@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.Infrastructure.Identity;
 
-public class AppIdentityDbContext : IdentityDbContext<User, Role, Guid>
+public class AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : IdentityDbContext<User, Role, Guid>(options)
 {
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -3,10 +3,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace CloudCrafter.Infrastructure.Data.Migrations
+namespace CloudCrafter.Infrastructure.Data.Migrations.Application
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialApplication : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

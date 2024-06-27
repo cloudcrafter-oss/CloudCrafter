@@ -6,6 +6,7 @@ using CloudCrafter.Core.Interfaces;
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Email;
+using CloudCrafter.Infrastructure.Identity;
 using CloudCrafter.UseCases.Contributors.Create;
 using FastEndpoints;
 using FastEndpoints.Swagger;
@@ -42,7 +43,8 @@ builder.Services.AddFastEndpoints()
 
 ConfigureMediatR();
 
-builder.Services.AddInfrastructureServices(builder.Configuration, microsoftLogger);
+builder.Services.AddInfrastructureServices(builder.Configuration, microsoftLogger)
+    .AddCloudCrafterIdentity(builder.Configuration);
 
 if (builder.Environment.IsDevelopment())
 {
@@ -77,11 +79,14 @@ app.UseFastEndpoints()
 
 app.UseHttpsRedirection();
 
-SeedDatabase(app);
+app.UseAuthentication();
+app.UseAuthorization();
+
+SeedAppDatabase(app);
 
 app.Run();
 
-static void SeedDatabase(WebApplication app)
+static void SeedAppDatabase(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
@@ -92,6 +97,10 @@ static void SeedDatabase(WebApplication app)
                  context.Database.Migrate();
        // context.Database.EnsureCreated();
         SeedData.Initialize(services);
+        
+        var identityContext = services.GetRequiredService<AppIdentityDbContext>();
+        identityContext.Database.Migrate();
+        SeedData.InitializeIdentity(services);
     }
     catch (Exception ex)
     {
