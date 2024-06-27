@@ -45,5 +45,9 @@
     <PackageVersion Include="Testcontainers" Version="3.9.0" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="3.9.0" />
     <PackageVersion Include="Respawn" Version="6.2.1" />
+
+    <PackageVersion Include="nunit" Version="3.14.0" />
+    <PackageVersion Include="NUnit.Analyzers" Version="3.9.0" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
   </ItemGroup>
 </Project>

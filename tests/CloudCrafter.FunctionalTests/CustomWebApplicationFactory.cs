@@ -14,20 +14,16 @@ using Xunit;
 
 namespace CloudCrafter.FunctionalTests;
 
-public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram>, IAsyncLifetime where TProgram : class
+public class CustomWebApplicationFactory: WebApplicationFactory<Program>
 {
-    private readonly PostgreSqlContainer _container = new PostgreSqlBuilder()
-        .WithImage("postgres:latest") // You may want to change this to be the version your production db is on
-        .WithDatabase("db")
-        .WithUsername("postgres")
-        .WithPassword("postgres")
-        .WithWaitStrategy(Wait.ForUnixContainer().UntilCommandIsCompleted("pg_isready"))
-        .WithCleanUp(true)
-        .Build();
+    private readonly DbConnection _connection;
 
-    private DbConnection _connection = null!;
-    private Respawner _respawner = null!;
+    public CustomWebApplicationFactory(DbConnection connection)
+    {
+        _connection = connection;
+    }
 
+    
     /// <summary>
     /// Overriding CreateHost to avoid creating a separate ServiceProvider per this thread:
     /// https://github.com/dotnet-architecture/eShopOnWeb/issues/465
@@ -88,17 +84,16 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
                 services.RemoveDbContext<AppDbContext>();
                 services.RemoveDbContext<AppIdentityDbContext>();
 
-
-                var connString = _container.GetConnectionString();
+                
 
                 services.AddDbContext<AppDbContext>(options =>
                 {
-                    options.UseNpgsql(_container.GetConnectionString());
+                    options.UseNpgsql(_connection);
                 });
                 
                 services.AddDbContext<AppIdentityDbContext>(options =>
                 {
-                    options.UseNpgsql(_container.GetConnectionString());
+                    options.UseNpgsql(_connection);
                 });
                 
                 services.EnsureDbCreated<AppDbContext>();
@@ -122,34 +117,6 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
                 //  options.UseInMemoryDatabase(inMemoryCollectionName);
                 //});
             });
-    }
-
-    public async Task InitializeAsync()
-    {
-        await _container.StartAsync();
-
-        Db = Services.CreateScope().ServiceProvider.GetRequiredService<AppDbContext>();
-        _connection = Db.Database.GetDbConnection();
-        await _connection.OpenAsync();
-
-        _respawner = await Respawner.CreateAsync(_connection, new RespawnerOptions
-        {
-            DbAdapter = DbAdapter.Postgres,
-            SchemasToInclude = new[] { "public" }
-        });
-    }
-
-    public AppDbContext Db { get; set; } = null!;
-
-    public async Task ResetDatabase()
-    {
-        await _respawner.ResetAsync(_connection);
-    }
-    
-    public new async Task DisposeAsync()
-    {
-        await _connection.CloseAsync();
-        await _container.DisposeAsync();
     }
 }
 
