@@ -1,4 +1,7 @@
+using Bogus;
 using CloudCrafter.FunctionalTests.Database;
+using CloudCrafter.FunctionalTests.Fakeds;
+using CloudCrafter.FunctionalTests.TestModels;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Identity;
 using MediatR;
@@ -34,6 +37,27 @@ public partial class Testing
         var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
 
         return await mediator.Send(request);
+    }
+
+    public static async Task<UsernamePasswordDto> CreateAdminUser()
+    {
+        using var scope = _scopeFactory.CreateScope();
+        
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+
+        var userFaker = FakerInstances.UserFaker.Generate();
+
+        var faker = new Faker();
+        var password = faker.Internet.Password(length: 16) + faker.Random.String2(3, "!@#$%^&*()_+");
+        
+        var result = await userManager.CreateAsync(userFaker, password);
+
+        if (!result.Succeeded)
+        {
+            throw new Exception($"Unable to create {userFaker.UserName}");
+        }
+
+        return new UsernamePasswordDto(userFaker.Email!, password);
     }
 
     public static async Task SendAsync(IBaseRequest request)

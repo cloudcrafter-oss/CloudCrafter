@@ -21,6 +21,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
     <PackageReference Include="Respawn"/>
     <PackageReference Include="Ardalis.HttpClientTestExtensions"/>
+    <PackageReference Include="Bogus" />
   </ItemGroup>
 
   <ItemGroup>
