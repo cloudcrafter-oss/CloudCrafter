@@ -8,11 +8,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace CloudCrafter.Infrastructure.Data.Migrations.Application
+namespace CloudCrafter.Infrastructure.Data.Migrations.App
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240627193936_InitialApplication")]
-    partial class InitialApplication
+    [Migration("20240628133941_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

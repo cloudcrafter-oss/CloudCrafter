@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CloudCrafter.Infrastructure.Data.Migrations.Identity
 {
     /// <inheritdoc />
-    public partial class InitialIdentity : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,23 +50,6 @@ namespace CloudCrafter.Infrastructure.Data.Migrations.Identity
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Contributor",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    PhoneNumber_CountryCode = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber_Number = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber_Extension = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Contributor", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -230,9 +213,6 @@ namespace CloudCrafter.Infrastructure.Data.Migrations.Identity
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "Contributor");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

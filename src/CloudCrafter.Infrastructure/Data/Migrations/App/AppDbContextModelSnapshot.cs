@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace CloudCrafter.Infrastructure.Data.Migrations.Application
+namespace CloudCrafter.Infrastructure.Data.Migrations.App
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot

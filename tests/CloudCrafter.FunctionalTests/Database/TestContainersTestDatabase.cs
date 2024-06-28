@@ -20,7 +20,8 @@ public class TestContainersTestDatabase : ITestDatabase
 
     public TestContainersTestDatabase()
     {
-        _container = new PostgreSqlBuilder().Build();
+        _container = new PostgreSqlBuilder().WithUsername("postgres")
+            .WithPassword("password").Build();
     }
 
     public async Task InitialiseAsync()

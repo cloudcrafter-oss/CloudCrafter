@@ -26,7 +26,7 @@ public static class InfrastructureServiceExtensions
         {
             options.UseNpgsql(connectionString, opt =>
             {
-                opt.MigrationsHistoryTable("EntityFrameworkMigrations");
+                //opt.MigrationsHistoryTable("EntityFrameworkMigrations");
             });
         });
 
@@ -52,7 +52,7 @@ public static class InfrastructureServiceExtensions
         {
             options.UseNpgsql(connectionString, opt =>
             {
-                opt.MigrationsHistoryTable("EntityFrameworkMigrations");
+                //opt.MigrationsHistoryTable("EntityFrameworkMigrations");
             });
         });
 

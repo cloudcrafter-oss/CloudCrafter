@@ -22,27 +22,6 @@ namespace CloudCrafter.Infrastructure.Data.Migrations.Identity
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("CloudCrafter.Core.ContributorAggregate.Contributor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Contributor");
-                });
-
             modelBuilder.Entity("CloudCrafter.Infrastructure.Identity.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -239,35 +218,6 @@ namespace CloudCrafter.Infrastructure.Data.Migrations.Identity
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("CloudCrafter.Core.ContributorAggregate.Contributor", b =>
-                {
-                    b.OwnsOne("CloudCrafter.Core.ContributorAggregate.PhoneNumber", "PhoneNumber", b1 =>
-                        {
-                            b1.Property<int>("ContributorId")
-                                .HasColumnType("integer");
-
-                            b1.Property<string>("CountryCode")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Extension")
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Number")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.HasKey("ContributorId");
-
-                            b1.ToTable("Contributor");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ContributorId");
-                        });
-
-                    b.Navigation("PhoneNumber");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

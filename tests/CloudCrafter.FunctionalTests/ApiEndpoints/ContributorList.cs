@@ -21,6 +21,8 @@ public class ContributorList : BaseTestFixture
   [Test]
   public async Task ReturnsTwoContributors()
   {
+      HttpResponseMessage async = await _client.GetAsync("/Contributors");
+      string json = await async.Content.ReadAsStringAsync();
     var result = await _client.GetAndDeserializeAsync<ContributorListResponse>("/Contributors");
 
     Assert.Equals(2, result.Contributors.Count);
