@@ -8,6 +8,7 @@ using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Email;
 using CloudCrafter.Infrastructure.Identity;
 using CloudCrafter.UseCases.Contributors.Create;
+using CloudCrafter.Web.Infrastructure;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using MediatR;
@@ -83,6 +84,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 SeedAppDatabase(app);
+
+app.MapEndpoints();
 
 app.Run();
 
