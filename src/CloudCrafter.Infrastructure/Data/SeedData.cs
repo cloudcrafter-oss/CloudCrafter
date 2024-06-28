@@ -47,5 +47,10 @@ public static class SeedData
         // add user
         var user = new User { UserName = "admin", Email = "admin@admin.com" };
         var result = userManager.CreateAsync(user, "P@ssw0rd!123").GetAwaiter().GetResult();
+
+        if (!result.Succeeded)
+        {
+            throw new Exception("Failed to create user");
+        }
     }
 }

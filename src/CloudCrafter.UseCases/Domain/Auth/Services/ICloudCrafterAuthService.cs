@@ -4,5 +4,5 @@ namespace CloudCrafter.UseCases.Domain.Auth.Services;
 
 public interface ICloudCrafterAuthService
 {
-    Task<TokenDto> LoginAsync(string username, string password);
+    Task<TokenDto> LoginAsync(string email, string password);
 }

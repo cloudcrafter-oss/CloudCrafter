@@ -11,9 +11,9 @@ namespace CloudCrafter.Infrastructure.Identity.Services;
 
 public class CloudCrafterAuthService(UserManager<User> userManager) : ICloudCrafterAuthService
 {
-    public async Task<TokenDto> LoginAsync(string username, string password)
+    public async Task<TokenDto> LoginAsync(string email, string password)
     {
-        var user = await userManager.FindByEmailAsync(username);
+        var user = await userManager.FindByEmailAsync(email);
 
         if (user == null || !await userManager.CheckPasswordAsync(user, password))
         {
