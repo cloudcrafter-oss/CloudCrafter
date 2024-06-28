@@ -1,4 +1,6 @@
 ﻿using CloudCrafter.Core.ContributorAggregate;
+using CloudCrafter.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,5 +33,17 @@ public static class SeedData
     dbContext.Contributors.Add(Contributor2);
 
     dbContext.SaveChanges();
+  }
+
+  public static void InitializeIdentity(IServiceProvider services)
+  {
+      using var dbContext = services.GetRequiredService<AppIdentityDbContext>();
+
+      if (dbContext.Users.Any()) return;
+      
+      var userManager = services.GetRequiredService<UserManager<User>>();
+      // add user
+      var user = new User { UserName = "admin", Email = "admin@admin.com" };
+      var result = userManager.CreateAsync(user, "P@ssw0rd!123").GetAwaiter().GetResult();
   }
 }
