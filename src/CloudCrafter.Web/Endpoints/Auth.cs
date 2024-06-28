@@ -1,3 +1,4 @@
+using CloudCrafter.Core.Domain.Auth;
 using CloudCrafter.UseCases.Domain.Auth.Commands;
 using CloudCrafter.Web.Infrastructure;
 using MediatR;
@@ -12,11 +13,9 @@ public class Auth : EndpointGroupBase
             .MapPost(GetDummy);
     }
 
-    public async Task<Dummy> GetDummy(ISender sender, PostLoginUser.Query query)
+    public async Task<TokenDto> GetDummy(ISender sender, PostLoginUser.Query query)
     {
-        await sender.Send(query);
-
-        return new Dummy() { Title = "hallo" };
+        return await sender.Send(query);
     }
 }
 

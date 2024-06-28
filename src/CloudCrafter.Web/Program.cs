@@ -36,6 +36,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
+
 builder.Services.AddFastEndpoints()
     .SwaggerDocument(o =>
     {
@@ -47,6 +48,7 @@ ConfigureMediatR();
 builder.Services.AddInfrastructureServices(builder.Configuration, microsoftLogger)
     .AddCloudCrafterIdentity(builder.Configuration);
 
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 if (builder.Environment.IsDevelopment())
 {
     // Use a local test email server
@@ -66,14 +68,15 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
-    app.UseShowAllServicesMiddleware(); // see https://github.com/ardalis/AspNetCoreStartupServices
+    // app.UseDeveloperExceptionPage();
+    // app.UseShowAllServicesMiddleware(); // see https://github.com/ardalis/AspNetCoreStartupServices
 }
 else
 {
-    app.UseDefaultExceptionHandler(); // from FastEndpoints
+    //  app.UseDefaultExceptionHandler(); // from FastEndpoints
     app.UseHsts();
 }
+
 
 app.UseFastEndpoints()
     .UseSwaggerGen(); // Includes AddFileServer and static files middleware
@@ -83,6 +86,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseExceptionHandler(options => { });
 SeedAppDatabase(app);
 
 app.MapEndpoints();
