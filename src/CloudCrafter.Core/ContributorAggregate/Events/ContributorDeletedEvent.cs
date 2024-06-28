@@ -8,5 +8,5 @@ namespace CloudCrafter.Core.ContributorAggregate.Events;
 /// </summary>
 internal sealed class ContributorDeletedEvent(int contributorId) : DomainEventBase
 {
-  public int ContributorId { get; init; } = contributorId;
+    public int ContributorId { get; init; } = contributorId;
 }

@@ -44,7 +44,11 @@ public class TestContainersTestDatabase : ITestDatabase
         context.Database.Migrate();
 
         _respawner = await Respawner.CreateAsync(_connection,
-            new RespawnerOptions { DbAdapter = DbAdapter.Postgres, TablesToIgnore = new Respawn.Graph.Table[] { "EntityFrameworkMigrations" } });
+            new RespawnerOptions
+            {
+                DbAdapter = DbAdapter.Postgres,
+                TablesToIgnore = new Respawn.Graph.Table[] { "EntityFrameworkMigrations" }
+            });
     }
 
     public DbConnection GetConnection()

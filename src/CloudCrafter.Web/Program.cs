@@ -94,10 +94,10 @@ static void SeedAppDatabase(WebApplication app)
     try
     {
         var context = services.GetRequiredService<AppDbContext>();
-                 context.Database.Migrate();
-       // context.Database.EnsureCreated();
+        context.Database.Migrate();
+        // context.Database.EnsureCreated();
         SeedData.Initialize(services);
-        
+
         var identityContext = services.GetRequiredService<AppIdentityDbContext>();
         identityContext.Database.Migrate();
         SeedData.InitializeIdentity(services);

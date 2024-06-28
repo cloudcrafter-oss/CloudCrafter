@@ -5,5 +5,4 @@ namespace CloudCrafter.Infrastructure.Identity;
 
 public class Role : IdentityRole<Guid>, IAggregateRoot
 {
-    
 }

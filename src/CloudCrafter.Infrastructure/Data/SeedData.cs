@@ -8,42 +8,44 @@ namespace CloudCrafter.Infrastructure.Data;
 
 public static class SeedData
 {
-  public static readonly Contributor Contributor1 = new("Ardalis");
-  public static readonly Contributor Contributor2 = new("Snowfrog");
+    public static readonly Contributor Contributor1 = new("Ardalis");
+    public static readonly Contributor Contributor2 = new("Snowfrog");
 
-  public static void Initialize(IServiceProvider serviceProvider)
-  {
-    using (var dbContext = new AppDbContext(
-        serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(), null))
+    public static void Initialize(IServiceProvider serviceProvider)
     {
-      if (dbContext.Contributors.Any()) return;   // DB has been seeded
+        using (var dbContext = new AppDbContext(
+                   serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(), null))
+        {
+            if (dbContext.Contributors.Any()) return; // DB has been seeded
 
-      PopulateTestData(dbContext);
+            PopulateTestData(dbContext);
+        }
     }
-  }
-  public static void PopulateTestData(AppDbContext dbContext)
-  {
-    foreach (var contributor in dbContext.Contributors)
+
+    public static void PopulateTestData(AppDbContext dbContext)
     {
-      dbContext.Remove(contributor);
+        foreach (var contributor in dbContext.Contributors)
+        {
+            dbContext.Remove(contributor);
+        }
+
+        dbContext.SaveChanges();
+
+        dbContext.Contributors.Add(Contributor1);
+        dbContext.Contributors.Add(Contributor2);
+
+        dbContext.SaveChanges();
     }
-    dbContext.SaveChanges();
 
-    dbContext.Contributors.Add(Contributor1);
-    dbContext.Contributors.Add(Contributor2);
+    public static void InitializeIdentity(IServiceProvider services)
+    {
+        using var dbContext = services.GetRequiredService<AppIdentityDbContext>();
 
-    dbContext.SaveChanges();
-  }
+        if (dbContext.Users.Any()) return;
 
-  public static void InitializeIdentity(IServiceProvider services)
-  {
-      using var dbContext = services.GetRequiredService<AppIdentityDbContext>();
-
-      if (dbContext.Users.Any()) return;
-      
-      var userManager = services.GetRequiredService<UserManager<User>>();
-      // add user
-      var user = new User { UserName = "admin", Email = "admin@admin.com" };
-      var result = userManager.CreateAsync(user, "P@ssw0rd!123").GetAwaiter().GetResult();
-  }
+        var userManager = services.GetRequiredService<UserManager<User>>();
+        // add user
+        var user = new User { UserName = "admin", Email = "admin@admin.com" };
+        var result = userManager.CreateAsync(user, "P@ssw0rd!123").GetAwaiter().GetResult();
+    }
 }

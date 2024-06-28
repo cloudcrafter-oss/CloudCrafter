@@ -14,7 +14,7 @@ using Xunit;
 
 namespace CloudCrafter.FunctionalTests;
 
-public class CustomWebApplicationFactory: WebApplicationFactory<Program>
+public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly DbConnection _connection;
 
@@ -23,7 +23,7 @@ public class CustomWebApplicationFactory: WebApplicationFactory<Program>
         _connection = connection;
     }
 
-    
+
     /// <summary>
     /// Overriding CreateHost to avoid creating a separate ServiceProvider per this thread:
     /// https://github.com/dotnet-architecture/eShopOnWeb/issues/465
@@ -84,18 +84,17 @@ public class CustomWebApplicationFactory: WebApplicationFactory<Program>
                 services.RemoveDbContext<AppDbContext>();
                 services.RemoveDbContext<AppIdentityDbContext>();
 
-                
 
                 services.AddDbContext<AppDbContext>(options =>
                 {
                     options.UseNpgsql(_connection);
                 });
-                
+
                 services.AddDbContext<AppIdentityDbContext>(options =>
                 {
                     options.UseNpgsql(_connection);
                 });
-                
+
                 services.EnsureDbCreated<AppDbContext>();
                 services.EnsureDbCreated<AppIdentityDbContext>();
                 //// Remove the app's ApplicationDbContext registration.
@@ -119,7 +118,6 @@ public class CustomWebApplicationFactory: WebApplicationFactory<Program>
             });
     }
 }
-
 
 public static class ServiceCollectionExtensions
 {
