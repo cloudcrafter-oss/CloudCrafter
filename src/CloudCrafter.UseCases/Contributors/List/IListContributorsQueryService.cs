@@ -6,5 +6,5 @@
 /// </summary>
 public interface IListContributorsQueryService
 {
-  Task<IEnumerable<ContributorDTO>> ListAsync();
+    Task<IEnumerable<ContributorDTO>> ListAsync();
 }

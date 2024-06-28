@@ -9,7 +9,6 @@ using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests;
 
-
 [SetUpFixture]
 public partial class Testing
 {
@@ -101,7 +100,7 @@ public partial class Testing
         {
             await _database.ResetAsync();
         }
-        catch (Exception) 
+        catch (Exception)
         {
         }
 

@@ -17,11 +17,12 @@ namespace CloudCrafter.Infrastructure;
 
 public static class InfrastructureServiceExtensions
 {
-    public static IServiceCollection AddCloudCrafterIdentity(this IServiceCollection services, ConfigurationManager config)
+    public static IServiceCollection AddCloudCrafterIdentity(this IServiceCollection services,
+        ConfigurationManager config)
     {
         string? connectionString = config.GetConnectionString("PostgresConnection");
         Guard.Against.Null(connectionString, "PostgresConnection is not set.");
-        
+
         services.AddDbContext<AppIdentityDbContext>(options =>
         {
             options.UseNpgsql(connectionString, opt =>
@@ -40,6 +41,7 @@ public static class InfrastructureServiceExtensions
 
         return services;
     }
+
     public static IServiceCollection AddInfrastructureServices(
         this IServiceCollection services,
         ConfigurationManager config,

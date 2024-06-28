@@ -1,7 +1,9 @@
 using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests;
+
 using static Testing;
+
 [TestFixture]
 public abstract class BaseTestFixture
 {

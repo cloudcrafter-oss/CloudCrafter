@@ -12,30 +12,30 @@ namespace CloudCrafter.Web.Contributors;
 /// Takes a positive integer ID and returns a matching Contributor record.
 /// </remarks>
 public class GetById(IMediator _mediator)
-  : Endpoint<GetContributorByIdRequest, ContributorRecord>
+    : Endpoint<GetContributorByIdRequest, ContributorRecord>
 {
-  public override void Configure()
-  {
-    Get(GetContributorByIdRequest.Route);
-    AllowAnonymous();
-  }
-
-  public override async Task HandleAsync(GetContributorByIdRequest request,
-    CancellationToken cancellationToken)
-  {
-    var command = new GetContributorQuery(request.ContributorId);
-
-    var result = await _mediator.Send(command, cancellationToken);
-
-    if (result.Status == ResultStatus.NotFound)
+    public override void Configure()
     {
-      await SendNotFoundAsync(cancellationToken);
-      return;
+        Get(GetContributorByIdRequest.Route);
+        AllowAnonymous();
     }
 
-    if (result.IsSuccess)
+    public override async Task HandleAsync(GetContributorByIdRequest request,
+        CancellationToken cancellationToken)
     {
-      Response = new ContributorRecord(result.Value.Id, result.Value.Name, result.Value.PhoneNumber);
+        var command = new GetContributorQuery(request.ContributorId);
+
+        var result = await _mediator.Send(command, cancellationToken);
+
+        if (result.Status == ResultStatus.NotFound)
+        {
+            await SendNotFoundAsync(cancellationToken);
+            return;
+        }
+
+        if (result.IsSuccess)
+        {
+            Response = new ContributorRecord(result.Value.Id, result.Value.Name, result.Value.PhoneNumber);
+        }
     }
-  }
 }
