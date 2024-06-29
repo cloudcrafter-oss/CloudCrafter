@@ -4,7 +4,8 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "ui:add": "pnpm --filter @repo/ui ui:add"
   },
   "devDependencies": {
     "eslint": "^8.57.0",
