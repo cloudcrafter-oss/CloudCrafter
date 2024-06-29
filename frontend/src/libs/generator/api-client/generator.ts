@@ -20,7 +20,7 @@ export default async function generateClient({url, outputPath}: {url: string, ou
         ],
 
         mutator: {
-          path: './axios-instance.ts',
+          path: './src/shared/util/axios-instance.ts',
           name: 'axiosInstance',
         },
       }

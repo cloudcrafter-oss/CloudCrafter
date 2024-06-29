@@ -16,7 +16,7 @@ import type {
   UseSuspenseQueryResult,
 } from '@tanstack/react-query';
 import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { axiosInstance } from '../../../axios-instance';
+import { axiosInstance } from '../../shared/util/axios-instance';
 export interface PostLoginUserQuery {
   email?: string;
   password?: string;
@@ -196,10 +196,8 @@ export const getCloudCrafterWebContributorsListQueryOptions = <
   TData = Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>,
   TError = unknown,
 >(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>,
-    TError,
-    TData
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>, TError, TData>
   >;
   request?: SecondParameter<typeof axiosInstance>;
 }) => {
@@ -230,10 +228,8 @@ export const useCloudCrafterWebContributorsList = <
   TData = Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>,
   TError = unknown,
 >(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>,
-    TError,
-    TData
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>, TError, TData>
   >;
   request?: SecondParameter<typeof axiosInstance>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -250,10 +246,12 @@ export const getCloudCrafterWebContributorsListSuspenseQueryOptions = <
   TData = Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>,
   TError = unknown,
 >(options?: {
-  query?: UseSuspenseQueryOptions<
-    Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>,
-    TError,
-    TData
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>,
+      TError,
+      TData
+    >
   >;
   request?: SecondParameter<typeof axiosInstance>;
 }) => {
@@ -284,10 +282,12 @@ export const useCloudCrafterWebContributorsListSuspense = <
   TData = Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>,
   TError = unknown,
 >(options?: {
-  query?: UseSuspenseQueryOptions<
-    Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>,
-    TError,
-    TData
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>,
+      TError,
+      TData
+    >
   >;
   request?: SecondParameter<typeof axiosInstance>;
 }): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -403,10 +403,8 @@ export const getCloudCrafterWebContributorsGetByIdQueryOptions = <
 >(
   contributorId: number,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>,
-      TError,
-      TData
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>, TError, TData>
     >;
     request?: SecondParameter<typeof axiosInstance>;
   },
@@ -441,10 +439,8 @@ export const useCloudCrafterWebContributorsGetById = <
 >(
   contributorId: number,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>,
-      TError,
-      TData
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>, TError, TData>
     >;
     request?: SecondParameter<typeof axiosInstance>;
   },
@@ -464,10 +460,12 @@ export const getCloudCrafterWebContributorsGetByIdSuspenseQueryOptions = <
 >(
   contributorId: number,
   options?: {
-    query?: UseSuspenseQueryOptions<
-      Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>,
-      TError,
-      TData
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>,
+        TError,
+        TData
+      >
     >;
     request?: SecondParameter<typeof axiosInstance>;
   },
@@ -507,10 +505,12 @@ export const useCloudCrafterWebContributorsGetByIdSuspense = <
 >(
   contributorId: number,
   options?: {
-    query?: UseSuspenseQueryOptions<
-      Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>,
-      TError,
-      TData
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>,
+        TError,
+        TData
+      >
     >;
     request?: SecondParameter<typeof axiosInstance>;
   },
