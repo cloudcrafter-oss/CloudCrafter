@@ -15,9 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@cloudcrafter-frontend/plugins/codegen": [
-        "libs/plugins/codegen/src/index.ts"
-      ]
+      "@cloudcrafter-frontend/plugins/codegen": ["libs/plugins/codegen/src/index.ts"],
+      "@cloudcrafter-frontend/ui/shared": ["libs/ui/shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
