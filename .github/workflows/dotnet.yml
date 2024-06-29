@@ -23,7 +23,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Copy development environment settings
-      run: cp src/CloudCrafter.Web/appsettings.Development.example.json src/CloudCrafter.Web/appsettings.Development.json
+      run: cp src/CloudCrafter.Web/appsettings.Development.example.json src/CloudCrafter.Web/appsettings.Developmente.json
     - name: Build
       run: dotnet build --no-restore
     - name: Test
@@ -31,5 +31,11 @@ jobs:
 
     - name: Dotnet Test Reporter
       uses: bibipkins/dotnet-test-reporter@v1.4.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        comment-title: 'Unit Test Results'
+        results-path: ./test-results/*.trx
+#        coverage-path: ./TestResults/coverage.xml
+#        coverage-threshold: 80
 
 
