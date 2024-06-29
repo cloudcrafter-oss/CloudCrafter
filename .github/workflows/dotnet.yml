@@ -28,3 +28,8 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+    - name: Dotnet Test Reporter
+      uses: bibipkins/dotnet-test-reporter@v1.4.1
+
+
