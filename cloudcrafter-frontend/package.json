@@ -3,10 +3,14 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "serve": "nx serve cloudcrafter-frontend"
+    "serve": "nx serve cloudcrafter-frontend",
+    "generate": "nx run cloudcrafter-frontend:generate",
+    "build": "nx build cloudcrafter-frontend"
   },
   "private": true,
   "dependencies": {
+    "@tanstack/react-query": "^5.49.0",
+    "qs": "^6.12.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "tslib": "^2.3.0"
@@ -31,6 +35,7 @@
     "@testing-library/react": "15.0.6",
     "@types/jest": "^29.4.0",
     "@types/node": "18.16.9",
+    "@types/qs": "^6.9.15",
     "@types/react": "18.3.1",
     "@types/react-dom": "18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.3.0",
@@ -53,7 +58,9 @@
     "nx": "19.3.2",
     "orval": "^6.31.0",
     "postcss": "8.4.38",
-    "prettier": "^2.6.2",
+    "prettier": "^3.3.2",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "prettier-plugin-tailwindcss": "^0.6.5",
     "tailwindcss": "3.4.3",
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",
