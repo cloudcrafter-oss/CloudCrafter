@@ -1,0 +1,17 @@
+{
+  "name": "cloudcrafter-frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/cloudcrafter-frontend/src",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project cloudcrafter-frontend --web",
+  "targets": {
+    "generate": {
+      "executor": "@cloudcrafter-frontend/plugins/codegen:generate-api",
+      "options": {
+        "url": "http://localhost:57680/swagger/v1/swagger.json",
+        "outputPath": "apps/cloudcrafter-frontend/src/generated"
+      }
+    }
+  }
+}
