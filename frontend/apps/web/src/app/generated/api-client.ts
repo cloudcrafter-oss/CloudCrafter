@@ -4,6 +4,7 @@
  * CloudCrafter.Web
  * OpenAPI spec version: 1.0.0
  */
+import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import type {
   MutationFunction,
   QueryFunction,
@@ -14,9 +15,8 @@ import type {
   UseQueryResult,
   UseSuspenseQueryOptions,
   UseSuspenseQueryResult,
-} from '@tanstack/react-query';
-import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { axiosInstance } from '../../shared/util/axios-instance';
+} from "@tanstack/react-query";
+import { axiosInstance } from "../../utils/axios-instance";
 export interface PostLoginUserQuery {
   email?: string;
   password?: string;
@@ -104,8 +104,8 @@ export const cloudCrafterWebContributorsCreate = (
   return axiosInstance<CreateContributorResponse>(
     {
       url: `/Contributors`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       data: createContributorRequest,
     },
     options,
@@ -134,7 +134,7 @@ export const getCloudCrafterWebContributorsCreateMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof cloudCrafterWebContributorsCreate>>,
     { data: CreateContributorRequest }
-  > = props => {
+  > = (props) => {
     const { data } = props ?? {};
 
     return cloudCrafterWebContributorsCreate(data, requestOptions);
@@ -146,7 +146,8 @@ export const getCloudCrafterWebContributorsCreateMutationOptions = <
 export type CloudCrafterWebContributorsCreateMutationResult = NonNullable<
   Awaited<ReturnType<typeof cloudCrafterWebContributorsCreate>>
 >;
-export type CloudCrafterWebContributorsCreateMutationBody = CreateContributorRequest;
+export type CloudCrafterWebContributorsCreateMutationBody =
+  CreateContributorRequest;
 export type CloudCrafterWebContributorsCreateMutationError = ErrorResponse;
 
 /**
@@ -169,7 +170,8 @@ export const useCloudCrafterWebContributorsCreate = <
   { data: CreateContributorRequest },
   TContext
 > => {
-  const mutationOptions = getCloudCrafterWebContributorsCreateMutationOptions(options);
+  const mutationOptions =
+    getCloudCrafterWebContributorsCreateMutationOptions(options);
 
   return useMutation(mutationOptions);
 };
@@ -183,7 +185,7 @@ export const cloudCrafterWebContributorsList = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<ContributorListResponse>(
-    { url: `/Contributors`, method: 'GET', signal },
+    { url: `/Contributors`, method: "GET", signal },
     options,
   );
 };
@@ -197,17 +199,22 @@ export const getCloudCrafterWebContributorsListQueryOptions = <
   TError = unknown,
 >(options?: {
   query?: Partial<
-    UseQueryOptions<Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>, TError, TData>
+    UseQueryOptions<
+      Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>,
+      TError,
+      TData
+    >
   >;
   request?: SecondParameter<typeof axiosInstance>;
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getCloudCrafterWebContributorsListQueryKey();
+  const queryKey =
+    queryOptions?.queryKey ?? getCloudCrafterWebContributorsListQueryKey();
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>> = ({
-    signal,
-  }) => cloudCrafterWebContributorsList(requestOptions, signal);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>
+  > = ({ signal }) => cloudCrafterWebContributorsList(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>,
@@ -229,13 +236,19 @@ export const useCloudCrafterWebContributorsList = <
   TError = unknown,
 >(options?: {
   query?: Partial<
-    UseQueryOptions<Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>, TError, TData>
+    UseQueryOptions<
+      Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>,
+      TError,
+      TData
+    >
   >;
   request?: SecondParameter<typeof axiosInstance>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
   const queryOptions = getCloudCrafterWebContributorsListQueryOptions(options);
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
   query.queryKey = queryOptions.queryKey;
 
@@ -257,11 +270,12 @@ export const getCloudCrafterWebContributorsListSuspenseQueryOptions = <
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getCloudCrafterWebContributorsListQueryKey();
+  const queryKey =
+    queryOptions?.queryKey ?? getCloudCrafterWebContributorsListQueryKey();
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>> = ({
-    signal,
-  }) => cloudCrafterWebContributorsList(requestOptions, signal);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>
+  > = ({ signal }) => cloudCrafterWebContributorsList(requestOptions, signal);
 
   return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
     Awaited<ReturnType<typeof cloudCrafterWebContributorsList>>,
@@ -291,11 +305,13 @@ export const useCloudCrafterWebContributorsListSuspense = <
   >;
   request?: SecondParameter<typeof axiosInstance>;
 }): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions = getCloudCrafterWebContributorsListSuspenseQueryOptions(options);
+  const queryOptions =
+    getCloudCrafterWebContributorsListSuspenseQueryOptions(options);
 
-  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
   query.queryKey = queryOptions.queryKey;
 
@@ -311,7 +327,7 @@ export const cloudCrafterWebContributorsDelete = (
   options?: SecondParameter<typeof axiosInstance>,
 ) => {
   return axiosInstance<unknown>(
-    { url: `/Contributors/${contributorId}`, method: 'DELETE' },
+    { url: `/Contributors/${contributorId}`, method: "DELETE" },
     options,
   );
 };
@@ -338,7 +354,7 @@ export const getCloudCrafterWebContributorsDeleteMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof cloudCrafterWebContributorsDelete>>,
     { contributorId: number }
-  > = props => {
+  > = (props) => {
     const { contributorId } = props ?? {};
 
     return cloudCrafterWebContributorsDelete(contributorId, requestOptions);
@@ -373,7 +389,8 @@ export const useCloudCrafterWebContributorsDelete = <
   { contributorId: number },
   TContext
 > => {
-  const mutationOptions = getCloudCrafterWebContributorsDeleteMutationOptions(options);
+  const mutationOptions =
+    getCloudCrafterWebContributorsDeleteMutationOptions(options);
 
   return useMutation(mutationOptions);
 };
@@ -388,12 +405,14 @@ export const cloudCrafterWebContributorsGetById = (
   signal?: AbortSignal,
 ) => {
   return axiosInstance<ContributorRecord>(
-    { url: `/Contributors/${contributorId}`, method: 'GET', signal },
+    { url: `/Contributors/${contributorId}`, method: "GET", signal },
     options,
   );
 };
 
-export const getCloudCrafterWebContributorsGetByIdQueryKey = (contributorId: number) => {
+export const getCloudCrafterWebContributorsGetByIdQueryKey = (
+  contributorId: number,
+) => {
   return [`/Contributors/${contributorId}`] as const;
 };
 
@@ -404,7 +423,11 @@ export const getCloudCrafterWebContributorsGetByIdQueryOptions = <
   contributorId: number,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>, TError, TData>
+      UseQueryOptions<
+        Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>,
+        TError,
+        TData
+      >
     >;
     request?: SecondParameter<typeof axiosInstance>;
   },
@@ -412,13 +435,20 @@ export const getCloudCrafterWebContributorsGetByIdQueryOptions = <
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getCloudCrafterWebContributorsGetByIdQueryKey(contributorId);
+    queryOptions?.queryKey ??
+    getCloudCrafterWebContributorsGetByIdQueryKey(contributorId);
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>> = ({
-    signal,
-  }) => cloudCrafterWebContributorsGetById(contributorId, requestOptions, signal);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>
+  > = ({ signal }) =>
+    cloudCrafterWebContributorsGetById(contributorId, requestOptions, signal);
 
-  return { queryKey, queryFn, enabled: !!contributorId, ...queryOptions } as UseQueryOptions<
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!contributorId,
+    ...queryOptions,
+  } as UseQueryOptions<
     Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>,
     TError,
     TData
@@ -440,14 +470,23 @@ export const useCloudCrafterWebContributorsGetById = <
   contributorId: number,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>, TError, TData>
+      UseQueryOptions<
+        Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>,
+        TError,
+        TData
+      >
     >;
     request?: SecondParameter<typeof axiosInstance>;
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions = getCloudCrafterWebContributorsGetByIdQueryOptions(contributorId, options);
+  const queryOptions = getCloudCrafterWebContributorsGetByIdQueryOptions(
+    contributorId,
+    options,
+  );
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
 
   query.queryKey = queryOptions.queryKey;
 
@@ -473,11 +512,13 @@ export const getCloudCrafterWebContributorsGetByIdSuspenseQueryOptions = <
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ?? getCloudCrafterWebContributorsGetByIdQueryKey(contributorId);
+    queryOptions?.queryKey ??
+    getCloudCrafterWebContributorsGetByIdQueryKey(contributorId);
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>> = ({
-    signal,
-  }) => cloudCrafterWebContributorsGetById(contributorId, requestOptions, signal);
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>
+  > = ({ signal }) =>
+    cloudCrafterWebContributorsGetById(contributorId, requestOptions, signal);
 
   return {
     queryKey,
@@ -494,7 +535,8 @@ export const getCloudCrafterWebContributorsGetByIdSuspenseQueryOptions = <
 export type CloudCrafterWebContributorsGetByIdSuspenseQueryResult = NonNullable<
   Awaited<ReturnType<typeof cloudCrafterWebContributorsGetById>>
 >;
-export type CloudCrafterWebContributorsGetByIdSuspenseQueryError = ErrorResponse;
+export type CloudCrafterWebContributorsGetByIdSuspenseQueryError =
+  ErrorResponse;
 
 /**
  * @summary Get a Contributor by integer ID.
@@ -515,14 +557,16 @@ export const useCloudCrafterWebContributorsGetByIdSuspense = <
     request?: SecondParameter<typeof axiosInstance>;
   },
 ): UseSuspenseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions = getCloudCrafterWebContributorsGetByIdSuspenseQueryOptions(
-    contributorId,
-    options,
-  );
+  const queryOptions =
+    getCloudCrafterWebContributorsGetByIdSuspenseQueryOptions(
+      contributorId,
+      options,
+    );
 
-  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
+  const query = useSuspenseQuery(queryOptions) as UseSuspenseQueryResult<
+    TData,
+    TError
+  > & { queryKey: QueryKey };
 
   query.queryKey = queryOptions.queryKey;
 
@@ -542,8 +586,8 @@ export const cloudCrafterWebContributorsUpdate = (
   return axiosInstance<UpdateContributorResponse>(
     {
       url: `/Contributors/${contributorId}`,
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       data: updateContributorRequest,
     },
     options,
@@ -572,10 +616,14 @@ export const getCloudCrafterWebContributorsUpdateMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof cloudCrafterWebContributorsUpdate>>,
     { contributorId: number; data: UpdateContributorRequest }
-  > = props => {
+  > = (props) => {
     const { contributorId, data } = props ?? {};
 
-    return cloudCrafterWebContributorsUpdate(contributorId, data, requestOptions);
+    return cloudCrafterWebContributorsUpdate(
+      contributorId,
+      data,
+      requestOptions,
+    );
   };
 
   return { mutationFn, ...mutationOptions };
@@ -584,7 +632,8 @@ export const getCloudCrafterWebContributorsUpdateMutationOptions = <
 export type CloudCrafterWebContributorsUpdateMutationResult = NonNullable<
   Awaited<ReturnType<typeof cloudCrafterWebContributorsUpdate>>
 >;
-export type CloudCrafterWebContributorsUpdateMutationBody = UpdateContributorRequest;
+export type CloudCrafterWebContributorsUpdateMutationBody =
+  UpdateContributorRequest;
 export type CloudCrafterWebContributorsUpdateMutationError = ErrorResponse;
 
 /**
@@ -607,7 +656,8 @@ export const useCloudCrafterWebContributorsUpdate = <
   { contributorId: number; data: UpdateContributorRequest },
   TContext
 > => {
-  const mutationOptions = getCloudCrafterWebContributorsUpdateMutationOptions(options);
+  const mutationOptions =
+    getCloudCrafterWebContributorsUpdateMutationOptions(options);
 
   return useMutation(mutationOptions);
 };
@@ -619,15 +669,18 @@ export const postLoginUser = (
   return axiosInstance<TokenDto>(
     {
       url: `/api/Auth`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       data: postLoginUserQuery,
     },
     options,
   );
 };
 
-export const getPostLoginUserMutationOptions = <TError = unknown, TContext = unknown>(options?: {
+export const getPostLoginUserMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof postLoginUser>>,
     TError,
@@ -646,7 +699,7 @@ export const getPostLoginUserMutationOptions = <TError = unknown, TContext = unk
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof postLoginUser>>,
     { data: PostLoginUserQuery }
-  > = props => {
+  > = (props) => {
     const { data } = props ?? {};
 
     return postLoginUser(data, requestOptions);
@@ -655,11 +708,16 @@ export const getPostLoginUserMutationOptions = <TError = unknown, TContext = unk
   return { mutationFn, ...mutationOptions };
 };
 
-export type PostLoginUserMutationResult = NonNullable<Awaited<ReturnType<typeof postLoginUser>>>;
+export type PostLoginUserMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postLoginUser>>
+>;
 export type PostLoginUserMutationBody = PostLoginUserQuery;
 export type PostLoginUserMutationError = unknown;
 
-export const usePostLoginUser = <TError = unknown, TContext = unknown>(options?: {
+export const usePostLoginUser = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof postLoginUser>>,
     TError,
