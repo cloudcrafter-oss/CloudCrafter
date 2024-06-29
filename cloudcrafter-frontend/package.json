@@ -51,6 +51,7 @@
     "jest-environment-node": "^29.4.1",
     "jsdom": "~22.1.0",
     "nx": "19.3.2",
+    "orval": "^6.31.0",
     "postcss": "8.4.38",
     "prettier": "^2.6.2",
     "tailwindcss": "3.4.3",

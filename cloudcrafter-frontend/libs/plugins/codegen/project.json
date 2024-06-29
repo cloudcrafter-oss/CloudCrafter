@@ -12,7 +12,13 @@
         "outputPath": "dist/libs/plugins/codegen",
         "main": "libs/plugins/codegen/src/index.ts",
         "tsConfig": "libs/plugins/codegen/tsconfig.lib.json",
-        "assets": ["libs/plugins/codegen/*.md"]
+        "assets": ["libs/plugins/codegen/*.md",
+          {
+            "glob": "executors.json",
+            "input": "./libs/plugins/codegen",
+            "output": "."
+          }
+        ]
       }
     }
   }
