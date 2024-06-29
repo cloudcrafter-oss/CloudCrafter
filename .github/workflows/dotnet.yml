@@ -11,6 +11,10 @@ on:
     
 env:
   ASPNETCORE_ENVIRONMENT: Development
+  
+permissions:
+  checks: write
+  pull-requests: write
 
 jobs:
   build:
@@ -32,13 +36,10 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal --logger trx --results-directory ./test-results
 
-    - name: Dotnet Test Reporter
-      uses: bibipkins/dotnet-test-reporter@v1.4.1
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        comment-title: 'Unit Test Results'
-        results-path: ./test-results/*.trx
-#        coverage-path: ./TestResults/coverage.xml
-#        coverage-threshold: 80
-
+        files: |
+          test-results/**/*.trx
 
