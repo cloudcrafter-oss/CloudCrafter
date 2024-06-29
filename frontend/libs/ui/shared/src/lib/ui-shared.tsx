@@ -1,14 +1,9 @@
-import styled from 'tailwind';
-
-const StyledUiShared = styled.div`
-  color: pink;
-`;
 
 export function UiShared() {
   return (
-    <StyledUiShared>
-      <h1>Welcome to UiShared!</h1>
-    </StyledUiShared>
+    <h1 className="text-3xl text-cloudcrafter-800 font-bold underline">
+      Hello world!
+    </h1>
   );
 }
 
