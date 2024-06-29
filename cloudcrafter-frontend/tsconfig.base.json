@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@cloudcrafter-frontend/codegen": ["codegen/src/index.ts"],
+      "@cloudcrafter-frontend/plugins/codegen": [
+        "libs/plugins/codegen/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

@@ -1,11 +1,11 @@
 /* eslint-disable */
 export default {
-  displayName: 'cloudcrafter-mono',
+  displayName: 'cloudcrafter-frontend',
   preset: '../../jest.preset.js',
   transform: {
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nx/react/plugins/jest',
     '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nx/react/babel'] }],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/apps/cloudcrafter-mono',
+  coverageDirectory: '../../coverage/apps/cloudcrafter-frontend',
 };
