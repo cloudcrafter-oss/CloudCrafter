@@ -8,7 +8,7 @@
   },
   "exports": {
     ".": "./src/components/index.ts",
-    "./main.css":"./main.css",
+    "./main.css": "./main.css",
     "./postcss.config": "./postcss.config.js",
     "./tailwind.config": "./tailwind.config.js",
     "./lib/*": "./src/lib/*.ts"
@@ -28,6 +28,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
