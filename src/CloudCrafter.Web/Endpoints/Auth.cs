@@ -10,16 +10,11 @@ public class Auth : EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
-            .MapPost(GetDummy);
+            .MapPost(PostLoginUser);
     }
 
-    public async Task<TokenDto> GetDummy(ISender sender, PostLoginUser.Query query)
+    public async Task<TokenDto> PostLoginUser(ISender sender, PostLoginUser.Query query)
     {
         return await sender.Send(query);
     }
-}
-
-public class Dummy
-{
-    public string Title { get; init; } = null!;
 }
