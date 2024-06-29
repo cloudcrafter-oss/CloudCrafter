@@ -30,7 +30,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal --logger trx --results-directory ./tests-results
+      run: dotnet test --no-build --verbosity normal --logger trx --results-directory ./test-results
 
     - name: Dotnet Test Reporter
       uses: bibipkins/dotnet-test-reporter@v1.4.1
