@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.Core.ContributorAggregate;
-using Xunit;
+using FluentAssertions;
+using NUnit.Framework;
 
 namespace CloudCrafter.UnitTests.Core.ContributorAggregate;
 
@@ -13,10 +14,10 @@ public class ContributorConstructor
         return new Contributor(_testName);
     }
 
-    [Fact]
+    [Test]
     public void InitializesName()
     {
         _testContributor = CreateContributor();
-        Assert.Equal(_testName, _testContributor.Name);
+        _testName.Should().Be(_testContributor.Name);
     }
 }

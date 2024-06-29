@@ -34,8 +34,8 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal --logger trx --results-directory ./test-results
-
+      run: dotnet test --no-build --verbosity normal --logger trx --results-directory ./test-results --collect:"XPlat Code Coverage;Format=opencover"
+    
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
@@ -47,4 +47,5 @@ jobs:
       uses: codecov/codecov-action@v4.0.1
       if: always()
       with:
+        fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
