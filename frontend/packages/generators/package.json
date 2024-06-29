@@ -1,0 +1,15 @@
+{
+  "name": "@repo/generators",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "exports": {
+    "." : "./generate-all.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "orval": "^6.31.0"
+  }
+}

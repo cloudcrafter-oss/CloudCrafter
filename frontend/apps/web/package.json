@@ -1,0 +1,29 @@
+{
+  "name": "web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --clearScreen false",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint \"src/**/*.ts\"",
+    "generate-clients": "tsx src/utils/generate-all.ts"
+  },
+  "dependencies": {
+    "@repo/generators": "workspace:*",
+    "@repo/ui": "workspace:*",
+    "@tanstack/react-query": "^5.49.0",
+    "axios": "^1.7.2",
+    "qs": "^6.12.1"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/qs": "^6.9.15",
+    "eslint": "^8.57.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.4"
+  }
+}
