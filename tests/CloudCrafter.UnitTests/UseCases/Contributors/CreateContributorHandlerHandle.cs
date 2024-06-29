@@ -3,7 +3,7 @@ using CloudCrafter.Core.ContributorAggregate;
 using CloudCrafter.UseCases.Contributors.Create;
 using FluentAssertions;
 using NSubstitute;
-using Xunit;
+using NUnit.Framework;
 
 namespace CloudCrafter.UnitTests.UseCases.Contributors;
 
@@ -23,7 +23,7 @@ public class CreateContributorHandlerHandle
         return new Contributor(_testName);
     }
 
-    [Fact]
+    [Test]
     public async Task ReturnsSuccessGivenValidName()
     {
         _repository.AddAsync(Arg.Any<Contributor>(), Arg.Any<CancellationToken>())

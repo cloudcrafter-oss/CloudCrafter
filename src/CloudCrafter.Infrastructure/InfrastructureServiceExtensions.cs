@@ -1,7 +1,9 @@
-﻿using Ardalis.GuardClauses;
+﻿using System.Reflection;
+using Ardalis.GuardClauses;
 using Ardalis.SharedKernel;
 using CloudCrafter.Core.Interfaces;
 using CloudCrafter.Core.Services;
+using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Data.Queries;
 using CloudCrafter.Infrastructure.Email;
@@ -18,6 +20,26 @@ namespace CloudCrafter.Infrastructure;
 
 public static class InfrastructureServiceExtensions
 {
+    
+    public static IServiceCollection AddCloudCrafterApplicationServices(this IServiceCollection services,
+        ConfigurationManager config)
+    {
+
+       // services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        
+        return services;
+    }
+    public static IServiceCollection AddCloudCrafterConfiguration(this IServiceCollection services,
+        ConfigurationManager config)
+    {
+
+        services.AddOptions<JwtSettings>()
+            .BindConfiguration(JwtSettings.KEY)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        return services;
+    }
     public static IServiceCollection AddCloudCrafterIdentity(this IServiceCollection services,
         ConfigurationManager config)
     {
@@ -65,6 +87,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IDeleteContributorService, DeleteContributorService>();
 
         services.AddScoped<ICloudCrafterAuthService, CloudCrafterAuthService>();
+        services.AddScoped<IJwtService, JwtService>();
 
         services.Configure<MailserverConfiguration>(config.GetSection("Mailserver"));
 

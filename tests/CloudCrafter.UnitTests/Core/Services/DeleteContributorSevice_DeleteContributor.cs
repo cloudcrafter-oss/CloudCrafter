@@ -1,10 +1,11 @@
 ﻿using Ardalis.SharedKernel;
 using CloudCrafter.Core.ContributorAggregate;
 using CloudCrafter.Core.Services;
+using FluentAssertions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-using Xunit;
+using NUnit.Framework;
 
 namespace CloudCrafter.UnitTests.Core.Services;
 
@@ -21,11 +22,10 @@ public class DeleteContributorService_DeleteContributor
         _service = new DeleteContributorService(_repository, _mediator, _logger);
     }
 
-    [Fact]
+    [Test]
     public async Task ReturnsNotFoundGivenCantFindContributor()
     {
         var result = await _service.DeleteContributor(0);
-
-        Assert.Equal(Ardalis.Result.ResultStatus.NotFound, result.Status);
+        result.Status.Should().Be(Ardalis.Result.ResultStatus.NotFound);
     }
 }

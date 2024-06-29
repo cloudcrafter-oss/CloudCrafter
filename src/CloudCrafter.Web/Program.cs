@@ -46,7 +46,8 @@ builder.Services.AddFastEndpoints()
 ConfigureMediatR();
 
 builder.Services.AddInfrastructureServices(builder.Configuration, microsoftLogger)
-    .AddCloudCrafterIdentity(builder.Configuration);
+    .AddCloudCrafterIdentity(builder.Configuration)
+    .AddCloudCrafterConfiguration(builder.Configuration);
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 if (builder.Environment.IsDevelopment())
