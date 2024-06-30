@@ -10,7 +10,6 @@ using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Email;
 using CloudCrafter.Infrastructure.Identity;
-using CloudCrafter.UseCases.Contributors.Create;
 using CloudCrafter.Web.Infrastructure;
 using CloudCrafter.Web.Infrastructure.Services;
 using FastEndpoints;
@@ -144,7 +143,6 @@ void ConfigureMediatR()
     var mediatRAssemblies = new[]
     {
         Assembly.GetAssembly(typeof(Contributor)), // Core
-        Assembly.GetAssembly(typeof(CreateContributorCommand)) // UseCases
     };
     builder.Services.AddApplicationServices(mediatRAssemblies);
 }
