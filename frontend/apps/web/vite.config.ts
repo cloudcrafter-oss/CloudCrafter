@@ -1,7 +1,7 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import { fileURLToPath } from "url";
-import path, { dirname } from "path";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import { fileURLToPath } from 'url';
+import path, { dirname } from 'path';
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 
 const __filename = fileURLToPath(import.meta.url);
@@ -13,13 +13,13 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: "./runtimeConfig",
-        replacement: "./runtimeConfig.browser",
+        find: './runtimeConfig',
+        replacement: './runtimeConfig.browser',
       },
       // Reference: https://github.com/vercel/turbo/discussions/620#discussioncomment-2136195
       {
-        find: "@ui",
-        replacement: path.resolve(__dirname, "../../packages/ui/src"),
+        find: '@ui',
+        replacement: path.resolve(__dirname, '../../packages/ui/src'),
       },
     ],
   },

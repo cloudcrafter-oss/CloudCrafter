@@ -1,6 +1,6 @@
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import React from "react";
-import {CloudcrafterProvider} from "./cloudcrafter-provider.tsx";
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import React from 'react';
+import {CloudcrafterProvider} from './cloudcrafter-provider.tsx';
 
 const queryClient = new QueryClient()
 

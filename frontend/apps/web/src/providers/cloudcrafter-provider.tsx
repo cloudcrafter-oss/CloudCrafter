@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect} from 'react';
 import axios from 'axios'
 
 export const CloudcrafterProvider = ({children}: { children: React.ReactNode }) => {
