@@ -22,6 +22,7 @@
     <PackageReference Include="Respawn"/>
     <PackageReference Include="Ardalis.HttpClientTestExtensions"/>
     <PackageReference Include="Bogus" />
+    <PackageReference Include="Moq" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Identity;
 using DotNet.Testcontainers.Builders;
@@ -6,14 +7,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Moq;
 using Respawn;
 using Testcontainers.PostgreSql;
 using Xunit;
 
 namespace CloudCrafter.FunctionalTests;
 
+using static Testing;
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly DbConnection _connection;
@@ -94,6 +98,11 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 {
                     options.UseNpgsql(_connection);
                 });
+                
+                services
+                    .RemoveAll<IUser>()
+                    .AddTransient(provider => Mock.Of<IUser>(s => s.Id == GetUserId()));
+
 
                 services.EnsureDbCreated<AppDbContext>();
                 services.EnsureDbCreated<AppIdentityDbContext>();
