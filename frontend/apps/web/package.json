@@ -11,6 +11,7 @@
     "generate-clients": "tsx src/utils/generate-all.ts"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.6.0",
     "@repo/generators": "workspace:*",
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.49.0",
@@ -18,7 +19,9 @@
     "axios": "^1.7.2",
     "qs": "^6.12.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.52.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
