@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\CloudCrafter.Infrastructure\CloudCrafter.Infrastructure.csproj"/>
-    <ProjectReference Include="..\..\src\CloudCrafter.UseCases\CloudCrafter.UseCases.csproj"/>
     <ProjectReference Include="..\..\src\CloudCrafter.Web\CloudCrafter.Web.csproj"/>
   </ItemGroup>
 
