@@ -12,6 +12,8 @@ using CloudCrafter.Infrastructure.Identity;
 using CloudCrafter.Web.Infrastructure;
 using CloudCrafter.Web.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using NSwag;
+using NSwag.Generation.Processors.Security;
 using Serilog;
 using Serilog.Extensions.Logging;
 
@@ -24,7 +26,6 @@ logger.Information("Starting web host");
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSwaggerSetup();
 builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
 var microsoftLogger = new SerilogLoggerFactory(logger)
     .CreateLogger<Program>();
@@ -39,15 +40,19 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 ConfigureMediatR();
 ConfigureAutoMapper();
 
+var nswagGeneratorRunning = Environment.GetEnvironmentVariable("CLOUDCRAFTER_RUN_NSWAG") == "true";
+
+
 builder.Services.AddInfrastructureServices(builder.Configuration, microsoftLogger)
     .AddCloudCrafterIdentity(builder.Configuration)
     .AddCloudCrafterConfiguration(builder.Configuration);
+
 
 builder.Services.AddCors(options =>
 {
     var corsSettings = new CorsSettings();
     builder.Configuration.Bind(CorsSettings.KEY, corsSettings);
-    
+
     options.AddPolicy("DefaultCorsPolicy", corsBuilder =>
     {
         corsBuilder.WithOrigins(corsSettings.AllowedOrigins.ToArray())
@@ -69,6 +74,22 @@ else
     builder.Services.AddScoped<IEmailSender, MimeKitEmailSender>();
 }
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddOpenApiDocument((configure, sp) =>
+{
+    configure.Title = "CloudCrafter API";
+    // Add JWT
+    configure.AddSecurity("JWT", Enumerable.Empty<string>(),
+        new OpenApiSecurityScheme
+        {
+            Type = OpenApiSecuritySchemeType.ApiKey,
+            Name = "Authorization",
+            In = OpenApiSecurityApiKeyLocation.Header,
+            Description = "Type into the textbox: Bearer {your JWT token}."
+        });
+
+    configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+});
 
 
 var app = builder.Build();
@@ -85,21 +106,27 @@ else
 }
 
 
-
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseExceptionHandler(options => { });
-SeedAppDatabase(app);
 
+if (!nswagGeneratorRunning)
+{
+    SeedAppDatabase(app);
+}
+app.UseSwaggerUi(settings =>
+{
+    settings.Path = "/api";
+    settings.DocumentPath = "/api/specification.json";
+});
 
-app.UseSwaggerSetup();
+app.UseStaticFiles();
 app.MapEndpoints();
 
-app.MapGet("/greeting", () => "Hello, world")
-    .WithGroupName("v1");
+
 
 app.UseCors("DefaultCorsPolicy");
 
@@ -141,8 +168,6 @@ void ConfigureAutoMapper()
 {
     builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 }
-
-
 
 
 // Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
