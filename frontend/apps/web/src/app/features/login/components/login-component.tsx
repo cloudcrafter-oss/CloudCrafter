@@ -12,18 +12,19 @@ import {
     useToast
 } from '@ui/components'
 import { Label } from '@ui/components/ui/label.tsx'
-import { postLoginUserMutationRequestSchema, usePostLoginUserHook } from '../../../app/generated'
+import { postLoginUserMutationRequestSchema, usePostLoginUserHook } from '../../../generated'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import AuthService from '../../../services/auth-service.ts'
 
 export const LoginComponent = () => {
 
     const { toast } = useToast()
     const login = usePostLoginUserHook({
         mutation: {
-            onSuccess: () => {
-                alert('success')
+            onSuccess: (value) => {
+                AuthService.setToken(value.token!)
             },
             onError: () => {
                 toast({
