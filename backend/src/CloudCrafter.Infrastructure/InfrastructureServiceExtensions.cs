@@ -1,16 +1,19 @@
 ﻿using System.Reflection;
 using Ardalis.GuardClauses;
 using Ardalis.SharedKernel;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces;
 using CloudCrafter.Core.Services;
 using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Data.Queries;
+using CloudCrafter.Infrastructure.Domain.Users.Services;
 using CloudCrafter.Infrastructure.Email;
 using CloudCrafter.Infrastructure.Identity;
 using CloudCrafter.Infrastructure.Identity.Services;
 using CloudCrafter.UseCases.Contributors.List;
 using CloudCrafter.UseCases.Domain.Auth.Services;
+using CloudCrafter.UseCases.Domain.Users.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -92,8 +95,10 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IDeleteContributorService, DeleteContributorService>();
 
         services.AddScoped<ICloudCrafterAuthService, CloudCrafterAuthService>();
+        services.AddScoped<IUsersService, UsersService>();
         services.AddScoped<IJwtService, JwtService>();
 
+        services.AddTransient<IIdentityService, IdentityService>();
         services.Configure<MailserverConfiguration>(config.GetSection("Mailserver"));
 
         logger.LogInformation("{Project} services registered", "Infrastructure");

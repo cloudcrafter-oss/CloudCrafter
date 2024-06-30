@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using Ardalis.ListStartupServices;
 using Ardalis.SharedKernel;
+using CloudCrafter.Core;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.ContributorAggregate;
 using CloudCrafter.Core.Interfaces;
 using CloudCrafter.Infrastructure;
@@ -10,6 +12,7 @@ using CloudCrafter.Infrastructure.Email;
 using CloudCrafter.Infrastructure.Identity;
 using CloudCrafter.UseCases.Contributors.Create;
 using CloudCrafter.Web.Infrastructure;
+using CloudCrafter.Web.Infrastructure.Services;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using MediatR;
@@ -47,6 +50,7 @@ builder.Services.AddFastEndpoints()
     });
 
 ConfigureMediatR();
+ConfigureAutoMapper();
 
 builder.Services.AddInfrastructureServices(builder.Configuration, microsoftLogger)
     .AddCloudCrafterIdentity(builder.Configuration)
@@ -66,6 +70,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+builder.Services.AddScoped<IUser, CurrentUser>();
 if (builder.Environment.IsDevelopment())
 {
     // Use a local test email server
@@ -136,14 +141,12 @@ static void SeedAppDatabase(WebApplication app)
 
 void ConfigureMediatR()
 {
-    var mediatRAssemblies = new[]
-    {
-        Assembly.GetAssembly(typeof(Contributor)), // Core
-        Assembly.GetAssembly(typeof(CreateContributorCommand)) // UseCases
-    };
-    builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(mediatRAssemblies!));
-    builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-    builder.Services.AddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>();
+    builder.Services.AddApplicationServices();
+}
+
+void ConfigureAutoMapper()
+{
+    builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 }
 
 void AddShowAllServicesSupport()
