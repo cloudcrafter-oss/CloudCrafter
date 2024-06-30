@@ -61,7 +61,8 @@ export function getUsersInfiniteQueryOptions(params?: GetUsers['queryParams'], o
     const queryKey = getUsersInfiniteQueryKey(params)
     return infiniteQueryOptions({
         queryKey,
-// @ts-expect-error TS6133: pageParam is declared but its value is never read
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore pageParam is declared but its value is possibly never read
         queryFn: async ({ pageParam }) => {
             const res = await client<GetUsers['data'], GetUsers['error']>({
                 method: 'get',

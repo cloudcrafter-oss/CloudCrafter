@@ -60,7 +60,8 @@ export function testInfiniteQueryOptions(options: Test['client']['parameters'] =
     const queryKey = testInfiniteQueryKey()
     return infiniteQueryOptions({
         queryKey,
-// @ts-expect-error TS6133: pageParam is declared but its value is never read
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore pageParam is declared but its value is possibly never read
         queryFn: async ({ pageParam }) => {
             const res = await client<Test['data'], Test['error']>({
                 method: 'get',
