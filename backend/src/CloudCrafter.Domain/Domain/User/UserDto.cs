@@ -4,7 +4,9 @@ namespace CloudCrafter.Domain.Domain.User;
 
 public class UserDto
 {
-    public string Email { get; set; } = null!;  
+    public Guid Id { get; init; }
+    public string Email { get; init; } = null!;
+    public DateTime CreatedAt { get; init; }
 
     private class Mapping : Profile
     {

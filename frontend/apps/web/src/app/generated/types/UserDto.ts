@@ -1,1 +1,6 @@
-export type UserDto = object;
+export type UserDto = {
+    /**
+     * @type string | undefined
+    */
+    email?: string;
+};

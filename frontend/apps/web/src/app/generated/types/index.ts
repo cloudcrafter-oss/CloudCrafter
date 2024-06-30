@@ -1,4 +1,5 @@
 export * from './GetUsers'
+export * from './PaginatedListOfUserDto'
 export * from './PostLoginUser'
 export * from './Query'
 export * from './Test'

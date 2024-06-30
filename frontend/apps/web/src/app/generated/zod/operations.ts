@@ -1,5 +1,5 @@
 import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema } from './postLoginUserSchema'
-import { getUsersQueryResponseSchema } from './getUsersSchema'
+import { getUsersQueryResponseSchema, getUsersQueryParamsSchema } from './getUsersSchema'
 import { testQueryResponseSchema } from './testSchema'
 
  export const operations = { 'PostLoginUser': {
@@ -18,7 +18,7 @@ import { testQueryResponseSchema } from './testSchema'
         request: undefined,
         parameters: {
             path: undefined,
-            query: undefined,
+            query: getUsersQueryParamsSchema,
             header: undefined
         },
         responses: {

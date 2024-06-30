@@ -1,9 +1,11 @@
 ﻿using CloudCrafter.Core.Commands.Users;
 using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Domain.Domain.User;
+using CloudCrafter.Domain.Requests.Filtering;
 using CloudCrafter.Web.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CloudCrafter.Web.Endpoints;
 
@@ -16,9 +18,9 @@ public class Users : EndpointGroupBase
             .MapGet(Test, "test");
     }
     
-    public async Task<PaginatedList<UserDto>> GetUsers(ISender sender)
+    public async Task<PaginatedList<UserDto>> GetUsers(ISender sender, [AsParameters] BasePaginationRequest paginationRequest)
     {
-        return await sender.Send(new GetUserList.Query());
+        return await sender.Send(new GetUserList.Query(paginationRequest));
     }
 
     public List<string> Test()
