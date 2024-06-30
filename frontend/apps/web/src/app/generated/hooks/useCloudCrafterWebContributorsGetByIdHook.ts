@@ -62,6 +62,7 @@ export function cloudCrafterWebContributorsGetByIdInfiniteQueryOptions(contribut
     const queryKey = cloudCrafterWebContributorsGetByIdInfiniteQueryKey(contributorId)
     return infiniteQueryOptions({
         queryKey,
+// @ts-expect-error TS6133: pageParam is declared but its value is never read
         queryFn: async ({ pageParam }) => {
             const res = await client<CloudCrafterWebContributorsGetById['data'], CloudCrafterWebContributorsGetById['error']>({
                 method: 'get',

@@ -62,6 +62,7 @@ export function cloudCrafterWebContributorsListInfiniteQueryOptions(options: Clo
     const queryKey = cloudCrafterWebContributorsListInfiniteQueryKey()
     return infiniteQueryOptions({
         queryKey,
+// @ts-expect-error TS6133: pageParam is declared but its value is never read
         queryFn: async ({ pageParam }) => {
             const res = await client<CloudCrafterWebContributorsList['data'], CloudCrafterWebContributorsList['error']>({
                 method: 'get',
