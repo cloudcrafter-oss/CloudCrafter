@@ -1,6 +1,6 @@
 import client from '@kubb/swagger-client/client'
 import { useQuery, queryOptions, useInfiniteQuery, infiniteQueryOptions, useSuspenseQuery } from '@tanstack/react-query'
-import type { GetUsersQueryResponse } from '../types/GetUsers'
+import type { GetUsersQueryResponse, GetUsersQueryParams } from '../types/GetUsers'
 import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, InfiniteData, UseSuspenseQueryOptions, UseSuspenseQueryResult } from '@tanstack/react-query'
 
  type GetUsersClient = typeof client<GetUsersQueryResponse, never, never>;
@@ -9,7 +9,7 @@ type GetUsers = {
     error: never;
     request: never;
     pathParams: never;
-    queryParams: never;
+    queryParams: GetUsersQueryParams;
     headerParams: never;
     response: GetUsersQueryResponse;
     client: {
@@ -17,16 +17,17 @@ type GetUsers = {
         return: Awaited<ReturnType<GetUsersClient>>;
     };
 };
-export const getUsersQueryKey = () => [{ url: '/api/Users' }] as const
+export const getUsersQueryKey = (params?: GetUsers['queryParams']) => [{ url: '/api/Users' }, ...(params ? [params] : [])] as const
 export type GetUsersQueryKey = ReturnType<typeof getUsersQueryKey>;
-export function getUsersQueryOptions(options: GetUsers['client']['parameters'] = {}) {
-    const queryKey = getUsersQueryKey()
+export function getUsersQueryOptions(params?: GetUsers['queryParams'], options: GetUsers['client']['parameters'] = {}) {
+    const queryKey = getUsersQueryKey(params)
     return queryOptions({
         queryKey,
         queryFn: async () => {
             const res = await client<GetUsers['data'], GetUsers['error']>({
                 method: 'get',
                 url: '/api/Users',
+                params,
                 ...options
             })
             return res.data
@@ -36,16 +37,16 @@ export function getUsersQueryOptions(options: GetUsers['client']['parameters'] =
 /**
  * @link /api/Users
  */
-export function useGetUsersHook<TData = GetUsers['response'], TQueryData = GetUsers['response'], TQueryKey extends QueryKey = GetUsersQueryKey>(options: {
+export function useGetUsersHook<TData = GetUsers['response'], TQueryData = GetUsers['response'], TQueryKey extends QueryKey = GetUsersQueryKey>(params?: GetUsers['queryParams'], options: {
     query?: Partial<QueryObserverOptions<GetUsers['response'], GetUsers['error'], TData, TQueryData, TQueryKey>>;
     client?: GetUsers['client']['parameters'];
 } = {}): UseQueryResult<TData, GetUsers['error']> & {
     queryKey: TQueryKey;
 } {
     const { query: queryOptions, client: clientOptions = {} } = options ?? {}
-    const queryKey = queryOptions?.queryKey ?? getUsersQueryKey()
+    const queryKey = queryOptions?.queryKey ?? getUsersQueryKey(params)
     const query = useQuery({
-        ...getUsersQueryOptions(clientOptions) as unknown as QueryObserverOptions,
+        ...getUsersQueryOptions(params, clientOptions) as unknown as QueryObserverOptions,
         queryKey,
         ...queryOptions as unknown as Omit<QueryObserverOptions, 'queryKey'>
     }) as UseQueryResult<TData, GetUsers['error']> & {
@@ -54,18 +55,24 @@ export function useGetUsersHook<TData = GetUsers['response'], TQueryData = GetUs
     query.queryKey = queryKey as TQueryKey
     return query
 }
-export const getUsersInfiniteQueryKey = () => [{ url: '/api/Users' }] as const
+export const getUsersInfiniteQueryKey = (params?: GetUsers['queryParams']) => [{ url: '/api/Users' }, ...(params ? [params] : [])] as const
 export type GetUsersInfiniteQueryKey = ReturnType<typeof getUsersInfiniteQueryKey>;
-export function getUsersInfiniteQueryOptions(options: GetUsers['client']['parameters'] = {}) {
-    const queryKey = getUsersInfiniteQueryKey()
+export function getUsersInfiniteQueryOptions(params?: GetUsers['queryParams'], options: GetUsers['client']['parameters'] = {}) {
+    const queryKey = getUsersInfiniteQueryKey(params)
     return infiniteQueryOptions({
         queryKey,
-// @ts-expect-error TS6133: pageParam is declared but its value is never read
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore pageParam is declared but its value is possibly never read
         queryFn: async ({ pageParam }) => {
             const res = await client<GetUsers['data'], GetUsers['error']>({
                 method: 'get',
                 url: '/api/Users',
-                ...options
+                ...options,
+                params: {
+                    ...params,
+                    ['id']: pageParam,
+                    ...(options.params || {}),
+                }
             })
             return res.data
         },
@@ -77,16 +84,16 @@ export function getUsersInfiniteQueryOptions(options: GetUsers['client']['parame
 /**
  * @link /api/Users
  */
-export function useGetUsersHookInfinite<TData = InfiniteData<GetUsers['response']>, TQueryData = GetUsers['response'], TQueryKey extends QueryKey = GetUsersInfiniteQueryKey>(options: {
+export function useGetUsersHookInfinite<TData = InfiniteData<GetUsers['response']>, TQueryData = GetUsers['response'], TQueryKey extends QueryKey = GetUsersInfiniteQueryKey>(params?: GetUsers['queryParams'], options: {
     query?: Partial<InfiniteQueryObserverOptions<GetUsers['response'], GetUsers['error'], TData, TQueryData, TQueryKey>>;
     client?: GetUsers['client']['parameters'];
 } = {}): UseInfiniteQueryResult<TData, GetUsers['error']> & {
     queryKey: TQueryKey;
 } {
     const { query: queryOptions, client: clientOptions = {} } = options ?? {}
-    const queryKey = queryOptions?.queryKey ?? getUsersInfiniteQueryKey()
+    const queryKey = queryOptions?.queryKey ?? getUsersInfiniteQueryKey(params)
     const query = useInfiniteQuery({
-        ...getUsersInfiniteQueryOptions(clientOptions) as unknown as InfiniteQueryObserverOptions,
+        ...getUsersInfiniteQueryOptions(params, clientOptions) as unknown as InfiniteQueryObserverOptions,
         queryKey,
         ...queryOptions as unknown as Omit<InfiniteQueryObserverOptions, 'queryKey'>
     }) as UseInfiniteQueryResult<TData, GetUsers['error']> & {
@@ -95,16 +102,17 @@ export function useGetUsersHookInfinite<TData = InfiniteData<GetUsers['response'
     query.queryKey = queryKey as TQueryKey
     return query
 }
-export const getUsersSuspenseQueryKey = () => [{ url: '/api/Users' }] as const
+export const getUsersSuspenseQueryKey = (params?: GetUsers['queryParams']) => [{ url: '/api/Users' }, ...(params ? [params] : [])] as const
 export type GetUsersSuspenseQueryKey = ReturnType<typeof getUsersSuspenseQueryKey>;
-export function getUsersSuspenseQueryOptions(options: GetUsers['client']['parameters'] = {}) {
-    const queryKey = getUsersSuspenseQueryKey()
+export function getUsersSuspenseQueryOptions(params?: GetUsers['queryParams'], options: GetUsers['client']['parameters'] = {}) {
+    const queryKey = getUsersSuspenseQueryKey(params)
     return queryOptions({
         queryKey,
         queryFn: async () => {
             const res = await client<GetUsers['data'], GetUsers['error']>({
                 method: 'get',
                 url: '/api/Users',
+                params,
                 ...options
             })
             return res.data
@@ -114,16 +122,16 @@ export function getUsersSuspenseQueryOptions(options: GetUsers['client']['parame
 /**
  * @link /api/Users
  */
-export function useGetUsersHookSuspense<TData = GetUsers['response'], TQueryKey extends QueryKey = GetUsersSuspenseQueryKey>(options: {
+export function useGetUsersHookSuspense<TData = GetUsers['response'], TQueryKey extends QueryKey = GetUsersSuspenseQueryKey>(params?: GetUsers['queryParams'], options: {
     query?: Partial<UseSuspenseQueryOptions<GetUsers['response'], GetUsers['error'], TData, TQueryKey>>;
     client?: GetUsers['client']['parameters'];
 } = {}): UseSuspenseQueryResult<TData, GetUsers['error']> & {
     queryKey: TQueryKey;
 } {
     const { query: queryOptions, client: clientOptions = {} } = options ?? {}
-    const queryKey = queryOptions?.queryKey ?? getUsersSuspenseQueryKey()
+    const queryKey = queryOptions?.queryKey ?? getUsersSuspenseQueryKey(params)
     const query = useSuspenseQuery({
-        ...getUsersSuspenseQueryOptions(clientOptions) as unknown as QueryObserverOptions,
+        ...getUsersSuspenseQueryOptions(params, clientOptions) as unknown as QueryObserverOptions,
         queryKey,
         ...queryOptions as unknown as Omit<QueryObserverOptions, 'queryKey'>
     }) as UseSuspenseQueryResult<TData, GetUsers['error']> & {

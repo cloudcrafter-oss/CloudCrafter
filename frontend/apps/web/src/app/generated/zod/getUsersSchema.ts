@@ -1,7 +1,9 @@
 import { z } from 'zod'
-import { userDtoSchema } from './userDtoSchema'
+import { paginatedListOfUserDtoSchema } from './paginatedListOfUserDtoSchema'
 
 
-export const getUsers200Schema = z.array(z.lazy(() => userDtoSchema))
+export const getUsersQueryParamsSchema = z.object({ 'Page': z.number().nullable().nullish(), 'PageSize': z.number().nullable().nullish() }).optional()
 
- export const getUsersQueryResponseSchema = z.array(z.lazy(() => userDtoSchema))
+ export const getUsers200Schema = z.lazy(() => paginatedListOfUserDtoSchema)
+
+ export const getUsersQueryResponseSchema = z.lazy(() => paginatedListOfUserDtoSchema)

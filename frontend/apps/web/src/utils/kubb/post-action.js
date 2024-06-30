@@ -14,7 +14,7 @@ async function fixUnusedVarsForPageParam(pattern) {
 
             const updatedLines = lines.map((line, index) => {
                 if (line.includes('queryFn: async ({ pageParam })')) {
-                    return '// @ts-expect-error TS6133: pageParam is declared but its value is never read\n' + line
+                    return '// eslint-disable-next-line @typescript-eslint/ban-ts-comment\n// @ts-ignore pageParam is declared but its value is possibly never read\n' + line
                 }
                 return line
             })
@@ -37,7 +37,8 @@ fixUnusedVarsForPageParam(pattern)
 
 const eslintConfigTypes = {
     'rules': {
-        '@typescript-eslint/no-explicit-any': 'off'
+        '@typescript-eslint/no-explicit-any': 'off',
+        //   '@typescript-eslint/ban-ts-comment': 'off'
     }
 }
 
