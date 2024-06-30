@@ -4,6 +4,7 @@ using Ardalis.SharedKernel;
 using CloudCrafter.Core.ContributorAggregate;
 using CloudCrafter.Core.Interfaces;
 using CloudCrafter.Infrastructure;
+using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Email;
 using CloudCrafter.Infrastructure.Identity;
@@ -37,6 +38,8 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 });
 
 
+
+
 builder.Services.AddFastEndpoints()
     .SwaggerDocument(o =>
     {
@@ -48,6 +51,19 @@ ConfigureMediatR();
 builder.Services.AddInfrastructureServices(builder.Configuration, microsoftLogger)
     .AddCloudCrafterIdentity(builder.Configuration)
     .AddCloudCrafterConfiguration(builder.Configuration);
+
+builder.Services.AddCors(options =>
+{
+    var corsSettings = new CorsSettings();
+    builder.Configuration.Bind(CorsSettings.KEY, corsSettings);
+    
+    options.AddPolicy("DefaultCorsPolicy", corsBuilder =>
+    {
+        corsBuilder.WithOrigins(corsSettings.AllowedOrigins.ToArray())
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 if (builder.Environment.IsDevelopment())
@@ -91,6 +107,7 @@ app.UseExceptionHandler(options => { });
 SeedAppDatabase(app);
 
 app.MapEndpoints();
+app.UseCors("DefaultCorsPolicy");
 
 app.Run();
 
