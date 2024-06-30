@@ -30,6 +30,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudCrafter.UnitTests", "t
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudCrafter.UseCases", "src\CloudCrafter.UseCases\CloudCrafter.UseCases.csproj", "{B74A78FF-B79E-4C38-A9C7-084A90990CAD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudCrafter.Infrastructure.UnitTests", "tests\CloudCrafter.Infrastructure.UnitTests\CloudCrafter.Infrastructure.UnitTests.csproj", "{82A3F2C3-B2AD-4007-A289-6E1CFC3D2683}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,6 +114,18 @@ Global
 		{B74A78FF-B79E-4C38-A9C7-084A90990CAD}.Release|x64.Build.0 = Release|Any CPU
 		{B74A78FF-B79E-4C38-A9C7-084A90990CAD}.Release|x86.ActiveCfg = Release|Any CPU
 		{B74A78FF-B79E-4C38-A9C7-084A90990CAD}.Release|x86.Build.0 = Release|Any CPU
+		{82A3F2C3-B2AD-4007-A289-6E1CFC3D2683}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82A3F2C3-B2AD-4007-A289-6E1CFC3D2683}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82A3F2C3-B2AD-4007-A289-6E1CFC3D2683}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{82A3F2C3-B2AD-4007-A289-6E1CFC3D2683}.Debug|x64.Build.0 = Debug|Any CPU
+		{82A3F2C3-B2AD-4007-A289-6E1CFC3D2683}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{82A3F2C3-B2AD-4007-A289-6E1CFC3D2683}.Debug|x86.Build.0 = Debug|Any CPU
+		{82A3F2C3-B2AD-4007-A289-6E1CFC3D2683}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82A3F2C3-B2AD-4007-A289-6E1CFC3D2683}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82A3F2C3-B2AD-4007-A289-6E1CFC3D2683}.Release|x64.ActiveCfg = Release|Any CPU
+		{82A3F2C3-B2AD-4007-A289-6E1CFC3D2683}.Release|x64.Build.0 = Release|Any CPU
+		{82A3F2C3-B2AD-4007-A289-6E1CFC3D2683}.Release|x86.ActiveCfg = Release|Any CPU
+		{82A3F2C3-B2AD-4007-A289-6E1CFC3D2683}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,6 +137,7 @@ Global
 		{7D84EFEE-A7D9-44AD-A0A3-38EC7882D94C} = {B31B4797-1D9F-4288-808C-BE9A31A98C7D}
 		{1DC7F5A0-DDF7-4975-84EB-05F4FC1B6AB5} = {B31B4797-1D9F-4288-808C-BE9A31A98C7D}
 		{B74A78FF-B79E-4C38-A9C7-084A90990CAD} = {106AE906-5075-410A-B941-912F811848EE}
+		{82A3F2C3-B2AD-4007-A289-6E1CFC3D2683} = {B31B4797-1D9F-4288-808C-BE9A31A98C7D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0F19343-8185-4A9F-9165-0EA8544BC925}

@@ -9,6 +9,7 @@
     <PackageReference Include="Ardalis.Specification"/>
     <PackageReference Include="FluentValidation"/>
     <PackageReference Include="MediatR"/>
+    <PackageReference Include="AutoMapper" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
   </ItemGroup>
 
