@@ -1,7 +1,7 @@
-import client from "@kubb/swagger-client/client";
-import { useMutation } from "@tanstack/react-query";
-import type { PostLoginUserMutationRequest, PostLoginUserMutationResponse } from "../types/PostLoginUser";
-import type { UseMutationOptions } from "@tanstack/react-query";
+import client from '@kubb/swagger-client/client'
+import { useMutation } from '@tanstack/react-query'
+import type { PostLoginUserMutationRequest, PostLoginUserMutationResponse } from '../types/PostLoginUser'
+import type { UseMutationOptions } from '@tanstack/react-query'
 
  type PostLoginUserClient = typeof client<PostLoginUserMutationResponse, never, PostLoginUserMutationRequest>;
 type PostLoginUser = {
@@ -21,20 +21,20 @@ type PostLoginUser = {
  * @link /api/Auth
  */
 export function usePostLoginUserHook(options: {
-    mutation?: UseMutationOptions<PostLoginUser["response"], PostLoginUser["error"], PostLoginUser["request"]>;
-    client?: PostLoginUser["client"]["parameters"];
+    mutation?: UseMutationOptions<PostLoginUser['response'], PostLoginUser['error'], PostLoginUser['request']>;
+    client?: PostLoginUser['client']['parameters'];
 } = {}) {
-    const { mutation: mutationOptions, client: clientOptions = {} } = options ?? {};
+    const { mutation: mutationOptions, client: clientOptions = {} } = options ?? {}
     return useMutation({
         mutationFn: async (data) => {
-            const res = await client<PostLoginUser["data"], PostLoginUser["error"], PostLoginUser["request"]>({
-                method: "post",
-                url: `/api/Auth`,
+            const res = await client<PostLoginUser['data'], PostLoginUser['error'], PostLoginUser['request']>({
+                method: 'post',
+                url: '/api/Auth',
                 data,
                 ...clientOptions
-            });
-            return res.data;
+            })
+            return res.data
         },
         ...mutationOptions
-    });
+    })
 }

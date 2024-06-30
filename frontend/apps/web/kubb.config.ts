@@ -1,8 +1,9 @@
 import { defineConfig } from '@kubb/core'
-import { pluginZod } from '@kubb/swagger-zod'
 import { pluginOas } from '@kubb/plugin-oas'
 import { pluginTanstackQuery } from '@kubb/swagger-tanstack-query'
 import { pluginTs } from '@kubb/swagger-ts'
+import { pluginZod } from '@kubb/swagger-zod'
+
 
 export default defineConfig({
     root: '.',
@@ -12,6 +13,12 @@ export default defineConfig({
     output: {
         path: './src/app/generated',
         clean: true,
+    },
+    hooks: {
+        done: [
+            'node src/utils/kubb/post-action.js',
+            'eslint ./src/app/generated --ext ts --fix'
+        ]
     },
     plugins: [
         pluginOas({ output: false }),
@@ -23,7 +30,7 @@ export default defineConfig({
                 productName: 'z.string().uuid()',
             },
         }),
-        pluginTs({}),
+        pluginTs(),
         pluginTanstackQuery({
             transformers: {
                 name: (name, type) => {
@@ -33,6 +40,7 @@ export default defineConfig({
                     return name
                 },
             },
+
             output: {
                 path: './hooks',
             },

@@ -1,5 +1,5 @@
-import { PostLoginUserQuery } from "./PostLoginUserQuery";
-import type { TokenDto } from "./TokenDto";
+import { PostLoginUserQuery } from './PostLoginUserQuery'
+import type { TokenDto } from './TokenDto'
 
  export type PostLoginUser200 = TokenDto;
 export type PostLoginUserMutationRequest = PostLoginUserQuery;

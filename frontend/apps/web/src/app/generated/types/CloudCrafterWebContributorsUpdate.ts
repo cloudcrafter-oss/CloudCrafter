@@ -1,6 +1,6 @@
-import { ErrorResponse } from "./ErrorResponse";
-import { UpdateContributorRequest } from "./UpdateContributorRequest";
-import type { UpdateContributorResponse } from "./UpdateContributorResponse";
+import { ErrorResponse } from './ErrorResponse'
+import { UpdateContributorRequest } from './UpdateContributorRequest'
+import type { UpdateContributorResponse } from './UpdateContributorResponse'
 
  export type CloudCrafterWebContributorsUpdatePathParams = {
     /**

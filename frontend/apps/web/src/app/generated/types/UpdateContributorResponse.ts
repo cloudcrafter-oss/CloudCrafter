@@ -1,4 +1,4 @@
-import { ContributorRecord } from "./ContributorRecord";
+import { ContributorRecord } from './ContributorRecord'
 
  export type UpdateContributorResponse = {
     contributor?: ContributorRecord;

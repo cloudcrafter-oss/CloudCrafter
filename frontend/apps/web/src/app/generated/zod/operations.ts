@@ -1,11 +1,11 @@
-import { cloudCrafterWebContributorsCreateMutationRequestSchema, cloudCrafterWebContributorsCreateMutationResponseSchema, cloudCrafterWebContributorsCreate400Schema } from "./cloudCrafterWebContributorsCreateSchema";
-import { cloudCrafterWebContributorsListQueryResponseSchema } from "./cloudCrafterWebContributorsListSchema";
-import { cloudCrafterWebContributorsDeleteMutationResponseSchema, cloudCrafterWebContributorsDelete400Schema, cloudCrafterWebContributorsDeletePathParamsSchema } from "./cloudCrafterWebContributorsDeleteSchema";
-import { cloudCrafterWebContributorsGetByIdQueryResponseSchema, cloudCrafterWebContributorsGetById400Schema, cloudCrafterWebContributorsGetByIdPathParamsSchema } from "./cloudCrafterWebContributorsGetByIdSchema";
-import { cloudCrafterWebContributorsUpdateMutationRequestSchema, cloudCrafterWebContributorsUpdateMutationResponseSchema, cloudCrafterWebContributorsUpdate400Schema, cloudCrafterWebContributorsUpdatePathParamsSchema } from "./cloudCrafterWebContributorsUpdateSchema";
-import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema } from "./postLoginUserSchema";
+import { cloudCrafterWebContributorsCreateMutationRequestSchema, cloudCrafterWebContributorsCreateMutationResponseSchema, cloudCrafterWebContributorsCreate400Schema } from './cloudCrafterWebContributorsCreateSchema'
+import { cloudCrafterWebContributorsListQueryResponseSchema } from './cloudCrafterWebContributorsListSchema'
+import { cloudCrafterWebContributorsDeleteMutationResponseSchema, cloudCrafterWebContributorsDelete400Schema, cloudCrafterWebContributorsDeletePathParamsSchema } from './cloudCrafterWebContributorsDeleteSchema'
+import { cloudCrafterWebContributorsGetByIdQueryResponseSchema, cloudCrafterWebContributorsGetById400Schema, cloudCrafterWebContributorsGetByIdPathParamsSchema } from './cloudCrafterWebContributorsGetByIdSchema'
+import { cloudCrafterWebContributorsUpdateMutationRequestSchema, cloudCrafterWebContributorsUpdateMutationResponseSchema, cloudCrafterWebContributorsUpdate400Schema, cloudCrafterWebContributorsUpdatePathParamsSchema } from './cloudCrafterWebContributorsUpdateSchema'
+import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema } from './postLoginUserSchema'
 
- export const operations = { "CloudCrafterWebContributorsCreate": {
+ export const operations = { 'CloudCrafterWebContributorsCreate': {
         request: cloudCrafterWebContributorsCreateMutationRequestSchema,
         parameters: {
             path: undefined,
@@ -20,7 +20,7 @@ import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema
         errors: {
             400: cloudCrafterWebContributorsCreate400Schema
         }
-    }, "CloudCrafterWebContributorsList": {
+    }, 'CloudCrafterWebContributorsList': {
         request: undefined,
         parameters: {
             path: undefined,
@@ -32,7 +32,7 @@ import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema
             default: cloudCrafterWebContributorsListQueryResponseSchema
         },
         errors: {}
-    }, "CloudCrafterWebContributorsDelete": {
+    }, 'CloudCrafterWebContributorsDelete': {
         request: undefined,
         parameters: {
             path: cloudCrafterWebContributorsDeletePathParamsSchema,
@@ -47,7 +47,7 @@ import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema
         errors: {
             400: cloudCrafterWebContributorsDelete400Schema
         }
-    }, "CloudCrafterWebContributorsGetById": {
+    }, 'CloudCrafterWebContributorsGetById': {
         request: undefined,
         parameters: {
             path: cloudCrafterWebContributorsGetByIdPathParamsSchema,
@@ -62,7 +62,7 @@ import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema
         errors: {
             400: cloudCrafterWebContributorsGetById400Schema
         }
-    }, "CloudCrafterWebContributorsUpdate": {
+    }, 'CloudCrafterWebContributorsUpdate': {
         request: cloudCrafterWebContributorsUpdateMutationRequestSchema,
         parameters: {
             path: cloudCrafterWebContributorsUpdatePathParamsSchema,
@@ -77,7 +77,7 @@ import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema
         errors: {
             400: cloudCrafterWebContributorsUpdate400Schema
         }
-    }, "PostLoginUser": {
+    }, 'PostLoginUser': {
         request: postLoginUserMutationRequestSchema,
         parameters: {
             path: undefined,
@@ -89,14 +89,14 @@ import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema
             default: postLoginUserMutationResponseSchema
         },
         errors: {}
-    } } as const;
-export const paths = { "/Contributors": {
-        post: operations["CloudCrafterWebContributorsCreate"],
-        get: operations["CloudCrafterWebContributorsList"]
-    }, "/Contributors/{contributorId}": {
-        delete: operations["CloudCrafterWebContributorsDelete"],
-        get: operations["CloudCrafterWebContributorsGetById"],
-        put: operations["CloudCrafterWebContributorsUpdate"]
-    }, "/api/Auth": {
-        post: operations["PostLoginUser"]
-    } } as const;
+    } } as const
+export const paths = { '/Contributors': {
+        post: operations['CloudCrafterWebContributorsCreate'],
+        get: operations['CloudCrafterWebContributorsList']
+    }, '/Contributors/{contributorId}': {
+        delete: operations['CloudCrafterWebContributorsDelete'],
+        get: operations['CloudCrafterWebContributorsGetById'],
+        put: operations['CloudCrafterWebContributorsUpdate']
+    }, '/api/Auth': {
+        post: operations['PostLoginUser']
+    } } as const

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 
-export const tokenDtoSchema = z.object({ "token": z.string().optional(), "validTo": z.string().datetime().optional() });
+export const tokenDtoSchema = z.object({ 'token': z.string().optional(), 'validTo': z.string().datetime().optional() })

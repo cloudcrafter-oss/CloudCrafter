@@ -1,6 +1,6 @@
-import { ErrorResponse } from "./ErrorResponse";
-import { CreateContributorRequest } from "./CreateContributorRequest";
-import type { CreateContributorResponse } from "./CreateContributorResponse";
+import { ErrorResponse } from './ErrorResponse'
+import { CreateContributorRequest } from './CreateContributorRequest'
+import type { CreateContributorResponse } from './CreateContributorResponse'
 
  /**
  * @description Success

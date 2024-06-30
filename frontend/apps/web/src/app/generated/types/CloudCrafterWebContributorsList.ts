@@ -1,4 +1,4 @@
-import type { ContributorListResponse } from "./ContributorListResponse";
+import type { ContributorListResponse } from './ContributorListResponse'
 
  /**
  * @description Success

@@ -1,5 +1,5 @@
-import { ErrorResponse } from "./ErrorResponse";
-import type { ContributorRecord } from "./ContributorRecord";
+import { ErrorResponse } from './ErrorResponse'
+import type { ContributorRecord } from './ContributorRecord'
 
  export type CloudCrafterWebContributorsGetByIdPathParams = {
     /**

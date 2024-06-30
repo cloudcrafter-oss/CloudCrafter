@@ -1,7 +1,7 @@
-import client from "@kubb/swagger-client/client";
-import { useMutation } from "@tanstack/react-query";
-import type { CloudCrafterWebContributorsDeleteMutationResponse, CloudCrafterWebContributorsDeletePathParams, CloudCrafterWebContributorsDelete400 } from "../types/CloudCrafterWebContributorsDelete";
-import type { UseMutationOptions } from "@tanstack/react-query";
+import client from '@kubb/swagger-client/client'
+import { useMutation } from '@tanstack/react-query'
+import type { CloudCrafterWebContributorsDeleteMutationResponse, CloudCrafterWebContributorsDeletePathParams, CloudCrafterWebContributorsDelete400 } from '../types/CloudCrafterWebContributorsDelete'
+import type { UseMutationOptions } from '@tanstack/react-query'
 
  type CloudCrafterWebContributorsDeleteClient = typeof client<CloudCrafterWebContributorsDeleteMutationResponse, CloudCrafterWebContributorsDelete400, never>;
 type CloudCrafterWebContributorsDelete = {
@@ -22,20 +22,20 @@ type CloudCrafterWebContributorsDelete = {
  * @summary Delete a Contributor.
  * @link /Contributors/:contributorId
  */
-export function useCloudCrafterWebContributorsDeleteHook(contributorId: CloudCrafterWebContributorsDeletePathParams["contributorId"], options: {
-    mutation?: UseMutationOptions<CloudCrafterWebContributorsDelete["response"], CloudCrafterWebContributorsDelete["error"], CloudCrafterWebContributorsDelete["request"]>;
-    client?: CloudCrafterWebContributorsDelete["client"]["parameters"];
+export function useCloudCrafterWebContributorsDeleteHook(contributorId: CloudCrafterWebContributorsDeletePathParams['contributorId'], options: {
+    mutation?: UseMutationOptions<CloudCrafterWebContributorsDelete['response'], CloudCrafterWebContributorsDelete['error'], CloudCrafterWebContributorsDelete['request']>;
+    client?: CloudCrafterWebContributorsDelete['client']['parameters'];
 } = {}) {
-    const { mutation: mutationOptions, client: clientOptions = {} } = options ?? {};
+    const { mutation: mutationOptions, client: clientOptions = {} } = options ?? {}
     return useMutation({
         mutationFn: async () => {
-            const res = await client<CloudCrafterWebContributorsDelete["data"], CloudCrafterWebContributorsDelete["error"], CloudCrafterWebContributorsDelete["request"]>({
-                method: "delete",
+            const res = await client<CloudCrafterWebContributorsDelete['data'], CloudCrafterWebContributorsDelete['error'], CloudCrafterWebContributorsDelete['request']>({
+                method: 'delete',
                 url: `/Contributors/${contributorId}`,
                 ...clientOptions
-            });
-            return res.data;
+            })
+            return res.data
         },
         ...mutationOptions
-    });
+    })
 }

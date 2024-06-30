@@ -1,7 +1,7 @@
-import client from "@kubb/swagger-client/client";
-import { useMutation } from "@tanstack/react-query";
-import type { CloudCrafterWebContributorsUpdateMutationRequest, CloudCrafterWebContributorsUpdateMutationResponse, CloudCrafterWebContributorsUpdatePathParams, CloudCrafterWebContributorsUpdate400 } from "../types/CloudCrafterWebContributorsUpdate";
-import type { UseMutationOptions } from "@tanstack/react-query";
+import client from '@kubb/swagger-client/client'
+import { useMutation } from '@tanstack/react-query'
+import type { CloudCrafterWebContributorsUpdateMutationRequest, CloudCrafterWebContributorsUpdateMutationResponse, CloudCrafterWebContributorsUpdatePathParams, CloudCrafterWebContributorsUpdate400 } from '../types/CloudCrafterWebContributorsUpdate'
+import type { UseMutationOptions } from '@tanstack/react-query'
 
  type CloudCrafterWebContributorsUpdateClient = typeof client<CloudCrafterWebContributorsUpdateMutationResponse, CloudCrafterWebContributorsUpdate400, CloudCrafterWebContributorsUpdateMutationRequest>;
 type CloudCrafterWebContributorsUpdate = {
@@ -22,21 +22,21 @@ type CloudCrafterWebContributorsUpdate = {
  * @summary Update an existing Contributor.
  * @link /Contributors/:contributorId
  */
-export function useCloudCrafterWebContributorsUpdateHook(contributorId: CloudCrafterWebContributorsUpdatePathParams["contributorId"], options: {
-    mutation?: UseMutationOptions<CloudCrafterWebContributorsUpdate["response"], CloudCrafterWebContributorsUpdate["error"], CloudCrafterWebContributorsUpdate["request"]>;
-    client?: CloudCrafterWebContributorsUpdate["client"]["parameters"];
+export function useCloudCrafterWebContributorsUpdateHook(contributorId: CloudCrafterWebContributorsUpdatePathParams['contributorId'], options: {
+    mutation?: UseMutationOptions<CloudCrafterWebContributorsUpdate['response'], CloudCrafterWebContributorsUpdate['error'], CloudCrafterWebContributorsUpdate['request']>;
+    client?: CloudCrafterWebContributorsUpdate['client']['parameters'];
 } = {}) {
-    const { mutation: mutationOptions, client: clientOptions = {} } = options ?? {};
+    const { mutation: mutationOptions, client: clientOptions = {} } = options ?? {}
     return useMutation({
         mutationFn: async (data) => {
-            const res = await client<CloudCrafterWebContributorsUpdate["data"], CloudCrafterWebContributorsUpdate["error"], CloudCrafterWebContributorsUpdate["request"]>({
-                method: "put",
+            const res = await client<CloudCrafterWebContributorsUpdate['data'], CloudCrafterWebContributorsUpdate['error'], CloudCrafterWebContributorsUpdate['request']>({
+                method: 'put',
                 url: `/Contributors/${contributorId}`,
                 data,
                 ...clientOptions
-            });
-            return res.data;
+            })
+            return res.data
         },
         ...mutationOptions
-    });
+    })
 }

@@ -1,7 +1,7 @@
-import client from "@kubb/swagger-client/client";
-import { useMutation } from "@tanstack/react-query";
-import type { CloudCrafterWebContributorsCreateMutationRequest, CloudCrafterWebContributorsCreateMutationResponse, CloudCrafterWebContributorsCreate400 } from "../types/CloudCrafterWebContributorsCreate";
-import type { UseMutationOptions } from "@tanstack/react-query";
+import client from '@kubb/swagger-client/client'
+import { useMutation } from '@tanstack/react-query'
+import type { CloudCrafterWebContributorsCreateMutationRequest, CloudCrafterWebContributorsCreateMutationResponse, CloudCrafterWebContributorsCreate400 } from '../types/CloudCrafterWebContributorsCreate'
+import type { UseMutationOptions } from '@tanstack/react-query'
 
  type CloudCrafterWebContributorsCreateClient = typeof client<CloudCrafterWebContributorsCreateMutationResponse, CloudCrafterWebContributorsCreate400, CloudCrafterWebContributorsCreateMutationRequest>;
 type CloudCrafterWebContributorsCreate = {
@@ -23,20 +23,20 @@ type CloudCrafterWebContributorsCreate = {
  * @link /Contributors
  */
 export function useCloudCrafterWebContributorsCreateHook(options: {
-    mutation?: UseMutationOptions<CloudCrafterWebContributorsCreate["response"], CloudCrafterWebContributorsCreate["error"], CloudCrafterWebContributorsCreate["request"]>;
-    client?: CloudCrafterWebContributorsCreate["client"]["parameters"];
+    mutation?: UseMutationOptions<CloudCrafterWebContributorsCreate['response'], CloudCrafterWebContributorsCreate['error'], CloudCrafterWebContributorsCreate['request']>;
+    client?: CloudCrafterWebContributorsCreate['client']['parameters'];
 } = {}) {
-    const { mutation: mutationOptions, client: clientOptions = {} } = options ?? {};
+    const { mutation: mutationOptions, client: clientOptions = {} } = options ?? {}
     return useMutation({
         mutationFn: async (data) => {
-            const res = await client<CloudCrafterWebContributorsCreate["data"], CloudCrafterWebContributorsCreate["error"], CloudCrafterWebContributorsCreate["request"]>({
-                method: "post",
-                url: `/Contributors`,
+            const res = await client<CloudCrafterWebContributorsCreate['data'], CloudCrafterWebContributorsCreate['error'], CloudCrafterWebContributorsCreate['request']>({
+                method: 'post',
+                url: '/Contributors',
                 data,
                 ...clientOptions
-            });
-            return res.data;
+            })
+            return res.data
         },
         ...mutationOptions
-    });
+    })
 }
