@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
-using CloudCrafter.Core.Domain.Auth;
+using CloudCrafter.Domain.Domain.Auth;
 
-namespace CloudCrafter.UseCases.Domain.Auth.Services;
+namespace CloudCrafter.Core.Interfaces.Domain.Auth;
 
 public interface IJwtService
 {

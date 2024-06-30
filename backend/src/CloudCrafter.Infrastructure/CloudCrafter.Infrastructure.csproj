@@ -28,5 +28,6 @@
   <ItemGroup>
     <Folder Include="Data\Migrations\"/>
     <Folder Include="Data\Migrations\App\"/>
+    <Folder Include="Domain\Users\Services\" />
   </ItemGroup>
 </Project>

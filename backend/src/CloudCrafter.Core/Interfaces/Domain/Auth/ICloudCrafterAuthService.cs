@@ -1,6 +1,7 @@
-using CloudCrafter.Core.Domain.Auth;
 
-namespace CloudCrafter.UseCases.Domain.Auth.Services;
+using CloudCrafter.Domain.Domain.Auth;
+
+namespace CloudCrafter.Core.Interfaces.Domain.Auth;
 
 public interface ICloudCrafterAuthService
 {

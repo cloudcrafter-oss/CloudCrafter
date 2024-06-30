@@ -1,6 +1,6 @@
 using System.Security.Claims;
-using CloudCrafter.Core.Domain.Auth;
-using CloudCrafter.UseCases.Domain.Auth.Services;
+using CloudCrafter.Core.Interfaces.Domain.Auth;
+using CloudCrafter.Domain.Domain.Auth;
 using Microsoft.AspNetCore.Identity;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 

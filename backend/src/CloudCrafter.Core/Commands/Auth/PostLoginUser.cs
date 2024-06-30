@@ -1,8 +1,9 @@
-using CloudCrafter.Core.Domain.Auth;
-using CloudCrafter.UseCases.Domain.Auth.Services;
+
+using CloudCrafter.Core.Interfaces.Domain.Auth;
+using CloudCrafter.Domain.Domain.Auth;
 using MediatR;
 
-namespace CloudCrafter.UseCases.Domain.Auth.Commands;
+namespace CloudCrafter.Core.Commands.Auth;
 
 public static class PostLoginUser
 {

@@ -1,5 +1,5 @@
-using CloudCrafter.Core.Domain.Auth;
-using CloudCrafter.UseCases.Domain.Auth.Commands;
+using CloudCrafter.Core.Commands.Auth;
+using CloudCrafter.Domain.Domain.Auth;
 using CloudCrafter.Web.Infrastructure;
 using MediatR;
 

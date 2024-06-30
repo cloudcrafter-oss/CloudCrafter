@@ -141,7 +141,12 @@ static void SeedAppDatabase(WebApplication app)
 
 void ConfigureMediatR()
 {
-    builder.Services.AddApplicationServices();
+    var mediatRAssemblies = new[]
+    {
+        Assembly.GetAssembly(typeof(Contributor)), // Core
+        Assembly.GetAssembly(typeof(CreateContributorCommand)) // UseCases
+    };
+    builder.Services.AddApplicationServices(mediatRAssemblies);
 }
 
 void ConfigureAutoMapper()

@@ -10,4 +10,11 @@
     <ProjectReference Include="..\CloudCrafter.Core\CloudCrafter.Core.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Domain\Auth\Commands\" />
+    <Folder Include="Domain\Auth\Services\" />
+    <Folder Include="Domain\Users\Commands\" />
+    <Folder Include="Domain\Users\Services\" />
+  </ItemGroup>
+
 </Project>

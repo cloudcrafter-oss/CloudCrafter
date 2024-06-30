@@ -1,9 +1,9 @@
 using CloudCrafter.Core.Common.Security;
-using CloudCrafter.Core.Domain.Users;
-using CloudCrafter.UseCases.Domain.Users.Services;
+using CloudCrafter.Core.Interfaces.Domain.Users;
+using CloudCrafter.Domain.Domain.User;
 using MediatR;
 
-namespace CloudCrafter.UseCases.Domain.Users.Commands;
+namespace CloudCrafter.Core.Commands.Users;
 
 public static class GetUserList
 {

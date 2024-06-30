@@ -1,5 +1,5 @@
-﻿using CloudCrafter.Core.Domain.Users;
-using CloudCrafter.UseCases.Domain.Users.Commands;
+﻿using CloudCrafter.Core.Commands.Users;
+using CloudCrafter.Domain.Domain.User;
 using CloudCrafter.Web.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

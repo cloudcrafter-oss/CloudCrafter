@@ -1,7 +1,7 @@
-using CloudCrafter.Core.Domain.Users;
-using CloudCrafter.UseCases.Domain.Users.Services;
+using CloudCrafter.Core.Interfaces.Domain.Users;
+using CloudCrafter.Domain.Domain.User;
 
-namespace CloudCrafter.Infrastructure.Domain.Users.Services;
+namespace CloudCrafter.Core.Services.Domain.Users;
 
 public class UsersService : IUsersService
 {
