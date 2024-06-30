@@ -146,9 +146,6 @@ static void SeedAppDatabase(WebApplication app)
         context.Database.Migrate();
         // context.Database.EnsureCreated();
         SeedData.Initialize(services);
-
-        var identityContext = services.GetRequiredService<AppIdentityDbContext>();
-        identityContext.Database.Migrate();
         SeedData.InitializeIdentity(services);
     }
     catch (Exception ex)

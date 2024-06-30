@@ -40,7 +40,7 @@ public static class SeedData
 
     public static void InitializeIdentity(IServiceProvider services)
     {
-        using var dbContext = services.GetRequiredService<AppIdentityDbContext>();
+        using var dbContext = services.GetRequiredService<AppDbContext>();
 
         if (dbContext.Users.Any()) return;
 

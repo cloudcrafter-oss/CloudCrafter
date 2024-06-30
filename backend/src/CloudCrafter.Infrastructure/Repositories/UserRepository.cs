@@ -4,12 +4,13 @@ using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.User;
 using CloudCrafter.Infrastructure.Common.Helpers;
+using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.Infrastructure.Repositories;
 
-public class UserRepository(AppIdentityDbContext context, IMapper mapper) : IUserRepository
+public class UserRepository(AppDbContext context, IMapper mapper) : IUserRepository
 {
     public async Task<PaginatedList<UserDto>> GetUsers()
     {

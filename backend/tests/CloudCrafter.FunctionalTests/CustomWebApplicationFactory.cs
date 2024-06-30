@@ -86,18 +86,13 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             {
                 // Configure test dependencies here
                 services.RemoveDbContext<AppDbContext>();
-                services.RemoveDbContext<AppIdentityDbContext>();
-
+               
 
                 services.AddDbContext<AppDbContext>(options =>
                 {
                     options.UseNpgsql(_connection);
                 });
 
-                services.AddDbContext<AppIdentityDbContext>(options =>
-                {
-                    options.UseNpgsql(_connection);
-                });
                 
                 services
                     .RemoveAll<IUser>()
@@ -105,7 +100,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
 
                 services.EnsureDbCreated<AppDbContext>();
-                services.EnsureDbCreated<AppIdentityDbContext>();
                 //// Remove the app's ApplicationDbContext registration.
                 //var descriptor = services.SingleOrDefault(
                 //d => d.ServiceType ==

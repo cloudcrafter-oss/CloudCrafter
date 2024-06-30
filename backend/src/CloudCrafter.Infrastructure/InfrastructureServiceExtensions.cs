@@ -52,20 +52,13 @@ public static class InfrastructureServiceExtensions
     {
         string? connectionString = config.GetConnectionString("PostgresConnection");
         Guard.Against.Null(connectionString, "PostgresConnection is not set.");
-
-        services.AddDbContext<AppIdentityDbContext>(options =>
-        {
-            options.UseNpgsql(connectionString, opt =>
-            {
-                //opt.MigrationsHistoryTable("EntityFrameworkMigrations");
-            });
-        });
+        
 
         services.AddIdentity<User, Role>(options =>
             {
                 options.User.RequireUniqueEmail = true;
             })
-            .AddEntityFrameworkStores<AppIdentityDbContext>();
+            .AddEntityFrameworkStores<AppDbContext>();
 
         services.AddAuthorization();
 
