@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'
 import axios from 'axios'
-import { Toaster } from '@ui/components';
+import { Toaster } from '@ui/components'
 
 export const CloudcrafterProvider = ({ children }: { children: React.ReactNode }) => {
 
