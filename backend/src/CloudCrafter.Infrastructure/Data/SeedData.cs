@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core.ContributorAggregate;
+using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

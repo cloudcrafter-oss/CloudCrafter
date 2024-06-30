@@ -50,10 +50,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UserDto"
-                  }
+                  "$ref": "#/components/schemas/PaginatedListOfUserDto"
                 }
               }
             }
@@ -112,9 +109,38 @@
           }
         }
       },
+      "PaginatedListOfUserDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "currentPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalItems": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "result": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserDto"
+            }
+          }
+        }
+      },
       "UserDto": {
         "type": "object",
-        "additionalProperties": false
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        }
       }
     },
     "securitySchemes": {

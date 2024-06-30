@@ -1,5 +1,6 @@
 using Ardalis.Result;
 using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 

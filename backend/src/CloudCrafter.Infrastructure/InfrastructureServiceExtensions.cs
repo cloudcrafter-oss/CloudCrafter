@@ -7,6 +7,7 @@ using CloudCrafter.Core.Interfaces.Domain.Auth;
 using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Services;
 using CloudCrafter.Core.Services.Domain.Users;
+using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Email;

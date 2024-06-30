@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core.Commands.Users;
+using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Domain.Domain.User;
 using CloudCrafter.Web.Infrastructure;
 using MediatR;
@@ -15,7 +16,7 @@ public class Users : EndpointGroupBase
             .MapGet(Test, "test");
     }
     
-    public async Task<List<UserDto>> GetUsers(ISender sender)
+    public async Task<PaginatedList<UserDto>> GetUsers(ISender sender)
     {
         return await sender.Send(new GetUserList.Query());
     }

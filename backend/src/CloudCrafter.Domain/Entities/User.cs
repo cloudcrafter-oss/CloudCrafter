@@ -1,9 +1,9 @@
-﻿using Ardalis.SharedKernel;
+using Ardalis.SharedKernel;
 using Microsoft.AspNetCore.Identity;
-
-namespace CloudCrafter.Infrastructure.Identity;
+namespace CloudCrafter.Domain.Entities;
 
 public class User : IdentityUser<Guid>, IAggregateRoot
 {
     public bool IsActive { get; set; } = true;
 }
+
