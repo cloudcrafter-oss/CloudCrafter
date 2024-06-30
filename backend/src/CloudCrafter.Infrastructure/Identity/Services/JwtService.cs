@@ -1,9 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using CloudCrafter.Core.Domain.Auth;
+using CloudCrafter.Core.Interfaces.Domain.Auth;
+using CloudCrafter.Domain.Domain.Auth;
 using CloudCrafter.Infrastructure.Core.Configuration;
-using CloudCrafter.UseCases.Domain.Auth.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 

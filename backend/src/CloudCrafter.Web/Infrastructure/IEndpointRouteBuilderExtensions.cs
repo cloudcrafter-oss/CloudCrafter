@@ -12,6 +12,7 @@ public static class IEndpointRouteBuilderExtensions
 
         builder.MapGet(pattern, handler)
             .WithName(handler.Method.Name);
+          //  .WithOpenApi();
 
         return builder;
     }

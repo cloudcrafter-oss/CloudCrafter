@@ -1,83 +1,8 @@
-import { cloudCrafterWebContributorsCreateMutationRequestSchema, cloudCrafterWebContributorsCreateMutationResponseSchema, cloudCrafterWebContributorsCreate400Schema } from './cloudCrafterWebContributorsCreateSchema'
-import { cloudCrafterWebContributorsListQueryResponseSchema } from './cloudCrafterWebContributorsListSchema'
-import { cloudCrafterWebContributorsDeleteMutationResponseSchema, cloudCrafterWebContributorsDelete400Schema, cloudCrafterWebContributorsDeletePathParamsSchema } from './cloudCrafterWebContributorsDeleteSchema'
-import { cloudCrafterWebContributorsGetByIdQueryResponseSchema, cloudCrafterWebContributorsGetById400Schema, cloudCrafterWebContributorsGetByIdPathParamsSchema } from './cloudCrafterWebContributorsGetByIdSchema'
-import { cloudCrafterWebContributorsUpdateMutationRequestSchema, cloudCrafterWebContributorsUpdateMutationResponseSchema, cloudCrafterWebContributorsUpdate400Schema, cloudCrafterWebContributorsUpdatePathParamsSchema } from './cloudCrafterWebContributorsUpdateSchema'
 import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema } from './postLoginUserSchema'
+import { getUsersQueryResponseSchema } from './getUsersSchema'
+import { testQueryResponseSchema } from './testSchema'
 
- export const operations = { 'CloudCrafterWebContributorsCreate': {
-        request: cloudCrafterWebContributorsCreateMutationRequestSchema,
-        parameters: {
-            path: undefined,
-            query: undefined,
-            header: undefined
-        },
-        responses: {
-            200: cloudCrafterWebContributorsCreateMutationResponseSchema,
-            400: cloudCrafterWebContributorsCreate400Schema,
-            default: cloudCrafterWebContributorsCreateMutationResponseSchema
-        },
-        errors: {
-            400: cloudCrafterWebContributorsCreate400Schema
-        }
-    }, 'CloudCrafterWebContributorsList': {
-        request: undefined,
-        parameters: {
-            path: undefined,
-            query: undefined,
-            header: undefined
-        },
-        responses: {
-            200: cloudCrafterWebContributorsListQueryResponseSchema,
-            default: cloudCrafterWebContributorsListQueryResponseSchema
-        },
-        errors: {}
-    }, 'CloudCrafterWebContributorsDelete': {
-        request: undefined,
-        parameters: {
-            path: cloudCrafterWebContributorsDeletePathParamsSchema,
-            query: undefined,
-            header: undefined
-        },
-        responses: {
-            200: cloudCrafterWebContributorsDeleteMutationResponseSchema,
-            400: cloudCrafterWebContributorsDelete400Schema,
-            default: cloudCrafterWebContributorsDeleteMutationResponseSchema
-        },
-        errors: {
-            400: cloudCrafterWebContributorsDelete400Schema
-        }
-    }, 'CloudCrafterWebContributorsGetById': {
-        request: undefined,
-        parameters: {
-            path: cloudCrafterWebContributorsGetByIdPathParamsSchema,
-            query: undefined,
-            header: undefined
-        },
-        responses: {
-            200: cloudCrafterWebContributorsGetByIdQueryResponseSchema,
-            400: cloudCrafterWebContributorsGetById400Schema,
-            default: cloudCrafterWebContributorsGetByIdQueryResponseSchema
-        },
-        errors: {
-            400: cloudCrafterWebContributorsGetById400Schema
-        }
-    }, 'CloudCrafterWebContributorsUpdate': {
-        request: cloudCrafterWebContributorsUpdateMutationRequestSchema,
-        parameters: {
-            path: cloudCrafterWebContributorsUpdatePathParamsSchema,
-            query: undefined,
-            header: undefined
-        },
-        responses: {
-            200: cloudCrafterWebContributorsUpdateMutationResponseSchema,
-            400: cloudCrafterWebContributorsUpdate400Schema,
-            default: cloudCrafterWebContributorsUpdateMutationResponseSchema
-        },
-        errors: {
-            400: cloudCrafterWebContributorsUpdate400Schema
-        }
-    }, 'PostLoginUser': {
+ export const operations = { 'PostLoginUser': {
         request: postLoginUserMutationRequestSchema,
         parameters: {
             path: undefined,
@@ -89,14 +14,35 @@ import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema
             default: postLoginUserMutationResponseSchema
         },
         errors: {}
+    }, 'GetUsers': {
+        request: undefined,
+        parameters: {
+            path: undefined,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: getUsersQueryResponseSchema,
+            default: getUsersQueryResponseSchema
+        },
+        errors: {}
+    }, 'Test': {
+        request: undefined,
+        parameters: {
+            path: undefined,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: testQueryResponseSchema,
+            default: testQueryResponseSchema
+        },
+        errors: {}
     } } as const
-export const paths = { '/Contributors': {
-        post: operations['CloudCrafterWebContributorsCreate'],
-        get: operations['CloudCrafterWebContributorsList']
-    }, '/Contributors/{contributorId}': {
-        delete: operations['CloudCrafterWebContributorsDelete'],
-        get: operations['CloudCrafterWebContributorsGetById'],
-        put: operations['CloudCrafterWebContributorsUpdate']
-    }, '/api/Auth': {
+export const paths = { '/api/Auth': {
         post: operations['PostLoginUser']
+    }, '/api/Users': {
+        get: operations['GetUsers']
+    }, '/api/Users/test': {
+        get: operations['Test']
     } } as const

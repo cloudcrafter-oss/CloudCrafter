@@ -1,4 +1,4 @@
-﻿using CloudCrafter.UseCases.Domain.Auth.Commands;
+﻿using CloudCrafter.Core.Commands.Auth;
 using FluentAssertions;
 using NUnit.Framework;
 

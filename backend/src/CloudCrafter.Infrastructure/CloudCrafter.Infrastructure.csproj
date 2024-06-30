@@ -3,6 +3,7 @@
 
   <ItemGroup>
     <PackageReference Include="Ardalis.SharedKernel"/>
+    <PackageReference Include="AutoMapper" />
     <PackageReference Include="Ardalis.Specification.EntityFrameworkCore"/>
     <PackageReference Include="MailKit"/>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"/>
@@ -21,11 +22,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CloudCrafter.Core\CloudCrafter.Core.csproj"/>
-    <ProjectReference Include="..\CloudCrafter.UseCases\CloudCrafter.UseCases.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Data\Migrations\"/>
     <Folder Include="Data\Migrations\App\"/>
+    <Folder Include="Data\Queries\" />
+    <Folder Include="Domain\Users\Services\" />
   </ItemGroup>
 </Project>
