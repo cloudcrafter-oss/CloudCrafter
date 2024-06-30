@@ -1,7 +1,30 @@
 import {Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Input} from "@ui/components";
 import {Label} from "@ui/components/ui/label.tsx";
+import {usePostLoginUser} from "../../../app/generated/api-client.ts";
 
 export const LoginComponent = () => {
+
+    const login = usePostLoginUser({
+        mutation: {
+            onSuccess: () => {
+                alert('success')
+            },
+            onError: () => {
+                alert('error')
+            }
+        }
+    })
+
+    const handleLogin = () => {
+        login.mutate({
+            data: {
+                email: '',
+                password: ''
+            }
+        })
+
+    }
+
     return (
         <Card className="w-full max-w-sm">
             <CardHeader>
@@ -19,7 +42,7 @@ export const LoginComponent = () => {
                 </div>
             </CardContent>
             <CardFooter>
-                <Button className="w-full">Sign in</Button>
+                <Button onClick={handleLogin} className="w-full">Sign in</Button>
             </CardFooter>
         </Card>
     )
