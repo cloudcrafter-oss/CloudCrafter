@@ -1,16 +1,31 @@
-import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Input } from '@ui/components'
+import {
+    Button,
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+    Input,
+    useToast
+} from '@ui/components'
 import { Label } from '@ui/components/ui/label.tsx'
 import { usePostLoginUser } from '../../../app/generated/api-client.ts'
 
 export const LoginComponent = () => {
 
+    const { toast } = useToast()
     const login = usePostLoginUser({
         mutation: {
             onSuccess: () => {
                 alert('success')
             },
             onError: () => {
-                alert('error')
+                toast({
+                    title: 'Something went wrong',
+                    description: 'Could not log you in at this time. Please try again later.',
+                    variant: 'destructive'
+                })
             }
         }
     })
