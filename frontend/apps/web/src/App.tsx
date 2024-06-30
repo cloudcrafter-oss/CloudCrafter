@@ -1,4 +1,4 @@
-import {Button} from '@ui/components';
+import { Button } from '@ui/components';
 
 function App() {
   return <Button>MyButto 123n</Button>;

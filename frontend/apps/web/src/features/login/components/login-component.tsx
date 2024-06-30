@@ -1,6 +1,6 @@
-import {Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Input} from '@ui/components';
-import {Label} from '@ui/components/ui/label.tsx';
-import {usePostLoginUser} from '../../../app/generated/api-client.ts';
+import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Input } from '@ui/components';
+import { Label } from '@ui/components/ui/label.tsx';
+import { usePostLoginUser } from '../../../app/generated/api-client.ts';
 
 export const LoginComponent = () => {
 

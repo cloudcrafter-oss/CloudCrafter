@@ -15,6 +15,7 @@ module.exports = {
     },
     rules: {
         "@typescript-eslint/no-non-null-assertion": "off",
-        "quotes": ["error", "single"]
+        "quotes": ["error", "single"],
+        "object-curly-spacing": ["error", "always"]
     },
 };

@@ -1,3 +1,3 @@
-import {generateAll} from '@repo/generators'
+import { generateAll } from '@repo/generators'
 
 await generateAll()
