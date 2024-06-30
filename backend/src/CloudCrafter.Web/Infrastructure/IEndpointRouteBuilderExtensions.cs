@@ -11,7 +11,8 @@ public static class IEndpointRouteBuilderExtensions
         Guard.Against.AnonymousMethod(handler);
 
         builder.MapGet(pattern, handler)
-            .WithName(handler.Method.Name);
+            .WithGroupName(handler.Method.Name);
+          //  .WithOpenApi();
 
         return builder;
     }
@@ -22,7 +23,8 @@ public static class IEndpointRouteBuilderExtensions
         Guard.Against.AnonymousMethod(handler);
 
         builder.MapPost(pattern, handler)
-            .WithName(handler.Method.Name);
+            .WithGroupName(handler.Method.Name)
+            .WithOpenApi();
 
         return builder;
     }

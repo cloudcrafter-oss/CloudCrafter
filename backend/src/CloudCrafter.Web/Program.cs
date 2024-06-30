@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using Ardalis.ListStartupServices;
-using Ardalis.SharedKernel;
 using CloudCrafter.Core;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.ContributorAggregate;
@@ -12,9 +11,6 @@ using CloudCrafter.Infrastructure.Email;
 using CloudCrafter.Infrastructure.Identity;
 using CloudCrafter.Web.Infrastructure;
 using CloudCrafter.Web.Infrastructure.Services;
-using FastEndpoints;
-using FastEndpoints.Swagger;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Extensions.Logging;
@@ -28,6 +24,7 @@ logger.Information("Starting web host");
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSwaggerSetup();
 builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
 var microsoftLogger = new SerilogLoggerFactory(logger)
     .CreateLogger<Program>();
@@ -38,15 +35,6 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.CheckConsentNeeded = context => true;
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
-
-
-
-
-builder.Services.AddFastEndpoints()
-    .SwaggerDocument(o =>
-    {
-        o.ShortSchemaNames = true;
-    });
 
 ConfigureMediatR();
 ConfigureAutoMapper();
@@ -75,15 +63,13 @@ if (builder.Environment.IsDevelopment())
     // Use a local test email server
     // See: https://ardalis.com/configuring-a-local-test-email-server/
     builder.Services.AddScoped<IEmailSender, MimeKitEmailSender>();
-
-    // Otherwise use this:
-    //builder.Services.AddScoped<IEmailSender, FakeEmailSender>();
-    AddShowAllServicesSupport();
 }
 else
 {
     builder.Services.AddScoped<IEmailSender, MimeKitEmailSender>();
 }
+
+
 
 var app = builder.Build();
 
@@ -99,8 +85,6 @@ else
 }
 
 
-app.UseFastEndpoints()
-    .UseSwaggerGen(); // Includes AddFileServer and static files middleware
 
 app.UseHttpsRedirection();
 
@@ -110,7 +94,13 @@ app.UseAuthorization();
 app.UseExceptionHandler(options => { });
 SeedAppDatabase(app);
 
+
+app.UseSwaggerSetup();
 app.MapEndpoints();
+
+app.MapGet("/greeting", () => "Hello, world")
+    .WithGroupName("v1");
+
 app.UseCors("DefaultCorsPolicy");
 
 app.Run();
@@ -152,17 +142,8 @@ void ConfigureAutoMapper()
     builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 }
 
-void AddShowAllServicesSupport()
-{
-    // add list services for diagnostic purposes - see https://github.com/ardalis/AspNetCoreStartupServices
-    builder.Services.Configure<ServiceConfig>(config =>
-    {
-        config.Services = new List<ServiceDescriptor>(builder.Services);
 
-        // optional - default path to view services is /listallservices - recommended to choose your own path
-        config.Path = "/listservices";
-    });
-}
+
 
 // Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
 public partial class Program
