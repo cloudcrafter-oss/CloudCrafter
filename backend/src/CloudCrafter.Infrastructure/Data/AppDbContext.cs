@@ -1,11 +1,13 @@
 ﻿using System.Reflection;
 using Ardalis.SharedKernel;
 using CloudCrafter.Core.ContributorAggregate;
+using CloudCrafter.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.Infrastructure.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<User,Role, Guid>
 {
     private readonly IDomainEventDispatcher? _dispatcher;
 

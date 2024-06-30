@@ -2,6 +2,9 @@ using System.Reflection;
 using Ardalis.SharedKernel;
 using CloudCrafter.Core.Common.Behaviours;
 using CloudCrafter.Core.ContributorAggregate;
+using CloudCrafter.Core.Interfaces.Domain.Users;
+using CloudCrafter.Core.Services.Domain.Users;
+using CloudCrafter.Domain;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,9 +14,14 @@ public static class ApplicationServiceExtensions
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, Assembly?[] assemblies)
     {
-        var combinedAssemblies = assemblies.Append(Assembly.GetExecutingAssembly());
+        // find assembly of IDomainTarget
+        var domainAssembly = Assembly.GetAssembly(typeof(IDomainTarget));
+        var combinedAssemblies = assemblies.Append(Assembly.GetExecutingAssembly())
+            .Append(domainAssembly);
        
         services.AddAutoMapper(combinedAssemblies);
+
+        services.AddScoped<IUsersService, UsersService>();
 
         //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
      

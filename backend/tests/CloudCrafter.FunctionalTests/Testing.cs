@@ -1,4 +1,5 @@
 using Bogus;
+using CloudCrafter.Domain.Entities;
 using CloudCrafter.FunctionalTests.Database;
 using CloudCrafter.FunctionalTests.Fakeds;
 using CloudCrafter.FunctionalTests.TestModels;

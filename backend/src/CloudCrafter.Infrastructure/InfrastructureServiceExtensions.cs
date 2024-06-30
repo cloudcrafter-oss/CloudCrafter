@@ -7,6 +7,7 @@ using CloudCrafter.Core.Interfaces.Domain.Auth;
 using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Services;
 using CloudCrafter.Core.Services.Domain.Users;
+using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Email;
@@ -51,20 +52,13 @@ public static class InfrastructureServiceExtensions
     {
         string? connectionString = config.GetConnectionString("PostgresConnection");
         Guard.Against.Null(connectionString, "PostgresConnection is not set.");
-
-        services.AddDbContext<AppIdentityDbContext>(options =>
-        {
-            options.UseNpgsql(connectionString, opt =>
-            {
-                //opt.MigrationsHistoryTable("EntityFrameworkMigrations");
-            });
-        });
+        
 
         services.AddIdentity<User, Role>(options =>
             {
                 options.User.RequireUniqueEmail = true;
             })
-            .AddEntityFrameworkStores<AppIdentityDbContext>();
+            .AddEntityFrameworkStores<AppDbContext>();
 
         services.AddAuthorization();
 

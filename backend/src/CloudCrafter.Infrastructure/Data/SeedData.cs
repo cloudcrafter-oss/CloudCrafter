@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core.ContributorAggregate;
+using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -39,7 +40,7 @@ public static class SeedData
 
     public static void InitializeIdentity(IServiceProvider services)
     {
-        using var dbContext = services.GetRequiredService<AppIdentityDbContext>();
+        using var dbContext = services.GetRequiredService<AppDbContext>();
 
         if (dbContext.Users.Any()) return;
 

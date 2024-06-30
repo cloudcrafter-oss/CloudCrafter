@@ -4,11 +4,13 @@ using CloudCrafter.Core;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.ContributorAggregate;
 using CloudCrafter.Core.Interfaces;
+using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Email;
 using CloudCrafter.Infrastructure.Identity;
+using CloudCrafter.Infrastructure.Repositories;
 using CloudCrafter.Web.Infrastructure;
 using CloudCrafter.Web.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
@@ -73,6 +75,7 @@ else
 {
     builder.Services.AddScoped<IEmailSender, MimeKitEmailSender>();
 }
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument((configure, sp) =>
@@ -143,9 +146,6 @@ static void SeedAppDatabase(WebApplication app)
         context.Database.Migrate();
         // context.Database.EnsureCreated();
         SeedData.Initialize(services);
-
-        var identityContext = services.GetRequiredService<AppIdentityDbContext>();
-        identityContext.Database.Migrate();
         SeedData.InitializeIdentity(services);
     }
     catch (Exception ex)

@@ -47,7 +47,7 @@ public class TestContainersTestDatabase : ITestDatabase
             new RespawnerOptions
             {
                 DbAdapter = DbAdapter.Postgres,
-                TablesToIgnore = new Respawn.Graph.Table[] { "EntityFrameworkMigrations" }
+                TablesToIgnore = new Respawn.Graph.Table[] { "__EFMigrationsHistory" }
             });
     }
 

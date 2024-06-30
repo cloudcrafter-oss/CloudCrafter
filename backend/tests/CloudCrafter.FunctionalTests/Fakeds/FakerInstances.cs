@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Identity;
 
 namespace CloudCrafter.FunctionalTests.Fakeds;

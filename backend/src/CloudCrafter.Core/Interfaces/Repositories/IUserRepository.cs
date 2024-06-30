@@ -1,10 +1,10 @@
-
 using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Domain.Domain.User;
+using CloudCrafter.Domain.Entities;
 
-namespace CloudCrafter.Core.Interfaces.Domain.Users;
+namespace CloudCrafter.Core.Interfaces.Repositories;
 
-public interface IUsersService
+public interface IUserRepository
 {
     Task<PaginatedList<UserDto>> GetUsers();
 }
