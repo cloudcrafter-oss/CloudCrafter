@@ -4,12 +4,16 @@
   "private": true,
   "license": "MIT",
   "exports": {
-    "." : "./generate-all.ts"
+    ".": "./generate-all.ts"
   },
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
     "orval": "^6.31.0"
+  },
+  "dependencies": {
+    "@kubb/cli": "^2.21.1",
+    "@kubb/core": "^2.21.1"
   }
 }

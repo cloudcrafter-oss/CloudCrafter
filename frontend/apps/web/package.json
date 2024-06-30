@@ -8,9 +8,20 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "generate-clients": "tsx src/utils/generate-all.ts"
+    "generate-clients": "kubb generate --config kubb.config.ts",
+    "clean-generated-files": "node src/utils/kubb/post-action.js"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.6.0",
+    "@kubb/cli": "^2.21.1",
+    "@kubb/core": "^2.21.1",
+    "@kubb/plugin-oas": "^2.21.1",
+    "@kubb/react": "^2.21.1",
+    "@kubb/swagger": "^2.21.1",
+    "@kubb/swagger-client": "^2.21.1",
+    "@kubb/swagger-tanstack-query": "^2.21.1",
+    "@kubb/swagger-ts": "^2.21.1",
+    "@kubb/swagger-zod": "^2.21.1",
     "@repo/generators": "workspace:*",
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.49.0",
@@ -18,7 +29,9 @@
     "axios": "^1.7.2",
     "qs": "^6.12.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.52.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -34,8 +47,10 @@
     "eslint": "^8.56.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "fast-glob": "^3.3.2",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.16.0",
     "typescript": "^5.2.2",
     "vite": "^5.1.0"
   }

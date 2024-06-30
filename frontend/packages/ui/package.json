@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "lint": "eslint . --max-warnings 0",
-    "generate:component": "turbo gen react-component"
+    "generate:component": "turbo gen react-component",
+    "ui:add": "pnpm dlx shadcn-ui@latest add"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -22,18 +23,23 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@radix-ui/react-slot": "^1.0.2",
+    "@hookform/resolvers": "^3.6.0",
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "lucide-react": "^0.330.0",
+    "react-hook-form": "^7.52.0",
     "tailwind-merge": "^2.2.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.23.8"
   },
   "exports": {
-		".": "./src/components/index.ts",
-    "./main.css":"./main.css",
-		"./postcss.config": "./postcss.config.js",
-		"./tailwind.config": "./tailwind.config.js",
-		"./lib/*": "./src/lib/*.ts"
-	}
+    ".": "./src/components/index.ts",
+    "./main.css": "./main.css",
+    "./postcss.config": "./postcss.config.js",
+    "./tailwind.config": "./tailwind.config.js",
+    "./lib/*": "./src/lib/*.ts"
+  }
 }

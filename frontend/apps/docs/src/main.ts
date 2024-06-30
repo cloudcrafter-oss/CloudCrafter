@@ -1,9 +1,9 @@
 
-import "./style.css";
-import typescriptLogo from "/typescript.svg";
+import './style.css';
+import typescriptLogo from '/typescript.svg';
 
 
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
+document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
     <a href="https://vitejs.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />

@@ -37,6 +37,11 @@ public static class InfrastructureServiceExtensions
             .BindConfiguration(JwtSettings.KEY)
             .ValidateDataAnnotations()
             .ValidateOnStart();
+        
+        services.AddOptions<CorsSettings>()
+            .BindConfiguration(CorsSettings.KEY)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
         return services;
     }
