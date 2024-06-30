@@ -8,10 +8,18 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "generate-clients": "tsx src/utils/generate-all.ts"
+    "generate-clients": "kubb generate --config kubb.config.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
+    "@kubb/cli": "^2.21.1",
+    "@kubb/core": "^2.21.1",
+    "@kubb/plugin-oas": "^2.21.1",
+    "@kubb/swagger": "^2.21.1",
+    "@kubb/swagger-client": "^2.21.1",
+    "@kubb/swagger-tanstack-query": "^2.21.1",
+    "@kubb/swagger-ts": "^2.21.1",
+    "@kubb/swagger-zod": "^2.21.1",
     "@repo/generators": "workspace:*",
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.49.0",

@@ -10,12 +10,12 @@ import {
     useToast
 } from '@ui/components'
 import { Label } from '@ui/components/ui/label.tsx'
-import { usePostLoginUser } from '../../../app/generated/api-client.ts'
+import { usePostLoginUserHook } from '../../../app/generated'
 
 export const LoginComponent = () => {
 
     const { toast } = useToast()
-    const login = usePostLoginUser({
+    const login = usePostLoginUserHook({
         mutation: {
             onSuccess: () => {
                 alert('success')
@@ -32,10 +32,8 @@ export const LoginComponent = () => {
 
     const handleLogin = () => {
         login.mutate({
-            data: {
-                email: '',
-                password: ''
-            }
+            email: '',
+            password: ''
         })
 
     }
