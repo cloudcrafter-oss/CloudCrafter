@@ -113,8 +113,6 @@ else
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.UseExceptionHandler(options => { });
 
@@ -133,6 +131,8 @@ app.MapEndpoints();
 
 
 
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseCors("DefaultCorsPolicy");
 
