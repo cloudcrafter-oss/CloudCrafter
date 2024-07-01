@@ -31,7 +31,7 @@ async function fixUnusedVarsForPageParam(pattern) {
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const pattern = path.join(__dirname, '../../app/generated/**/*.*').replace(/\\/g, '/')
+const pattern = path.join(__dirname, '../../core/generated/**/*.*').replace(/\\/g, '/')
 fixUnusedVarsForPageParam(pattern)
 
 
@@ -51,7 +51,7 @@ const eslintConfigHooks = {
 
 const jsonStringTypes = JSON.stringify(eslintConfigTypes, null, 2)
 const jsongStringHooks = JSON.stringify(eslintConfigHooks, null, 2)
-fs.writeFile(path.join(__dirname, '../../app/generated/types/.eslintrc'), jsonStringTypes, 'utf8', (err) => {
+fs.writeFile(path.join(__dirname, '../../core/generated/types/.eslintrc'), jsonStringTypes, 'utf8', (err) => {
     if (err) {
         console.error('Error writing file:', err)
         throw err
@@ -60,7 +60,7 @@ fs.writeFile(path.join(__dirname, '../../app/generated/types/.eslintrc'), jsonSt
     }
 })
 
-fs.writeFile(path.join(__dirname, '../../app/generated/hooks/.eslintrc'), jsongStringHooks, 'utf8', (err) => {
+fs.writeFile(path.join(__dirname, '../../core/generated/hooks/.eslintrc'), jsongStringHooks, 'utf8', (err) => {
     if (err) {
         console.error('Error writing file:', err)
         throw err

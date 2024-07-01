@@ -11,13 +11,13 @@ export default defineConfig({
         path: 'http://localhost:57680/swagger/v1/swagger.json'
     },
     output: {
-        path: './src/app/generated',
+        path: './src/core/generated',
         clean: true,
     },
     hooks: {
         done: [
             'node src/utils/kubb/post-action.js',
-            'eslint ./src/app/generated --ext ts --fix'
+            'eslint ./src/core/generated --ext ts --fix'
         ]
     },
     plugins: [
