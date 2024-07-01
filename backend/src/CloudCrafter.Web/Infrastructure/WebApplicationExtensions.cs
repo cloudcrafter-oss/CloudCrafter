@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.OpenApi.Models;
 
 namespace CloudCrafter.Web.Infrastructure;
 
@@ -10,15 +11,15 @@ public static class WebApplicationExtensions
 
         return app
             .MapGroup($"/api/{groupName}")
-            .WithGroupName(groupName)
-            .WithTags(groupName);
+            .WithTags(groupName)
+            .WithOpenApi();
     }
 
     public static WebApplication MapEndpoints(this WebApplication app)
     {
         var endpointGroupType = typeof(EndpointGroupBase);
 
-        var assembly = Assembly.GetExecutingAssembly();
+        var assembly = typeof(IWebSelector).Assembly;
 
         var endpointGroupTypes = assembly.GetExportedTypes()
             .Where(t => t.IsSubclassOf(endpointGroupType));
@@ -29,6 +30,7 @@ public static class WebApplicationExtensions
             {
                 instance.Map(app);
             }
+
         }
 
         return app;

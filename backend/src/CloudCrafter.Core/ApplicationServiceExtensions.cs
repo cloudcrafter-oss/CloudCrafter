@@ -12,19 +12,17 @@ namespace CloudCrafter.Core;
 
 public static class ApplicationServiceExtensions
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services, Assembly?[] assemblies)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        // find assembly of IDomainTarget
-        var domainAssembly = Assembly.GetAssembly(typeof(IDomainTarget));
-        var combinedAssemblies = assemblies.Append(Assembly.GetExecutingAssembly())
-            .Append(domainAssembly);
-       
+        var domainAssembly = typeof(IDomainTarget).Assembly;
+        var currentAssembly = Assembly.GetExecutingAssembly();
+        Assembly[] combinedAssemblies = new Assembly[] { domainAssembly, currentAssembly };
+
+        
         services.AddAutoMapper(combinedAssemblies);
 
         services.AddScoped<IUsersService, UsersService>();
-
-        //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-     
+        
         services.AddMediatR(cfg => {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
