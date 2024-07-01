@@ -2,18 +2,36 @@
   "name": "web-nextjs",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --port 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --max-warnings 0"
+    "lint": "eslint . --max-warnings 0",
+    "generate-clients": "kubb generate --config kubb.config.ts",
+    "clean-generated-files": "node src/utils/kubb/post-action.js"
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^3.5.0",
+    "@hookform/resolvers": "^3.6.0",
+    "@kubb/cli": "^2.21.1",
+    "@kubb/core": "^2.21.1",
+    "@kubb/plugin-oas": "^2.21.1",
+    "@kubb/react": "^2.21.1",
+    "@kubb/swagger": "^2.21.1",
+    "@kubb/swagger-client": "^2.21.1",
+    "@kubb/swagger-tanstack-query": "^2.21.1",
+    "@kubb/swagger-ts": "^2.21.1",
+    "@kubb/swagger-zod": "^2.21.1",
     "@repo/ui": "workspace:*",
-    "next": "15.0.0-rc.0",
-    "react": "19.0.0-rc-100dfd7dab-20240701",
-    "react-dom": "19.0.0-rc-100dfd7dab-20240701"
+    "@tanstack/react-query": "^5.49.0",
+    "axios": "^1.7.2",
+    "clsx": "^2.1.0",
+    "next": "^14.2.4",
+    "next-auth": "5.0.0-beta.19",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.52.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "14.2.4",
@@ -24,7 +42,8 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.19",
-    "eslint": "^9.5.0",
+    "eslint": "^8.56.0",
+    "fast-glob": "^3.3.2",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.4.5"

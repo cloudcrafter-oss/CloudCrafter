@@ -1,15 +1,16 @@
-'use client'
-import { Button } from '@ui/components'
+import { signIn } from '../auth'
 
 export default function Page() {
-    const goToLogin = () => {
-        console.log('Go to login')
-        window.location.href = '/api/auth/login'
-    }
-    return (
-        <main>
-            <Button onClick={goToLogin}>Click me</Button>
 
-        </main>
+    return (
+        <form
+            action={async () => {
+                'use server'
+                await signIn('auth0')
+            }}
+        >
+            <button type="submit">Signin with Auth0</button>
+        </form>
+
     )
 }
