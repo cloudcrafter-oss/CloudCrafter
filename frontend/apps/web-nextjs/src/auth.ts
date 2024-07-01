@@ -1,12 +1,24 @@
 import NextAuth from 'next-auth'
 import Auth0 from 'next-auth/providers/auth0'
+import type { Provider } from 'next-auth/providers'
 
+const providers: Provider[] = [
+    Auth0
+]
+
+export const providerMap = providers.map((provider) => {
+    if (typeof provider === 'function') {
+        const providerData = provider()
+        return { id: providerData.id, name: providerData.name }
+    } else {
+        return { id: provider.id, name: provider.name }
+    }
+})
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
-    providers: [
-        Auth0,
-    ],
+    providers,
+    basePath: '/auth',
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
@@ -22,6 +34,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 // token.accessToken = data.accessToken
             }
             return token
+        },
+        authorized: async ({ auth }) => {
+            // Logged in users are authenticated, otherwise redirect to login page
+            return !!auth
         },
     }
 })

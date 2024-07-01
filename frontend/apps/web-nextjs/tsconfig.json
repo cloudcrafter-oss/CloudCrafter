@@ -13,10 +13,13 @@
     "paths": {
       "@ui/*": [
         "../../packages/ui/src/*"
+      ],
+      "@/*": [
+        "./src/*"
       ]
     },
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
