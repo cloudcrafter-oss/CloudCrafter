@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text;
 using Ardalis.GuardClauses;
 using Ardalis.SharedKernel;
 using CloudCrafter.Core.Common.Interfaces;
@@ -13,10 +14,12 @@ using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Email;
 using CloudCrafter.Infrastructure.Identity;
 using CloudCrafter.Infrastructure.Identity.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CloudCrafter.Infrastructure;
 
@@ -52,8 +55,30 @@ public static class InfrastructureServiceExtensions
     {
         string? connectionString = config.GetConnectionString("PostgresConnection");
         Guard.Against.Null(connectionString, "PostgresConnection is not set.");
-        
 
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(o =>
+        {
+            var jwtSettings = new JwtSettings();
+            config.Bind(JwtSettings.KEY, jwtSettings);
+
+            o.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey
+                    (Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = false,
+                ValidateIssuerSigningKey = false
+            };
+        });
+        
         services.AddIdentity<User, Role>(options =>
             {
                 options.User.RequireUniqueEmail = true;

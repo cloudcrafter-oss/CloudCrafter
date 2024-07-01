@@ -6,6 +6,7 @@ using CloudCrafter.Web.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
 
 namespace CloudCrafter.Web.Endpoints;
 

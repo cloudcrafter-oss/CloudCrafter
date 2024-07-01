@@ -2,6 +2,7 @@ using CloudCrafter.Core.Commands.Auth;
 using CloudCrafter.Domain.Domain.Auth;
 using CloudCrafter.Web.Infrastructure;
 using MediatR;
+using Microsoft.OpenApi.Models;
 
 namespace CloudCrafter.Web.Endpoints;
 
