@@ -9,6 +9,7 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^3.5.0",
     "@repo/ui": "workspace:*",
     "next": "15.0.0-rc.0",
     "react": "19.0.0-rc-100dfd7dab-20240701",
