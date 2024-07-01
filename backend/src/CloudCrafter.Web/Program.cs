@@ -1,17 +1,9 @@
 ﻿using System.Reflection;
 using CloudCrafter.Core;
-using CloudCrafter.Core.Common.Interfaces;
-using CloudCrafter.Core.ContributorAggregate;
 using CloudCrafter.Core.Interfaces;
-using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Infrastructure;
-using CloudCrafter.Infrastructure.Core.Configuration;
-using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Email;
-using CloudCrafter.Infrastructure.Repositories;
 using CloudCrafter.Web.Infrastructure;
-using CloudCrafter.Web.Infrastructure.Services;
-using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Extensions.Logging;
 
@@ -38,7 +30,6 @@ builder.Services.AddEndpointsApiExplorer()
     .AddCloudCrafterIdentity(builder.Configuration)
     .AddCloudCrafterConfiguration(builder.Configuration)
     .AddWebConfig(builder.Configuration);
-
 
 
 if (builder.Environment.IsDevelopment())
