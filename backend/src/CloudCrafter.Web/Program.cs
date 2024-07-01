@@ -4,6 +4,7 @@ using CloudCrafter.Core.Interfaces;
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Email;
 using CloudCrafter.Web.Infrastructure;
+using CloudCrafter.Web.Infrastructure.Swagger;
 using Serilog;
 using Serilog.Extensions.Logging;
 
@@ -23,7 +24,11 @@ var microsoftLogger = new SerilogLoggerFactory(logger)
 
 
 builder.Services.AddEndpointsApiExplorer()
-    .AddSwaggerGen()
+    .AddSwaggerGen(swagger =>
+    {
+        swagger.SupportNonNullableReferenceTypes();
+        swagger.SchemaFilter<RequireNotNullableSchemaFilter>();
+    })
     .AddApplicationServices()
     .AddAutoMapper(Assembly.GetExecutingAssembly())
     .AddInfrastructureServices(builder.Configuration, microsoftLogger)
