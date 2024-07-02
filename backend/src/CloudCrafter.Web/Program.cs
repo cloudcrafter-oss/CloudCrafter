@@ -1,13 +1,14 @@
-﻿using System.Reflection;
+﻿using System.Text;
 using CloudCrafter.Core;
 using CloudCrafter.Core.Interfaces;
 using CloudCrafter.Infrastructure;
+using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Email;
+using CloudCrafter.Web;
 using CloudCrafter.Web.Infrastructure;
-using CloudCrafter.Web.Infrastructure.Swagger;
-using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using Serilog.Extensions.Logging;
 
 var logger = Log.Logger = new LoggerConfiguration()
     .Enrich.FromLogContext()
@@ -18,62 +19,10 @@ logger.Information("Starting web host");
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
-
-var microsoftLogger = new SerilogLoggerFactory(logger)
-    .CreateLogger<Program>();
-
-
-builder.Services.AddEndpointsApiExplorer()
-    .AddSwaggerGen(swagger =>
-    {
-        var defaultSchemaIdSelector = swagger.SchemaGeneratorOptions.SchemaIdSelector;
-        
-        swagger.CustomSchemaIds(type =>
-        {
-            if (type.MemberType == MemberTypes.NestedType)
-            {
-                var parentType = type.DeclaringType;
-                return parentType!.Name + type.Name;
-            }
-
-            return defaultSchemaIdSelector(type);
-        });
-        swagger.SupportNonNullableReferenceTypes();
-        swagger.SchemaFilter<RequireNotNullableSchemaFilter>();
-        
-        swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-        {
-            In = ParameterLocation.Header,
-            Description = "Please enter a valid token",
-            Name = "Authorization",
-            Type = SecuritySchemeType.Http,
-            BearerFormat = "JWT",
-            Scheme = "Bearer"
-        });
-        
-        swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
-        {
-            {
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                    {
-                        Type=ReferenceType.SecurityScheme,
-                        Id="Bearer"
-                    }
-                },
-                new string[]{}
-            }
-        });
-    })
+builder.Services.AddApiConfiguration(builder.Configuration)
     .AddApplicationServices()
-    .AddAutoMapper(Assembly.GetExecutingAssembly())
-    .AddInfrastructureServices(builder.Configuration, microsoftLogger)
-    .AddCloudCrafterIdentity(builder.Configuration)
-    .AddCloudCrafterConfiguration(builder.Configuration)
-    .AddWebConfig(builder.Configuration);
-
+    .AddInfrastructureServices(builder.Configuration)
+    .AddWebServices(builder.Configuration);
 
 if (builder.Environment.IsDevelopment())
 {
@@ -86,7 +35,27 @@ else
     builder.Services.AddScoped<IEmailSender, MimeKitEmailSender>();
 }
 
+builder.Services.AddControllers();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
+    {
+        var jwtConfig = new JwtSettings();
+        builder.Configuration.Bind(JwtSettings.KEY, jwtConfig);
+        
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtConfig.Issuer,
+            ValidAudience = jwtConfig.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecretKey))
+        };
+    });
 var app = builder.Build();
+
+// app.UseHealthChecks("/healthz");
 
 if (app.Environment.IsDevelopment())
 {
@@ -98,16 +67,16 @@ else
     app.UseHsts();
 }
 
+//
+// app.SeedDatabase();
+
 
 app.UseHttpsRedirection();
-app.SeedDatabase();
-app.UseStaticFiles();
-app.UseAuthentication();
+app.UseRouting();
+app.UseAuthentication(); // Add this if it's missing
 app.UseAuthorization();
-
-app.UseCors("DefaultCorsPolicy");
-
-app.MapEndpoints();
+app.MapControllers();
+//app.MapEndpoints();
 
 app.Run();
 

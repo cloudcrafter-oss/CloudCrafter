@@ -1,7 +1,6 @@
 using System.Reflection;
 using Ardalis.SharedKernel;
 using CloudCrafter.Core.Common.Behaviours;
-using CloudCrafter.Core.ContributorAggregate;
 using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Services.Domain.Users;
 using CloudCrafter.Domain;
@@ -16,21 +15,25 @@ public static class ApplicationServiceExtensions
     {
         var domainAssembly = typeof(IDomainTarget).Assembly;
         var currentAssembly = Assembly.GetExecutingAssembly();
-        Assembly[] combinedAssemblies = new Assembly[] { domainAssembly, currentAssembly };
+        Assembly[] combinedAssemblies = { domainAssembly, currentAssembly };
 
-        
         services.AddAutoMapper(combinedAssemblies);
+        // services.AddHttpClient()
 
-        services.AddScoped<IUsersService, UsersService>();
-        
-        services.AddMediatR(cfg => {
+        services.AddMediatR(cfg =>
+        {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehaviour<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
         });
+
+        // Services
+        services.AddScoped<IUsersService, UsersService>();
+
         services.AddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>();
+
 
         return services;
     }

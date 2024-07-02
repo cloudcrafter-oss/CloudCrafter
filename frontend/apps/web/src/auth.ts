@@ -35,7 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
             return true
         },
-        
+
         jwt({ token, user }) {
             if (user) { // User is available during sign-in
                 token.cloudCraftTest = user.specialToken
@@ -45,7 +45,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session({ session, token }) {
             session.user.id = token.id as string
             session.cloudCraftSession = token.cloudCraftTest
-            console.log('sessino called')
             return session
         },
         authorized: async ({ request, auth }) => {
