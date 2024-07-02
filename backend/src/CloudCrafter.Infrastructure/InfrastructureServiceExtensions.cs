@@ -78,6 +78,8 @@ public static class InfrastructureServiceExtensions
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true
                 };
+                
+             
             });
 
         services.AddAuthorizationBuilder();

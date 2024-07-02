@@ -11,6 +11,7 @@ public class CurrentUser(IHttpContextAccessor httpContextAccessor) : IUser
         {
             var id = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            var claims = httpContextAccessor.HttpContext?.User?.Claims;
             if (string.IsNullOrWhiteSpace(id))
             {
                 return null;
