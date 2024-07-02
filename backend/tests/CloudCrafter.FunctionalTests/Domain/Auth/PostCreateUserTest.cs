@@ -11,7 +11,7 @@ public class PostCreateUserTest : BaseTestFixture
     [Test]
     public async Task ShouldBeAbleToCreateUser()
     {
-        (await CountAsync<User>()).Should().Be(1);
+        (await CountAsync<User>()).Should().Be(0);
 
         var now = DateTime.UtcNow.ToString("HH-mm-ss-fff");
         var query = new PostCreateUser.Query($"admin-{now}@domain.com", "Admin User");
@@ -25,7 +25,7 @@ public class PostCreateUserTest : BaseTestFixture
          
          result.Token.Length.Should().BeGreaterThan(10);
          
-         (await CountAsync<User>()).Should().Be(3);
+         (await CountAsync<User>()).Should().Be(2);
     }
     
 }
