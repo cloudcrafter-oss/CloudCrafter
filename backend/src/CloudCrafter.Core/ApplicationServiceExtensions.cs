@@ -3,7 +3,7 @@ using Ardalis.SharedKernel;
 using CloudCrafter.Core.Common.Behaviours;
 using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Services.Domain.Users;
-using CloudCrafter.Domain;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,12 +13,9 @@ public static class ApplicationServiceExtensions
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        var domainAssembly = typeof(IDomainTarget).Assembly;
-        var currentAssembly = Assembly.GetExecutingAssembly();
-        Assembly[] combinedAssemblies = { domainAssembly, currentAssembly };
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-        services.AddAutoMapper(combinedAssemblies);
-        // services.AddHttpClient()
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         services.AddMediatR(cfg =>
         {
@@ -29,12 +26,11 @@ public static class ApplicationServiceExtensions
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
         });
 
-        // Services
-        services.AddScoped<IUsersService, UsersService>();
-
         services.AddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>();
 
 
+        services.AddScoped<IUsersService, UsersService>();
+        
         return services;
     }
 }

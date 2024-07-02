@@ -1,14 +1,11 @@
-using System.Reflection;
 using CloudCrafter.Core.Common.Interfaces;
-using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Infrastructure.Core.Configuration;
-using CloudCrafter.Infrastructure.Repositories;
+using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Web.Infrastructure;
 using CloudCrafter.Web.Infrastructure.Services;
 using CloudCrafter.Web.Infrastructure.Swagger;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
-using Serilog;
 
 namespace CloudCrafter.Web;
 
@@ -30,86 +27,56 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection AddWebServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddSwaggerServices(this IServiceCollection collection)
     {
-      //  services.AddHttpContextAccessor();
-      
-//            .AddDbContextCheck<ApplicationDbContext>();
+        collection.AddEndpointsApiExplorer()
+            .AddSwaggerGen(swagger =>
+            {
+                swagger.SupportNonNullableReferenceTypes();
+                swagger.SchemaFilter<RequireNotNullableSchemaFilter>();
+            });
 
-        // services.AddExceptionHandler<CustomExceptionHandler>();
+        return collection;
+    }
 
-        // services.AddRazorPages();
+    public static IServiceCollection AddWebServices(this IServiceCollection services)
+    {
+        services.AddDatabaseDeveloperPageExceptionFilter();
 
+        services.AddScoped<IUser, CurrentUser>();
+
+        services.AddHttpContextAccessor();
+
+        services.AddHealthChecks()
+            .AddDbContextCheck<AppDbContext>();
+
+        services.AddExceptionHandler<CustomExceptionHandler>();
+
+        services.AddRazorPages();
 
         // Customise default API behaviour
-        // services.Configure<ApiBehaviorOptions>(options =>
-        //     options.SuppressModelStateInvalidFilter = true);
+        services.Configure<ApiBehaviorOptions>(options =>
+            options.SuppressModelStateInvalidFilter = true);
 
         services.AddEndpointsApiExplorer();
 
+        // services.AddOpenApiDocument((configure, sp) =>
+        // {
+        //     configure.Title = "YourProjectName API";
+        //
+        //     // Add JWT
+        //     configure.AddSecurity("JWT", Enumerable.Empty<string>(),
+        //         new OpenApiSecurityScheme
+        //         {
+        //             Type = OpenApiSecuritySchemeType.ApiKey,
+        //             Name = "Authorization",
+        //             In = OpenApiSecurityApiKeyLocation.Header,
+        //             Description = "Type into the textbox: Bearer {your JWT token}."
+        //         });
+        //
+        //     configure.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
+        // });
 
-        services.AddCors(options =>
-        {
-            var corsSettings = new CorsSettings();
-            configuration.Bind(CorsSettings.KEY, corsSettings);
-
-            options.AddPolicy("DefaultCorsPolicy", corsBuilder =>
-            {
-                corsBuilder.WithOrigins(corsSettings.AllowedOrigins.ToArray())
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-            });
-        });
-        services.AddSerilog((sp, log) =>
-        {
-            log.ReadFrom.Configuration(configuration);
-        });
-        
-        services.AddSwaggerGen(swagger =>
-        {
-            var defaultSchemaIdSelector = swagger.SchemaGeneratorOptions.SchemaIdSelector;
-
-            swagger.CustomSchemaIds(type =>
-            {
-                if (type.MemberType == MemberTypes.NestedType)
-                {
-                    var parentType = type.DeclaringType;
-                    return parentType!.Name + type.Name;
-                }
-
-                return defaultSchemaIdSelector(type);
-            });
-            swagger.SupportNonNullableReferenceTypes();
-            swagger.SchemaFilter<RequireNotNullableSchemaFilter>();
-
-            swagger.AddSecurityDefinition("Bearer",
-                new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please enter a valid token",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
-                    Scheme = "Bearer"
-                });
-
-            swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-                    },
-                    new string[] { }
-                }
-            });
-        });
-
-        
- 
-        services.AddExceptionHandler<CustomExceptionHandler>()
-            .AddScoped<IUser, CurrentUser>()
-            .AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }
