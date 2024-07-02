@@ -1,11 +1,11 @@
-import { Query } from './Query'
+import { PostLoginUserQuery } from './PostLoginUserQuery'
 import type { TokenDto } from './TokenDto'
 
  /**
  * @description OK
 */
 export type PostLoginUser200 = TokenDto;
-export type PostLoginUserMutationRequest = Query;
+export type PostLoginUserMutationRequest = PostLoginUserQuery;
 /**
  * @description OK
 */

@@ -18,7 +18,7 @@ type PostLoginUser = {
     };
 };
 /**
- * @link /api/Auth
+ * @link /api/Auth/login
  */
 export function usePostLoginUserHook(options: {
     mutation?: UseMutationOptions<PostLoginUser['response'], PostLoginUser['error'], PostLoginUser['request']>;
@@ -29,7 +29,7 @@ export function usePostLoginUserHook(options: {
         mutationFn: async (data) => {
             const res = await client<PostLoginUser['data'], PostLoginUser['error'], PostLoginUser['request']>({
                 method: 'post',
-                url: '/api/Auth',
+                url: '/api/Auth/login',
                 data,
                 ...clientOptions
             })

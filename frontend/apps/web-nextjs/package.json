@@ -12,6 +12,7 @@
     "clean-generated-files": "node src/utils/kubb/post-action.js"
   },
   "dependencies": {
+    "@auth/unstorage-adapter": "^2.4.1",
     "@hookform/resolvers": "^3.6.0",
     "@kubb/cli": "^2.21.1",
     "@kubb/core": "^2.21.1",
@@ -22,15 +23,18 @@
     "@kubb/swagger-tanstack-query": "^2.21.1",
     "@kubb/swagger-ts": "^2.21.1",
     "@kubb/swagger-zod": "^2.21.1",
+    "@radix-ui/react-avatar": "^1.1.0",
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.49.0",
     "axios": "^1.7.2",
     "clsx": "^2.1.0",
+    "lucide-react": "^0.330.0",
     "next": "^14.2.4",
     "next-auth": "5.0.0-beta.19",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.52.0",
+    "unstorage": "^1.10.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {

@@ -1,4 +1,5 @@
 import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema } from './postLoginUserSchema'
+import { postCreateUserMutationRequestSchema, postCreateUserMutationResponseSchema } from './postCreateUserSchema'
 import { getUsersQueryResponseSchema, getUsersQueryParamsSchema } from './getUsersSchema'
 import { testQueryResponseSchema } from './testSchema'
 
@@ -12,6 +13,18 @@ import { testQueryResponseSchema } from './testSchema'
         responses: {
             200: postLoginUserMutationResponseSchema,
             default: postLoginUserMutationResponseSchema
+        },
+        errors: {}
+    }, 'PostCreateUser': {
+        request: postCreateUserMutationRequestSchema,
+        parameters: {
+            path: undefined,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: postCreateUserMutationResponseSchema,
+            default: postCreateUserMutationResponseSchema
         },
         errors: {}
     }, 'GetUsers': {
@@ -39,8 +52,10 @@ import { testQueryResponseSchema } from './testSchema'
         },
         errors: {}
     } } as const
-export const paths = { '/api/Auth': {
+export const paths = { '/api/Auth/login': {
         post: operations['PostLoginUser']
+    }, '/api/Auth/create': {
+        post: operations['PostCreateUser']
     }, '/api/Users': {
         get: operations['GetUsers']
     }, '/api/Users/test': {

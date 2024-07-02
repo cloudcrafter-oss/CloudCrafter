@@ -1,4 +1,4 @@
-import { providerMap } from '@/auth.ts'
+import { providerMap } from '../../../auth.ts'
 import { signIn } from 'next-auth/react'
 import { AuthError } from 'next-auth'
 import { redirect } from 'next/navigation'

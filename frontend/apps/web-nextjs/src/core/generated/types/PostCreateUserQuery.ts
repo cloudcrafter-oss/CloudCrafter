@@ -1,4 +1,4 @@
-export type Query = {
+export type PostCreateUserQuery = {
     /**
      * @type string
     */
@@ -6,5 +6,5 @@ export type Query = {
     /**
      * @type string
     */
-    password: string;
+    name: string;
 };

@@ -3,6 +3,7 @@ import { pluginOas } from '@kubb/plugin-oas'
 import { pluginTanstackQuery } from '@kubb/swagger-tanstack-query'
 import { pluginTs } from '@kubb/swagger-ts'
 import { pluginZod } from '@kubb/swagger-zod'
+import { pluginClient } from '@kubb/swagger-client'
 
 
 export default defineConfig({
@@ -29,6 +30,12 @@ export default defineConfig({
             mapper: {
                 productName: 'z.string().uuid()',
             },
+        }),
+        pluginClient({
+            output: {
+                path: './axios'
+            },
+            client: { importPath: '../../backend/client.ts' }
         }),
         pluginTs(),
         pluginTanstackQuery({

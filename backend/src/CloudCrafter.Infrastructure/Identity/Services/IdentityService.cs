@@ -32,6 +32,15 @@ public class IdentityService(
         return (result.ToApplicationResult(), user.Id);
     }
 
+    public async  Task<(Result Result, Guid UserId)> CreateUserWithoutPassword(string email, string name)
+    {
+        var user = new User() { UserName = email, Email = email, };
+
+        var result = await userManager.CreateAsync(user);
+        
+        return (result.ToApplicationResult(), user.Id);
+    }
+
     public async Task<bool> IsInRoleAsync(Guid userId, string role)
     {
         var user = await userManager.FindByIdAsync(userId.ToString());

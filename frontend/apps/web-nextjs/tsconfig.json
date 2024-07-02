@@ -15,7 +15,10 @@
         "../../packages/ui/src/*"
       ],
       "@/*": [
-        "./src/*"
+        "./*"
+      ],
+      "auth": [
+        "./auth"
       ]
     },
     /* Bundler mode */
@@ -40,7 +43,10 @@
     ]
   },
   "include": [
-    "src",
+    "process.d.ts",
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
     ".next/types/**/*.ts"
   ],
   "references": [

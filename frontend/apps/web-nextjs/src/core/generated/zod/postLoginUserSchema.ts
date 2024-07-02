@@ -1,13 +1,13 @@
 import { z } from 'zod'
 import { tokenDtoSchema } from './tokenDtoSchema'
-import { querySchema } from './querySchema'
+import { postLoginUserQuerySchema } from './postLoginUserQuerySchema'
 
  /**
  * @description OK
  */
 export const postLoginUser200Schema = z.lazy(() => tokenDtoSchema)
 
- export const postLoginUserMutationRequestSchema = z.lazy(() => querySchema)
+ export const postLoginUserMutationRequestSchema = z.lazy(() => postLoginUserQuerySchema)
 /**
  * @description OK
  */
