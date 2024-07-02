@@ -1,3 +1,4 @@
+using System.Reflection;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Data;
@@ -32,6 +33,18 @@ public static class DependencyInjection
         collection.AddEndpointsApiExplorer()
             .AddSwaggerGen(swagger =>
             {
+                var defaultSchemaIdSelector = swagger.SchemaGeneratorOptions.SchemaIdSelector;
+        
+                swagger.CustomSchemaIds(type =>
+                {
+                    if (type.MemberType == MemberTypes.NestedType)
+                    {
+                        var parentType = type.DeclaringType;
+                        return parentType!.Name + type.Name;
+                    }
+
+                    return defaultSchemaIdSelector(type);
+                });
                 swagger.SupportNonNullableReferenceTypes();
                 swagger.SchemaFilter<RequireNotNullableSchemaFilter>();
             });
