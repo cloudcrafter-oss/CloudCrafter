@@ -23,6 +23,8 @@ public static class WebExtensions
             });
         });
 
+        services.AddHttpContextAccessor();
+ 
         services.AddExceptionHandler<CustomExceptionHandler>()
             .AddScoped<IUser, CurrentUser>()
             .AddScoped<IUserRepository, UserRepository>();

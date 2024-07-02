@@ -54,7 +54,8 @@ public class CloudCrafterAuthService(UserManager<User> userManager, IJwtService 
         var roles = await userManager.GetRolesAsync(user);
         var authClaims = new List<Claim>
         {
-            new(ClaimTypes.Name, user.UserName!), new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new(ClaimTypes.Name, user.UserName!), new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
         };
 
         var tokenDto = jwtService.GenerateForClaims(authClaims);

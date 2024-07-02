@@ -18,7 +18,7 @@ importers:
         specifier: ^2.0.6
         version: 2.0.6
 
-  apps/web-nextjs:
+  apps/web:
     dependencies:
       '@auth/unstorage-adapter':
         specifier: ^2.4.1
@@ -31,7 +31,7 @@ importers:
         version: 2.21.1(typescript@5.5.2)
       '@kubb/core':
         specifier: ^2.21.1
-        version: 2.21.1
+        version: 2.21.2
       '@kubb/plugin-oas':
         specifier: ^2.21.1
         version: 2.21.2(@kubb/react@2.21.2)
@@ -3956,6 +3956,7 @@ packages:
   /eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    hasBin: true
     dependencies:
       '@eslint-community/eslint-utils': 4.4.0(eslint@8.57.0)
       '@eslint-community/regexpp': 4.10.0

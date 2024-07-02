@@ -5,6 +5,7 @@ using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Email;
 using CloudCrafter.Web.Infrastructure;
 using CloudCrafter.Web.Infrastructure.Swagger;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Extensions.Logging;
 
@@ -40,6 +41,31 @@ builder.Services.AddEndpointsApiExplorer()
         });
         swagger.SupportNonNullableReferenceTypes();
         swagger.SchemaFilter<RequireNotNullableSchemaFilter>();
+        
+        swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            In = ParameterLocation.Header,
+            Description = "Please enter a valid token",
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            BearerFormat = "JWT",
+            Scheme = "Bearer"
+        });
+        
+        swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type=ReferenceType.SecurityScheme,
+                        Id="Bearer"
+                    }
+                },
+                new string[]{}
+            }
+        });
     })
     .AddApplicationServices()
     .AddAutoMapper(Assembly.GetExecutingAssembly())

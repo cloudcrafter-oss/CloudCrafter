@@ -25,24 +25,22 @@ namespace CloudCrafter.Infrastructure;
 
 public static class InfrastructureServiceExtensions
 {
-    
     public static IServiceCollection AddCloudCrafterApplicationServices(this IServiceCollection services,
         ConfigurationManager config)
     {
+        // services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-       // services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        
         return services;
     }
+
     public static IServiceCollection AddCloudCrafterConfiguration(this IServiceCollection services,
         ConfigurationManager config)
     {
-
         services.AddOptions<JwtSettings>()
             .BindConfiguration(JwtSettings.KEY)
             .ValidateDataAnnotations()
             .ValidateOnStart();
-        
+
         services.AddOptions<CorsSettings>()
             .BindConfiguration(CorsSettings.KEY)
             .ValidateDataAnnotations()
@@ -50,35 +48,33 @@ public static class InfrastructureServiceExtensions
 
         return services;
     }
+
     public static IServiceCollection AddCloudCrafterIdentity(this IServiceCollection services,
         ConfigurationManager config)
     {
         string? connectionString = config.GetConnectionString("PostgresConnection");
         Guard.Against.Null(connectionString, "PostgresConnection is not set.");
 
-        services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(o =>
-        {
-            var jwtSettings = new JwtSettings();
-            config.Bind(JwtSettings.KEY, jwtSettings);
-
-            o.TokenValidationParameters = new TokenValidationParameters
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(o =>
             {
-                ValidIssuer = jwtSettings.Issuer,
-                ValidAudience = jwtSettings.Audience,
-                IssuerSigningKey = new SymmetricSecurityKey
-                    (Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ValidateLifetime = false,
-                ValidateIssuerSigningKey = false
-            };
-        });
-        
+                var jwtSettings = new JwtSettings();
+                config.Bind(JwtSettings.KEY, jwtSettings);
+
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey
+                        (Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = false
+                };
+            });
+
+        services.AddAuthorizationBuilder();
         services.AddIdentity<User, Role>(options =>
             {
                 options.User.RequireUniqueEmail = true;
