@@ -11,3 +11,5 @@ server/dist
 public/dist
 
 .next
+
+.env
