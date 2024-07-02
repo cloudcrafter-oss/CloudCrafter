@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CLOUDCRAFTER_AXIOS_BACKEND_BASEURL: http://dummy
     defaults:
       run:
         working-directory: ./frontend
