@@ -12,7 +12,7 @@ async function fixUnusedVarsForPageParam(pattern) {
             const data = await fs.promises.readFile(file, 'utf8')
             const lines = data.split('\n')
 
-            const updatedLines = lines.map((line, index) => {
+            const updatedLines = lines.map((line) => {
                 if (line.includes('queryFn: async ({ pageParam })')) {
                     return '// eslint-disable-next-line @typescript-eslint/ban-ts-comment\n// @ts-ignore pageParam is declared but its value is possibly never read\n' + line
                 }

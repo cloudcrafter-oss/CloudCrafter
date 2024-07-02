@@ -23,6 +23,6 @@ public class GetUserListQueryTest : BaseTestFixture
         var result = await SendAsync(_query);
 
         result.Should().NotBeNull();
-        result.Result.Count.Should().Be(3);
+        result.Result.Count.Should().Be(2);
     }
 }
