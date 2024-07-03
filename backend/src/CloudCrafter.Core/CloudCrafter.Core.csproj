@@ -9,12 +9,13 @@
     <PackageReference Include="Ardalis.Specification"/>
     <PackageReference Include="FluentValidation"/>
     <PackageReference Include="MediatR"/>
-    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="AutoMapper"/>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions"/>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CloudCrafter.Domain\CloudCrafter.Domain.csproj" />
+    <ProjectReference Include="..\CloudCrafter.Domain\CloudCrafter.Domain.csproj"/>
   </ItemGroup>
 
 </Project>

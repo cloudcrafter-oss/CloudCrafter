@@ -1,54 +1,34 @@
-﻿using System.Reflection;
-using CloudCrafter.Core;
-using CloudCrafter.Core.Interfaces;
+﻿using CloudCrafter.Core;
 using CloudCrafter.Infrastructure;
-using CloudCrafter.Infrastructure.Email;
+using CloudCrafter.Infrastructure.Data;
+using CloudCrafter.Web;
 using CloudCrafter.Web.Infrastructure;
-using CloudCrafter.Web.Infrastructure.Swagger;
-using Serilog;
-using Serilog.Extensions.Logging;
-
-var logger = Log.Logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .CreateLogger();
-
-logger.Information("Starting web host");
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
 
-var microsoftLogger = new SerilogLoggerFactory(logger)
-    .CreateLogger<Program>();
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(builder.Configuration)
+    .AddApiConfiguration(builder.Configuration);
+builder.Services.AddWebServices();
+builder.Services.AddSwaggerServices();
 
+var app = builder.Build();
 
-builder.Services.AddEndpointsApiExplorer()
-    .AddSwaggerGen(swagger =>
-    {
-        swagger.SupportNonNullableReferenceTypes();
-        swagger.SchemaFilter<RequireNotNullableSchemaFilter>();
-    })
-    .AddApplicationServices()
-    .AddAutoMapper(Assembly.GetExecutingAssembly())
-    .AddInfrastructureServices(builder.Configuration, microsoftLogger)
-    .AddCloudCrafterIdentity(builder.Configuration)
-    .AddCloudCrafterConfiguration(builder.Configuration)
-    .AddWebConfig(builder.Configuration);
-
-
-if (builder.Environment.IsDevelopment())
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
-    // Use a local test email server
-    // See: https://ardalis.com/configuring-a-local-test-email-server/
-    builder.Services.AddScoped<IEmailSender, MimeKitEmailSender>();
+    await app.InitialiseDatabaseAsync();
 }
 else
 {
-    builder.Services.AddScoped<IEmailSender, MimeKitEmailSender>();
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
 
-var app = builder.Build();
+app.UseHealthChecks("/health");
+app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 if (app.Environment.IsDevelopment())
 {
@@ -60,18 +40,22 @@ else
     app.UseHsts();
 }
 
+app.MapControllerRoute(
+    "default",
+    "{controller}/{action=Index}/{id?}");
 
-app.UseHttpsRedirection();
-app.SeedDatabase();
-app.UseStaticFiles();
-app.UseAuthentication();
-app.UseAuthorization();
+app.MapRazorPages();
 
-app.UseCors("DefaultCorsPolicy");
+app.MapFallbackToFile("index.html");
+
+app.UseExceptionHandler(options => { });
+
+app.Map("/", () => Results.Redirect("/api"));
 
 app.MapEndpoints();
 
 app.Run();
+
 
 // Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
 public partial class Program

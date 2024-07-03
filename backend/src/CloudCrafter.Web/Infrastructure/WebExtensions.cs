@@ -10,22 +10,11 @@ public static class WebExtensions
 {
     public static IServiceCollection AddWebConfig(this IServiceCollection services, ConfigurationManager config)
     {
-        services.AddCors(options =>
-        {
-            var corsSettings = new CorsSettings();
-            config.Bind(CorsSettings.KEY, corsSettings);
+        
 
-            options.AddPolicy("DefaultCorsPolicy", corsBuilder =>
-            {
-                corsBuilder.WithOrigins(corsSettings.AllowedOrigins.ToArray())
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-            });
-        });
-
-        services.AddExceptionHandler<CustomExceptionHandler>()
-            .AddScoped<IUser, CurrentUser>()
-            .AddScoped<IUserRepository, UserRepository>();
+        services.AddHttpContextAccessor();
+ 
+      
         return services;
     }
 }

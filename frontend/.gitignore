@@ -5,7 +5,11 @@ node_modules
 dist
 dist-ssr
 *.local
-.env
+apps/web-nextjs/.env
 .cache
 server/dist
 public/dist
+
+.next
+
+.env

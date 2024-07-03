@@ -3,21 +3,22 @@ import { pluginOas } from '@kubb/plugin-oas'
 import { pluginTanstackQuery } from '@kubb/swagger-tanstack-query'
 import { pluginTs } from '@kubb/swagger-ts'
 import { pluginZod } from '@kubb/swagger-zod'
+import { pluginClient } from '@kubb/swagger-client'
 
 
 export default defineConfig({
     root: '.',
     input: {
-        path: 'http://localhost:57680/api/specification.json'
+        path: 'http://localhost:57680/swagger/v1/swagger.json'
     },
     output: {
-        path: './src/app/generated',
+        path: './src/core/generated',
         clean: true,
     },
     hooks: {
         done: [
             'node src/utils/kubb/post-action.js',
-            'eslint ./src/app/generated --ext ts --fix'
+            'eslint ./src/core/generated --ext ts --fix'
         ]
     },
     plugins: [
@@ -29,6 +30,12 @@ export default defineConfig({
             mapper: {
                 productName: 'z.string().uuid()',
             },
+        }),
+        pluginClient({
+            output: {
+                path: './axios'
+            },
+            client: { importPath: '../../backend/client.ts' }
         }),
         pluginTs(),
         pluginTanstackQuery({

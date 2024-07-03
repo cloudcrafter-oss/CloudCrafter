@@ -18,7 +18,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" PrivateAssets="All"/>
     <PackageReference Include="Serilog.AspNetCore"/>
     <PackageReference Include="Swashbuckle.AspNetCore"/>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore"/>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
   </ItemGroup>
 
   <ItemGroup>
