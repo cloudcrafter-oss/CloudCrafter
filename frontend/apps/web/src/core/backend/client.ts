@@ -33,7 +33,7 @@ axiosInstance.interceptors.request.use(async (request) => {
     const session = await auth()
 
     if (session) {
-        request.headers.Authorization = `Bearer ${session.cloudCraftSession}`
+        request.headers.Authorization = `Bearer ${session.sessionCloudCraftAccessToken}`
     }
 
     return request

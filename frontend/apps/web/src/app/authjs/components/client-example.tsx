@@ -48,6 +48,7 @@ export default function ClientExample() {
 
     return (
         <div className="flex flex-col gap-4">
+            <pre>{JSON.stringify({ session }, null, 2)}</pre>
             <h1 className="text-3xl font-bold">Client Side Rendering</h1>
             <p>
                 This page fetches session data client side using the{' '}

@@ -7,6 +7,10 @@ export const operations = {
         'path': '/api/Auth/create',
         'method': 'post'
     },
+    'PostRefreshTokens': {
+        'path': '/api/Auth/refresh',
+        'method': 'post'
+    },
     'GetUsers': {
         'path': '/api/Users',
         'method': 'get'
