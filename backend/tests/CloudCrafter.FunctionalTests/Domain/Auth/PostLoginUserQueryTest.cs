@@ -25,7 +25,8 @@ public class PostLoginUserQueryTest : BaseTestFixture
         
         var result = await SendAsync(query);
 
-        result.Token.Length.Should().BeGreaterThan(10); // safe to assume its there
+        result.RefreshToken.Length.Should().BeGreaterThan(10); // safe to assume its there
+        result.AccessToken.Length.Should().BeGreaterThan(10); // safe to assume its there
         result.ValidTo.Should().BeAfter(now);
     }
 }
