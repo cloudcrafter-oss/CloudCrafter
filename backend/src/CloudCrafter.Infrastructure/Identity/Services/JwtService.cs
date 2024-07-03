@@ -12,28 +12,20 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CloudCrafter.Infrastructure.Identity.Services;
 
-public class JwtService(IOptions<JwtSettings> jwtSettings, IUserRefreshTokenRepository userRefreshTokenRepository) : IJwtService
+public class JwtService(IOptions<JwtSettings> jwtSettings, IUserRefreshTokenRepository userRefreshTokenRepository)
+    : IJwtService
 {
-    public (string,DateTime) GenerateForClaims(List<Claim> authClaims)
-    {
-        var token = GetToken(authClaims);
-
-        var actualToken = new JwtSecurityTokenHandler().WriteToken(token);
-
-        return (actualToken, token.ValidTo);
-    }
-
     public async Task<TokenDto> GenerateTokenForUserAsync(User user, List<string> roles)
     {
         var authClaims = new List<Claim>
         {
-            new(ClaimTypes.Name, user.UserName!), 
+            new(ClaimTypes.Name, user.UserName!),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString())
         };
 
         var tokenDto = GenerateForClaims(authClaims);
-        
+
         // Store refresh token
         var refreshToken = GenerateRefreshToken();
         await userRefreshTokenRepository.AddRefreshTokenToUserAsync(user.Id, refreshToken,
@@ -41,6 +33,28 @@ public class JwtService(IOptions<JwtSettings> jwtSettings, IUserRefreshTokenRepo
 
 
         return new TokenDto(tokenDto.Item1, refreshToken, tokenDto.Item2);
+    }
+
+    public async Task<Guid?> GetUserIdFromRefreshToken(string refreshToken)
+    {
+        var userRefreshToken = await userRefreshTokenRepository.GetRefreshTokenAsync(refreshToken);
+        if (userRefreshToken == null)
+        {
+            throw new UnauthorizedAccessException();
+        }
+
+        var userId = userRefreshToken.UserId;
+
+        return userId;
+    }
+
+    public (string, DateTime) GenerateForClaims(List<Claim> authClaims)
+    {
+        var token = GetToken(authClaims);
+
+        var actualToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+        return (actualToken, token.ValidTo);
     }
 
     private string GenerateRefreshToken()
