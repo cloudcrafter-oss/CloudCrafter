@@ -1,6 +1,7 @@
 import React from 'react'
-import { Logo, SettingsIcon, UsersIcon, VercelLogo } from './components/icons'
+import { Logo } from './components/icons'
 import { NavItem } from './components/nav'
+import { menuItems } from '@/src/core/menu/menu.tsx'
 
 
 export const AdminLayout = ({ children }: { children: React.ReactNode }) => {
@@ -19,19 +20,12 @@ export const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                     </div>
                     <div className="flex-1 overflow-auto py-2">
                         <nav className="grid items-start px-4 text-sm font-medium">
-                            <NavItem href="/">
-                                <UsersIcon className="h-4 w-4"/>
-                                Users
-                            </NavItem>
-                            <NavItem href="/settings">
-                                <SettingsIcon className="h-4 w-4"/>
-                                Settings
-                            </NavItem>
-                            <NavItem
-                                href="https://vercel.com/templates/next.js/admin-dashboard-tailwind-postgres-react-nextjs">
-                                <VercelLogo className="h-4 w-4"/>
-                                Deploy
-                            </NavItem>
+                            {menuItems.map((item) => (
+                                <NavItem key={item.link} href={item.link}>
+                                    {item.logo}
+                                    {item.title}
+                                </NavItem>
+                            ))}
                         </nav>
                     </div>
                 </div>

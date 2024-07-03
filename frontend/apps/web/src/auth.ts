@@ -50,6 +50,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         authorized: async ({ request, auth }) => {
             const { pathname } = request.nextUrl
             if (pathname === '/authjs/middleware-example') return !!auth
+
+            // check if pathname starts with /admin
+            if (pathname.startsWith('/admin')) {
+                return !!auth
+            }
+
             return true
         },
     }

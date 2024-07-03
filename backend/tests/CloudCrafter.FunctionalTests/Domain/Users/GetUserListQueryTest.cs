@@ -9,6 +9,7 @@ using static Testing;
 public class GetUserListQueryTest : BaseTestFixture
 {
     private GetUserList.Query _query = new GetUserList.Query(new BasePaginationRequest());
+    
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
@@ -23,6 +24,6 @@ public class GetUserListQueryTest : BaseTestFixture
         var result = await SendAsync(_query);
 
         result.Should().NotBeNull();
-        result.Result.Count.Should().Be(4);
+        result.Result.Count.Should().Be(1);
     }
 }
