@@ -99,6 +99,7 @@ public static class InfrastructureServiceExtensions
         // Add services
         services.AddScoped<ICloudCrafterAuthService, CloudCrafterAuthService>()
             .AddScoped<IUserRepository, UserRepository>()
+            .AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>()
             .AddScoped<IJwtService, JwtService>()
             .AddScoped<IEmailSender, FakeEmailSender>();
         
