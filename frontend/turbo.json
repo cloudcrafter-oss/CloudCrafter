@@ -3,6 +3,9 @@
   "globalDependencies": [
     ".env"
   ],
+  "globalEnv": [
+    "CLOUDCRAFTER_AXIOS_BACKEND_BASEURL"
+  ],
   "tasks": {
     "build": {
       "dependsOn": [
