@@ -1,5 +1,5 @@
-import client from '../../backend/client.ts'
-import type { ResponseConfig } from '../../backend/client.ts'
+import client from '../../backend/non-auth-client.ts'
+import type { ResponseConfig } from '../../backend/non-auth-client.ts'
 import type { PostRefreshTokensMutationRequest, PostRefreshTokensMutationResponse } from '../types/PostRefreshTokens'
 
  /**
