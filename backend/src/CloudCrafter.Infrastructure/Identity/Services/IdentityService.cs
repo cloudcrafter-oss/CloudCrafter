@@ -21,23 +21,19 @@ public class IdentityService(
 
     public async Task<(Result Result, Guid UserId)> CreateUserAsync(string userName, string password)
     {
-        var user = new User()
-        {
-            UserName = userName,
-            Email = userName,
-        };
+        var user = new User() { UserName = userName, Email = userName, };
 
         var result = await userManager.CreateAsync(user, password);
 
         return (result.ToApplicationResult(), user.Id);
     }
 
-    public async  Task<(Result Result, Guid UserId)> CreateUserWithoutPassword(string email, string name)
+    public async Task<(Result Result, Guid UserId)> CreateUserWithoutPassword(string email, string name)
     {
-        var user = new User() { UserName = email, Email = email, };
+        var user = new User() { UserName = email, Email = email, FullName = name };
 
         var result = await userManager.CreateAsync(user);
-        
+
         return (result.ToApplicationResult(), user.Id);
     }
 

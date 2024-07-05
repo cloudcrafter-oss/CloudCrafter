@@ -1,0 +1,22 @@
+{
+  "extends": "@repo/typescript-config/react-library.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "es2022",
+    "paths": {
+      "@cloudcraft-datatable/*": [
+        "./src/*"
+      ],
+      "@cloudcraft-datatable/components/data-table*": [
+        "./src/components/data-table/*"
+      ]
+    }
+  },
+  "include": [
+    "."
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

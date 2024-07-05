@@ -1,4 +1,4 @@
-import NextAuth, { User } from 'next-auth'
+import NextAuth from 'next-auth'
 import 'next-auth/jwt'
 import Auth0 from 'next-auth/providers/auth0'
 import type { Provider } from 'next-auth/providers'
@@ -22,14 +22,9 @@ export const providerMap = providers.map((provider) => {
 
 async function refreshAccessToken(token: JWT): Promise<JWT> {
     try {
-
-        console.log('refreshAccessToken')
         const response = await postRefreshTokens({
             refreshToken: token.refreshToken as string,
         })
-
-        console.log('refreshaccessTokenResponse', response)
-
         return {
             ...token,
             accessToken: response.accessToken,
@@ -37,7 +32,7 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
             refreshToken: response.refreshToken, // This will be the new refresh token
         }
     } catch (error) {
-        console.error('Error refreshing access token', error)
+        console.log('cannot refresh tokens!')
         return {
             ...token,
             error: 'RefreshAccessTokenError',
@@ -80,7 +75,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
         async session({ session, token, user, }) {
 
-            session.user = token.user as User
             session.accessToken = token.accessToken as string
             session.error = token.error as string | undefined
 
@@ -105,6 +99,7 @@ declare module 'next-auth' {
         accessToken?: string
         sessionCloudCraftAccessToken?: string
         sessionCloudCraftRefreshToken?: string
+        error?: string
     }
 
     interface User {
