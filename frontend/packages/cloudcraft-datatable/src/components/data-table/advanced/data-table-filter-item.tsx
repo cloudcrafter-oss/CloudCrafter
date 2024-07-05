@@ -7,20 +7,11 @@ import { DataTableAdvancedFacetedFilter } from './data-table-advanced-faceted-fi
 import { DataTableFilterOption } from '@cloudcraft-datatable/types'
 import { dataTableConfig } from '@cloudcraft-datatable/config/data-table'
 import { useDebounce } from '@repo/ui/hooks/use-debounce'
-import {
-    Button,
-    Input,
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from '@repo/ui'
 import { cn } from '@repo/ui/lib/utils'
+import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/components/popover'
+import { Button } from '@repo/ui/components/button'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/components/select'
+import { Input } from '@repo/ui/components/input'
 
 interface DataTableFilterItemProps<TData> {
     table: Table<TData>

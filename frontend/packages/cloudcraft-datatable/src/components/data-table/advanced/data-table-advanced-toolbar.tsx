@@ -10,9 +10,10 @@ import { DataTableFilterItem } from './data-table-filter-item'
 import { DataTableMultiFilter } from './data-table-multi-filter'
 import { DataTableFilterField, DataTableFilterOption } from '@cloudcraft-datatable/types'
 import { cn } from '@repo/ui/lib/utils'
-import { Button } from '@repo/ui'
+
 import { DataTableFilterCombobox } from '@cloudcraft-datatable/components/data-table/advanced/data-table-filter-combobox'
 import { DataTableViewOptions } from '@cloudcraft-datatable/components/data-table/data-table-view-options'
+import { Button } from '@repo/ui/components/button'
 
 interface DataTableAdvancedToolbarProps<TData>
     extends React.HTMLAttributes<HTMLDivElement> {

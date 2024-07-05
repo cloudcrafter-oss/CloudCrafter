@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "turbo build",
+    "build": "turbo build -vvv",
     "dev": "turbo dev",
     "lint": "turbo lint -- --fix",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",

@@ -1,22 +1,21 @@
 import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons'
 import type { Column } from '@tanstack/react-table'
 import { Option } from '@cloudcraft-datatable/types'
+import { cn } from '@repo/ui/lib/utils'
+import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/components/popover'
+import { Button } from '@repo/ui/components/button'
+import { Separator } from '@repo/ui/components/separator'
+import React from 'react'
+import { Badge } from '@repo/ui/components/badge'
 import {
-    Badge,
-    Button,
     Command,
     CommandEmpty,
     CommandGroup,
     CommandInput,
     CommandItem,
     CommandList,
-    CommandSeparator,
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-    Separator
-} from '@repo/ui'
-import { cn } from '@repo/ui/lib/utils'
+    CommandSeparator
+} from '@repo/ui/components/command'
 
 
 interface DataTableFacetedFilterProps<TData, TValue> {

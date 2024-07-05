@@ -4,10 +4,11 @@ import * as React from 'react'
 import { Table } from '@tanstack/react-table'
 import { DataTableFilterField } from '@cloudcraft-datatable/types'
 import { cn } from '@repo/ui/lib/utils'
-import { Button, Input } from '@repo/ui'
 import { DataTableFacetedFilter } from '@cloudcraft-datatable/components/data-table/data-table-faceted-filter'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { DataTableViewOptions } from '@cloudcraft-datatable/components/data-table/data-table-view-options'
+import { Input } from '@repo/ui/components/input'
+import { Button } from '@repo/ui/components/button'
 
 interface DataTableToolbarProps<TData>
     extends React.HTMLAttributes<HTMLDivElement> {

@@ -3,19 +3,17 @@
 import * as React from 'react'
 import { CaretSortIcon, ChevronDownIcon, PlusIcon, TextIcon, } from '@radix-ui/react-icons'
 import { DataTableFilterOption } from '@cloudcraft-datatable/types'
+import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/components/popover'
+import { Button } from '@repo/ui/components/button'
 import {
-    Button,
     Command,
     CommandEmpty,
     CommandGroup,
     CommandInput,
     CommandItem,
     CommandList,
-    CommandSeparator,
-    Popover,
-    PopoverContent,
-    PopoverTrigger
-} from '@repo/ui'
+    CommandSeparator
+} from '@repo/ui/components/command'
 
 
 interface DataTableFilterComboboxProps<TData> {

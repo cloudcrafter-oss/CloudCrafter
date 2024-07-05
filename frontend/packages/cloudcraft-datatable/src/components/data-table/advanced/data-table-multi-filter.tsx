@@ -5,26 +5,19 @@ import { CopyIcon, DotsHorizontalIcon, TextAlignCenterIcon, TrashIcon, } from '@
 import type { Table } from '@tanstack/react-table'
 import { DataTableFilterOption } from '@cloudcraft-datatable/types'
 import { DataTableConfig, dataTableConfig } from '@cloudcraft-datatable/config/data-table'
+import { useDebounce } from '@repo/ui/hooks/use-debounce'
+import { DataTableFacetedFilter } from '@cloudcraft-datatable/components/data-table/data-table-faceted-filter'
+import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/components/popover'
+import { Button } from '@repo/ui/components/button'
+import { Separator } from '@repo/ui/components/separator'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/components/select'
+import { Input } from '@repo/ui/components/input'
 import {
-    Button,
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuTrigger,
-    Input,
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-    Separator
-} from '@repo/ui'
-import { useDebounce } from '@repo/ui/hooks/use-debounce'
-import { DataTableFacetedFilter } from '@cloudcraft-datatable/components/data-table/data-table-faceted-filter'
+    DropdownMenuTrigger
+} from '@repo/ui/components/dropdown-menu'
 
 
 interface DataTableMultiFilterProps<TData> {

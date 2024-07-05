@@ -17,6 +17,7 @@ export interface UserListProps {
 export const UsersList = async ({ searchParams }: UserListProps) => {
     const search = searchParamsSchema.parse(searchParams)
 
+    console.log(search)
     const users = getUsers()
 
     return (
