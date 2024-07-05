@@ -56,6 +56,6 @@
     "./tailwind.config": "./tailwind.config.js",
     "./lib/*": "./src/lib/*.ts",
     "./hooks/*": "./src/hooks/*.ts",
-    "./newcomponents/*": "./src/components/ui/*.tsx"
+    "./components/*": "./src/components/ui/*.tsx"
   }
 }

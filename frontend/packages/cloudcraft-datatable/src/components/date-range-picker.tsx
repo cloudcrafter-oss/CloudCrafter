@@ -6,9 +6,9 @@ import { CalendarIcon } from '@radix-ui/react-icons'
 import { addDays, format } from 'date-fns'
 import type { DateRange } from 'react-day-picker'
 import { cn } from '@repo/ui/lib/utils'
-import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/newcomponents/popover'
-import { Button, ButtonProps } from '@repo/ui'
-import { Calendar } from '@repo/ui/newcomponents/calendar'
+import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/components/popover'
+import { Button, ButtonProps } from '@repo/ui/components/button'
+import { Calendar } from '@repo/ui/components/calendar'
 
 
 interface DateRangePickerProps

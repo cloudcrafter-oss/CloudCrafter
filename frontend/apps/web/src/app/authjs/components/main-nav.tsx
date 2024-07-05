@@ -1,6 +1,6 @@
 'use client'
 import CustomLink from '@/src/app/authjs/components/custom-link.tsx'
-import { Button } from '@ui/components'
+
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -12,6 +12,7 @@ import {
 } from '@ui/components/ui/navigation-menu.tsx'
 import { cn } from '@ui/lib/utils.ts'
 import React from 'react'
+import { Button } from '@ui/components/ui/button.tsx'
 
 
 export function MainNav() {
