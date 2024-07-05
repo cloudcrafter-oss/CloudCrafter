@@ -3,6 +3,8 @@ import 'next-auth/jwt'
 import Auth0 from 'next-auth/providers/auth0'
 import type { Provider } from 'next-auth/providers'
 import { postCreateUser, postRefreshTokens } from '@/src/core/generated'
+import { debugToken, isTokenExpired } from '@/src/utils/auth/jwt-utils.ts'
+import { JWT } from 'next-auth/jwt'
 
 const providers: Provider[] = [
     Auth0
@@ -17,6 +19,28 @@ export const providerMap = providers.map((provider) => {
     }
 })
 
+async function refreshAccessToken(token: JWT): Promise<JWT> {
+    try {
+        // Make a request to your backend to refresh the token
+        const response = await postRefreshTokens({
+            refreshToken: token.refreshToken as string
+        })
+
+        return {
+            ...token,
+            accessToken: response.accessToken,
+            accessTokenExpires: Date.now() + response.expiresIn * 1000,
+            refreshToken: response.refreshToken ?? token.refreshToken,
+        }
+    } catch (error) {
+        console.error('Error refreshing access token', error)
+        return {
+            ...token,
+            error: 'RefreshAccessTokenError',
+        }
+    }
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
     theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
     providers,
@@ -26,33 +50,58 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         async signIn({ user, account, profile, email, credentials }) {
             console.log('signIn', user, account, profile, email, credentials)
 
-            const result = await postCreateUser({
-                name: user.name || '',
-                email: user.email || '',
-            })
+            if (user) {
+                const result = await postCreateUser({
+                    name: user.name || '',
+                    email: user.email || '',
+                })
 
-            const refreshResult = await postRefreshTokens({ refreshToken: '' })
+                user.userCloudCraftAccessToken = result.accessToken
+                user.userCloudCraftRefreshToken = result.refreshToken
+                user.userCloudCraftAccessTokenExpires = result.expiresIn
+                // user.userCloudCraftRefreshToken = result.refreshToken
 
+                return true
+            }
 
-            user.userCloudCraftAccessToken = result.accessToken
-            user.userCloudCraftRefreshToken = result.refreshToken
-
-            return true
+            return false
         },
 
-        jwt({ token, user, account, session }) {
-
-
+        async jwt({ token, user, account, session }) {
             if (user) { // User is available during sign-in
-                token.jwtCloudCraftAccessToken = user.userCloudCraftAccessToken
-                token.jwtCloudCraftRefreshToken = user.userCloudCraftRefreshToken
+                return {
+                    user,
+                    accessToken: user.userCloudCraftAccessToken,
+                    accessTokenExpires: user.userCloudCraftAccessTokenExpires,
+                    refreshToken: user.userCloudCraftRefreshToken,
+                }
             }
+
+            if (token.jwtCloudCraftAccessToken) {
+                debugToken(token.jwtCloudCraftAccessToken, 'jwt')
+            } else {
+                console.log('NO TOKEN!!!')
+            }
+
+            if (token.jwtCloudCraftAccessToken && !isTokenExpired(token.jwtCloudCraftAccessToken)) {
+                return token
+            }
+
+
+            if (token.jwtCloudCraftRefreshToken) {
+                console.log('refreshing')
+                return refreshAccessToken(token)
+            }
+
             return token
         },
-        session({ session, token, user, }) {
+        async session({ session, token, user, }) {
+
+            debugToken(token.jwtCloudCraftAccessToken!, 'session')
 
             session.sessionCloudCraftAccessToken = token.jwtCloudCraftAccessToken
             session.sessionCloudCraftRefreshToken = token.jwtCloudCraftRefreshToken
+
 
             return session
         },
@@ -80,6 +129,7 @@ declare module 'next-auth' {
     interface User {
         userCloudCraftAccessToken?: string;
         userCloudCraftRefreshToken?: string;
+        userCloudCraftAccessTokenExpires?: number
     }
 }
 
