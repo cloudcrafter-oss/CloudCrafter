@@ -3,21 +3,21 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import { CopyIcon, DotsHorizontalIcon, TextAlignCenterIcon, TrashIcon, } from '@radix-ui/react-icons'
 import type { Table } from '@tanstack/react-table'
-import { DataTableFilterOption } from '@cloudcraft-datatable/types'
-import { DataTableConfig, dataTableConfig } from '@cloudcraft-datatable/config/data-table'
-import { useDebounce } from '@repo/ui/hooks/use-debounce'
-import { DataTableFacetedFilter } from '@cloudcraft-datatable/components/data-table/data-table-faceted-filter'
-import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/components/popover'
-import { Button } from '@repo/ui/components/button'
-import { Separator } from '@repo/ui/components/separator'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/components/select'
-import { Input } from '@repo/ui/components/input'
+import { DataTableFilterOption } from '@/src/components/datatable/types'
+import { DataTableConfig, dataTableConfig } from '@/src/components/datatable/config/data-table.ts'
+import { Popover, PopoverContent, PopoverTrigger } from '@ui/components/ui/popover.tsx'
+import { Button } from '@ui/components/ui/button.tsx'
+import { Separator } from '@ui/components/ui/separator.tsx'
+import { useDebounce } from '@ui/hooks/use-debounce.ts'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@ui/components/ui/select.tsx'
+import { DataTableFacetedFilter } from '@/src/components/datatable/components/data-table/data-table-faceted-filter.tsx'
+import { Input } from '@ui/components/ui/input.tsx'
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger
-} from '@repo/ui/components/dropdown-menu'
+} from '@ui/components/ui/dropdown-menu.tsx'
 
 
 interface DataTableMultiFilterProps<TData> {

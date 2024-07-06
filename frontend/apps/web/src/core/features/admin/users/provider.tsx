@@ -1,9 +1,10 @@
 'use client'
 
 import * as React from 'react'
-import { dataTableConfig, DataTableConfig } from '@repo/cloudcraft-datatable/src/config/data-table.ts'
+
 import { ToggleGroup, ToggleGroupItem } from '@ui/components/ui/toggle-group.tsx'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@ui/components/ui/tooltip.tsx'
+import { dataTableConfig, DataTableConfig } from '@/src/components/datatable/config/data-table.ts'
 
 type FeatureFlagValue = DataTableConfig['featureFlags'][number]['value']
 

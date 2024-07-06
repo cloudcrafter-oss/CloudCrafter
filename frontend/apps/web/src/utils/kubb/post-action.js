@@ -68,3 +68,32 @@ fs.writeFile(path.join(__dirname, '../../core/generated/hooks/.eslintrc'), jsong
         console.log('File has been saved.')
     }
 })
+
+
+fetch('http://localhost:57680/api/System/get-fields')
+    .then(response => response.json())
+    .then(data => {
+        const dtoFilters = {}
+
+        Object.keys(data).forEach(dtoName => {
+            dtoFilters[dtoName] = data[dtoName]
+        })
+
+        const tsContent = `
+export const DtoFilters = ${JSON.stringify(dtoFilters, null, 2)};
+    `
+        writeFile(tsContent)
+    })
+    .catch(error => console.error('Error fetching data:', error))
+
+// Mock function to simulate file writing (replace with actual file writing code)
+function writeFile(content) {
+    
+
+    // write content to file
+
+    const realPath = path.join(__dirname, '../../core/filtering/dto-filters.ts')
+    console.error('writing!')
+    fs.writeFileSync(realPath, content, 'utf8')
+    console.log(`File written: ${realPath}`)
+}

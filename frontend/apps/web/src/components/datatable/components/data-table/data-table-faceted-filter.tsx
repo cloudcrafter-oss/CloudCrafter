@@ -1,12 +1,11 @@
 import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons'
 import type { Column } from '@tanstack/react-table'
-import { Option } from '@cloudcraft-datatable/types'
-import { cn } from '@repo/ui/lib/utils'
-import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/components/popover'
-import { Button } from '@repo/ui/components/button'
-import { Separator } from '@repo/ui/components/separator'
+import { Option } from '@/src/components/datatable/types'
+import { Popover, PopoverContent, PopoverTrigger } from '@ui/components/ui/popover.tsx'
 import React from 'react'
-import { Badge } from '@repo/ui/components/badge'
+import { Button } from '@ui/components/ui/button.tsx'
+import { Separator } from '@ui/components/ui/separator.tsx'
+import { Badge } from '@ui/components/ui/badge.tsx'
 import {
     Command,
     CommandEmpty,
@@ -15,7 +14,8 @@ import {
     CommandItem,
     CommandList,
     CommandSeparator
-} from '@repo/ui/components/command'
+} from '@ui/components/ui/command.tsx'
+import { cn } from '@ui/lib/utils.ts'
 
 
 interface DataTableFacetedFilterProps<TData, TValue> {

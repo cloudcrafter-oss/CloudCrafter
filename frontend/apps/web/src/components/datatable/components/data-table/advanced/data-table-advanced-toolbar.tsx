@@ -8,12 +8,14 @@ import type { Table } from '@tanstack/react-table'
 
 import { DataTableFilterItem } from './data-table-filter-item'
 import { DataTableMultiFilter } from './data-table-multi-filter'
-import { DataTableFilterField, DataTableFilterOption } from '@cloudcraft-datatable/types'
-import { cn } from '@repo/ui/lib/utils'
+import { DataTableFilterField, DataTableFilterOption } from '@/src/components/datatable/types'
+import { cn } from '@ui/lib/utils.ts'
+import { Button } from '@ui/components/ui/button.tsx'
+import {
+    DataTableFilterCombobox
+} from '@/src/components/datatable/components/data-table/advanced/data-table-filter-combobox.tsx'
+import { DataTableViewOptions } from '@/src/components/datatable/components/data-table/data-table-view-options.tsx'
 
-import { DataTableFilterCombobox } from '@cloudcraft-datatable/components/data-table/advanced/data-table-filter-combobox'
-import { DataTableViewOptions } from '@cloudcraft-datatable/components/data-table/data-table-view-options'
-import { Button } from '@repo/ui/components/button'
 
 interface DataTableAdvancedToolbarProps<TData>
     extends React.HTMLAttributes<HTMLDivElement> {

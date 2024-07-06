@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { flexRender, type Table as TanstackTable } from '@tanstack/react-table'
-import { cn } from '@repo/ui/lib/utils'
-import { DataTablePagination } from './data-table-pagination'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/components/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@ui/components/ui/table.tsx'
+import { cn } from '@ui/lib/utils.ts'
+import { DataTablePagination } from '@/src/components/datatable/components/data-table/data-table-pagination.tsx'
 
 
 interface DataTableProps<TData> extends React.HTMLAttributes<HTMLDivElement> {

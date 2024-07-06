@@ -3,7 +3,7 @@ using CloudCrafter.Domain.Common.Filtering;
 
 namespace CloudCrafter.Domain.Domain.User;
 
-public class UserDto
+public class UserDto : IFilterableDto
 {
     public Guid Id { get; init; }
     [Filterable]

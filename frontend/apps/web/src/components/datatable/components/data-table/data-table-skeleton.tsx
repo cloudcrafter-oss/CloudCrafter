@@ -1,6 +1,7 @@
-import { cn } from '@repo/ui/lib/utils'
-import { Skeleton } from '@repo/ui/components/skeleton'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/components/table'
+import { cn } from '@ui/lib/utils.ts'
+import { Skeleton } from '@ui/components/ui/skeleton.tsx'
+import React from 'react'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@ui/components/ui/table.tsx'
 
 
 interface DataTableSkeletonProps extends React.HTMLAttributes<HTMLDivElement> {

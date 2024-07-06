@@ -4,7 +4,8 @@ import * as React from 'react'
 import { ColumnDef } from '@tanstack/react-table'
 import { UserDto } from '@/src/core/generated'
 import { Checkbox } from '@ui/components/ui/checkbox.tsx'
-import { DataTableColumnHeader } from '@repo/cloudcraft-datatable/src/components/data-table/data-table-column-header.tsx'
+import { DataTableColumnHeader } from '@/src/components/datatable/components/data-table/data-table-column-header.tsx'
+
 
 export function getColumns(): ColumnDef<UserDto>[] {
     return [

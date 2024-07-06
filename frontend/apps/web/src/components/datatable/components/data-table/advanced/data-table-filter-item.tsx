@@ -4,14 +4,14 @@ import { TrashIcon } from '@radix-ui/react-icons'
 import type { Table } from '@tanstack/react-table'
 
 import { DataTableAdvancedFacetedFilter } from './data-table-advanced-faceted-filter'
-import { DataTableFilterOption } from '@cloudcraft-datatable/types'
-import { dataTableConfig } from '@cloudcraft-datatable/config/data-table'
-import { useDebounce } from '@repo/ui/hooks/use-debounce'
-import { cn } from '@repo/ui/lib/utils'
-import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/components/popover'
-import { Button } from '@repo/ui/components/button'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/components/select'
-import { Input } from '@repo/ui/components/input'
+import { DataTableFilterOption } from '@/src/components/datatable/types'
+import { dataTableConfig } from '@/src/components/datatable/config/data-table.ts'
+import { useDebounce } from '@ui/hooks/use-debounce.ts'
+import { Popover, PopoverContent, PopoverTrigger } from '@ui/components/ui/popover.tsx'
+import { Button } from '@ui/components/ui/button.tsx'
+import { cn } from '@ui/lib/utils.ts'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@ui/components/ui/select.tsx'
+import { Input } from '@ui/components/ui/input.tsx'
 
 interface DataTableFilterItemProps<TData> {
     table: Table<TData>

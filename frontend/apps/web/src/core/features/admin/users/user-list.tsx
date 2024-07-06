@@ -1,24 +1,37 @@
 import { SearchParams } from 'nuqs/parsers'
-import { searchParamsSchema } from '@repo/cloudcraft-datatable/src/validation'
 import { getUsers } from '@/src/core/generated'
 import { TasksTableProvider } from '@/src/core/features/admin/users/provider.tsx'
 import React from 'react'
-import { DateRangePicker } from '@repo/cloudcraft-datatable/src/components/date-range-picker.tsx'
-import { DataTableSkeleton } from '@repo/cloudcraft-datatable/src/components/data-table/data-table-skeleton.tsx'
+
 import { TasksTable } from '@/src/core/features/admin/users/table.tsx'
 import { Shell } from '@ui/components/ui/shell.tsx'
 import { Skeleton } from '@ui/components/ui/skeleton.tsx'
+import { z } from 'zod'
+import { filterFilterSchema, searchParamsSchema } from '@/src/components/datatable/validation'
+import { DateRangePicker } from '@/src/components/datatable/components/date-range-picker.tsx'
+import { DataTableSkeleton } from '@/src/components/datatable/components/data-table/data-table-skeleton.tsx'
 
 
 export interface UserListProps {
     searchParams: SearchParams
 }
 
+const test = (tata: z.infer<typeof filterFilterSchema>) => {
+    console.log('test', { tata })
+
+}
+
 export const UsersList = async ({ searchParams }: UserListProps) => {
     const search = searchParamsSchema.parse(searchParams)
 
-    console.log(search)
-    const users = getUsers()
+    console.log(search.filter)
+
+    test(search['filter[]'])
+    const users = getUsers({
+        page: 1,
+        pageSize: 10,
+        filters: []
+    })
 
     return (
         <Shell className="gap-2">
@@ -36,6 +49,7 @@ export const UsersList = async ({ searchParams }: UserListProps) => {
                     <DateRangePicker
                         triggerSize="sm"
                         triggerClassName="ml-auto w-56 sm:w-60"
+                        // @ts-expect-error align is not a valid prop
                         align='end'
                     />
                 </React.Suspense>

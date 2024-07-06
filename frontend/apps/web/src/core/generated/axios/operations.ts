@@ -7,9 +7,13 @@ export const operations = {
         'path': '/api/Auth/create',
         'method': 'post'
     },
+    'GetFilterableFields': {
+        'path': '/api/System/get-fields',
+        'method': 'get'
+    },
     'GetUsers': {
         'path': '/api/Users',
-        'method': 'get'
+        'method': 'post'
     },
     'Test': {
         'path': '/api/Users/test',

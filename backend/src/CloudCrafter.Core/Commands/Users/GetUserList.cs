@@ -10,7 +10,7 @@ namespace CloudCrafter.Core.Commands.Users;
 
 public static class GetUserList
 {
-    // [Authorize]
+    [Authorize]
     public record Query(PaginatedRequest<UserDto> Pagination) : IRequest<PaginatedList<UserDto>>;
     
     private class Handler(IUsersService service) : IRequestHandler<Query, PaginatedList<UserDto>>

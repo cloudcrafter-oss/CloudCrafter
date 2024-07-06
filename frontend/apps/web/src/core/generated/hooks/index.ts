@@ -1,3 +1,4 @@
+export * from './useGetFilterableFieldsHook'
 export * from './useGetUsersHook'
 export * from './usePostCreateUserHook'
 export * from './usePostLoginUserHook'

@@ -52,6 +52,7 @@ public static class DependencyInjection
                 });
                 swagger.SupportNonNullableReferenceTypes();
                 swagger.SchemaFilter<RequireNotNullableSchemaFilter>();
+                swagger.OperationFilter<FilterableFieldsOperationFilter>();
                 
                 swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -62,6 +63,7 @@ public static class DependencyInjection
                     BearerFormat = "JWT",
                     Scheme = "Bearer"
                 });
+                
         
                 swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {

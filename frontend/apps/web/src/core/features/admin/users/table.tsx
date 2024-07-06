@@ -4,9 +4,12 @@ import * as React from 'react'
 import { getUsers, UserDto } from '@/src/core/generated'
 import { useTasksTable } from '@/src/core/features/admin/users/provider.tsx'
 import { getColumns } from '@/src/core/features/admin/users/columns.tsx'
-import { DataTableFilterField } from '@repo/cloudcraft-datatable/src/types'
-import { useDataTable } from '@repo/cloudcraft-datatable/src/hooks/use-data-table.ts'
-import { DataTable } from '@repo/cloudcraft-datatable/src/components/data-table/data-table.tsx'
+import { DataTableFilterField } from '@/src/components/datatable/types'
+import { useDataTable } from '@/src/components/datatable/hooks/use-data-table.ts'
+import { DataTable } from '@/src/components/datatable/components/data-table/data-table.tsx'
+import {
+    DataTableAdvancedToolbar
+} from '@/src/components/datatable/components/data-table/advanced/data-table-advanced-toolbar.tsx'
 
 
 interface TasksTableProps {
@@ -82,9 +85,9 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
             // }
         >
             {/*{featureFlags.includes('advancedFilter') ? (*/}
-            {/*    <DataTableAdvancedToolbar table={table} filterFields={filterFields}>*/}
-            {/*        <TasksTableToolbarActions table={table}/>*/}
-            {/*    </DataTableAdvancedToolbar>*/}
+            <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
+                {/*<TasksTableToolbarActions table={table}/>*/}
+            </DataTableAdvancedToolbar>
             {/*) : (*/}
             {/*    <DataTableToolbar table={table} filterFields={filterFields}>*/}
             {/*        <TasksTableToolbarActions table={table}/>*/}
