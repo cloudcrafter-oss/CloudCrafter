@@ -25,6 +25,11 @@ public static class DependencyInjection
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
+        services.AddOptions<CloudCrafterConfig>()
+            .BindConfiguration(CloudCrafterConfig.KEY)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
         return services;
     }
 

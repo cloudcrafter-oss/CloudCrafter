@@ -20,11 +20,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CloudCrafter.Core\CloudCrafter.Core.csproj"/>
+    <ProjectReference Include="..\Packages\EntityFrameworkCore.EncryptColumn\EntityFrameworkCore.EncryptColumn.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Data\Migrations\"/>
     <Folder Include="Data\Queries\" />
-    <Folder Include="Domain\Users\Services\" />
   </ItemGroup>
 </Project>

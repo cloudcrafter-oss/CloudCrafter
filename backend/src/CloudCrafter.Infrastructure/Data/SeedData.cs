@@ -1,9 +1,11 @@
 ﻿using CloudCrafter.Core.ContributorAggregate;
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace CloudCrafter.Infrastructure.Data;
 
@@ -14,8 +16,9 @@ public static class SeedData
 
     public static void Initialize(IServiceProvider serviceProvider)
     {
+        var cloudCrafterConfig = serviceProvider.GetRequiredService<IOptions<CloudCrafterConfig>>();
         using (var dbContext = new AppDbContext(
-                   serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(), null))
+                   serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(), null, cloudCrafterConfig))
         {
             if (dbContext.Contributors.Any()) return; // DB has been seeded
 
