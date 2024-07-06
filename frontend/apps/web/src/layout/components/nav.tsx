@@ -1,5 +1,5 @@
 import React from 'react'
-import { SideLink } from '@/src/layout/data/sidelinks.tsx'
+import { SideLink } from '@/src/core/menu/sidelinks.tsx'
 import { cn } from '@ui/lib/utils.ts'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@ui/components/ui/tooltip.tsx'
 import useCheckActiveNav from '@/src/layout/hooks/use-check-active-nav.tsx'

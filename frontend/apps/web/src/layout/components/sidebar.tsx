@@ -5,7 +5,7 @@ import { cn } from '@ui/lib/utils.ts'
 import { Layout, LayoutHeader } from './custom/layout'
 import { Button } from '@ui/components/ui/button.tsx'
 import Nav from '@/src/layout/components/nav.tsx'
-import { sidelinks } from '@/src/layout/data/sidelinks.tsx'
+import { sidelinks } from '@/src/core/menu/sidelinks.tsx'
 
 
 interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
@@ -82,8 +82,8 @@ export default function Sidebar({
                         <div
                             className={`flex flex-col justify-end truncate ${isCollapsed ? 'invisible w-0' : 'visible w-auto'}`}
                         >
-                            <span className='font-medium'>Shadcn Admin</span>
-                            <span className='text-xs'>Vite + ShadcnUI</span>
+                            <span className='font-medium'>CloudCrafter</span>
+                            <span className='text-xs'>Admin Panel</span>
                         </div>
                     </div>
 
