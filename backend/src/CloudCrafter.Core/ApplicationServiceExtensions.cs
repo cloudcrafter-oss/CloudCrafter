@@ -1,7 +1,9 @@
 using System.Reflection;
 using Ardalis.SharedKernel;
 using CloudCrafter.Core.Common.Behaviours;
+using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Interfaces.Domain.Users;
+using CloudCrafter.Core.Services.Domain.Servers;
 using CloudCrafter.Core.Services.Domain.Users;
 using CloudCrafter.Domain;
 using FluentValidation;
@@ -36,7 +38,8 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>();
 
 
-        services.AddScoped<IUsersService, UsersService>();
+        services.AddScoped<IUsersService, UsersService>()
+            .AddScoped<IServersService, ServersService>();
         
         return services;
     }

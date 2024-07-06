@@ -1,4 +1,5 @@
 export * from './getFilterableFields'
+export * from './getServers'
 export * from './getUsers'
 export * from './postCreateUser'
 export * from './postLoginUser'
