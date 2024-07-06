@@ -53,7 +53,7 @@ public class GetUserListQueryTest : BaseTestFixture
             {
                 new FilterCriterea()
                 {
-                    Operator = "contains",
+                    Operator = FilterOperatorOption.Contains,
                     PropertyName = "Email",
                     Value = randomUser.Email
                 }
@@ -67,5 +67,27 @@ public class GetUserListQueryTest : BaseTestFixture
         
         var userFromResult = result.Result.First();
         userFromResult.Id.Should().Be(randomUser.Id);
+        
+        // Now we should fetch for not equal
+        query = new GetUserList.Query(new()
+        {
+            Filters = new List<FilterCriterea>()
+            {
+                new FilterCriterea()
+                {
+                    Operator = FilterOperatorOption.NotEqual,
+                    PropertyName = "Email",
+                    Value = randomUser.Email
+                }
+            }
+        });
+        
+        result = await SendAsync(query);
+
+        result.Should().NotBeNull();
+        result.Result.Count.Should().Be(10);
+        
+        result.Result.Any(x => x.Email == randomUser.Email).Should().BeFalse();
+
     }
 }

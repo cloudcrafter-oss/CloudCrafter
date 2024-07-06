@@ -52,15 +52,15 @@ public static class QueryableExtensions
             var property = Expression.Property(parameter, filter.PropertyName);
             var constant = Expression.Constant(filter.Value);
 
-            Expression comparison = filter.Operator.ToLower() switch
+            Expression comparison = filter.Operator switch
             {
-                "eq" => Expression.Equal(property, constant),
-                "neq" => Expression.NotEqual(property, constant),
-                "gt" => Expression.GreaterThan(property, constant),
-                "gte" => Expression.GreaterThanOrEqual(property, constant),
-                "lt" => Expression.LessThan(property, constant),
-                "lte" => Expression.LessThanOrEqual(property, constant),
-                "contains" => Expression.Call(property, typeof(string).GetMethod("Contains", new[] { typeof(string) })!, constant),
+                FilterOperatorOption.Equal => Expression.Equal(property, constant),
+                FilterOperatorOption.NotEqual => Expression.NotEqual(property, constant),
+                FilterOperatorOption.GreaterThan => Expression.GreaterThan(property, constant),
+                FilterOperatorOption.GreaterThanOrEqual => Expression.GreaterThanOrEqual(property, constant),
+                FilterOperatorOption.LessThan => Expression.LessThan(property, constant),
+                FilterOperatorOption.LessThanOrEqual => Expression.LessThanOrEqual(property, constant),
+                FilterOperatorOption.Contains => Expression.Call(property, typeof(string).GetMethod("Contains", new[] { typeof(string) })!, constant),
                 _ => throw new NotSupportedException($"Operator {filter.Operator} is not supported.")
             };
 
