@@ -18,7 +18,7 @@ public class PostLoginUserQueryTest : BaseTestFixture
     [Test]
     public async Task ShouldGetTokenWhenUserIsCorrect()
     {
-        var now = DateTime.Now;
+        var now = DateTime.UtcNow;
         var user = await CreateAdminUser();
 
         var query = new PostLoginUser.Query(user.Email, user.Password);
