@@ -2,6 +2,7 @@ using CloudCrafter.Core.Commands.Users;
 using CloudCrafter.Domain.Common.Filtering;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Domain.Requests.Filtering;
+using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -34,7 +35,7 @@ public class GetUserListQueryTest : BaseTestFixture
     {
         await RunAsAdministratorAsync();
 
-        var users = Fakeds.FakerInstances.UserFaker.Generate(10);
+        var users = FakerInstances.UserFaker.Generate(10);
 
         foreach (var user in users)
         {

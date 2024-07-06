@@ -6,6 +6,7 @@
     <PackageReference Include="AutoMapper" />
     <PackageReference Include="Ardalis.Specification.EntityFrameworkCore"/>
     <PackageReference Include="MailKit"/>
+    <PackageReference Include="Bogus" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"/>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.Extensions.Identity.Stores"/>

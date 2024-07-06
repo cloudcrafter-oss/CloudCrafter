@@ -53,6 +53,7 @@ app.UseExceptionHandler(options => { });
 app.Map("/", () => Results.Redirect("/api"));
 
 app.MapEndpoints();
+app.SeedDatabase();
 
 app.Run();
 

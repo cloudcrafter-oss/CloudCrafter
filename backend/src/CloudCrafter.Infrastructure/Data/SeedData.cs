@@ -20,7 +20,7 @@ public static class SeedData
         using (var dbContext = new AppDbContext(
                    serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(), null, cloudCrafterConfig))
         {
-            if (dbContext.Contributors.Any()) return; // DB has been seeded
+            if (dbContext.Users.Count() > 100) return; // DB has been seeded
 
             PopulateTestData(dbContext);
         }
@@ -28,16 +28,12 @@ public static class SeedData
 
     public static void PopulateTestData(AppDbContext dbContext)
     {
-        foreach (var contributor in dbContext.Contributors)
+        var users = Fakeds.FakerInstances.UserFaker.Generate(100);
+        foreach (var user in users)
         {
-            dbContext.Remove(contributor);
+            dbContext.Users.Add(user);
         }
-
-        dbContext.SaveChanges();
-
-        dbContext.Contributors.Add(Contributor1);
-        dbContext.Contributors.Add(Contributor2);
-
+        
         dbContext.SaveChanges();
     }
 
