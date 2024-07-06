@@ -32,6 +32,7 @@ export function DataTableAdvancedToolbar<TData>({
                                                 }: DataTableAdvancedToolbarProps<TData>) {
     const searchParams = useSearchParams()
 
+    // @ts-expect-error we need to dig into this
     const options = React.useMemo<DataTableFilterOption<TData>[]>(() => {
         return filterFields.map((field) => {
             return {

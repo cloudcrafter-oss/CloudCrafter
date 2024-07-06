@@ -18,9 +18,8 @@ import {
     type VisibilityState,
 } from '@tanstack/react-table'
 import { z } from 'zod'
-import { DataTableFilterField } from '@cloudcraft-datatable/types'
-import { useDebounce } from '@repo/ui/hooks/use-debounce'
-
+import { DataTableFilterField } from '@/src/components/datatable/types'
+import { useDebounce } from '@ui/hooks/use-debounce.ts'
 
 interface UseDataTableProps<TData, TValue> {
     /**
@@ -213,7 +212,6 @@ export function useDataTable<TData, TValue>({
             }
         )
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pageIndex, pageSize])
 
     // Handle server-side sorting
@@ -233,7 +231,6 @@ export function useDataTable<TData, TValue>({
                     : null,
             })}`
         )
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sorting])
 
     // Handle server-side filtering
@@ -304,11 +301,11 @@ export function useDataTable<TData, TValue>({
 
         table.setPageIndex(0)
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
         JSON.stringify(debouncedSearchableColumnFilters),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+      
         JSON.stringify(filterableColumnFilters),
     ])
 
