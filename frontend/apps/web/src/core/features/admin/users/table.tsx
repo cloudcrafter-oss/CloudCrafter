@@ -10,36 +10,28 @@ import { DataTable } from '@/src/components/datatable/components/data-table/data
 import {
     DataTableAdvancedToolbar
 } from '@/src/components/datatable/components/data-table/advanced/data-table-advanced-toolbar.tsx'
+import { DtoFilters } from '@/src/core/filtering/dto-filters.ts'
 
 
 interface TasksTableProps {
-    tasksPromise: ReturnType<typeof getUsers>
+    usersPromise: ReturnType<typeof getUsers>,
 }
 
-export function TasksTable({ tasksPromise }: TasksTableProps) {
+export function UsersTable({ usersPromise }: TasksTableProps) {
+
     // Feature flags for showcasing some additional features. Feel free to remove them.
     const { featureFlags } = useTasksTable()
 
-    const { result: data, totalPages: pageCount } = React.use(tasksPromise)
+    const { result: data, totalPages: pageCount } = React.use(usersPromise)
 
     // Memoize the columns so they don't re-render on every render
     const columns = React.useMemo(() => getColumns(), [])
 
-    /**
-     * This component can render either a faceted filter or a search filter based on the `options` prop.
-     *
-     * @prop options - An array of objects, each representing a filter option. If provided, a faceted filter is rendered. If not, a search filter is rendered.
-     *
-     * Each `option` object has the following properties:
-     * @prop {string} label - The label for the filter option.
-     * @prop {string} value - The value for the filter option.
-     * @prop {React.ReactNode} [icon] - An optional icon to display next to the label.
-     * @prop {boolean} [withCount] - An optional boolean to display the count of the filter option.
-     */
+
     const filterFields: DataTableFilterField<UserDto>[] = [
         {
             label: 'Email',
-            value: 'email',
+            value: DtoFilters.UserDto.Email,
             placeholder: 'Filter email...',
         },
         // {

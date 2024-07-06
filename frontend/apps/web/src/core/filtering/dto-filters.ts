@@ -1,8 +1,7 @@
-
 export const DtoFilters = {
-  'UserDto': [
-    'Email',
-    'FullName'
-  ]
+    'UserDto': {
+        'Email': 'Email',
+        'FullName': 'Email'
+    }
 }
     

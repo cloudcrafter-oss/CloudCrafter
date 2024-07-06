@@ -2,7 +2,7 @@
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Identity;
 
-namespace CloudCrafter.FunctionalTests.Fakeds;
+namespace CloudCrafter.Infrastructure.Data.Fakeds;
 
 public static class FakerInstances
 {

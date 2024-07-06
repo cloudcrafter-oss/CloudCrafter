@@ -36,9 +36,18 @@ export function getColumns(): ColumnDef<UserDto>[] {
         {
             accessorKey: 'code',
             header: ({ column }) => (
-                <DataTableColumnHeader column={column} title="Task"/>
+                <DataTableColumnHeader column={column} title="Email"/>
             ),
             cell: ({ row }) => <div className="w-20">{row.original.email}</div>,
+            enableSorting: false,
+            enableHiding: false,
+        },
+        {
+            accessorKey: 'fullName',
+            header: ({ column }) => (
+                <DataTableColumnHeader column={column} title="Name"/>
+            ),
+            cell: ({ row }) => <div>{row.original.fullName}</div>,
             enableSorting: false,
             enableHiding: false,
         },

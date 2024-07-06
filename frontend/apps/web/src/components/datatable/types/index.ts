@@ -9,9 +9,10 @@ export interface Option {
 
 export interface DataTableFilterField<TData> {
     label: string
-    value: keyof TData
+    value: string
     placeholder?: string
     options?: Option[]
+    debugField?: keyof TData
 }
 
 export interface DataTableFilterOption<TData> {
