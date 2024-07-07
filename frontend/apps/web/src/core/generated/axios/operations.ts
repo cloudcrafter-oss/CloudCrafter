@@ -7,6 +7,10 @@ export const operations = {
         'path': '/api/Auth/create',
         'method': 'post'
     },
+    'GetProjects': {
+        'path': '/api/Projects',
+        'method': 'get'
+    },
     'GetServers': {
         'path': '/api/Servers',
         'method': 'get'

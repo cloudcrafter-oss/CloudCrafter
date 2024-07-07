@@ -34,7 +34,25 @@ public static class SeedData
                 PopulateServers(dbContext);
             }
 
+            var projectCount = dbContext.Projects.Count();
+
+            if (projectCount == 0)
+            {
+                PopulateProjects(dbContext);
+            }
+
         }
+    }
+
+    public static void PopulateProjects(AppDbContext dbContext)
+    {
+        var projects = Fakeds.FakerInstances.ProjectFaker.Generate(10);
+        foreach (var project in projects)
+        {
+            dbContext.Projects.Add(project);
+        }
+
+        dbContext.SaveChanges();
     }
 
     public static void PopulateServers(AppDbContext dbContext)
