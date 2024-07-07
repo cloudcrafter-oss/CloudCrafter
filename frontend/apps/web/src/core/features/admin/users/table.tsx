@@ -10,7 +10,6 @@ import { DataTable } from '@/src/components/datatable/components/data-table/data
 import {
     DataTableAdvancedToolbar
 } from '@/src/components/datatable/components/data-table/advanced/data-table-advanced-toolbar.tsx'
-import { DtoFilters } from '@/src/core/filtering/dto-filters.ts'
 
 
 interface TasksTableProps {
@@ -31,7 +30,7 @@ export function UsersTable({ usersPromise }: TasksTableProps) {
     const filterFields: DataTableFilterField<UserDto>[] = [
         {
             label: 'Email',
-            value: DtoFilters.UserDto.Email,
+            value: 'email',
             placeholder: 'Filter email...',
         },
         // {

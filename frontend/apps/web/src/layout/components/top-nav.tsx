@@ -2,10 +2,6 @@ import React from 'react'
 import { CloudcrafterBreadcrumbs } from '@/src/layout/components/breadcrumbs.tsx'
 
 
-interface TopNavProps extends React.HTMLAttributes<HTMLElement> {
-
-}
-
 export function TopNav() {
     return (
         <>

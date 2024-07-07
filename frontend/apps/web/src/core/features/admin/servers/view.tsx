@@ -10,6 +10,7 @@ import { DatabaseIcon, PackageIcon, ServerIcon } from 'lucide-react'
 import Link from 'next/link'
 
 export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
+    console.log({ server })
     return (
         <div className="container mx-auto px-4 py-12 md:px-6 lg:px-8 grid md:grid-cols-2 gap-6">
             <div>
@@ -31,7 +32,6 @@ export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
                             <Label htmlFor="ssh-key">SSH Key</Label>
                             <Textarea
                                 id="ssh-key"
-                                type="password"
                                 defaultValue="ssh-rsa AAAAB3NzaC1yc2EAA..."
                                 autoComplete="off"
                                 className="min-h-[100px]"
@@ -39,7 +39,7 @@ export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
                         </div>
                         <div className="grid gap-2">
                             <Label htmlFor="docker-version">Docker Version</Label>
-                            <Select id="docker-version" defaultValue="20.10.14">
+                            <Select defaultValue="20.10.14">
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select Docker version"/>
                                 </SelectTrigger>

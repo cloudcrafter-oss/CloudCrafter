@@ -6,10 +6,10 @@ import { RefreshCwIcon, RepeatIcon, SettingsIcon } from 'lucide-react'
 import { Button } from '@ui/components/ui/button.tsx'
 
 
-function CircleStopIcon(props: any) {
+function CircleStopIcon({ className }: { className: string }) {
     return (
         <svg
-            {...props}
+            className={className}
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -31,6 +31,8 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
     const handleProjectClick = (projectName: string) => {
         setExpandedProject(expandedProject === projectName ? null : projectName)
     }
+
+    console.log({ projects })
     return (
         <div className="p-4 bg-background text-foreground min-h-screen">
             <h1 className="text-2xl font-bold mb-4">Projects</h1>
