@@ -14,7 +14,7 @@ export default function NextAdminLayout({ children }: { children: React.ReactNod
             <AppShell>
                 <Layout>
                     <LayoutHeader>
-                        <TopNav links={topNav}/>
+                        <TopNav/>
                         <div className='ml-auto flex items-center space-x-4'>
                             <Search/>
                             <ThemeSwitch/>
@@ -31,26 +31,3 @@ export default function NextAdminLayout({ children }: { children: React.ReactNod
     </ThemeProvider>)
 }
 
-
-const topNav = [
-    {
-        title: 'Overview',
-        href: 'dashboard/overview',
-        isActive: true,
-    },
-    {
-        title: 'Customers',
-        href: 'dashboard/customers',
-        isActive: false,
-    },
-    {
-        title: 'Products',
-        href: 'dashboard/products',
-        isActive: false,
-    },
-    {
-        title: 'Settings',
-        href: 'dashboard/settings',
-        isActive: false,
-    },
-]

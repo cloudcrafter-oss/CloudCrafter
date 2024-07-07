@@ -10,4 +10,9 @@ public class ServersService(IServerRepository repository) : IServersService
     {
         return repository.GetServers();
     }
+
+    public Task<ServerDetailDto?> GetServer(Guid id)
+    {
+        return repository.GetServer(id);
+    }
 }

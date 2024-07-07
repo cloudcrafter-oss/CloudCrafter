@@ -23,4 +23,14 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
 
         return result;
     }
+
+    public Task<ServerDetailDto?> GetServer(Guid id)
+    {
+        var server = GetBaseQuery()
+            .Where(x => x.Id == id)
+            .ProjectTo<ServerDetailDto>(mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+
+        return server;
+    }
 }

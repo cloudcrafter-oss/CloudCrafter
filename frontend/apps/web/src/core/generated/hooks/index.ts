@@ -1,4 +1,5 @@
 export * from './useGetFilterableFieldsHook'
+export * from './useGetServerByIdHook'
 export * from './useGetServersHook'
 export * from './useGetUsersHook'
 export * from './usePostCreateUserHook'

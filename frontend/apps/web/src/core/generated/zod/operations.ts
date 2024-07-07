@@ -2,6 +2,7 @@ import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema
 import { postCreateUserMutationRequestSchema, postCreateUserMutationResponseSchema } from './postCreateUserSchema'
 import { postRefreshTokensMutationRequestSchema, postRefreshTokensMutationResponseSchema } from './postRefreshTokensSchema'
 import { getServersQueryResponseSchema } from './getServersSchema'
+import { getServerByIdQueryResponseSchema, getServerByIdPathParamsSchema } from './getServerByIdSchema'
 import { getFilterableFieldsQueryResponseSchema } from './getFilterableFieldsSchema'
 import { getUsersMutationRequestSchema, getUsersMutationResponseSchema } from './getUsersSchema'
 import { testQueryResponseSchema } from './testSchema'
@@ -54,6 +55,18 @@ import { testQueryResponseSchema } from './testSchema'
             default: getServersQueryResponseSchema
         },
         errors: {}
+    }, 'GetServerById': {
+        request: undefined,
+        parameters: {
+            path: getServerByIdPathParamsSchema,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: getServerByIdQueryResponseSchema,
+            default: getServerByIdQueryResponseSchema
+        },
+        errors: {}
     }, 'GetFilterableFields': {
         request: undefined,
         parameters: {
@@ -99,6 +112,8 @@ export const paths = { '/api/Auth/login': {
         post: operations['PostRefreshTokens']
     }, '/api/Servers': {
         get: operations['GetServers']
+    }, '/api/Servers/{id}': {
+        get: operations['GetServerById']
     }, '/api/System/get-fields': {
         get: operations['GetFilterableFields']
     }, '/api/Users': {

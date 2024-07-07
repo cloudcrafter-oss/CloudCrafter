@@ -1,9 +1,7 @@
 import { getServers } from '@/src/core/generated'
+import { ServersList } from '@/src/core/features/admin/servers/list.tsx'
 
 export default async function Page() {
     const servers = await getServers()
-    return <>
-        <h1>Servers</h1>
-        <pre>{JSON.stringify({ servers }, null, 2)}</pre>
-    </>
+    return <ServersList servers={servers}/>
 }

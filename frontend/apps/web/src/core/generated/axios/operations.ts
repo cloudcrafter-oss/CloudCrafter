@@ -11,6 +11,10 @@ export const operations = {
         'path': '/api/Servers',
         'method': 'get'
     },
+    'GetServerById': {
+        'path': '/api/Servers/:id',
+        'method': 'get'
+    },
     'GetFilterableFields': {
         'path': '/api/System/get-fields',
         'method': 'get'
