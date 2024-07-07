@@ -1,13 +1,14 @@
 import { z } from 'zod'
 import { userDtoPaginatedListSchema } from './userDtoPaginatedListSchema'
+import { userDtoPaginatedRequestSchema } from './userDtoPaginatedRequestSchema'
 
-
-export const getUsersQueryParamsSchema = z.object({ 'Page': z.number().optional(), 'PageSize': z.number().optional() }).optional()
-/**
+ /**
  * @description OK
  */
 export const getUsers200Schema = z.lazy(() => userDtoPaginatedListSchema)
+
+ export const getUsersMutationRequestSchema = z.lazy(() => userDtoPaginatedRequestSchema)
 /**
  * @description OK
  */
-export const getUsersQueryResponseSchema = z.lazy(() => userDtoPaginatedListSchema)
+export const getUsersMutationResponseSchema = z.lazy(() => userDtoPaginatedListSchema)

@@ -1,9 +1,9 @@
 using Bogus;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.FunctionalTests.Database;
-using CloudCrafter.FunctionalTests.Fakeds;
 using CloudCrafter.FunctionalTests.TestModels;
 using CloudCrafter.Infrastructure.Data;
+using CloudCrafter.Infrastructure.Data.Fakeds;
 using CloudCrafter.Infrastructure.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -43,14 +43,14 @@ public partial class Testing
     public static async Task<UsernamePasswordDto> CreateAdminUser()
     {
         using var scope = _scopeFactory.CreateScope();
-        
+
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 
         var userFaker = FakerInstances.UserFaker.Generate();
 
         var faker = new Faker();
         var password = faker.Internet.Password(length: 16) + faker.Random.String2(3, "!@#$%^&*()_+");
-        
+
         var result = await userManager.CreateAsync(userFaker, password);
 
         if (!result.Succeeded)
@@ -121,14 +121,7 @@ public partial class Testing
 
     public static async Task ResetState()
     {
-        try
-        {
-            await _database.ResetAsync();
-        }
-        catch (Exception)
-        {
-        }
-
+        await _database.ResetAsync();
         _userId = null;
     }
 

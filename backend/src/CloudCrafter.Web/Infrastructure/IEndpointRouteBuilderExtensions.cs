@@ -18,12 +18,14 @@ public static class IEndpointRouteBuilderExtensions
     }
 
     public static IEndpointRouteBuilder MapPost(this IEndpointRouteBuilder builder, Delegate handler,
-        [StringSyntax("Route")] string pattern = "")
+        [StringSyntax("Route")] string pattern = "", Action<RouteHandlerBuilder>? configure = null)
     {
         Guard.Against.AnonymousMethod(handler);
 
-        builder.MapPost(pattern, handler)
+        var router = builder.MapPost(pattern, handler)
             .WithName(handler.Method.Name);
+
+        configure?.Invoke(router);
 
         return builder;
     }

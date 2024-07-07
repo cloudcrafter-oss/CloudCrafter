@@ -7,5 +7,8 @@ public class User : IdentityUser<Guid>, IAggregateRoot
     public bool IsActive { get; set; } = true;
 
     public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
+    public List<UserRefreshToken> RefreshTokens { get; set; } = new List<UserRefreshToken>();
+
+    public string FullName { get; set; } = string.Empty;
 }
 

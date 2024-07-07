@@ -1,14 +1,15 @@
-using System.Security.Claims;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Auth;
 using CloudCrafter.Domain.Domain.Auth;
 using CloudCrafter.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
 namespace CloudCrafter.Infrastructure.Identity.Services;
 
-public class CloudCrafterAuthService(UserManager<User> userManager, IJwtService jwtService, IIdentityService identityService) : ICloudCrafterAuthService
+public class CloudCrafterAuthService(
+    UserManager<User> userManager,
+    IJwtService jwtService,
+    IIdentityService identityService) : ICloudCrafterAuthService
 {
     public async Task<TokenDto> LoginAsync(string email, string password)
     {
@@ -32,34 +33,48 @@ public class CloudCrafterAuthService(UserManager<User> userManager, IJwtService 
         }
 
         var result = await identityService.CreateUserWithoutPassword(email, name);
-        
+
         if (!result.Result.IsSuccess)
         {
             throw new UnauthorizedAccessException();
         }
-        
+
         var userFromManager = await userManager.FindByEmailAsync(email);
 
         if (userFromManager == null)
         {
             throw new UnauthorizedAccessException();
         }
-        
-        
+
+
         return await CreateTokenForUserAsync(userFromManager);
+    }
+
+    public async Task<TokenDto> FetchTokensForRefreshToken(string refreshToken)
+    {
+        var userId = await jwtService.GetUserIdFromRefreshToken(refreshToken);
+
+        if (userId == null)
+        {
+            throw new UnauthorizedAccessException();
+        }
+        
+        var user = await userManager.FindByIdAsync(userId.Value.ToString());
+
+        if (user == null)
+        {
+            throw new UnauthorizedAccessException();
+        }
+
+        return await CreateTokenForUserAsync(user);
     }
 
     private async Task<TokenDto> CreateTokenForUserAsync(User user)
     {
         var roles = await userManager.GetRolesAsync(user);
-        var authClaims = new List<Claim>
-        {
-            new(ClaimTypes.Name, user.UserName!), new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-        };
 
-        var tokenDto = jwtService.GenerateForClaims(authClaims);
+        var result = await jwtService.GenerateTokenForUserAsync(user, roles.ToList());
 
-        return tokenDto;
+        return result;
     }
 }

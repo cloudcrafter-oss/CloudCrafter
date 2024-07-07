@@ -3,9 +3,11 @@
 
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
-import { Button, Input } from '@ui/components'
+
 import CustomLink from '@/src/app/authjs/components/custom-link.tsx'
 import SessionData from '@/src/app/authjs/components/session-data.tsx'
+import { Input } from '@ui/components/ui/input.tsx'
+import { Button } from '@ui/components/ui/button.tsx'
 
 const UpdateForm = () => {
     const { data: session, update } = useSession()
@@ -48,6 +50,7 @@ export default function ClientExample() {
 
     return (
         <div className="flex flex-col gap-4">
+            <pre>{JSON.stringify({ session }, null, 2)}</pre>
             <h1 className="text-3xl font-bold">Client Side Rendering</h1>
             <p>
                 This page fetches session data client side using the{' '}

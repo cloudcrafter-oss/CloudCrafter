@@ -18,6 +18,7 @@ export default async function Page() {
                 </CustomLink>{' '}
                 method.
             </p>
+            <pre>{JSON.stringify({ session }, null, 2)}</pre>
             <SessionData session={session}/>
         </div>
     )

@@ -6,6 +6,7 @@ using NUnit.Framework;
 namespace CloudCrafter.FunctionalTests.Domain.Auth;
 
 using static Testing;
+
 public class PostCreateUserTest : BaseTestFixture
 {
     [Test]
@@ -17,15 +18,14 @@ public class PostCreateUserTest : BaseTestFixture
         var query = new PostCreateUser.Query($"admin-{now}@domain.com", "Admin User");
         var result = await SendAsync(query);
 
-        result.Token.Length.Should().BeGreaterThan(10);
-        
-         now = DateTime.UtcNow.ToString("HH-mm-ss-fff");
-         query = new PostCreateUser.Query($"admin-{now}@domain.com", "Admin User");
-         result = await SendAsync(query);
-         
-         result.Token.Length.Should().BeGreaterThan(10);
-         
-         (await CountAsync<User>()).Should().Be(2);
+        result.AccessToken.Length.Should().BeGreaterThan(10);
+
+        now = DateTime.UtcNow.ToString("HH-mm-ss-fff");
+        query = new PostCreateUser.Query($"admin-{now}@domain.com", "Admin User");
+        result = await SendAsync(query);
+
+        result.AccessToken.Length.Should().BeGreaterThan(10);
+
+        (await CountAsync<User>()).Should().Be(2);
     }
-    
 }

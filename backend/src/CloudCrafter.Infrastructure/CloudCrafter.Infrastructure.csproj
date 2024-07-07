@@ -6,27 +6,26 @@
     <PackageReference Include="AutoMapper" />
     <PackageReference Include="Ardalis.Specification.EntityFrameworkCore"/>
     <PackageReference Include="MailKit"/>
+    <PackageReference Include="Bogus" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"/>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.Extensions.Identity.Stores"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" PrivateAssets="all"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"/>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
     <PackageReference Include="Microsoft.Extensions.Configuration"/>
     <PackageReference Include="Microsoft.Extensions.Logging"/>
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions"/>
-    <PackageReference Include="SQLite"/>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CloudCrafter.Core\CloudCrafter.Core.csproj"/>
+    <ProjectReference Include="..\Packages\EntityFrameworkCore.EncryptColumn\EntityFrameworkCore.EncryptColumn.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Data\Migrations\"/>
     <Folder Include="Data\Queries\" />
-    <Folder Include="Domain\Users\Services\" />
   </ItemGroup>
 </Project>

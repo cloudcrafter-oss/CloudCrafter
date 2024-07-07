@@ -10,16 +10,16 @@ namespace CloudCrafter.Infrastructure.Data;
 
 public static class InitialiserExtensions
 {
-    public static Task InitialiseDatabaseAsync(this WebApplication app)
+    public static async Task InitialiseDatabaseAsync(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
 
         var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
 
-        return Task.CompletedTask;
-        //   await initialiser.InitialiseAsync();
 
-        //   await initialiser.SeedAsync();
+        await initialiser.InitialiseAsync();
+
+        await initialiser.SeedAsync();
     }
 }
 
@@ -76,11 +76,11 @@ public class ApplicationDbContextInitialiser
         }
 
         // Default users
-        var administrator = new User { UserName = "administrator@localhost", Email = "administrator@localhost" };
+        var administrator = new User { UserName = "admin@admin.com", Email = "admin@admin.com" };
 
         if (_userManager.Users.All(u => u.UserName != administrator.UserName))
         {
-            await _userManager.CreateAsync(administrator, "Administrator1!");
+            await _userManager.CreateAsync(administrator, "P@ssw0rd!123");
             if (!string.IsNullOrWhiteSpace(administratorRole.Name))
             {
                 await _userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });

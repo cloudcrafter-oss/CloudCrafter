@@ -1,6 +1,7 @@
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import axios from 'axios'
 import { backendEnv } from '@/src/core/env/cloudcrafter-env.ts'
+import { auth } from '@/src/auth.ts'
 
 /**
  * Subset of AxiosRequestConfig
@@ -26,6 +27,17 @@ export type ResponseConfig<TData = unknown> = {
 
 export const axiosInstance = axios.create({
     baseURL: backendEnv.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL,
+})
+
+axiosInstance.interceptors.request.use(async (request) => {
+    const session = await auth()
+
+    if (session) {
+        console.log(session.sessionCloudCraftAccessToken)
+        request.headers.Authorization = `Bearer ${session.accessToken}`
+    }
+
+    return request
 })
 
 export const axiosClient = async <TData, TError = unknown, TVariables = unknown>(config: RequestConfig<TVariables>): Promise<ResponseConfig<TData>> => {
