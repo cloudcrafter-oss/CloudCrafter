@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+      <PackageReference Include="NUnit"/>
+      <PackageReference Include="NUnit3TestAdapter"/>
+      <PackageReference Include="NUnit.Analyzers"/>
+      <PackageReference Include="coverlet.collector"/>
+      <PackageReference Include="Testcontainers"/>
+      <PackageReference Include="FluentAssertions"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\engine\CloudCrafter.DockerCompose.Engine\CloudCrafter.DockerCompose.Engine.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="TestData\InvalidFiles\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="TestData\InvalidFiles\valid-minecraft-compose-yaml.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="TestData\ValidFiles\valid-minecraft-compose-yaml.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="TestData\ValidFiles\valid-minecraft-compose-yaml.txt" />
+      <Content Include="TestData\ValidFiles\valid-minecraft-compose-yaml.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="TestData\ValidFiles\valid-simple-nginx-yaml.txt" />
+      <Content Include="TestData\ValidFiles\valid-simple-nginx-yaml.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="TestData\ValidFiles\valid-simple-nginx-redis-yaml.txt" />
+      <Content Include="TestData\ValidFiles\valid-simple-nginx-redis-yaml.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="TestData\ValidFiles\valid-lamp-stack-yaml.txt" />
+      <Content Include="TestData\ValidFiles\valid-lamp-stack-yaml.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="TestData\ValidFiles\valid-stack-yaml.txt" />
+      <Content Include="TestData\ValidFiles\valid-stack-yaml.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="TestData\ValidFiles\valid-advanced-yaml.txt" />
+      <Content Include="TestData\ValidFiles\valid-advanced-yaml.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+</Project>

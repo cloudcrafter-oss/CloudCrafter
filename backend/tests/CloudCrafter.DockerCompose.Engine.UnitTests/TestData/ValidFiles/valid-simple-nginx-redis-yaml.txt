@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+    networks:
+      - webnet
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - webnet
+
+networks:
+  webnet:

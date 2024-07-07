@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  frontend:
+    image: reactapp:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - API_URL=http://backend:5000/api
+    networks:
+      - frontendnet
+      - backendnet
+    depends_on:
+      - backend
+  backend:
+    image: nodeapp:latest
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=database
+      - DB_USER=root
+      - DB_PASS=rootpass
+      - DB_NAME=myapp
+    networks:
+      - backendnet
+    depends_on:
+      - database
+  database:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: myapp
+      MYSQL_USER: root
+      MYSQL_PASSWORD: rootpass
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - backendnet
+
+volumes:
+  db_data:
+
+networks:
+  frontendnet:
+  backendnet:
