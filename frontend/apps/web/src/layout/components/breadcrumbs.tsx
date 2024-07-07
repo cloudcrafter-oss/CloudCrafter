@@ -1,3 +1,4 @@
+'use server'
 import { getBreadcrumbs } from '@/src/utils/breadcrumbs'
 import React from 'react'
 import {
@@ -9,7 +10,7 @@ import {
 } from '@ui/components/ui/breadcrumb.tsx'
 
 export const CloudcrafterBreadcrumbs = async () => {
-    const breadcrumbs = getBreadcrumbs()
+    const breadcrumbs = await getBreadcrumbs()
 
 
     return (

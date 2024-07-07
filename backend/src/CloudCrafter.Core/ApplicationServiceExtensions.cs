@@ -1,8 +1,10 @@
 using System.Reflection;
 using Ardalis.SharedKernel;
 using CloudCrafter.Core.Common.Behaviours;
+using CloudCrafter.Core.Interfaces.Domain.Projects;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Interfaces.Domain.Users;
+using CloudCrafter.Core.Services.Domain.Projects;
 using CloudCrafter.Core.Services.Domain.Servers;
 using CloudCrafter.Core.Services.Domain.Users;
 using CloudCrafter.Domain;
@@ -39,7 +41,8 @@ public static class ApplicationServiceExtensions
 
 
         services.AddScoped<IUsersService, UsersService>()
-            .AddScoped<IServersService, ServersService>();
+            .AddScoped<IServersService, ServersService>()
+            .AddScoped<IProjectsService, ProjectsService>();
         
         return services;
     }

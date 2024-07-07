@@ -21,5 +21,12 @@ public static class FakerInstances
         .RuleFor(x => x.SshPrivateKey, f => f.Random.AlphaNumeric(100))
         .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
         .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    
+    public static Faker<Project> ProjectFaker => new Faker<Project>()
+        .StrictMode(true)
+        .RuleFor(x => x.Id, Guid.NewGuid)
+        .RuleFor(x => x.Name, f => $"Project {f.Person.FirstName}")
+        .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+        .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
 }
