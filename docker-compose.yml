@@ -12,6 +12,14 @@ services:
     ports:
       - '5432:5432'
 
+  test-host:
+    build:
+      context: ./docker/test-host
+      dockerfile: Dockerfile
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 2222:22
 volumes:
   pgdata:
     driver: local
