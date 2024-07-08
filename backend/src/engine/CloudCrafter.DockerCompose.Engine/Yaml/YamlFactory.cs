@@ -1,10 +1,11 @@
 ﻿using YamlDotNet.Core.Events;
+using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
 namespace CloudCrafter.DockerCompose.Engine.Yaml;
 
-public class YamlFactory
+public static class YamlFactory
 {
     public static string YamlToJson(string yaml)
     {
@@ -21,6 +22,8 @@ public class YamlFactory
 
         return json;
     }
+
+  
     
     private class InferTypeFromValue : INodeTypeResolver
     {

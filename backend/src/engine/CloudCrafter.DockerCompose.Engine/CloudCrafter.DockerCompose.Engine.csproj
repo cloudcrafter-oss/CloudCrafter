@@ -9,6 +9,7 @@
 
 
   <ItemGroup>
+    <PackageReference Include="NJsonSchema.CodeGeneration.CSharp" />
     <PackageReference Include="YamlDotNet" />
     <PackageReference Include="JsonSchema.Net" />
     <PackageReference Include="NJsonSchema" />
@@ -37,6 +38,11 @@
     <Content Include="docker-compose-schema.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Test\" />
   </ItemGroup>
   
 </Project>

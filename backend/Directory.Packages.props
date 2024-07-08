@@ -54,6 +54,13 @@
     <PackageVersion Include="SSH.NET" Version="2024.1.0" />
     <PackageVersion Include="YamlDotNet" Version="15.3.0" />
     <PackageVersion Include="JsonSchema.Net" Version="7.1.2" />
+    <PackageVersion Include="NSwag.MSBuild" Version="14.0.7" />
     <PackageVersion Include="NJsonSchema" Version="11.0.1" />
+    <PackageVersion Include="NJsonSchema.CodeGeneration.CSharp" Version="11.0.1" />
+    <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.10.4" />
+    <PackageVersion Include="Corvus.Json.CodeGeneration.201909" Version="3.0.27" />
+    <PackageVersion Include="Corvus.Json.JsonSchema.TypeGeneratorTool" Version="3.0.27" />
+    <PackageVersion Include="Verify.NUnit" Version="20.8.2"/>
+
   </ItemGroup>
 </Project>

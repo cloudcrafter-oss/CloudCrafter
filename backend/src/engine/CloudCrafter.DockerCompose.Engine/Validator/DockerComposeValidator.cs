@@ -2,6 +2,7 @@
 using CloudCrafter.DockerCompose.Engine.Yaml;
 using Newtonsoft.Json.Linq;
 using NJsonSchema;
+using NJsonSchema.CodeGeneration.CSharp;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 

@@ -1,0 +1,23 @@
+﻿version: '3.8'
+services:
+  web:
+    image: php:7.4-apache
+    ports:
+    - "80:80"
+    volumes:
+    - ./php-app:/var/www/html
+    - ./cache:/var/www/html/cache
+    networks:
+    - lampnet
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+    - db_data:/var/lib/mysql
+    networks:
+    - lampnet
+volumes:
+  db_data: 
+networks:
+  lampnet: 

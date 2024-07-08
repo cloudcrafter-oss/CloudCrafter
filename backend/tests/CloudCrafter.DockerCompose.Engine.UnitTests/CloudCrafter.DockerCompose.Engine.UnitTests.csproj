@@ -17,6 +17,7 @@
       <PackageReference Include="coverlet.collector"/>
       <PackageReference Include="Testcontainers"/>
       <PackageReference Include="FluentAssertions"/>
+      <PackageReference Include="Verify.NUnit" />
     </ItemGroup>
 
     <ItemGroup>
