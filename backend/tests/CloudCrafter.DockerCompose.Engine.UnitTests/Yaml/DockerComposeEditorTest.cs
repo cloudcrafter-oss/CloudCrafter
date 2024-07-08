@@ -98,4 +98,16 @@ networks:
         return Verify(yaml);
     }
 
+    [Test]
+    public Task ShouldBeAbleToAddService()
+    {
+        var service = _editor.AddService("newService");
+        service.AddEnvironmentVariable("newKey", "newValue");
+        service.AddVolume("newVolume", "newPath");
+        
+        var yaml = _editor.GetYaml();
+        
+        return Verify(yaml);
+    }
+
 }

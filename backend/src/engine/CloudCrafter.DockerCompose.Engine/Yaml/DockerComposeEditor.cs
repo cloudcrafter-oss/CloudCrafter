@@ -21,17 +21,26 @@ public class DockerComposeEditor
         servicesNode = (YamlMappingNode)rootNode["services"];
     }
 
-    public ServiceEditor? Service(string serviceName)
+    public ServiceEditor Service(string serviceName)
     {
         var serviceNode = GetServiceNode(serviceName);
-
-        if (serviceNode == null)
-        {
-            return null;
-        }
-
+        
         return new ServiceEditor(this, serviceName);
     }
+
+    public ServiceEditor AddService(string serviceName)
+    {
+        if (servicesNode.Children.ContainsKey(serviceName))
+        {
+            throw new ServiceAlreadyExistsException(serviceName);
+        }
+
+        var serviceNode = new YamlMappingNode();
+        servicesNode.Add(serviceName, serviceNode);
+        return new ServiceEditor(this, serviceName);
+    }
+    
+
 
     public string GetYaml()
     {
