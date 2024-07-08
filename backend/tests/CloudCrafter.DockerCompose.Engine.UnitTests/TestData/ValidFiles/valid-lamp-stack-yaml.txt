@@ -20,5 +20,6 @@ services:
 volumes:
   db_data:
 
+#dummy
 networks:
   lampnet:

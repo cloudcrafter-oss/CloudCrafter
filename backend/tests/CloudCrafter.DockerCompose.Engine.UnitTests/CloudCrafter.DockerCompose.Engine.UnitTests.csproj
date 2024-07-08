@@ -24,10 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="TestData\InvalidFiles\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Remove="TestData\InvalidFiles\valid-minecraft-compose-yaml.txt" />
     </ItemGroup>
 
@@ -57,6 +53,14 @@
       </Content>
       <None Remove="TestData\ValidFiles\valid-advanced-yaml.txt" />
       <Content Include="TestData\ValidFiles\valid-advanced-yaml.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="TestData\InvalidFiles\some-plain-text-file.txt" />
+      <Content Include="TestData\InvalidFiles\some-plain-text-file.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="TestData\InvalidFiles\docker-compose-with-deploy.txt" />
+      <Content Include="TestData\InvalidFiles\docker-compose-with-deploy.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
