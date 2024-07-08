@@ -59,55 +59,103 @@ networks:
     }
 
     [Test]
-    public Task ShouldBeAbleToGetBaseYaml()
+    public void ShouldNotBeAbleToAddExistingService()
     {
-        var yaml = _editor.GetYaml();
-        return Verify(yaml);
+        ServiceAlreadyExistsException ex = Assert.Throws<ServiceAlreadyExistsException>(() => _editor.AddService("db"));
+        
+        ex.Message.Should().Be("Service db already exists");
     }
 
     [Test]
-    public Task ShouldBeAbleToAddALabel()
+    public async Task ShouldBeAbleToGetBaseYaml()
+    {
+        var yaml = _editor.GetYaml();
+        var isValid = await _editor.IsValid();
+       
+        isValid.Should().BeTrue();
+        
+        await Verify(yaml);
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToAddALabel()
     {
         var service = _editor.Service("web")!
             .AddLabel("treafik.enable", "true");
 
         var yaml = _editor.GetYaml();
 
-        return Verify(yaml);
+        var isValid = await _editor.IsValid();
+       
+        isValid.Should().BeTrue();
+        
+        await Verify(yaml);
     }
 
     [Test]
-    public Task ShouldBeAbleToAddEnvironmentVariable()
+    public async Task ShouldBeAbleToAddEnvironmentVariable()
     {
         var service = _editor.Service("web")!
             .AddEnvironmentVariable("APP_ENV", "dev");
         
         var yaml = _editor.GetYaml();
         
-        return Verify(yaml);
+        var isValid = await _editor.IsValid();
+       
+        isValid.Should().BeTrue();
+        
+        await Verify(yaml);
     }
 
     [Test]
-    public Task ShouldBeAbleToAddVolume()
+    public async Task ShouldBeAbleToAddVolume()
     {
         var service = _editor.Service("web")!
             .AddVolume("./cache", "/var/www/html/cache");
         
         var yaml = _editor.GetYaml();
         
-        return Verify(yaml);
+        var isValid = await _editor.IsValid();
+       
+        isValid.Should().BeTrue();
+        
+        await Verify(yaml);
     }
 
     [Test]
-    public Task ShouldBeAbleToAddService()
+    public async Task ShouldBeAbleToAddService()
     {
         var service = _editor.AddService("newService");
         service.AddEnvironmentVariable("newKey", "newValue");
         service.AddVolume("newVolume", "newPath");
         
         var yaml = _editor.GetYaml();
+
+        var isValid = await _editor.IsValid();
+       
+        isValid.Should().BeTrue();
         
-        return Verify(yaml);
+        await Verify(yaml);
     }
+
+    [Test]
+    public async Task ShouldBeAbleToAddServiceAndEditExistingOne()
+    {
+        var service = _editor.AddService("newService");
+        service.AddEnvironmentVariable("newKey", "newValue");
+        service.AddVolume("newVolume", "newPath");
+
+        var dbService = _editor.Service("db");
+        dbService.AddEnvironmentVariable("newKey", "newValue");
+        
+        var yaml = _editor.GetYaml();
+
+        var isValid = await _editor.IsValid();
+       
+        isValid.Should().BeTrue();
+        
+        await Verify(yaml);
+    }
+    
 
 }

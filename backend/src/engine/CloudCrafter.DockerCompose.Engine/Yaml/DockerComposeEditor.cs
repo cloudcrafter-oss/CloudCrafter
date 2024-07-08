@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.DockerCompose.Engine.Exceptions;
+using CloudCrafter.DockerCompose.Engine.Validator;
 using YamlDotNet.RepresentationModel;
 
 namespace CloudCrafter.DockerCompose.Engine.Yaml;
@@ -40,8 +41,7 @@ public class DockerComposeEditor
         return new ServiceEditor(this, serviceName);
     }
     
-
-
+    
     public string GetYaml()
     {
         using (var writer = new StringWriter())
@@ -57,6 +57,13 @@ public class DockerComposeEditor
 
             return yamlString;
         }
+    }
+
+    public Task<bool> IsValid()
+    {
+        var validator = new DockerComposeValidator(GetYaml());
+        
+        return validator.IsValid();
     }
 
     private YamlMappingNode GetServiceNode(string serviceName)
