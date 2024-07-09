@@ -1,10 +1,8 @@
 ﻿using CloudCrafter.Jobs.Infrastructure.Jobs.Context.Deployments;
-using Hangfire;
 using Hangfire.Console;
 using Hangfire.Server;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace CloudCrafter.Jobs.Actions;
+namespace CloudCrafter.Jobs.Infrastructure.Jobs;
 
 public class TestDeploymentJob(IDeploymentTracker tracker)
 {

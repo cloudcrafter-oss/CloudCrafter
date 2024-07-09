@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Jobs.Actions;
+﻿using CloudCrafter.Jobs.Infrastructure.Jobs;
 using Hangfire;
 using Hangfire.Console;
 using Hangfire.Server;

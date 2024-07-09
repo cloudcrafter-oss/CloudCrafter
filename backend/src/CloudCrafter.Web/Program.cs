@@ -2,7 +2,6 @@
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Logging;
-using CloudCrafter.Jobs.Actions;
 using CloudCrafter.Jobs.Infrastructure;
 using CloudCrafter.Web;
 using CloudCrafter.Web.Infrastructure;

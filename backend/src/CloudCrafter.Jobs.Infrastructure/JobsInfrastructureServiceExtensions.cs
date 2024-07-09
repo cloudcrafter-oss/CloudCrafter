@@ -1,5 +1,4 @@
-﻿using CloudCrafter.Jobs.Actions;
-using CloudCrafter.Jobs.Infrastructure.Jobs.Context.Deployments;
+﻿using CloudCrafter.Jobs.Infrastructure.Jobs.Context.Deployments;
 using CloudCrafter.Jobs.Infrastructure.Logging;
 using Hangfire;
 using Hangfire.Console;
