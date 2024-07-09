@@ -48,6 +48,11 @@ public class JwtService(IOptions<JwtSettings> jwtSettings, IUserRefreshTokenRepo
         return userId;
     }
 
+    public Task DisableRefreshToken(string refreshTokenToDisable)
+    {
+        return userRefreshTokenRepository.DisableRefreshToken(refreshTokenToDisable);
+    }
+
     public (string, DateTime) GenerateForClaims(List<Claim> authClaims)
     {
         var token = GetToken(authClaims);

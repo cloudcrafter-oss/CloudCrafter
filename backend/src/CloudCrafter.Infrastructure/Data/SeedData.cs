@@ -11,9 +11,6 @@ namespace CloudCrafter.Infrastructure.Data;
 
 public static class SeedData
 {
-    public static readonly Contributor Contributor1 = new("Ardalis");
-    public static readonly Contributor Contributor2 = new("Snowfrog");
-
     public static void Initialize(IServiceProvider serviceProvider)
     {
         var cloudCrafterConfig = serviceProvider.GetRequiredService<IOptions<CloudCrafterConfig>>();

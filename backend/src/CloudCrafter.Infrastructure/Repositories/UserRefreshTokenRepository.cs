@@ -23,4 +23,18 @@ public class UserRefreshTokenRepository(IApplicationDbContext dbContext) : IUser
             .Where(x => x.ExpiresAt > DateTime.UtcNow)
             .FirstOrDefaultAsync();
     }
+
+    public async Task DisableRefreshToken(string refreshTokenToDisable)
+    {
+        var refreshToken = await GetRefreshTokenAsync(refreshTokenToDisable);
+
+        if (refreshToken == null)
+        {
+            // Already disabled, go to next
+            return;
+        }
+        
+        refreshToken.ExpiresAt = DateTime.UtcNow;
+        await dbContext.SaveChangesAsync(default);
+    }
 }

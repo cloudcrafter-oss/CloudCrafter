@@ -8,6 +8,8 @@ public interface ITestDatabase
 
     DbConnection GetConnection();
 
+    string GetRedisConnectionString();
+
     Task ResetAsync();
 
     Task DisposeAsync();

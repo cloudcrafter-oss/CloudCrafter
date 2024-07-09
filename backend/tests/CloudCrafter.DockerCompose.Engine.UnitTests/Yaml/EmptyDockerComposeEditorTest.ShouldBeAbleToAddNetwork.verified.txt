@@ -1,0 +1,7 @@
+﻿services:
+  test:
+    labels:
+      test: true
+networks:
+  network1:
+    name: network1

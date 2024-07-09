@@ -18,11 +18,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory"/>
     <PackageReference Include="Testcontainers.PostgreSql"/>
+    <PackageReference Include="Testcontainers.Redis"/>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
     <PackageReference Include="Respawn"/>
     <PackageReference Include="Ardalis.HttpClientTestExtensions"/>
-    <PackageReference Include="Bogus" />
-    <PackageReference Include="Moq" />
+    <PackageReference Include="Bogus"/>
+    <PackageReference Include="Moq"/>
   </ItemGroup>
 
   <ItemGroup>
