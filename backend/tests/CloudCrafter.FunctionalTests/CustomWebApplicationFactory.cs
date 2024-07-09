@@ -20,11 +20,11 @@ namespace CloudCrafter.FunctionalTests;
 using static Testing;
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
-    private readonly DbConnection _connection;
+    private readonly DbConnection _postgreSqlConnection;
 
-    public CustomWebApplicationFactory(DbConnection connection)
+    public CustomWebApplicationFactory(DbConnection postgreSqlConnection)
     {
-        _connection = connection;
+        _postgreSqlConnection = postgreSqlConnection;
     }
 
 
@@ -90,7 +90,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
                 services.AddDbContext<AppDbContext>(options =>
                 {
-                    options.UseNpgsql(_connection);
+                    options.UseNpgsql(_postgreSqlConnection);
                 });
 
                 

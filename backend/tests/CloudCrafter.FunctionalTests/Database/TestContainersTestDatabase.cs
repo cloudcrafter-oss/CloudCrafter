@@ -9,27 +9,34 @@ using Npgsql;
 using NSubstitute;
 using Respawn;
 using Testcontainers.PostgreSql;
+using Testcontainers.Redis;
 
 namespace CloudCrafter.FunctionalTests.Database;
 
 public class TestContainersTestDatabase : ITestDatabase
 {
-    private readonly PostgreSqlContainer _container;
+    private readonly PostgreSqlContainer _postgreSqlContainer;
     private DbConnection _connection = null!;
     private string _connectionString = null!;
     private Respawner _respawner = null!;
+    private readonly RedisContainer _redisContainer;
 
     public TestContainersTestDatabase()
     {
-        _container = new PostgreSqlBuilder().WithUsername("postgres")
+        _postgreSqlContainer = new PostgreSqlBuilder().WithUsername("postgres")
             .WithPassword("password").Build();
+        _redisContainer = new RedisBuilder()
+            .WithImage("redis:alpine")
+            .WithExposedPort("6379")
+            .Build();
     }
 
     public async Task InitialiseAsync()
     {
-        await _container.StartAsync();
+        await _postgreSqlContainer.StartAsync();
+        await _redisContainer.StartAsync();
 
-        _connectionString = _container.GetConnectionString();
+        _connectionString = _postgreSqlContainer.GetConnectionString();
 
         _connection = new NpgsqlConnection(_connectionString);
         await _connection.OpenAsync();
@@ -72,6 +79,7 @@ public class TestContainersTestDatabase : ITestDatabase
     public async Task DisposeAsync()
     {
         await _connection.DisposeAsync();
-        await _container.DisposeAsync();
+        await _postgreSqlContainer.DisposeAsync();
+        await _redisContainer.DisposeAsync();
     }
 }
