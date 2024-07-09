@@ -12,4 +12,9 @@
     <PackageReference Include="Hangfire.AspNetCore"/>
     <PackageReference Include="Hangfire.Console"/>
   </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\CloudCrafter.Jobs.Infrastructure\CloudCrafter.Jobs.Infrastructure.csproj" />
+  </ItemGroup>
 </Project>

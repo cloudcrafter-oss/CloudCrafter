@@ -2,6 +2,7 @@
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Logging;
+using CloudCrafter.Jobs.Actions;
 using CloudCrafter.Jobs.Infrastructure;
 using CloudCrafter.Web;
 using CloudCrafter.Web.Infrastructure;
@@ -22,7 +23,6 @@ builder.Services.AddInfrastructureServices(builder.Configuration)
 builder.Services.AddWebServices();
 builder.Services.AddSwaggerServices();
 builder.Services.AddJobInfrastructure(builder.Configuration);
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,4 +1,7 @@
-﻿using Hangfire;
+﻿using CloudCrafter.Jobs.Actions;
+using CloudCrafter.Jobs.Infrastructure.Jobs.Context.Deployments;
+using CloudCrafter.Jobs.Infrastructure.Logging;
+using Hangfire;
 using Hangfire.Console;
 using Hangfire.Redis.StackExchange;
 using Microsoft.Extensions.Configuration;
@@ -14,9 +17,11 @@ public static class JobsInfrastructureServiceExtensions
         ConfigurationManager config)
     {
 
-        services.AddHangfire(hangfireConfig =>
+        services.AddScoped<IDeploymentTracker, DeploymentTracker>();
+        services.AddHangfire((sp, hangfireConfig)  =>
         {
             var connectionString = config.GetConnectionString("RedisConnection");
+            
             
             hangfireConfig.UseRedisStorage(connectionString,
                 new RedisStorageOptions()
@@ -25,7 +30,8 @@ public static class JobsInfrastructureServiceExtensions
                 });
 
             hangfireConfig.UseFilter(new LogEverythingAttribute());
-
+         
+            
             hangfireConfig
                 .UseConsole();
         });
