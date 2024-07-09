@@ -1,17 +1,27 @@
 ﻿using CloudCrafter.Core;
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Data;
+using CloudCrafter.Infrastructure.Logging;
+using CloudCrafter.Jobs.Infrastructure;
 using CloudCrafter.Web;
 using CloudCrafter.Web.Infrastructure;
+using Hangfire;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
+Log.Logger = LoggingConfiguration.GetLogger();
+
+Log.Information("Starting CloudCrafter");
+
+builder.Services.AddCloudCrafterLogging(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration)
     .AddApiConfiguration(builder.Configuration);
 builder.Services.AddWebServices();
 builder.Services.AddSwaggerServices();
+builder.Services.AddJobInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
@@ -54,6 +64,10 @@ app.Map("/", () => Results.Redirect("/api"));
 
 app.MapEndpoints();
 app.SeedDatabase();
+
+app.UseHangfireDashboard();
+
+
 
 app.Run();
 

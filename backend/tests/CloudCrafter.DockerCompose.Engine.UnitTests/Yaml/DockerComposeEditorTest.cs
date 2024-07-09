@@ -156,6 +156,39 @@ networks:
         
         await Verify(yaml);
     }
-    
+
+    [Test]
+    public async Task ShouldBeAbleToChangeServiceImage()
+    {
+        var service = _editor.Service("web")!;
+        service.SetImage("php", "8.0-apache");
+        
+        var yaml = _editor.GetYaml();
+
+        var isValid = await _editor.IsValid();
+       
+        isValid.Should().BeTrue();
+        
+        await Verify(yaml);
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToAddNetwork()
+    {
+        var network = _editor.AddNetwork("mynetwork");
+        network.SetNetworkName("mynetwork");
+
+        var database = _editor.Service("db");
+        database.AddNetwork(network);
+        
+        var yaml = _editor.GetYaml();
+
+        var isValid = await _editor.IsValid();
+       
+        isValid.Should().BeTrue();
+        
+        await Verify(yaml);
+        
+    }
 
 }

@@ -9,9 +9,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="NJsonSchema.CodeGeneration.CSharp" />
     <PackageReference Include="YamlDotNet" />
-    <PackageReference Include="JsonSchema.Net" />
     <PackageReference Include="NJsonSchema" />
   </ItemGroup>
 

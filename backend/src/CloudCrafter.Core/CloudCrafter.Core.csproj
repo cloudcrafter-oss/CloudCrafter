@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CloudCrafter.Domain\CloudCrafter.Domain.csproj"/>
+    <ProjectReference Include="..\CloudCrafter.Jobs.Service\CloudCrafter.Jobs.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>
