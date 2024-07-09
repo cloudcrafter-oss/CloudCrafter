@@ -6,6 +6,7 @@ using DotNet.Testcontainers.Builders;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -21,10 +22,12 @@ using static Testing;
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly DbConnection _postgreSqlConnection;
+    private readonly string _redisConnectionString;
 
-    public CustomWebApplicationFactory(DbConnection postgreSqlConnection)
+    public CustomWebApplicationFactory(DbConnection postgreSqlConnection, string redisConnectionString)
     {
         _postgreSqlConnection = postgreSqlConnection;
+        _redisConnectionString = redisConnectionString;
     }
 
 
@@ -43,44 +46,21 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         // Get service provider. 
         var serviceProvider = host.Services;
 
-        // Create a scope to obtain a reference to the database
-        // context (AppDbContext).
-        // using (var scope = serviceProvider.CreateScope())
-        // {
-        //     var scopedServices = scope.ServiceProvider;
-        //     var db = scopedServices.GetRequiredService<AppDbContext>();
-        //
-        //     var logger = scopedServices
-        //         .GetRequiredService<ILogger<CustomWebApplicationFactory<TProgram>>>();
-        //
-        //     // Reset Sqlite database for each test run
-        //     // If using a real database, you'll likely want to remove this step.
-        //     db.Database.EnsureDeleted();
-        //
-        //     // Ensure the database is created.
-        //     db.Database.EnsureCreated();
-        //
-        //     try
-        //     {
-        //         // Can also skip creating the items
-        //         //if (!db.ToDoItems.Any())
-        //         //{
-        //         // Seed the database with test data.
-        //         SeedData.PopulateTestData(db);
-        //         //}
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         logger.LogError(ex, "An error occurred seeding the " +
-        //                             "database with test messages. Error: {exceptionMessage}", ex.Message);
-        //     }
-        // }
+        
 
         return host;
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.ConfigureAppConfiguration((context, config) =>
+        {
+            config.AddInMemoryCollection(new[]
+            {
+                new KeyValuePair<string, string?>("ConnectionStrings:RedisConnection", _redisConnectionString)
+            });
+
+        });
         builder
             .ConfigureServices(services =>
             {

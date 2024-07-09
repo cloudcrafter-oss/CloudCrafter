@@ -27,7 +27,6 @@ public class TestContainersTestDatabase : ITestDatabase
             .WithPassword("password").Build();
         _redisContainer = new RedisBuilder()
             .WithImage("redis:alpine")
-            .WithExposedPort("6379")
             .Build();
     }
 
@@ -69,6 +68,11 @@ public class TestContainersTestDatabase : ITestDatabase
     public DbConnection GetConnection()
     {
         return _connection;
+    }
+
+    public string GetRedisConnectionString()
+    {
+        return _redisContainer.GetConnectionString();
     }
 
     public async Task ResetAsync()
