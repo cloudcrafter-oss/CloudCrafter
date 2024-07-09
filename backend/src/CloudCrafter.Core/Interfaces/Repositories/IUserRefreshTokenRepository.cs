@@ -6,4 +6,5 @@ public interface IUserRefreshTokenRepository
 {
     Task AddRefreshTokenToUserAsync(Guid userId, string refreshToken, DateTime expires);
     Task<UserRefreshToken?> GetRefreshTokenAsync(string refreshToken);
+    Task DisableRefreshToken(string refreshTokenToDisable);
 }

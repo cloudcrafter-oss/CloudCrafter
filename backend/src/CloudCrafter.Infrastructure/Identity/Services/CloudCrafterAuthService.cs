@@ -66,14 +66,20 @@ public class CloudCrafterAuthService(
             throw new UnauthorizedAccessException();
         }
 
-        return await CreateTokenForUserAsync(user);
+        return await CreateTokenForUserAsync(user, refreshToken);
     }
 
-    private async Task<TokenDto> CreateTokenForUserAsync(User user)
+    private async Task<TokenDto> CreateTokenForUserAsync(User user, string? refreshTokenToDisable = null)
     {
         var roles = await userManager.GetRolesAsync(user);
 
         var result = await jwtService.GenerateTokenForUserAsync(user, roles.ToList());
+        
+        // If refreshtoken is provided, we should disable it
+        if (refreshTokenToDisable != null)
+        {
+            await jwtService.DisableRefreshToken(refreshTokenToDisable);
+        }
 
         return result;
     }
