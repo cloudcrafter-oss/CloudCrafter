@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  web:
+    image: nginx:latest
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        - APP_ENV=production
+    container_name: web_container
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - ./web/.env
+    ports:
+      - "80:80"
+      - "443:443"
+    expose:
+      - "80"
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock
+    configs:
+      - source: nginx_config
+        target: /etc/nginx/nginx.conf
+    secrets:
+      - db_password
+    networks:
+      - frontend
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  db:
+    image: postgres:12
+    container_name: db_container
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - backend
+    restart: always
+    secrets:
+      - db_password
+
+  redis:
+    image: redis:alpine
+    container_name: redis_container
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
+  worker:
+    image: myapp_worker:latest
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+      - redis
+    networks:
+      - backend
+    environment:
+      - WORKER_ENV=production
+    volumes:
+      - ./worker/logs:/app/logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+volumes:
+  db_data:
+    driver: local
+
+networks:
+  frontend:
+  backend:
+
+configs:
+  nginx_config:
+    file: ./nginx/nginx.conf
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt

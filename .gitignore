@@ -44,3 +44,6 @@ msbuild.wrn
 
 
 appsettings.Development.json
+
+
+*.received.*
