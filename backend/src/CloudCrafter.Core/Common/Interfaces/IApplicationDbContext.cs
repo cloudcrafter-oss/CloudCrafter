@@ -8,5 +8,6 @@ public interface IApplicationDbContext
     DbSet<UserRefreshToken> UserRefreshTokens { get; }
     DbSet<Server> Servers { get; }
     DbSet<Project> Projects { get; }
+    DbSet<Application> Applications { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

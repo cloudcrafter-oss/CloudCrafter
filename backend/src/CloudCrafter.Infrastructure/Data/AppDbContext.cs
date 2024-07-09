@@ -29,6 +29,7 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     public DbSet<UserRefreshToken> UserRefreshTokens => Set<UserRefreshToken>();
     public DbSet<Server> Servers => Set<Server>();
     public DbSet<Project> Projects => Set<Project>();
+    public DbSet<Application> Applications => Set<Application>();
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
