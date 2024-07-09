@@ -12,5 +12,10 @@
     <PackageReference Include="Ardalis.SharedKernel"/>
 
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\CloudCrafter.Utils\CloudCrafter.Utils.csproj" />
+    <ProjectReference Include="..\Packages\EntityFrameworkCore.EncryptColumn\EntityFrameworkCore.EncryptColumn.csproj" />
+  </ItemGroup>
 
 </Project>

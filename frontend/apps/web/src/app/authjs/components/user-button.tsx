@@ -7,8 +7,8 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger
 } from '@ui/components/ui/dropdown-menu.tsx'
-import { Button } from '@ui/components'
 import { Avatar, AvatarImage } from '@radix-ui/react-avatar'
+import { Button } from '@ui/components/ui/button.tsx'
 
 
 export default async function UserButton() {

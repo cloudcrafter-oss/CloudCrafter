@@ -1,9 +1,9 @@
 using Bogus;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.FunctionalTests.Database;
-using CloudCrafter.FunctionalTests.Fakeds;
 using CloudCrafter.FunctionalTests.TestModels;
 using CloudCrafter.Infrastructure.Data;
+using CloudCrafter.Infrastructure.Data.Fakeds;
 using CloudCrafter.Infrastructure.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;

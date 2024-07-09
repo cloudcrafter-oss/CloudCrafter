@@ -1,7 +1,11 @@
 import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema } from './postLoginUserSchema'
 import { postCreateUserMutationRequestSchema, postCreateUserMutationResponseSchema } from './postCreateUserSchema'
 import { postRefreshTokensMutationRequestSchema, postRefreshTokensMutationResponseSchema } from './postRefreshTokensSchema'
-import { getUsersQueryResponseSchema, getUsersQueryParamsSchema } from './getUsersSchema'
+import { getProjectsQueryResponseSchema } from './getProjectsSchema'
+import { getServersQueryResponseSchema } from './getServersSchema'
+import { getServerByIdQueryResponseSchema, getServerByIdPathParamsSchema } from './getServerByIdSchema'
+import { getFilterableFieldsQueryResponseSchema } from './getFilterableFieldsSchema'
+import { getUsersMutationRequestSchema, getUsersMutationResponseSchema } from './getUsersSchema'
 import { testQueryResponseSchema } from './testSchema'
 
  export const operations = { 'PostLoginUser': {
@@ -40,16 +44,64 @@ import { testQueryResponseSchema } from './testSchema'
             default: postRefreshTokensMutationResponseSchema
         },
         errors: {}
-    }, 'GetUsers': {
+    }, 'GetProjects': {
         request: undefined,
         parameters: {
             path: undefined,
-            query: getUsersQueryParamsSchema,
+            query: undefined,
             header: undefined
         },
         responses: {
-            200: getUsersQueryResponseSchema,
-            default: getUsersQueryResponseSchema
+            200: getProjectsQueryResponseSchema,
+            default: getProjectsQueryResponseSchema
+        },
+        errors: {}
+    }, 'GetServers': {
+        request: undefined,
+        parameters: {
+            path: undefined,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: getServersQueryResponseSchema,
+            default: getServersQueryResponseSchema
+        },
+        errors: {}
+    }, 'GetServerById': {
+        request: undefined,
+        parameters: {
+            path: getServerByIdPathParamsSchema,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: getServerByIdQueryResponseSchema,
+            default: getServerByIdQueryResponseSchema
+        },
+        errors: {}
+    }, 'GetFilterableFields': {
+        request: undefined,
+        parameters: {
+            path: undefined,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: getFilterableFieldsQueryResponseSchema,
+            default: getFilterableFieldsQueryResponseSchema
+        },
+        errors: {}
+    }, 'GetUsers': {
+        request: getUsersMutationRequestSchema,
+        parameters: {
+            path: undefined,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: getUsersMutationResponseSchema,
+            default: getUsersMutationResponseSchema
         },
         errors: {}
     }, 'Test': {
@@ -71,8 +123,16 @@ export const paths = { '/api/Auth/login': {
         post: operations['PostCreateUser']
     }, '/api/Auth/refresh': {
         post: operations['PostRefreshTokens']
+    }, '/api/Projects': {
+        get: operations['GetProjects']
+    }, '/api/Servers': {
+        get: operations['GetServers']
+    }, '/api/Servers/{id}': {
+        get: operations['GetServerById']
+    }, '/api/System/get-fields': {
+        get: operations['GetFilterableFields']
     }, '/api/Users': {
-        get: operations['GetUsers']
+        post: operations['GetUsers']
     }, '/api/Users/test': {
         get: operations['Test']
     } } as const

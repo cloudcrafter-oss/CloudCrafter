@@ -18,7 +18,8 @@ export default defineConfig({
     hooks: {
         done: [
             'node src/utils/kubb/post-action.js',
-            'eslint ./src/core/generated --ext ts --fix'
+            'eslint ./src/core/generated --ext ts --fix',
+            'eslint ./src/core/filtering --ext ts --fix'
         ]
     },
     plugins: [
@@ -35,7 +36,25 @@ export default defineConfig({
             output: {
                 path: './axios'
             },
+            exclude: [
+                {
+                    type: 'tag',
+                    pattern: 'cloudCrafterAuthTest'
+                }
+            ],
             client: { importPath: '../../backend/client.ts' }
+        }),
+        pluginClient({
+            output: {
+                path: './non-auth-axios'
+            },
+            include: [
+                {
+                    type: 'tag',
+                    pattern: 'cloudCrafterAuthTest'
+                }
+            ],
+            client: { importPath: '../../backend/non-auth-client.ts' }
         }),
         pluginTs(),
         pluginTanstackQuery({

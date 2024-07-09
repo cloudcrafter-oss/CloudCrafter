@@ -4,7 +4,7 @@ import { UserDto } from './UserDto'
     /**
      * @type integer, int32
     */
-    currentPage: number;
+    page: number;
     /**
      * @type integer, int32
     */

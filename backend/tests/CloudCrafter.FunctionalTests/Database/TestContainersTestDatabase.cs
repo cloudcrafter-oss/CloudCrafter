@@ -1,5 +1,6 @@
 using System.Data.Common;
 using Ardalis.SharedKernel;
+using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -38,8 +39,15 @@ public class TestContainersTestDatabase : ITestDatabase
             .Options;
 
         var _fakeEventDispatcher = Substitute.For<IDomainEventDispatcher>();
+        
 
-        var context = new AppDbContext(options, _fakeEventDispatcher);
+        // inject IOptions<CloudCrafterConfig> into AppDbContext
+        var cloudCrafterOptions = Microsoft.Extensions.Options.Options.Create(new CloudCrafterConfig()
+        {
+            AppKey = "this-is-some-dummy-testing-value"
+        });
+        
+        var context = new AppDbContext(options, _fakeEventDispatcher, cloudCrafterOptions);
 
         context.Database.Migrate();
 

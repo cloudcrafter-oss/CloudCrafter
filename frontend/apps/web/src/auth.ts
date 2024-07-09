@@ -3,8 +3,8 @@ import 'next-auth/jwt'
 import Auth0 from 'next-auth/providers/auth0'
 import type { Provider } from 'next-auth/providers'
 import { postCreateUser, postRefreshTokens } from '@/src/core/generated'
-import { debugToken, isTokenExpired } from '@/src/utils/auth/jwt-utils.ts'
 import { JWT } from 'next-auth/jwt'
+import { debugToken } from '@/src/utils/auth/jwt-utils.ts'
 
 const providers: Provider[] = [
     Auth0
@@ -19,27 +19,26 @@ export const providerMap = providers.map((provider) => {
     }
 })
 
+
 async function refreshAccessToken(token: JWT): Promise<JWT> {
     try {
-        // Make a request to your backend to refresh the token
         const response = await postRefreshTokens({
-            refreshToken: token.refreshToken as string
+            refreshToken: token.refreshToken as string,
         })
-
         return {
             ...token,
             accessToken: response.accessToken,
             accessTokenExpires: Date.now() + response.expiresIn * 1000,
-            refreshToken: response.refreshToken ?? token.refreshToken,
+            refreshToken: response.refreshToken, // This will be the new refresh token
         }
     } catch (error) {
-        console.error('Error refreshing access token', error)
+        console.log('cannot refresh tokens!')
         return {
-            ...token,
             error: 'RefreshAccessTokenError',
         }
     }
 }
+
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
@@ -47,61 +46,36 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     basePath: '/auth',
     //debug: process.env.NODE_ENV !== 'production' ? true : false,
     callbacks: {
-        async signIn({ user, account, profile, email, credentials }) {
-            console.log('signIn', user, account, profile, email, credentials)
 
-            if (user) {
+        async jwt({ token, user, account }) {
+            if (account && user) {
                 const result = await postCreateUser({
                     name: user.name || '',
                     email: user.email || '',
                 })
 
-                user.userCloudCraftAccessToken = result.accessToken
-                user.userCloudCraftRefreshToken = result.refreshToken
-                user.userCloudCraftAccessTokenExpires = result.expiresIn
-                // user.userCloudCraftRefreshToken = result.refreshToken
-
-                return true
-            }
-
-            return false
-        },
-
-        async jwt({ token, user, account, session }) {
-            if (user) { // User is available during sign-in
                 return {
+                    accessToken: result.accessToken,
+                    accessTokenExpires: Date.now() + result.expiresIn * 1000,
+                    refreshToken: result.refreshToken,
                     user,
-                    accessToken: user.userCloudCraftAccessToken,
-                    accessTokenExpires: user.userCloudCraftAccessTokenExpires,
-                    refreshToken: user.userCloudCraftRefreshToken,
                 }
             }
 
-            if (token.jwtCloudCraftAccessToken) {
-                debugToken(token.jwtCloudCraftAccessToken, 'jwt')
-            } else {
-                console.log('NO TOKEN!!!')
-            }
-
-            if (token.jwtCloudCraftAccessToken && !isTokenExpired(token.jwtCloudCraftAccessToken)) {
+            debugToken(token.accessToken!, 'jwt')
+            // Return previous token if the access token has not expired yet
+            if (Date.now() < (token.accessTokenExpires as number)) {
                 return token
             }
 
+            // Access token has expired, try to update it
+            return await refreshAccessToken(token)
 
-            if (token.jwtCloudCraftRefreshToken) {
-                console.log('refreshing')
-                return refreshAccessToken(token)
-            }
-
-            return token
         },
-        async session({ session, token, user, }) {
+        async session({ session, token, }) {
 
-            debugToken(token.jwtCloudCraftAccessToken!, 'session')
-
-            session.sessionCloudCraftAccessToken = token.jwtCloudCraftAccessToken
-            session.sessionCloudCraftRefreshToken = token.jwtCloudCraftRefreshToken
-
+            session.accessToken = token.accessToken as string
+            session.error = token.error as string | undefined
 
             return session
         },
@@ -124,6 +98,7 @@ declare module 'next-auth' {
         accessToken?: string
         sessionCloudCraftAccessToken?: string
         sessionCloudCraftRefreshToken?: string
+        error?: string
     }
 
     interface User {

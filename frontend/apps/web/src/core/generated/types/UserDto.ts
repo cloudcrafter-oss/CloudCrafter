@@ -11,4 +11,8 @@ export type UserDto = {
      * @type string, date-time
     */
     createdAt: string;
+    /**
+     * @type string
+    */
+    fullName: string;
 };

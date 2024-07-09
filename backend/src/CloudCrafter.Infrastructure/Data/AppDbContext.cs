@@ -3,24 +3,32 @@ using Ardalis.SharedKernel;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.ContributorAggregate;
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Infrastructure.Core.Configuration;
+using EntityFrameworkCore.EncryptColumn.Extensions;
+using EntityFrameworkCore.EncryptColumn.Util;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace CloudCrafter.Infrastructure.Data;
 
 public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbContext
 {
     private readonly IDomainEventDispatcher? _dispatcher;
+    private readonly GenerateEncryptionProvider _encryptionProvider;
 
     public AppDbContext(DbContextOptions<AppDbContext> options,
-        IDomainEventDispatcher? dispatcher)
+        IDomainEventDispatcher? dispatcher, IOptions<CloudCrafterConfig> cloudCrafterConfig)
         : base(options)
     {
         _dispatcher = dispatcher;
+        _encryptionProvider = new GenerateEncryptionProvider(cloudCrafterConfig.Value.AppKey);
     }
 
     public DbSet<Contributor> Contributors => Set<Contributor>();
     public DbSet<UserRefreshToken> UserRefreshTokens => Set<UserRefreshToken>();
+    public DbSet<Server> Servers => Set<Server>();
+    public DbSet<Project> Projects => Set<Project>();
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
@@ -47,6 +55,7 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.UseEncryption(_encryptionProvider);
     }
 
     public override int SaveChanges()
