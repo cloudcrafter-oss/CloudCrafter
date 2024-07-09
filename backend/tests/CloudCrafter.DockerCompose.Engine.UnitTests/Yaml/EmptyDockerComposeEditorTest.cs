@@ -91,7 +91,7 @@ public class EmptyDockerComposeEditorTest
 
         serviceEditor.SetImage("redis", "alpine");
         serviceEditor.AddLabel("label1", "value1");
-        serviceEditor.AddVolume("/tmp", "/tmp");
+        serviceEditor.AddVolume("/dev-path", "/dev-path");
         serviceEditor.AddEnvironmentVariable("DEV", "1");
         serviceEditor.AddEnvironmentVariable("DB_NAME", "example");
 

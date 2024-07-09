@@ -4,7 +4,7 @@
     labels:
       label1: value1
     volumes:
-    - /tmp:/tmp
+    - /dev-path:/dev-path
     environment:
       DEV: 1
       DB_NAME: example
