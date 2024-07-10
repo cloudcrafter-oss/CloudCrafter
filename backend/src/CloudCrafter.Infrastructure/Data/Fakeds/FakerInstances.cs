@@ -28,5 +28,14 @@ public static class FakerInstances
         .RuleFor(x => x.Name, f => $"Project {f.Person.FirstName}")
         .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
         .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    
+    public static Faker<Application> ApplicationFaker => new Faker<Application>()
+        .StrictMode(true)
+        .RuleFor(x => x.Id, Guid.NewGuid)
+        .RuleFor(x => x.Name, f => $"Application {f.Person.FirstName}")
+        .RuleFor(x => x.Server, ServerFaker.Generate())
+        .RuleFor(x => x.Project, ProjectFaker.Generate())
+        .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+        .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
 }

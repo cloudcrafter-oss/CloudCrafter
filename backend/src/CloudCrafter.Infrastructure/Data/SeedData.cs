@@ -37,8 +37,43 @@ public static class SeedData
             {
                 PopulateProjects(dbContext);
             }
+            
+            var applicationCount = dbContext.Applications.Count();
+            
+            if (applicationCount == 0)
+            {
+                PopulateApplications(dbContext);
+            }
 
         }
+    }
+
+    public static void PopulateApplications(AppDbContext dbContext)
+    {
+        var firstServer = dbContext.Servers.FirstOrDefault();
+
+        if (firstServer is null)
+        {
+            throw new Exception("Seed servers first.");
+        }
+
+        var projects = dbContext.Projects.ToList();
+
+        foreach (var project in projects)
+        {
+
+            var applications = Fakeds.FakerInstances.ApplicationFaker
+                .RuleFor(x => x.Server, firstServer)
+                .RuleFor(x => x.Project, project)
+                .Generate(10);
+
+            foreach (var application in applications)
+            {
+                dbContext.Applications.Add(application);
+            }
+        }
+
+        dbContext.SaveChanges();
     }
 
     public static void PopulateProjects(AppDbContext dbContext)
