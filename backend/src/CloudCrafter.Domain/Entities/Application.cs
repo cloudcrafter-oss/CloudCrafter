@@ -10,4 +10,6 @@ public class Application : IHasTimestamps
     public required Server Server { get; set; }
     public required DateTime CreatedAt { get; set; }
     public required DateTime UpdatedAt { get; set; }
+
+    public List<Deployment> Deployments { get; set; } = new List<Deployment>();
 }

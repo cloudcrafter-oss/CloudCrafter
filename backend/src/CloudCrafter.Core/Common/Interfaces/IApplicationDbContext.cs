@@ -9,5 +9,6 @@ public interface IApplicationDbContext
     DbSet<Server> Servers { get; }
     DbSet<Project> Projects { get; }
     DbSet<Application> Applications { get; }
+    DbSet<Deployment> Deployments { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
