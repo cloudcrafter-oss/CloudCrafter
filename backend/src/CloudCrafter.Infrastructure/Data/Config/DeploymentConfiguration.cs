@@ -8,11 +8,11 @@ public class DeploymentConfiguration : IEntityTypeConfiguration<Deployment>
 {
     public void Configure(EntityTypeBuilder<Deployment> builder)
     {
-        // builder.OwnsMany(d => d.Logs, b =>
-        // {
-        //     b.ToJson();
-        // });
-        //
+        builder.OwnsMany(d => d.Logs, b =>
+        {
+            b.ToJson();
+        });
+        
         // builder.Property(p => p.Logs)
         //     .HasColumnType("jsonb")
         //     .IsRequired();

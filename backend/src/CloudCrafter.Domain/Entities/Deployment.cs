@@ -8,6 +8,6 @@ public class Deployment : IHasTimestamps
     public required DateTime CreatedAt { get; set; }
     public required DateTime UpdatedAt { get; set; }
 
-    public required Application Application { get; set; }
-    // public required List<DeploymentLog> Logs { get; init; }
+    public required Application Application { get; set; } 
+    public required List<DeploymentLog> Logs { get; init; }
 }
