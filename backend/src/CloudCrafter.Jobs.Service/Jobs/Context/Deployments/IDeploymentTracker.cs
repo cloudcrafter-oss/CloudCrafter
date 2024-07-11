@@ -1,6 +1,6 @@
 ﻿using Hangfire.Server;
 
-namespace CloudCrafter.Jobs.Infrastructure.Jobs.Context.Deployments;
+namespace CloudCrafter.Jobs.Service.Jobs.Context.Deployments;
 
 public interface IDeploymentTracker
 {

@@ -1,9 +1,12 @@
 using System.Reflection;
 using Ardalis.SharedKernel;
 using CloudCrafter.Core.Common.Behaviours;
+using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
 using CloudCrafter.Core.Interfaces.Domain.Projects;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Interfaces.Domain.Users;
+using CloudCrafter.Core.Jobs.Dispatcher;
+using CloudCrafter.Core.Services.Domain.Applications.Deployments;
 using CloudCrafter.Core.Services.Domain.Projects;
 using CloudCrafter.Core.Services.Domain.Servers;
 using CloudCrafter.Core.Services.Domain.Users;
@@ -18,12 +21,8 @@ public static class ApplicationServiceExtensions
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        var mapperAssemblies = new List<Assembly>
-        {
-            Assembly.GetExecutingAssembly(),
-            typeof(IDomainTarget).Assembly
-        };
-        
+        var mapperAssemblies = new List<Assembly> { Assembly.GetExecutingAssembly(), typeof(IDomainTarget).Assembly };
+
         services.AddAutoMapper(mapperAssemblies);
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
@@ -42,8 +41,14 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<IUsersService, UsersService>()
             .AddScoped<IServersService, ServersService>()
-            .AddScoped<IProjectsService, ProjectsService>();
-        
+            .AddScoped<IProjectsService, ProjectsService>()
+            .AddScoped<IDeploymentService, DeploymentService>();
+
+        // Jobs
+
+        services.AddScoped<ICloudCrafterDispatcher, CloudCrafterDispatcher>();
+
+
         return services;
     }
 }

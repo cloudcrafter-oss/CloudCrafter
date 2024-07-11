@@ -14,6 +14,8 @@ public class Server : IHasTimestamps
     [EncryptColumn]
     public string? SshPrivateKey { get; set; }
 
+    public required int SshPort { get; set; } = 22;
+
     public required DateTime CreatedAt { get; set; }
     public required DateTime UpdatedAt { get; set; }
 }

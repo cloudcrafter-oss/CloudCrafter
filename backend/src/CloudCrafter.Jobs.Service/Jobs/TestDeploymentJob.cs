@@ -1,8 +1,8 @@
-﻿using CloudCrafter.Jobs.Infrastructure.Jobs.Context.Deployments;
+﻿using CloudCrafter.Jobs.Service.Jobs.Context.Deployments;
 using Hangfire.Console;
 using Hangfire.Server;
 
-namespace CloudCrafter.Jobs.Infrastructure.Jobs;
+namespace CloudCrafter.Jobs.Service.Jobs;
 
 public class TestDeploymentJob(IDeploymentTracker tracker)
 {
@@ -14,9 +14,10 @@ public class TestDeploymentJob(IDeploymentTracker tracker)
         {
             tracker.SetDeploymentContext(context);
         }
+
         tracker.SetDeploymentId(args.Id);
-        
-        
+
+
         // Simulate some work
         for (var i = 0; i < 10; i++)
         {
@@ -24,10 +25,10 @@ public class TestDeploymentJob(IDeploymentTracker tracker)
             context.WriteProgressBar(i * 10);
             context.WriteLine($"Step {i + 1} completed");
         }
+
         context!.WriteLine("done contex");
     }
 }
-
 
 public class DeploymentArgs
 {

@@ -5,7 +5,7 @@ using Hangfire.Server;
 using Hangfire.States;
 using Hangfire.Storage;
 
-namespace CloudCrafter.Jobs.Infrastructure;
+namespace CloudCrafter.Jobs.Service;
 
 public class LogEverythingAttribute : JobFilterAttribute,
     IClientFilter, IServerFilter, IElectStateFilter, IApplyStateFilter

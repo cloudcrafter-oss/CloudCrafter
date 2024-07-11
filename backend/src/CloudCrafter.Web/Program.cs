@@ -1,8 +1,9 @@
 ﻿using CloudCrafter.Core;
+using CloudCrafter.DeploymentEngine.Remote;
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Logging;
-using CloudCrafter.Jobs.Infrastructure;
+using CloudCrafter.Jobs.Service;
 using CloudCrafter.Web;
 using CloudCrafter.Web.Infrastructure;
 using Hangfire;
@@ -22,6 +23,7 @@ builder.Services.AddInfrastructureServices(builder.Configuration)
 builder.Services.AddWebServices();
 builder.Services.AddSwaggerServices();
 builder.Services.AddJobInfrastructure(builder.Configuration);
+builder.Services.AddEngineInfrastructure();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -65,7 +67,6 @@ app.MapEndpoints();
 app.SeedDatabase();
 
 app.UseHangfireDashboard();
-
 
 
 app.Run();

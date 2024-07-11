@@ -12,9 +12,5 @@ public class DeploymentConfiguration : IEntityTypeConfiguration<Deployment>
         {
             b.ToJson();
         });
-        
-        // builder.Property(p => p.Logs)
-        //     .HasColumnType("jsonb")
-        //     .IsRequired();
     }
 }
