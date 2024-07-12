@@ -1,6 +1,7 @@
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.DeploymentEngine.Domain.Models;
 using CloudCrafter.DeploymentEngine.Remote.Manager;
+using Hangfire.Console;
 using Hangfire.Server;
 
 namespace CloudCrafter.Core.Jobs.Servers.SingleServer;
@@ -11,13 +12,23 @@ public class ServerConnectivityCheckJob(IServersService serverService, ICloudCra
 
     public async Task RunAsync(PerformContext? context, Args args)
     {
-        EngineServerModel engineServerModel = await serverService.GetDeploymentEngineModelForServerAsync(args.ServerId);
+        try
+        {
+            EngineServerModel engineServerModel =
+                await serverService.GetDeploymentEngineModelForServerAsync(args.ServerId);
 
-        var manager = managerFactory.CreateFromModel(engineServerModel);
+            var manager = managerFactory.CreateFromModel(engineServerModel);
 
-        var client = manager.CreateSshClient();
+            var client = manager.CreateSshClient();
 
-        await client.ConnectAsync();
-        
+            await client.ConnectAsync();
+        }
+        catch (Exception ex)
+        {
+            context?.WriteLine("Failed to connect to server");
+            context?.WriteLine($"Caught exception: {ex.Message}");
+            context?.WriteLine(ex.StackTrace
+        }
+
     }
 }
