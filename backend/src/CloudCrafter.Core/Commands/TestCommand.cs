@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Jobs.Service;
+﻿using CloudCrafter.Core.Jobs.Dispatcher;
+using CloudCrafter.Jobs.Service;
 using MediatR;
 
 namespace CloudCrafter.Core.Commands;
@@ -7,7 +8,7 @@ public static class TestCommand
 {
     public record Query(bool Fail) : IRequest;
 
-    private class Handler : IRequestHandler<Query>
+    private class Handler(ICloudCrafterDispatcher dispatcher) : IRequestHandler<Query>
     {
         public Task Handle(Query request, CancellationToken cancellationToken)
         {
@@ -18,7 +19,7 @@ public static class TestCommand
             }
             else
             {
-                JobTesting.Fire();
+                return dispatcher.DispatchServerConnectivityChecks();
             }
 
             return Task.CompletedTask;

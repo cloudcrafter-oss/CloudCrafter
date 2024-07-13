@@ -27,7 +27,7 @@ public class ServerConnectivityCheckJob(IServersService serverService, ICloudCra
         {
             context?.WriteLine("Failed to connect to server");
             context?.WriteLine($"Caught exception: {ex.Message}");
-            context?.WriteLine(ex.StackTrace
+            context?.WriteLine(ex.StackTrace);
         }
 
     }

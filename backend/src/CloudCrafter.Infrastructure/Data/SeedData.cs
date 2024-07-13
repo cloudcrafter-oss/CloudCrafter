@@ -90,10 +90,32 @@ public static class SeedData
     public static void PopulateServers(AppDbContext dbContext)
     {
         var servers = Fakeds.FakerInstances.ServerFaker.Generate(5);
+        
         foreach (var server in servers)
         {
             dbContext.Servers.Add(server);
         }
+        
+        var solutionDirectory = GetSolutionDirectory();
+
+        var dockerfileDirectory = Path.Combine(solutionDirectory, "..", "docker", "test-host");
+        
+        var sshKeyContents = File.ReadLines(dockerfileDirectory + "/id_rsa");
+        var sshKey = string.Join("\n", sshKeyContents);
+
+        var localTestServer = new Server()
+        {
+            SshPort = 2222,
+            SshUsername = "root",
+            SshPrivateKey = sshKey,
+            IpAddress = "127.0.0.1",
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            Name = "Local Test Server",
+            Id = Guid.NewGuid()
+        };
+
+        dbContext.Servers.Add(localTestServer);
 
         dbContext.SaveChanges();
     }
@@ -109,6 +131,19 @@ public static class SeedData
         dbContext.SaveChanges();
     }
 
+    private static string GetSolutionDirectory()
+    {
+        var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
+        while (directory != null && !directory.GetFiles("*.sln").Any())
+        {
+            directory = directory.Parent;
+        }
+
+        return directory?.FullName
+               ?? throw new DirectoryNotFoundException("Solution directory not found.");
+    }
+    
+    
     public static void InitializeIdentity(IServiceProvider services)
     {
         using var dbContext = services.GetRequiredService<AppDbContext>();
