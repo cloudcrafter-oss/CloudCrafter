@@ -26,15 +26,15 @@ public class BackgroundJobFactory(IApplicationDbContext context)
         await context.SaveChangesAsync();
 
         // TODO: Add Context tracker?
-        var jobId = Hangfire.BackgroundJob.Enqueue(() => ExecuteJobAsync(job, backgroundJob.Id, parameters));
+        var jobId = Hangfire.BackgroundJob.Enqueue(() => ExecuteJobAsync(job, job.Type, backgroundJob.Id, parameters));
         backgroundJob.HangfireJobId = jobId;
         await context.SaveChangesAsync();
 
         return jobId;
     }
 
-    [JobDisplayName("{0}")]
-    public async Task ExecuteJobAsync<TParam>(IBaseJob<TParam> job, Guid backgroundJobId, TParam parameters)
+    [JobDisplayName("{1}")]
+    public async Task ExecuteJobAsync<TParam>(IBaseJob<TParam> job,  BackgroundJobType type, Guid backgroundJobId, TParam parameters)
     {
         var backgroundJob = await context.Jobs.FindAsync(backgroundJobId);
         if (backgroundJob == null)
