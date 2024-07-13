@@ -6,6 +6,7 @@ using CloudCrafter.Core.Interfaces.Domain.Projects;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Jobs.Dispatcher;
+using CloudCrafter.Core.Jobs.Dispatcher.Factory;
 using CloudCrafter.Core.Services.Domain.Applications.Deployments;
 using CloudCrafter.Core.Services.Domain.Projects;
 using CloudCrafter.Core.Services.Domain.Servers;
@@ -47,7 +48,7 @@ public static class ApplicationServiceExtensions
         // Jobs
 
         services.AddScoped<ICloudCrafterDispatcher, CloudCrafterDispatcher>();
-
+        services.AddScoped<BackgroundJobFactory>();
 
         return services;
     }

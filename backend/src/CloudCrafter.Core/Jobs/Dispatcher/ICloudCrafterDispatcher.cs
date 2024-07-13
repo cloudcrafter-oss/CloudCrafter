@@ -1,10 +1,8 @@
-﻿using CloudCrafter.Core.Jobs.Servers.SingleServer;
+﻿using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.Core.Jobs.Dispatcher;
 
 public interface ICloudCrafterDispatcher
 {
-    Task DispatchDeploymentAsync(Guid deploymentId);
-    Task DispatchServerConnectivityChecks();
-    Task DispatchServerConnectivityCheck(ServerConnectivityCheckJob.Args args);
+    Task EnqueueConnectivityCheck(Server server);
 }

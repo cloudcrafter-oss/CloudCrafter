@@ -31,6 +31,7 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<Application> Applications => Set<Application>();
     public DbSet<Deployment> Deployments => Set<Deployment>();
+    public DbSet<BackgroundJob> Jobs => Set<BackgroundJob>();
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
@@ -53,15 +54,15 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
         return result;
     }
 
+    public override int SaveChanges()
+    {
+        return SaveChangesAsync().GetAwaiter().GetResult();
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         modelBuilder.UseEncryption(_encryptionProvider);
-    }
-
-    public override int SaveChanges()
-    {
-        return SaveChangesAsync().GetAwaiter().GetResult();
     }
 }

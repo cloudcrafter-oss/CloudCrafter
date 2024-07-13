@@ -1,27 +1,14 @@
-﻿using CloudCrafter.Core.Jobs.Servers;
-using CloudCrafter.Core.Jobs.Servers.SingleServer;
-using Hangfire;
+﻿using CloudCrafter.Core.Jobs.Dispatcher.Factory;
+using CloudCrafter.Core.Jobs.Servers;
+using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.Core.Jobs.Dispatcher;
 
-public class CloudCrafterDispatcher : ICloudCrafterDispatcher
+public class CloudCrafterDispatcher(BackgroundJobFactory jobFactory) : ICloudCrafterDispatcher
 {
-    public Task DispatchDeploymentAsync(Guid deploymentId)
+    public async Task EnqueueConnectivityCheck(Server server)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task DispatchServerConnectivityChecks()
-    {
-        BackgroundJob.Enqueue<ServersConnectivityCheckJob>(job => job.RunAsync(null));
-
-        return Task.CompletedTask;
-    }
-
-    public Task DispatchServerConnectivityCheck(ServerConnectivityCheckJob.Args args)
-    {
-        BackgroundJob.Enqueue<ServerConnectivityCheckJob>(job => job.RunAsync(null, args));
-
-        return Task.CompletedTask;
+        var connectivityCheckJob = new ConnectivityCheckBackgroundJob();
+        await jobFactory.CreateAndEnqueueJobAsync(connectivityCheckJob, server);
     }
 }
