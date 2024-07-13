@@ -8,6 +8,7 @@ public class BackgroundJob : IHasTimestamps
     public required Guid Id { get; init; }
     public required string? HangfireJobId { get; set; }
     public required BackgroundJobType Type { get; init; }
+    public string SerializedArguments { get; set; } = string.Empty;
     public ServerConnectivityCheckJob? ServerConnectivityCheckJob { get; set; }
     public List<BackgroundJobLog> Logs { get; set; } = new();
     public required BackgroundJobStatus Status { get; set; }
