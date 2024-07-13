@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Domain.Entities;
+using CloudCrafter.Domain.Entities.Jobs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,5 +13,7 @@ public class BackgroundJobConfiguration : IEntityTypeConfiguration<BackgroundJob
         {
             b.ToJson();
         });
+
+        // builder.HasOne(x => x.ServerConnectivityCheckJob);
     }
 }

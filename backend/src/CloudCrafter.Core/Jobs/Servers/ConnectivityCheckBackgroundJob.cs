@@ -13,12 +13,7 @@ public class ConnectivityCheckBackgroundJob : IBaseJob<Server>
     {
         var logger = loggerFactory.CreateLogger<ConnectivityCheckBackgroundJob>();
         logger.LogInformation("Starting connectivity job for server {ServerName} ({ServerId})", server.Name, server.Id);
-
-        backgroundJob.ServerConnectivityCheckJob = new ServerConnectivityCheckJob
-        {
-            Server = server, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Id = Guid.NewGuid()
-        };
-
+        
         logger.LogInformation("Deployment job completed");
 
         return Task.CompletedTask;

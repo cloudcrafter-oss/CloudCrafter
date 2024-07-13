@@ -1,5 +1,6 @@
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CloudCrafter.Core.Common.Interfaces;
 
@@ -13,4 +14,5 @@ public interface IApplicationDbContext
     DbSet<BackgroundJob> Jobs { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     int SaveChanges();
+    Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
 }

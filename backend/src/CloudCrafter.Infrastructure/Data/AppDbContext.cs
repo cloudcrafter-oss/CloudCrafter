@@ -8,6 +8,7 @@ using EntityFrameworkCore.EncryptColumn.Extensions;
 using EntityFrameworkCore.EncryptColumn.Util;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Options;
 
 namespace CloudCrafter.Infrastructure.Data;
@@ -53,10 +54,16 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
 
         return result;
     }
+    
 
     public override int SaveChanges()
     {
         return SaveChangesAsync().GetAwaiter().GetResult();
+    }
+
+    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+    {
+        return Database.BeginTransactionAsync(cancellationToken);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -5,13 +5,16 @@ using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
 using CloudCrafter.Core.Interfaces.Domain.Projects;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Interfaces.Domain.Users;
+using CloudCrafter.Core.Jobs.Creation;
 using CloudCrafter.Core.Jobs.Dispatcher;
 using CloudCrafter.Core.Jobs.Dispatcher.Factory;
+using CloudCrafter.Core.Jobs.Servers;
 using CloudCrafter.Core.Services.Domain.Applications.Deployments;
 using CloudCrafter.Core.Services.Domain.Projects;
 using CloudCrafter.Core.Services.Domain.Servers;
 using CloudCrafter.Core.Services.Domain.Users;
 using CloudCrafter.Domain;
+using CloudCrafter.Domain.Entities;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,6 +52,11 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<ICloudCrafterDispatcher, CloudCrafterDispatcher>();
         services.AddScoped<BackgroundJobFactory>();
+        
+        // TODO: Find with reflection each IBaseJob
+        services.AddScoped<ConnectivityCheckBackgroundJob>();
+        services.AddScoped<IJobCreationStrategy<ConnectivityCheckBackgroundJob, Server>, ConnectivityCheckCreationStrategy>();
+
 
         return services;
     }

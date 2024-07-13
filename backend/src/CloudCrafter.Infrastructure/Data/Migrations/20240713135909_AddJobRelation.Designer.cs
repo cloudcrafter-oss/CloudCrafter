@@ -3,6 +3,7 @@ using System;
 using CloudCrafter.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CloudCrafter.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240713135909_AddJobRelation")]
+    partial class AddJobRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,9 +96,6 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("ServerConnectivityCheckJobId")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
@@ -106,8 +106,6 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ServerConnectivityCheckJobId");
 
                     b.ToTable("Jobs");
                 });
@@ -140,6 +138,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("BackgroundJobId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -150,6 +151,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BackgroundJobId")
+                        .IsUnique();
 
                     b.HasIndex("ServerId");
 
@@ -492,10 +496,6 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.BackgroundJob", b =>
                 {
-                    b.HasOne("CloudCrafter.Domain.Entities.Jobs.ServerConnectivityCheckJob", "ServerConnectivityCheckJob")
-                        .WithMany()
-                        .HasForeignKey("ServerConnectivityCheckJobId");
-
                     b.OwnsMany("CloudCrafter.Domain.Entities.BackgroundJobLog", "Logs", b1 =>
                         {
                             b1.Property<Guid>("BackgroundJobId")
@@ -530,8 +530,6 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         });
 
                     b.Navigation("Logs");
-
-                    b.Navigation("ServerConnectivityCheckJob");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Deployment", b =>
@@ -572,6 +570,10 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Jobs.ServerConnectivityCheckJob", b =>
                 {
+                    b.HasOne("CloudCrafter.Domain.Entities.BackgroundJob", null)
+                        .WithOne("ServerConnectivityCheckJob")
+                        .HasForeignKey("CloudCrafter.Domain.Entities.Jobs.ServerConnectivityCheckJob", "BackgroundJobId");
+
                     b.HasOne("CloudCrafter.Domain.Entities.Server", "Server")
                         .WithMany()
                         .HasForeignKey("ServerId")
@@ -644,6 +646,11 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Application", b =>
                 {
                     b.Navigation("Deployments");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.BackgroundJob", b =>
+                {
+                    b.Navigation("ServerConnectivityCheckJob");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.User", b =>

@@ -36,4 +36,5 @@ public class BackgroundJobLog
     public required DateTime Timestamp { get; set; }
     public required string Level { get; set; }
     public required string Message { get; set; }
+    public string? Exception { get; set; }
 }

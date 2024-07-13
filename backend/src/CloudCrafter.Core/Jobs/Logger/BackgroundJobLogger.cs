@@ -22,7 +22,9 @@ public class BackgroundJobLogger(BackgroundJob job, IApplicationDbContext contex
         var message = formatter(state, exception);
         var logEntry = new BackgroundJobLog
         {
-            Timestamp = DateTime.UtcNow, Level = logLevel.ToString(), Message = $"[{categoryName}] {message}"
+            Timestamp = DateTime.UtcNow, Level = logLevel.ToString(), Message = $"[{categoryName}] {message}",
+            Exception = exception?.ToString()
+            
         };
 
         job.Logs.Add(logEntry);
