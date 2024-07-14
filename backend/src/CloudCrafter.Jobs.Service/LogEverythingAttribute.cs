@@ -1,4 +1,5 @@
-﻿using Hangfire.Client;
+﻿using System.Runtime.InteropServices;
+using Hangfire.Client;
 using Hangfire.Common;
 using Hangfire.Logging;
 using Hangfire.Server;

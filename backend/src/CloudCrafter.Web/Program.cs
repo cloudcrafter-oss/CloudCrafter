@@ -16,6 +16,7 @@ Log.Logger = LoggingConfiguration.GetLogger();
 
 Log.Information("Starting CloudCrafter");
 
+builder.Services.AddEngineInfrastructure();
 builder.Services.AddCloudCrafterLogging(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration)
@@ -23,7 +24,7 @@ builder.Services.AddInfrastructureServices(builder.Configuration)
 builder.Services.AddWebServices();
 builder.Services.AddSwaggerServices();
 builder.Services.AddJobInfrastructure(builder.Configuration);
-builder.Services.AddEngineInfrastructure();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

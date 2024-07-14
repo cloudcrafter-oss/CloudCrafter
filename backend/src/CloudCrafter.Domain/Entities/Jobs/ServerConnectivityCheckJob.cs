@@ -6,6 +6,16 @@ public class ServerConnectivityCheckJob : IHasTimestamps
 {
     public required Guid Id { get; init; }
     public required Server Server { get; init; }
+    public required ServerConnectivityCheckResult Result { get; set; } = ServerConnectivityCheckResult.Unknown;
+    public long? TimeTakenMs { get; set; }
     public required DateTime CreatedAt { get; set; }
     public required DateTime UpdatedAt { get; set; }
+}
+
+public enum ServerConnectivityCheckResult
+{
+    Unknown,
+    Healthy,
+    Degraded,
+    Unhealthy,
 }

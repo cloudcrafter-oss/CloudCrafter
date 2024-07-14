@@ -5,4 +5,5 @@ namespace CloudCrafter.Core.Jobs.Dispatcher;
 public interface ICloudCrafterDispatcher
 {
     Task EnqueueConnectivityCheck(Server server);
+    Task EnqueueConnectivityCheck(List<Server> servers);
 }

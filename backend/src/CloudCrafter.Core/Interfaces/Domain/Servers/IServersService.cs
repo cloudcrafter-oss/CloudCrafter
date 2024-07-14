@@ -7,5 +7,6 @@ public interface IServersService
 {
     Task<List<ServerDto>> GetServers();
     Task<ServerDetailDto?> GetServer(Guid id);
-    Task<EngineServerModel> GetDeploymentEngineModelForServerAsync(Guid argsServerId);
+ 
+
 }

@@ -10,4 +10,12 @@ public class CloudCrafterDispatcher(BackgroundJobFactory jobFactory) : ICloudCra
     {
         await jobFactory.CreateAndEnqueueJobAsync<ConnectivityCheckBackgroundJob, Server>(server);
     }
+
+    public async Task EnqueueConnectivityCheck(List<Server> servers)
+    {
+        foreach (var server in servers)
+        {
+            await EnqueueConnectivityCheck(server);
+        }
+    }
 }

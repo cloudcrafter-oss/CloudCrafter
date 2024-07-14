@@ -15,6 +15,7 @@ using CloudCrafter.Core.Services.Domain.Servers;
 using CloudCrafter.Core.Services.Domain.Users;
 using CloudCrafter.Domain;
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Domain.Entities.Jobs;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,6 +46,7 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<IUsersService, UsersService>()
             .AddScoped<IServersService, ServersService>()
+            .AddScoped<IServerConnectivityService, ServerConnectivityService>()
             .AddScoped<IProjectsService, ProjectsService>()
             .AddScoped<IDeploymentService, DeploymentService>();
 
@@ -54,6 +56,8 @@ public static class ApplicationServiceExtensions
         services.AddScoped<BackgroundJobFactory>();
         
         // TODO: Find with reflection each IBaseJob
+        
+        
         services.AddScoped<ConnectivityCheckBackgroundJob>();
         services.AddScoped<IJobCreationStrategy<ConnectivityCheckBackgroundJob, Server>, ConnectivityCheckCreationStrategy>();
 

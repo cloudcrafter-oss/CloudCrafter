@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using CloudCrafter.Core.Jobs.Servers;
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Domain.Entities.Jobs;
 
 namespace CloudCrafter.Core.Jobs.Creation;
 
@@ -22,6 +23,7 @@ public class ConnectivityCheckCreationStrategy : IJobCreationStrategy<Connectivi
             {
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
+                Result = ServerConnectivityCheckResult.Unknown,
                 Id = Guid.NewGuid(),
                 Server = parameter
             }

@@ -1,11 +1,12 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Jobs.Creation;
 using CloudCrafter.Core.Jobs.Logger;
 using CloudCrafter.Core.Jobs.Servers;
 using CloudCrafter.Domain.Entities;
 using Hangfire;
-using Hangfire.Processing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using BackgroundJob = CloudCrafter.Domain.Entities.BackgroundJob;
@@ -42,13 +43,16 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
         }
     }
 
-    [JobDisplayName("{0}")]
+    [JobDisplayName("{1}")]
     public async Task ExecuteJobAsync(Guid backgroundJobId, BackgroundJobType jobType)
     {
         using var scope = sp.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
 
-        var backgroundJob = await dbContext.Jobs.FindAsync(backgroundJobId);
+        var backgroundJob = await dbContext.Jobs
+            .Include(x => x.ServerConnectivityCheckJob)
+            .ThenInclude(x => x != null ? x.Server : null)
+            .FirstOrDefaultAsync(x => x.Id == backgroundJobId);
         if (backgroundJob == null)
         {
             throw new ArgumentException("Background job not found", nameof(backgroundJobId));
@@ -56,6 +60,7 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
 
         var loggerFactory = new BackgroundJobLoggerFactory(backgroundJob, dbContext);
 
+        var stopwatch = Stopwatch.StartNew();
         try
         {
             backgroundJob.Status = BackgroundJobStatus.Running;
@@ -72,7 +77,7 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
             }
 
             backgroundJob.Status = BackgroundJobStatus.Completed;
-            backgroundJob.CompletedAt = DateTime.UtcNow;
+           
         }
         catch (Exception ex)
         {
@@ -82,6 +87,9 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
         }
         finally
         { 
+            stopwatch.Stop();
+            backgroundJob.RunningTime = stopwatch.ElapsedMilliseconds;
+            backgroundJob.CompletedAt = DateTime.UtcNow;
             await dbContext.SaveChangesAsync();
         }
     }

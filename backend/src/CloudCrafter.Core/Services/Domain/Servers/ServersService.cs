@@ -19,24 +19,5 @@ public class ServersService(IServerRepository repository) : IServersService
         return repository.GetServer(id);
     }
 
-    public async Task<EngineServerModel> GetDeploymentEngineModelForServerAsync(Guid serverId)
-    {
-        Server server = await repository.GetServerEntityOrFail(serverId);
-
-        if (string.IsNullOrEmpty(server.SshUsername) || string.IsNullOrEmpty(server.SshPrivateKey))
-        {
-            throw new ArgumentException("Server SSH username or private key is not set");
-        }
-
-        EngineServerModel engineModel = new()
-        {
-            Host = server.IpAddress,
-            Username = server.SshUsername,
-            Port = server.SshPort,
-            SshKey = server.SshPrivateKey
-        };
-
-        return engineModel;
-
-    }
+  
 }

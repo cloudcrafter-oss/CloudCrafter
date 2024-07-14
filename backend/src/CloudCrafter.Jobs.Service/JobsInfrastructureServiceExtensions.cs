@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Jobs.Service.Jobs.Context.Deployments;
+﻿using System.Runtime.Intrinsics.Arm;
+using CloudCrafter.Jobs.Service.Jobs.Context.Deployments;
 using Hangfire;
 using Hangfire.Console;
 using Hangfire.Redis.StackExchange;
@@ -22,6 +23,7 @@ public static class JobsInfrastructureServiceExtensions
             hangfireConfig.UseRedisStorage(connectionString,
                 new RedisStorageOptions { Prefix = "cloudCrafter:", Db = 0, FetchTimeout = TimeSpan.FromSeconds(1) });
 
+            
             hangfireConfig.UseFilter(new LogEverythingAttribute());
 
 

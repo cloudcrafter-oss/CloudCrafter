@@ -6,7 +6,7 @@ public class CloudCrafterEngineManagerFactory :ICloudCrafterEngineManagerFactory
 {
     public CloudCrafterEngineManager CreateFromModel(EngineServerModel model)
     {
-        throw new NotImplementedException();
+        return new CloudCrafterEngineManager(model);
     }
 }
 
