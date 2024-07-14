@@ -53,7 +53,7 @@ public class ConnectivityCheckBackgroundJobTest : BaseTestFixture
 
         job.RunningTime.Should().BeGreaterThan(1);
         job.ServerConnectivityCheckJob.TimeTakenMs.Should().BeGreaterThan(1);
-        job.Logs.Where(x => string.IsNullOrEmpty(x.Exception)).ToList().Count.Should().Be(0);
+        job.Logs.Where(x => !string.IsNullOrEmpty(x.Exception)).ToList().Count.Should().Be(0);
         job.Logs.Count.Should().BeGreaterThan(0);
     }
 
@@ -93,6 +93,6 @@ public class ConnectivityCheckBackgroundJobTest : BaseTestFixture
 
         job.RunningTime.Should().BeGreaterThan(1);
         job.ServerConnectivityCheckJob.TimeTakenMs.Should().BeGreaterThan(1);
-        job.Logs.Where(x => string.IsNullOrEmpty(x.Exception)).ToList().Count.Should().BeGreaterThan(0);
+        job.Logs.Where(x => !string.IsNullOrEmpty(x.Exception)).ToList().Count.Should().BeGreaterThan(0);
     }
 }
