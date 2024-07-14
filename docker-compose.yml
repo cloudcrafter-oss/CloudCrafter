@@ -11,6 +11,17 @@ services:
       - pgdata:/var/lib/postgresql/data
     ports:
       - '5432:5432'
+  
+  postgres-tests:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: cloudcrafter
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: cloudcrafter-tests
+    volumes:
+      - pgdata-testing:/var/lib/postgresql/data
+    ports:
+      - '5678:5432'
 
   test-host:
     build:
@@ -25,6 +36,12 @@ services:
     image: redis:alpine
     ports:
       - '6379:6379'
+  redis-tests:
+    image: redis:alpine
+    ports:
+      - '6380:6379'
 volumes:
   pgdata:
+    driver: local
+  pgdata-testing:
     driver: local

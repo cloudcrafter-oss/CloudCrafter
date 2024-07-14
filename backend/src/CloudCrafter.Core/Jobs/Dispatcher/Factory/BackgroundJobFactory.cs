@@ -24,11 +24,12 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
         {
             var backgroundJob = await strategy.CreateJobAsync(parameters);
 
+
             context.Jobs.Add(backgroundJob);
             await context.SaveChangesAsync();
 
             var hangfireJobId = client.Enqueue(() => ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type));
-            
+
             backgroundJob.HangfireJobId = hangfireJobId;
             await context.SaveChangesAsync();
 
@@ -36,8 +37,9 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
 
             return hangfireJobId;
         }
-        catch
+        catch (Exception ex)
         {
+            Console.WriteLine(ex);
             await transaction.RollbackAsync();
             throw;
         }
@@ -77,7 +79,6 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
             }
 
             backgroundJob.Status = BackgroundJobStatus.Completed;
-           
         }
         catch (Exception ex)
         {
@@ -86,7 +87,7 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
             logger.LogError(ex, "Job execution failed");
         }
         finally
-        { 
+        {
             stopwatch.Stop();
             backgroundJob.RunningTime = stopwatch.ElapsedMilliseconds;
             backgroundJob.CompletedAt = DateTime.UtcNow;
@@ -110,4 +111,3 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
         await job.ExecuteAsync(backgroundJob, parameter, loggerFactory);
     }
 }
-

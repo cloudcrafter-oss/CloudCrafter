@@ -2,24 +2,24 @@ using System.Data.Common;
 using Ardalis.SharedKernel;
 using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Data;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Npgsql;
 using NSubstitute;
 using Respawn;
+using Respawn.Graph;
 using Testcontainers.PostgreSql;
 using Testcontainers.Redis;
 
-namespace CloudCrafter.FunctionalTests.Database;
+namespace CloudCrafter.FunctionalTests.Database.Testcontainers;
 
 public class TestContainersTestDatabase : ITestDatabase
 {
     private readonly PostgreSqlContainer _postgreSqlContainer;
+    private readonly RedisContainer _redisContainer;
     private DbConnection _connection = null!;
     private string _connectionString = null!;
     private Respawner _respawner = null!;
-    private readonly RedisContainer _redisContainer;
 
     public TestContainersTestDatabase()
     {
@@ -45,14 +45,14 @@ public class TestContainersTestDatabase : ITestDatabase
             .Options;
 
         var _fakeEventDispatcher = Substitute.For<IDomainEventDispatcher>();
-        
+
 
         // inject IOptions<CloudCrafterConfig> into AppDbContext
-        var cloudCrafterOptions = Microsoft.Extensions.Options.Options.Create(new CloudCrafterConfig()
+        var cloudCrafterOptions = Options.Create(new CloudCrafterConfig
         {
             AppKey = "this-is-some-dummy-testing-value"
         });
-        
+
         var context = new AppDbContext(options, _fakeEventDispatcher, cloudCrafterOptions);
 
         context.Database.Migrate();
@@ -60,8 +60,7 @@ public class TestContainersTestDatabase : ITestDatabase
         _respawner = await Respawner.CreateAsync(_connection,
             new RespawnerOptions
             {
-                DbAdapter = DbAdapter.Postgres,
-                TablesToIgnore = new Respawn.Graph.Table[] { "__EFMigrationsHistory" }
+                DbAdapter = DbAdapter.Postgres, TablesToIgnore = new Table[] { "__EFMigrationsHistory" }
             });
     }
 

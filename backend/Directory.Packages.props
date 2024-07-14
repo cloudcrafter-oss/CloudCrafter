@@ -64,5 +64,6 @@
     <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.14"/>
     <PackageVersion Include="Hangfire.Redis.StackExchange" Version="1.9.3"/>
     <PackageVersion Include="Hangfire.Console" Version="1.4.3"/>
+    <PackageVersion Include="Hangfire.InMemory" Version="0.10.3"/>
   </ItemGroup>
 </Project>

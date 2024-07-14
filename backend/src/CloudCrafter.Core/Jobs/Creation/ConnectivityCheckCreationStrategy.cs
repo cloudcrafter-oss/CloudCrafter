@@ -18,18 +18,16 @@ public class ConnectivityCheckCreationStrategy : IJobCreationStrategy<Connectivi
             SerializedArguments = JsonSerializer.Serialize(parameter),
             HangfireJobId = string.Empty,
             Type = BackgroundJobType.ServerConnectivityCheck,
-            
-            ServerConnectivityCheckJob = new ()
+            ServerConnectivityCheckJob = new ServerConnectivityCheckJob
             {
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 Result = ServerConnectivityCheckResult.Unknown,
                 Id = Guid.NewGuid(),
-                Server = parameter
+                ServerId = parameter.Id
             }
         };
 
         return Task.FromResult(backgroundJob);
-
     }
 }

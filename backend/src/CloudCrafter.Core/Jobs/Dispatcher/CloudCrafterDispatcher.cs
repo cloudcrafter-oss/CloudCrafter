@@ -6,9 +6,9 @@ namespace CloudCrafter.Core.Jobs.Dispatcher;
 
 public class CloudCrafterDispatcher(BackgroundJobFactory jobFactory) : ICloudCrafterDispatcher
 {
-    public async Task EnqueueConnectivityCheck(Server server)
+    public async Task<string> EnqueueConnectivityCheck(Server server)
     {
-        await jobFactory.CreateAndEnqueueJobAsync<ConnectivityCheckBackgroundJob, Server>(server);
+        return await jobFactory.CreateAndEnqueueJobAsync<ConnectivityCheckBackgroundJob, Server>(server);
     }
 
     public async Task EnqueueConnectivityCheck(List<Server> servers)
