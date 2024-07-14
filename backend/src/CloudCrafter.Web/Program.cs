@@ -69,6 +69,8 @@ app.SeedDatabase();
 
 app.UseHangfireDashboard();
 
+app.ConfigureRecurringJobs();
+
 
 app.Run();
 

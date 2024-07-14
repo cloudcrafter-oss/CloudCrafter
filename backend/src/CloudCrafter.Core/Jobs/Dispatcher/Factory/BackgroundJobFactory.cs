@@ -27,7 +27,7 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
 
             context.Jobs.Add(backgroundJob);
             await context.SaveChangesAsync();
-
+            
             var hangfireJobId = client.Enqueue(() => ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type));
 
             backgroundJob.HangfireJobId = hangfireJobId;

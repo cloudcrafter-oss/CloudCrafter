@@ -17,13 +17,25 @@ using CloudCrafter.Domain;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Domain.Entities.Jobs;
 using FluentValidation;
+using Hangfire;
 using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CloudCrafter.Core;
 
 public static class ApplicationServiceExtensions
 {
+    public static IApplicationBuilder ConfigureRecurringJobs(
+        this IApplicationBuilder app)
+    {
+
+        RecurringJob.AddOrUpdate<ICloudCrafterRecurringJobsDispatcher>(
+            "5m-recurring-connectivity-checks",
+            service => service.AddRecurringConnectivityChecks(),
+            "*/5 * * * *");
+        return app;
+    }
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         var mapperAssemblies = new List<Assembly> { Assembly.GetExecutingAssembly(), typeof(IDomainTarget).Assembly };
@@ -53,6 +65,7 @@ public static class ApplicationServiceExtensions
         // Jobs
 
         services.AddScoped<ICloudCrafterDispatcher, CloudCrafterDispatcher>();
+        services.AddScoped<ICloudCrafterRecurringJobsDispatcher, CloudCrafterRecurringJobsDispatcher>();
         services.AddScoped<BackgroundJobFactory>();
         
         // TODO: Find with reflection each IBaseJob
