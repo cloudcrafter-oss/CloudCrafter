@@ -1,9 +1,9 @@
 ﻿using CloudCrafter.Core;
+using CloudCrafter.DeploymentEngine.Remote;
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Logging;
-using CloudCrafter.Jobs.Actions;
-using CloudCrafter.Jobs.Infrastructure;
+using CloudCrafter.Jobs.Service;
 using CloudCrafter.Web;
 using CloudCrafter.Web.Infrastructure;
 using Hangfire;
@@ -16,6 +16,7 @@ Log.Logger = LoggingConfiguration.GetLogger();
 
 Log.Information("Starting CloudCrafter");
 
+builder.Services.AddEngineInfrastructure();
 builder.Services.AddCloudCrafterLogging(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration)
@@ -23,6 +24,7 @@ builder.Services.AddInfrastructureServices(builder.Configuration)
 builder.Services.AddWebServices();
 builder.Services.AddSwaggerServices();
 builder.Services.AddJobInfrastructure(builder.Configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -67,6 +69,7 @@ app.SeedDatabase();
 
 app.UseHangfireDashboard();
 
+app.ConfigureRecurringJobs();
 
 
 app.Run();

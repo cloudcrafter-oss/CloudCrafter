@@ -15,6 +15,7 @@ public static class FakerInstances
     public static Faker<Server> ServerFaker => new Faker<Server>()
         .StrictMode(true)
         .RuleFor(x => x.Id, Guid.NewGuid)
+        .RuleFor(x => x.SshPort, f => f.Random.Number(22, 2000))
         .RuleFor(x => x.Name, f => $"Server {f.Person.FirstName}")
         .RuleFor(x => x.IpAddress, f => f.Internet.Ip())
         .RuleFor(x => x.SshUsername, "root")
@@ -26,6 +27,16 @@ public static class FakerInstances
         .StrictMode(true)
         .RuleFor(x => x.Id, Guid.NewGuid)
         .RuleFor(x => x.Name, f => $"Project {f.Person.FirstName}")
+        .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+        .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    
+    public static Faker<Application> ApplicationFaker => new Faker<Application>()
+        .StrictMode(true)
+        .RuleFor(x => x.Id, Guid.NewGuid)
+        .RuleFor(x => x.Name, f => $"Application {f.Person.FirstName}")
+        .RuleFor(x => x.Server, ServerFaker.Generate())
+        .RuleFor(x => x.Project, ProjectFaker.Generate())
+        .RuleFor(x => x.Deployments, f => new ())
         .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
         .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 

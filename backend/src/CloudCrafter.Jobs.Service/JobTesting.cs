@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Jobs.Actions;
+﻿using CloudCrafter.Jobs.Service.Jobs;
 using Hangfire;
 using Hangfire.Console;
 using Hangfire.Server;
@@ -9,26 +9,11 @@ public static class JobTesting
 {
     public static void Fire()
     {
-        BackgroundJob.Enqueue<TestDeploymentJob>(job => job.RunAsync(null, new DeploymentArgs()
-        {
-            Id = Guid.NewGuid()
-        }));
-        BackgroundJob.Enqueue<TestDeploymentJob>(job => job.RunAsync(null, new DeploymentArgs()
-        {
-            Id = Guid.NewGuid()
-        }));
-        BackgroundJob.Enqueue<TestDeploymentJob>(job => job.RunAsync(null, new DeploymentArgs()
-        {
-            Id = Guid.NewGuid()
-        }));
-        BackgroundJob.Enqueue<TestDeploymentJob>(job => job.RunAsync(null, new DeploymentArgs()
-        {
-            Id = Guid.NewGuid()
-        }));
-        BackgroundJob.Enqueue<TestDeploymentJob>(job => job.RunAsync(null, new DeploymentArgs()
-        {
-            Id = Guid.NewGuid()
-        }));
+        BackgroundJob.Enqueue<TestDeploymentJob>(job => job.RunAsync(null, new DeploymentArgs { Id = Guid.NewGuid() }));
+        BackgroundJob.Enqueue<TestDeploymentJob>(job => job.RunAsync(null, new DeploymentArgs { Id = Guid.NewGuid() }));
+        BackgroundJob.Enqueue<TestDeploymentJob>(job => job.RunAsync(null, new DeploymentArgs { Id = Guid.NewGuid() }));
+        BackgroundJob.Enqueue<TestDeploymentJob>(job => job.RunAsync(null, new DeploymentArgs { Id = Guid.NewGuid() }));
+        BackgroundJob.Enqueue<TestDeploymentJob>(job => job.RunAsync(null, new DeploymentArgs { Id = Guid.NewGuid() }));
     }
 
     public static void FireFailJob()

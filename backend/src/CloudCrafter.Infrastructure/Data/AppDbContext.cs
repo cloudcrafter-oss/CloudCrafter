@@ -8,6 +8,7 @@ using EntityFrameworkCore.EncryptColumn.Extensions;
 using EntityFrameworkCore.EncryptColumn.Util;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Options;
 
 namespace CloudCrafter.Infrastructure.Data;
@@ -29,6 +30,9 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     public DbSet<UserRefreshToken> UserRefreshTokens => Set<UserRefreshToken>();
     public DbSet<Server> Servers => Set<Server>();
     public DbSet<Project> Projects => Set<Project>();
+    public DbSet<Application> Applications => Set<Application>();
+    public DbSet<Deployment> Deployments => Set<Deployment>();
+    public DbSet<BackgroundJob> Jobs => Set<BackgroundJob>();
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
@@ -50,16 +54,22 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
 
         return result;
     }
+    
+
+    public override int SaveChanges()
+    {
+        return SaveChangesAsync().GetAwaiter().GetResult();
+    }
+
+    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+    {
+        return Database.BeginTransactionAsync(cancellationToken);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         modelBuilder.UseEncryption(_encryptionProvider);
-    }
-
-    public override int SaveChanges()
-    {
-        return SaveChangesAsync().GetAwaiter().GetResult();
     }
 }

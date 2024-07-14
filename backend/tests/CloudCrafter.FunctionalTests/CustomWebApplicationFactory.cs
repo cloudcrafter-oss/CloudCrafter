@@ -1,8 +1,7 @@
 ﻿using System.Data.Common;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Infrastructure.Data;
-using CloudCrafter.Infrastructure.Identity;
-using DotNet.Testcontainers.Builders;
+using Hangfire;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -10,15 +9,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Moq;
-using Respawn;
-using Testcontainers.PostgreSql;
-using Xunit;
 
 namespace CloudCrafter.FunctionalTests;
 
 using static Testing;
+
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly DbConnection _postgreSqlConnection;
@@ -32,8 +28,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
 
     /// <summary>
-    /// Overriding CreateHost to avoid creating a separate ServiceProvider per this thread:
-    /// https://github.com/dotnet-architecture/eShopOnWeb/issues/465
+    ///     Overriding CreateHost to avoid creating a separate ServiceProvider per this thread:
+    ///     https://github.com/dotnet-architecture/eShopOnWeb/issues/465
     /// </summary>
     /// <param name="builder"></param>
     /// <returns></returns>
@@ -46,7 +42,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         // Get service provider. 
         var serviceProvider = host.Services;
 
-        
 
         return host;
     }
@@ -59,21 +54,35 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             {
                 new KeyValuePair<string, string?>("ConnectionStrings:RedisConnection", _redisConnectionString)
             });
-
         });
         builder
             .ConfigureServices(services =>
             {
+                // Hangfire context
+                GlobalConfiguration.Configuration.UseInMemoryStorage();
+                services.AddHangfire(config => config.UseInMemoryStorage());
+                services.AddHangfireServer(options =>
+                {
+                    options.WorkerCount = 1; // Ensure jobs are processed immediately
+                });
                 // Configure test dependencies here
                 services.RemoveDbContext<AppDbContext>();
-               
+
+                services.RemoveAll<IApplicationDbContext>();
 
                 services.AddDbContext<AppDbContext>(options =>
                 {
                     options.UseNpgsql(_postgreSqlConnection);
                 });
 
-                
+                services.AddScoped<IApplicationDbContext>(provider =>
+                {
+                    var ctx = provider.GetRequiredService<AppDbContext>();
+                    return ctx;
+                });
+                services.AddScoped<ApplicationDbContextInitialiser>();
+
+
                 services
                     .RemoveAll<IUser>()
                     .AddTransient(provider => Mock.Of<IUser>(s => s.Id == GetUserId()));
