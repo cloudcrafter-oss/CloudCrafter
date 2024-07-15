@@ -3,6 +3,7 @@ using System;
 using CloudCrafter.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CloudCrafter.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240715163738_AddApplicationSource")]
+    partial class AddApplicationSource
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -561,28 +564,6 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("ApplicationId");
-
-                            b1.OwnsOne("CloudCrafter.Domain.Entities.ApplicationSourceGit", "Git", b2 =>
-                                {
-                                    b2.Property<Guid>("ApplicationSourceApplicationId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<string>("Branch")
-                                        .HasColumnType("text");
-
-                                    b2.Property<string>("Repository")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.HasKey("ApplicationSourceApplicationId");
-
-                                    b2.ToTable("Applications");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("ApplicationSourceApplicationId");
-                                });
-
-                            b1.Navigation("Git");
                         });
 
                     b.Navigation("Project");
