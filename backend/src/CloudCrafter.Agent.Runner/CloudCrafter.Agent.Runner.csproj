@@ -12,5 +12,8 @@
 
   <ItemGroup>
     <PackageReference Include="YamlDotNet"/>
+    <PackageReference Include="MediatR"/>
+    <PackageReference Include="Microsoft.Extensions.Hosting"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
   </ItemGroup>
 </Project>

@@ -16,4 +16,8 @@
     <PackageReference Include="Microsoft.Extensions.Hosting"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Commands\Runner\"/>
+  </ItemGroup>
 </Project>
