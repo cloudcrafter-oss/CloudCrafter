@@ -11,6 +11,8 @@ public class DeploymentService(ISender sender)
     {
         var context = new DeploymentContext(recipe);
 
+        await sender.Send(new CreateAndWriteArtifacts.Query(context));
+        
         foreach (var step in recipe.BuildOptions.Steps)
         {
             await sender.Send(new ExecuteBuildStepCommand.Query(step, context));

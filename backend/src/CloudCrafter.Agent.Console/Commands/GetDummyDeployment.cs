@@ -11,10 +11,13 @@ public static class GetDummyDeployment
     {
         public Task<DeploymentRecipe> Handle(Query request, CancellationToken cancellationToken)
         {
+            var random = new Random();
+            var randomString = new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
             var recipe = new DeploymentRecipe
             {
                 Name = "My Application",
-                Destination = new DeploymentRecipeDestination { RootDirectory = "/root/directory" },
+                Destination = new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" + randomString },
                 Source = new DeploymentRecipeSource
                 {
                     Git = new DeploymentSourceGit
