@@ -3,6 +3,8 @@
 using CloudCrafter.Agent.Models.Deployment;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Runner;
+using CloudCrafter.Agent.Runner.DeploymentLogPump;
+using CloudCrafter.Agent.Runner.DeploymentLogPump.Implementation;
 using CloudCrafter.Agent.Runner.IO;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
@@ -17,6 +19,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
         {
             services.AddKeyedTransient<IDeploymentStep, CheckoutGitRepositoryStep>(DeploymentBuildStepType
                 .FetchGitRepository);
+            services.AddSingleton<IMessagePump, MessagePump>();
             services.AddSingleton<IDeploymentStepFactory, DeploymentStepFactory>();
 
             services.AddTransient<DeploymentService>();
@@ -37,3 +40,5 @@ var recipe = await mediator.Send(new GetDummyDeployment.Query());
 var deploymentService = host.Services.GetRequiredService<DeploymentService>();
 
 await deploymentService.DeployAsync(recipe);
+
+var pump = host.Services.GetRequiredService<IMessagePump>();
