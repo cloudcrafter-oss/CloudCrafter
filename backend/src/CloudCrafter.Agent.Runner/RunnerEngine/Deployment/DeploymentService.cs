@@ -17,5 +17,7 @@ public class DeploymentService(ISender sender)
         {
             await sender.Send(new ExecuteBuildStepCommand.Query(step, context));
         }
+
+        await sender.Send(new CleanupArtifactsDirectory.Query(context));
     }
 }
