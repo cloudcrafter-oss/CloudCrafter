@@ -5,5 +5,6 @@ namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 
 public interface IDeploymentStepFactory
 {
-    IDeploymentStep CreateStep(DeploymentBuildStepType stepType);
+    IDeploymentStepHandler<TParams> CreateHandler<TParams>(DeploymentBuildStepType type);
+    IDeploymentStepConfig<TParams> GetConfig<TParams>(DeploymentBuildStepType type);
 }

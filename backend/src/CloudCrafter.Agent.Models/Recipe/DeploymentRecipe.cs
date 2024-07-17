@@ -34,10 +34,12 @@ public class DeploymentBuildStep
     public required string Name { get; init; }
     public required string Description { get; init; }
     public required DeploymentBuildStepType Type { get; init; }
+    public required Dictionary<string, object> Params { get; init; }
 }
 
 public enum DeploymentBuildStepType
 {
     FetchGitRepository,
+    BuildDockerImageWithNixpacks,
     BuildDockerImage
 }

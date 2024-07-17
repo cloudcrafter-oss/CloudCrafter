@@ -1,6 +1,7 @@
 ﻿using CloudCrafter.Agent.Console.Commands;
 
 using CloudCrafter.Agent.Models.Deployment;
+using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Runner;
 using CloudCrafter.Agent.Runner.Cli;
@@ -9,6 +10,7 @@ using CloudCrafter.Agent.Runner.DeploymentLogPump.Implementation;
 using CloudCrafter.Agent.Runner.IO;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
+using CloudCrafter.Agent.Runner.Validators;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,8 +20,10 @@ static IHostBuilder CreateHostBuilder(string[] args)
     return Host.CreateDefaultBuilder(args)
         .ConfigureServices((hostContext, services) =>
         {
-            services.AddKeyedTransient<IDeploymentStep, CheckoutGitRepositoryStep>(DeploymentBuildStepType
-                .FetchGitRepository);
+          
+            services.AddTransient<IDeploymentStepHandler<GitCheckoutParams>, CheckoutGitRepositoryStepHandler>();
+            services.AddTransient<IDeploymentStepConfig<GitCheckoutParams>, GitCheckoutConfig>();
+            
             services.AddSingleton<IMessagePump, MessagePump>();
             services.AddTransient<ICommandExecutor, CommandExecutor>();
             services.AddSingleton<IDeploymentStepFactory, DeploymentStepFactory>();
@@ -43,4 +47,8 @@ var deploymentService = host.Services.GetRequiredService<DeploymentService>();
 
 await deploymentService.DeployAsync(recipe);
 
+var writer = new YamlRecipeWriter(recipe);
+
+var yaml = writer.WriteString();
+Console.Write(yaml);
 var pump = host.Services.GetRequiredService<IMessagePump>();

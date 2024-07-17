@@ -3,7 +3,7 @@ using CloudCrafter.Agent.Models.Runner;
 
 namespace CloudCrafter.Agent.Models.Deployment;
 
-public interface IDeploymentStep
+public interface IDeploymentStepHandler<TParams>
 {
-    Task ExecuteAsync(DeploymentBuildStep step, DeploymentContext context);
+    Task ExecuteAsync(TParams paramseters, DeploymentContext context);
 }

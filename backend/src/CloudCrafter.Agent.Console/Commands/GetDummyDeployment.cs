@@ -33,7 +33,12 @@ public static class GetDummyDeployment
                         {
                             Name = "Fetch git",
                             Description = "Fetch the git application",
-                            Type = DeploymentBuildStepType.FetchGitRepository
+                            Type = DeploymentBuildStepType.FetchGitRepository,
+                            Params = new()
+                            {
+                                { "repo", "git@github.com:Thijmen/thijmen.dev.git"},
+                                { "branch", "main" }
+                            }
                         }
                     }
                 }
