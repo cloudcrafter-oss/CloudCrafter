@@ -1,5 +1,6 @@
 ﻿using CliWrap;
 using CloudCrafter.Agent.Models.Deployment;
+using CloudCrafter.Agent.Models.Deployment.Steps;
 using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
@@ -8,6 +9,7 @@ using CloudCrafter.Agent.Runner.DeploymentLogPump;
 
 namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
 
+[DeploymentStep(DeploymentBuildStepType.FetchGitRepository)]
 public class CheckoutGitRepositoryStepHandler(IMessagePump pump, ICommandExecutor executor) : IDeploymentStepHandler<GitCheckoutParams>
 {
     private readonly IDeploymentLogger Logger = pump.CreateLogger<CheckoutGitRepositoryStepHandler>();

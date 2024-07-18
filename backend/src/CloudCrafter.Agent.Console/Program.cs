@@ -20,10 +20,11 @@ static IHostBuilder CreateHostBuilder(string[] args)
     return Host.CreateDefaultBuilder(args)
         .ConfigureServices((hostContext, services) =>
         {
-          
-            services.AddTransient<IDeploymentStepHandler<GitCheckoutParams>, CheckoutGitRepositoryStepHandler>();
-            services.AddTransient<IDeploymentStepConfig<GitCheckoutParams>, GitCheckoutConfig>();
-            
+
+            services.AddDeploymentStepsConfig();
+            // services.AddTransient<IDeploymentStepHandler<GitCheckoutParams>, CheckoutGitRepositoryStepHandler>();
+            // services.AddTransient<IDeploymentStepConfig<GitCheckoutParams>, GitCheckoutConfig>();
+            //
             services.AddSingleton<IMessagePump, MessagePump>();
             services.AddTransient<ICommandExecutor, CommandExecutor>();
             services.AddSingleton<IDeploymentStepFactory, DeploymentStepFactory>();

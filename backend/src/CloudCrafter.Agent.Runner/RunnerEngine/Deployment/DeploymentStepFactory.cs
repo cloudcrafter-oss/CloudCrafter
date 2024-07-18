@@ -9,23 +9,21 @@ public class DeploymentStepFactory(IServiceProvider serviceProvider) : IDeployme
 {
     public IDeploymentStepHandler<TParams> CreateHandler<TParams>(DeploymentBuildStepType type)
     {
-        return type switch
+        var handler = serviceProvider.GetKeyedService<IDeploymentStepHandler<TParams>>(type);
+        if (handler == null)
         {
-            DeploymentBuildStepType.FetchGitRepository => serviceProvider
-                .GetRequiredService<IDeploymentStepHandler<GitCheckoutParams>>() as IDeploymentStepHandler<TParams>,
-            _ => throw new ArgumentException($"Unknown step type: {type}")
-        } ?? throw new InvalidOperationException(
-            $"Handler for step type {type} is not assignable to IStepHandler<{typeof(TParams).Name}>");
+            throw new InvalidOperationException($"No handler registered for step type {type} with params type {typeof(TParams).Name}");
+        }
+        return handler;
     }
 
     public IDeploymentStepConfig<TParams> GetConfig<TParams>(DeploymentBuildStepType type)
     {
-        return type switch
+        var config = serviceProvider.GetKeyedService<IDeploymentStepConfig<TParams>>(type);
+        if (config == null)
         {
-            DeploymentBuildStepType.FetchGitRepository => serviceProvider
-                .GetRequiredService<IDeploymentStepConfig<GitCheckoutParams>>() as IDeploymentStepConfig<TParams>,
-            _ => throw new ArgumentException($"Unknown step type: {type}")
-        } ?? throw new InvalidOperationException(
-            $"Config for step type {type} is not assignable to IStepConfig<{typeof(TParams).Name}>");
+            throw new InvalidOperationException($"No config registered for step type {type} with params type {typeof(TParams).Name}");
+        }
+        return config;
     }
 }

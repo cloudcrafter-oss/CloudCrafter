@@ -32,6 +32,13 @@ public static class GetDummyDeployment
                                 { "repo", "git@github.com:Thijmen/thijmen.dev.git"},
                                 { "commit", "HEAD" }
                             }
+                        },
+                        new()
+                        {
+                            Name = "Determine Buildpack",
+                            Description = "Determine the buildpack",
+                            Type = DeploymentBuildStepType.NixpacksDetermineBuildPack,
+                            Params = new()
                         }
                     }
                 }

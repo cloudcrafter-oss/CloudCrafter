@@ -39,6 +39,7 @@ public class DeploymentBuildStep
 public enum DeploymentBuildStepType
 {
     FetchGitRepository,
+    NixpacksDetermineBuildPack,
     BuildDockerImageWithNixpacks,
     BuildDockerImage
 }
