@@ -43,5 +43,11 @@ public class MessagePump(ILoggerFactory loggerFactory) : IMessagePump
             _pump.AddLogEntry(typeof(T), text);
             _logger.LogInformation(text);
         }
+
+        public void LogException(Exception exception, string message)
+        {
+            _logger.LogCritical(exception, message);
+            _pump.AddLogEntry(typeof(T), message); // TODO: Set exception somewhere
+        }
     }
 }

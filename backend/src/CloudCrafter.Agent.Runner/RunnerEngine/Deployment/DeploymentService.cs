@@ -1,21 +1,32 @@
 ﻿using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
+using CloudCrafter.Agent.Runner.DeploymentLogPump;
 using CloudCrafter.Agent.Runner.MediatR.Commands;
+using FluentValidation;
 using MediatR;
 
 namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 
-public class DeploymentService(ISender sender)
+public class DeploymentService(ISender sender, IMessagePump pump)
 {
+    private readonly IDeploymentLogger Logger = pump.CreateLogger<DeploymentService>();
     public async Task DeployAsync(DeploymentRecipe recipe)
     {
         var context = new DeploymentContext(recipe);
 
         await sender.Send(new CreateAndWriteArtifacts.Query(context));
-        
-        foreach (var step in recipe.BuildOptions.Steps)
+
+        try
         {
-            await sender.Send(new ExecuteBuildStepCommand.Query(step, context));
+            foreach (var step in recipe.BuildOptions.Steps)
+            {
+                await sender.Send(new ExecuteBuildStepCommand.Query(step, context));
+            }
+        }
+        catch (ValidationException ex)
+        {
+            var firstError = ex.Errors.FirstOrDefault()?.ErrorMessage;
+            Logger.LogException(ex, $"Validation error occurred during deployment: {firstError}");
         }
 
         await sender.Send(new CleanupArtifactsDirectory.Query(context));

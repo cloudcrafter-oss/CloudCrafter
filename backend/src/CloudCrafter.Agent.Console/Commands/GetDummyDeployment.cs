@@ -18,13 +18,6 @@ public static class GetDummyDeployment
             {
                 Name = "My Application",
                 Destination = new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" + randomString },
-                Source = new DeploymentRecipeSource
-                {
-                    Git = new DeploymentSourceGit
-                    {
-                        Repository = "git@github.com:Thijmen/thijmen.dev.git", Commit = "HEAD"
-                    }
-                },
                 BuildOptions = new DeploymentBuildOptions
                 {
                     Steps = new List<DeploymentBuildStep>
@@ -37,7 +30,7 @@ public static class GetDummyDeployment
                             Params = new()
                             {
                                 { "repo", "git@github.com:Thijmen/thijmen.dev.git"},
-                                { "branch", "main" }
+                                { "commit", "HEAD" }
                             }
                         }
                     }

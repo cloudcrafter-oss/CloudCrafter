@@ -3,7 +3,6 @@
 public class DeploymentRecipe
 {
     public required string Name { get; init; }
-    public required DeploymentRecipeSource Source { get; init; }
     public required DeploymentRecipeDestination Destination { get; init; }
     public required DeploymentBuildOptions BuildOptions { get; init; }
 }
