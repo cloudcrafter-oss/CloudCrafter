@@ -10,9 +10,10 @@ namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 public class DeploymentService(ISender sender, IMessagePump pump)
 {
     private readonly IDeploymentLogger Logger = pump.CreateLogger<DeploymentService>();
-    public async Task DeployAsync(DeploymentRecipe recipe)
+
+    public async Task DeployAsync(DeploymentRecipe recipe, bool dryRun = false)
     {
-        var context = new DeploymentContext(recipe);
+        var context = new DeploymentContext(recipe, dryRun);
 
         await sender.Send(new CreateAndWriteArtifacts.Query(context));
 
@@ -30,5 +31,10 @@ public class DeploymentService(ISender sender, IMessagePump pump)
         }
 
         await sender.Send(new CleanupArtifactsDirectory.Query(context));
+    }
+
+    public Task ValidateRecipe(DeploymentRecipe recipe)
+    {
+        return DeployAsync(recipe, true);
     }
 }

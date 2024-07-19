@@ -2,26 +2,28 @@
 using CloudCrafter.Agent.Models.Deployment;
 using CloudCrafter.Agent.Models.Deployment.Steps;
 using CloudCrafter.Agent.Models.Recipe;
+using CloudCrafter.Agent.Runner.Cli;
+using CloudCrafter.Agent.Runner.Cli.Helpers;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CloudCrafter.Agent.Runner;
 
-public static  class ExtensionMethods
+public static class ExtensionMethods
 {
     public static IServiceCollection AddDeploymentStepsConfig(this IServiceCollection services)
     {
         var assembly = typeof(IAgentRunnerTarget).Assembly;
-        
-        
+
+
         var handlerTypes = assembly.GetTypes()
-            .Where(t => t.GetInterfaces().Any(i => 
-                i.IsGenericType && 
+            .Where(t => t.GetInterfaces().Any(i =>
+                i.IsGenericType &&
                 i.GetGenericTypeDefinition() == typeof(IDeploymentStepHandler<>)));
 
         var configTypes = assembly.GetTypes()
-            .Where(t => t.GetInterfaces().Any(i => 
-                i.IsGenericType && 
+            .Where(t => t.GetInterfaces().Any(i =>
+                i.IsGenericType &&
                 i.GetGenericTypeDefinition() == typeof(IDeploymentStepConfig<>)));
 
         foreach (var handlerType in handlerTypes)
@@ -40,9 +42,12 @@ public static  class ExtensionMethods
             services.AddKeyedTransient(interfaceType, stepType, configType);
         }
 
+        services.AddTransient<INixpacksHelper, NixpacksHelper>();
+        services.AddTransient<ICommandParser, CommandParser>();
+
         return services;
     }
-    
+
     private static DeploymentBuildStepType GetDeploymentBuildStepType(Type type)
     {
         var attribute = type.GetCustomAttribute<DeploymentStepAttribute>();
@@ -50,6 +55,7 @@ public static  class ExtensionMethods
         {
             throw new InvalidOperationException($"Type {type.Name} is missing DeploymentStepAttribute");
         }
+
         return attribute.StepType;
     }
 }

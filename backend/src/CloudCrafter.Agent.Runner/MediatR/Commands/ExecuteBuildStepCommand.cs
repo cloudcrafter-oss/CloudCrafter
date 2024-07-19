@@ -2,7 +2,6 @@
 using System.Text.Json;
 using CloudCrafter.Agent.Models;
 using CloudCrafter.Agent.Models.Deployment.Steps;
-using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
@@ -54,8 +53,15 @@ public static class ExecuteBuildStepCommand
             var config = factory.GetConfig<TParams>(step.Type);
             var handler = factory.CreateHandler<TParams>(step.Type);
 
-            var paramObject = ConvertAndValidateParams<TParams>(step.Params, config.Validator);
-            await handler.ExecuteAsync(paramObject, context);
+            var paramObject = ConvertAndValidateParams(step.Params, config.Validator);
+            if (context.IsDryRun)
+            {
+                await handler.DryRun(paramObject, context);
+            }
+            else
+            {
+                await handler.ExecuteAsync(paramObject, context);
+            }
         }
 
         private TParams ConvertAndValidateParams<TParams>(Dictionary<string, object> parameters,
@@ -63,7 +69,7 @@ public static class ExecuteBuildStepCommand
         {
             var jsonString = JsonSerializer.Serialize(parameters);
 
-            JsonSerializerOptions options = new JsonSerializerOptions()
+            var options = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase, WriteIndented = true
             };

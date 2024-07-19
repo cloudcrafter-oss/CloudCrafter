@@ -1,9 +1,9 @@
-﻿using CloudCrafter.Agent.Models.Recipe;
-using CloudCrafter.Agent.Models.Runner;
+﻿using CloudCrafter.Agent.Models.Runner;
 
 namespace CloudCrafter.Agent.Models.Deployment;
 
-public interface IDeploymentStepHandler<TParams>
+public interface IDeploymentStepHandler<in TParams>
 {
-    Task ExecuteAsync(TParams paramseters, DeploymentContext context);
+    Task ExecuteAsync(TParams parameters, DeploymentContext context);
+    Task DryRun(TParams parameters, DeploymentContext context);
 }

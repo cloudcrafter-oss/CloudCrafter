@@ -12,17 +12,6 @@ public class DeploymentRecipeDestination
     public required string RootDirectory { get; init; }
 }
 
-public class DeploymentRecipeSource
-{
-    public DeploymentSourceGit? Git { get; init; }
-}
-
-public class DeploymentSourceGit
-{
-    public required string Repository { get; init; }
-    public required string Commit { get; init; }
-}
-
 public class DeploymentBuildOptions
 {
     public required List<DeploymentBuildStep> Steps { get; init; }

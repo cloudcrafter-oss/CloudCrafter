@@ -10,7 +10,7 @@ public static class CreateAndWriteArtifacts
 
     private class Handler(IMessagePump pump) : IRequestHandler<Query>
     {
-        private readonly IDeploymentLogger Logger = pump.CreateLogger<CreateAndWriteArtifacts.Handler>();
+        private readonly IDeploymentLogger Logger = pump.CreateLogger<Handler>();
 
         public Task Handle(Query request, CancellationToken cancellationToken)
         {
@@ -18,9 +18,12 @@ public static class CreateAndWriteArtifacts
 
             var workingDir = request.Context.GetWorkingDirectory();
 
-            if (!Directory.Exists(workingDir))
+            if (!request.Context.IsDryRun)
             {
-                Directory.CreateDirectory(workingDir);
+                if (!Directory.Exists(workingDir))
+                {
+                    Directory.CreateDirectory(workingDir);
+                }
             }
 
             Logger.LogInfo($"Directory '{workingDir}' created");

@@ -2,5 +2,5 @@
 
 public interface ICommandExecutor
 {
-    Task ExecuteAsync(string command, string arguments);
+    Task<ExecutorResult> ExecuteAsync(string command, IEnumerable<string> arguments);
 }

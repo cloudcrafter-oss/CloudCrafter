@@ -17,7 +17,8 @@ public static class GetDummyDeployment
             var recipe = new DeploymentRecipe
             {
                 Name = "My Application",
-                Destination = new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" + randomString },
+                Destination =
+                    new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" + randomString },
                 BuildOptions = new DeploymentBuildOptions
                 {
                     Steps = new List<DeploymentBuildStep>
@@ -29,7 +30,7 @@ public static class GetDummyDeployment
                             Type = DeploymentBuildStepType.FetchGitRepository,
                             Params = new()
                             {
-                                { "repo", "git@github.com:Thijmen/thijmen.dev.git"},
+                                { "repo", "git@github.com:cloudcrafter-oss/demo-examples.git" },
                                 { "commit", "HEAD" }
                             }
                         },
@@ -38,7 +39,7 @@ public static class GetDummyDeployment
                             Name = "Determine Buildpack",
                             Description = "Determine the buildpack",
                             Type = DeploymentBuildStepType.NixpacksDetermineBuildPack,
-                            Params = new()
+                            Params = new Dictionary<string, object> { { "path", "nixpacks-node-server" } }
                         }
                     }
                 }
