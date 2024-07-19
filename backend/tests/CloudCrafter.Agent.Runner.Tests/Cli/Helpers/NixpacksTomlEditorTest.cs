@@ -14,6 +14,20 @@ public class NixpacksTomlEditorTest
 
         return Verify(toml);
     }
+    
+    [Test]
+    public Task ShouldBeAbleToAddPackagesMultipleTimes()
+    {
+        var editor = new NixpacksTomlEditor(GetNixpacksTomlWithNoAptPkgs());
+        editor.AddPackages(["wget"]);
+        editor.AddPackages(["curl"]);
+        editor.AddPackages(["firefox"]);
+
+        var toml = editor.GetToml();
+
+        return Verify(toml);
+    }
+
 
     [Test]
     public Task ShouldBeAbleToAddPackagesToExistingAptPkgs()

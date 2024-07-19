@@ -55,6 +55,9 @@ public static class GetDummyDeployment
                             Description = "Alter plan",
                             Type = DeploymentBuildStepType.NixpacksAlterPlan,
                             Params = new Dictionary<string, object>()
+                            {
+                                { "packages", new List<string> { "iputils-ping" } }
+                            }
                         }
                     }
                 }

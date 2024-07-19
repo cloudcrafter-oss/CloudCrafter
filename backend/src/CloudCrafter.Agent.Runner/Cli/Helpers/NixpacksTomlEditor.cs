@@ -24,7 +24,7 @@ public class NixpacksTomlEditor
             var packagesToAdd = from zz in packages
                 where !aptPkgs.Contains(zz)
                 select zz;
-            
+
             foreach (var package in packagesToAdd)
             {
                 aptPkgs.Add(package);
@@ -32,7 +32,14 @@ public class NixpacksTomlEditor
         }
         else
         {
-            setupTable.Add("aptPkgs", packages);
+            var aptPackagesTable = new TomlArray();
+
+            foreach (var package in packages)
+            {
+                aptPackagesTable.Add(package);
+            }
+
+            setupTable.Add("aptPkgs", aptPackagesTable);
         }
     }
 

@@ -27,8 +27,17 @@ public class NixpacksAlterPlanHandler(IMessagePump pump)
             throw new DeploymentException("Nixpacks plan not found.");
         }
 
-        var tomlEditor = new NixpacksTomlEditor(plan);
+        var editor = new NixpacksTomlEditor(plan);
 
+
+        var packagesToAdd = parameters.Packages;
+        editor.AddPackages(packagesToAdd);
+        editor.AddPackages(["curl", "wget"]);
+
+        var toml = editor.GetToml();
+
+        context.SetRecipeResult(RecipeResultKeys.NixpacksBuildPlan, toml);
+        
         return Task.CompletedTask;
     }
 
