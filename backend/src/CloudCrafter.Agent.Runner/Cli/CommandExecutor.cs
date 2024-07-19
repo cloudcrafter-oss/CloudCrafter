@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Text;
 using CliWrap;
+using CliWrap.EventStream;
+using CloudCrafter.Agent.Models.Exceptions;
 
 namespace CloudCrafter.Agent.Runner.Cli;
 
@@ -10,7 +12,7 @@ public class CommandExecutor : ICommandExecutor
     {
         var stdOutBuffer = new StringBuilder();
         var stdErrBuffer = new StringBuilder();
-        
+
         try
         {
             var result = await CliWrap.Cli.Wrap(command)
@@ -30,24 +32,68 @@ public class CommandExecutor : ICommandExecutor
         }
         catch (Win32Exception ex) when (ex.NativeErrorCode == 2)
         {
-            return new ExecutorResult
-            {
-                StdErr = $"Command not found: {command}",
-                ExitCode = -1,
-                IsSuccess = false
-            };
+            return new ExecutorResult { StdErr = $"Command not found: {command}", ExitCode = -1, IsSuccess = false };
         }
         catch (Exception ex)
         {
-            return new ExecutorResult
+            return new ExecutorResult { StdErr = $"An error occurred: {ex.Message}", ExitCode = -1, IsSuccess = false };
+        }
+    }
+
+    public async Task<ExecutorResult> ExecuteWithStreamAsync(string command, IEnumerable<string> arguments,
+        Action<ExecutorStreamResult>? onLog = null)
+    {
+        try
+        {
+            var cmd = CliWrap.Cli.Wrap(command)
+                .WithArguments(arguments);
+            var stdOutBuffer = new StringBuilder();
+            var stdErrBuffer = new StringBuilder();
+
+            int? exitCode = null;
+            await foreach (var cmdEvent in cmd.ListenAsync())
             {
-                StdErr = $"An error occurred: {ex.Message}",
-                ExitCode = -1,
-                IsSuccess = false
+                switch (cmdEvent)
+                {
+                    case StandardOutputCommandEvent stdOut:
+                        onLog?.Invoke(new ExecutorStreamResult(false, stdOut.Text));
+                        stdOutBuffer.AppendLine(stdOut.Text);
+                        break;
+                    case StandardErrorCommandEvent stdErr:
+                        onLog?.Invoke(new ExecutorStreamResult(true, stdErr.Text));
+                        stdErrBuffer.AppendLine(stdErr.Text);
+                        break;
+                    case ExitedCommandEvent exited:
+                        exitCode = exited.ExitCode;
+                        break;
+                }
+            }
+
+            if (!exitCode.HasValue)
+            {
+                throw new DeploymentException($"Cannot find exit code for command {command}");
+            }
+
+            return new ExecutorResult()
+            {
+                ExitCode = exitCode.Value,
+                IsSuccess = exitCode.Value == 0,
+                StdErr = stdErrBuffer.ToString(),
+                StdOut = stdOutBuffer.ToString()
             };
+        }
+        catch (Win32Exception ex) when (ex.NativeErrorCode == 2)
+        {
+            return new ExecutorResult { StdErr = $"Command not found: {command}", ExitCode = -1, IsSuccess = false };
+        }
+        catch (Exception ex)
+        {
+            return new ExecutorResult { StdErr = $"An error occurred: {ex.Message}", ExitCode = -1, IsSuccess = false };
         }
     }
 }
+
+public record ExecutorStreamResult(bool IsStdErr, string Log);
 
 public class ExecutorResult
 {

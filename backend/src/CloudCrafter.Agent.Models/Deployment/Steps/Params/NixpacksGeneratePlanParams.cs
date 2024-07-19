@@ -3,7 +3,7 @@
 namespace CloudCrafter.Agent.Models.Deployment.Steps.Params;
 
 [DeploymentStep(DeploymentBuildStepType.NixpacksGeneratePlan)]
-public class NixpacksGeneratePlanParams
+// ReSharper disable once ClassNeverInstantiated.Global
+public class NixpacksGeneratePlanParams : NixpacksBaseParams
 {
-    public string Path { get; set; } = string.Empty;
 }

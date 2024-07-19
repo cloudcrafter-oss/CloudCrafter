@@ -31,5 +31,6 @@ public enum DeploymentBuildStepType
     NixpacksDetermineBuildPack,
     NixpacksGeneratePlan,
     NixpacksAlterPlan,
-    NixpacksWritePlanToFileSystem
+    NixpacksWritePlanToFileSystem,
+    NixpacksBuildDockerImage
 }

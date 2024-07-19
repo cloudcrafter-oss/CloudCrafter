@@ -1,9 +1,11 @@
 using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Agent.Runner.Cli.Helpers;
 
-public class NixpacksHelper(ICommandExecutor executor, ICommandParser parser) : INixpacksHelper
+public class NixpacksHelper(ICommandExecutor executor, ICommandParser parser, ILogger<NixpacksHelper> logger)
+    : INixpacksHelper
 {
     private const string NixpacksExecutable = "nixpacks";
 
@@ -39,6 +41,56 @@ public class NixpacksHelper(ICommandExecutor executor, ICommandParser parser) : 
         var parsedResult = parser.ParseSingleOutput(result.StdOut);
 
         return parsedResult;
+    }
+
+    public async Task<ExecutorResult> BuildDockerImage(string planPath, string workDir, string imageName)
+    {
+        await EnsureNixpacksInstalled();
+
+        var result = await executor.ExecuteAsync(NixpacksExecutable,
+        [
+            "build",
+            "-c",
+            planPath,
+            "--no-cache", // TODO: Abstract to config in the future
+            "--no-error-without-start", // TODO: What does this mean?
+            "-n",
+            imageName,
+            workDir,
+            "-o",
+            workDir
+        ]);
+
+        if (!result.IsSuccess)
+        {
+            throw new DeploymentException("Could not export Nixpacks docker image to directory.");
+        }
+
+       
+        var dockerBuild = await executor.ExecuteWithStreamAsync("docker", [
+            "build",
+            "--network",
+            "host",
+            "--no-cache", // TODO: Make this an option
+            "-f",
+            $"{workDir}/.nixpacks/Dockerfile", // TODO: Add build args
+            "--progress",
+            "plain",
+            "-t",
+            imageName,
+            workDir
+        ], streamResult =>
+        {
+            // TODO: Make sure to stream this somewhere... 
+            logger.LogInformation(streamResult.Log);
+        });
+
+        if (!dockerBuild.IsSuccess)
+        {
+            throw new DeploymentException("Could not build docker image from Nixpacks plan.");
+        }
+
+        return dockerBuild;
     }
 
     private async Task EnsureNixpacksInstalled()

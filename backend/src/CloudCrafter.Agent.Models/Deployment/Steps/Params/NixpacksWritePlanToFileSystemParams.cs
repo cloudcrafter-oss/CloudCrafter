@@ -3,7 +3,8 @@
 namespace CloudCrafter.Agent.Models.Deployment.Steps.Params;
 
 [DeploymentStep(DeploymentBuildStepType.NixpacksWritePlanToFileSystem)]
-public class NixpacksWritePlanToFileSystemParams
+// ReSharper disable once ClassNeverInstantiated.Global
+public class NixpacksWritePlanToFileSystemParams : NixpacksBaseParams
 {
     
 }

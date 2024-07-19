@@ -29,6 +29,9 @@ public class NixpacksWritePlanToFileSystemHandler(IMessagePump pump, IFileSystem
         
         var planPath = context.GetWorkingDirectory() + "/nixpacks-plan.toml";
         await fileSystemHelper.WriteFile(planPath, plan);
+
+        context.SetRecipeResult(RecipeResultKeys.NixpacksTomlLocation, planPath);
+        
         
         _logger.LogInfo($"Successfully wrote Nixpacks plan to '{planPath}'");
     }

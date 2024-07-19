@@ -54,17 +54,27 @@ public static class GetDummyDeployment
                             Name = "Alter plan",
                             Description = "Alter plan",
                             Type = DeploymentBuildStepType.NixpacksAlterPlan,
-                            Params = new Dictionary<string, object>()
-                            {
-                                { "packages", new List<string> { "iputils-ping" } }
-                            }
+                            Params =
+                                new Dictionary<string, object>() { { "packages", new List<string> { "iputils-ping" } } }
                         },
                         new()
                         {
                             Name = "Write plan to filesystem",
                             Description = "Write plan to filesystem",
                             Type = DeploymentBuildStepType.NixpacksWritePlanToFileSystem,
+                            Params = new() { { "path", "nixpacks-node-server" } }
+                        },
+                        new()
+                        {
+                            Name = "Build Nixpacks docker image",
+                            Description = "Builds Nixpacks docker image",
+                            Type = DeploymentBuildStepType.NixpacksBuildDockerImage,
                             Params = new()
+                            {
+                                { "path", "nixpacks-node-server" },
+                                { "image", "custom-image" },
+                                { "tag", randomString }
+                            }
                         }
                     }
                 }
