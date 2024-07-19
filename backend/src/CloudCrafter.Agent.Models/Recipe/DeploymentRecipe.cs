@@ -29,6 +29,5 @@ public enum DeploymentBuildStepType
 {
     FetchGitRepository,
     NixpacksDetermineBuildPack,
-    BuildDockerImageWithNixpacks,
-    BuildDockerImage
+    NixpacksGeneratePlan
 }

@@ -28,17 +28,25 @@ public static class GetDummyDeployment
                             Name = "Fetch git",
                             Description = "Fetch the git application",
                             Type = DeploymentBuildStepType.FetchGitRepository,
-                            Params = new()
-                            {
-                                { "repo", "git@github.com:cloudcrafter-oss/demo-examples.git" },
-                                { "commit", "HEAD" }
-                            }
+                            Params =
+                                new Dictionary<string, object>
+                                {
+                                    { "repo", "https://github.com/cloudcrafter-oss/demo-examples.git" },
+                                    { "commit", "HEAD" }
+                                }
                         },
                         new()
                         {
                             Name = "Determine Buildpack",
                             Description = "Determine the buildpack",
                             Type = DeploymentBuildStepType.NixpacksDetermineBuildPack,
+                            Params = new Dictionary<string, object> { { "path", "nixpacks-node-server" } }
+                        },
+                        new()
+                        {
+                            Name = "Generate Build plan",
+                            Description = "Generate the build plan",
+                            Type = DeploymentBuildStepType.NixpacksGeneratePlan,
                             Params = new Dictionary<string, object> { { "path", "nixpacks-node-server" } }
                         }
                     }

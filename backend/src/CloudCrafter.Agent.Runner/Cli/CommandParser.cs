@@ -4,6 +4,11 @@ public class CommandParser : ICommandParser
 {
     public string ParseSingleOutput(string output)
     {
-        return output.Replace("\n", string.Empty);
+        if (output.EndsWith("\n"))
+        {
+            output = output.Substring(0, output.Length - 1);
+        }
+
+        return output;
     }
 }
