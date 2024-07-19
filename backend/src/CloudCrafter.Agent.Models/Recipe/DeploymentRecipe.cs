@@ -30,5 +30,6 @@ public enum DeploymentBuildStepType
     FetchGitRepository,
     NixpacksDetermineBuildPack,
     NixpacksGeneratePlan,
-    NixpacksAlterPlan
+    NixpacksAlterPlan,
+    NixpacksWritePlanToFileSystem
 }

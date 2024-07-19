@@ -58,6 +58,13 @@ public static class GetDummyDeployment
                             {
                                 { "packages", new List<string> { "iputils-ping" } }
                             }
+                        },
+                        new()
+                        {
+                            Name = "Write plan to filesystem",
+                            Description = "Write plan to filesystem",
+                            Type = DeploymentBuildStepType.NixpacksWritePlanToFileSystem,
+                            Params = new()
                         }
                     }
                 }

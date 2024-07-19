@@ -43,7 +43,8 @@ public static class ExtensionMethods
         }
 
         services.AddTransient<INixpacksHelper, NixpacksHelper>();
-        services.AddTransient<ICommandParser, CommandParser>();
+        services.AddTransient<ICommandParser, CommandParser>()
+            .AddTransient<IFileSystemHelper, FileSystemHelper>();
 
         return services;
     }
