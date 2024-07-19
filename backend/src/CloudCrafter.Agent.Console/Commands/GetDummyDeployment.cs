@@ -48,6 +48,13 @@ public static class GetDummyDeployment
                             Description = "Generate the build plan",
                             Type = DeploymentBuildStepType.NixpacksGeneratePlan,
                             Params = new Dictionary<string, object> { { "path", "nixpacks-node-server" } }
+                        },
+                        new()
+                        {
+                            Name = "Alter plan",
+                            Description = "Alter plan",
+                            Type = DeploymentBuildStepType.NixpacksAlterPlan,
+                            Params = new Dictionary<string, object>()
                         }
                     }
                 }

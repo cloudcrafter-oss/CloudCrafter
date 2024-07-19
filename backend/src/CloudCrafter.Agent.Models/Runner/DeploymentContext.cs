@@ -21,6 +21,11 @@ public class DeploymentContext(DeploymentRecipe recipe, bool dryRun = false)
 
     public T GetRecipeResult<T>(string stepName)
     {
+        if (!_recipeResults.ContainsKey(stepName))
+        {
+            throw new KeyNotFoundException($"Recipe result with key '{stepName}' not found");
+        }
+
         return (T)_recipeResults[stepName];
     }
 }
