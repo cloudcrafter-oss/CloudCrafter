@@ -12,6 +12,8 @@ public class DeploymentRecipe
 public class DeploymentRecipeDockerComposeOptions
 {
     public string? Base64DockerCompose { get; set; }
+    public string? DockerComposeDirectory { get; set; }
+
 }
 public class DeploymentRecipeDestination
 {

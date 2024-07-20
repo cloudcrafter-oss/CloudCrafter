@@ -44,6 +44,8 @@ public class DeploymentRecipeDockerComposeOptionsValidator : AbstractValidator<D
     {
         RuleFor(x => x.Base64DockerCompose).NotEmpty()
             .Must(BeValidBase64).WithMessage("Docker Compose must be a valid base64 string");
+
+        RuleFor(x => x.DockerComposeDirectory).NotEmpty();
     }
     
     private bool BeValidBase64(string? base64String)

@@ -29,6 +29,7 @@ public class DeploymentService(ISender sender, IMessagePump pump)
         {
             var firstError = ex.Errors.FirstOrDefault()?.ErrorMessage;
             Logger.LogException(ex, $"Validation error occurred during deployment: {firstError}");
+            throw;
         }
 
         await sender.Send(new CleanupArtifactsDirectory.Query(context));

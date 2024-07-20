@@ -31,7 +31,13 @@ public static class GetDummyDeployment
                 Destination =
                     new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" + imageTag },
                 DockerComposeOptions =
-                    new DeploymentRecipeDockerComposeOptions { Base64DockerCompose = dockerComposeBase64 },
+                    new DeploymentRecipeDockerComposeOptions
+                    {
+                        Base64DockerCompose = dockerComposeBase64,
+                        // In production envs, this will have the application stack guid in it
+                        DockerComposeDirectory =
+                            "/tmp/cloudcrafter-data/my-application"
+                    },
                 BuildOptions = new DeploymentBuildOptions
                 {
                     Steps = new List<DeploymentBuildStep>
@@ -89,6 +95,13 @@ public static class GetDummyDeployment
                                 { "tag", imageTag },
                                 { "disableCache", true }
                             }
+                        },
+                        new()
+                        {
+                            Name = "Write docker compose file",
+                            Description = "Write docker compose file",
+                            Type = DeploymentBuildStepType.DockerComposeWriteToFileSystem,
+                            Params = new() { { "dockerComposeFile", "docker-compose.yml" } }
                         }
                     }
                 }

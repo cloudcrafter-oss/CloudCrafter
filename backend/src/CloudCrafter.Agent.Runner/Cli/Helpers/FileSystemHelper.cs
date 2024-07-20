@@ -6,4 +6,14 @@ public class FileSystemHelper : IFileSystemHelper
     {
         return File.WriteAllTextAsync(file, contents);
     }
+
+    public Task EnsureDirectoryExists(string directory)
+    {
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+
+        return Task.CompletedTask;
+    }
 }
