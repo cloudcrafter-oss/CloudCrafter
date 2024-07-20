@@ -1,25 +1,21 @@
 ﻿using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.DockerCompose.Engine.Yaml;
+using CloudCrafter.Shared.Utils;
 using MediatR;
 
 namespace CloudCrafter.Agent.Console.Commands;
 
 public static class GetDummyDeployment
 {
-    public record Query : IRequest<DeploymentRecipe>;
+    public record Query(string ImageRepository, string ImageTag) : IRequest<DeploymentRecipe>;
 
     private class Handler : IRequestHandler<Query, DeploymentRecipe>
     {
         public Task<DeploymentRecipe> Handle(Query request, CancellationToken cancellationToken)
         {
-            var random = new Random();
-            var randomString = new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
+            var imageRepository = request.ImageRepository;
+            var imageTag = request.ImageTag;
 
-
-            var imageRepository = "custom-image";
-            var imageTag = randomString;
-            
             var dockerComposeEditor = new DockerComposeEditor();
 
             var service = dockerComposeEditor.AddService("frontend");
@@ -27,18 +23,15 @@ public static class GetDummyDeployment
             service.AddExposedPort(3000, 3000);
 
             var dockerComposeBase64 = dockerComposeEditor.ToBase64();
-            
-            
-            
+
+
             var recipe = new DeploymentRecipe
             {
                 Name = "My Application",
                 Destination =
-                    new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" + randomString },
-                DockerComposeOptions = new()
-                {
-                    Base64DockerCompose = dockerComposeBase64
-                },
+                    new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" + imageTag },
+                DockerComposeOptions =
+                    new DeploymentRecipeDockerComposeOptions { Base64DockerCompose = dockerComposeBase64 },
                 BuildOptions = new DeploymentBuildOptions
                 {
                     Steps = new List<DeploymentBuildStep>
@@ -75,24 +68,24 @@ public static class GetDummyDeployment
                             Description = "Alter plan",
                             Type = DeploymentBuildStepType.NixpacksAlterPlan,
                             Params =
-                                new Dictionary<string, object>() { { "packages", new List<string> { "iputils-ping" } } }
+                                new Dictionary<string, object> { { "packages", new List<string> { "iputils-ping" } } }
                         },
                         new()
                         {
                             Name = "Write plan to filesystem",
                             Description = "Write plan to filesystem",
                             Type = DeploymentBuildStepType.NixpacksWritePlanToFileSystem,
-                            Params = new() { { "path", "nixpacks-node-server" } }
+                            Params = new Dictionary<string, object> { { "path", "nixpacks-node-server" } }
                         },
                         new()
                         {
                             Name = "Build Nixpacks docker image",
                             Description = "Builds Nixpacks docker image",
                             Type = DeploymentBuildStepType.NixpacksBuildDockerImage,
-                            Params = new()
+                            Params = new Dictionary<string, object>
                             {
                                 { "path", "nixpacks-node-server" },
-                                { "image", imageRepository},
+                                { "image", imageRepository },
                                 { "tag", imageTag }
                             }
                         }

@@ -44,7 +44,11 @@ public class Program
             DeploymentRecipe? recipe = null;
             if (demoOptionValue)
             {
-                recipe = await mediator.Send(new GetDummyDeployment.Query());
+                var random = new Random();
+                var randomString = new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10)
+                    .Select(s => s[random.Next(s.Length)]).ToArray());
+
+                recipe = await mediator.Send(new GetDummyDeployment.Query("custom-image", randomString));
             }
 
             if (recipe == null)

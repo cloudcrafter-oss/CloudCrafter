@@ -1,9 +1,9 @@
 ﻿using CloudCrafter.Agent.Console.Commands;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
+using CloudCrafter.Shared.Utils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using YamlDotNet.Serialization.ObjectGraphVisitors;
 
 namespace CloudCrafter.Agent.Console.IntegrationTests.DummyDeployment;
 
@@ -20,7 +20,7 @@ public class SuccessfulDummyDeploymentTest
 
 
         var mediator = host.Services.GetRequiredService<IMediator>();
-        _recipe = await mediator.Send(new GetDummyDeployment.Query());
+        _recipe = await mediator.Send(new GetDummyDeployment.Query("custom-image", "testing"));
 
         _deploymentService = host.Services.GetRequiredService<DeploymentService>();
     }
@@ -46,7 +46,7 @@ public class SuccessfulDummyDeploymentTest
 
         repository.Should().NotBeNull();
         tag.Should().NotBeNull();
-        
+
         var fullImage = $"{repository}:{tag}";
 
         var dummyDockerCompose = GetDummyEditor(repository!, tag!);
@@ -57,13 +57,14 @@ public class SuccessfulDummyDeploymentTest
 
         var base64Yaml = dummyDockerCompose.ToBase64();
 
-        _recipe.DockerComposeOptions = new() { Base64DockerCompose = base64Yaml };
-        
+        _recipe.DockerComposeOptions = new DeploymentRecipeDockerComposeOptions { Base64DockerCompose = base64Yaml };
+
+        await _deploymentService.ValidateRecipe(_recipe);
+
         await _deploymentService.DeployAsync(_recipe);
 
         // it at least should not throw an exception
         true.Should().BeTrue();
-
 
 
         await ShouldHaveDockerImage(fullImage);
