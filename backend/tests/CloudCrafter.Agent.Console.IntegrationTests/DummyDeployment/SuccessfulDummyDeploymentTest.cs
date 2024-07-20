@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CloudCrafter.Agent.Console.IntegrationTests.DummyDeployment;
 
-public class SuccessfullDummyDeploymentTest
+public class SuccessfulDummyDeploymentTest
 {
     private DeploymentService _deploymentService;
     private DeploymentRecipe _recipe;
