@@ -1,4 +1,5 @@
-﻿using CloudCrafter.DockerCompose.Engine.Exceptions;
+﻿using System.Text;
+using CloudCrafter.DockerCompose.Engine.Exceptions;
 using CloudCrafter.DockerCompose.Engine.Yaml;
 using FluentAssertions;
 
@@ -188,7 +189,50 @@ networks:
         isValid.Should().BeTrue();
         
         await Verify(yaml);
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToAddPortsToServiceWhichHasExistingPorts()
+    {
+        var service = _editor.Service("web");
+
+        service.AddExposedPort(443, 443);
+
+        var isValid = await _editor.IsValid();
+
+        isValid.Should().Be(true);
+
+        var yaml = _editor.GetYaml();
+
+        await Verify(yaml);
+    }
+
+    
+    [Test]
+    public async Task ShouldBeAbleToAddPortsToServiceWhichHasNoExistingPorts()
+    {
+        var service = _editor.Service("db");
+
+        service.AddExposedPort(3306, 3306);
+        service.AddExposedPort(3307, 3307);
+        var isValid = await _editor.IsValid();
+
+        isValid.Should().Be(true);
+
+        var yaml = _editor.GetYaml();
+
+        await Verify(yaml);
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToRetrieveBase64EncodedYaml()
+    {
+        var base64 = _editor.ToBase64();
+        await Verify(base64);
         
+        // Decode base64
+        var decodedBase64 = Encoding.UTF8.GetString(Convert.FromBase64String(base64));
+        decodedBase64.Should().Be(_editor.GetYaml());
     }
 
 }

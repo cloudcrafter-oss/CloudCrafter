@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CloudCrafter.Agent.Runner\CloudCrafter.Agent.Runner.csproj"/>
+    <ProjectReference Include="..\engine\CloudCrafter.DockerCompose.Engine\CloudCrafter.DockerCompose.Engine.csproj" />
   </ItemGroup>
 
   <ItemGroup>

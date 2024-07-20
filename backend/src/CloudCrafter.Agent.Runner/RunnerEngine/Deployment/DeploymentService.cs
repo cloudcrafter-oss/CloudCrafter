@@ -2,6 +2,7 @@
 using CloudCrafter.Agent.Models.Runner;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
 using CloudCrafter.Agent.Runner.MediatR.Commands;
+using CloudCrafter.Agent.Runner.Validators;
 using FluentValidation;
 using MediatR;
 
@@ -33,8 +34,12 @@ public class DeploymentService(ISender sender, IMessagePump pump)
         await sender.Send(new CleanupArtifactsDirectory.Query(context));
     }
 
-    public Task ValidateRecipe(DeploymentRecipe recipe)
+    public async Task ValidateRecipe(DeploymentRecipe recipe)
     {
-        return DeployAsync(recipe, true);
+        var validator = new DeploymentRecipeValidator();
+        
+        await validator.ValidateAndThrowAsync(recipe);
+        
+        await DeployAsync(recipe, true);
     }
 }

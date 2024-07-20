@@ -1,4 +1,5 @@
-﻿using CloudCrafter.DockerCompose.Engine.Exceptions;
+﻿using System.Text;
+using CloudCrafter.DockerCompose.Engine.Exceptions;
 using CloudCrafter.DockerCompose.Engine.Validator;
 using YamlDotNet.RepresentationModel;
 
@@ -82,6 +83,13 @@ public class DockerComposeEditor
 
         return new NetworkEditor(this, networkName);
 
+    }
+
+    public string ToBase64()
+    {
+        var yaml = GetYaml();
+        var bytes = Encoding.UTF8.GetBytes(yaml);
+        return Convert.ToBase64String(bytes);
     }
 
     public string GetYaml()
@@ -247,6 +255,26 @@ public class DockerComposeEditor
             }
 
             networks.Add(new YamlScalarNode(network.GetNetworkName()));
+
+            return this;
+        }
+
+        public ServiceEditor AddExposedPort(int hostPort, int containerPort)
+        {
+            var serviceNode = editor.GetServiceNode(serviceName);
+
+            YamlSequenceNode ports;
+            if (!serviceNode!.Children.ContainsKey("ports"))
+            {
+                ports = new YamlSequenceNode();
+                serviceNode.Add("ports", ports);
+            }
+            else
+            {
+                ports = (YamlSequenceNode)serviceNode["ports"];
+            }
+            
+            ports.Add(new YamlScalarNode($"{hostPort}:{containerPort}"));
 
             return this;
         }

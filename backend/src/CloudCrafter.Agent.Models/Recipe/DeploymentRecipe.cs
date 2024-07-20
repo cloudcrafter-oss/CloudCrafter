@@ -3,10 +3,16 @@
 public class DeploymentRecipe
 {
     public required string Name { get; init; }
+    public DeploymentRecipeDockerComposeOptions? DockerComposeOptions { get; set; }
     public required DeploymentRecipeDestination Destination { get; init; }
     public required DeploymentBuildOptions BuildOptions { get; init; }
 }
 
+
+public class DeploymentRecipeDockerComposeOptions
+{
+    public string? Base64DockerCompose { get; set; }
+}
 public class DeploymentRecipeDestination
 {
     public required string RootDirectory { get; init; }

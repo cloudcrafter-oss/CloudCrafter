@@ -3,6 +3,7 @@ using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using YamlDotNet.Serialization.ObjectGraphVisitors;
 
 namespace CloudCrafter.Agent.Console.IntegrationTests.DummyDeployment;
 
@@ -36,11 +37,6 @@ public class SuccessfulDummyDeploymentTest
     [Test]
     public async Task ShouldBeAbleToDeployRecipe()
     {
-        await _deploymentService.DeployAsync(_recipe);
-
-        // it at least should not throw an exception
-        true.Should().BeTrue();
-
         var nixpacksDockerBuildStep = _recipe.BuildOptions.Steps.FirstOrDefault(x =>
             x.Type == DeploymentBuildStepType.NixpacksBuildDockerImage);
 
@@ -48,7 +44,27 @@ public class SuccessfulDummyDeploymentTest
         var repository = nixpacksDockerBuildStep!.Params["image"].ToString();
         var tag = nixpacksDockerBuildStep.Params["tag"].ToString();
 
+        repository.Should().NotBeNull();
+        tag.Should().NotBeNull();
+        
         var fullImage = $"{repository}:{tag}";
+
+        var dummyDockerCompose = GetDummyEditor(repository!, tag!);
+
+        var dockerComposeYaml = dummyDockerCompose.GetYaml();
+
+        await Verify(dockerComposeYaml);
+
+        var base64Yaml = dummyDockerCompose.ToBase64();
+
+        _recipe.DockerComposeOptions = new() { Base64DockerCompose = base64Yaml };
+        
+        await _deploymentService.DeployAsync(_recipe);
+
+        // it at least should not throw an exception
+        true.Should().BeTrue();
+
+
 
         await ShouldHaveDockerImage(fullImage);
     }
