@@ -57,7 +57,12 @@ public class SuccessfulDummyDeploymentTest
 
         var base64Yaml = dummyDockerCompose.ToBase64();
 
-        _recipe.DockerComposeOptions = new DeploymentRecipeDockerComposeOptions { Base64DockerCompose = base64Yaml };
+        var tmpDirectory = "/tmp/cloudcrafter-data/" + RandomGenerator.String();
+
+        _recipe.DockerComposeOptions = new DeploymentRecipeDockerComposeOptions
+        {
+            Base64DockerCompose = base64Yaml, DockerComposeDirectory = tmpDirectory
+        };
 
         await _deploymentService.ValidateRecipe(_recipe);
 

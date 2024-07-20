@@ -22,6 +22,8 @@ public static class GetDummyDeployment
             service.SetImage(imageRepository, imageTag);
             service.AddExposedPort(3000, 3000);
 
+            var randomString = RandomGenerator.String();
+
             var dockerComposeBase64 = dockerComposeEditor.ToBase64();
 
 
@@ -29,7 +31,7 @@ public static class GetDummyDeployment
             {
                 Name = "My Application",
                 Destination =
-                    new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" + imageTag },
+                    new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" + randomString },
                 DockerComposeOptions =
                     new DeploymentRecipeDockerComposeOptions
                     {
