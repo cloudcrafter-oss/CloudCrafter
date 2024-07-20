@@ -95,6 +95,9 @@ public class EmptyDockerComposeEditorTest
         serviceEditor.AddEnvironmentVariable("DEV", "1");
         serviceEditor.AddEnvironmentVariable("DB_NAME", "example");
 
+        serviceEditor.AddExposedPort(80, 80);
+        serviceEditor.AddExposedPort(443, 443);
+        
         var yaml = editor.GetYaml();
 
         return Verify(yaml);
@@ -110,7 +113,7 @@ public class EmptyDockerComposeEditorTest
         var network = editor.AddNetwork("network1");
         network.SetNetworkName("network1");
         var yaml = editor.GetYaml();
-
+        
         return Verify(yaml);
     }
 }

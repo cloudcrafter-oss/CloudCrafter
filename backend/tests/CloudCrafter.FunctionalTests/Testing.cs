@@ -135,7 +135,7 @@ public class Testing
 
         if (!result.Succeeded)
         {
-            throw new Exception($"Unable to create {userFaker.UserName}");
+            throw new Exception($"Unable to create {userFaker.UserName}, error: {string.Join(", ", result.Errors.Select(x => x.Description))}");
         }
 
         return new UsernamePasswordDto(userFaker.Email!, password);

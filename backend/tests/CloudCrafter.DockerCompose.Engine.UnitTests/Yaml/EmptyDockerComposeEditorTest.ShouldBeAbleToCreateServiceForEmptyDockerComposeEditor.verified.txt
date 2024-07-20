@@ -8,3 +8,6 @@
     environment:
       DEV: 1
       DB_NAME: example
+    ports:
+    - 80:80
+    - 443:443

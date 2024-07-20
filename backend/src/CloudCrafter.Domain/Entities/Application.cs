@@ -11,5 +11,8 @@ public class Application : IHasTimestamps
     public required DateTime CreatedAt { get; set; }
     public required DateTime UpdatedAt { get; set; }
 
-    public List<Deployment> Deployments { get; set; } = new List<Deployment>();
+    public ApplicationSource? Source { get; set; }
+
+    public List<Deployment> Deployments { get; set; } = new();
+    public List<ApplicationService> Services { get; set; } = new();
 }

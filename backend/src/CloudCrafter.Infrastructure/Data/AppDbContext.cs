@@ -33,6 +33,8 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     public DbSet<Application> Applications => Set<Application>();
     public DbSet<Deployment> Deployments => Set<Deployment>();
     public DbSet<BackgroundJob> Jobs => Set<BackgroundJob>();
+    public DbSet<ApplicationService> ApplicationServices => Set<ApplicationService>();
+    public DbSet<ApplicationServiceType> ApplicationServiceTypes => Set<ApplicationServiceType>();
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {

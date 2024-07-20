@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Sdk Name="Microsoft.Build.CentralPackageVersions" Version="2.1.3"/>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CloudCrafter.Agent.Runner\CloudCrafter.Agent.Runner.csproj"/>
+    <ProjectReference Include="..\engine\CloudCrafter.DockerCompose.Engine\CloudCrafter.DockerCompose.Engine.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR"/>
+    <PackageReference Include="System.CommandLine"/>
+    <PackageReference Include="Microsoft.Extensions.Hosting"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
+  </ItemGroup>
+</Project>

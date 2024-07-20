@@ -26,6 +26,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Install Nixpacks
+      run: curl -sSL https://nixpacks.com/install.sh | bash
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -44,8 +46,17 @@ jobs:
       if: always()
       with:
         files: |
-          test-results/**/*.trx
+          ./backend/test-results/**/*.trx
           
+    # - name: Process trx reports with default
+    #   if: always()
+    #   # You may also reference just the major or major.minor version
+    #   uses: im-open/process-dotnet-test-results@v3.0.0
+    #   with:
+    #     base-directory: ./backend/test-results
+    #     github-token: ${{ secrets.GITHUB_TOKEN }}
+    #     create-status-check: true
+    #     create-pr-comment: true
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.0.1
       if: always()

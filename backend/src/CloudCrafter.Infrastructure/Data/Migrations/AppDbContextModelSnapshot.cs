@@ -74,6 +74,59 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.ToTable("Applications");
                 });
 
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.ApplicationService", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ApplicationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ApplicationServiceTypeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.HasIndex("ApplicationServiceTypeId");
+
+                    b.ToTable("ApplicationServices");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.ApplicationServiceType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationServiceTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("6257aa7c-09f0-42c0-8417-3d0ca0ead213"),
+                            Type = "AppType"
+                        });
+                });
+
             modelBuilder.Entity("CloudCrafter.Domain.Entities.BackgroundJob", b =>
                 {
                     b.Property<Guid>("Id")
@@ -494,9 +547,68 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("CloudCrafter.Domain.Entities.ApplicationSource", "Source", b1 =>
+                        {
+                            b1.Property<Guid>("ApplicationId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<int>("Type")
+                                .HasColumnType("integer");
+
+                            b1.HasKey("ApplicationId");
+
+                            b1.ToTable("Applications");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ApplicationId");
+
+                            b1.OwnsOne("CloudCrafter.Domain.Entities.ApplicationSourceGit", "Git", b2 =>
+                                {
+                                    b2.Property<Guid>("ApplicationSourceApplicationId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<string>("Branch")
+                                        .HasColumnType("text");
+
+                                    b2.Property<string>("Repository")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.HasKey("ApplicationSourceApplicationId");
+
+                                    b2.ToTable("Applications");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("ApplicationSourceApplicationId");
+                                });
+
+                            b1.Navigation("Git");
+                        });
+
                     b.Navigation("Project");
 
                     b.Navigation("Server");
+
+                    b.Navigation("Source");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.ApplicationService", b =>
+                {
+                    b.HasOne("CloudCrafter.Domain.Entities.Application", "Application")
+                        .WithMany("Services")
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CloudCrafter.Domain.Entities.ApplicationServiceType", "Type")
+                        .WithMany()
+                        .HasForeignKey("ApplicationServiceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Application");
+
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.BackgroundJob", b =>
@@ -653,6 +765,8 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Application", b =>
                 {
                     b.Navigation("Deployments");
+
+                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.User", b =>

@@ -12,6 +12,9 @@ public interface IApplicationDbContext
     DbSet<Application> Applications { get; }
     DbSet<Deployment> Deployments { get; }
     DbSet<BackgroundJob> Jobs { get; }
+    DbSet<ApplicationService> ApplicationServices { get; }
+    DbSet<ApplicationServiceType> ApplicationServiceTypes { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     int SaveChanges();
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
