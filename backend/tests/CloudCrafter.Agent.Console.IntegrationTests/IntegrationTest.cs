@@ -5,7 +5,7 @@ namespace CloudCrafter.Agent.Console.IntegrationTests;
 public class IntegrationTest
 {
     [Test]
-    public async Task ShouldBuildDemoDeployment()
+    public async Task ShouldNotBeAbletoDeployWithoutRecipe()
     {
         string[] args = [];
 

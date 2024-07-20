@@ -63,7 +63,7 @@ public class Program
         return exitCode ?? intResult;
     }
 
-    private static IHostBuilder CreateHostBuilder(string[] args)
+    public static IHostBuilder CreateHostBuilder(string[] args)
     {
         return Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostContext, services) =>
