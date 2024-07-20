@@ -30,8 +30,11 @@ public class NixpacksBuildDockerImageHandler(IMessagePump pump, INixpacksHelper 
         var workDir = context.GetWorkingDirectory() + $"/git/{parameters.Path}";
 
         var image = $"{parameters.Image}:{parameters.Tag}";
-        var result = await nixpacksHelper.BuildDockerImage(planPath, workDir, image);
-        
+
+        var result = await nixpacksHelper.BuildDockerImage(planPath, workDir, image,
+            parameters.DisableCache.GetValueOrDefault());
+
+
         _logger.LogInfo($"Successfully built Docker image: {image}");
     }
 

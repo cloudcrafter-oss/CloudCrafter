@@ -43,47 +43,71 @@ public class NixpacksHelper(ICommandExecutor executor, ICommandParser parser, IL
         return parsedResult;
     }
 
-    public async Task<ExecutorResult> BuildDockerImage(string planPath, string workDir, string imageName)
+    public async Task<ExecutorResult> BuildDockerImage(string planPath, string workDir, string imageName,
+        bool disableCache)
     {
         await EnsureNixpacksInstalled();
 
-        var result = await executor.ExecuteAsync(NixpacksExecutable,
+
+        List<string> baseCommand =
         [
             "build",
             "-c",
             planPath,
-            "--no-cache", // TODO: Abstract to config in the future
             "--no-error-without-start", // TODO: What does this mean?
             "-n",
             imageName,
+        ];
+
+        if (!disableCache)
+        {
+            baseCommand.Add("--no-cache");
+        }
+
+        baseCommand.AddRange([
             workDir,
             "-o",
             workDir
         ]);
+
+        var result = await executor.ExecuteAsync(NixpacksExecutable,
+            baseCommand);
 
         if (!result.IsSuccess)
         {
             throw new DeploymentException("Could not export Nixpacks docker image to directory.");
         }
 
-       
-        var dockerBuild = await executor.ExecuteWithStreamAsync("docker", [
+
+        List<string> baseDockerBuildCommand =
+        [
             "build",
             "--network",
             "host",
-            "--no-cache", // TODO: Make this an option
             "-f",
             $"{workDir}/.nixpacks/Dockerfile", // TODO: Add build args
             "--progress",
             "plain",
+        ];
+
+        if (!disableCache)
+        {
+            baseDockerBuildCommand.Add("--no-cache");
+        }
+
+        baseDockerBuildCommand.AddRange([
             "-t",
             imageName,
             workDir
-        ], streamResult =>
-        {
-            // TODO: Make sure to stream this somewhere... 
-            logger.LogInformation(streamResult.Log);
-        });
+        ]);
+
+
+        var dockerBuild = await executor.ExecuteWithStreamAsync("docker",
+            baseDockerBuildCommand, streamResult =>
+            {
+                // TODO: Make sure to stream this somewhere... 
+                logger.LogInformation(streamResult.Log);
+            });
 
         if (!dockerBuild.IsSuccess)
         {

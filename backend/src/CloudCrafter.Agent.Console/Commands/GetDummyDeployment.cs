@@ -86,7 +86,8 @@ public static class GetDummyDeployment
                             {
                                 { "path", "nixpacks-node-server" },
                                 { "image", imageRepository },
-                                { "tag", imageTag }
+                                { "tag", imageTag },
+                                { "disableCache", true }
                             }
                         }
                     }
