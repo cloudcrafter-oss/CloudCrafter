@@ -104,6 +104,18 @@ public static class GetDummyDeployment
                             Description = "Write docker compose file",
                             Type = DeploymentBuildStepType.DockerComposeWriteToFileSystem,
                             Params = new() { { "dockerComposeFile", "docker-compose.yml" } }
+                        },
+                        new()
+                        {
+                            Name = "Start docker compose",
+                            Description = "Start docker compose",
+                            Type = DeploymentBuildStepType.DockerComposeUp,
+                            Params = new()
+                            {
+                                {
+                                    "dockerComposeFile", "docker-compose.yml"
+                                }
+                            }
                         }
                     }
                 }
