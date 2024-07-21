@@ -6,4 +6,5 @@ public interface IDeploymentLogger
 {
     void LogInfo(string message);
     void LogException(Exception exception, string message);
+    void LogCritical(string message);
 }
