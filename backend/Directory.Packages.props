@@ -63,6 +63,7 @@
     <PackageVersion Include="NSwag.MSBuild" Version="14.0.7"/>
     <PackageVersion Include="NJsonSchema" Version="11.0.1"/>
     <PackageVersion Include="NJsonSchema.CodeGeneration.CSharp" Version="11.0.1"/>
+    <PackageVersion Include="Polly" Version="8.4.1"/>
     <PackageVersion Include="Verify.NUnit" Version="20.8.2"/>
     <!-- Background Jobs -->
     <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.14"/>

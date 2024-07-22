@@ -1,9 +1,8 @@
-﻿using CloudCrafter.DockerCompose.Engine.Yaml;
+﻿using CloudCrafter.Agent.Console.IntegrationTests.Client;
+using CloudCrafter.DockerCompose.Engine.Yaml;
 using Docker.DotNet;
-using Docker.DotNet.Models;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
-using DotNet.Testcontainers.Images;
 
 namespace CloudCrafter.Agent.Console.IntegrationTests;
 
@@ -33,25 +32,28 @@ public static class Helpers
             throw new Exception("Nginx is already running");
         }
 
-        try
-        {
-            _nginxContainer = new ContainerBuilder()
-                .WithImage("nginx:latest")
-                .WithName("my-custom-container")
-                .WithPortBinding(8080, 80)
-                .Build();
 
-            await _nginxContainer.StartAsync();
-            System.Console.WriteLine("Nginx is running");
-        }
-        catch (Exception ex)
+        _nginxContainer = new ContainerBuilder()
+            .WithImage("nginx:latest")
+            .WithName("my-custom-container")
+            .WithPortBinding(8080, 80)
+            .Build();
+
+        await _nginxContainer.StartAsync();
+
+        using var httpClient = new RetryHttpClient(5);
+
+        var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:8080");
+
+        var response = await httpClient.SendAsync(request);
+
+        if (!response.IsSuccessStatusCode)
         {
-            System.Console.WriteLine(ex.Message);
-            throw;
+            throw new Exception("Nginx did not became healthy");
         }
     }
 
-   
+
     public static async Task RemoveNginx()
     {
         if (_nginxContainer == null)
