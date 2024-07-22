@@ -1,14 +1,13 @@
-﻿using CloudCrafter.Agent.Console.IntegrationTests.Client;
-using CloudCrafter.DockerCompose.Engine.Yaml;
+﻿using CloudCrafter.DockerCompose.Engine.Yaml;
+using CloudCrafter.Shared.Utils.Http;
 using Docker.DotNet;
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Containers;
 
 namespace CloudCrafter.Agent.Console.IntegrationTests;
 
 public static class Helpers
 {
     private static readonly DockerClient _client;
+
     static Helpers()
     {
         _client = new DockerClientConfiguration()
@@ -23,11 +22,11 @@ public static class Helpers
         result.Should().NotBeNull();
     }
 
-  
 
     public static async Task ShouldHaveEndpointResponse(string url, string responseContains, int statusCode = 200)
     {
-        using var client = new RetryHttpClient(5);
+
+        var client = RetryHttpClientFactory.Create();
         var request = new HttpRequestMessage(HttpMethod.Get, url);
 
         var response = await client.SendAsync(request);

@@ -39,4 +39,8 @@
     <ProjectReference Include="..\..\src\engine\CloudCrafter.DockerCompose.Engine\CloudCrafter.DockerCompose.Engine.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Client\"/>
+  </ItemGroup>
+
 </Project>

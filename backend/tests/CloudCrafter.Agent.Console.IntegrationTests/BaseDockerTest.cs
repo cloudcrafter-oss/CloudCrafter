@@ -1,7 +1,6 @@
-﻿using CloudCrafter.Agent.Console.IntegrationTests.Client;
+﻿using CloudCrafter.Shared.Utils.Http;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
-using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Agent.Console.IntegrationTests;
 
@@ -45,11 +44,11 @@ public abstract class BaseDockerTest
 
         await _nginxContainer.StartAsync();
 
-        using var httpClient = new RetryHttpClient(5);
+        var client = RetryHttpClientFactory.Create();
 
         var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:8080");
 
-        var response = await httpClient.SendAsync(request);
+        var response = await client.SendAsync(request);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -63,7 +62,7 @@ public abstract class BaseDockerTest
         {
             throw new Exception("Nginx is never started");
         }
-        
+
         return _nginxContainer.Id;
     }
 

@@ -65,6 +65,7 @@
     <PackageVersion Include="NJsonSchema.CodeGeneration.CSharp" Version="11.0.1"/>
     <PackageVersion Include="Polly" Version="8.4.1"/>
     <PackageVersion Include="Verify.NUnit" Version="20.8.2"/>
+    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="8.0.7"/>
     <!-- Background Jobs -->
     <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.14"/>
     <PackageVersion Include="Hangfire.Redis.StackExchange" Version="1.9.3"/>
