@@ -48,6 +48,11 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
     [JobDisplayName("{1}")]
     public async Task ExecuteJobAsync(Guid backgroundJobId, BackgroundJobType jobType)
     {
+        #if IN_TESTS
+        // In tests, the job is executed synchronously (in memory)
+        // So we need to wait until the DBContext is done saving the job to the database.
+        Thread.Sleep(3000);
+        #endif
         using var scope = sp.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
 
