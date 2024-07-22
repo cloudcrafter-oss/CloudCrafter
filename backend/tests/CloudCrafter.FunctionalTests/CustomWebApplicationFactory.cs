@@ -60,9 +60,13 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             {
                 // Hangfire context
                 GlobalConfiguration.Configuration.UseInMemoryStorage();
-                services.AddHangfire(config => config.UseInMemoryStorage());
+                services.AddHangfire(config =>
+                {
+                    config.UseInMemoryStorage();
+                });
                 services.AddHangfireServer(options =>
                 {
+                    options.SchedulePollingInterval = TimeSpan.FromSeconds(2);
                     options.WorkerCount = 1; // Ensure jobs are processed immediately
                 });
                 // Configure test dependencies here
