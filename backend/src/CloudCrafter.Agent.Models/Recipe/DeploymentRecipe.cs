@@ -8,13 +8,12 @@ public class DeploymentRecipe
     public required DeploymentBuildOptions BuildOptions { get; init; }
 }
 
-
 public class DeploymentRecipeDockerComposeOptions
 {
     public string? Base64DockerCompose { get; set; }
     public string? DockerComposeDirectory { get; set; }
-
 }
+
 public class DeploymentRecipeDestination
 {
     public required string RootDirectory { get; init; }
@@ -43,4 +42,5 @@ public enum DeploymentBuildStepType
     NixpacksBuildDockerImage,
     DockerComposeWriteToFileSystem,
     DockerComposeUp,
+    ContainerHealthCheck
 }

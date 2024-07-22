@@ -15,6 +15,7 @@
     <PackageReference Include="nunit"/>
     <PackageReference Include="Microsoft.Extensions.Hosting"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
+    <PackageReference Include="Testcontainers" />
     <PackageReference Include="Verify.NUnit"/>
     <PackageReference Include="Docker.DotNet"/>
     <PackageReference Include="NUnit.Analyzers">

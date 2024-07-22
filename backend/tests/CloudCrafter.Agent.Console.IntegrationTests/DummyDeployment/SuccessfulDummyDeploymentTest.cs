@@ -73,5 +73,6 @@ public class SuccessfulDummyDeploymentTest
 
 
         await ShouldHaveDockerImage(fullImage);
+        await ShouldHaveEndpointResponse("http://localhost:3000", "Hello World!");
     }
 }
