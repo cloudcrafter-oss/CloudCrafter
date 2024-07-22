@@ -66,8 +66,10 @@ public static class Helpers
 
     public static async Task ShouldHaveEndpointResponse(string url, string responseContains, int statusCode = 200)
     {
-        using var client = new HttpClient();
-        var response = await client.GetAsync(url);
+        using var client = new RetryHttpClient(5);
+        var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+        var response = await client.SendAsync(request);
         ((int)response.StatusCode).Should().Be(statusCode);
         var content = await response.Content.ReadAsStringAsync();
 
