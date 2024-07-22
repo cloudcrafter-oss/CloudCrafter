@@ -51,7 +51,8 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
         #if IN_TESTS
         // In tests, the job is executed synchronously (in memory)
         // So we need to wait until the DBContext is done saving the job to the database.
-        Thread.Sleep(3000);
+        System.Console.WriteLine("Sleeping 5000ms");
+        await Task.Delay(5000);
         #endif
         using var scope = sp.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
