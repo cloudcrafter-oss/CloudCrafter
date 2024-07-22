@@ -5,14 +5,15 @@ using CloudCrafter.FunctionalTests.Database;
 using CloudCrafter.FunctionalTests.TestModels;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Data.Fakeds;
+using CloudCrafter.Infrastructure.Logging;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
-using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using Serilog;
 
 namespace CloudCrafter.FunctionalTests;
 
@@ -23,12 +24,13 @@ public class Testing
     public static CustomWebApplicationFactory _factory = null!;
     private static IServiceScopeFactory _scopeFactory = null!;
     private static Guid? _userId;
-    private IContainer? _testingHostContainer;
     private static int _testingHostPort;
+    private IContainer? _testingHostContainer;
 
     [OneTimeSetUp]
     public async Task RunBeforeAnyTests()
     {
+        Log.Logger = LoggingConfiguration.GetLogger();
         _database = await TestDatabaseFactory.CreateAsync();
 
         _factory = new CustomWebApplicationFactory(_database.GetConnection(), _database.GetRedisConnectionString());
@@ -129,13 +131,14 @@ public class Testing
         var userFaker = FakerInstances.UserFaker.Generate();
 
         var faker = new Faker();
-        var password = faker.Internet.Password(16) + faker.Random.String2(3, "!@#$%^&*()_+");
+        var password = "AcdE3" + faker.Internet.Password(16) + faker.Random.String2(3, "!@#$%^&*()_+");
 
         var result = await userManager.CreateAsync(userFaker, password);
 
         if (!result.Succeeded)
         {
-            throw new Exception($"Unable to create {userFaker.UserName}, error: {string.Join(", ", result.Errors.Select(x => x.Description))}");
+            throw new Exception(
+                $"Unable to create {userFaker.UserName}, error: {string.Join(", ", result.Errors.Select(x => x.Description))}");
         }
 
         return new UsernamePasswordDto(userFaker.Email!, password);

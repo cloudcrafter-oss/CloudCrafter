@@ -1,14 +1,11 @@
-﻿using CloudCrafter.Core.Common.Interfaces;
-using CloudCrafter.Core.Jobs.Dispatcher;
+﻿using CloudCrafter.Core.Jobs.Dispatcher;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Domain.Entities.Jobs;
-using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
-using Hangfire;
-using Hangfire.States;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using Serilog;
 using BackgroundJob = CloudCrafter.Domain.Entities.BackgroundJob;
 
 namespace CloudCrafter.FunctionalTests.Jobs;
@@ -23,11 +20,11 @@ public class ConnectivityCheckBackgroundJobTest : BaseTestFixture
         (await CountAsync<BackgroundJob>()).Should().Be(0);
         (await CountAsync<ServerConnectivityCheckJob>()).Should().Be(0);
         (await CountAsync<Server>()).Should().Be(0);
-        
-        
+
+
         var server = TestingHostServerFaker().Generate();
         await AddAsync(server);
-        
+
         (await CountAsync<Server>()).Should().Be(1);
         var dispatcher = GetService<ICloudCrafterDispatcher>();
 
@@ -37,7 +34,7 @@ public class ConnectivityCheckBackgroundJobTest : BaseTestFixture
 
         (await CountAsync<BackgroundJob>()).Should().Be(1);
         (await CountAsync<ServerConnectivityCheckJob>()).Should().Be(1);
-        
+
         var job = FetchEntity<BackgroundJob>(x => x.HangfireJobId == jobId,
             f => f.Include(x => x.ServerConnectivityCheckJob)
                 .ThenInclude(x => x != null ? x.Server : null));
@@ -47,7 +44,7 @@ public class ConnectivityCheckBackgroundJobTest : BaseTestFixture
         job.ServerConnectivityCheckJob!.Server.Should().NotBeNull();
         job.ServerConnectivityCheckJob.ServerId.Should().Be(server.Id);
         job.ServerConnectivityCheckJob.Server.Name.Should().Be(server.Name);
-        
+
         job.Status.Should().Be(BackgroundJobStatus.Completed);
         job.ServerConnectivityCheckJob.Result.Should().Be(ServerConnectivityCheckResult.Healthy);
 
@@ -63,11 +60,11 @@ public class ConnectivityCheckBackgroundJobTest : BaseTestFixture
         (await CountAsync<BackgroundJob>()).Should().Be(0);
         (await CountAsync<ServerConnectivityCheckJob>()).Should().Be(0);
         (await CountAsync<Server>()).Should().Be(0);
-        
-        
+
+
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
-        
+
         (await CountAsync<Server>()).Should().Be(1);
         var dispatcher = GetService<ICloudCrafterDispatcher>();
 
@@ -77,7 +74,7 @@ public class ConnectivityCheckBackgroundJobTest : BaseTestFixture
 
         (await CountAsync<BackgroundJob>()).Should().Be(1);
         (await CountAsync<ServerConnectivityCheckJob>()).Should().Be(1);
-        
+
         var job = FetchEntity<BackgroundJob>(x => x.HangfireJobId == jobId,
             f => f.Include(x => x.ServerConnectivityCheckJob)
                 .ThenInclude(x => x != null ? x.Server : null));
@@ -87,7 +84,7 @@ public class ConnectivityCheckBackgroundJobTest : BaseTestFixture
         job.ServerConnectivityCheckJob!.Server.Should().NotBeNull();
         job.ServerConnectivityCheckJob.ServerId.Should().Be(server.Id);
         job.ServerConnectivityCheckJob.Server.Name.Should().Be(server.Name);
-        
+
         job.Status.Should().Be(BackgroundJobStatus.Completed);
         job.ServerConnectivityCheckJob.Result.Should().Be(ServerConnectivityCheckResult.Unhealthy);
 

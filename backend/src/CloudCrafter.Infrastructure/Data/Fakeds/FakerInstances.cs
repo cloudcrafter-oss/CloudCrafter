@@ -37,6 +37,8 @@ public static class FakerInstances
         .RuleFor(x => x.Server, ServerFaker.Generate())
         .RuleFor(x => x.Project, ProjectFaker.Generate())
         .RuleFor(x => x.Deployments, f => new ())
+        .RuleFor(x => x.Source, f => null)
+        .RuleFor(x => x.Services, f => new())
         .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
         .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 

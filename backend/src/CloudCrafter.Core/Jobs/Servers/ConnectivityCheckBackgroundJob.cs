@@ -17,11 +17,11 @@ public class ConnectivityCheckBackgroundJob(IServerConnectivityService serverCon
         {
             throw new ArgumentException("Background job is missing the ServerConnectivityCheckJob property.");
         }
-        
+
         var logger = loggerFactory.CreateLogger<ConnectivityCheckBackgroundJob>();
-        logger.LogInformation("Starting connectivity job for server ({ServerId})", server.Id);
-        
-        
+        logger.LogDebug("Starting connectivity job for server ({ServerId})", server.Id);
+
+
         var stopwatch = Stopwatch.StartNew();
 
         try
@@ -40,7 +40,7 @@ public class ConnectivityCheckBackgroundJob(IServerConnectivityService serverCon
 
         var elapsedMs = stopwatch.ElapsedMilliseconds;
         backgroundJob.ServerConnectivityCheckJob.TimeTakenMs = elapsedMs;
-        
+
         logger.LogInformation("Deployment job completed in {ElapsedMs}ms", elapsedMs);
     }
 }
