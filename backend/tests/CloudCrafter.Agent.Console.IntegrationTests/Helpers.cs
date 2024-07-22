@@ -9,8 +9,6 @@ namespace CloudCrafter.Agent.Console.IntegrationTests;
 public static class Helpers
 {
     private static readonly DockerClient _client;
-    public static IContainer? _nginxContainer;
-
     static Helpers()
     {
         _client = new DockerClientConfiguration()
@@ -25,44 +23,7 @@ public static class Helpers
         result.Should().NotBeNull();
     }
 
-    public static async Task RunNginx()
-    {
-        if (_nginxContainer != null)
-        {
-            throw new Exception("Nginx is already running");
-        }
-
-
-        _nginxContainer = new ContainerBuilder()
-            .WithImage("nginx:latest")
-            .WithName("my-custom-container")
-            .WithPortBinding(8080, 80)
-            .Build();
-
-        await _nginxContainer.StartAsync();
-
-        using var httpClient = new RetryHttpClient(5);
-
-        var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:8080");
-
-        var response = await httpClient.SendAsync(request);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception("Nginx did not became healthy");
-        }
-    }
-
-
-    public static async Task RemoveNginx()
-    {
-        if (_nginxContainer == null)
-        {
-            throw new Exception("Nginx is never started");
-        }
-
-        await _nginxContainer.DisposeAsync();
-    }
+  
 
     public static async Task ShouldHaveEndpointResponse(string url, string responseContains, int statusCode = 200)
     {

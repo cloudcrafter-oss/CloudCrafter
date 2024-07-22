@@ -2,28 +2,20 @@
 
 namespace CloudCrafter.Agent.Console.IntegrationTests.InternalHelpers;
 
-public class DockerHelperTest
+public class DockerHelperTest : BaseDockerTest
 {
     private DockerHelper _dockerHelper;
 
-    [OneTimeSetUp]
-    public async Task SetUp()
+    [SetUp]
+    public void SetUp()
     {
-        await RunNginx();
-
         _dockerHelper = new DockerHelper();
     }
-
-    [OneTimeTearDown]
-    public async Task TearDown()
-    {
-        await RemoveNginx();
-    }
-
+    
     [Test]
     public async Task ShouldBeAbleToRunCommandInContainer()
     {
-        var nginxContainerId = _nginxContainer!.Id;
+        var nginxContainerId = GetNginxContainerId();
 
         var list = new List<DockerHelperResponse>();
         await _dockerHelper.RunCommandInContainer(nginxContainerId!, "whoami", log =>
