@@ -25,10 +25,18 @@ public class DockerHelperTest
     {
         var nginxContainerId = _nginxContainer!.Id;
 
+        var list = new List<DockerHelperResponse>();
         await _dockerHelper.RunCommandInContainer(nginxContainerId!, "whoami", log =>
         {
             var std = log.IsStdOut ? "StdOut" : "StdErr";
             System.Console.WriteLine($"{std}: {log.Response}");
+            list.Add(log);
         });
+        
+        list.Should().NotBeEmpty();
+        list.Should().HaveCount(1);
+        
+        list[0].IsStdOut.Should().BeTrue();
+        list[0].Response.Should().Be("root\n");
     }
 }

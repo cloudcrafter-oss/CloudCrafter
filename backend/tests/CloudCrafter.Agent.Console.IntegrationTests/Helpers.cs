@@ -33,31 +33,22 @@ public static class Helpers
             throw new Exception("Nginx is already running");
         }
 
-        string dockerfileContent = @"
-FROM nginx
-";
+        try
+        {
+            _nginxContainer = new ContainerBuilder()
+                .WithImage("nginx:latest")
+                .WithName("my-custom-container")
+                .WithPortBinding(8080, 80)
+                .Build();
 
-        // Create a temporary directory for the Dockerfile
-        string tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-        Directory.CreateDirectory(tempDir);
-        string dockerfilePath = Path.Combine(tempDir, "Dockerfile");
-        File.WriteAllText(dockerfilePath, dockerfileContent);
-
-        // Build and start the container
-        var imageBuilder = new ImageFromDockerfileBuilder()
-            .WithDockerfile(dockerfilePath)
-            .WithName("my-nginx-image");
-
-
-        IFutureDockerImage builtImage = imageBuilder.Build();
-
-        _nginxContainer = new ContainerBuilder()
-            .WithImage(builtImage)
-            .WithName("my-custom-container")
-            .WithPortBinding(8080, 80)
-            .Build();
-
-        await _nginxContainer.StartAsync();
+            await _nginxContainer.StartAsync();
+            System.Console.WriteLine("Nginx is running");
+        }
+        catch (Exception ex)
+        {
+            System.Console.WriteLine(ex.Message);
+            throw;
+        }
     }
 
    
