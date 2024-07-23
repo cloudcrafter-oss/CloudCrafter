@@ -10,13 +10,22 @@ public class ContainerHealthCheckValidator : AbstractValidator<ContainerHealthCh
 {
     public ContainerHealthCheckValidator()
     {
-        RuleFor(x => x.ContainerName).NotEmpty();
-        RuleFor(x => x.Options).NotNull();
+        RuleFor(x => x.Services)
+            .ForEach(service => service.SetValidator(new ContainerHealthCheckParamsServiceValidator()));
+    }
+}
+public class ContainerHealthCheckParamsServiceValidator : AbstractValidator<KeyValuePair<string, ContainerHealthCheckParamsOptions>>
+{
+    public ContainerHealthCheckParamsServiceValidator()
+    {
+        RuleFor(x => x.Key)
+            .NotEmpty()
+            .WithMessage("Service name is required.");
 
-        When(x => x.Options != null, () =>
-        {
-            RuleFor(x => x.Options!).SetValidator(new ContainerHealthCheckParamsOptionsValidator());
-        });
+        RuleFor(x => x.Value)
+            .NotEmpty()
+            .WithMessage("Service healthcheck options are required.")
+            .SetValidator(new ContainerHealthCheckParamsOptionsValidator());
     }
 }
 
@@ -24,31 +33,57 @@ public class ContainerHealthCheckParamsOptionsValidator : AbstractValidator<Cont
 {
     public ContainerHealthCheckParamsOptionsValidator()
     {
-        RuleFor(x => x.HttpMethod).NotEmpty();
-        RuleFor(x => x.HttpSchema).NotEmpty();
-        RuleFor(x => x.HttpHost).NotEmpty();
-        RuleFor(x => x.HttpPort).NotNull()
-            .GreaterThan(0);
+        RuleFor(x => x.CheckForDockerHealth)
+            .NotNull().When(x => !HasHttpChecks(x))
+            .WithMessage("Either CheckForDockerHealth or HTTP checks must be specified.");
+
+        RuleFor(x => x.HttpMethod)
+            .NotEmpty().When(HasHttpChecks)
+            .WithMessage("HTTP method is required when specifying HTTP checks.");
+
+        RuleFor(x => x.HttpSchema)
+            .NotEmpty().When(HasHttpChecks)
+            .WithMessage("HTTP schema is required when specifying HTTP checks.");
+
+        RuleFor(x => x.HttpHost)
+            .NotEmpty().When(HasHttpChecks)
+            .WithMessage("HTTP host is required when specifying HTTP checks.");
+        
+        RuleFor(x => x.HttpPath)
+            .NotEmpty().When(HasHttpChecks)
+            .WithMessage("HTTP path is required when specifying HTTP checks.");
+
+        RuleFor(x => x.HttpPort)
+            .NotNull().When(HasHttpChecks)
+            .WithMessage("HTTP port is required when specifying HTTP checks.");
 
         RuleFor(x => x.ExpectedResponseCode)
-            .NotNull()
-            .GreaterThan(0);
+            .NotNull().When(HasHttpChecks)
+            .WithMessage("Expected response code is required when specifying HTTP checks.");
 
         RuleFor(x => x.CheckInterval)
-            .NotNull()
-            .GreaterThan(0);
+            .GreaterThan(0).When(x => x.CheckInterval.HasValue)
+            .WithMessage("Check interval must be greater than 0.");
 
         RuleFor(x => x.CheckTimeout)
-            .NotNull()
-            .GreaterThan(0);
+            .GreaterThan(0).When(x => x.CheckTimeout.HasValue)
+            .WithMessage("Check timeout must be greater than 0.");
 
         RuleFor(x => x.Retries)
-            .NotNull()
-            .GreaterThan(0);
+            .GreaterThanOrEqualTo(0).When(x => x.Retries.HasValue)
+            .WithMessage("Retries must be greater than or equal to 0.");
 
         RuleFor(x => x.BackOffPeriod)
-            .NotNull()
-            .GreaterThan(-1); // not negative 
+            .GreaterThan(0).When(x => x.BackOffPeriod.HasValue)
+            .WithMessage("Back-off period must be greater than 0.");
+    }
+
+    private bool HasHttpChecks(ContainerHealthCheckParamsOptions options)
+    {
+        return !string.IsNullOrEmpty(options.HttpMethod) ||
+               !string.IsNullOrEmpty(options.HttpSchema) ||
+               !string.IsNullOrEmpty(options.HttpHost) ||
+               options.HttpPort.HasValue;
     }
 }
 

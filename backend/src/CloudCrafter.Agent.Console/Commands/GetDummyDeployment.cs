@@ -90,32 +90,39 @@ public static class GetDummyDeployment
                             Name = "Build Nixpacks docker image",
                             Description = "Builds Nixpacks docker image",
                             Type = DeploymentBuildStepType.NixpacksBuildDockerImage,
-                            Params = new Dictionary<string, object>
-                            {
-                                { "path", "nixpacks-node-server" },
-                                { "image", imageRepository },
-                                { "tag", imageTag },
-                                { "disableCache", true }
-                            }
+                            Params =
+                                new Dictionary<string, object>
+                                {
+                                    { "path", "nixpacks-node-server" },
+                                    { "image", imageRepository },
+                                    { "tag", imageTag },
+                                    { "disableCache", true }
+                                }
                         },
                         new()
                         {
                             Name = "Write docker compose file",
                             Description = "Write docker compose file",
                             Type = DeploymentBuildStepType.DockerComposeWriteToFileSystem,
-                            Params = new() { { "dockerComposeFile", "docker-compose.yml" } }
+                            Params =
+                                new Dictionary<string, object> { { "dockerComposeFile", "docker-compose.yml" } }
                         },
                         new()
                         {
                             Name = "Start docker compose",
                             Description = "Start docker compose",
                             Type = DeploymentBuildStepType.DockerComposeUp,
-                            Params = new()
+                            Params = new Dictionary<string, object>
                             {
-                                {
-                                    "dockerComposeFile", "docker-compose.yml"
-                                }
+                                { "dockerComposeFile", "docker-compose.yml" }, { "storeServiceNames", true }
                             }
+                        },
+                        new()
+                        {
+                            Name = "Check if container is healthy",
+                            Description = "Check if container is healthy",
+                            Type = DeploymentBuildStepType.ContainerHealthCheck,
+                            Params = new Dictionary<string, object> { { "service", "frontend" } }
                         }
                     }
                 }

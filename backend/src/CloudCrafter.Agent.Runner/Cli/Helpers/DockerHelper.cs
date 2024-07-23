@@ -11,13 +11,13 @@ public class DockerHelper : IDockerHelper
         .CreateClient();
 
 
-    public async Task RunCommandInContainer(string containerName, string command, Action<DockerHelperResponse>? onLog = null)
+    public async Task<DockerHelperResponseResult> RunCommandInContainer(string containerName, IList<string> commands, Action<DockerHelperResponse>? onLog = null)
     {
         var container = await GetContainer(containerName);
 
         ContainerExecCreateParameters execParams = new ContainerExecCreateParameters
         {
-            AttachStdout = true, AttachStderr = true, Cmd = [command]
+            AttachStdout = true, AttachStderr = true, Cmd = commands
         };
 
         ContainerExecCreateResponse execCreateResponse =
@@ -65,9 +65,17 @@ public class DockerHelper : IDockerHelper
         string stdoutContent = Encoding.UTF8.GetString(stdout.ToArray());
         string stderrContent = Encoding.UTF8.GetString(stderr.ToArray());
 
-        
+        var execInspectResponse = await _client.Exec.InspectContainerExecAsync(execCreateResponse.ID);
+        var exitCode = execInspectResponse.ExitCode;
         Console.WriteLine("STDOUT: " + stdoutContent);
         Console.WriteLine("STDERR: " + stderrContent);
+
+        return new() { ExitCode = exitCode, StdOut = stdoutContent, StdErr = stderrContent };
+    }
+
+    public Task<ContainerInspectResponse> GetDockerContainer(string containerId)
+    {
+        return _client.Containers.InspectContainerAsync(containerId);
     }
 
 
@@ -95,4 +103,11 @@ public class DockerHelperResponse
 {
     public required string Response { get; set; }
     public required bool IsStdOut { get; set; }
+}
+
+public class DockerHelperResponseResult
+{
+    public long ExitCode { get; init; }
+    public string? StdOut { get; init; }
+    public string? StdErr { get; init; }
 }

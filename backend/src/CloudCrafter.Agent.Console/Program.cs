@@ -3,6 +3,7 @@ using CloudCrafter.Agent.Console.Commands;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Runner;
 using CloudCrafter.Agent.Runner.Cli;
+using CloudCrafter.Agent.Runner.Cli.Helpers;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
 using CloudCrafter.Agent.Runner.DeploymentLogPump.Implementation;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
@@ -40,6 +41,37 @@ public class Program
         rootCommand.SetHandler(async demoOptionValue =>
         {
             var mediator = host.Services.GetRequiredService<IMediator>();
+
+            var dockerHelper = host.Services.GetRequiredService<IDockerHelper>();
+
+            var nginxResult = await dockerHelper.GetDockerContainer("c226748108c8");
+            var frontendResult = await dockerHelper.GetDockerContainer("ccb67c7ba3ab");
+
+            var healthCheckHelper = host.Services.GetRequiredService<IDockerHealthCheckHelper>();
+
+
+
+            var testResult = await healthCheckHelper.IsHealthyAsync(nginxResult.ID, new()
+            {
+                CheckForDockerHealth = true,
+                HttpMethod = "GET",
+                HttpSchema = "http",
+                HttpHost = "localhost",
+                HttpPort = 80,
+                HttpPath = "/",
+                ExpectedResponseCode = 200
+            });
+
+            
+            
+            // var tester = host.Services.GetRequiredService<IDockerComposeHelper>();
+            //
+            // var testResult =
+            //     await tester.GetDockerContainerIdForService(
+            //         "/tmp/cloudcrafter-data/my-application/docker-compose.yml", "tester");
+            //
+            //
+            //
 
             DeploymentRecipe? recipe = null;
             if (demoOptionValue)

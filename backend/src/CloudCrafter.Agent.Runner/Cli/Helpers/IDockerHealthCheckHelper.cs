@@ -4,5 +4,5 @@ namespace CloudCrafter.Agent.Runner.Cli.Helpers;
 
 public interface IDockerHealthCheckHelper
 {
-    Task<bool> IsHealthyAsync(ContainerHealthCheckParamsOptions options);
+    Task<bool> IsHealthyAsync(string containerId, ContainerHealthCheckParamsOptions options);
 }

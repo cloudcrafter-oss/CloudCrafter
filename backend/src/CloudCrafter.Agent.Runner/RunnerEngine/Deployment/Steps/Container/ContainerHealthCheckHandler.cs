@@ -20,21 +20,49 @@ public class ContainerHealthCheckHandler(IMessagePump pump, IDockerHealthCheckHe
         _logger.LogInfo("Running container health check");
 
         // This is already validated, but better safe than sorry.
-        if (parameters.Options == null)
+        if (!parameters.Services.Any())
         {
             throw new DeploymentException("Container health check options not found.");
         }
 
-        var containerIsHealthy = await dockerHealthCheckHelper.IsHealthyAsync(parameters.Options);
 
-        if (!containerIsHealthy)
+        var taskDictionary = new Dictionary<string, Task<bool>>();
+
+
+        foreach (var service in parameters.Services)
         {
-            _logger.LogCritical("Container did not become healthy within a timely manner.");
-            throw new DeploymentException("Container health check failed.");
+            var containerIsHealthyForService = dockerHealthCheckHelper.IsHealthyAsync(service.Key, service.Value);
+
+            taskDictionary[service.Key] = containerIsHealthyForService;
         }
 
 
-        _logger.LogInfo("Container is healthy");
+        await Task.WhenAll(taskDictionary.Values);
+
+
+        var unhealthyServices = new List<string>();
+
+        foreach (var kvp in taskDictionary)
+        {
+            var serviceName = kvp.Key;
+            var isHealthy = kvp.Value.Result;
+
+            if (!isHealthy)
+            {
+                unhealthyServices.Add(serviceName);
+            }
+        }
+
+
+        if (!unhealthyServices.Any())
+        {
+            var unhealthyServicesString = string.Join(", ", unhealthyServices);
+            _logger.LogCritical($"The following containers did not become healthy: {unhealthyServicesString}");
+            throw new DeploymentException($"Container health checks failed for services: {unhealthyServicesString}");
+        }
+
+
+        _logger.LogInfo("All provided containers are healthy");
     }
 
     public Task DryRun(ContainerHealthCheckParams parameters, DeploymentContext context)

@@ -6,15 +6,16 @@ namespace CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
 // ReSharper disable once ClassNeverInstantiated.Global
 public class ContainerHealthCheckParams
 {
-    public string ContainerName { get; init; } = string.Empty;
-    public ContainerHealthCheckParamsOptions? Options { get; init; }
+    public Dictionary<string, ContainerHealthCheckParamsOptions> Services { get; init; } = new();
 }
 
 public class ContainerHealthCheckParamsOptions
 {
+    public bool? CheckForDockerHealth { get; init; }
     public string HttpMethod { get; init; } = string.Empty;
     public string HttpSchema { get; init; } = string.Empty;
     public string HttpHost { get; init; } = string.Empty;
+    public string HttpPath { get; init; } = string.Empty;
     public int? HttpPort { get; init; }
 
     public int? ExpectedResponseCode { get; init; }

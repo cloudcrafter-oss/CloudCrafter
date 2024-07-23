@@ -35,4 +35,5 @@ public abstract class RecipeResultKeys
     public const string NixpacksBuildPack = nameof(NixpacksBuildPack);
     public const string NixpacksBuildPlan = nameof(NixpacksBuildPlan);
     public const string NixpacksTomlLocation = nameof(NixpacksTomlLocation);
+    public const string DockerComposeServices = nameof(DockerComposeServices);
 }
