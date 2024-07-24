@@ -15,6 +15,10 @@
     <PackageReference Include="nunit"/>
     <PackageReference Include="Microsoft.Extensions.Hosting"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
+    <PackageReference Include="Serilog"/>
+    <PackageReference Include="Serilog.Sinks.NUnit"/>
+    <PackageReference Include="Testcontainers"/>
+    <PackageReference Include="Polly"/>
     <PackageReference Include="Verify.NUnit"/>
     <PackageReference Include="Docker.DotNet"/>
     <PackageReference Include="NUnit.Analyzers">
@@ -34,7 +38,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\CloudCrafter.Agent.Console\CloudCrafter.Agent.Console.csproj"/>
-    <ProjectReference Include="..\..\src\engine\CloudCrafter.DockerCompose.Engine\CloudCrafter.DockerCompose.Engine.csproj" />
+    <ProjectReference Include="..\..\src\engine\CloudCrafter.DockerCompose.Engine\CloudCrafter.DockerCompose.Engine.csproj"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Client\"/>
   </ItemGroup>
 
 </Project>

@@ -42,7 +42,10 @@ public static class ExtensionMethods
             services.AddKeyedTransient(interfaceType, stepType, configType);
         }
 
-        services.AddTransient<INixpacksHelper, NixpacksHelper>();
+        services.AddTransient<INixpacksHelper, NixpacksHelper>()
+            .AddTransient<IDockerHealthCheckHelper, DockerHealthCheckHelper>()
+            .AddTransient<IDockerHelper, DockerHelper>()
+            .AddTransient<IDockerComposeHelper, DockerComposeHelper>();
         services.AddTransient<ICommandParser, CommandParser>()
             .AddTransient<IFileSystemHelper, FileSystemHelper>();
 

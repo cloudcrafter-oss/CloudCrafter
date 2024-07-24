@@ -30,6 +30,7 @@ public class CheckoutGitRepositoryStepHandler(IMessagePump pump, ICommandExecuto
 
         if (result.ExitCode != 0)
         {
+            _logger.LogCritical("Failed to clone git repository");
             throw new DeploymentException("Failed to clone git repository");
         }
     }

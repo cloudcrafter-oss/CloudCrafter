@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Infrastructure.Data;
+using CloudCrafter.Infrastructure.Logging;
 using Hangfire;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Moq;
+using Serilog;
 
 namespace CloudCrafter.FunctionalTests;
 
@@ -38,11 +40,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         builder.UseEnvironment("Development"); // will not send real emails
         var host = builder.Build();
         host.Start();
-
-        // Get service provider. 
-        var serviceProvider = host.Services;
-
-
+        
         return host;
     }
 
@@ -50,17 +48,28 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureAppConfiguration((context, config) =>
         {
-            config.AddInMemoryCollection(new[]
+            config
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.Development.json", optional: true)
+            .AddInMemoryCollection(new[]
             {
                 new KeyValuePair<string, string?>("ConnectionStrings:RedisConnection", _redisConnectionString)
-            });
+            })
+            .AddEnvironmentVariables();
         });
         builder
-            .ConfigureServices(services =>
+            .ConfigureServices((context, services) =>
             {
                 // Hangfire context
-                GlobalConfiguration.Configuration.UseInMemoryStorage();
-                services.AddHangfire(config => config.UseInMemoryStorage());
+                //GlobalConfiguration.Configuration.UseInMemoryStorage();
+                GlobalConfiguration.Configuration.UseSerilogLogProvider();
+                var configuration = context.Configuration;
+                
+                services.AddSerilog(opt =>
+                {
+                    opt.ReadFrom.Configuration(configuration);
+                });
+                
                 services.AddHangfireServer(options =>
                 {
                     options.WorkerCount = 1; // Ensure jobs are processed immediately
@@ -74,6 +83,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 {
                     options.UseNpgsql(_postgreSqlConnection);
                 });
+
 
                 services.AddScoped<IApplicationDbContext>(provider =>
                 {
@@ -89,24 +99,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
 
                 services.EnsureDbCreated<AppDbContext>();
-                //// Remove the app's ApplicationDbContext registration.
-                //var descriptor = services.SingleOrDefault(
-                //d => d.ServiceType ==
-                //    typeof(DbContextOptions<AppDbContext>));
-
-                //if (descriptor != null)
-                //{
-                //  services.Remove(descriptor);
-                //}
-
-                //// This should be set for each individual test run
-                //string inMemoryCollectionName = Guid.NewGuid().ToString();
-
-                //// Add ApplicationDbContext using an in-memory database for testing.
-                //services.AddDbContext<AppDbContext>(options =>
-                //{
-                //  options.UseInMemoryDatabase(inMemoryCollectionName);
-                //});
             });
     }
 }

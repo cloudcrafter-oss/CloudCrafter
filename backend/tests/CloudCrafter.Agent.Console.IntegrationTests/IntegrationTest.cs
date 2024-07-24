@@ -9,14 +9,21 @@ public class IntegrationTest
     {
         string[] args = [];
 
+        var originalStream = System.Console.Out;
         using var sw = new StringWriter();
         System.Console.SetOut(sw);
+        try
+        {
+            var exitCode = await Program.Main(args);
 
-        var exitCode = await Program.Main(args);
+            exitCode.Should().Be(-1);
 
-        exitCode.Should().Be(-1);
-
-        var output = sw.ToString();
-        output.Should().Contain("Error: No Recipe found - cannot continue");
+            var output = sw.ToString();
+            output.Should().Contain("Error: No Recipe found - cannot continue");
+        }
+        finally
+        {
+            System.Console.SetOut(originalStream);
+        }
     }
 }

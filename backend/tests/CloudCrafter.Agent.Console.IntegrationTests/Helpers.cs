@@ -1,6 +1,6 @@
 ﻿using CloudCrafter.DockerCompose.Engine.Yaml;
+using CloudCrafter.Shared.Utils.Http;
 using Docker.DotNet;
-
 
 namespace CloudCrafter.Agent.Console.IntegrationTests;
 
@@ -20,13 +20,26 @@ public static class Helpers
             .InspectImageAsync(image);
 
         result.Should().NotBeNull();
+    }
 
+
+    public static async Task ShouldHaveEndpointResponse(string url, string responseContains, int statusCode = 200)
+    {
+
+        var client = RetryHttpClientFactory.Create();
+        var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+        var response = await client.SendAsync(request);
+        ((int)response.StatusCode).Should().Be(statusCode);
+        var content = await response.Content.ReadAsStringAsync();
+
+        content.Should().Contain(responseContains);
     }
 
     public static DockerComposeEditor GetDummyEditor(string repository, string tag)
     {
         var editor = new DockerComposeEditor();
-        var service = editor.AddService("web");
+        var service = editor.AddService("frontend");
 
         service.SetImage(repository, tag);
 

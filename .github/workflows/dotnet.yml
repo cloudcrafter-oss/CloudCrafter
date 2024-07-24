@@ -39,7 +39,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal --logger trx --results-directory ./test-results --collect:"XPlat Code Coverage;Format=opencover"
+      run: dotnet test --no-build --verbosity normal --logger trx --results-directory ./test-results --collect:"XPlat Code Coverage;Format=opencover" /p:DefineConstants="IN_TESTS"
     
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2

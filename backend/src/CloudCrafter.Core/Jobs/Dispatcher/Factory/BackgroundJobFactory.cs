@@ -13,10 +13,15 @@ using BackgroundJob = CloudCrafter.Domain.Entities.BackgroundJob;
 
 namespace CloudCrafter.Core.Jobs.Dispatcher.Factory;
 
-public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvider sp, IBackgroundJobClient client)
+public class BackgroundJobFactory(
+    IApplicationDbContext context,
+    IServiceProvider sp,
+    IBackgroundJobClient client,
+    ILogger<BackgroundJobFactory> logger)
 {
     public async Task<string> CreateAndEnqueueJobAsync<TJob, TParam>(TParam parameters) where TJob : IBaseJob<TParam>
     {
+        logger.LogDebug("[CreateAndEnqueueJobAsync] Creating and enqueuing job of type {JobType}", typeof(TJob).Name);
         var strategy = sp.GetRequiredService<IJobCreationStrategy<TJob, TParam>>();
 
         await using var transaction = await context.BeginTransactionAsync();
@@ -27,8 +32,8 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
 
             context.Jobs.Add(backgroundJob);
             await context.SaveChangesAsync();
-            
-            var hangfireJobId = client.Enqueue(() => ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type));
+
+            var hangfireJobId = client.Enqueue<CloudCrafterJob>(job => job.ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type));
 
             backgroundJob.HangfireJobId = hangfireJobId;
             await context.SaveChangesAsync();
@@ -44,10 +49,20 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
             throw;
         }
     }
+}
 
+public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider sp)
+{
     [JobDisplayName("{1}")]
     public async Task ExecuteJobAsync(Guid backgroundJobId, BackgroundJobType jobType)
     {
+#if IN_TESTS
+        // In tests, the job is executed synchronously (in memory)
+        // So we need to wait until the DBContext is done saving the job to the database.
+        System.Console.WriteLine("Sleeping 5000ms");
+        await Task.Delay(5000);
+#endif
+        logger.LogDebug("Executing job {BackgroundJobId} of type {JobType}", backgroundJobId, jobType);
         using var scope = sp.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
 
@@ -60,7 +75,7 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
             throw new ArgumentException("Background job not found", nameof(backgroundJobId));
         }
 
-        var loggerFactory = new BackgroundJobLoggerFactory(backgroundJob, dbContext);
+        var loggerFactory = new BackgroundJobLoggerFactory(backgroundJob, dbContext, scope.ServiceProvider);
 
         var stopwatch = Stopwatch.StartNew();
         try
@@ -94,7 +109,7 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
             await dbContext.SaveChangesAsync();
         }
     }
-
+    
     private async Task ExecuteTypedJobAsync<TJob, TParam>(BackgroundJob backgroundJob, IServiceScope scope)
         where TJob : IBaseJob<TParam>
     {
@@ -104,9 +119,10 @@ public class BackgroundJobFactory(IApplicationDbContext context, IServiceProvide
         {
             throw new ArgumentException("Failed to deserialize job parameters");
         }
-
+        
+        logger.LogDebug("Creating background job factory");
         var loggerFactory = new BackgroundJobLoggerFactory(backgroundJob,
-            scope.ServiceProvider.GetRequiredService<IApplicationDbContext>());
+            scope.ServiceProvider.GetRequiredService<IApplicationDbContext>(), scope.ServiceProvider);
 
         await job.ExecuteAsync(backgroundJob, parameter, loggerFactory);
     }

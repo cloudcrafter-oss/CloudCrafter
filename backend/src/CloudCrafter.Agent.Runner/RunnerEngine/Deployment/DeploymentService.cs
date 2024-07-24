@@ -32,15 +32,15 @@ public class DeploymentService(ISender sender, IMessagePump pump)
             throw;
         }
 
-        await sender.Send(new CleanupArtifactsDirectory.Query(context));
+        //await sender.Send(new CleanupArtifactsDirectory.Query(context));
     }
 
     public async Task ValidateRecipe(DeploymentRecipe recipe)
     {
         var validator = new DeploymentRecipeValidator();
-        
+
         await validator.ValidateAndThrowAsync(recipe);
-        
+
         await DeployAsync(recipe, true);
     }
 }

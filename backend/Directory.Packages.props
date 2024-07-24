@@ -39,6 +39,7 @@
     <PackageVersion Include="NSubstitute" Version="5.1.0"/>
     <PackageVersion Include="Moq" Version="4.20.70"/>
     <PackageVersion Include="ReportGenerator" Version="5.2.2"/>
+    <PackageVersion Include="Serilog" Version="3.1.1"/>
     <PackageVersion Include="Serilog.AspNetCore" Version="8.0.1"/>
     <PackageVersion Include="System.Configuration.ConfigurationManager" Version="7.0.0"/>
     <PackageVersion Include="Testcontainers" Version="3.9.0"/>
@@ -57,13 +58,16 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
     <!-- Tests -->
     <PackageVersion Include="Docker.DotNet" Version="3.125.15"/>
+    <PackageVersion Include="Serilog.Sinks.NUnit" Version="1.0.3"/>
     <!-- Engine -->
     <PackageVersion Include="SSH.NET" Version="2024.1.0"/>
     <PackageVersion Include="YamlDotNet" Version="15.3.0"/>
     <PackageVersion Include="NSwag.MSBuild" Version="14.0.7"/>
     <PackageVersion Include="NJsonSchema" Version="11.0.1"/>
     <PackageVersion Include="NJsonSchema.CodeGeneration.CSharp" Version="11.0.1"/>
+    <PackageVersion Include="Polly" Version="8.4.1"/>
     <PackageVersion Include="Verify.NUnit" Version="20.8.2"/>
+    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="8.0.7"/>
     <!-- Background Jobs -->
     <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.14"/>
     <PackageVersion Include="Hangfire.Redis.StackExchange" Version="1.9.3"/>

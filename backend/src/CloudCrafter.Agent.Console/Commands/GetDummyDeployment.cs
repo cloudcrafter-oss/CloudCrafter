@@ -1,4 +1,6 @@
-﻿using CloudCrafter.Agent.Models.Recipe;
+﻿using System.Dynamic;
+using CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
+using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.DockerCompose.Engine.Yaml;
 using CloudCrafter.Shared.Utils;
 using MediatR;
@@ -26,7 +28,10 @@ public static class GetDummyDeployment
 
             var dockerComposeBase64 = dockerComposeEditor.ToBase64();
 
-
+            dynamic healthCheckOptions = new
+            {
+                checkForDockerHealth = true
+            };
             var recipe = new DeploymentRecipe
             {
                 Name = "My Application",
@@ -90,20 +95,76 @@ public static class GetDummyDeployment
                             Name = "Build Nixpacks docker image",
                             Description = "Builds Nixpacks docker image",
                             Type = DeploymentBuildStepType.NixpacksBuildDockerImage,
-                            Params = new Dictionary<string, object>
-                            {
-                                { "path", "nixpacks-node-server" },
-                                { "image", imageRepository },
-                                { "tag", imageTag },
-                                { "disableCache", true }
-                            }
+                            Params =
+                                new Dictionary<string, object>
+                                {
+                                    { "path", "nixpacks-node-server" },
+                                    { "image", imageRepository },
+                                    { "tag", imageTag },
+                                    { "disableCache", true }
+                                }
                         },
                         new()
                         {
                             Name = "Write docker compose file",
                             Description = "Write docker compose file",
                             Type = DeploymentBuildStepType.DockerComposeWriteToFileSystem,
-                            Params = new() { { "dockerComposeFile", "docker-compose.yml" } }
+                            Params =
+                                new Dictionary<string, object> { { "dockerComposeFile", "docker-compose.yml" } }
+                        },
+                        new()
+                        {
+                            Name = "Start docker compose",
+                            Description = "Start docker compose",
+                            Type = DeploymentBuildStepType.DockerComposeUp,
+                            Params = new Dictionary<string, object>
+                            {
+                                { "dockerComposeFile", "docker-compose.yml" }, { "storeServiceNames", true }
+                            }
+                        },
+                        new()
+                        {
+                            Name = "Check if container is healthy",
+                            Description = "Check if container is healthy",
+                            Type = DeploymentBuildStepType.ContainerHealthCheck,
+                            Params = new Dictionary<string, object>
+                            {
+                                {"dockerComposeSettings", new Dictionary<string, object>()
+                                {
+                                    {
+                                        "fetchServicesFromContext", true
+                                    }
+                                }},
+                                { "services", new Dictionary<string, object>()
+                                {
+                                    {
+                                        "frontend", new Dictionary<string, object>()
+                                        {
+                                            {
+                                                "httpMethod", "get"
+                                            },
+                                            {
+                                                "httpSchema", "http"
+                                            },
+                                            {
+                                                "httpHost", "localhost"
+                                            },
+                                            {
+                                                "httpPath", "/"
+                                            },
+                                            {
+                                                "httpPort", 3000
+                                            },
+                                            {
+                                                "expectedResponseCode", 200
+                                            },
+                                            {
+                                                "retries", 4
+                                            }
+                                        }
+                                    }
+                                }}
+                            }
                         }
                     }
                 }

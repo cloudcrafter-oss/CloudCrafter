@@ -4,7 +4,11 @@ using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Jobs.Logger;
 
-public class BackgroundJobLogger(BackgroundJob job, IApplicationDbContext context, string categoryName) : ILogger
+public class BackgroundJobLogger(
+    BackgroundJob job,
+    IApplicationDbContext context,
+    string categoryName,
+    ILogger<BackgroundJobLogger> logger) : ILogger
 {
     public IDisposable? BeginScope<TState>(TState state) where TState : notnull
     {
@@ -22,10 +26,16 @@ public class BackgroundJobLogger(BackgroundJob job, IApplicationDbContext contex
         var message = formatter(state, exception);
         var logEntry = new BackgroundJobLog
         {
-            Timestamp = DateTime.UtcNow, Level = logLevel.ToString(), Message = $"[{categoryName}] {message}",
+            Timestamp = DateTime.UtcNow,
+            Level = logLevel.ToString(),
+            Message = $"[{categoryName}] {message}",
             Exception = exception?.ToString()
-            
         };
+
+        #if IN_TESTS
+        System.Console.WriteLine("IN_TESTS >> " + logEntry.Message);
+        #endif
+        logger.Log(logLevel, eventId, state, exception, formatter);
 
         job.Logs.Add(logEntry);
         context.SaveChanges(); // Note: This might impact performance for high-frequency logging
