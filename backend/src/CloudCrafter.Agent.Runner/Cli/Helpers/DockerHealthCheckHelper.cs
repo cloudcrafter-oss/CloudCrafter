@@ -4,6 +4,8 @@ using CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
 using CloudCrafter.Agent.Runner.Exceptions;
 using Docker.DotNet.Models;
 using Microsoft.Extensions.Logging;
+using Polly;
+using Polly.Retry;
 
 namespace CloudCrafter.Agent.Runner.Cli.Helpers;
 
@@ -55,13 +57,30 @@ public class DockerHealthCheckHelper(IDockerHelper dockerHelper, ILogger<DockerH
 
     private class HealthCheckOutput
     {
-        [JsonPropertyName("response_code")]
-        public string ResponseCode { get; init; } = string.Empty;
-        [JsonPropertyName("response_body")]
-        public string? ResponseBody { get; init; }
+        [JsonPropertyName("response_code")] public string ResponseCode { get; init; } = string.Empty;
+        [JsonPropertyName("response_body")] public string? ResponseBody { get; init; }
     }
-        
+
+
     public async Task<bool> IsHealthyAsync(string containerId, ContainerHealthCheckParamsOptions options)
+    {
+        var retry = Policy<bool>
+            .Handle<Exception>()
+            .OrResult(result => !result)
+            .WaitAndRetryAsync(
+                retryCount: options.Retries.GetValueOrDefault(1),
+                sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
+                onRetry: (result, timeSpan, retryCount, context) =>
+                {
+                    logger.LogWarning("Attempt {RetryCount} failed. Waiting {TimeSpan} before next retry.", retryCount,
+                        timeSpan);
+                }
+            );
+
+        return await retry.ExecuteAsync(async () => await RunHealthCheck(containerId, options));
+    }
+
+    private async Task<bool> RunHealthCheck(string containerId, ContainerHealthCheckParamsOptions options)
     {
         var container = await dockerHelper.GetDockerContainer(containerId);
 
@@ -105,10 +124,12 @@ public class DockerHealthCheckHelper(IDockerHelper dockerHelper, ILogger<DockerH
             logger.LogCritical("Could not parse health check output for container {ContainerId}", containerId);
             return false;
         }
-        
-        if(healthCheckOutput.ResponseCode != options.ExpectedResponseCode.ToString())
+
+        if (healthCheckOutput.ResponseCode != options.ExpectedResponseCode.ToString())
         {
-            logger.LogCritical("Health check failed for container {ContainerId}, expected response code {ExpectedResponseCode} but got {ResponseCode}", containerId, options.ExpectedResponseCode, healthCheckOutput.ResponseCode);
+            logger.LogCritical(
+                "Health check failed for container {ContainerId}, expected response code {ExpectedResponseCode} but got {ResponseCode}",
+                containerId, options.ExpectedResponseCode, healthCheckOutput.ResponseCode);
             return false;
         }
 
