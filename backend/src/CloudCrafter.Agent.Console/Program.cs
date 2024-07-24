@@ -4,6 +4,7 @@ using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Runner;
 using CloudCrafter.Agent.Runner.Cli;
 using CloudCrafter.Agent.Runner.Cli.Helpers;
+using CloudCrafter.Agent.Runner.Common.Behaviour;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
 using CloudCrafter.Agent.Runner.DeploymentLogPump.Implementation;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
@@ -85,6 +86,8 @@ public class Program
                 {
                     cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
                     cfg.RegisterServicesFromAssembly(typeof(IAgentRunnerTarget).Assembly);
+
+                    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
                 });
             });
     }
