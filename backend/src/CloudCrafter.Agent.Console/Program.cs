@@ -42,36 +42,7 @@ public class Program
         {
             var mediator = host.Services.GetRequiredService<IMediator>();
 
-            var dockerHelper = host.Services.GetRequiredService<IDockerHelper>();
-
-            var nginxResult = await dockerHelper.GetDockerContainer("c226748108c8");
-            var frontendResult = await dockerHelper.GetDockerContainer("ccb67c7ba3ab");
-
-            var healthCheckHelper = host.Services.GetRequiredService<IDockerHealthCheckHelper>();
-
-
-
-            var testResult = await healthCheckHelper.IsHealthyAsync(nginxResult.ID, new()
-            {
-                CheckForDockerHealth = true,
-                HttpMethod = "GET",
-                HttpSchema = "http",
-                HttpHost = "localhost",
-                HttpPort = 80,
-                HttpPath = "/",
-                ExpectedResponseCode = 200
-            });
-
             
-            
-            // var tester = host.Services.GetRequiredService<IDockerComposeHelper>();
-            //
-            // var testResult =
-            //     await tester.GetDockerContainerIdForService(
-            //         "/tmp/cloudcrafter-data/my-application/docker-compose.yml", "tester");
-            //
-            //
-            //
 
             DeploymentRecipe? recipe = null;
             if (demoOptionValue)

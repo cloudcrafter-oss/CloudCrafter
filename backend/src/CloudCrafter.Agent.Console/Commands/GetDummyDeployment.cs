@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Agent.Models.Recipe;
+﻿using System.Dynamic;
+using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.DockerCompose.Engine.Yaml;
 using CloudCrafter.Shared.Utils;
 using MediatR;
@@ -26,7 +27,10 @@ public static class GetDummyDeployment
 
             var dockerComposeBase64 = dockerComposeEditor.ToBase64();
 
-
+            dynamic healthCheckOptions = new
+            {
+                checkForDockerHealth = true
+            };
             var recipe = new DeploymentRecipe
             {
                 Name = "My Application",
@@ -122,7 +126,7 @@ public static class GetDummyDeployment
                             Name = "Check if container is healthy",
                             Description = "Check if container is healthy",
                             Type = DeploymentBuildStepType.ContainerHealthCheck,
-                            Params = new Dictionary<string, object> { { "service", "frontend" } }
+                            Params = new Dictionary<string, object> { { "frontend", healthCheckOptions }}
                         }
                     }
                 }
