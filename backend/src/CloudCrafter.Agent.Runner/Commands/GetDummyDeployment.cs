@@ -1,11 +1,9 @@
-﻿using System.Dynamic;
-using CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
-using CloudCrafter.Agent.Models.Recipe;
+﻿using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.DockerCompose.Engine.Yaml;
 using CloudCrafter.Shared.Utils;
 using MediatR;
 
-namespace CloudCrafter.Agent.Console.Commands;
+namespace CloudCrafter.Agent.Runner.Commands;
 
 public static class GetDummyDeployment
 {
