@@ -39,7 +39,7 @@ public static class Helpers
     public static DockerComposeEditor GetDummyEditor(string repository, string tag)
     {
         var editor = new DockerComposeEditor();
-        var service = editor.AddService("web");
+        var service = editor.AddService("frontend");
 
         service.SetImage(repository, tag);
 
