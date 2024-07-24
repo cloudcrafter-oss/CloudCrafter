@@ -4,6 +4,7 @@ using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.Shared.Utils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace CloudCrafter.Agent.Console.IntegrationTests.DummyDeployment;
 
@@ -12,13 +13,14 @@ public class SuccessfulDummyDeploymentTest
     private DeploymentService _deploymentService;
     private DeploymentRecipe _recipe;
 
+
     [SetUp]
     public async Task SetUp()
     {
         var builder = Program.CreateHostBuilder([]);
         var host = builder.Build();
 
-
+        Log.Logger =  new LoggerConfiguration().WriteTo.NUnitOutput().CreateLogger();
         var mediator = host.Services.GetRequiredService<IMediator>();
         _recipe = await mediator.Send(new GetDummyDeployment.Query("custom-image", "testing"));
 

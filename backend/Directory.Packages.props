@@ -39,6 +39,7 @@
     <PackageVersion Include="NSubstitute" Version="5.1.0"/>
     <PackageVersion Include="Moq" Version="4.20.70"/>
     <PackageVersion Include="ReportGenerator" Version="5.2.2"/>
+    <PackageVersion Include="Serilog" Version="3.1.1"/>
     <PackageVersion Include="Serilog.AspNetCore" Version="8.0.1"/>
     <PackageVersion Include="System.Configuration.ConfigurationManager" Version="7.0.0"/>
     <PackageVersion Include="Testcontainers" Version="3.9.0"/>
@@ -57,6 +58,7 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
     <!-- Tests -->
     <PackageVersion Include="Docker.DotNet" Version="3.125.15"/>
+    <PackageVersion Include="Serilog.Sinks.NUnit" Version="1.0.3"/>
     <!-- Engine -->
     <PackageVersion Include="SSH.NET" Version="2024.1.0"/>
     <PackageVersion Include="YamlDotNet" Version="15.3.0"/>
