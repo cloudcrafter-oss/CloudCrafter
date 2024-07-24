@@ -153,7 +153,7 @@ public static class GetDummyDeployment
                                                 "httpPath", "/"
                                             },
                                             {
-                                                "httpPort", 80
+                                                "httpPort", 3000
                                             },
                                             {
                                                 "expectedResponseCode", 200

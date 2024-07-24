@@ -97,6 +97,8 @@ public class DockerHealthCheckHelper(IDockerHelper dockerHelper, ILogger<DockerH
         await WriteHealthCheckScript(containerId);
 
         var url = $"{options.HttpSchema}://{options.HttpHost}:{options.HttpPort}{options.HttpPath}";
+        
+        logger.LogInformation("Running health check for container {ContainerId} with URL {Url}", containerId, url);
         var result = await dockerHelper.RunCommandInContainer(containerId, [
             "sh",
             "-c",
