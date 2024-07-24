@@ -157,6 +157,9 @@ public static class GetDummyDeployment
                                             },
                                             {
                                                 "expectedResponseCode", 200
+                                            },
+                                            {
+                                                "retries", 4
                                             }
                                         }
                                     }
