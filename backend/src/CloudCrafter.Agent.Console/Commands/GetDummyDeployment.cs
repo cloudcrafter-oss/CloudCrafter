@@ -129,13 +129,34 @@ public static class GetDummyDeployment
                             Type = DeploymentBuildStepType.ContainerHealthCheck,
                             Params = new Dictionary<string, object>
                             {
+                                {"dockerComposeSettings", new Dictionary<string, object>()
+                                {
+                                    {
+                                        "fetchServicesFromContext", true
+                                    }
+                                }},
                                 { "services", new Dictionary<string, object>()
                                 {
                                     {
                                         "frontend", new Dictionary<string, object>()
                                         {
                                             {
-                                                "checkForDockerHealth", true
+                                                "httpMethod", "get"
+                                            },
+                                            {
+                                                "httpSchema", "http"
+                                            },
+                                            {
+                                                "httpHost", "localhost"
+                                            },
+                                            {
+                                                "httpPath", "/"
+                                            },
+                                            {
+                                                "httpPort", 80
+                                            },
+                                            {
+                                                "expectedResponseCode", 200
                                             }
                                         }
                                     }

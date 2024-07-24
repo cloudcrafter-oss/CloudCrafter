@@ -7,6 +7,8 @@ namespace CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
 public class ContainerHealthCheckParams
 {
     public Dictionary<string, ContainerHealthCheckParamsOptions> Services { get; init; } = new();
+    
+    public ContainerHealthCheckParamsOptionsDockerComposeSettings? DockerComposeSettings { get; init; }
 }
 
 public class ContainerHealthCheckParamsOptions
@@ -25,4 +27,9 @@ public class ContainerHealthCheckParamsOptions
     public int? CheckTimeout { get; init; }
     public int? Retries { get; init; }
     public int? BackOffPeriod { get; init; }
+}
+
+public class ContainerHealthCheckParamsOptionsDockerComposeSettings
+{
+    public bool? FetchServicesFromContext { get; init; }
 }

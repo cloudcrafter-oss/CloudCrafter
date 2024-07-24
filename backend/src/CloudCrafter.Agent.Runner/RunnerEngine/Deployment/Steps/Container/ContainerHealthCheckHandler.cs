@@ -26,12 +26,24 @@ public class ContainerHealthCheckHandler(IMessagePump pump, IDockerHealthCheckHe
         }
 
 
+        var dockerComposeServiceContainerIdMap = new Dictionary<string, string>();
+
+        if (parameters.DockerComposeSettings?.FetchServicesFromContext == true)
+        {
+            dockerComposeServiceContainerIdMap = context.GetRecipeResult<Dictionary<string, string>>(RecipeResultKeys.DockerComposeServices);
+        }
+        
+        
+
         var taskDictionary = new Dictionary<string, Task<bool>>();
 
 
         foreach (var service in parameters.Services)
         {
-            var containerIsHealthyForService = dockerHealthCheckHelper.IsHealthyAsync(service.Key, service.Value);
+            
+            var containerId = dockerComposeServiceContainerIdMap.TryGetValue(service.Key, out var value) ? value : service.Key;
+            
+            var containerIsHealthyForService = dockerHealthCheckHelper.IsHealthyAsync(containerId, service.Value);
 
             taskDictionary[service.Key] = containerIsHealthyForService;
         }
@@ -54,7 +66,7 @@ public class ContainerHealthCheckHandler(IMessagePump pump, IDockerHealthCheckHe
         }
 
 
-        if (!unhealthyServices.Any())
+        if (unhealthyServices.Any())
         {
             var unhealthyServicesString = string.Join(", ", unhealthyServices);
             _logger.LogCritical($"The following containers did not become healthy: {unhealthyServicesString}");
