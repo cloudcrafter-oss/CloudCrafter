@@ -18,7 +18,7 @@ public class DockerHelperTest : BaseDockerTest
         var nginxContainerId = GetNginxContainerId();
 
         var list = new List<DockerHelperResponse>();
-        await _dockerHelper.RunCommandInContainer(nginxContainerId!, "whoami", log =>
+        await _dockerHelper.RunCommandInContainer(nginxContainerId!, ["whoami"], log =>
         {
             list.Add(log);
         });
