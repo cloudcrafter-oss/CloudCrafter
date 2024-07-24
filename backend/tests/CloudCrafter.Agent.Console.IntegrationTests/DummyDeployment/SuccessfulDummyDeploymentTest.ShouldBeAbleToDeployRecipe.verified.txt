@@ -1,5 +1,5 @@
 ﻿services:
-  web:
+  frontend:
     image: custom-image:testing
     ports:
     - 3000:3000
