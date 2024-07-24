@@ -1,4 +1,5 @@
 ﻿using System.Dynamic;
+using CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.DockerCompose.Engine.Yaml;
 using CloudCrafter.Shared.Utils;
@@ -126,7 +127,20 @@ public static class GetDummyDeployment
                             Name = "Check if container is healthy",
                             Description = "Check if container is healthy",
                             Type = DeploymentBuildStepType.ContainerHealthCheck,
-                            Params = new Dictionary<string, object> { { "frontend", healthCheckOptions }}
+                            Params = new Dictionary<string, object>
+                            {
+                                { "services", new Dictionary<string, object>()
+                                {
+                                    {
+                                        "frontend", new Dictionary<string, object>()
+                                        {
+                                            {
+                                                "checkForDockerHealth", true
+                                            }
+                                        }
+                                    }
+                                }}
+                            }
                         }
                     }
                 }
