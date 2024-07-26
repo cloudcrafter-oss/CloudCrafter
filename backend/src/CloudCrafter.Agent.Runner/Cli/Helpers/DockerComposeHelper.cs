@@ -20,8 +20,19 @@ public class DockerComposeHelper(
             "-d"
         ], streamResult =>
         {
-            logger.LogDebug(streamResult.Log);
-            logger.LogInformation(streamResult.Log);
+            var errorAlikeMessages = new List<string> { "error", "fail" };
+            // Docker compose up logs to stdout, so we can log it as info
+            var logToStdErr = errorAlikeMessages.Any(streamResult.Log.Contains);
+            if (logToStdErr)
+            {
+                logger.LogError(streamResult.Log);
+            }
+            else
+            {
+                logger.LogInformation(streamResult.Log);
+            }
+
+            onLog?.Invoke(streamResult with { IsStdErr = logToStdErr });
         });
 
         return result;

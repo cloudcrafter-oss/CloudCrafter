@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="FluentAssertions"/>
     <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+    <PackageReference Include="Moq"/>
     <PackageReference Include="nunit"/>
     <PackageReference Include="Verify.NUnit"/>
     <PackageReference Include="Bogus"/>
