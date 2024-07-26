@@ -32,7 +32,9 @@ public class AgentRunner(IHost host)
             var random = new Random();
             var randomString = new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
-            recipe = await mediator.Send(new GetDummyDeployment.Query("custom-image", randomString));
+
+            var applicationId = Guid.Parse("4676dae2-08a5-4a5d-a5f6-5b02a3a77ac7");
+            recipe = await mediator.Send(new GetDummyDeployment.Query("custom-image", randomString, applicationId));
         }
         
         if (!string.IsNullOrWhiteSpace(base64Recipe))

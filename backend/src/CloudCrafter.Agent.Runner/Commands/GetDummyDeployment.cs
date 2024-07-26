@@ -7,7 +7,7 @@ namespace CloudCrafter.Agent.Runner.Commands;
 
 public static class GetDummyDeployment
 {
-    public record Query(string ImageRepository, string ImageTag) : IRequest<DeploymentRecipe>;
+    public record Query(string ImageRepository, string ImageTag, Guid ApplicationId) : IRequest<DeploymentRecipe>;
 
     private class Handler : IRequestHandler<Query, DeploymentRecipe>
     {
@@ -26,13 +26,11 @@ public static class GetDummyDeployment
 
             var dockerComposeBase64 = dockerComposeEditor.ToBase64();
 
-            dynamic healthCheckOptions = new
-            {
-                checkForDockerHealth = true
-            };
+            dynamic healthCheckOptions = new { checkForDockerHealth = true };
             var recipe = new DeploymentRecipe
             {
                 Name = "My Application",
+                Application = new() { Id = request.ApplicationId },
                 Destination =
                     new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" + randomString },
                 DockerComposeOptions =
@@ -115,10 +113,11 @@ public static class GetDummyDeployment
                             Name = "Start docker compose",
                             Description = "Start docker compose",
                             Type = DeploymentBuildStepType.DockerComposeUp,
-                            Params = new Dictionary<string, object>
-                            {
-                                { "dockerComposeFile", "docker-compose.yml" }, { "storeServiceNames", true }
-                            }
+                            Params =
+                                new Dictionary<string, object>
+                                {
+                                    { "dockerComposeFile", "docker-compose.yml" }, { "storeServiceNames", true }
+                                }
                         },
                         new()
                         {
@@ -127,41 +126,29 @@ public static class GetDummyDeployment
                             Type = DeploymentBuildStepType.ContainerHealthCheck,
                             Params = new Dictionary<string, object>
                             {
-                                {"dockerComposeSettings", new Dictionary<string, object>()
                                 {
-                                    {
-                                        "fetchServicesFromContext", true
-                                    }
-                                }},
-                                { "services", new Dictionary<string, object>()
+                                    "dockerComposeSettings",
+                                    new Dictionary<string, object>() { { "fetchServicesFromContext", true } }
+                                },
                                 {
+                                    "services",
+                                    new Dictionary<string, object>()
                                     {
-                                        "frontend", new Dictionary<string, object>()
                                         {
+                                            "frontend",
+                                            new Dictionary<string, object>()
                                             {
-                                                "httpMethod", "get"
-                                            },
-                                            {
-                                                "httpSchema", "http"
-                                            },
-                                            {
-                                                "httpHost", "localhost"
-                                            },
-                                            {
-                                                "httpPath", "/"
-                                            },
-                                            {
-                                                "httpPort", 3000
-                                            },
-                                            {
-                                                "expectedResponseCode", 200
-                                            },
-                                            {
-                                                "retries", 4
+                                                { "httpMethod", "get" },
+                                                { "httpSchema", "http" },
+                                                { "httpHost", "localhost" },
+                                                { "httpPath", "/" },
+                                                { "httpPort", 3000 },
+                                                { "expectedResponseCode", 200 },
+                                                { "retries", 4 }
                                             }
                                         }
                                     }
-                                }}
+                                }
                             }
                         }
                     }
