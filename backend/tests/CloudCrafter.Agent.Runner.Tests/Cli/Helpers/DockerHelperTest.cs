@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.Agent.Models.Docker.Filters;
 using CloudCrafter.Agent.Runner.Cli.Helpers;
+using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.DockerCompose.Shared.Labels;
 using Docker.DotNet;
 using Docker.DotNet.Models;
@@ -54,8 +55,8 @@ public class DockerHelperTest
                 It.Is<ContainersListParameters>(p => 
                     p.All == true && 
                     p.Filters.ContainsKey("label") && 
-                    ((Dictionary<string, bool>)p.Filters["label"]).Keys.Contains(LabelHelper.GenerateApplicationLabel(firstApplicationId)) && 
-                    ((Dictionary<string, bool>)p.Filters["label"]).Keys.Contains(LabelHelper.GenerateApplicationLabel(secondApplicationId))),
+                    ((Dictionary<string, bool>)p.Filters["label"]).Keys.Contains(LabelFactory.GenerateApplicationLabel(firstApplicationId).ToLabelString()) && 
+                    ((Dictionary<string, bool>)p.Filters["label"]).Keys.Contains(LabelFactory.GenerateApplicationLabel(secondApplicationId).ToLabelString())),
                 It.IsAny<CancellationToken>()),
             Times.Once);
     }

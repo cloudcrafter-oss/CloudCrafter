@@ -1,7 +1,7 @@
 ﻿using CloudCrafter.Agent.Models.Docker.Filters;
 using Docker.DotNet.Models;
 
-namespace CloudCrafter.Agent.Runner.Cli.Helpers;
+namespace CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 
 public interface IDockerHelper
 {

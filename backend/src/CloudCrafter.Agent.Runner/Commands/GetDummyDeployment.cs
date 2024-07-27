@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.DockerCompose.Engine.Yaml;
+using CloudCrafter.DockerCompose.Shared.Labels;
 using CloudCrafter.Shared.Utils;
 using MediatR;
 
@@ -21,7 +22,9 @@ public static class GetDummyDeployment
             var service = dockerComposeEditor.AddService("frontend");
             service.SetImage(imageRepository, imageTag);
             service.AddExposedPort(3000, 3000);
-
+            service.AddLabel(LabelFactory.GenerateApplicationLabel(request.ApplicationId));
+            
+            
             var randomString = RandomGenerator.String();
 
             var dockerComposeBase64 = dockerComposeEditor.ToBase64();

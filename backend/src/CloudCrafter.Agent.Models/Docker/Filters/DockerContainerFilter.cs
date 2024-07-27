@@ -8,6 +8,6 @@ public class DockerContainerFilter
 
     public Dictionary<string, bool> GetCloudCrafterApplications()
     {
-        return CloudCrafterApplicationIds.ToDictionary(LabelHelper.GenerateApplicationLabel, _ => true);
+        return CloudCrafterApplicationIds.ToDictionary(x => LabelFactory.GenerateApplicationLabel(x).ToLabelString(), _ => true);
     }
 }

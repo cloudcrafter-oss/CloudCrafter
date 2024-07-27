@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using CloudCrafter.DockerCompose.Engine.Exceptions;
 using CloudCrafter.DockerCompose.Engine.Validator;
+using CloudCrafter.DockerCompose.Shared.Labels;
 using YamlDotNet.RepresentationModel;
 
 namespace CloudCrafter.DockerCompose.Engine.Yaml;
@@ -195,6 +196,13 @@ public class DockerComposeEditor
             var labelsNode = (YamlMappingNode)serviceNode["labels"];
             labelsNode.Add(key, new YamlScalarNode(value));
             return this;
+        }
+
+        public ServiceEditor AddLabel(CloudCrafterLabel cloudCrafterLabel)
+        {
+            var labelDetails = cloudCrafterLabel.ToDockerComposeLabel();
+            
+            return AddLabel(labelDetails.Item1, labelDetails.Item2);
         }
 
         public ServiceEditor SetImage(string image, string tag)
