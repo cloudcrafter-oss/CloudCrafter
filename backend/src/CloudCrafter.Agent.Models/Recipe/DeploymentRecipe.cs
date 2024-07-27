@@ -48,5 +48,6 @@ public enum DeploymentBuildStepType
     NixpacksBuildDockerImage,
     DockerComposeWriteToFileSystem,
     DockerComposeUp,
+    DockerValidateNetworksExists,
     ContainerHealthCheck
 }

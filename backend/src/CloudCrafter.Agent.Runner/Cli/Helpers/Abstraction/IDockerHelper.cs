@@ -11,4 +11,5 @@ public interface IDockerHelper
     Task<ContainerInspectResponse> GetDockerContainer(string containerId);
 
     Task<IList<ContainerListResponse>> GetContainerFromFilter(DockerContainerFilter filter);
+    Task<IList<NetworkResponse>> GetNetworks();
 }

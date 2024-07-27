@@ -31,6 +31,14 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
         var containers = await _client.Containers.ListContainersAsync(dockerFilter);
         return containers;
     }
+
+    public async Task<IList<NetworkResponse>> GetNetworks()
+    {
+        var networks = await _client.Networks.ListNetworksAsync();
+
+        return networks;
+    }
+
     public async Task<DockerHelperResponseResult> RunCommandInContainer(string containerName, IList<string> commands,
         Action<DockerHelperResponse>? onLog = null)
     {

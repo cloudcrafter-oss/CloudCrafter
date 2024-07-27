@@ -65,6 +65,21 @@ public static class GetDummyDeployment
                     {
                         new()
                         {
+                            Name  = "Check if network exists",
+                            Description = "Check if network exists",
+                            Type = DeploymentBuildStepType.DockerValidateNetworksExists,
+                            Params = new Dictionary<string, object>()
+                            {
+                                {
+                                    "networks", new List<string>()
+                                    {
+                                        "cloudcrafter"
+                                    }
+                                }
+                            }
+                        },
+                        new()
+                        {
                             Name = "Fetch git",
                             Description = "Fetch the git application",
                             Type = DeploymentBuildStepType.FetchGitRepository,
