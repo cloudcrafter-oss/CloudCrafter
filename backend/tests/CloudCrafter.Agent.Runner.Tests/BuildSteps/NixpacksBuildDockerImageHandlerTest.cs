@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params;
+﻿using CloudCrafter.Agent.Models.Configs;
+using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Exceptions;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
@@ -49,12 +50,13 @@ public class NixpacksBuildDockerImageHandlerTest : BaseTest
         await _handler.ExecuteAsync(parameters, _context);
 
         // Assert
-        _mockNixpacksHelper.Verify(x => x.BuildDockerImage(
-            "testPlanPath",
-            $"{workingDirectory}/git/testPath",
-            "testImage:testTag",
-            false
-        ), Times.Once);
+        _mockNixpacksHelper.Verify(x => x.BuildDockerImage(It.Is<NixpacksBuildDockerImageConfig>(p =>
+            p.PlanPath == "testPlanPath" &&
+            p.WorkDir == $"{workingDirectory}/git/testPath" &&
+            p.ImageName == "testImage:testTag" &&
+            p.DisableCache == false
+        )), Times.Once);
+
 
         _mockLogger.Verify(x => x.LogInfo("Building Docker image via Nixpacks"), Times.Once);
         _mockLogger.Verify(x => x.LogInfo("Successfully built Docker image: testImage:testTag"), Times.Once);

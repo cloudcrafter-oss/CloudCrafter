@@ -130,7 +130,13 @@ public static class GetDummyDeployment
                                     { "path", "nixpacks-node-server" },
                                     { "image", imageRepository },
                                     { "tag", imageTag },
-                                    { "disableCache", true }
+                                    { "disableCache", true },
+                                    { "env", new Dictionary<string, object>()
+                                    {
+                                        {
+                                            "BUILD_MOMENT", DateTime.UtcNow.ToString("F")
+                                        }
+                                    }}
                                 }
                         },
                         new()
