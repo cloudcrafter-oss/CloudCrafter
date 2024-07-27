@@ -41,6 +41,7 @@ public class SuccessfulDummyDeploymentTest
     [Test]
     public async Task ShouldBeAbleToDeployRecipe()
     {
+        await EnsureNetworkExists("cloudcrafter");
         var nixpacksDockerBuildStep = _recipe.BuildOptions.Steps.FirstOrDefault(x =>
             x.Type == DeploymentBuildStepType.NixpacksBuildDockerImage);
 
