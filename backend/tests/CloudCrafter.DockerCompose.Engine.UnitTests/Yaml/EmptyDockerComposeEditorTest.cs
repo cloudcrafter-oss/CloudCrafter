@@ -147,4 +147,22 @@ public class EmptyDockerComposeEditorTest
         
         return Verify(yaml);
     }
+    
+    [Test]
+    public Task ShouldBeAbleToAddNetworkWithExternalNetwork()
+    {
+        var editor = new DockerComposeEditor();
+        var service = editor.AddService("test")
+            .AddLabel("test", "true");
+
+        var network = editor.AddNetwork("cloudcrafter");
+        network.SetNetworkName("cloudcrafter")
+            .SetIsExternalNetwork();
+
+        service.AddNetwork(network);
+        
+        var yaml = editor.GetYaml();
+        
+        return Verify(yaml);
+    }
 }

@@ -19,10 +19,25 @@ public static class GetDummyDeployment
 
             var dockerComposeEditor = new DockerComposeEditor();
 
+            var network = dockerComposeEditor.AddNetwork("cloudcrafter")
+                .SetNetworkName("cloudcrafter")
+                .SetIsExternalNetwork();
+
+            
             var service = dockerComposeEditor.AddService("frontend");
             service.SetImage(imageRepository, imageTag);
-            service.AddExposedPort(3000, 3000);
-            service.AddLabel(LabelFactory.GenerateApplicationLabel(request.ApplicationId));
+
+            service.AddNetwork(network);
+
+            var labelService = new DockerComposeLabelService();
+            labelService.AddLabel(LabelFactory.GenerateApplicationLabel(request.ApplicationId));
+            labelService.AddTraefikLabels(new()
+            {
+                Rule = "Host(`frontend.127.0.0.1.sslip.io`)",
+                Service = "frontend",
+                LoadBalancerPort = 3000
+            });
+            service.AddLabels(labelService);
             
             
             var randomString = RandomGenerator.String();

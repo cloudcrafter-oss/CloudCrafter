@@ -168,6 +168,11 @@ public class DockerComposeEditor
             return SetKeyValue("name", networkName);
         }
 
+        public NetworkEditor SetIsExternalNetwork()
+        {
+            return SetKeyValue("external", "true");
+        }
+
         public string GetNetworkName()
         {
             return NetworkName;
