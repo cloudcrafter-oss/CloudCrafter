@@ -198,11 +198,16 @@ public class DockerComposeEditor
             return this;
         }
 
-        public ServiceEditor AddLabel(CloudCrafterLabel cloudCrafterLabel)
+        public ServiceEditor AddLabels(DockerComposeLabelService labelService)
         {
-            var labelDetails = cloudCrafterLabel.ToDockerComposeLabel();
-            
-            return AddLabel(labelDetails.Item1, labelDetails.Item2);
+            var labels = labelService.ToDictionary();
+
+            foreach (var label in labels)
+            {
+                AddLabel(label.Key, label.Value);
+            }
+
+            return this;
         }
 
         public ServiceEditor SetImage(string image, string tag)

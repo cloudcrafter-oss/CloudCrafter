@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using CloudCrafter.DockerCompose.Engine.Exceptions;
 using CloudCrafter.DockerCompose.Engine.Yaml;
+using CloudCrafter.DockerCompose.Shared.Labels;
 using Docker.DotNet;
 using FluentAssertions;
 
@@ -70,6 +71,36 @@ public class EmptyDockerComposeEditorTest
             .AddNetwork(network);
         
         service.Should().NotBeNull();
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToAddLabelsFromLabelService()
+    {
+        var editor = new DockerComposeEditor();
+        var service = editor.AddService("frontend");
+
+        service.SetImage("nginx", "latest");
+
+        var id = Guid.Parse("ddf9e4a2-3358-442d-8781-30daf32fd59d");
+        var labelsService = new DockerComposeLabelService();
+        
+        labelsService.AddLabel(LabelFactory.GenerateApplicationLabel(id));
+        labelsService.AddTraefikLabels(new()
+        {
+            Service = "frontend",
+            Rule = "Host(`example.com`)"
+        });
+        
+        
+        service.AddLabels(labelsService);
+
+        var isValid = await editor.IsValid();
+
+        isValid.Should().BeTrue();
+        
+        var yaml = editor.GetYaml();
+
+        await Verify(yaml);
     }
 
     [Test]
