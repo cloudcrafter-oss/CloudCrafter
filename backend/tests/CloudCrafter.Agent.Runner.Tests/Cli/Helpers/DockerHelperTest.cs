@@ -46,7 +46,7 @@ public class DockerHelperTest
         var dockerService = new DockerHelper(provider.Object);
 
         // Act
-        var result = await dockerService.GetContainerFromFilter(filter);
+        var result = await dockerService.GetContainersFromFilter(filter);
 
         // Assert
         expectedContainers.Count.Should().Be(result.Count);

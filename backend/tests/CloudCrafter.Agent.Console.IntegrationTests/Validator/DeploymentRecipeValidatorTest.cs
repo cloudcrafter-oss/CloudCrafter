@@ -23,17 +23,18 @@ public class DeploymentRecipeValidatorTest
         var recipe = new DeploymentRecipe
         {
             Name = "My Application",
-            Application = new()
+            Application = new DeploymentRecipeApplicationInfo { Id = Guid.NewGuid() },
+            EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
             {
-                Id = Guid.NewGuid()
+                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>()
             },
             Destination =
                 new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" },
             BuildOptions = new DeploymentBuildOptions
             {
-                Steps = new List<DeploymentBuildStep>()
+                Steps = new List<DeploymentBuildStep>
                 {
-                    new DeploymentBuildStep()
+                    new()
                     {
                         Name = "dummy",
                         Description = "description",
@@ -54,23 +55,24 @@ public class DeploymentRecipeValidatorTest
         // If no exception is thrown, the recipe is valid
         true.Should().BeTrue();
     }
-    
+
     [Test]
     public void ShouldNotBeValidRecipeBecauseThereAreNoBuildOptionSteps()
     {
         var recipe = new DeploymentRecipe
         {
             Name = "My Application",
-            Application = new()
+            Application = new DeploymentRecipeApplicationInfo { Id = Guid.NewGuid() },
+            EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
             {
-                Id = Guid.NewGuid()
+                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>()
             },
             Destination =
                 new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" },
             BuildOptions = new DeploymentBuildOptions { Steps = new List<DeploymentBuildStep>() }
         };
-        
-        var exception = Assert.ThrowsAsync<ValidationException>(() => ((DeploymentService)_deploymentService).ValidateRecipe(recipe));
+
+        var exception = Assert.ThrowsAsync<ValidationException>(() => _deploymentService.ValidateRecipe(recipe));
         exception.Should().NotBeNull();
 
         exception.Errors.Count(error => error.PropertyName == "BuildOptions.Steps")
@@ -83,21 +85,23 @@ public class DeploymentRecipeValidatorTest
         var recipe = new DeploymentRecipe
         {
             Name = "My Application",
-            Application = new()
+            Application = new DeploymentRecipeApplicationInfo { Id = Guid.NewGuid() },
+            EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
             {
-                Id = Guid.NewGuid()
+                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>()
             },
             Destination =
                 new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" },
-            DockerComposeOptions = new() { },
+            DockerComposeOptions = new DeploymentRecipeDockerComposeOptions(),
             BuildOptions = new DeploymentBuildOptions { Steps = new List<DeploymentBuildStep>() }
         };
-        
-        var exception = Assert.ThrowsAsync<ValidationException>(() => ((DeploymentService)_deploymentService).ValidateRecipe(recipe));
+
+        var exception =
+            Assert.ThrowsAsync<ValidationException>(
+                () => ((DeploymentService)_deploymentService).ValidateRecipe(recipe));
 
         exception.Should().NotBeNull();
         exception.Errors.Count(error => error.PropertyName == "DockerComposeOptions.Base64DockerCompose")
             .Should().BeGreaterThan(0);
-        
     }
 }

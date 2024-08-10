@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.DockerCompose.Shared.Labels;
+using CloudCrafter.Shared.Deployment.Docker.Labels;
 
 namespace CloudCrafter.DockerCompose.Engine.Yaml;
 

@@ -23,7 +23,7 @@ public static class GetDummyDeployment
                 .SetNetworkName("cloudcrafter")
                 .SetIsExternalNetwork();
 
-            
+
             var service = dockerComposeEditor.AddService("frontend");
             service.SetImage(imageRepository, imageTag);
 
@@ -31,24 +31,25 @@ public static class GetDummyDeployment
 
             var labelService = new DockerComposeLabelService();
             labelService.AddLabel(LabelFactory.GenerateApplicationLabel(request.ApplicationId));
-            labelService.AddTraefikLabels(new()
+            labelService.AddTraefikLabels(new DockerComposeLabelServiceTraefikOptions
             {
-                Rule = "Host(`frontend.127.0.0.1.sslip.io`)",
-                Service = "frontend",
-                LoadBalancerPort = 3000
+                Rule = "Host(`frontend.127.0.0.1.sslip.io`)", Service = "frontend", LoadBalancerPort = 3000
             });
             service.AddLabels(labelService);
-            
-            
+
+
             var randomString = RandomGenerator.String();
 
             var dockerComposeBase64 = dockerComposeEditor.ToBase64();
 
-            dynamic healthCheckOptions = new { checkForDockerHealth = true };
             var recipe = new DeploymentRecipe
             {
                 Name = "My Application",
-                Application = new() { Id = request.ApplicationId },
+                Application = new DeploymentRecipeApplicationInfo { Id = request.ApplicationId },
+                EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
+                {
+                    Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>()
+                },
                 Destination =
                     new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" + randomString },
                 DockerComposeOptions =
@@ -65,17 +66,12 @@ public static class GetDummyDeployment
                     {
                         new()
                         {
-                            Name  = "Check if network exists",
+                            Name = "Check if network exists",
                             Description = "Check if network exists",
                             Type = DeploymentBuildStepType.DockerValidateNetworksExists,
-                            Params = new Dictionary<string, object>()
+                            Params = new Dictionary<string, object>
                             {
-                                {
-                                    "networks", new List<string>()
-                                    {
-                                        "cloudcrafter"
-                                    }
-                                }
+                                { "networks", new List<string> { "cloudcrafter" } }
                             }
                         },
                         new()
@@ -131,12 +127,13 @@ public static class GetDummyDeployment
                                     { "image", imageRepository },
                                     { "tag", imageTag },
                                     { "disableCache", true },
-                                    { "env", new Dictionary<string, object>()
                                     {
+                                        "env",
+                                        new Dictionary<string, object>
                                         {
-                                            "BUILD_MOMENT", DateTime.UtcNow.ToString("F")
+                                            { "BUILD_MOMENT", DateTime.UtcNow.ToString("F") }
                                         }
-                                    }}
+                                    }
                                 }
                         },
                         new()
@@ -167,15 +164,15 @@ public static class GetDummyDeployment
                             {
                                 {
                                     "dockerComposeSettings",
-                                    new Dictionary<string, object>() { { "fetchServicesFromContext", true } }
+                                    new Dictionary<string, object> { { "fetchServicesFromContext", true } }
                                 },
                                 {
                                     "services",
-                                    new Dictionary<string, object>()
+                                    new Dictionary<string, object>
                                     {
                                         {
                                             "frontend",
-                                            new Dictionary<string, object>()
+                                            new Dictionary<string, object>
                                             {
                                                 { "httpMethod", "get" },
                                                 { "httpSchema", "http" },

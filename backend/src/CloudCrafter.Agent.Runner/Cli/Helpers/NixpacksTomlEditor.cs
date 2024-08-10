@@ -1,6 +1,5 @@
-﻿using System.Text;
+﻿using System.Text.RegularExpressions;
 using Tomlyn;
-using Tomlyn.Syntax;
 using Tomlyn.Model;
 
 namespace CloudCrafter.Agent.Runner.Cli.Helpers;
@@ -25,11 +24,11 @@ public class NixpacksTomlEditor
 
         foreach (var variable in variables)
         {
-            variablesTable[variable.Key] = variable.Value;
+            variablesTable.Add(variable.Key, variable.Value);
         }
     }
 
-   
+
     public void AddPackages(IEnumerable<string> packages)
     {
         var phasesTable = (TomlTable)_model["phases"];
@@ -63,44 +62,10 @@ public class NixpacksTomlEditor
 
     public string GetToml()
     {
-        return CustomTomlSerializer.Serialize(_model);
+        var result = Toml.FromModel(_model);
+
+        var processedResult = Regex.Replace(result, @"=\s*""([^""]*)""\s*$", "= '$1'", RegexOptions.Multiline);
+
+        return processedResult;
     }
 }
-
-
-public static class CustomTomlSerializer
-{
-    public static string Serialize(TomlTable table)
-    {
-        var sb = new StringBuilder();
-        SerializeTable(table, sb, 0);
-        return sb.ToString();
-    }
-
-    private static void SerializeTable(TomlTable table, StringBuilder sb, int indent)
-    {
-        foreach (var kvp in table)
-        {
-            if (kvp.Value is TomlTable nestedTable)
-            {
-                sb.AppendLine($"{new string(' ', indent)}[{kvp.Key}]");
-                SerializeTable(nestedTable, sb, indent + 2);
-            }
-            else
-            {
-                sb.AppendLine($"{new string(' ', indent)}{kvp.Key} = {SerializeValue(kvp.Value)}");
-            }
-        }
-    }
-
-    private static string SerializeValue(object? value)
-    {
-        return value switch
-        {
-            string str => $"'{str}'",
-            TomlArray arr => $"[{string.Join(", ", arr.Select(SerializeValue))}]",
-            _ => value?.ToString() ?? "null"
-        };
-    }
-}
-

@@ -6,4 +6,5 @@ public class NixpacksBuildDockerImageConfig
     public required string WorkDir { get; init; }
     public required string ImageName { get; init; }
     public required bool DisableCache { get; init; }
+    public required Dictionary<string, string> EnvironmentVariables { get; init; }
 }

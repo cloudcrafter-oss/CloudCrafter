@@ -11,7 +11,7 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
 {
     private readonly IDockerClient _client = provider.GetClient();
 
-    public async Task<IList<ContainerListResponse>> GetContainerFromFilter(DockerContainerFilter filter)
+    public async Task<IList<ContainerListResponse>> GetContainersFromFilter(DockerContainerFilter filter)
     {
         var applications = filter.GetCloudCrafterApplications();
 

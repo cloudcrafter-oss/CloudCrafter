@@ -14,7 +14,7 @@ public class NixpacksTomlEditorTest
 
         return Verify(toml);
     }
-    
+
     [Test]
     public Task ShouldBeAbleToAddPackagesMultipleTimes()
     {
@@ -34,6 +34,26 @@ public class NixpacksTomlEditorTest
     {
         var editor = new NixpacksTomlEditor(GetNixpacksTomlWithExistingAptPkgs());
         editor.AddPackages(["wget", "curl", "nano"]);
+
+        var toml = editor.GetToml();
+
+        return Verify(toml);
+    }
+
+    [Test]
+    public Task ShouldBeAbleToAddEnvironmentVariables()
+    {
+        var multi = """
+                    test
+                    test1
+
+                    another test
+                    """;
+        var editor = new NixpacksTomlEditor(GetNixpacksTomlWithNoAptPkgs());
+        editor.AddVariables(new Dictionary<string, string>
+        {
+            { "ENV1", "value1" }, { "ENV2", "value2" }, { "MULTILINE", multi }
+        });
 
         var toml = editor.GetToml();
 
@@ -77,8 +97,8 @@ public class NixpacksTomlEditorTest
 
         return toml;
     }
-    
-    
+
+
     private string GetNixpacksTomlWithExistingAptPkgs()
     {
         var toml = """
