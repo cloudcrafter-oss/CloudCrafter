@@ -48,16 +48,14 @@ public class NixpacksHelper(ICommandExecutor executor, ICommandParser parser, IL
     public async Task<ExecutorResult> BuildDockerImage(NixpacksBuildDockerImageConfig config)
     {
         await EnsureNixpacksInstalled();
-
-
+        
         List<string> baseCommand =
         [
             "build",
             "-c",
             config.PlanPath,
-            "--no-error-without-start", // TODO: What does this mean?
-            "-n",
-            config.ImageName,
+            "-t",
+            config.ImageName
         ];
 
         if (!config.DisableCache)
@@ -66,56 +64,22 @@ public class NixpacksHelper(ICommandExecutor executor, ICommandParser parser, IL
         }
 
         baseCommand.AddRange([
-            config.WorkDir,
-            "-o",
             config.WorkDir
         ]);
 
-        var result = await executor.ExecuteAsync(NixpacksExecutable,
-            baseCommand);
+        var result = await executor.ExecuteWithStreamAsync(NixpacksExecutable,
+            baseCommand, streamResult =>
+            {
+                // TODO: Save this somewhere
+                logger.LogInformation(streamResult.Log);
+            } );
 
         if (!result.IsSuccess)
         {
-            throw new DeploymentException("Could not export Nixpacks docker image to directory.");
+            throw new DeploymentException("Could build Nixpacks docker image.");
         }
 
-
-        List<string> baseDockerBuildCommand =
-        [
-            "build",
-            "--network",
-            "host",
-            "-f",
-            $"{config.WorkDir}/.nixpacks/Dockerfile", // TODO: Add build args
-            "--progress",
-            "plain",
-        ];
-
-        if (!config.DisableCache)
-        {
-            baseDockerBuildCommand.Add("--no-cache");
-        }
-
-        baseDockerBuildCommand.AddRange([
-            "-t",
-            config.ImageName,
-            config.WorkDir
-        ]);
-
-
-        var dockerBuild = await executor.ExecuteWithStreamAsync("docker",
-            baseDockerBuildCommand, streamResult =>
-            {
-                // TODO: Make sure to stream this somewhere... 
-                logger.LogInformation(streamResult.Log);
-            });
-
-        if (!dockerBuild.IsSuccess)
-        {
-            throw new DeploymentException("Could not build docker image from Nixpacks plan.");
-        }
-
-        return dockerBuild;
+        return result;
     }
 
     private async Task EnsureNixpacksInstalled()
