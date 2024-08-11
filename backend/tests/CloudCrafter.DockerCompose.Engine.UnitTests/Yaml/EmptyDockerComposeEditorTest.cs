@@ -87,6 +87,7 @@ public class EmptyDockerComposeEditorTest
         labelsService.AddLabel(LabelFactory.GenerateApplicationLabel(id));
         labelsService.AddTraefikLabels(new()
         {
+            AppName = "frontend",
             Service = "frontend",
             Rule = "Host(`example.com`)"
         });
