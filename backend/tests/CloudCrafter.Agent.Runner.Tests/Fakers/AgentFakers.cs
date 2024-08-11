@@ -7,12 +7,18 @@ public abstract class AgentFakers
 {
     public static Faker<DeploymentRecipe> DeploymentRecipeFaker() => new Faker<DeploymentRecipe>()
         .StrictMode(true)
+        .RuleFor(x => x.EnvironmentVariables, f => DeploymentRecipeEnvironmentVariableConfigFaker().Generate())
         .RuleFor(x => x.Name, f => $"Application stack {f.Random.Number()}")
         .RuleFor(x => x.DockerComposeOptions, opt => null)
         .RuleFor(x => x.Application, f => DeploymentApplicationInfoFaker().Generate())
         .RuleFor(x => x.Destination, f => DeploymentRecipeDestinationFaker().Generate())
         .RuleFor(x => x.BuildOptions, f => DeploymentBuildOptionsFaker().Generate());
 
+
+    public static Faker<DeploymentRecipeEnvironmentVariableConfig> DeploymentRecipeEnvironmentVariableConfigFaker() =>
+        new Faker<DeploymentRecipeEnvironmentVariableConfig>()
+            .StrictMode(true)
+            .RuleFor(x => x.Variables, f => new Dictionary<string, DeploymentRecipeEnvironmentVariable>());
 
     public static Faker<DeploymentRecipeDestination> DeploymentRecipeDestinationFaker() =>
         new Faker<DeploymentRecipeDestination>()
