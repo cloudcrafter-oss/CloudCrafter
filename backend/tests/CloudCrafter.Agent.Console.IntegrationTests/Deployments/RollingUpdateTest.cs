@@ -8,7 +8,7 @@ using Serilog;
 
 namespace CloudCrafter.Agent.Console.IntegrationTests.Deployments;
 
-public class RollingUpdateTest
+public class RollingUpdateTest : AbstractTraefikTest
 {
     private DeploymentService _deploymentService;
     private DeploymentRecipe _firstRecipe;
@@ -30,9 +30,13 @@ public class RollingUpdateTest
         var labelService = new DockerComposeLabelService();
         labelService.AddLabel(LabelFactory.GenerateApplicationLabel(applicationId));
         labelService.AddLabel(LabelFactory.GenerateDeploymentLabel(deploymentId));
+        labelService.AddLabel(LabelFactory.GenerateManagedLabel());
         labelService.AddTraefikLabels(new DockerComposeLabelServiceTraefikOptions
         {
-            Rule = "Host(`frontend-rolling.127.0.0.1.sslip.io`)", Service = $"frontend-{tag}", LoadBalancerPort = 3000
+            AppName = "frontend",
+            Rule = "Host(`frontend-rolling.127.0.0.1.sslip.io`)",
+            Service = $"frontend",
+            LoadBalancerPort = 3000
         });
 
         service.AddLabels(labelService);
@@ -151,7 +155,7 @@ public class RollingUpdateTest
                         Description = "Write docker compose file",
                         Type = DeploymentBuildStepType.DockerComposeWriteToFileSystem,
                         Params =
-                            new Dictionary<string, object> { { "dockerComposeFile", $"{deploymentId}.yml" } }
+                            new Dictionary<string, object> { { "dockerComposeFile", $"docker-compose.yml" } }
                     },
                     new()
                     {
@@ -161,7 +165,7 @@ public class RollingUpdateTest
                         Params =
                             new Dictionary<string, object>
                             {
-                                { "dockerComposeFile", $"{deploymentId}.yml" }, { "storeServiceNames", true }
+                                { "dockerComposeFile", $"docker-compose.yml" }, { "storeServiceNames", true }
                             }
                     },
                     new()
@@ -239,6 +243,9 @@ public class RollingUpdateTest
                             }
                         }
                     }
+                },
+                {
+                    "onlyCloudCrafterContainers", true
                 }
             }
         });
@@ -263,5 +270,7 @@ public class RollingUpdateTest
         await ShouldHaveEndpointResponse("http://frontend-rolling.127.0.0.1.sslip.io/env", "DUMMY_ENV_VAR: firstTag");
 
         await _deploymentService.DeployAsync(_secondRecipe);
+        await ShouldHaveEndpointResponse("http://frontend-rolling.127.0.0.1.sslip.io/env", "DUMMY_ENV_VAR: secondTag");
+
     }
 }

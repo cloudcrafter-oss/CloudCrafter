@@ -11,6 +11,8 @@ public class CloudCrafterLabel(CloudCrafterLabelKey Key, string Value)
                 return CloudCrafterLabelKeys.ApplicationId;
             case CloudCrafterLabelKey.DeploymentId:
                 return CloudCrafterLabelKeys.DeploymentId;
+            case CloudCrafterLabelKey.CloudCrafterManaged:
+                return CloudCrafterLabelKeys.CloudCrafterManaged;
         }
 
         throw new KeyNotFoundException($"Key not found in CloudCrafterLabel, Key: {Key}");
@@ -34,5 +36,6 @@ public class CloudCrafterLabel(CloudCrafterLabelKey Key, string Value)
 public enum CloudCrafterLabelKey
 {
     ApplicationId,
-    DeploymentId
+    DeploymentId,
+    CloudCrafterManaged
 }

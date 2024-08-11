@@ -2,6 +2,7 @@
 using CloudCrafter.Agent.Models.Docker.Filters;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.Agent.Runner.Exceptions;
+using CloudCrafter.Shared.Deployment.Docker.Labels;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 
@@ -13,10 +14,9 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
 
     public async Task<IList<ContainerListResponse>> GetContainersFromFilter(DockerContainerFilter filter)
     {
-
         var dockerFilter = new ContainersListParameters { All = true };
 
-        if (filter.LabelFilters.Any())
+        if (filter.OnlyCloudCrafterLabels.GetValueOrDefault())
         {
             // TODO: Add to constructor if more filters in the future
             if (dockerFilter.Filters == null)
@@ -24,14 +24,45 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
                 dockerFilter.Filters = new Dictionary<string, IDictionary<string, bool>>();
             }
 
-            var labelFilter = filter.LabelFilters.Select(x => (x.ToFilterString(), x.ShouldMatch))
-                .ToDictionary();
-
+            var labelFilter = new Dictionary<string, bool>() { { CloudCrafterLabelKeys.CloudCrafterManaged, true } };
             dockerFilter.Filters.Add("label", labelFilter);
         }
 
         var containers = await _client.Containers.ListContainersAsync(dockerFilter);
-        return containers;
+
+
+        if (filter.LabelFilters.Count == 0)
+        {
+            // No filters at all, so return response as is
+            return containers;
+        }
+
+        // Docker API does not allow filtering based on a label which is not equal to a certain value.
+        // Hence we filter here this way.
+
+        List<ContainerListResponse> filteredContainers = new();
+
+
+        foreach (var container in containers)
+        {
+            bool allLabelsMatch = true;
+            foreach (var labelFilter in filter.LabelFilters)
+            {
+                if (!container.Labels.TryGetValue(labelFilter.Key, out var value) ||
+                    (value == labelFilter.Value) != labelFilter.ShouldMatch)
+                {
+                    allLabelsMatch = false;
+                    break;
+                }
+            }
+
+            if (allLabelsMatch)
+            {
+                filteredContainers.Add(container);
+            }
+        }
+
+        return filteredContainers;
     }
 
     public async Task<IList<NetworkResponse>> GetNetworks()
@@ -39,6 +70,32 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
         var networks = await _client.Networks.ListNetworksAsync();
 
         return networks;
+    }
+
+    public async Task StopContainers(List<string> containerIds)
+    {
+        if (containerIds.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var containerId in containerIds)
+        {
+            await _client.Containers.StopContainerAsync(containerId, new ContainerStopParameters());
+        }
+    }
+
+    public async Task RemoveContainers(List<string> containerIds)
+    {
+        if (containerIds.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var containerId in containerIds)
+        {
+            await _client.Containers.RemoveContainerAsync(containerId, new ContainerRemoveParameters());
+        }
     }
 
     public async Task<DockerHelperResponseResult> RunCommandInContainer(string containerName, IList<string> commands,
@@ -96,8 +153,6 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
     {
         return _client.Containers.InspectContainerAsync(containerId);
     }
-
-
 
 
     private async Task<ContainerInspectResponse> GetContainer(string containerName)

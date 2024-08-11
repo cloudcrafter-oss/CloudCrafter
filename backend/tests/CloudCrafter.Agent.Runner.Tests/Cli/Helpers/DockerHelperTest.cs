@@ -24,7 +24,12 @@ public class DockerHelperTest
         var secondApplicationId = Guid.NewGuid();
         var filter = new DockerContainerFilter()
         {
-            CloudCrafterApplicationIds = new List<Guid>() { firstApplicationId, secondApplicationId }
+            OnlyCloudCrafterLabels = true,
+            LabelFilters = new List<DockerLabelFilter>()
+            {
+                DockerLabelFilter.Parse(LabelFactory.GenerateApplicationLabel(firstApplicationId).ToLabelString()),
+                DockerLabelFilter.Parse(LabelFactory.GenerateApplicationLabel(secondApplicationId).ToLabelString())
+            }
         };
         
         var expectedContainers = new List<ContainerListResponse>

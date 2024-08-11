@@ -30,8 +30,21 @@ public class StopContainersHandler(IMessagePump pump, IDockerHelper dockerHelper
             filter.LabelFilters = labelFilters;
         }
 
+        filter.OnlyCloudCrafterLabels = parameters.OnlyCloudCrafterContainers;
+
 
         var containers = await dockerHelper.GetContainersFromFilter(filter);
+
+        if (containers.Any())
+        {
+            _logger.LogInfo($"Found {containers.Count()} containers to stop and remove");
+
+            var containerIds = containers.Select(x => x.ID)
+                .ToList();
+
+            await dockerHelper.StopContainers(containerIds);
+            await dockerHelper.RemoveContainers(containerIds);
+        }
 
         _logger.LogInfo("All containers stopped based on the provided filters");
 

@@ -7,4 +7,5 @@ namespace CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
 public class StopContainersParams
 {
     public Dictionary<string, List<string>> Filters { get; init; } = new();
+    public bool? OnlyCloudCrafterContainers { get; init; }
 }

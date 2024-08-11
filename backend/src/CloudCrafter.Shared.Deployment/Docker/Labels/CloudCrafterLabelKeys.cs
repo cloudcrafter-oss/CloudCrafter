@@ -2,6 +2,7 @@
 
 public static class CloudCrafterLabelKeys
 {
+    public static readonly string CloudCrafterManaged = "cloudcrafter.managed";
     public static readonly string ApplicationId = "cloudcrafter.application";
     public static readonly string DeploymentId = "cloudcrafter.deployment";
 

@@ -15,8 +15,8 @@ public class DockerComposeLabelService
 
     public void AddTraefikLabels(DockerComposeLabelServiceTraefikOptions traefikOptions)
     {
-        var routerBase = $"traefik.http.routers.{traefikOptions.Service}";
-        var serviceBase = $"traefik.http.services.{traefikOptions.Service}";
+        var routerBase = $"traefik.http.routers.{traefikOptions.AppName}";
+        var serviceBase = $"traefik.http.services.{traefikOptions.AppName}";
         
         AddLabel("traefik.enable", "true");
         AddLabel($"{routerBase}.rule", traefikOptions.Rule);
@@ -53,6 +53,7 @@ public class DockerComposeLabelServiceTraefikOptions
 {
     public required string Service { get; init; }
     public required string Rule { get; init; }
+    public required string AppName { get; init; }
 
     public int? LoadBalancerPort { get; init; }
 }

@@ -12,4 +12,6 @@ public interface IDockerHelper
 
     Task<IList<ContainerListResponse>> GetContainersFromFilter(DockerContainerFilter filter);
     Task<IList<NetworkResponse>> GetNetworks();
+    Task StopContainers(List<string> containerIds);
+    Task RemoveContainers(List<string> containerIds);
 }

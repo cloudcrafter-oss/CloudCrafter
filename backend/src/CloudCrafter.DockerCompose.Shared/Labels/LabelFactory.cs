@@ -4,6 +4,10 @@ namespace CloudCrafter.DockerCompose.Shared.Labels;
 
 public abstract class LabelFactory
 {
+    public static CloudCrafterLabel GenerateManagedLabel()
+    {
+        return new CloudCrafterLabel(CloudCrafterLabelKey.CloudCrafterManaged, "true");
+    }
     public static CloudCrafterLabel GenerateApplicationLabel(Guid applicationId)
     {
         var label = new CloudCrafterLabel(CloudCrafterLabelKey.ApplicationId, applicationId.ToString());

@@ -33,6 +33,7 @@ public static class GetDummyDeployment
             labelService.AddLabel(LabelFactory.GenerateApplicationLabel(request.ApplicationId));
             labelService.AddTraefikLabels(new DockerComposeLabelServiceTraefikOptions
             {
+                AppName = "frontend",
                 Rule = "Host(`frontend.127.0.0.1.sslip.io`)", Service = "frontend", LoadBalancerPort = 3000
             });
             service.AddLabels(labelService);
