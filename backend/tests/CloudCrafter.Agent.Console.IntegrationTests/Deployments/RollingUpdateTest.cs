@@ -14,7 +14,7 @@ public class RollingUpdateTest
     private DeploymentRecipe _firstRecipe;
     private DeploymentRecipe _secondRecipe;
 
-    private DeploymentRecipe Create(Guid deploymentId, Guid applicationId, string tag)
+    private DeploymentRecipe Create(Guid deploymentId, Guid applicationId, string tag, string dummyEnv)
     {
         var mainImageRepository = "rolling-update";
         var dockerComposeEditor = new DockerComposeEditor();
@@ -23,7 +23,7 @@ public class RollingUpdateTest
             .SetNetworkName("cloudcrafter")
             .SetIsExternalNetwork();
 
-        var service = dockerComposeEditor.AddService("frontend");
+        var service = dockerComposeEditor.AddService($"frontend-{tag}");
         service.SetImage(mainImageRepository, tag);
         service.AddNetwork(network);
 
@@ -32,7 +32,7 @@ public class RollingUpdateTest
         labelService.AddLabel(LabelFactory.GenerateDeploymentLabel(deploymentId));
         labelService.AddTraefikLabels(new DockerComposeLabelServiceTraefikOptions
         {
-            Rule = "Host(`frontend-rolling.127.0.0.1.sslip.io`)", Service = "frontend", LoadBalancerPort = 3000
+            Rule = "Host(`frontend-rolling.127.0.0.1.sslip.io`)", Service = $"frontend-{tag}", LoadBalancerPort = 3000
         });
 
         service.AddLabels(labelService);
@@ -64,7 +64,7 @@ public class RollingUpdateTest
                             "DUMMY_ENV_VAR",
                             new DeploymentRecipeEnvironmentVariable
                             {
-                                Name = "DUMMY_ENV_VAR", Value = "firstTag", IsBuildVariable = true
+                                Name = "DUMMY_ENV_VAR", Value = dummyEnv, IsBuildVariable = true
                             }
                         }
                     }
@@ -141,7 +141,6 @@ public class RollingUpdateTest
                                     new Dictionary<string, object>
                                     {
                                         { "BUILD_MOMENT", DateTime.UtcNow.ToString("F") },
-                                        { "DUMMY_ENV_VAR", tag }
                                     }
                                 }
                             }
@@ -181,7 +180,7 @@ public class RollingUpdateTest
                                 new Dictionary<string, object>
                                 {
                                     {
-                                        "frontend",
+                                        $"frontend-{tag}",
                                         new Dictionary<string, object>
                                         {
                                             { "httpMethod", "get" },
@@ -216,8 +215,8 @@ public class RollingUpdateTest
         var firstTag = $"{time}-v1";
         var secondTag = $"{time}-v2";
 
-        _firstRecipe = Create(firstDeploymentId, applicationId, firstTag);
-        _secondRecipe = Create(secondDeploymentId, applicationId, secondTag);
+        _firstRecipe = Create(firstDeploymentId, applicationId, firstTag, "firstTag");
+        _secondRecipe = Create(secondDeploymentId, applicationId, secondTag, "secondTag");
 
 
         _secondRecipe.BuildOptions.Steps.Add(new DeploymentBuildStep
@@ -232,11 +231,11 @@ public class RollingUpdateTest
                     new Dictionary<string, object>
                     {
                         {
-                            "label",
+                            "labels",
                             new List<string>
                             {
                                 $"cloudcrafter.application={applicationId}",
-                                $"cloudcrafter.deployment!={firstDeploymentId}"
+                                $"cloudcrafter.deployment!={secondDeploymentId}"
                             }
                         }
                     }
@@ -262,5 +261,7 @@ public class RollingUpdateTest
         await _deploymentService.DeployAsync(_firstRecipe);
 
         await ShouldHaveEndpointResponse("http://frontend-rolling.127.0.0.1.sslip.io/env", "DUMMY_ENV_VAR: firstTag");
+
+        await _deploymentService.DeployAsync(_secondRecipe);
     }
 }

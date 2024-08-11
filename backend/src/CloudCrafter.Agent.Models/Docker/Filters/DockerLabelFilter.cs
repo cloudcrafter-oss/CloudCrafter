@@ -6,6 +6,8 @@ public class DockerLabelFilter
     public required string Operator { get; set; }
     public required string Value { get; set; }
 
+    public bool ShouldMatch => Operator == "=";
+
     public static DockerLabelFilter Parse(string filterString)
     {
         var parts = filterString.Split(new[] { "=", "!=" }, 2, StringSplitOptions.RemoveEmptyEntries);
@@ -35,6 +37,14 @@ public class DockerLabelFilter
         }
     }
 
+    /// <summary>
+    /// When using this method, please check for ShouldMatch to check whether it should be true or false.
+    /// </summary>
+    /// <returns></returns>
+    public string ToFilterString()
+    {
+        return $"{Key}={Value}";
+    }
     public override string ToString()
     {
         return $"{Key}{Operator}{Value}";

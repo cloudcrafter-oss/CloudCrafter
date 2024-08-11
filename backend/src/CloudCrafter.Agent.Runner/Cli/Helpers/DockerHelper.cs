@@ -13,11 +13,10 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
 
     public async Task<IList<ContainerListResponse>> GetContainersFromFilter(DockerContainerFilter filter)
     {
-        var applications = filter.GetCloudCrafterApplications();
 
         var dockerFilter = new ContainersListParameters { All = true };
 
-        if (applications.Any())
+        if (filter.LabelFilters.Any())
         {
             // TODO: Add to constructor if more filters in the future
             if (dockerFilter.Filters == null)
@@ -25,7 +24,10 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
                 dockerFilter.Filters = new Dictionary<string, IDictionary<string, bool>>();
             }
 
-            dockerFilter.Filters.Add("label", applications);
+            var labelFilter = filter.LabelFilters.Select(x => (x.ToFilterString(), x.ShouldMatch))
+                .ToDictionary();
+
+            dockerFilter.Filters.Add("label", labelFilter);
         }
 
         var containers = await _client.Containers.ListContainersAsync(dockerFilter);
