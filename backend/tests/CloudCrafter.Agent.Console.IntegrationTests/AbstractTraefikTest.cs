@@ -11,7 +11,7 @@ public abstract class AbstractTraefikTest
     {
         TraefikContainer = new ContainerBuilder()
             .WithImage("traefik:v3.1")
-            .WithPortBinding(80, 80)
+            .WithPortBinding(8888, 80)
             .WithCommand(
                 "--api.insecure=true",
                 "--providers.docker=true",

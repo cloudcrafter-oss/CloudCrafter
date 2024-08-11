@@ -267,10 +267,10 @@ public class RollingUpdateTest : AbstractTraefikTest
 
         await _deploymentService.DeployAsync(_firstRecipe);
 
-        await ShouldHaveEndpointResponse("http://frontend-rolling.127.0.0.1.sslip.io/env", "DUMMY_ENV_VAR: firstTag");
+        await ShouldHaveEndpointResponse("http://frontend-rolling.127.0.0.1.sslip.io:8888/env", "DUMMY_ENV_VAR: firstTag");
 
         await _deploymentService.DeployAsync(_secondRecipe);
-        await ShouldHaveEndpointResponse("http://frontend-rolling.127.0.0.1.sslip.io/env", "DUMMY_ENV_VAR: secondTag");
+        await ShouldHaveEndpointResponse("http://frontend-rolling.127.0.0.1.sslip.io:8888/env", "DUMMY_ENV_VAR: secondTag");
 
     }
 }
