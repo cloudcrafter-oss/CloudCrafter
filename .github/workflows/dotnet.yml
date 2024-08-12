@@ -52,7 +52,9 @@ jobs:
   test:
     needs: [build, detect-test-projects]
     runs-on: ubuntu-latest
-    
+    defaults:
+      run:
+        working-directory: ./backend
     strategy:
       matrix:
         test-project: ${{fromJson(needs.detect-test-projects.outputs.test-projects)}}
