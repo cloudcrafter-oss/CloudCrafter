@@ -36,8 +36,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Install Nixpacks
-      run: curl -sSL https://nixpacks.com/install.sh | bash
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -59,6 +57,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Install Nixpacks
+      run: curl -sSL https://nixpacks.com/install.sh | bash
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
