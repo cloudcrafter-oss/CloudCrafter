@@ -102,7 +102,10 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         path: test-results
-
+    - name: Download coverage results
+      uses: actions/download-artifact@v3
+      with:
+        path: coverage-results
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
@@ -110,18 +113,9 @@ jobs:
         files: |
           test-results/**/*.trx
 
-    - name: Download coverage results
-      uses: actions/download-artifact@v3
-      with:
-        path: coverage-results
-
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.0.1
       if: always()
       with:
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
-        files: coverage-results/**/coverage.opencover.xml
-        flags: unittests
-        name: codecov-umbrella
-        verbose: true
