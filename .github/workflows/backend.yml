@@ -53,6 +53,7 @@ jobs:
       run:
         working-directory: ./backend
     strategy:
+      fail-fast: false 
       matrix:
         test-project: ${{fromJson(needs.detect-test-projects.outputs.test-projects)}}
 
