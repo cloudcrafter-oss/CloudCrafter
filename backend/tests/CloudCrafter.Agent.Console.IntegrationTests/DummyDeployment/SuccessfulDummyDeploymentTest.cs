@@ -1,4 +1,6 @@
-﻿using CloudCrafter.Agent.Models.Recipe;
+﻿using CloudCrafter.Agent.Models.Docker.Filters;
+using CloudCrafter.Agent.Models.Recipe;
+using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.Agent.Runner.Commands;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.Shared.Utils;
@@ -12,6 +14,7 @@ public class SuccessfulDummyDeploymentTest
 {
     private DeploymentService _deploymentService;
     private DeploymentRecipe _recipe;
+    private IDockerHelper _dockerHelper;
 
 
     [SetUp]
@@ -27,6 +30,22 @@ public class SuccessfulDummyDeploymentTest
         _recipe = await mediator.Send(new GetDummyDeployment.Query("custom-image", "testing", applicationId));
 
         _deploymentService = host.Services.GetRequiredService<DeploymentService>();
+        _dockerHelper = host.Services.GetRequiredService<IDockerHelper>();
+    }
+    
+    [TearDown]
+    public async Task Cleanup()
+    {
+        var cloudCrafterContainers = await _dockerHelper.GetContainersFromFilter(new DockerContainerFilter()
+        {
+            OnlyCloudCrafterLabels = true
+        });
+        
+        foreach (var container in cloudCrafterContainers)
+        {
+            await _dockerHelper.StopContainers([container.ID]);
+            await _dockerHelper.RemoveContainers([container.ID]);
+        }
     }
 
     [Test]

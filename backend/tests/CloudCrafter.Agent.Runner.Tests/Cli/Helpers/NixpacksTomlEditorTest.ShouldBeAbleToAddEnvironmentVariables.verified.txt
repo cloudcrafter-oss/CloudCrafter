@@ -7,7 +7,7 @@ NODE_ENV = 'production'
 NPM_CONFIG_PRODUCTION = 'false'
 ENV1 = 'value1'
 ENV2 = 'value2'
-MULTILINE = 'test\r\ntest1\r\n\r\nanother test'
+MULTILINE = 'test\ntest1\n\nanother test'
 [phases.build]
 dependsOn = ["install"]
 cacheDirectories = ["node_modules/.cache"]

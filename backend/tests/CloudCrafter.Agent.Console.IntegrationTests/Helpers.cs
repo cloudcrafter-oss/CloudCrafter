@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.DockerCompose.Engine.Yaml;
+using CloudCrafter.DockerCompose.Shared.Labels;
 using CloudCrafter.Shared.Utils.Http;
 using Docker.DotNet;
 using Docker.DotNet.Models;
@@ -58,6 +59,10 @@ public static class Helpers
 
         service.SetImage(repository, tag);
 
+        var labelService = new DockerComposeLabelService();
+        labelService.AddLabel(LabelFactory.GenerateManagedLabel());
+        service.AddLabels(labelService);
+        
         service.AddExposedPort(3000, 3000);
 
         return editor;
