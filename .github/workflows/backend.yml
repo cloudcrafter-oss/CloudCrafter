@@ -44,12 +44,6 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Save NuGet packages
-      uses: actions/upload-artifact@v3
-      with:
-        name: nuget-packages-archive
-        path: ./backend/nuget-packages.tar.gz
-  
 
   test:
     needs: [build, detect-test-projects]
@@ -82,14 +76,14 @@ jobs:
       uses: actions/upload-artifact@v3
       if: always()
       with:
-        name: test-results-${{ matrix.test-project }}
+        name: test-results-${{ matrix.test-project | regex_replace('[^a-zA-Z0-9\-]', '') }}
         path: ./backend/test-results
 
     - name: Upload coverage
       uses: actions/upload-artifact@v3
       if: always()
       with:
-        name: coverage-${{ matrix.test-project }}
+        name: coverage-${{ matrix.test-project | regex_replace('[^a-zA-Z0-9\-]', '') }}
         path: ./backend/test-results/**/coverage.opencover.xml
 
   publish-results:
