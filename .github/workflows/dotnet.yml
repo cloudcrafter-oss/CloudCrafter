@@ -1,6 +1,3 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
 name: .NET
 
 on:
@@ -17,8 +14,21 @@ permissions:
   pull-requests: write
 
 jobs:
-  build:
+  detect-test-projects:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    outputs:
+      test-projects: ${{ steps.set-matrix.outputs.test-projects }}
+    steps:
+    - uses: actions/checkout@v4
+    - id: set-matrix
+      run: |
+        TEST_PROJECTS=$(find ./tests -maxdepth 1 -type d -not -path '*/\.*' -not -path './tests' | jq -R -s -c 'split("\n")[:-1]')
+        echo "test-projects=$TEST_PROJECTS" >> $GITHUB_OUTPUT
 
+  build:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -38,28 +48,70 @@ jobs:
       run: cp src/CloudCrafter.Web/appsettings.Development.example.json src/CloudCrafter.Web/appsettings.Development.json
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal --logger trx --results-directory ./test-results --collect:"XPlat Code Coverage;Format=opencover" /p:DefineConstants="IN_TESTS"
+
+  test:
+    needs: [build, detect-test-projects]
+    runs-on: ubuntu-latest
     
+    strategy:
+      matrix:
+        test-project: ${{fromJson(needs.detect-test-projects.outputs.test-projects)}}
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Test
+      run: |
+        project_name=$(basename ${{ matrix.test-project }})
+        dotnet test ${{ matrix.test-project }} --verbosity normal --logger trx --results-directory ./test-results/$project_name --collect:"XPlat Code Coverage;Format=opencover" /p:DefineConstants="IN_TESTS"
+    
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results-${{ matrix.test-project }}
+        path: ./test-results
+
+    - name: Upload coverage
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: coverage-${{ matrix.test-project }}
+        path: ./test-results/**/coverage.opencover.xml
+
+  publish-results:
+    needs: test
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+    - name: Download test results
+      uses: actions/download-artifact@v3
+      with:
+        path: test-results
+
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
         files: |
-          ./backend/test-results/**/*.trx
-          
-    # - name: Process trx reports with default
-    #   if: always()
-    #   # You may also reference just the major or major.minor version
-    #   uses: im-open/process-dotnet-test-results@v3.0.0
-    #   with:
-    #     base-directory: ./backend/test-results
-    #     github-token: ${{ secrets.GITHUB_TOKEN }}
-    #     create-status-check: true
-    #     create-pr-comment: true
+          test-results/**/*.trx
+
+    - name: Download coverage results
+      uses: actions/download-artifact@v3
+      with:
+        path: coverage-results
+
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.0.1
       if: always()
       with:
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
+        files: coverage-results/**/coverage.opencover.xml
+        flags: unittests
+        name: codecov-umbrella
+        verbose: true
