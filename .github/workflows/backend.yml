@@ -87,12 +87,12 @@ jobs:
         name: test-results-${{ steps.sanitize.outputs.sanitized }}
         path: ./backend/test-results
 
-    - name: Upload coverage
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: coverage-${{ steps.sanitize.outputs.sanitized }}
-        path: ./backend/test-results/**/coverage.opencover.xml
+    # - name: Upload coverage
+    #   uses: actions/upload-artifact@v3
+    #   if: always()
+    #   with:
+    #     name: coverage-${{ steps.sanitize.outputs.sanitized }}
+    #     path: ./backend/test-results/**/coverage.opencover.xml
 
   publish-results:
     needs: test
@@ -104,10 +104,10 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         path: ./backend/test-results
-    - name: Download coverage results
-      uses: actions/download-artifact@v3
-      with:
-        path: ./backend/coverage-results
+    # - name: Download coverage results
+    #   uses: actions/download-artifact@v3
+    #   with:
+    #     path: ./backend/coverage-results
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
