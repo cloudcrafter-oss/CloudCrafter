@@ -41,9 +41,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore --packages ./nuget-packages
-    - name: Create NuGet packages archive
-      run: tar -czf nuget-packages.tar.gz -C ./nuget-packages .
+      run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: Save NuGet packages
@@ -73,15 +71,8 @@ jobs:
         dotnet-version: 8.0.x
     - name: Copy development environment settings
       run: cp src/CloudCrafter.Web/appsettings.Development.example.json src/CloudCrafter.Web/appsettings.Development.json
-    - name: Download NuGet packages
-      uses: actions/download-artifact@v3
-      with:
-        name: nuget-packages-archive
-        path: ./backend/nuget-packages.tar.gz
-    - name: Extract NuGet packages archive
-      run: tar -xzf nuget-packages.tar.gz -C ./nuget-packages
     - name: Restore dependencies from cache
-      run: dotnet restore --packages ./nuget-packages
+      run: dotnet restore
     - name: Test
       run: |
         project_name=$(basename ${{ matrix.test-project }})
