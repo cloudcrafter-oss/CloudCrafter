@@ -65,6 +65,8 @@ jobs:
         dotnet-version: 8.0.x
     - name: Copy development environment settings
       run: cp src/CloudCrafter.Web/appsettings.Development.example.json src/CloudCrafter.Web/appsettings.Development.json
+    - name: Restore dependencies
+      run: dotnet restore
     - name: Test
       run: |
         project_name=$(basename ${{ matrix.test-project }})
