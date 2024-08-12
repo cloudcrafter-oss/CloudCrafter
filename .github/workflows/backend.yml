@@ -77,14 +77,14 @@ jobs:
       if: always()
       with:
         name: test-results-${{ matrix.test-project }}
-        path: ./test-results
+        path: ./backend/test-results
 
     - name: Upload coverage
       uses: actions/upload-artifact@v3
       if: always()
       with:
         name: coverage-${{ matrix.test-project }}
-        path: ./test-results/**/coverage.opencover.xml
+        path: ./backend/test-results/**/coverage.opencover.xml
 
   publish-results:
     needs: test
