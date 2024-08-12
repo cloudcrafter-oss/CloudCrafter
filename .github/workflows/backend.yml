@@ -69,6 +69,8 @@ jobs:
       run: cp src/CloudCrafter.Web/appsettings.Development.example.json src/CloudCrafter.Web/appsettings.Development.json
     - name: Restore dependencies from cache
       run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
     - name: Test
       run: |
         project_name=$(basename ${{ matrix.test-project }})
