@@ -1,5 +1,7 @@
 ﻿services:
   frontend:
     image: custom-image:testing
+    labels:
+      cloudcrafter.managed: true
     ports:
     - 3000:3000

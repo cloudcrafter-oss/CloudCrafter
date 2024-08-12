@@ -1,76 +1,152 @@
 ﻿using System.Text;
+using CloudCrafter.Agent.Models.Docker.Filters;
+using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.Agent.Runner.Exceptions;
+using CloudCrafter.Shared.Deployment.Docker.Labels;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 
 namespace CloudCrafter.Agent.Runner.Cli.Helpers;
 
-public class DockerHelper : IDockerHelper
+public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
 {
-    private readonly DockerClient _client = new DockerClientConfiguration()
-        .CreateClient();
+    private readonly IDockerClient _client = provider.GetClient();
+
+    public async Task<IList<ContainerListResponse>> GetContainersFromFilter(DockerContainerFilter filter)
+    {
+        var dockerFilter = new ContainersListParameters { All = true };
+
+        if (filter.OnlyCloudCrafterLabels.GetValueOrDefault())
+        {
+            // TODO: Add to constructor if more filters in the future
+            if (dockerFilter.Filters == null)
+            {
+                dockerFilter.Filters = new Dictionary<string, IDictionary<string, bool>>();
+            }
+
+            var labelFilter = new Dictionary<string, bool>() { { CloudCrafterLabelKeys.CloudCrafterManaged, true } };
+            dockerFilter.Filters.Add("label", labelFilter);
+        }
+
+        var containers = await _client.Containers.ListContainersAsync(dockerFilter);
 
 
-    public async Task<DockerHelperResponseResult> RunCommandInContainer(string containerName, IList<string> commands, Action<DockerHelperResponse>? onLog = null)
+        if (filter.LabelFilters.Count == 0)
+        {
+            // No filters at all, so return response as is
+            return containers;
+        }
+
+        // Docker API does not allow filtering based on a label which is not equal to a certain value.
+        // Hence we filter here this way.
+
+        List<ContainerListResponse> filteredContainers = new();
+
+
+        foreach (var container in containers)
+        {
+            bool allLabelsMatch = true;
+            foreach (var labelFilter in filter.LabelFilters)
+            {
+                if (!container.Labels.TryGetValue(labelFilter.Key, out var value) ||
+                    (value == labelFilter.Value) != labelFilter.ShouldMatch)
+                {
+                    allLabelsMatch = false;
+                    break;
+                }
+            }
+
+            if (allLabelsMatch)
+            {
+                filteredContainers.Add(container);
+            }
+        }
+
+        return filteredContainers;
+    }
+
+    public async Task<IList<NetworkResponse>> GetNetworks()
+    {
+        var networks = await _client.Networks.ListNetworksAsync();
+
+        return networks;
+    }
+
+    public async Task StopContainers(List<string> containerIds)
+    {
+        if (containerIds.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var containerId in containerIds)
+        {
+            await _client.Containers.StopContainerAsync(containerId, new ContainerStopParameters());
+        }
+    }
+
+    public async Task RemoveContainers(List<string> containerIds)
+    {
+        if (containerIds.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var containerId in containerIds)
+        {
+            await _client.Containers.RemoveContainerAsync(containerId, new ContainerRemoveParameters());
+        }
+    }
+
+    public async Task<DockerHelperResponseResult> RunCommandInContainer(string containerName, IList<string> commands,
+        Action<DockerHelperResponse>? onLog = null)
     {
         var container = await GetContainer(containerName);
 
-        ContainerExecCreateParameters execParams = new ContainerExecCreateParameters
-        {
-            AttachStdout = true, AttachStderr = true, Cmd = commands
-        };
+        var execParams = new ContainerExecCreateParameters { AttachStdout = true, AttachStderr = true, Cmd = commands };
 
-        ContainerExecCreateResponse execCreateResponse =
+        var execCreateResponse =
             await _client.Exec.ExecCreateContainerAsync(container.ID, execParams);
 
         // Get the stream
         using var stream = await _client.Exec.StartAndAttachContainerExecAsync(execCreateResponse.ID, false);
         // Now you can read from the stream
-        
-        byte[] buffer = new byte[81920];
-        MemoryStream stdout = new MemoryStream();
-        MemoryStream stderr = new MemoryStream();
 
-        
+        var buffer = new byte[81920];
+        var stdout = new MemoryStream();
+        var stderr = new MemoryStream();
+
+
         while (true)
         {
             var result = await stream.ReadOutputAsync(buffer, 0, buffer.Length, CancellationToken.None);
             if (result.EOF)
+            {
                 break;
-            
-            string content = Encoding.UTF8.GetString(buffer, 0, result.Count);
+            }
+
+            var content = Encoding.UTF8.GetString(buffer, 0, result.Count);
 
 
             switch (result.Target)
             {
                 case MultiplexedStream.TargetStream.StandardOut:
-                    onLog?.Invoke(new DockerHelperResponse()
-                    {
-                        Response = content,
-                        IsStdOut = true
-                    });
+                    onLog?.Invoke(new DockerHelperResponse { Response = content, IsStdOut = true });
                     stdout.Write(buffer, 0, result.Count);
                     break;
                 case MultiplexedStream.TargetStream.StandardError:
-                    onLog?.Invoke(new DockerHelperResponse()
-                    {
-                        Response = content,
-                        IsStdOut = false
-                    });
+                    onLog?.Invoke(new DockerHelperResponse { Response = content, IsStdOut = false });
                     stderr.Write(buffer, 0, result.Count);
                     break;
             }
         }
-        
-        string stdoutContent = Encoding.UTF8.GetString(stdout.ToArray());
-        string stderrContent = Encoding.UTF8.GetString(stderr.ToArray());
+
+        var stdoutContent = Encoding.UTF8.GetString(stdout.ToArray());
+        var stderrContent = Encoding.UTF8.GetString(stderr.ToArray());
 
         var execInspectResponse = await _client.Exec.InspectContainerExecAsync(execCreateResponse.ID);
         var exitCode = execInspectResponse.ExitCode;
-        Console.WriteLine("STDOUT: " + stdoutContent);
-        Console.WriteLine("STDERR: " + stderrContent);
-
-        return new() { ExitCode = exitCode, StdOut = stdoutContent, StdErr = stderrContent };
+        return new DockerHelperResponseResult { ExitCode = exitCode, StdOut = stdoutContent, StdErr = stderrContent };
     }
 
     public Task<ContainerInspectResponse> GetDockerContainer(string containerId)

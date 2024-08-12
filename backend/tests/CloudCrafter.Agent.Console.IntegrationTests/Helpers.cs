@@ -1,6 +1,8 @@
 ﻿using CloudCrafter.DockerCompose.Engine.Yaml;
+using CloudCrafter.DockerCompose.Shared.Labels;
 using CloudCrafter.Shared.Utils.Http;
 using Docker.DotNet;
+using Docker.DotNet.Models;
 
 namespace CloudCrafter.Agent.Console.IntegrationTests;
 
@@ -20,6 +22,20 @@ public static class Helpers
             .InspectImageAsync(image);
 
         result.Should().NotBeNull();
+    }
+
+    public static async Task EnsureNetworkExists(string networkName)
+    {
+        var networks = await _client.Networks.ListNetworksAsync();
+        var network = networks.FirstOrDefault(x => x.Name == networkName);
+
+        if (network == null)
+        {
+            await _client.Networks.CreateNetworkAsync(new NetworksCreateParameters
+            {
+                Name = networkName
+            });
+        }
     }
 
 
@@ -43,6 +59,10 @@ public static class Helpers
 
         service.SetImage(repository, tag);
 
+        var labelService = new DockerComposeLabelService();
+        labelService.AddLabel(LabelFactory.GenerateManagedLabel());
+        service.AddLabels(labelService);
+        
         service.AddExposedPort(3000, 3000);
 
         return editor;

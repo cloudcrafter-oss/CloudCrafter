@@ -1,15 +1,14 @@
-﻿using System.Dynamic;
-using CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
-using CloudCrafter.Agent.Models.Recipe;
+﻿using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.DockerCompose.Engine.Yaml;
+using CloudCrafter.DockerCompose.Shared.Labels;
 using CloudCrafter.Shared.Utils;
 using MediatR;
 
-namespace CloudCrafter.Agent.Console.Commands;
+namespace CloudCrafter.Agent.Runner.Commands;
 
 public static class GetDummyDeployment
 {
-    public record Query(string ImageRepository, string ImageTag) : IRequest<DeploymentRecipe>;
+    public record Query(string ImageRepository, string ImageTag, Guid ApplicationId) : IRequest<DeploymentRecipe>;
 
     private class Handler : IRequestHandler<Query, DeploymentRecipe>
     {
@@ -20,21 +19,38 @@ public static class GetDummyDeployment
 
             var dockerComposeEditor = new DockerComposeEditor();
 
+            var network = dockerComposeEditor.AddNetwork("cloudcrafter")
+                .SetNetworkName("cloudcrafter")
+                .SetIsExternalNetwork();
+
+
             var service = dockerComposeEditor.AddService("frontend");
             service.SetImage(imageRepository, imageTag);
-            service.AddExposedPort(3000, 3000);
+
+            service.AddNetwork(network);
+
+            var labelService = new DockerComposeLabelService();
+            labelService.AddLabel(LabelFactory.GenerateApplicationLabel(request.ApplicationId));
+            labelService.AddTraefikLabels(new DockerComposeLabelServiceTraefikOptions
+            {
+                AppName = "frontend",
+                Rule = "Host(`frontend.127.0.0.1.sslip.io`)", Service = "frontend", LoadBalancerPort = 3000
+            });
+            service.AddLabels(labelService);
+
 
             var randomString = RandomGenerator.String();
 
             var dockerComposeBase64 = dockerComposeEditor.ToBase64();
 
-            dynamic healthCheckOptions = new
-            {
-                checkForDockerHealth = true
-            };
             var recipe = new DeploymentRecipe
             {
                 Name = "My Application",
+                Application = new DeploymentRecipeApplicationInfo { Id = request.ApplicationId },
+                EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
+                {
+                    Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>()
+                },
                 Destination =
                     new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" + randomString },
                 DockerComposeOptions =
@@ -49,6 +65,16 @@ public static class GetDummyDeployment
                 {
                     Steps = new List<DeploymentBuildStep>
                     {
+                        new()
+                        {
+                            Name = "Check if network exists",
+                            Description = "Check if network exists",
+                            Type = DeploymentBuildStepType.DockerValidateNetworksExists,
+                            Params = new Dictionary<string, object>
+                            {
+                                { "networks", new List<string> { "cloudcrafter" } }
+                            }
+                        },
                         new()
                         {
                             Name = "Fetch git",
@@ -101,7 +127,14 @@ public static class GetDummyDeployment
                                     { "path", "nixpacks-node-server" },
                                     { "image", imageRepository },
                                     { "tag", imageTag },
-                                    { "disableCache", true }
+                                    { "disableCache", true },
+                                    {
+                                        "env",
+                                        new Dictionary<string, object>
+                                        {
+                                            { "BUILD_MOMENT", DateTime.UtcNow.ToString("F") }
+                                        }
+                                    }
                                 }
                         },
                         new()
@@ -117,10 +150,11 @@ public static class GetDummyDeployment
                             Name = "Start docker compose",
                             Description = "Start docker compose",
                             Type = DeploymentBuildStepType.DockerComposeUp,
-                            Params = new Dictionary<string, object>
-                            {
-                                { "dockerComposeFile", "docker-compose.yml" }, { "storeServiceNames", true }
-                            }
+                            Params =
+                                new Dictionary<string, object>
+                                {
+                                    { "dockerComposeFile", "docker-compose.yml" }, { "storeServiceNames", true }
+                                }
                         },
                         new()
                         {
@@ -129,41 +163,29 @@ public static class GetDummyDeployment
                             Type = DeploymentBuildStepType.ContainerHealthCheck,
                             Params = new Dictionary<string, object>
                             {
-                                {"dockerComposeSettings", new Dictionary<string, object>()
                                 {
-                                    {
-                                        "fetchServicesFromContext", true
-                                    }
-                                }},
-                                { "services", new Dictionary<string, object>()
+                                    "dockerComposeSettings",
+                                    new Dictionary<string, object> { { "fetchServicesFromContext", true } }
+                                },
                                 {
+                                    "services",
+                                    new Dictionary<string, object>
                                     {
-                                        "frontend", new Dictionary<string, object>()
                                         {
+                                            "frontend",
+                                            new Dictionary<string, object>
                                             {
-                                                "httpMethod", "get"
-                                            },
-                                            {
-                                                "httpSchema", "http"
-                                            },
-                                            {
-                                                "httpHost", "localhost"
-                                            },
-                                            {
-                                                "httpPath", "/"
-                                            },
-                                            {
-                                                "httpPort", 3000
-                                            },
-                                            {
-                                                "expectedResponseCode", 200
-                                            },
-                                            {
-                                                "retries", 4
+                                                { "httpMethod", "get" },
+                                                { "httpSchema", "http" },
+                                                { "httpHost", "localhost" },
+                                                { "httpPath", "/" },
+                                                { "httpPort", 3000 },
+                                                { "expectedResponseCode", 200 },
+                                                { "retries", 4 }
                                             }
                                         }
                                     }
-                                }}
+                                }
                             }
                         }
                     }

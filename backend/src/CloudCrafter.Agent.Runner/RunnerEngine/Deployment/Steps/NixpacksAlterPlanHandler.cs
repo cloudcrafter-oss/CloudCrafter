@@ -29,6 +29,18 @@ public class NixpacksAlterPlanHandler(IMessagePump pump)
 
         var editor = new NixpacksTomlEditor(plan);
 
+        var environmentVariables = context.Recipe.EnvironmentVariables.Variables;
+
+        if (environmentVariables.Any())
+        {
+            var buildVariables = environmentVariables
+                .Select(x => x.Value)
+                .Where(x => x.IsBuildVariable)
+                .ToDictionary(x => x.Name, x => x.Value);
+
+            editor.AddVariables(buildVariables);
+        }
+
 
         var packagesToAdd = parameters.Packages;
         editor.AddPackages(packagesToAdd);
@@ -37,7 +49,7 @@ public class NixpacksAlterPlanHandler(IMessagePump pump)
         var toml = editor.GetToml();
 
         context.SetRecipeResult(RecipeResultKeys.NixpacksBuildPlan, toml);
-        
+
         return Task.CompletedTask;
     }
 

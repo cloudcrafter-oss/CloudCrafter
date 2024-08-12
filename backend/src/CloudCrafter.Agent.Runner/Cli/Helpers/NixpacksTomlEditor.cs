@@ -1,4 +1,5 @@
-﻿using Tomlyn;
+﻿using System.Text.RegularExpressions;
+using Tomlyn;
 using Tomlyn.Model;
 
 namespace CloudCrafter.Agent.Runner.Cli.Helpers;
@@ -11,6 +12,22 @@ public class NixpacksTomlEditor
     {
         _model = Toml.ToModel(toml);
     }
+
+    public void AddVariables(IDictionary<string, string> variables)
+    {
+        if (!_model.ContainsKey("variables"))
+        {
+            _model.Add("variables", new TomlTable());
+        }
+
+        var variablesTable = (TomlTable)_model["variables"];
+
+        foreach (var variable in variables)
+        {
+            variablesTable.Add(variable.Key, variable.Value);
+        }
+    }
+
 
     public void AddPackages(IEnumerable<string> packages)
     {
@@ -45,6 +62,10 @@ public class NixpacksTomlEditor
 
     public string GetToml()
     {
-        return Toml.FromModel(_model);
+        var result = Toml.FromModel(_model);
+
+        var processedResult = Regex.Replace(result, @"=\s*""([^""]*)""\s*$", "= '$1'", RegexOptions.Multiline);
+
+        return processedResult;
     }
 }
