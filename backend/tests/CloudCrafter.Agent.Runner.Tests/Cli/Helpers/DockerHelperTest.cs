@@ -2,6 +2,7 @@
 using CloudCrafter.Agent.Runner.Cli.Helpers;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.DockerCompose.Shared.Labels;
+using CloudCrafter.Shared.Deployment.Docker.Labels;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 using FluentAssertions;
@@ -11,58 +12,114 @@ namespace CloudCrafter.Agent.Runner.Tests.Cli.Helpers;
 
 public class DockerHelperTest
 {
-    [Test]
-    public async Task GetContainerFromFilter_ReturnsFilteredContainers()
+    private Mock<IDockerClientProvider> _mockProvider;
+    private Mock<IDockerClient> _mockClient;
+    private Mock<IContainerOperations> _mockContainerOperations;
+    private DockerHelper _dockerHelper;
+
+    [SetUp]
+    public void Setup()
     {
-        // Arrange
-        var mockDockerClient = new Mock<IDockerClient>();
-        var mockContainerOperations = new Mock<IContainerOperations>();
+        _mockProvider = new Mock<IDockerClientProvider>();
+        _mockClient = new Mock<IDockerClient>();
+        _mockContainerOperations = new Mock<IContainerOperations>();
 
-        mockDockerClient.Setup(x => x.Containers).Returns(mockContainerOperations.Object);
+        _mockClient.Setup(c => c.Containers).Returns(_mockContainerOperations.Object);
+        _mockProvider.Setup(p => p.GetClient()).Returns(_mockClient.Object);
 
-        var firstApplicationId = Guid.NewGuid();
-        var secondApplicationId = Guid.NewGuid();
-        var filter = new DockerContainerFilter()
+        _dockerHelper = new DockerHelper(_mockProvider.Object);
+    }
+
+      [Test]
+        public async Task GetContainersFromFilter_WithOnlyCloudCrafterLabels_ReturnsFilteredContainers()
         {
-            OnlyCloudCrafterLabels = true,
-            LabelFilters = new List<DockerLabelFilter>()
+            // Arrange
+            var filter = new DockerContainerFilter { OnlyCloudCrafterLabels = true };
+            var expectedContainers = new List<ContainerListResponse>
             {
-                DockerLabelFilter.Parse(LabelFactory.GenerateApplicationLabel(firstApplicationId).ToLabelString()),
-                DockerLabelFilter.Parse(LabelFactory.GenerateApplicationLabel(secondApplicationId).ToLabelString())
-            }
-        };
-        
-        var expectedContainers = new List<ContainerListResponse>
-        {
-            new ContainerListResponse { ID = "container1" },
-            new ContainerListResponse { ID = "container2" }
-        };
+                new ContainerListResponse
+                {
+                    ID = "container1",
+                    Labels = new Dictionary<string, string>
+                    {
+                        { CloudCrafterLabelKeys.CloudCrafterManaged, "true" }
+                    }
+                }
+            };
 
-        mockContainerOperations
-            .Setup(x => x.ListContainersAsync(
-                It.IsAny<ContainersListParameters>(),
-                It.IsAny<CancellationToken>()))
-            .ReturnsAsync(expectedContainers);
+            _mockContainerOperations
+                .Setup(c => c.ListContainersAsync(It.IsAny<ContainersListParameters>(), default))
+                .ReturnsAsync(expectedContainers);
 
-        var provider = new Mock<IDockerClientProvider>();
-        provider.Setup(x => x.GetClient())
-            .Returns(mockDockerClient.Object);
+            // Act
+            var result = await _dockerHelper.GetContainersFromFilter(filter);
 
-        var dockerService = new DockerHelper(provider.Object);
-
-        // Act
-        var result = await dockerService.GetContainersFromFilter(filter);
-
-        // Assert
-        expectedContainers.Count.Should().Be(result.Count);
-        mockContainerOperations.Verify(
-            x => x.ListContainersAsync(
+            // Assert
+            Assert.That(result, Is.EqualTo(expectedContainers));
+            _mockContainerOperations.Verify(c => c.ListContainersAsync(
                 It.Is<ContainersListParameters>(p => 
                     p.All == true && 
                     p.Filters.ContainsKey("label") && 
-                    ((Dictionary<string, bool>)p.Filters["label"]).Keys.Contains(LabelFactory.GenerateApplicationLabel(firstApplicationId).ToLabelString()) && 
-                    ((Dictionary<string, bool>)p.Filters["label"]).Keys.Contains(LabelFactory.GenerateApplicationLabel(secondApplicationId).ToLabelString())),
-                It.IsAny<CancellationToken>()),
-            Times.Once);
-    }
+                    p.Filters["label"].ContainsKey(CloudCrafterLabelKeys.CloudCrafterManaged)),
+                default), Times.Once);
+        }
+
+        [Test]
+        public async Task GetContainersFromFilter_WithLabelFilters_ReturnsFilteredContainers()
+        {
+            // Arrange
+            var filter = new DockerContainerFilter
+            {
+                LabelFilters = new List<DockerLabelFilter>
+                {
+                    DockerLabelFilter.Parse("test.label=value1")
+                }
+            };
+            var allContainers = new List<ContainerListResponse>
+            {
+                new ContainerListResponse
+                {
+                    ID = "container1",
+                    Labels = new Dictionary<string, string> { { "test.label", "value1" } }
+                },
+                new ContainerListResponse
+                {
+                    ID = "container2",
+                    Labels = new Dictionary<string, string> { { "test.label", "value2" } }
+                }
+            };
+
+            _mockContainerOperations
+                .Setup(c => c.ListContainersAsync(It.IsAny<ContainersListParameters>(), default))
+                .ReturnsAsync(allContainers);
+
+            // Act
+            var result = await _dockerHelper.GetContainersFromFilter(filter);
+
+            // Assert
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result[0].ID, Is.EqualTo("container1"));
+        }
+
+        [Test]
+        public async Task GetContainersFromFilter_WithNoFilters_ReturnsAllContainers()
+        {
+            // Arrange
+            var filter = new DockerContainerFilter();
+            var allContainers = new List<ContainerListResponse>
+            {
+                new ContainerListResponse { ID = "container1" },
+                new ContainerListResponse { ID = "container2" }
+            };
+
+            _mockContainerOperations
+                .Setup(c => c.ListContainersAsync(It.IsAny<ContainersListParameters>(), default))
+                .ReturnsAsync(allContainers);
+
+            // Act
+            var result = await _dockerHelper.GetContainersFromFilter(filter);
+
+            // Assert
+            Assert.That(result, Is.EqualTo(allContainers));
+        }
 }
