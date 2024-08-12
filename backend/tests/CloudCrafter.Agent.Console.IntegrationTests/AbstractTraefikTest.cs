@@ -10,6 +10,7 @@ public abstract class AbstractTraefikTest
     [OneTimeSetUp]
     public async Task Setup()
     {
+        await EnsureNetworkExists("cloudcrafter");
         TraefikContainer = new ContainerBuilder()
             .WithImage("traefik:v3.1")
             .WithPortBinding(8888, 80)
@@ -19,6 +20,7 @@ public abstract class AbstractTraefikTest
                 "--providers.docker.exposedbydefault=false",
                 "--entrypoints.web.address=:80"
             )
+            .WithNetwork("cloudcrafter")
             .WithEnvironment("DOCKER_HOST", "unix:///var/run/docker.sock")
             .WithBindMount("/var/run/docker.sock","/var/run/docker.sock")
             .Build();
