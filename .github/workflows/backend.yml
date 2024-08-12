@@ -45,6 +45,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
 
+
   test:
     needs: [build, detect-test-projects]
     runs-on: ubuntu-latest
@@ -71,19 +72,23 @@ jobs:
       run: |
         project_name=$(basename ${{ matrix.test-project }})
         dotnet test ${{ matrix.test-project }} --verbosity normal --logger trx --results-directory ./test-results --collect:"XPlat Code Coverage;Format=opencover" /p:DefineConstants="IN_TESTS"
-    
+    - name: Sanitize project name
+      id: sanitize
+      run: |
+        sanitized=$(echo "${{ matrix.test-project }}" | sed 's/[^a-zA-Z0-9-]//g')
+        echo "sanitized=$sanitized" >> $GITHUB_OUTPUT
     - name: Upload test results
       uses: actions/upload-artifact@v3
       if: always()
       with:
-        name: test-results-${{ matrix.test-project | regex_replace('[^a-zA-Z0-9\-]', '') }}
+        name: test-results-${{ steps.sanitize.outputs.sanitized }}
         path: ./backend/test-results
 
     - name: Upload coverage
       uses: actions/upload-artifact@v3
       if: always()
       with:
-        name: coverage-${{ matrix.test-project | regex_replace('[^a-zA-Z0-9\-]', '') }}
+        name: coverage-${{ steps.sanitize.outputs.sanitized }}
         path: ./backend/test-results/**/coverage.opencover.xml
 
   publish-results:
