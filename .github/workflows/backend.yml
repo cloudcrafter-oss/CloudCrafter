@@ -42,13 +42,16 @@ jobs:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore --packages ./nuget-packages
+    - name: Create NuGet packages archive
+      run: tar -czvf nuget-packages.tar.gz -C ./nuget-packages .
     - name: Build
       run: dotnet build --no-restore
     - name: Save NuGet packages
       uses: actions/upload-artifact@v3
       with:
-        name: nuget-packages
-        path: ./backend/nuget-packages
+        name: nuget-packages-archive
+        path: ./backend/nuget-packages.tar.gz
+  
 
   test:
     needs: [build, detect-test-projects]
@@ -73,8 +76,10 @@ jobs:
     - name: Download NuGet packages
       uses: actions/download-artifact@v3
       with:
-        name: nuget-packages
-        path: ./nuget-packages
+        name: nuget-packages-archive
+        path: ./backend/nuget-packages.tar.gz
+    - name: Extract NuGet packages archive
+      run: tar -xzvf nuget-packages.tar.gz -C ./nuget-packages
     - name: Restore dependencies from cache
       run: dotnet restore --packages ./nuget-packages
     - name: Test
