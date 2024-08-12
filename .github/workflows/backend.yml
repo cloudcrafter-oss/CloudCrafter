@@ -43,7 +43,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore --packages ./nuget-packages
     - name: Create NuGet packages archive
-      run: tar -czvf nuget-packages.tar.gz -C ./nuget-packages .
+      run: tar -czf nuget-packages.tar.gz -C ./nuget-packages .
     - name: Build
       run: dotnet build --no-restore
     - name: Save NuGet packages
@@ -79,7 +79,7 @@ jobs:
         name: nuget-packages-archive
         path: ./backend/nuget-packages.tar.gz
     - name: Extract NuGet packages archive
-      run: tar -xzvf nuget-packages.tar.gz -C ./nuget-packages
+      run: tar -xzf nuget-packages.tar.gz -C ./nuget-packages
     - name: Restore dependencies from cache
       run: dotnet restore --packages ./nuget-packages
     - name: Test
