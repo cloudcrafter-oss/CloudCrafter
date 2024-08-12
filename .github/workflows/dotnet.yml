@@ -44,8 +44,6 @@ jobs:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore
-    - name: Copy development environment settings
-      run: cp src/CloudCrafter.Web/appsettings.Development.example.json src/CloudCrafter.Web/appsettings.Development.json
     - name: Build
       run: dotnet build --no-restore
 
@@ -65,10 +63,12 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+    - name: Copy development environment settings
+      run: cp src/CloudCrafter.Web/appsettings.Development.example.json src/CloudCrafter.Web/appsettings.Development.json
     - name: Test
       run: |
         project_name=$(basename ${{ matrix.test-project }})
-        dotnet test ${{ matrix.test-project }} --verbosity normal --logger trx --results-directory ./test-results/$project_name --collect:"XPlat Code Coverage;Format=opencover" /p:DefineConstants="IN_TESTS"
+        dotnet test ${{ matrix.test-project }} --verbosity normal --logger trx --results-directory ./test-results --collect:"XPlat Code Coverage;Format=opencover" /p:DefineConstants="IN_TESTS"
     
     - name: Upload test results
       uses: actions/upload-artifact@v3
