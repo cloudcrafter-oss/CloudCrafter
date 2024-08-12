@@ -1,4 +1,6 @@
-﻿using CloudCrafter.Agent.Models.Recipe;
+﻿using CloudCrafter.Agent.Models.Docker.Filters;
+using CloudCrafter.Agent.Models.Recipe;
+using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.DockerCompose.Engine.Yaml;
 using CloudCrafter.DockerCompose.Shared.Labels;
@@ -13,6 +15,7 @@ public class RollingUpdateTest : AbstractTraefikTest
     private DeploymentService _deploymentService;
     private DeploymentRecipe _firstRecipe;
     private DeploymentRecipe _secondRecipe;
+    private IDockerHelper _dockerHelper;
 
     private DeploymentRecipe Create(Guid deploymentId, Guid applicationId, string tag, string dummyEnv)
     {
@@ -206,6 +209,21 @@ public class RollingUpdateTest : AbstractTraefikTest
 
         return recipe;
     }
+    
+    [TearDown]
+    public async Task StopCreatedContainers()
+    {
+        var containers = await _dockerHelper.GetContainersFromFilter(new DockerContainerFilter()
+        {
+            OnlyCloudCrafterLabels = true
+        });
+
+        foreach (var container in containers)
+        {
+            await _dockerHelper.StopContainers([container.ID]);
+            await _dockerHelper.RemoveContainers([container.ID]);
+        }
+    }
 
     [SetUp]
     public void SetUp()
@@ -256,6 +274,7 @@ public class RollingUpdateTest : AbstractTraefikTest
         Log.Logger = new LoggerConfiguration().WriteTo.NUnitOutput().CreateLogger();
 
         _deploymentService = host.Services.GetRequiredService<DeploymentService>();
+        _dockerHelper = host.Services.GetRequiredService<IDockerHelper>();
     }
 
     [Test]
