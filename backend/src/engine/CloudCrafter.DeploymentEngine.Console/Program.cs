@@ -20,9 +20,12 @@ var client = manager.CreateSshClient();
 
 await client.ConnectAsync();
 
+
 var result = await client.ExecuteCommandAsync("ls -la");
+var patchedResult = await client.ExecuteCommandAsync("whoami");
 
 var anotherResult = await client.ExecuteCommandAsync("docker ps");
 
 Console.WriteLine(result.Result);
 Console.WriteLine(anotherResult.Result);
+Console.WriteLine(patchedResult.Result);
