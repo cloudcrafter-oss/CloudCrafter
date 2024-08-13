@@ -119,6 +119,12 @@ jobs:
         files: |
           ./backend/test-results/**/*.trx
 
+    - name: Show debug info
+      run: |
+        pwd
+        ls -lah .
+        ls -lah ./test-results
+
     - name: Consolidate coverage files
       run: |
         mkdir -p ./backend/consolidated-coverage
