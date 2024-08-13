@@ -134,10 +134,9 @@ jobs:
       run: |
         ls -lah ./consolidated-coverage
     - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v4.1.0
+      uses: codecov/codecov-action@v4.5.0
       if: always()
       with:
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
-        directory: ./backend/consolidated-coverage
         verbose: true
