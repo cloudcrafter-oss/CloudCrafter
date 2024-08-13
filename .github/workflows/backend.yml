@@ -119,9 +119,16 @@ jobs:
         files: |
           ./backend/test-results/**/*.trx
 
+    - name: Consolidate coverage files
+      run: |
+        mkdir -p ./backend/consolidated-coverage
+        find ./backend/test-results -name "coverage.opencover.xml" -exec cp {} ./backend/consolidated-coverage/ \;
+
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.1.0
       if: always()
       with:
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./backend/consolidated-coverage/*.xml
+        verbose: true
