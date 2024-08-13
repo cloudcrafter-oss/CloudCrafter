@@ -37,7 +37,14 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal --logger trx --results-directory ./test-results --collect:"XPlat Code Coverage;Format=opencover" /p:DefineConstants="IN_TESTS"
-    
+  
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results
+        path: ./backend/test-results
+
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
