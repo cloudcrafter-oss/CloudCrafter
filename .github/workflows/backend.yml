@@ -1,4 +1,4 @@
-name: Backend build
+name: Backend Build
 
 on:
   push:
@@ -14,12 +14,48 @@ permissions:
   pull-requests: write
 
 jobs:
-  build:
-
+  detect-test-projects:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./backend
+    outputs:
+      test-projects: ${{ steps.set-matrix.outputs.test-projects }}
+    steps:
+    - uses: actions/checkout@v4
+    - id: set-matrix
+      run: |
+        TEST_PROJECTS=$(find ./tests -maxdepth 1 -type d -not -path '*/\.*' -not -path './tests' | jq -R -s -c 'split("\n")[:-1]')
+        echo "test-projects=$TEST_PROJECTS" >> $GITHUB_OUTPUT
+
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+
+
+  test:
+    needs: [build, detect-test-projects]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    strategy:
+      fail-fast: false 
+      matrix:
+        test-project: ${{fromJson(needs.detect-test-projects.outputs.test-projects)}}
 
     steps:
     - uses: actions/checkout@v4
@@ -29,41 +65,81 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore
     - name: Copy development environment settings
       run: cp src/CloudCrafter.Web/appsettings.Development.example.json src/CloudCrafter.Web/appsettings.Development.json
+    - name: Restore dependencies from cache
+      run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal --logger trx --results-directory ./test-results --collect:"XPlat Code Coverage;Format=opencover" /p:DefineConstants="IN_TESTS"
-  
+      run: |
+        project_name=$(basename ${{ matrix.test-project }})
+        dotnet test ${{ matrix.test-project }} --verbosity normal --logger trx --results-directory ./test-results --collect:"XPlat Code Coverage;Format=opencover" /p:DefineConstants="IN_TESTS"
+    - name: Sanitize project name
+      id: sanitize
+      run: |
+        sanitized=$(echo "${{ matrix.test-project }}" | sed 's/[^a-zA-Z0-9-]//g')
+        echo "sanitized=$sanitized" >> $GITHUB_OUTPUT
     - name: Upload test results
       uses: actions/upload-artifact@v3
       if: always()
       with:
-        name: test-results
+        name: test-results-${{ steps.sanitize.outputs.sanitized }}
         path: ./backend/test-results
 
-    - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action@v2
-      if: always()
-      with:
-        files: |
-          ./backend/test-results/**/*.trx
-          
-    # - name: Process trx reports with default
-    #   if: always()
-    #   # You may also reference just the major or major.minor version
-    #   uses: im-open/process-dotnet-test-results@v3.0.0
-    #   with:
-    #     base-directory: ./backend/test-results
-    #     github-token: ${{ secrets.GITHUB_TOKEN }}
-    #     create-status-check: true
-    #     create-pr-comment: true
     - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v4.0.1
+      uses: codecov/codecov-action@v4.5.0
       if: always()
       with:
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
+        name: ${{ steps.sanitize.outputs.sanitized }}-coverage
+        verbose: true
+
+  # publish-results:
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   if: always()
+  #   defaults:
+  #     run:
+  #       working-directory: ./backend
+
+
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Download test results
+  #     uses: actions/download-artifact@v3
+  #     with:
+  #       path: ./backend/test-results
+  #   # - name: Download coverage results
+  #   #   uses: actions/download-artifact@v3
+  #   #   with:
+  #   #     path: ./backend/coverage-results
+  #   - name: Publish Test Results
+  #     uses: EnricoMi/publish-unit-test-result-action@v2
+  #     if: always()
+  #     with:
+  #       files: |
+  #         ./backend/test-results/**/*.trx
+
+  #   - name: Show debug info
+  #     run: |
+  #       pwd
+  #       ls -lah .
+  #       ls -lah ./test-results
+
+  #   - name: Consolidate coverage files
+  #     run: |
+  #       mkdir -p ./consolidated-coverage
+  #       find ./test-results -name "coverage.opencover.xml" -exec cp {} ./consolidated-coverage/ \;
+
+  #   - name: Show consolidated entries
+  #     run: |
+  #       ls -lah ./consolidated-coverage
+  #   - name: Upload coverage reports to Codecov
+  #     uses: codecov/codecov-action@v4.5.0
+  #     if: always()
+  #     with:
+  #       fail_ci_if_error: true
+  #       token: ${{ secrets.CODECOV_TOKEN }}
+  #       verbose: true

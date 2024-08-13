@@ -15,7 +15,8 @@ public class ConnectivityCheckBackgroundJob(IServerConnectivityService serverCon
     {
         if (backgroundJob.ServerConnectivityCheckJob == null)
         {
-            throw new ArgumentException("Background job is missing the ServerConnectivityCheckJob property.");
+            string message = "Background job is missing the ServerConnectivityCheckJob property.";
+            throw new ArgumentException(message);
         }
 
         var logger = loggerFactory.CreateLogger<ConnectivityCheckBackgroundJob>();
