@@ -127,7 +127,7 @@ jobs:
 
     - name: Consolidate coverage files
       run: |
-        mkdir -p ./backend/consolidated-coverage
+        mkdir -p ./consolidated-coverage
         find ./test-results -name "coverage.opencover.xml" -exec cp {} ./consolidated-coverage/ \;
 
     - name: Upload coverage reports to Codecov
