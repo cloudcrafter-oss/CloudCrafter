@@ -130,6 +130,9 @@ jobs:
         mkdir -p ./consolidated-coverage
         find ./test-results -name "coverage.opencover.xml" -exec cp {} ./consolidated-coverage/ \;
 
+    - name: Show consolidated entries
+      run: |
+        ls -lah ./consolidated-coverage
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.1.0
       if: always()
