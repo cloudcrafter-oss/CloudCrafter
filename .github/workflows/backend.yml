@@ -98,6 +98,10 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     if: always()
+    defaults:
+      run:
+        working-directory: ./backend
+
 
     steps:
     - name: Download test results
