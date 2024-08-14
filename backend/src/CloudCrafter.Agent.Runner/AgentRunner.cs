@@ -24,19 +24,6 @@ public class AgentRunner(IHost host)
             return -1;
         }
         
-        // Test code
-
-        var dockerHelper = host.Services.GetRequiredService<IDockerHelper>();
-
-        var hosts = await dockerHelper.GetContainersFromFilter(new DockerContainerFilter()
-        {
-            LabelFilters = new List<DockerLabelFilter>()
-            {
-                DockerLabelFilter.Parse("cloudcrafter.application=0e038998-c7c0-4fb6-bf35-187b6e9cbcb5"),
-                DockerLabelFilter.Parse("cloudcrafter.deployment!=943c2a2d-f794-403a-9c91-0f1086a034bf")
-            }
-        });
-
         var mediator = host.Services.GetRequiredService<IMediator>();
         
         

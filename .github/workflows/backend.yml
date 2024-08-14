@@ -99,11 +99,13 @@ jobs:
   validate-agent:
     needs: [test, build]
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend
     steps:
     - uses: actions/checkout@v4
     - name: Build Docker image of agent
       run: |
-        docker build -t console -f src/CloudCrafter.Agent.Console/Dockerfile .
+        docker build -t console -f backend/src/CloudCrafter.Agent.Console/Dockerfile ./backend/
+    - name: Run validate script
+      run: |
+        chmod +x ./ci/tests/validate-agent.sh
+        ./ci/tests/validate-agent.sh
+    
