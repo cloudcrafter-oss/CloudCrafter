@@ -106,6 +106,6 @@ jobs:
         docker build -t console -f backend/src/CloudCrafter.Agent.Console/Dockerfile ./backend/
     - name: Run validate script
       run: |
-        chmod +x ./ci/tests/validate-agent.sh
-        ./ci/tests/validate-agent.sh
+        chmod +x ./ci/tests/validate_agent.sh
+        ./ci/tests/validate_agent.sh
     
