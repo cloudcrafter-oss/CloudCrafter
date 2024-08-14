@@ -33,5 +33,8 @@ run_and_validate() {
     fi
 }
 
-# Example usage
+echo "Validating basic usage\n"
 run_and_validate "docker run --rm console" "No Recipe found - cannot continue"
+
+echo "Validating help command\n"
+run_and_validate "docker run --rm console --help" "Show version information"

@@ -16,6 +16,8 @@
   <ItemGroup>
     <PackageReference Include="MediatR"/>
     <PackageReference Include="System.CommandLine"/>
+    <PackageReference Include="Serilog"/>
+    <PackageReference Include="Serilog.AspNetCoreSerilog.AspNetCore"/>
     <PackageReference Include="Microsoft.Extensions.Hosting"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
   </ItemGroup>

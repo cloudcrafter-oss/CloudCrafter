@@ -17,4 +17,10 @@ public class YamlRecipeWriter(DeploymentRecipe recipe)
 
         return yaml;
     }
+
+    public void WriteToFile(string filename)
+    {
+        var yaml = WriteString();
+        File.WriteAllText(filename, yaml);
+    }
 }

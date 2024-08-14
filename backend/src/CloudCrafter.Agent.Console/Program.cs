@@ -22,16 +22,27 @@ public class Program
 
         var demoOption = new Option<bool>("--demo", "Runs the dummy deployment recipe");
         var fromBase64Option = new Option<string>("--from-base64", "Runs the deployment recipe from a base64 string");
-        
+        var onlyDryRun = new Option<bool>("--dry-run",
+            "Only runs the Agent in dry-run mode. Does not execute the actual recipe, but validates the recipe.");
+
+        var generateSampleRecipe = new Option<bool>("--generate-sample-recipe", "Generates a sample recipe and exits");
+
         var rootCommand = new RootCommand("CloudCrafter Agent");
         rootCommand.AddOption(demoOption);
 
         int? resultCode = null;
-        rootCommand.SetHandler(async (demoOptionValue, fromBase64OptionValue) =>
-        {
-            var agentRunner = new AgentRunner(host);
-            resultCode = await agentRunner.Run(demoOptionValue, fromBase64OptionValue);
-        }, demoOption, fromBase64Option);
+        rootCommand.SetHandler(
+            async (demoOptionValue, fromBase64OptionValue, onlyDryRunValue, generateSampleRecipeValue) =>
+            {
+                var agentRunner = new AgentRunner(host);
+                resultCode = await agentRunner.Run(new AgentRunner.AgentRunnerArgs
+                {
+                    UseDummyDeployment = demoOptionValue,
+                    Base64Recipe = fromBase64OptionValue,
+                    OnlyDryRun = onlyDryRunValue,
+                    GenerateSampleRecipe = generateSampleRecipeValue
+                });
+            }, demoOption, fromBase64Option, onlyDryRun, generateSampleRecipe);
 
 
         var intResult = await rootCommand.InvokeAsync(args);
