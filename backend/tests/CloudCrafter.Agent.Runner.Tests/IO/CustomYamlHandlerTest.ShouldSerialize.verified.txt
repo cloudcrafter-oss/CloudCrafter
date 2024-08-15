@@ -1,0 +1,33 @@
+﻿string: Hello, World!
+int: 42
+bool: true
+listString:
+- apple
+- banana
+- cherry
+listInt:
+- 1
+- 2
+- 3
+- 4
+- 5
+dictStringBool:
+  key1: true
+  key2: false
+dictStringString:
+  name: John Doe
+  city: New York
+dictStringObject:
+  number: 10
+  text: sample
+  flag: false
+dictStringListString:
+  fruits:
+  - apple
+  - banana
+  - cherry
+  colors:
+  - red
+  - green
+  - blue
+double: 3.14159

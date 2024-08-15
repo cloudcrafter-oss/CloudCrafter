@@ -28,12 +28,10 @@ public class YamlRecipeReader
     {
         try
         {
-            var deserializer = new DeserializerBuilder()
-                .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                .WithTypeConverter(new CustomObjectConverter())
-                .Build();
 
-            var recipe = deserializer.Deserialize<DeploymentRecipe>(yaml);
+            var reader = new CustomYamlHandler();
+            
+            var recipe = reader.Deserialize<DeploymentRecipe>(yaml);
 
 
             if (recipe == null)
@@ -56,34 +54,3 @@ public class YamlRecipeReader
     }
 }
 
-
-public class CustomObjectConverter : IYamlTypeConverter
-{
-    public bool Accepts(Type type) => type == typeof(object);
-
-    public object ReadYaml(IParser parser, Type type)
-    {
-        var scalar = parser.Consume<Scalar>();
-        var value = scalar.Value;
-
-        // Try parsing as boolean
-        if (bool.TryParse(value, out bool boolResult))
-            return boolResult;
-
-        // Try parsing as integer
-        if (int.TryParse(value, out int intResult))
-            return intResult;
-
-        // Try parsing as double
-        if (double.TryParse(value, out double doubleResult))
-            return doubleResult;
-
-        // If all else fails, return as string
-        return value;
-    }
-
-    public void WriteYaml(IEmitter emitter, object? value, Type type)
-    {
-        throw new NotImplementedException();
-    }
-}
