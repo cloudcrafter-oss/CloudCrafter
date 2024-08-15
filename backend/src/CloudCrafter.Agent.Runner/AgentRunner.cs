@@ -52,6 +52,11 @@ public class AgentRunner(IHost host)
 
         if (recipe == null)
         {
+            recipe = GetFromCurrentDirectory(logger);
+        }
+
+        if (recipe == null)
+        {
             logger.LogCritical("Error: No Recipe found - cannot continue");
             return -1;
         }
@@ -98,11 +103,30 @@ public class AgentRunner(IHost host)
         var writer = new YamlRecipeWriter(recipe);
 
         var currentPath = Directory.GetCurrentDirectory();
-        var filename = Path.Combine(currentPath, "sample-recipe.yaml");
+        var filename = Path.Combine(currentPath, "recipe.yml");
 
         logger.LogInformation("Writing sample recipe to {0}", filename);
         writer.WriteToFile(filename);
         logger.LogInformation("Sample recipe written to {0}", filename);
+    }
+
+    private DeploymentRecipe? GetFromCurrentDirectory(ILogger<AgentRunner> logger)
+    {
+        var currentPath = Directory.GetCurrentDirectory();
+        var filename = Path.Combine(currentPath, "recipe.yml");
+
+        if (!File.Exists(filename))
+        {
+            logger.LogInformation("No recipe file found in current directory (looking for recipe.yml)");
+            return null;
+        }
+
+        // read file
+        var recipeReader = new YamlRecipeReader();
+
+        var recipe = recipeReader.FromFile(filename);
+
+        return recipe;
     }
 
     public class AgentRunnerArgs

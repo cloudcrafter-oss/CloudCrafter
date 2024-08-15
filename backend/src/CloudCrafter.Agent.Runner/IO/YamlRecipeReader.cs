@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Agent.Models.Recipe;
+﻿using System.Text;
+using CloudCrafter.Agent.Models.Recipe;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -9,7 +10,14 @@ public class YamlRecipeReader
 {
     public DeploymentRecipe FromBase64(string base64)
     {
-        var yaml = System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(base64));
+        var yaml = Encoding.UTF8.GetString(Convert.FromBase64String(base64));
+
+        return FromString(yaml);
+    }
+
+    public DeploymentRecipe? FromFile(string filename)
+    {
+        var yaml = File.ReadAllText(filename);
 
         return FromString(yaml);
     }

@@ -8,6 +8,7 @@ using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 public class Program
 {
@@ -20,7 +21,7 @@ public class Program
     {
         var host = CreateHostBuilder(args).Build();
 
-        var demoOption = new Option<bool>("--demo", "Runs the dummy deployment recipe");
+        var demoOption = new Option<bool>("--demo", "Runs the dummy deployment recipe 123");
         var fromBase64Option = new Option<string>("--from-base64", "Runs the deployment recipe from a base64 string");
         var onlyDryRun = new Option<bool>("--dry-run",
             "Only runs the Agent in dry-run mode. Does not execute the actual recipe, but validates the recipe.");
@@ -29,6 +30,9 @@ public class Program
 
         var rootCommand = new RootCommand("CloudCrafter Agent");
         rootCommand.AddOption(demoOption);
+        rootCommand.AddOption(fromBase64Option);
+        rootCommand.AddOption(onlyDryRun);
+        rootCommand.AddOption(generateSampleRecipe);
 
         int? resultCode = null;
         rootCommand.SetHandler(
@@ -52,6 +56,11 @@ public class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .CreateLogger();
+
+
         return Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostContext, services) =>
             {
@@ -68,6 +77,8 @@ public class Program
 
                     cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
                 });
+
+                services.AddSerilog();
             });
     }
 }

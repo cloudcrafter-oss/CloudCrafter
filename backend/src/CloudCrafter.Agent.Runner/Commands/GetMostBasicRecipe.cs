@@ -37,8 +37,26 @@ public static class GetMostBasicRecipe
                     },
                 Destination = new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter" },
                 DockerComposeOptions =
-                    new DeploymentRecipeDockerComposeOptions { Base64DockerCompose = dockerComposeBase64 },
-                BuildOptions = new DeploymentBuildOptions { Steps = new List<DeploymentBuildStep>() }
+                    new DeploymentRecipeDockerComposeOptions
+                    {
+                        Base64DockerCompose = dockerComposeBase64, DockerComposeDirectory = "/tmp/cloudcrafter"
+                    },
+                BuildOptions = new DeploymentBuildOptions
+                {
+                    Steps = new List<DeploymentBuildStep>
+                    {
+                        new()
+                        {
+                            Name = "Dummy",
+                            Description = "Some dummy description",
+                            Type = DeploymentBuildStepType.RunPlainCommand,
+                            Params = new Dictionary<string, object>
+                            {
+                                { "command", "echo 'Hello, World!'" }, { "allowFailure", false }
+                            }
+                        }
+                    }
+                }
             };
 
             return Task.FromResult(recipe);

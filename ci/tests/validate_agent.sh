@@ -38,3 +38,6 @@ run_and_validate "docker run --rm console" "No Recipe found - cannot continue"
 
 echo "Validating help command\n"
 run_and_validate "docker run --rm console --help" "Show version information"
+
+echo "Save basic recipe\n"
+run_and_validate "docker run --rm -v \"$(pwd):/app\" console --generate-sample-recipe" "Saved recipe test"
