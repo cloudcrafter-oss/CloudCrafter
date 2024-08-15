@@ -3,6 +3,8 @@ using CloudCrafter.Agent.Models.Recipe;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.Core.Events;
+
 
 namespace CloudCrafter.Agent.Runner.IO;
 
@@ -28,6 +30,7 @@ public class YamlRecipeReader
         {
             var deserializer = new DeserializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                .WithTypeConverter(new CustomObjectConverter())
                 .Build();
 
             var recipe = deserializer.Deserialize<DeploymentRecipe>(yaml);
@@ -50,5 +53,37 @@ public class YamlRecipeReader
             throw new InvalidOperationException("An unexpected error occurred while deserializing YAML: " + ex.Message,
                 ex);
         }
+    }
+}
+
+
+public class CustomObjectConverter : IYamlTypeConverter
+{
+    public bool Accepts(Type type) => type == typeof(object);
+
+    public object ReadYaml(IParser parser, Type type)
+    {
+        var scalar = parser.Consume<Scalar>();
+        var value = scalar.Value;
+
+        // Try parsing as boolean
+        if (bool.TryParse(value, out bool boolResult))
+            return boolResult;
+
+        // Try parsing as integer
+        if (int.TryParse(value, out int intResult))
+            return intResult;
+
+        // Try parsing as double
+        if (double.TryParse(value, out double doubleResult))
+            return doubleResult;
+
+        // If all else fails, return as string
+        return value;
+    }
+
+    public void WriteYaml(IEmitter emitter, object? value, Type type)
+    {
+        throw new NotImplementedException();
     }
 }
