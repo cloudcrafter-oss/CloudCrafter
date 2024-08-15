@@ -68,5 +68,5 @@ echo "### 4: Save basic recipe\n"
 run_and_validate "docker run --rm -v \"$(pwd):/app\" console --generate-sample-recipe" "Sample recipe generated and saved"
 
 # Validate that recipe.yml file exists
-echo "#### 5Validating recipe.yml file exists\n"
+echo "#### 5: Validating recipe.yml file exists\n"
 check_file_exists "recipe.yml" true

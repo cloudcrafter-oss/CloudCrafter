@@ -103,7 +103,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build Docker image of agent
       run: |
-        docker build -t console -f backend/src/CloudCrafter.Agent.Console/Dockerfile ./backend/
+        docker build -t console --no-cache -f backend/src/CloudCrafter.Agent.Console/Dockerfile ./backend/
     - name: Run validate script
       run: |
         chmod +x ./ci/tests/validate_agent.sh
