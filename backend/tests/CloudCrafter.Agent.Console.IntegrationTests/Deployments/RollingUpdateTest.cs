@@ -1,6 +1,7 @@
 ﻿using CloudCrafter.Agent.Models.Docker.Filters;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
+using CloudCrafter.Agent.Runner.IO;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.DockerCompose.Engine.Yaml;
 using CloudCrafter.DockerCompose.Shared.Labels;
@@ -207,7 +208,16 @@ public class RollingUpdateTest : AbstractTraefikTest
             }
         };
 
-        return recipe;
+        var recipeWriter = new YamlRecipeWriter(recipe);
+
+        var recipeAsString = recipeWriter.WriteString();
+
+        var recipeReader = new YamlRecipeReader();
+
+        var readRecipe = recipeReader.FromString(recipeAsString);
+
+        return readRecipe;
+
     }
     
     [TearDown]
