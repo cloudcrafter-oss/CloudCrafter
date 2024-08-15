@@ -53,20 +53,20 @@ check_file_exists() {
 }
 
 
-echo "Validating basic usage\n"
+echo "### 1: Validating basic usage\n"
 run_and_validate "docker run --rm console" "No Recipe found - cannot continue"
 
-echo "Validating help command\n"
+echo "### 2: Validating help command\n"
 run_and_validate "docker run --rm console --help" "Show version information"
 
 # Validate that recipe.yml file does not exists
-echo "Validating recipe.yml file does not exists\n"
+echo "### 3: Validating recipe.yml file does not exists\n"
 check_file_exists "recipe.yml" false
 
 
-echo "Save basic recipe\n"
-run_and_validate "docker run --rm -v \"$(pwd):/app\" console --generate-sample-recipe" "Saved recipe test"
+echo "### 4: Save basic recipe\n"
+run_and_validate "docker run --rm -v \"$(pwd):/app\" console --generate-sample-recipe" "Sample recipe generated and saved"
 
 # Validate that recipe.yml file exists
-echo "Validating recipe.yml file exists\n"
+echo "#### 5Validating recipe.yml file exists\n"
 check_file_exists "recipe.yml" true
