@@ -22,6 +22,13 @@ ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "CloudCrafter.Agent.Console.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
-WORKDIR /app
+WORKDIR /console
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "CloudCrafter.Agent.Console.dll"]
+RUN echo '#!/bin/sh' > /usr/local/bin/cloudcrafter-agent && \
+    echo 'dotnet /console/CloudCrafter.Agent.Console.dll "$@"' >> /usr/local/bin/cloudcrafter-agent && \
+    chmod +x /usr/local/bin/cloudcrafter-agent
+
+WORKDIR /app
+
+# Set the entrypoint to a shell
+ENTRYPOINT ["/usr/local/bin/cloudcrafter-agent"]

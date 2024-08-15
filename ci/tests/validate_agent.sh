@@ -11,7 +11,7 @@ run_and_validate() {
     # Check if the output is empty
     if [ -z "$output" ]; then
         echo "Error: Command '$command' produced no output."
-        return 1
+        exit 1
     fi
 
     # If expected output is provided, check if it matches
@@ -19,12 +19,12 @@ run_and_validate() {
         if [[ "$output" == *"$expected_output"* ]]; then
             echo "Success: Command output contains expected text."
             echo "Output: $output"
-            return 0
+    
         else
             echo "Error: Command output does not contain expected text."
             echo "Output: $output"
             echo "Expected: $expected_output"
-            return 1
+            exit 1
         fi
     else
         echo "Success: Command produced output."
@@ -33,11 +33,40 @@ run_and_validate() {
     fi
 }
 
+check_file_exists() {
+    local file="$1"
+    local should_exist="$2"
+
+    if [ "$should_exist" = true ] && [ -f "$file" ]; then
+        echo "Success: File '$file' exists as expected."
+
+    elif [ "$should_exist" = false ] && [ ! -f "$file" ]; then
+        echo "Success: File '$file' does not exist as expected."
+    else
+        if [ "$should_exist" = true ]; then
+            echo "Error: File '$file' does not exist, but it should."
+        else
+            echo "Error: File '$file' exists, but it shouldn't."
+        fi
+        exit 1
+    fi
+}
+
+
 echo "Validating basic usage\n"
 run_and_validate "docker run --rm console" "No Recipe found - cannot continue"
 
 echo "Validating help command\n"
 run_and_validate "docker run --rm console --help" "Show version information"
 
+# Validate that recipe.yml file does not exists
+echo "Validating recipe.yml file does not exists\n"
+check_file_exists "recipe.yml" false
+
+
 echo "Save basic recipe\n"
 run_and_validate "docker run --rm -v \"$(pwd):/app\" console --generate-sample-recipe" "Saved recipe test"
+
+# Validate that recipe.yml file exists
+echo "Validating recipe.yml file exists\n"
+check_file_exists "recipe.yml" true
