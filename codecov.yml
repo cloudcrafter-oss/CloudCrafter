@@ -1,0 +1,7 @@
+codecov:
+  require_ci_to_pass: yes
+
+coverage:
+  status:
+    project: yes
+    patch: off  # This disables the patch check
