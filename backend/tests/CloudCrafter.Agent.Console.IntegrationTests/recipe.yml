@@ -1,0 +1,18 @@
+name: Most basic recipe
+application:
+  id: 658810df-d89e-4daf-91c8-91737117a765
+dockerComposeOptions:
+  base64DockerCompose: c2VydmljZXM6CiAgbmdpbng6CiAgICBpbWFnZTogbmdpbng6bGF0ZXN0CiAgICBwb3J0czoKICAgIC0gODA6ODAK
+  dockerComposeDirectory: /tmp/cloudcrafter
+destination:
+  rootDirectory: /tmp/cloudcrafter
+environmentVariables:
+  variables: { }
+buildOptions:
+  steps:
+    - name: Dummy
+      description: Some dummy description
+      type: RunPlainCommand
+      params:
+        command: echo 'Hello, World!'
+        allowFailure: false

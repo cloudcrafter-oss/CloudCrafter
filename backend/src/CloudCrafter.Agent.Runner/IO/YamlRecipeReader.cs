@@ -1,7 +1,10 @@
-﻿using CloudCrafter.Agent.Models.Recipe;
+﻿using System.Text;
+using CloudCrafter.Agent.Models.Recipe;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.Core.Events;
+
 
 namespace CloudCrafter.Agent.Runner.IO;
 
@@ -9,7 +12,14 @@ public class YamlRecipeReader
 {
     public DeploymentRecipe FromBase64(string base64)
     {
-        var yaml = System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(base64));
+        var yaml = Encoding.UTF8.GetString(Convert.FromBase64String(base64));
+
+        return FromString(yaml);
+    }
+
+    public DeploymentRecipe? FromFile(string filename)
+    {
+        var yaml = File.ReadAllText(filename);
 
         return FromString(yaml);
     }
@@ -18,11 +28,10 @@ public class YamlRecipeReader
     {
         try
         {
-            var deserializer = new DeserializerBuilder()
-                .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                .Build();
 
-            var recipe = deserializer.Deserialize<DeploymentRecipe>(yaml);
+            var reader = new CustomYamlHandler();
+            
+            var recipe = reader.Deserialize<DeploymentRecipe>(yaml);
 
 
             if (recipe == null)
@@ -44,3 +53,4 @@ public class YamlRecipeReader
         }
     }
 }
+

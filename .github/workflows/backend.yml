@@ -95,51 +95,17 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         name: ${{ steps.sanitize.outputs.sanitized }}-coverage
         verbose: true
-
-  # publish-results:
-  #   needs: test
-  #   runs-on: ubuntu-latest
-  #   if: always()
-  #   defaults:
-  #     run:
-  #       working-directory: ./backend
-
-
-  #   steps:
-  #   - uses: actions/checkout@v4
-  #   - name: Download test results
-  #     uses: actions/download-artifact@v3
-  #     with:
-  #       path: ./backend/test-results
-  #   # - name: Download coverage results
-  #   #   uses: actions/download-artifact@v3
-  #   #   with:
-  #   #     path: ./backend/coverage-results
-  #   - name: Publish Test Results
-  #     uses: EnricoMi/publish-unit-test-result-action@v2
-  #     if: always()
-  #     with:
-  #       files: |
-  #         ./backend/test-results/**/*.trx
-
-  #   - name: Show debug info
-  #     run: |
-  #       pwd
-  #       ls -lah .
-  #       ls -lah ./test-results
-
-  #   - name: Consolidate coverage files
-  #     run: |
-  #       mkdir -p ./consolidated-coverage
-  #       find ./test-results -name "coverage.opencover.xml" -exec cp {} ./consolidated-coverage/ \;
-
-  #   - name: Show consolidated entries
-  #     run: |
-  #       ls -lah ./consolidated-coverage
-  #   - name: Upload coverage reports to Codecov
-  #     uses: codecov/codecov-action@v4.5.0
-  #     if: always()
-  #     with:
-  #       fail_ci_if_error: true
-  #       token: ${{ secrets.CODECOV_TOKEN }}
-  #       verbose: true
+    
+  validate-agent:
+    needs: [test, build]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image of agent
+      run: |
+        docker build -t console --no-cache -f backend/src/CloudCrafter.Agent.Console/Dockerfile ./backend/
+    - name: Run validate script
+      run: |
+        chmod +x ./ci/tests/validate_agent.sh
+        ./ci/tests/validate_agent.sh
+    
