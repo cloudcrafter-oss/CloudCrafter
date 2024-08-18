@@ -2,4 +2,5 @@ coverage:
   status:
     project: yes
     patch:
-      if_ci_failed: success
+      default:
+        if_ci_failed: "success"
