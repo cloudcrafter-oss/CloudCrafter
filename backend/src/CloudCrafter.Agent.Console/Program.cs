@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
+namespace CloudCrafter.Agent.Console;
+
 public class Program
 {
     public static async Task<int> Main(string[] args)

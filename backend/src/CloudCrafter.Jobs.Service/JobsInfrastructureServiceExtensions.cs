@@ -12,7 +12,7 @@ public static class JobsInfrastructureServiceExtensions
 {
     public static IServiceCollection AddJobInfrastructure(
         this IServiceCollection services,
-        ConfigurationManager config)
+        ConfigurationManager config, bool withServer, string prefix)
     {
         services.AddScoped<IDeploymentTracker, DeploymentTracker>();
         services.AddHangfire((sp, hangfireConfig) =>
@@ -23,7 +23,7 @@ public static class JobsInfrastructureServiceExtensions
             hangfireConfig.UseRedisStorage(connectionString,
                 new RedisStorageOptions { Prefix = "cloudCrafter:", Db = 0, FetchTimeout = TimeSpan.FromSeconds(1) });
 
-            
+
             hangfireConfig.UseFilter(new LogEverythingAttribute());
 
 
@@ -31,7 +31,16 @@ public static class JobsInfrastructureServiceExtensions
                 .UseConsole();
         });
 
-        services.AddHangfireServer();
+
+        if (withServer)
+        {
+            services.AddHangfireServer(opt =>
+            {
+                var random = new Random();
+                var randomValue = random.Next(1, 1000);
+                opt.ServerName = $"{prefix}-{randomValue}";
+            });
+        }
 
         return services;
     }
