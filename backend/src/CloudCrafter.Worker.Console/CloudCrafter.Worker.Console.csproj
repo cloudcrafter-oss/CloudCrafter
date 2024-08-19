@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <None Remove="appsettings.Development.json" />
-    <Content Include="appsettings.Development.json">
+    <Content Include="appsettings.Development.json" Condition="Exists('appsettings.Development.json')">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
