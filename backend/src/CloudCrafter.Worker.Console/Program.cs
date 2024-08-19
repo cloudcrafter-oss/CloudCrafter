@@ -1,6 +1,6 @@
-﻿using System.CommandLine;
+﻿using CloudCrafter.Infrastructure;
+using CloudCrafter.Infrastructure.Logging;
 using CloudCrafter.Jobs.Service;
-using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,14 +17,15 @@ public class Program
 
     public static async Task<int> RunApp(string[] args)
     {
-        var host = CreateHostBuilder(args).Build();
+        var builder = CreateHostBuilder(args);
+        var host = builder.Build();
 
-        
+
         await host.RunAsync();
         return 0;
     }
-    
-    
+
+
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
@@ -35,17 +36,21 @@ public class Program
         var builder = Host.CreateDefaultBuilder(args);
 
         var configurationBuilder = new ConfigurationBuilder();
-        configurationBuilder.AddJsonFile("appsettings.json", optional: true);
-        configurationBuilder.AddJsonFile("appsettings.Development.json", optional: true);
+        configurationBuilder.AddJsonFile("appsettings.json", false);
+        configurationBuilder.AddJsonFile("appsettings.Development.json", true);
         configurationBuilder.AddEnvironmentVariables();
 
         var config = configurationBuilder.Build();
-        
+
         var manager = new ConfigurationManager();
         manager.AddConfiguration(config);
-        
-        
+
+
         return builder
+            .ConfigureAppConfiguration((ctx, config) =>
+            {
+                config.AddConfiguration(manager);
+            })
             .ConfigureServices((hostContext, services) =>
             {
                 services.AddMediatR(cfg =>
@@ -53,9 +58,11 @@ public class Program
                     cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
                 });
                 
-                services.AddJobInfrastructure(manager, withServer: true, "worker");
 
-                services.AddSerilog();
+                services.AddCloudCrafterConfiguration();
+                services.AddCloudCrafterLogging(manager);
+                services.AddInfrastructureServices(manager);
+                services.AddJobInfrastructure(manager, true, "worker");
             });
     }
 }

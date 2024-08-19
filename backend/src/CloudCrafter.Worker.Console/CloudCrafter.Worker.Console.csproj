@@ -19,14 +19,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CloudCrafter.Core\CloudCrafter.Core.csproj" />
+    <ProjectReference Include="..\CloudCrafter.Core\CloudCrafter.Core.csproj"/>
+    <ProjectReference Include="..\CloudCrafter.Infrastructure\CloudCrafter.Infrastructure.csproj"/>
     <ProjectReference Include="..\CloudCrafter.Jobs.Service\CloudCrafter.Jobs.Service.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="appsettings.Development.json" />
+    <None Remove="appsettings.Development.json"/>
     <Content Include="appsettings.Development.json" Condition="Exists('appsettings.Development.json')">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Remove="appsettings.json"/>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

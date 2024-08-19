@@ -1,5 +1,6 @@
 using System.Reflection;
 using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Web.Infrastructure;
@@ -25,13 +26,11 @@ public static class DependencyInjection
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        services.AddOptions<CloudCrafterConfig>()
-            .BindConfiguration(CloudCrafterConfig.KEY)
-            .ValidateDataAnnotations()
-            .ValidateOnStart();
+        services.AddCloudCrafterConfiguration();
 
         return services;
     }
+
 
     public static IServiceCollection AddSwaggerServices(this IServiceCollection collection)
     {
@@ -39,7 +38,7 @@ public static class DependencyInjection
             .AddSwaggerGen(swagger =>
             {
                 var defaultSchemaIdSelector = swagger.SchemaGeneratorOptions.SchemaIdSelector;
-        
+
                 swagger.CustomSchemaIds(type =>
                 {
                     if (type.MemberType == MemberTypes.NestedType)
@@ -53,30 +52,27 @@ public static class DependencyInjection
                 swagger.SupportNonNullableReferenceTypes();
                 swagger.SchemaFilter<RequireNotNullableSchemaFilter>();
                 swagger.OperationFilter<FilterableFieldsOperationFilter>();
-                
-                swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please enter a valid token",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
-                    Scheme = "Bearer"
-                });
-                
-        
+
+                swagger.AddSecurityDefinition("Bearer",
+                    new OpenApiSecurityScheme
+                    {
+                        In = ParameterLocation.Header,
+                        Description = "Please enter a valid token",
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.Http,
+                        BearerFormat = "JWT",
+                        Scheme = "Bearer"
+                    });
+
+
                 swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                         new OpenApiSecurityScheme
                         {
-                            Reference = new OpenApiReference
-                            {
-                                Type=ReferenceType.SecurityScheme,
-                                Id="Bearer"
-                            }
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
                         },
-                        new string[]{}
+                        new string[] { }
                     }
                 });
             });
