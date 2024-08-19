@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Core;
 
@@ -7,21 +8,33 @@ namespace CloudCrafter.Infrastructure.Logging;
 
 public static class LoggingConfiguration
 {
-    public static Logger GetLogger()
+    public static Logger GetLogger(IConfiguration? config = null)
     {
-        return new LoggerConfiguration()
+        var loggerConfig = new LoggerConfiguration();
+        
+        if (config != null)
+        {
+            loggerConfig = loggerConfig.ReadFrom.Configuration(config);
+        }
+        
+        return loggerConfig
             .WriteTo.Console()
             .CreateLogger();
+     
     }
 
     public static IServiceCollection AddCloudCrafterLogging(
         this IServiceCollection services,
-        ConfigurationManager config)
+        IConfiguration config)
     {
-        services.AddSerilog(opt =>
+        Log.Logger = GetLogger(config);
+
+        services.AddLogging(logger =>
         {
-            opt.ReadFrom.Configuration(config);
+            logger.ClearProviders();
+            logger.AddSerilog();
         });
+        
         return services;
     }
 }

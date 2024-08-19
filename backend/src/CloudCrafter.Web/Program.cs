@@ -23,7 +23,7 @@ builder.Services.AddInfrastructureServices(builder.Configuration)
     .AddApiConfiguration(builder.Configuration);
 builder.Services.AddWebServices();
 builder.Services.AddSwaggerServices();
-builder.Services.AddJobInfrastructure(builder.Configuration, withServer: true, "web");
+builder.Services.AddJobInfrastructure(builder.Configuration, withServer: false, "web");
 
 var app = builder.Build();
 

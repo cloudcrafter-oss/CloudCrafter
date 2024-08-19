@@ -68,9 +68,6 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ICloudCrafterRecurringJobsDispatcher, CloudCrafterRecurringJobsDispatcher>();
         services.AddScoped<BackgroundJobFactory>();
         
-        // TODO: Find with reflection each IBaseJob
-        
-        
         services.AddScoped<ConnectivityCheckBackgroundJob>();
         services.AddScoped<IJobCreationStrategy<ConnectivityCheckBackgroundJob, Server>, ConnectivityCheckCreationStrategy>();
 

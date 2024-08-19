@@ -36,7 +36,7 @@ public static class InfrastructureServiceExtensions
 
     public static IServiceCollection AddInfrastructureServices(
         this IServiceCollection services,
-        ConfigurationManager config)
+        IConfiguration config)
     {
         var connectionString = config.GetConnectionString("PostgresConnection");
         Guard.Against.Null(connectionString, "PostgresConnection is not set.");

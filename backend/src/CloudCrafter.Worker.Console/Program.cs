@@ -1,6 +1,10 @@
-﻿using CloudCrafter.Infrastructure;
+﻿using CloudCrafter.Core;
+using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.DeploymentEngine.Remote;
+using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Logging;
 using CloudCrafter.Jobs.Service;
+using CloudCrafter.Worker.Console.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -35,21 +39,16 @@ public class Program
 
         var builder = Host.CreateDefaultBuilder(args);
 
-        var configurationBuilder = new ConfigurationBuilder();
-        configurationBuilder.AddJsonFile("appsettings.json", false);
-        configurationBuilder.AddJsonFile("appsettings.Development.json", true);
-        configurationBuilder.AddEnvironmentVariables();
-
-        var config = configurationBuilder.Build();
-
-        var manager = new ConfigurationManager();
-        manager.AddConfiguration(config);
+      
 
 
         return builder
             .ConfigureAppConfiguration((ctx, config) =>
             {
-                config.AddConfiguration(manager);
+                config.AddJsonFile("appsettings.json", optional: false);
+                config.AddJsonFile("appsettings.Development.json", optional: true);
+                config.AddEnvironmentVariables();
+                config.AddConfiguration(config.Build());
             })
             .ConfigureServices((hostContext, services) =>
             {
@@ -59,10 +58,15 @@ public class Program
                 });
                 
 
+
+                services.AddScoped<IUser, NullUser>();
+
+                services.AddEngineInfrastructure();
                 services.AddCloudCrafterConfiguration();
-                services.AddCloudCrafterLogging(manager);
-                services.AddInfrastructureServices(manager);
-                services.AddJobInfrastructure(manager, true, "worker");
+                services.AddCloudCrafterLogging(hostContext.Configuration);
+                services.AddInfrastructureServices(hostContext.Configuration);
+                services.AddJobInfrastructure(hostContext.Configuration, true, "worker");
+                services.AddApplicationServices();
             });
     }
 }

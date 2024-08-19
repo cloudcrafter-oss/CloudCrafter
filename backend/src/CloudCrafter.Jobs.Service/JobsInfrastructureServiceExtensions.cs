@@ -12,7 +12,7 @@ public static class JobsInfrastructureServiceExtensions
 {
     public static IServiceCollection AddJobInfrastructure(
         this IServiceCollection services,
-        ConfigurationManager config, bool withServer, string prefix)
+        IConfiguration config, bool withServer, string prefix)
     {
         services.AddScoped<IDeploymentTracker, DeploymentTracker>();
         services.AddHangfire((sp, hangfireConfig) =>
