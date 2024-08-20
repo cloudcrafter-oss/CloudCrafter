@@ -11,7 +11,15 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.web.rule=Host(`web.127.0.0.1.sslip.io`)"
+      - "traefik.http.services.web.loadbalancer.server.port=8080"
+      - "traefik.http.routers.web.entrypoints=web"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__PostgresConnection=Host=postgres;Username=cloudcrafter;Password=password;Database=cloudcrafter
       - ConnectionStrings__RedisConnection=redis
+      - CloudCrafter__AppKey=ContainerQCE4ndQUfPUOBE1cSzH3txf21YwR9yZQ
+      - JwtSettings__SecretKey=ContainerDevelopmentSecretKey
+      - JwtSettings__Issuer=CloudCrafter Web
+      - JwtSettings__Audience=CloudCrafter Web
+      - JwtSettings__AccessTokenValidInSeconds=60
+      - JwtSettings__RefreshTokenValidInSeconds=900

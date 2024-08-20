@@ -7,6 +7,7 @@ using CloudCrafter.Jobs.Service;
 using CloudCrafter.Web;
 using CloudCrafter.Web.Infrastructure;
 using Hangfire;
+using Hangfire.Dashboard;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +24,7 @@ builder.Services.AddInfrastructureServices(builder.Configuration)
     .AddApiConfiguration(builder.Configuration);
 builder.Services.AddWebServices();
 builder.Services.AddSwaggerServices();
-builder.Services.AddJobInfrastructure(builder.Configuration, withServer: false, "web");
+builder.Services.AddJobInfrastructure(builder.Configuration, false, "web");
 
 var app = builder.Build();
 
@@ -67,7 +68,15 @@ app.Map("/", () => Results.Redirect("/api"));
 app.MapEndpoints();
 app.SeedDatabase();
 
-app.UseHangfireDashboard();
+
+var hangfireDashboardOptions = new DashboardOptions();
+
+if (app.Environment.IsDevelopment())
+{
+    hangfireDashboardOptions.Authorization = new List<IDashboardAuthorizationFilter>();
+}
+
+app.UseHangfireDashboard(options: hangfireDashboardOptions);
 
 app.ConfigureRecurringJobs();
 
