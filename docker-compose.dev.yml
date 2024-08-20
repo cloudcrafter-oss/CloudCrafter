@@ -8,6 +8,7 @@ services:
       - cloudcrafter
     depends_on:
       - postgres
+      - redis
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.web.rule=Host(`web.127.0.0.1.sslip.io`)"
@@ -23,3 +24,19 @@ services:
       - JwtSettings__Audience=CloudCrafter Web
       - JwtSettings__AccessTokenValidInSeconds=60
       - JwtSettings__RefreshTokenValidInSeconds=900
+
+  job-runner:
+    container_name: job-runner
+    build:
+      context: backend/
+      dockerfile: src/CloudCrafter.Worker.Console/Dockerfile
+    networks:
+      - cloudcrafter
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__PostgresConnection=Host=postgres;Username=cloudcrafter;Password=password;Database=cloudcrafter
+      - ConnectionStrings__RedisConnection=redis
+      - CloudCrafter__AppKey=ContainerQCE4ndQUfPUOBE1cSzH3txf21YwR9yZQ

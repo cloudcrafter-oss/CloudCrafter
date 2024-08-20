@@ -109,6 +109,14 @@ jobs:
         chmod +x ./ci/tests/validate_agent.sh
         ./ci/tests/validate_agent.sh
   
+  validate-worker:
+    needs: [test, build]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build Docker image of worker
+      run: |
+        docker build -t worker --no-cache -f backend/src/CloudCrafter.Worker.Console/Dockerfile ./backend/
   validate-web:
     needs: [test, build]
     runs-on: ubuntu-latest
