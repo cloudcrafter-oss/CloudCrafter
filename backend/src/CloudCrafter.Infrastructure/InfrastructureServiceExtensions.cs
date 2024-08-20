@@ -24,24 +24,19 @@ namespace CloudCrafter.Infrastructure;
 
 public static class InfrastructureServiceExtensions
 {
-    // public static IServiceCollection AddCloudCrafterIdentity(this IServiceCollection services,
-    //     ConfigurationManager config)
-    // {
-    //     var connectionString = config.GetConnectionString("PostgresConnection");
-    //     Guard.Against.Null(connectionString, "PostgresConnection is not set.");
-    //     
-    //     services.AddIdentity<User, Role>(options =>
-    //         {
-    //             options.User.RequireUniqueEmail = true;
-    //         })
-    //         .AddEntityFrameworkStores<AppDbContext>();
-    //
-    //     return services;
-    // }
+    public static IServiceCollection AddCloudCrafterConfiguration(this IServiceCollection services)
+    {
+        services.AddOptions<CloudCrafterConfig>()
+            .BindConfiguration(CloudCrafterConfig.KEY)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        return services;
+    }
 
     public static IServiceCollection AddInfrastructureServices(
         this IServiceCollection services,
-        ConfigurationManager config)
+        IConfiguration config)
     {
         var connectionString = config.GetConnectionString("PostgresConnection");
         Guard.Against.Null(connectionString, "PostgresConnection is not set.");
@@ -79,8 +74,6 @@ public static class InfrastructureServiceExtensions
                     ValidateIssuerSigningKey = true,
                     ClockSkew = TimeSpan.FromSeconds(5)
                 };
-                
-             
             });
 
         services.AddAuthorizationBuilder();
@@ -105,7 +98,7 @@ public static class InfrastructureServiceExtensions
             .AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>()
             .AddScoped<IJwtService, JwtService>()
             .AddScoped<IEmailSender, FakeEmailSender>();
-        
+
         return services;
     }
 }

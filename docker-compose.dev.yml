@@ -1,0 +1,8 @@
+services:
+  web:
+    container_name: web
+    build:
+      context: backend/src/CloudCrafter.Web
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
