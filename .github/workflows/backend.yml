@@ -110,7 +110,7 @@ jobs:
         ./ci/tests/validate_agent.sh
   
   validate-web:
-    needs: [tests, build]
+    needs: [test, build]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
