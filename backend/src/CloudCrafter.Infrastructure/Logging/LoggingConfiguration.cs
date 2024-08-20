@@ -18,7 +18,6 @@ public static class LoggingConfiguration
         }
         
         return loggerConfig
-            .WriteTo.Console()
             .CreateLogger();
      
     }
