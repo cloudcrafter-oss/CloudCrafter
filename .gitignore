@@ -47,3 +47,5 @@ appsettings.Development.json
 
 
 *.received.*
+
+.env

@@ -2,7 +2,13 @@ services:
   web:
     container_name: web
     build:
-      context: backend/src/CloudCrafter.Web
-      dockerfile: Dockerfile
+      context: backend/
+      dockerfile: src/CloudCrafter.Web/Dockerfile
+    networks:
+      - cloudcrafter
     depends_on:
       - postgres
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__PostgresConnection=Host=postgres;Username=cloudcrafter;Password=password;Database=cloudcrafter
+      - ConnectionStrings__RedisConnection=redis
