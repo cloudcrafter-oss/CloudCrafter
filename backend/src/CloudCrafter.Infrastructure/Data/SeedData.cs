@@ -1,7 +1,6 @@
-﻿using CloudCrafter.Core.ContributorAggregate;
-using CloudCrafter.Domain.Entities;
+﻿using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Core.Configuration;
-using CloudCrafter.Infrastructure.Identity;
+using CloudCrafter.Infrastructure.Data.Fakeds;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,14 +36,13 @@ public static class SeedData
             {
                 PopulateProjects(dbContext);
             }
-            
+
             var applicationCount = dbContext.Applications.Count();
-            
+
             if (applicationCount == 0)
             {
                 PopulateApplications(dbContext);
             }
-
         }
     }
 
@@ -61,8 +59,7 @@ public static class SeedData
 
         foreach (var project in projects)
         {
-
-            var applications = Fakeds.FakerInstances.ApplicationFaker
+            var applications = FakerInstances.ApplicationFaker
                 .RuleFor(x => x.Server, firstServer)
                 .RuleFor(x => x.Project, project)
                 .Generate(10);
@@ -78,7 +75,7 @@ public static class SeedData
 
     public static void PopulateProjects(AppDbContext dbContext)
     {
-        var projects = Fakeds.FakerInstances.ProjectFaker.Generate(10);
+        var projects = FakerInstances.ProjectFaker.Generate(10);
         foreach (var project in projects)
         {
             dbContext.Projects.Add(project);
@@ -89,26 +86,43 @@ public static class SeedData
 
     public static void PopulateServers(AppDbContext dbContext)
     {
-        var servers = Fakeds.FakerInstances.ServerFaker.Generate(5);
-        
+        var servers = FakerInstances.ServerFaker.Generate(5);
+
         foreach (var server in servers)
         {
             dbContext.Servers.Add(server);
         }
-        
-        var solutionDirectory = GetSolutionDirectory();
 
-        var dockerfileDirectory = Path.Combine(solutionDirectory, "..", "docker", "test-host");
-        
-        var sshKeyContents = File.ReadLines(dockerfileDirectory + "/id_rsa");
-        var sshKey = string.Join("\n", sshKeyContents);
+        IEnumerable<string>? privateKeyEntry = null;
 
-        var localTestServer = new Server()
+        try
         {
-            SshPort = 2222,
+            var solutionDirectory = GetSolutionDirectory();
+
+            var dockerfileDirectory = Path.Combine(solutionDirectory, "..", "docker", "test-host");
+
+            privateKeyEntry = File.ReadLines(dockerfileDirectory + "/id_rsa");
+        }
+        catch (DirectoryNotFoundException)
+        {
+            var path = Environment.GetEnvironmentVariable("SPECIAL_TESTHOST_PATH");
+
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new Exception("Private key file not found");
+            }
+
+            privateKeyEntry = File.ReadLines(path);
+        }
+
+        var sshKey = string.Join("\n", privateKeyEntry);
+
+        var localTestServer = new Server
+        {
+            SshPort = 22,
             SshUsername = "root",
             SshPrivateKey = sshKey,
-            IpAddress = "127.0.0.1",
+            IpAddress = "test-host",
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Name = "Local Test Server",
@@ -122,12 +136,12 @@ public static class SeedData
 
     public static void PopulateUsers(AppDbContext dbContext)
     {
-        var users = Fakeds.FakerInstances.UserFaker.Generate(100);
+        var users = FakerInstances.UserFaker.Generate(100);
         foreach (var user in users)
         {
             dbContext.Users.Add(user);
         }
-        
+
         dbContext.SaveChanges();
     }
 
@@ -142,13 +156,16 @@ public static class SeedData
         return directory?.FullName
                ?? throw new DirectoryNotFoundException("Solution directory not found.");
     }
-    
-    
+
+
     public static void InitializeIdentity(IServiceProvider services)
     {
         using var dbContext = services.GetRequiredService<AppDbContext>();
 
-        if (dbContext.Users.Any()) return;
+        if (dbContext.Users.Any())
+        {
+            return;
+        }
 
         var userManager = services.GetRequiredService<UserManager<User>>();
         // add user
