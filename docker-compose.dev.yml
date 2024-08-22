@@ -2,7 +2,44 @@ services:
   web:
     container_name: web
     build:
-      context: backend/src/CloudCrafter.Web
-      dockerfile: Dockerfile
+      context: backend/
+      dockerfile: src/CloudCrafter.Web/Dockerfile
+    networks:
+      - cloudcrafter
     depends_on:
       - postgres
+      - redis
+    volumes:
+      - ./docker/test-host:/test-host
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web.rule=Host(`web.127.0.0.1.sslip.io`)"
+      - "traefik.http.services.web.loadbalancer.server.port=8080"
+      - "traefik.http.routers.web.entrypoints=web"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__PostgresConnection=Host=postgres;Username=cloudcrafter;Password=password;Database=cloudcrafter
+      - ConnectionStrings__RedisConnection=redis
+      - CloudCrafter__AppKey=QCE4ndQUfPUOBE1cSzH3txf21YwR9yZQ
+      - JwtSettings__SecretKey=ContainerDevelopmentSecretKey
+      - JwtSettings__Issuer=CloudCrafter Web
+      - JwtSettings__Audience=CloudCrafter Web
+      - JwtSettings__AccessTokenValidInSeconds=60
+      - JwtSettings__RefreshTokenValidInSeconds=900
+      - SPECIAL_TESTHOST_PATH=/test-host/id_rsa
+
+  job-runner:
+    container_name: job-runner
+    build:
+      context: backend/
+      dockerfile: src/CloudCrafter.Worker.Console/Dockerfile
+    networks:
+      - cloudcrafter
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__PostgresConnection=Host=postgres;Username=cloudcrafter;Password=password;Database=cloudcrafter
+      - ConnectionStrings__RedisConnection=redis
+      - CloudCrafter__AppKey=QCE4ndQUfPUOBE1cSzH3txf21YwR9yZQ

@@ -1,11 +1,14 @@
 ﻿using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Domain.Entities;
+using Hangfire.Console;
+using Hangfire.Server;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Jobs.Logger;
 
 public class BackgroundJobLogger(
     BackgroundJob job,
+    PerformContext? performContext,
     IApplicationDbContext context,
     string categoryName,
     ILogger<BackgroundJobLogger> logger) : ILogger
@@ -32,10 +35,13 @@ public class BackgroundJobLogger(
             Exception = exception?.ToString()
         };
 
-        #if IN_TESTS
+#if IN_TESTS
         System.Console.WriteLine("IN_TESTS >> " + logEntry.Message);
-        #endif
+#endif
         logger.Log(logLevel, eventId, state, exception, formatter);
+
+
+        performContext.WriteLine($"[{logLevel}] [{categoryName}] {message}");
 
         job.Logs.Add(logEntry);
         context.SaveChanges(); // Note: This might impact performance for high-frequency logging

@@ -1,5 +1,4 @@
-﻿using System.Runtime.Intrinsics.Arm;
-using CloudCrafter.Jobs.Service.Jobs.Context.Deployments;
+﻿using CloudCrafter.Jobs.Service.Jobs.Context.Deployments;
 using Hangfire;
 using Hangfire.Console;
 using Hangfire.Redis.StackExchange;
@@ -26,7 +25,7 @@ public static class JobsInfrastructureServiceExtensions
 
             hangfireConfig.UseFilter(new LogEverythingAttribute());
 
-
+            hangfireConfig.UseSerilogLogProvider();
             hangfireConfig
                 .UseConsole();
         });

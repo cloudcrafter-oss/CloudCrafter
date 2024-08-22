@@ -15,12 +15,13 @@ public class ConnectivityCheckBackgroundJob(IServerConnectivityService serverCon
     {
         if (backgroundJob.ServerConnectivityCheckJob == null)
         {
-            string message = "Background job is missing the ServerConnectivityCheckJob property.";
+            var message = "Background job is missing the ServerConnectivityCheckJob property.";
             throw new ArgumentException(message);
         }
 
         var logger = loggerFactory.CreateLogger<ConnectivityCheckBackgroundJob>();
-        logger.LogDebug("Starting connectivity job for server ({ServerId})", server.Id);
+        logger.LogDebug("Starting connectivity job for server ({ServerId}) with hostname ({Hostname})", server.Id,
+            server.IpAddress);
 
 
         var stopwatch = Stopwatch.StartNew();
@@ -29,12 +30,14 @@ public class ConnectivityCheckBackgroundJob(IServerConnectivityService serverCon
         {
             await serverConnectivity.PerformConnectivityCheckAsync(server.Id);
             backgroundJob.ServerConnectivityCheckJob.Result = ServerConnectivityCheckResult.Healthy;
+            logger.LogInformation("Connectivity to ({ServerName}) is healthy", server.Name);
         }
         catch (Exception ex)
         {
             backgroundJob.ServerConnectivityCheckJob.Result = ServerConnectivityCheckResult.Unhealthy;
-            logger.LogCritical(ex, "Something went wrong during the connectivity check for server ({ServerId})",
-                server.Id);
+            logger.LogCritical(ex,
+                "Something went wrong during the connectivity check for server ({ServerId}) ({ServerName})",
+                server.Id, server.Name);
         }
 
         stopwatch.Stop();
@@ -42,6 +45,6 @@ public class ConnectivityCheckBackgroundJob(IServerConnectivityService serverCon
         var elapsedMs = stopwatch.ElapsedMilliseconds;
         backgroundJob.ServerConnectivityCheckJob.TimeTakenMs = elapsedMs;
 
-        logger.LogInformation("Deployment job completed in {ElapsedMs}ms", elapsedMs);
+        logger.LogInformation("Connectivity job completed in {ElapsedMs}ms", elapsedMs);
     }
 }

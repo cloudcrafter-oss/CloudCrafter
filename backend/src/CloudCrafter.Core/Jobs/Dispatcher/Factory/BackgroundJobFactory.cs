@@ -6,6 +6,8 @@ using CloudCrafter.Core.Jobs.Logger;
 using CloudCrafter.Core.Jobs.Servers;
 using CloudCrafter.Domain.Entities;
 using Hangfire;
+using Hangfire.Console;
+using Hangfire.Server;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -33,7 +35,8 @@ public class BackgroundJobFactory(
             context.Jobs.Add(backgroundJob);
             await context.SaveChangesAsync();
 
-            var hangfireJobId = client.Enqueue<CloudCrafterJob>(job => job.ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type));
+            var hangfireJobId =
+                client.Enqueue<CloudCrafterJob>(job => job.ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type, null));
 
             backgroundJob.HangfireJobId = hangfireJobId;
             await context.SaveChangesAsync();
@@ -54,7 +57,7 @@ public class BackgroundJobFactory(
 public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider sp)
 {
     [JobDisplayName("{1}")]
-    public async Task ExecuteJobAsync(Guid backgroundJobId, BackgroundJobType jobType)
+    public async Task ExecuteJobAsync(Guid backgroundJobId, BackgroundJobType jobType, PerformContext? performContext)
     {
 #if IN_TESTS
         // In tests, the job is executed synchronously (in memory)
@@ -63,6 +66,7 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
         await Task.Delay(5000);
 #endif
         logger.LogDebug("Executing job {BackgroundJobId} of type {JobType}", backgroundJobId, jobType);
+        performContext.WriteLine("Executing job {0} of type {1}", backgroundJobId, jobType);
         using var scope = sp.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
 
@@ -75,7 +79,8 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
             throw new ArgumentException("Background job not found", nameof(backgroundJobId));
         }
 
-        var loggerFactory = new BackgroundJobLoggerFactory(backgroundJob, dbContext, scope.ServiceProvider);
+        var loggerFactory =
+            new BackgroundJobLoggerFactory(backgroundJob, performContext, dbContext, scope.ServiceProvider);
 
         var stopwatch = Stopwatch.StartNew();
         try
@@ -86,7 +91,8 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
             switch (jobType)
             {
                 case BackgroundJobType.ServerConnectivityCheck:
-                    await ExecuteTypedJobAsync<ConnectivityCheckBackgroundJob, Server>(backgroundJob, scope);
+                    await ExecuteTypedJobAsync<ConnectivityCheckBackgroundJob, Server>(backgroundJob, performContext,
+                        scope);
                     break;
                 // Add other job types as needed
                 default:
@@ -109,8 +115,9 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
             await dbContext.SaveChangesAsync();
         }
     }
-    
-    private async Task ExecuteTypedJobAsync<TJob, TParam>(BackgroundJob backgroundJob, IServiceScope scope)
+
+    private async Task ExecuteTypedJobAsync<TJob, TParam>(BackgroundJob backgroundJob, PerformContext? performContext,
+        IServiceScope scope)
         where TJob : IBaseJob<TParam>
     {
         var job = scope.ServiceProvider.GetRequiredService<TJob>();
@@ -119,9 +126,9 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
         {
             throw new ArgumentException("Failed to deserialize job parameters");
         }
-        
+
         logger.LogDebug("Creating background job factory");
-        var loggerFactory = new BackgroundJobLoggerFactory(backgroundJob,
+        var loggerFactory = new BackgroundJobLoggerFactory(backgroundJob, performContext,
             scope.ServiceProvider.GetRequiredService<IApplicationDbContext>(), scope.ServiceProvider);
 
         await job.ExecuteAsync(backgroundJob, parameter, loggerFactory);
