@@ -8,6 +8,7 @@ using CloudCrafter.Worker.Console.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 namespace CloudCrafter.Worker.Console;
@@ -23,6 +24,9 @@ public class Program
     {
         var builder = CreateHostBuilder(args);
         var host = builder.Build();
+
+        var validator = host.Services.GetRequiredService<IStartupValidator>();
+        validator.Validate();
 
 
         await host.RunAsync();

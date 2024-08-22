@@ -8,6 +8,7 @@ using CloudCrafter.Web;
 using CloudCrafter.Web.Infrastructure;
 using Hangfire;
 using Hangfire.Dashboard;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,16 +18,19 @@ Log.Logger = LoggingConfiguration.GetLogger();
 
 Log.Information("Starting CloudCrafter");
 
+builder.Services.AddApiConfiguration(builder.Configuration);
 builder.Services.AddEngineInfrastructure();
 builder.Services.AddCloudCrafterLogging(builder.Configuration);
 builder.Services.AddApplicationServices();
-builder.Services.AddInfrastructureServices(builder.Configuration)
-    .AddApiConfiguration(builder.Configuration);
+builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices();
 builder.Services.AddSwaggerServices();
 builder.Services.AddJobInfrastructure(builder.Configuration, false, "web");
 
 var app = builder.Build();
+
+var validator = app.Services.GetRequiredService<IStartupValidator>();
+validator.Validate();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

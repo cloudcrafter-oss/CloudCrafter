@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using CloudCrafter.Infrastructure.Core.Configuration.Attributes;
 
 namespace CloudCrafter.Infrastructure.Core.Configuration;
 
@@ -7,6 +8,7 @@ public class JwtSettings
     public const string KEY = "JwtSettings";
     
     [Required]
+    [ValidJwtSecretKey]
     public string SecretKey { get; init; } = null!;
     
     [Required]
