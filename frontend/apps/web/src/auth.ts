@@ -73,7 +73,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         },
         async session({ session, token }) {
-            
+
             session.accessToken = token.accessToken as string
             session.error = token.error as string | undefined
 
@@ -99,9 +99,6 @@ declare module 'next-auth' {
         sessionCloudCraftAccessToken?: string
         sessionCloudCraftRefreshToken?: string
         error?: string
-        user?: {
-            name?: string
-        }
     }
 
     interface User {
