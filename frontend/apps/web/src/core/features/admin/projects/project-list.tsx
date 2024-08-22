@@ -4,10 +4,8 @@ import { PlusIcon } from '@radix-ui/react-icons'
 import React, { useState } from 'react'
 import { RefreshCwIcon, RepeatIcon, SettingsIcon } from 'lucide-react'
 import { Button } from '@ui/components/ui/button.tsx'
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@ui/components/ui/sheet'
-import { Input } from '@ui/components/ui/input'
-import { Label } from '@ui/components/ui/label'
-
+import { Sheet, SheetContent, SheetTrigger } from '@ui/components/ui/sheet'
+import { CreateProjectSheet } from '@/src/core/features/admin/projects/create-project-sheet.tsx'
 
 
 function CircleStopIcon({ className }: { className: string }) {
@@ -36,12 +34,34 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
         setExpandedProject(expandedProject === projectName ? null : projectName)
     }
 
+
     console.log({ projects })
     return (
         <div className="p-4 bg-background text-foreground min-h-screen">
             <h1 className="text-2xl font-bold mb-4">Projects</h1>
             <div className="space-y-4">
+                {projects.map((project) => (
+                    <div key={project.id} className="border border-input rounded-lg">
+                        <div
+                            className="flex justify-between items-center p-4 bg-card rounded-t-lg cursor-pointer">
+                            <div className="flex items-center space-x-2">
+                                <span className="font-semibold">{project.name}</span>
+                                <span className="w-2.5 h-2.5 bg-green-500 rounded-full"/>
+                            </div>
+                            <div className="flex space-x-2">
+                                <button className="p-2 bg-muted rounded-full hover:bg-muted-foreground">
+                                    <PlusIcon className="w-4 h-4 text-muted-foreground"/>
+                                </button>
+                                <button className="p-2 bg-muted rounded-full hover:bg-muted-foreground">
+                                    <SettingsIcon className="w-4 h-4 text-muted-foreground"/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
                 <div className="border border-input rounded-lg">
+
+
                     <div
                         className="flex justify-between items-center p-4 bg-card rounded-t-lg cursor-pointer"
                         onClick={() => handleProjectClick('Example App')}
@@ -324,20 +344,7 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
                         </Button>
                     </SheetTrigger>
                     <SheetContent>
-                        <SheetHeader>
-                            <SheetTitle>Add New Project</SheetTitle>
-                            <SheetDescription>Create a new project here. Click save when you're done.</SheetDescription>
-                        </SheetHeader>
-                        <div className="grid gap-4 py-4">
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="name" className="text-right">
-                                    Name
-                                </Label>
-                                <Input id="name" value="" className="col-span-3" />
-                            </div>
-                            {/* Add more fields as needed */}
-                        </div>
-                        <Button type="submit">Save changes</Button>
+                        <CreateProjectSheet/>
                     </SheetContent>
                 </Sheet>
             </div>

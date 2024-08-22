@@ -1,4 +1,8 @@
 export const operations = {
+    'PostCreateDeployment': {
+        'path': '/api/Applications/:applicationId/deployment',
+        'method': 'post'
+    },
     'PostLoginUser': {
         'path': '/api/Auth/login',
         'method': 'post'
@@ -11,6 +15,10 @@ export const operations = {
         'path': '/api/Projects',
         'method': 'get'
     },
+    'CreateProject': {
+        'path': '/api/Projects',
+        'method': 'post'
+    },
     'GetServers': {
         'path': '/api/Servers',
         'method': 'get'
@@ -22,6 +30,10 @@ export const operations = {
     'GetFilterableFields': {
         'path': '/api/System/get-fields',
         'method': 'get'
+    },
+    'GetTest': {
+        'path': '/api/Test',
+        'method': 'post'
     },
     'GetUsers': {
         'path': '/api/Users',

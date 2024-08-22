@@ -5,4 +5,5 @@ namespace CloudCrafter.Core.Interfaces.Domain.Projects;
 public interface IProjectsService
 {
     Task<List<ProjectDto>> GetProjects();
+    Task<ProjectDto> CreateProject(string name);
 }

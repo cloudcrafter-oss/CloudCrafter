@@ -10,4 +10,9 @@ public class ProjectsService(IProjectRepository repository) : IProjectsService
     {
         return repository.GetProjects();
     }
+
+    public Task<ProjectDto> CreateProject(string name)
+    {
+        return repository.CreateProject(name);
+    }
 }

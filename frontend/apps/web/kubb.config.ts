@@ -9,7 +9,7 @@ import { pluginClient } from '@kubb/swagger-client'
 export default defineConfig({
     root: '.',
     input: {
-        path: 'http://localhost:57680/swagger/v1/swagger.json'
+        path: 'http://web.127.0.0.1.sslip.io/swagger/v1/swagger.json'
     },
     output: {
         path: './src/core/generated',
