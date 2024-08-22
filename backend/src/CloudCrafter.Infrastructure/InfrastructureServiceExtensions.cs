@@ -30,6 +30,8 @@ public static class InfrastructureServiceExtensions
             .BindConfiguration(CloudCrafterConfig.KEY)
             .ValidateDataAnnotations()
             .ValidateOnStart();
+        
+        services.ValidateConfiguration<CloudCrafterConfig>();
 
         return services;
     }

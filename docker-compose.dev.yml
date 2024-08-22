@@ -21,7 +21,7 @@ services:
       - ConnectionStrings__PostgresConnection=Host=postgres;Username=cloudcrafter;Password=password;Database=cloudcrafter
       - ConnectionStrings__RedisConnection=redis
       - CloudCrafter__AppKey=QCE4ndQUfPUOBE1cSzH3txf21YwR9yZQ
-      - JwtSettings__SecretKey=ContainerDevelopmentSecretKey
+      - JwtSettings__SecretKey=This is a very very very very very very very secret key
       - JwtSettings__Issuer=CloudCrafter Web
       - JwtSettings__Audience=CloudCrafter Web
       - JwtSettings__AccessTokenValidInSeconds=60
