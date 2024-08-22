@@ -24,7 +24,7 @@ services:
       - JwtSettings__SecretKey=This is a very very very very very very very secret key
       - JwtSettings__Issuer=CloudCrafter Web
       - JwtSettings__Audience=CloudCrafter Web
-      - JwtSettings__AccessTokenValidInSeconds=60
+      - JwtSettings__AccessTokenValidInSeconds=600
       - JwtSettings__RefreshTokenValidInSeconds=900
       - SPECIAL_TESTHOST_PATH=/test-host/id_rsa
 
