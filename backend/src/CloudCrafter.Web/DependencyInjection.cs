@@ -21,14 +21,11 @@ public static class DependencyInjection
             .ValidateDataAnnotations()
             .ValidateOnStart();
         
-        services.ValidateConfiguration<JwtSettings>();
-
         services.AddOptions<CorsSettings>()
             .BindConfiguration(CorsSettings.KEY)
             .ValidateDataAnnotations()
             .ValidateOnStart();
         
-        services.ValidateConfiguration<CorsSettings>();
 
         services.AddCloudCrafterConfiguration();
 
