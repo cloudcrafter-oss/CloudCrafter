@@ -4,6 +4,10 @@ import { PlusIcon } from '@radix-ui/react-icons'
 import React, { useState } from 'react'
 import { RefreshCwIcon, RepeatIcon, SettingsIcon } from 'lucide-react'
 import { Button } from '@ui/components/ui/button.tsx'
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@ui/components/ui/sheet'
+import { Input } from '@ui/components/ui/input'
+import { Label } from '@ui/components/ui/label'
+
 
 
 function CircleStopIcon({ className }: { className: string }) {
@@ -313,9 +317,29 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
                         </div>
                     )}
                 </div>
-                <Button variant="outline" className="w-full">
-                    + New Project
-                </Button>
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <Button variant="outline" className="w-full">
+                            + New Project
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent>
+                        <SheetHeader>
+                            <SheetTitle>Add New Project</SheetTitle>
+                            <SheetDescription>Create a new project here. Click save when you're done.</SheetDescription>
+                        </SheetHeader>
+                        <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="name" className="text-right">
+                                    Name
+                                </Label>
+                                <Input id="name" value="" className="col-span-3" />
+                            </div>
+                            {/* Add more fields as needed */}
+                        </div>
+                        <Button type="submit">Save changes</Button>
+                    </SheetContent>
+                </Sheet>
             </div>
         </div>
     )

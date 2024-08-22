@@ -1,4 +1,4 @@
-import { IconLayoutDashboard, IconList, IconPlus, IconServer, IconSettings, IconUsers, } from '@tabler/icons-react'
+import { IconLayoutDashboard, IconList, IconPlus, IconServer, IconSettings, IconUsers, IconListDetails } from '@tabler/icons-react'
 
 export interface NavLink {
     title: string
@@ -37,6 +37,12 @@ export const sidelinks: SideLink[] = [
                 icon: <IconPlus size={18}/>
             }
         ]
+    },
+    {
+        title: 'Projects',
+        label: '',
+        href: '/admin/projects',
+        icon: <IconListDetails size={18}/>,
     },
     {
         title: 'Servers',
