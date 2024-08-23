@@ -8,9 +8,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@ui/components/ui/input.tsx'
 import { Button } from '@ui/components/ui/button.tsx'
 import { createProjectAction } from '@/src/app/_actions.ts'
+import { useRouter } from 'next/navigation'
 
 type FormValues = z.infer<typeof createProjectCommandCommandSchema>
 export const CreateProjectSheet = () => {
+    const router = useRouter()
 
     const form = useForm<z.infer<typeof createProjectCommandCommandSchema>>({
         resolver: zodResolver(createProjectCommandCommandSchema),
@@ -21,6 +23,7 @@ export const CreateProjectSheet = () => {
 
     const onSubmit = async (data: FormValues) => {
         await createProjectAction(data)
+        router.refresh()
     }
 
     return (<>
