@@ -4,7 +4,8 @@ import { postCreateUserMutationRequestSchema, postCreateUserMutationResponseSche
 import { postRefreshTokensMutationRequestSchema, postRefreshTokensMutationResponseSchema } from './postRefreshTokensSchema'
 import { getProjectsQueryResponseSchema } from './getProjectsSchema'
 import { createProjectMutationRequestSchema, createProjectMutationResponseSchema } from './createProjectSchema'
-import { patchApiProjectsIdMutationRequestSchema, patchApiProjectsIdMutationResponseSchema, patchApiProjectsIdPathParamsSchema } from './patchApiProjectsIdSchema'
+import { getProjectQueryResponseSchema, getProject404Schema, getProjectPathParamsSchema } from './getProjectSchema'
+import { postApiProjectsIdMutationRequestSchema, postApiProjectsIdMutationResponseSchema, postApiProjectsIdPathParamsSchema } from './postApiProjectsIdSchema'
 import { getServersQueryResponseSchema } from './getServersSchema'
 import { getServerByIdQueryResponseSchema, getServerByIdPathParamsSchema } from './getServerByIdSchema'
 import { getFilterableFieldsQueryResponseSchema } from './getFilterableFieldsSchema'
@@ -84,16 +85,31 @@ import { testQueryResponseSchema } from './testSchema'
             default: createProjectMutationResponseSchema
         },
         errors: {}
-    }, 'patch_api-projects-id': {
-        request: patchApiProjectsIdMutationRequestSchema,
+    }, 'GetProject': {
+        request: undefined,
         parameters: {
-            path: patchApiProjectsIdPathParamsSchema,
+            path: getProjectPathParamsSchema,
             query: undefined,
             header: undefined
         },
         responses: {
-            200: patchApiProjectsIdMutationResponseSchema,
-            default: patchApiProjectsIdMutationResponseSchema
+            200: getProjectQueryResponseSchema,
+            404: getProject404Schema,
+            default: getProjectQueryResponseSchema
+        },
+        errors: {
+            404: getProject404Schema
+        }
+    }, 'post_api-projects-id': {
+        request: postApiProjectsIdMutationRequestSchema,
+        parameters: {
+            path: postApiProjectsIdPathParamsSchema,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: postApiProjectsIdMutationResponseSchema,
+            default: postApiProjectsIdMutationResponseSchema
         },
         errors: {}
     }, 'GetServers': {
@@ -181,7 +197,8 @@ export const paths = { '/api/Applications/{applicationId}/deployment': {
         get: operations['GetProjects'],
         post: operations['CreateProject']
     }, '/api/Projects/{id}': {
-        patch: operations['patch_api-projects-id']
+        get: operations['GetProject'],
+        post: operations['post_api-projects-id']
     }, '/api/Servers': {
         get: operations['GetServers']
     }, '/api/Servers/{id}': {

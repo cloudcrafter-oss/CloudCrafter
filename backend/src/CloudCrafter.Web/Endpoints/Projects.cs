@@ -13,7 +13,8 @@ public class Projects : EndpointGroupBase
         app.MapGroup(this)
             .MapGet(GetProjects)
             .MapPost(CreateProject)
-            .MapPatch("{id}", PatchProject);
+            .MapGet(GetProject, "{id}")
+            .MapPost("{id}", UpdateProject);
     }
 
     public async Task<List<ProjectDto>> GetProjects(ISender sender)
@@ -21,12 +22,21 @@ public class Projects : EndpointGroupBase
         return await sender.Send(new GetProjectList.Query());
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProjectDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IResult> GetProject([FromRoute] Guid id, ISender sender)
+    {
+        var project = await sender.Send(new GetProjectQuery.Query(id));
+
+        return project is not null ? Results.Ok(project) : Results.NotFound();
+    }
+
     public async Task<ProjectDto> CreateProject(CreateProjectCommand.Command command, ISender sender)
     {
         return await sender.Send(command);
     }
 
-    public async Task<ProjectDto> PatchProject([FromRoute] Guid id, UpdateProjectPatchArgs args, ISender sender)
+    public async Task<ProjectDto> UpdateProject([FromRoute] Guid id, UpdateProjectArgs args, ISender sender)
     {
         return await sender.Send(new UpdateProjectCommand.Command(id, args));
     }

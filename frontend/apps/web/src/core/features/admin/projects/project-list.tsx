@@ -6,6 +6,7 @@ import { RefreshCwIcon, RepeatIcon, SettingsIcon } from 'lucide-react'
 import { Button } from '@ui/components/ui/button.tsx'
 import { Sheet, SheetContent, SheetTrigger } from '@ui/components/ui/sheet'
 import { CreateProjectSheet } from '@/src/core/features/admin/projects/create-project-sheet.tsx'
+import { ProjectListItem } from '@/src/core/features/admin/projects/project-list-item.tsx'
 
 
 function CircleStopIcon({ className }: { className: string }) {
@@ -40,27 +41,11 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
         <div className="p-4 bg-background text-foreground min-h-screen">
             <h1 className="text-2xl font-bold mb-4">Projects</h1>
             <div className="space-y-4">
+
                 {projects.map((project) => (
-                    <div key={project.id} className="border border-input rounded-lg">
-                        <div
-                            className="flex justify-between items-center p-4 bg-card rounded-t-lg cursor-pointer">
-                            <div className="flex items-center space-x-2">
-                                <span className="font-semibold">{project.name}</span>
-                                <span className="w-2.5 h-2.5 bg-green-500 rounded-full"/>
-                            </div>
-                            <div className="flex space-x-2">
-                                <button className="p-2 bg-muted rounded-full hover:bg-muted-foreground">
-                                    <PlusIcon className="w-4 h-4 text-muted-foreground"/>
-                                </button>
-                                <button className="p-2 bg-muted rounded-full hover:bg-muted-foreground">
-                                    <SettingsIcon className="w-4 h-4 text-muted-foreground"/>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <ProjectListItem project={project} key={project.id}/>
                 ))}
                 <div className="border border-input rounded-lg">
-
 
                     <div
                         className="flex justify-between items-center p-4 bg-card rounded-t-lg cursor-pointer"
