@@ -7,6 +7,7 @@ import ThemeSwitch from '@/src/layout/components/theme-switch.tsx'
 import { UserNav } from '@/src/layout/components/user-nav.tsx'
 import React from 'react'
 import { TooltipProvider } from '@ui/components/ui/tooltip.tsx'
+import { ProjectSelector } from '@/src/layout/components/project-selector.tsx'
 
 export default function NextAdminLayout({ children }: { children: React.ReactNode }) {
     return (<ThemeProvider defaultTheme={'dark'} storageKey={'cloudCraft-theme'}>
@@ -16,6 +17,7 @@ export default function NextAdminLayout({ children }: { children: React.ReactNod
                     <LayoutHeader>
                         <TopNav/>
                         <div className='ml-auto flex items-center space-x-4'>
+                            <ProjectSelector/>
                             <Search/>
                             <ThemeSwitch/>
                             <UserNav/>
