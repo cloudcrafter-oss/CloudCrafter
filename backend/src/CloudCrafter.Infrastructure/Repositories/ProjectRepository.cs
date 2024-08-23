@@ -21,7 +21,7 @@ public class ProjectRepository(IApplicationDbContext dbContext, IMapper mapper) 
     {
         var project = new Project
         {
-            CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Id = Guid.NewGuid(), Name = name
+            CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Id = Guid.NewGuid(), Name = name, Description = null
         };
 
         dbContext.Projects.Add(project);
