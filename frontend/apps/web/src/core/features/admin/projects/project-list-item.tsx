@@ -83,7 +83,7 @@ export const ProjectListItem = ({ project }: { project: ProjectDto }) => {
                                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 
                                         <FormField
-                                            disabled={projectIsFetching}
+                                            disabled={projectIsFetching || isExecuting}
                                             key={'name'}
                                             control={form.control}
                                             name={'name' as keyof FormValues}
@@ -99,7 +99,7 @@ export const ProjectListItem = ({ project }: { project: ProjectDto }) => {
                                         />
 
                                         <FormField
-                                            disabled={projectIsFetching}
+                                            disabled={projectIsFetching || isExecuting}
                                             key={'description'}
                                             control={form.control}
                                             name={'description' as keyof FormValues}
@@ -119,7 +119,7 @@ export const ProjectListItem = ({ project }: { project: ProjectDto }) => {
                             </div>
                             <SheetFooter>
                                 <SheetClose asChild>
-                                    <Button disabled={projectIsFetching || !form.formState.isDirty}
+                                    <Button disabled={isExecuting || projectIsFetching || !form.formState.isDirty}
                                             onClick={form.handleSubmit(onSubmit)}>Save
                                         changes</Button>
                                 </SheetClose>
