@@ -9,7 +9,7 @@ public class ServerConnectivityCheckJob : IHasTimestamps
     public Server Server { get; init; } = null!;
     public required ServerConnectivityCheckResult Result { get; set; } = ServerConnectivityCheckResult.Unknown;
     public long? TimeTakenMs { get; set; }
-    public required DateTime CreatedAt { get; set; }
+    public required DateTime CreatedAt { get; init; }
     public required DateTime UpdatedAt { get; set; }
 }
 

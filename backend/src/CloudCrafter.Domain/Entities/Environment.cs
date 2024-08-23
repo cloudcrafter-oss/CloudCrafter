@@ -1,12 +1,12 @@
-﻿using CloudCrafter.Domain.Interfaces;
+using CloudCrafter.Domain.Interfaces;
 
 namespace CloudCrafter.Domain.Entities;
 
-public class Project : IHasTimestamps
+public class Environment : IHasTimestamps
 {
     public required Guid Id { get; init; }
-    public required string Name { get; set; }
-    public required string? Description { get; set; }
+    public required Project Project { get; set; }
     public required DateTime CreatedAt { get; init; }
     public required DateTime UpdatedAt { get; set; }
+    public required string Name { get; set; }
 }

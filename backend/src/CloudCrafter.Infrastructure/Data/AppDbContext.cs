@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Options;
+using Environment = CloudCrafter.Domain.Entities.Environment;
 
 namespace CloudCrafter.Infrastructure.Data;
 
@@ -30,6 +31,7 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     public DbSet<UserRefreshToken> UserRefreshTokens => Set<UserRefreshToken>();
     public DbSet<Server> Servers => Set<Server>();
     public DbSet<Project> Projects => Set<Project>();
+    public DbSet<Environment> Environments => Set<Environment>();
     public DbSet<Application> Applications => Set<Application>();
     public DbSet<Deployment> Deployments => Set<Deployment>();
     public DbSet<BackgroundJob> Jobs => Set<BackgroundJob>();

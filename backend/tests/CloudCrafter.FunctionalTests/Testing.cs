@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Serilog;
+using Environment = System.Environment;
 
 namespace CloudCrafter.FunctionalTests;
 
