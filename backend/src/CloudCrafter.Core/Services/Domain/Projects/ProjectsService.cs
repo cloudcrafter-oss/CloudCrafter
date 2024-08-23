@@ -7,9 +7,9 @@ namespace CloudCrafter.Core.Services.Domain.Projects;
 
 public class ProjectsService(IProjectRepository repository) : IProjectsService
 {
-    public Task<List<ProjectDto>> GetProjects()
+    public Task<List<ProjectDto>> GetProjects(LoadProjectOptions options)
     {
-        return repository.GetProjects();
+        return repository.GetProjects(options);
     }
 
     public Task<ProjectDto> CreateProject(string name)

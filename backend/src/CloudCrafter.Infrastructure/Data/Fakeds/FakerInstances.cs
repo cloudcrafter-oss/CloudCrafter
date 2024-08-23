@@ -1,6 +1,6 @@
 ﻿using Bogus;
 using CloudCrafter.Domain.Entities;
-using CloudCrafter.Infrastructure.Identity;
+using Environment = CloudCrafter.Domain.Entities.Environment;
 
 namespace CloudCrafter.Infrastructure.Data.Fakeds;
 
@@ -22,25 +22,37 @@ public static class FakerInstances
         .RuleFor(x => x.SshPrivateKey, f => f.Random.AlphaNumeric(100))
         .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
         .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
-    
+
     public static Faker<Project> ProjectFaker => new Faker<Project>()
         .StrictMode(true)
         .RuleFor(x => x.Id, Guid.NewGuid)
         .RuleFor(x => x.Name, f => $"Project {f.Person.FirstName}")
         .RuleFor(x => x.Description, f => f.Lorem.Sentence())
         .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+        .RuleFor(x => x.Environments, new List<Environment>())
         .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
-    
+
     public static Faker<Application> ApplicationFaker => new Faker<Application>()
         .StrictMode(true)
         .RuleFor(x => x.Id, Guid.NewGuid)
         .RuleFor(x => x.Name, f => $"Application {f.Person.FirstName}")
         .RuleFor(x => x.Server, ServerFaker.Generate())
         .RuleFor(x => x.Project, ProjectFaker.Generate())
-        .RuleFor(x => x.Deployments, f => new ())
+        .RuleFor(x => x.Deployments, f => new List<Deployment>())
         .RuleFor(x => x.Source, f => null)
-        .RuleFor(x => x.Services, f => new())
+        .RuleFor(x => x.Services, f => new List<ApplicationService>())
         .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
         .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
+    public static Faker<Environment> EnvironmentFaker(Project project)
+    {
+        return new Faker<Environment>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, Guid.NewGuid)
+            .RuleFor(x => x.Project, f => null)
+            .RuleFor(x => x.ProjectId, project.Id)
+            .RuleFor(x => x.Name, f => $"Environment {f.Person.FirstName}")
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    }
 }

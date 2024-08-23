@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using CloudCrafter.Core.Commands.Projects;
 using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Core.Interfaces.Domain.Projects;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Project;
 using CloudCrafter.Domain.Entities;
@@ -11,12 +12,22 @@ namespace CloudCrafter.Infrastructure.Repositories;
 
 public class ProjectRepository(IApplicationDbContext dbContext, IMapper mapper) : IProjectRepository
 {
-    public Task<List<ProjectDto>> GetProjects()
+    public async Task<List<ProjectDto>> GetProjects(LoadProjectOptions options)
     {
-        return dbContext.Projects
-            .ProjectTo<ProjectDto>(mapper.ConfigurationProvider)
-            .ToListAsync();
+        IQueryable<Project> projects = dbContext.Projects;
+
+        if (options.IncludeEnvironments.GetValueOrDefault())
+        {
+            projects = projects.Include(x => x.Environments);
+        }
+
+        var projectList = await projects.ToListAsync();
+
+        var result = mapper.Map<List<ProjectDto>>(projectList);
+
+        return result;
     }
+
 
     public async Task<ProjectDto> CreateProject(string name)
     {

@@ -17,9 +17,9 @@ public class Projects : EndpointGroupBase
             .MapPost("{id}", UpdateProject);
     }
 
-    public async Task<List<ProjectDto>> GetProjects(ISender sender)
+    public async Task<List<ProjectDto>> GetProjects(ISender sender, [FromQuery] bool includeEnvironments = false)
     {
-        return await sender.Send(new GetProjectList.Query());
+        return await sender.Send(new GetProjectList.Query(includeEnvironments));
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProjectDto))]
