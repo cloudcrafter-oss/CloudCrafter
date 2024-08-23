@@ -27,6 +27,7 @@ public static class FakerInstances
         .StrictMode(true)
         .RuleFor(x => x.Id, Guid.NewGuid)
         .RuleFor(x => x.Name, f => $"Project {f.Person.FirstName}")
+        .RuleFor(x => x.Description, f => f.Lorem.Sentence())
         .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
         .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
     
