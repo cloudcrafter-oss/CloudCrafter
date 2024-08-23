@@ -8,7 +8,6 @@ import { z } from 'zod'
 export const fetchProjectDetail = actionClient.schema(getProjectPathParamsSchema)
     .action(async ({ parsedInput: { id } }) => {
 
-        await new Promise((resolve) => setTimeout(resolve, 1000))
         const project = await getProject(id)
 
         return project
