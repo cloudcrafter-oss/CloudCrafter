@@ -2,6 +2,7 @@
 using CloudCrafter.Domain.Domain.Project;
 using CloudCrafter.Web.Infrastructure;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CloudCrafter.Web.Endpoints;
 
@@ -11,7 +12,8 @@ public class Projects : EndpointGroupBase
     {
         app.MapGroup(this)
             .MapGet(GetProjects)
-            .MapPost(CreateProject);
+            .MapPost(CreateProject)
+            .MapPatch("{id}", PatchProject);
     }
 
     public async Task<List<ProjectDto>> GetProjects(ISender sender)
@@ -22,5 +24,10 @@ public class Projects : EndpointGroupBase
     public async Task<ProjectDto> CreateProject(CreateProjectCommand.Command command, ISender sender)
     {
         return await sender.Send(command);
+    }
+
+    public async Task<ProjectDto> PatchProject([FromRoute] Guid id, UpdateProjectPatchArgs args, ISender sender)
+    {
+        return await sender.Send(new UpdateProjectCommand.Command(id, args));
     }
 }

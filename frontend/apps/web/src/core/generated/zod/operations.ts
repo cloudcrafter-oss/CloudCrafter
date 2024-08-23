@@ -4,6 +4,7 @@ import { postCreateUserMutationRequestSchema, postCreateUserMutationResponseSche
 import { postRefreshTokensMutationRequestSchema, postRefreshTokensMutationResponseSchema } from './postRefreshTokensSchema'
 import { getProjectsQueryResponseSchema } from './getProjectsSchema'
 import { createProjectMutationRequestSchema, createProjectMutationResponseSchema } from './createProjectSchema'
+import { patchApiProjectsIdMutationRequestSchema, patchApiProjectsIdMutationResponseSchema, patchApiProjectsIdPathParamsSchema } from './patchApiProjectsIdSchema'
 import { getServersQueryResponseSchema } from './getServersSchema'
 import { getServerByIdQueryResponseSchema, getServerByIdPathParamsSchema } from './getServerByIdSchema'
 import { getFilterableFieldsQueryResponseSchema } from './getFilterableFieldsSchema'
@@ -81,6 +82,18 @@ import { testQueryResponseSchema } from './testSchema'
         responses: {
             200: createProjectMutationResponseSchema,
             default: createProjectMutationResponseSchema
+        },
+        errors: {}
+    }, 'patch_api-projects-id': {
+        request: patchApiProjectsIdMutationRequestSchema,
+        parameters: {
+            path: patchApiProjectsIdPathParamsSchema,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: patchApiProjectsIdMutationResponseSchema,
+            default: patchApiProjectsIdMutationResponseSchema
         },
         errors: {}
     }, 'GetServers': {
@@ -167,6 +180,8 @@ export const paths = { '/api/Applications/{applicationId}/deployment': {
     }, '/api/Projects': {
         get: operations['GetProjects'],
         post: operations['CreateProject']
+    }, '/api/Projects/{id}': {
+        patch: operations['patch_api-projects-id']
     }, '/api/Servers': {
         get: operations['GetServers']
     }, '/api/Servers/{id}': {

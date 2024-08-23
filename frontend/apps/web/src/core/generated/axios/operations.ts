@@ -19,6 +19,10 @@ export const operations = {
         'path': '/api/Projects',
         'method': 'post'
     },
+    'patch_api-projects-id': {
+        'path': '/api/Projects/:id',
+        'method': 'patch'
+    },
     'GetServers': {
         'path': '/api/Servers',
         'method': 'get'
