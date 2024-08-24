@@ -14,7 +14,8 @@ public class Projects : EndpointGroupBase
             .MapGet(GetProjects)
             .MapPost(CreateProject)
             .MapGet(GetProject, "{id}")
-            .MapPost("{id}", UpdateProject);
+            .MapPost(UpdateProject, "{id}")
+            .MapDelete(DeleteProject, "{id}");
     }
 
     public async Task<List<ProjectDto>> GetProjects(ISender sender, [FromQuery] bool includeEnvironments = false)
@@ -39,5 +40,12 @@ public class Projects : EndpointGroupBase
     public async Task<ProjectDto> UpdateProject([FromRoute] Guid id, UpdateProjectArgs args, ISender sender)
     {
         return await sender.Send(new UpdateProjectCommand.Command(id, args));
+    }
+
+    public async Task<IResult> DeleteProject([FromRoute] Guid id, ISender sender)
+    {
+        await sender.Send(new DeleteProjectCommand.Command(id));
+
+        return Results.Ok();
     }
 }

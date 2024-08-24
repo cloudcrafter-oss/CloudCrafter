@@ -33,4 +33,9 @@ public class ProjectsService(IProjectRepository repository, IMapper mapper, IEve
     {
         return repository.UpdateProject(id, updateValues);
     }
+
+    public Task DeleteProject(Guid id)
+    {
+        return repository.DeleteProject(id);
+    }
 }

@@ -7,6 +7,8 @@ import { Button } from '@ui/components/ui/button.tsx'
 import { Sheet, SheetContent, SheetTrigger } from '@ui/components/ui/sheet'
 import { CreateProjectSheet } from '@/src/core/features/admin/projects/create-project-sheet.tsx'
 import { ProjectListItem } from '@/src/core/features/admin/projects/project-list-item.tsx'
+import { useSWRConfig } from 'swr'
+import { useRouter } from 'next/navigation'
 
 
 function CircleStopIcon({ className }: { className: string }) {
@@ -34,8 +36,19 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
     const handleProjectClick = (projectName: string) => {
         setExpandedProject(expandedProject === projectName ? null : projectName)
     }
-
+    const { mutate } = useSWRConfig()
+    const router = useRouter()
     const [open, setOpen] = useState(false)
+
+    const handleRefresh = async () => {
+        await mutate('userProjects')
+        router.refresh()
+    }
+
+    const closeSheet = async () => {
+        setOpen(false)
+        await handleRefresh()
+    }
 
     return (
         <div className="p-4 bg-background text-foreground min-h-screen">
@@ -43,7 +56,7 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
             <div className="space-y-4">
 
                 {projects.map((project) => (
-                    <ProjectListItem project={project} key={project.id}/>
+                    <ProjectListItem onCloseEditSheet={handleRefresh} project={project} key={project.id}/>
                 ))}
                 <div className="border border-input rounded-lg">
 
@@ -329,7 +342,7 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
                         </Button>
                     </SheetTrigger>
                     <SheetContent>
-                        <CreateProjectSheet onClose={() => setOpen(false)}/>
+                        <CreateProjectSheet onClose={closeSheet}/>
                     </SheetContent>
                 </Sheet>
             </div>

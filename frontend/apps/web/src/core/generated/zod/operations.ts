@@ -5,7 +5,8 @@ import { postRefreshTokensMutationRequestSchema, postRefreshTokensMutationRespon
 import { getProjectsQueryResponseSchema, getProjectsQueryParamsSchema } from './getProjectsSchema'
 import { createProjectMutationRequestSchema, createProjectMutationResponseSchema } from './createProjectSchema'
 import { getProjectQueryResponseSchema, getProject404Schema, getProjectPathParamsSchema } from './getProjectSchema'
-import { postApiProjectsIdMutationRequestSchema, postApiProjectsIdMutationResponseSchema, postApiProjectsIdPathParamsSchema } from './postApiProjectsIdSchema'
+import { updateProjectMutationRequestSchema, updateProjectMutationResponseSchema, updateProjectPathParamsSchema } from './updateProjectSchema'
+import { deleteProjectMutationResponseSchema, deleteProjectPathParamsSchema } from './deleteProjectSchema'
 import { getServersQueryResponseSchema } from './getServersSchema'
 import { getServerByIdQueryResponseSchema, getServerByIdPathParamsSchema } from './getServerByIdSchema'
 import { getFilterableFieldsQueryResponseSchema } from './getFilterableFieldsSchema'
@@ -100,16 +101,28 @@ import { testQueryResponseSchema } from './testSchema'
         errors: {
             404: getProject404Schema
         }
-    }, 'post_api-projects-id': {
-        request: postApiProjectsIdMutationRequestSchema,
+    }, 'UpdateProject': {
+        request: updateProjectMutationRequestSchema,
         parameters: {
-            path: postApiProjectsIdPathParamsSchema,
+            path: updateProjectPathParamsSchema,
             query: undefined,
             header: undefined
         },
         responses: {
-            200: postApiProjectsIdMutationResponseSchema,
-            default: postApiProjectsIdMutationResponseSchema
+            200: updateProjectMutationResponseSchema,
+            default: updateProjectMutationResponseSchema
+        },
+        errors: {}
+    }, 'DeleteProject': {
+        request: undefined,
+        parameters: {
+            path: deleteProjectPathParamsSchema,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: deleteProjectMutationResponseSchema,
+            default: deleteProjectMutationResponseSchema
         },
         errors: {}
     }, 'GetServers': {
@@ -198,7 +211,8 @@ export const paths = { '/api/Applications/{applicationId}/deployment': {
         post: operations['CreateProject']
     }, '/api/Projects/{id}': {
         get: operations['GetProject'],
-        post: operations['post_api-projects-id']
+        post: operations['UpdateProject'],
+        delete: operations['DeleteProject']
     }, '/api/Servers': {
         get: operations['GetServers']
     }, '/api/Servers/{id}': {

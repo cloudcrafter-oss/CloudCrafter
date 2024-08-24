@@ -88,4 +88,18 @@ public class ProjectRepository(IApplicationDbContext dbContext, IMapper mapper) 
 
         return mapper.Map<ProjectDto>(project);
     }
+
+    public async Task DeleteProject(Guid id)
+    {
+        var project = ProjectsQueryable.FirstOrDefault(p => p.Id == id);
+        
+        if (project is null)
+        {
+            throw new Exception("Project not found");
+        }
+        
+        
+        dbContext.Projects.Remove(project);
+        await dbContext.SaveChangesAsync();
+    }
 }

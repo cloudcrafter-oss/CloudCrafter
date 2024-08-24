@@ -1,10 +1,11 @@
 'use server'
 
 import {
+    deleteProject,
     getProject,
     getProjectPathParamsSchema,
     getProjects,
-    postApiProjectsId,
+    updateProject,
     updateProjectArgsSchema
 } from '@/src/core/generated'
 import { actionClient } from '@/src/utils/actions/safe-action.ts'
@@ -22,11 +23,19 @@ const updateSchema = z.object({
     id: z.string().uuid()
 })
 
+const deleteSchema = z.object({
+    id: z.string().uuid()
+})
+
 export const updateProjectAction = actionClient.schema(updateSchema)
     .action(async ({ parsedInput: { id, project } }) => {
-        return await postApiProjectsId(id, project)
+        return await updateProject(id, project)
     })
 
+export const deleteProjectAction = actionClient.schema(deleteSchema)
+    .action(async ({ parsedInput: { id } }) => {
+        return await deleteProject(id)
+    })
 
 export const fetchProjectsWithEnvironments = async () => {
     return await getProjects({

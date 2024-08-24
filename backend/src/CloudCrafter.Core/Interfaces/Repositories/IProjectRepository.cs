@@ -11,4 +11,5 @@ public interface IProjectRepository
     Task<Project> CreateProject(string name);
     Task<ProjectDto?> GetProject(Guid id);
     Task<ProjectDto> UpdateProject(Guid id, UpdateProjectArgs updateValues);
+    Task DeleteProject(Guid id);
 }

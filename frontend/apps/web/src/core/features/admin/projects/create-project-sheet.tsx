@@ -8,16 +8,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@ui/components/ui/input.tsx'
 import { Button } from '@ui/components/ui/button.tsx'
 import { createProjectAction } from '@/src/app/_actions.ts'
-import { useRouter } from 'next/navigation'
-import { useSWRConfig } from 'swr'
 
 import { toast } from 'sonner'
 
 type FormValues = z.infer<typeof createProjectCommandCommandSchema>
 export const CreateProjectSheet = ({ onClose }: { onClose: () => void }) => {
-    const router = useRouter()
-
-    const { mutate } = useSWRConfig()
     const form = useForm<z.infer<typeof createProjectCommandCommandSchema>>({
         resolver: zodResolver(createProjectCommandCommandSchema),
         defaultValues: {
@@ -27,8 +22,6 @@ export const CreateProjectSheet = ({ onClose }: { onClose: () => void }) => {
 
     const onSubmit = async (data: FormValues) => {
         await createProjectAction(data)
-        await mutate('userProjects')
-        router.refresh()
 
         toast.success('Project created successfully')
         onClose()

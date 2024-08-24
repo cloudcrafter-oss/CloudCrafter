@@ -23,9 +23,13 @@ export const operations = {
         'path': '/api/Projects/:id',
         'method': 'get'
     },
-    'post_api-projects-id': {
+    'UpdateProject': {
         'path': '/api/Projects/:id',
         'method': 'post'
+    },
+    'DeleteProject': {
+        'path': '/api/Projects/:id',
+        'method': 'delete'
     },
     'GetServers': {
         'path': '/api/Servers',

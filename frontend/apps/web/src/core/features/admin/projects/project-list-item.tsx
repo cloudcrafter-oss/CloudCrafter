@@ -1,6 +1,6 @@
 import { updateProjectArgsSchema } from '@/src/core/generated/zod/updateProjectArgsSchema.ts'
 import React, { useState } from 'react'
-import { fetchProjectDetail, updateProjectAction } from '@/src/app/_actions/project.ts'
+import { deleteProjectAction, fetchProjectDetail, updateProjectAction } from '@/src/app/_actions/project.ts'
 import { SettingsIcon } from 'lucide-react'
 import {
     Sheet,
@@ -20,13 +20,16 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@ui/components/ui/form'
 import { Input } from '@ui/components/ui/input.tsx'
+import { Popover, PopoverContent, PopoverTrigger } from '@ui/components/ui/popover.tsx'
+import { toast } from 'sonner'
 
 
 type FormValues = z.infer<typeof updateProjectArgsSchema>
 
-export const ProjectListItem = ({ project }: { project: ProjectDto }) => {
+export const ProjectListItem = ({ project, onCloseEditSheet }: { project: ProjectDto, onCloseEditSheet: () => void }) => {
 
     const [showEditSheet, setShowEditSheet] = useState(false)
+    const [showDeletePopover, setShowDeletePopover] = useState(false)
 
     const {
         executeAsync: fetchProjectExecuteAsync,
@@ -35,6 +38,10 @@ export const ProjectListItem = ({ project }: { project: ProjectDto }) => {
     } = useAction(fetchProjectDetail)
 
     const { executeAsync: updateProjectExecuteAsync, isExecuting } = useAction(updateProjectAction)
+    const {
+        executeAsync: deleteProjectExecuteAsync,
+        isExecuting: deleteProjectIsExecuting
+    } = useAction(deleteProjectAction)
 
     const form = useForm<FormValues>({
         resolver: zodResolver(updateProjectArgsSchema),
@@ -53,10 +60,20 @@ export const ProjectListItem = ({ project }: { project: ProjectDto }) => {
 
 
     const onSubmit = async (data: FormValues) => {
-        const result = await updateProjectExecuteAsync({ id: project.id, project: data })
-
-        console.log({ result })
+        await updateProjectExecuteAsync({ id: project.id, project: data })
+        toast.success('Project updated successfully')
     }
+
+    const handleDelete = async () => {
+        await deleteProjectExecuteAsync({ id: project.id })
+        toast.success('Project deleted successfully')
+
+        onCloseEditSheet()
+    }
+
+    const saveButtonDisabled = projectIsFetching || isExecuting || !form.formState.isDirty
+
+    const deleteButtonDisabled = projectIsFetching || isExecuting || deleteProjectIsExecuting
 
     return (
         <div className="border border-input rounded-lg">
@@ -118,8 +135,29 @@ export const ProjectListItem = ({ project }: { project: ProjectDto }) => {
                                 </Form>
                             </div>
                             <SheetFooter>
+                                <Popover open={showDeletePopover} onOpenChange={setShowDeletePopover}>
+                                    <PopoverTrigger asChild>
+                                        <Button variant={'destructive'} disabled={deleteButtonDisabled}>
+                                            Delete
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent>
+                                        <div className="p-4">
+                                            <p>Are you sure you want to delete this project?</p>
+                                            <div className="flex justify-end space-x-2 mt-4">
+                                                <Button variant="outline" onClick={() => setShowDeletePopover(false)}>
+                                                    Cancel
+                                                </Button>
+                                                <Button variant="destructive" onClick={handleDelete}>
+                                                    Confirm
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </PopoverContent>
+                                </Popover>
                                 <SheetClose asChild>
-                                    <Button disabled={isExecuting || projectIsFetching || !form.formState.isDirty}
+
+                                    <Button disabled={saveButtonDisabled}
                                             onClick={form.handleSubmit(onSubmit)}>Save
                                         changes</Button>
                                 </SheetClose>

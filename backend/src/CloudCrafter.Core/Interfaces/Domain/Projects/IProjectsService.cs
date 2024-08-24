@@ -9,4 +9,5 @@ public interface IProjectsService
     Task<ProjectDto> CreateProject(string name);
     Task<ProjectDto?> GetProject(Guid id);
     Task<ProjectDto> UpdateProject(Guid id, UpdateProjectArgs updateValues);
+    Task DeleteProject(Guid id);
 }
