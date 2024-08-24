@@ -10,7 +10,7 @@ export const DebugHeader = () => {
             role="combobox"
             className="w-[250px] justify-between"
         >
-            {pathname}
+            usePathname() = {pathname}
         </Button>
     </>
 }

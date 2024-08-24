@@ -14,14 +14,18 @@ import {
 import { cn } from '@ui/lib/utils.ts'
 import useSWR from 'swr'
 import { fetchProjectsWithEnvironments } from '@/src/app/_actions/project.ts'
+import Link from 'next/link'
 
 export const ProjectSelector = () => {
-  
+
     const [open, setOpen] = useState(false)
     const [selectedEnvironment, setSelectedEnvironment] = useState('')
     const [selectedProject, setSelectedProject] = useState('')
 
     const { data: projects, isLoading } = useSWR('userProjects', fetchProjectsWithEnvironments)
+
+
+    const isEnvActive = false
 
     return (
         <div className="flex items-center">
@@ -50,23 +54,22 @@ export const ProjectSelector = () => {
                                     {project.environments.map((env) => (
                                         <CommandItem
                                             key={env.id}
-                                            onSelect={() => {
-                                                setOpen(false)
-                                            }}
                                         >
-                                            <div className="flex items-center">
+
+                                            <Link href={`/admin/projects/${project.id}/${env.id}`}
+                                                  className="flex items-center w-full">
                                                 <ChevronRight className="mr-2 h-4 w-4"/>
                                                 {env.name}
-                                            </div>
-                                            <Check
-                                                className={cn(
-                                                    'ml-auto h-4 w-4',
-                                                    true
-                                                        // selectedEnvironment === env.label && selectedProject === project.label
-                                                        ? 'opacity-100'
-                                                        : 'opacity-0'
-                                                )}
-                                            />
+                                                <Check
+                                                    className={cn(
+                                                        'ml-auto h-4 w-4',
+                                                        isEnvActive
+                                                            // selectedEnvironment === env.label && selectedProject === project.label
+                                                            ? 'opacity-100'
+                                                            : 'opacity-0'
+                                                    )}
+                                                />
+                                            </Link>
                                         </CommandItem>
                                     ))}
                                 </CommandGroup>
