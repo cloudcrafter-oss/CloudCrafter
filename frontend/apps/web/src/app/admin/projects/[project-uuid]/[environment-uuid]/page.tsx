@@ -9,11 +9,14 @@ import {
     Clock,
     Cloud,
     Database,
+    Home,
     Layers,
     Play,
     Plus,
     RefreshCw,
     Server,
+    Settings,
+    Users,
     XCircle
 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/components/ui/card.tsx'
@@ -37,7 +40,7 @@ export default function ProjectEnvironmentPage({ params }: PageProps) {
         { name: 'Message Queue', healthy: true },
         { name: 'Monitoring Service', healthy: false },
     ]
-    return (
+    const mainCard = (
         <>
             <Card className="bg-white dark:bg-gray-800 shadow-lg mb-8">
                 <CardContent className="p-6">
@@ -265,5 +268,66 @@ export default function ProjectEnvironmentPage({ params }: PageProps) {
                 </CardContent>
             </Card>
         </>
+    )
+
+    return (
+        <Tabs defaultValue="dashboard" className="flex h-screen bg-gray-100 dark:bg-gray-900">
+            {/* Vertical Menu */}
+            <TabsList className="w-64 h-full flex flex-col p-4 bg-white dark:bg-gray-800 shadow-lg">
+                <div className="space-y-2">
+                    <TabsTrigger value="dashboard" className="flex items-center justify-start px-4 py-2 w-full">
+                        <Home className="mr-2 h-5 w-5"/>
+                        Dashboard
+                    </TabsTrigger>
+                    <TabsTrigger value="deployments" className="flex items-center justify-start px-4 py-2 w-full">
+                        <Layers className="mr-2 h-5 w-5"/>
+                        Deployments
+                    </TabsTrigger>
+                    <TabsTrigger value="servers" className="flex items-center justify-start px-4 py-2 w-full">
+                        <Server className="mr-2 h-5 w-5"/>
+                        Servers
+                    </TabsTrigger>
+                    <TabsTrigger value="team" className="flex items-center justify-start px-4 py-2 w-full">
+                        <Users className="mr-2 h-5 w-5"/>
+                        Team
+                    </TabsTrigger>
+                </div>
+                <TabsTrigger value="settings" className="flex items-center justify-start px-4 py-2 w-full mt-auto">
+                    <Settings className="mr-2 h-5 w-5"/>
+                    Settings
+                </TabsTrigger>
+            </TabsList>
+
+            {/* Main Content Area */}
+            <div className="flex-1 overflow-auto p-8">
+                <TabsContent value="dashboard">
+
+                    {mainCard}
+
+                    {/* Rest of the dashboard content */}
+                    {/* ... (include the grid of cards, deployed applications, and other elements) ... */}
+                </TabsContent>
+
+                <TabsContent value="deployments">
+                    <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Deployments</h2>
+                    {/* Add deployment-specific content here */}
+                </TabsContent>
+
+                <TabsContent value="servers">
+                    <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Servers</h2>
+                    {/* Add server-specific content here */}
+                </TabsContent>
+
+                <TabsContent value="team">
+                    <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Team</h2>
+                    {/* Add team-specific content here */}
+                </TabsContent>
+
+                <TabsContent value="settings">
+                    <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Settings</h2>
+                    {/* Add settings-specific content here */}
+                </TabsContent>
+            </div>
+        </Tabs>
     )
 }
