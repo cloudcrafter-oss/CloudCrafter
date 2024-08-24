@@ -26,7 +26,7 @@ public class Testing
     private static IServiceScopeFactory _scopeFactory = null!;
     private static Guid? _userId;
     private static int _testingHostPort;
-    private IContainer? _testingHostContainer;
+    private static IContainer? _testingHostContainer;
 
     [OneTimeSetUp]
     public async Task RunBeforeAnyTests()
@@ -60,7 +60,7 @@ public class Testing
     }
 
 
-    private async Task StartTestingHost()
+    public static async Task StartTestingHost()
     {
         var dockerfileDirectory = GetDockerfileDirectory();
 
@@ -252,13 +252,9 @@ public class Testing
                ?? throw new DirectoryNotFoundException("Solution directory not found.");
     }
 
-
-    [OneTimeTearDown]
-    public async Task RunAfterAnyTests()
+    [TearDown]
+    public async Task TearDown()
     {
-        await _database.DisposeAsync();
-        await _factory.DisposeAsync();
-
         if (_testingHostContainer != null)
         {
             await _testingHostContainer.StopAsync()
@@ -267,5 +263,12 @@ public class Testing
             await _testingHostContainer.DisposeAsync()
                 .ConfigureAwait(false);
         }
+    }
+
+    [OneTimeTearDown]
+    public async Task RunAfterAnyTests()
+    {
+        await _database.DisposeAsync();
+        await _factory.DisposeAsync();
     }
 }

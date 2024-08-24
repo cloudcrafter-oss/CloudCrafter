@@ -14,6 +14,11 @@ using static Testing;
 
 public class ConnectivityCheckBackgroundJobTest : BaseTestFixture
 {
+    [SetUp]
+    public Task SetUp()
+    {
+        return StartTestingHost();
+    }
     [Test]
     public async Task ShouldBeAbleToSuccessfullyRunConnectivityJob()
     {
