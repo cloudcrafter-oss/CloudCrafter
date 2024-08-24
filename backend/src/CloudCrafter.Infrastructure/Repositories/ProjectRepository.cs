@@ -29,7 +29,7 @@ public class ProjectRepository(IApplicationDbContext dbContext, IMapper mapper) 
     }
 
 
-    public async Task<ProjectDto> CreateProject(string name)
+    public async Task<Project> CreateProject(string name)
     {
         var project = new Project
         {
@@ -44,7 +44,7 @@ public class ProjectRepository(IApplicationDbContext dbContext, IMapper mapper) 
 
         await dbContext.SaveChangesAsync();
 
-        return mapper.Map<ProjectDto>(project);
+        return project;
     }
 
     public Task<ProjectDto?> GetProject(Guid id)

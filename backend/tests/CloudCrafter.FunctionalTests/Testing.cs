@@ -38,7 +38,7 @@ public class Testing
 
         _scopeFactory = _factory.Services.GetRequiredService<IServiceScopeFactory>();
 
-        await StartTestingHost();
+        //await StartTestingHost();
     }
 
     public static Faker<Server> TestingHostServerFaker()

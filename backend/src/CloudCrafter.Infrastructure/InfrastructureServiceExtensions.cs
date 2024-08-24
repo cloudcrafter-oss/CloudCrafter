@@ -94,6 +94,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<ICloudCrafterAuthService, CloudCrafterAuthService>()
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IServerRepository, ServerRepository>()
+            .AddScoped<IEnvironmentRepository, EnvironmentRepository>()
             .AddScoped<IProjectRepository, ProjectRepository>()
             .AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>()
             .AddScoped<IJwtService, JwtService>()

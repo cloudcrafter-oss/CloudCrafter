@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core;
+using CloudCrafter.Core.Events;
 using CloudCrafter.DeploymentEngine.Remote;
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Data;
@@ -22,6 +23,7 @@ builder.Services.AddApiConfiguration(builder.Configuration);
 builder.Services.AddEngineInfrastructure();
 builder.Services.AddCloudCrafterLogging(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.AddDomainEvents(typeof(IDomainEvent).Assembly);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices();
 builder.Services.AddSwaggerServices();
