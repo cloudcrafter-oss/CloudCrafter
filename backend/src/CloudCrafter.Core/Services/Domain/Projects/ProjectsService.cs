@@ -8,7 +8,11 @@ using CloudCrafter.Domain.Domain.Project;
 
 namespace CloudCrafter.Core.Services.Domain.Projects;
 
-public class ProjectsService(IProjectRepository repository, IMapper mapper, IEventStore eventStore) : IProjectsService
+public class ProjectsService(
+    IProjectRepository repository,
+    IEnvironmentRepository environmentRepository,
+    IMapper mapper,
+    IEventStore eventStore) : IProjectsService
 {
     public Task<List<ProjectDto>> GetProjects(LoadProjectOptions options)
     {
@@ -37,5 +41,20 @@ public class ProjectsService(IProjectRepository repository, IMapper mapper, IEve
     public Task DeleteProject(Guid id)
     {
         return repository.DeleteProject(id);
+    }
+
+    public async Task<ProjectEnvironmentEnhancedDto?> GetProjectEnvironmentEnhancedDetails(Guid projectId,
+        Guid environmentId)
+    {
+        var environment = await environmentRepository.GetEnvironment(environmentId, projectId);
+       
+        if (environment is null)
+        {
+            return null;
+        }
+
+
+        return null;
+
     }
 }

@@ -10,4 +10,5 @@ public interface IProjectsService
     Task<ProjectDto?> GetProject(Guid id);
     Task<ProjectDto> UpdateProject(Guid id, UpdateProjectArgs updateValues);
     Task DeleteProject(Guid id);
+    Task<ProjectEnvironmentEnhancedDto?> GetProjectEnvironmentEnhancedDetails(Guid projectId, Guid environmentId);
 }

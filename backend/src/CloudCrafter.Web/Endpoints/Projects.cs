@@ -48,4 +48,15 @@ public class Projects : EndpointGroupBase
 
         return Results.Ok();
     }
+
+
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProjectEnvironmentEnhancedDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IResult> GetProjectEnvironmentEnhanced([FromRoute] Guid projectId, [FromRoute] Guid environmentId,
+        ISender sender)
+    {
+        var details = await sender.Send(new GetProjectEnvironmentEnhancedDetailsQuery.Query(projectId, environmentId));
+
+        return details is not null ? Results.Ok(details) : Results.NotFound();
+    }
 }
