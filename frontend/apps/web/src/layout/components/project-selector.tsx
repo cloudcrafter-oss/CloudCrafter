@@ -16,12 +16,12 @@ import useSWR from 'swr'
 import { fetchProjectsWithEnvironments } from '@/src/app/_actions/project.ts'
 
 export const ProjectSelector = () => {
+  
     const [open, setOpen] = useState(false)
     const [selectedEnvironment, setSelectedEnvironment] = useState('')
     const [selectedProject, setSelectedProject] = useState('')
 
     const { data: projects, isLoading } = useSWR('userProjects', fetchProjectsWithEnvironments)
-
 
     return (
         <div className="flex items-center">
