@@ -12,9 +12,13 @@ namespace CloudCrafter.Infrastructure.Repositories;
 
 public class ProjectRepository(IApplicationDbContext dbContext, IMapper mapper) : IProjectRepository
 {
+
+    private IQueryable<Project> ProjectsQueryable => dbContext.Projects
+        .OrderBy(x => x.CreatedAt);
+    
     public async Task<List<ProjectDto>> GetProjects(LoadProjectOptions options)
     {
-        IQueryable<Project> projects = dbContext.Projects;
+        IQueryable<Project> projects = ProjectsQueryable;
 
         if (options.IncludeEnvironments.GetValueOrDefault())
         {

@@ -12,6 +12,7 @@ import { ProjectSelector } from '@/src/layout/components/project-selector.tsx'
 export default function NextAdminLayout({ children }: { children: React.ReactNode }) {
     return (<ThemeProvider defaultTheme={'dark'} storageKey={'cloudCraft-theme'}>
         <TooltipProvider>
+
             <AppShell>
                 <Layout>
                     <LayoutHeader>
@@ -25,7 +26,6 @@ export default function NextAdminLayout({ children }: { children: React.ReactNod
                     </LayoutHeader>
                     <LayoutBody>
                         {children}
-
                     </LayoutBody>
                 </Layout>
             </AppShell>

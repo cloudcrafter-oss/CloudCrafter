@@ -35,8 +35,8 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
         setExpandedProject(expandedProject === projectName ? null : projectName)
     }
 
+    const [open, setOpen] = useState(false)
 
-    console.log({ projects })
     return (
         <div className="p-4 bg-background text-foreground min-h-screen">
             <h1 className="text-2xl font-bold mb-4">Projects</h1>
@@ -322,14 +322,14 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
                         </div>
                     )}
                 </div>
-                <Sheet>
+                <Sheet open={open} onOpenChange={setOpen}>
                     <SheetTrigger asChild>
                         <Button variant="outline" className="w-full">
                             + New Project
                         </Button>
                     </SheetTrigger>
                     <SheetContent>
-                        <CreateProjectSheet/>
+                        <CreateProjectSheet onClose={() => setOpen(false)}/>
                     </SheetContent>
                 </Sheet>
             </div>

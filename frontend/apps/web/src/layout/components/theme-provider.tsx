@@ -1,5 +1,6 @@
 'use client'
 import React, { createContext, useContext, useEffect, useState } from 'react'
+import { Toaster } from '@ui/components/ui/sonner.tsx'
 
 type Theme = 'dark' | 'light' | 'system'
 
@@ -60,6 +61,7 @@ export function ThemeProvider({
     return (
         <ThemeProviderContext.Provider {...props} value={value}>
             {children}
+            <Toaster richColors/>
         </ThemeProviderContext.Provider>
     )
 }

@@ -12,31 +12,15 @@ import {
     CommandList
 } from '@ui/components/ui/command.tsx'
 import { cn } from '@ui/lib/utils.ts'
-
-const projects = [
-    {
-        value: 'my-project',
-        label: 'My Project',
-        environments: [
-            { value: 'production', label: 'Production' },
-            { value: 'staging', label: 'Staging' },
-        ],
-    },
-
-    {
-        value: 'another-project',
-        label: 'My Other Project',
-        environments: [
-            { value: 'production', label: 'Production' },
-            { value: 'staging', label: 'Staging' },
-        ],
-    },
-]
+import useSWR from 'swr'
+import { fetchProjectsWithEnvironments } from '@/src/app/_actions/project.ts'
 
 export const ProjectSelector = () => {
     const [open, setOpen] = useState(false)
     const [selectedEnvironment, setSelectedEnvironment] = useState('')
     const [selectedProject, setSelectedProject] = useState('')
+
+    const { data: projects, isLoading } = useSWR('userProjects', fetchProjectsWithEnvironments)
 
 
     return (
@@ -44,6 +28,7 @@ export const ProjectSelector = () => {
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                     <Button
+                        disabled={isLoading}
                         variant="outline"
                         role="combobox"
                         aria-expanded={open}
@@ -60,25 +45,24 @@ export const ProjectSelector = () => {
                         <CommandInput placeholder="Search environment or project..."/>
                         <CommandList>
                             <CommandEmpty>No results found.</CommandEmpty>
-                            {projects.map((project) => (
-                                <CommandGroup key={project.value} heading={project.label}>
+                            {projects?.map((project) => (
+                                <CommandGroup key={project.id} heading={project.name}>
                                     {project.environments.map((env) => (
                                         <CommandItem
-                                            key={`${env.value}-${project.value}`}
+                                            key={env.id}
                                             onSelect={() => {
-                                                setSelectedEnvironment(env.label)
-                                                setSelectedProject(project.label)
                                                 setOpen(false)
                                             }}
                                         >
                                             <div className="flex items-center">
                                                 <ChevronRight className="mr-2 h-4 w-4"/>
-                                                {project.label}
+                                                {env.name}
                                             </div>
                                             <Check
                                                 className={cn(
                                                     'ml-auto h-4 w-4',
-                                                    selectedEnvironment === env.label && selectedProject === project.label
+                                                    true
+                                                        // selectedEnvironment === env.label && selectedProject === project.label
                                                         ? 'opacity-100'
                                                         : 'opacity-0'
                                                 )}
