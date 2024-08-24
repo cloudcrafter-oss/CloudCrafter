@@ -25,8 +25,6 @@ public class Testing
     public static CustomWebApplicationFactory _factory = null!;
     private static IServiceScopeFactory _scopeFactory = null!;
     private static Guid? _userId;
-    private static int _testingHostPort;
-    private static IContainer? _testingHostContainer;
 
     [OneTimeSetUp]
     public async Task RunBeforeAnyTests()
@@ -37,53 +35,12 @@ public class Testing
         _factory = new CustomWebApplicationFactory(_database.GetConnection(), _database.GetRedisConnectionString());
 
         _scopeFactory = _factory.Services.GetRequiredService<IServiceScopeFactory>();
-
-        //await StartTestingHost();
     }
 
-    public static Faker<Server> TestingHostServerFaker()
-    {
-        var sshKeyContents = File.ReadLines(GetDockerfileDirectory() + "/id_rsa");
+   
+   
 
-        var sshKey = string.Join("\n", sshKeyContents);
-
-        return new Faker<Server>()
-            .StrictMode(true)
-            .RuleFor(x => x.Id, Guid.NewGuid)
-            .RuleFor(x => x.SshPort, f => _testingHostPort)
-            .RuleFor(x => x.Name, f => $"Server {f.Person.FirstName}")
-            .RuleFor(x => x.IpAddress, "127.0.0.1")
-            .RuleFor(x => x.SshUsername, "root")
-            .RuleFor(x => x.SshPrivateKey, sshKey)
-            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
-            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
-    }
-
-
-    public static async Task StartTestingHost()
-    {
-        var dockerfileDirectory = GetDockerfileDirectory();
-
-        var testingHostImage = new ImageFromDockerfileBuilder()
-            .WithDockerfileDirectory(dockerfileDirectory).WithDockerfile("Dockerfile")
-            .Build();
-
-        var faker = new Faker();
-        _testingHostPort = faker.Random.Number(3000, 4000);
-        await testingHostImage.CreateAsync()
-            .ConfigureAwait(false);
-
-        _testingHostContainer = new ContainerBuilder()
-            .WithImage(testingHostImage)
-            .WithPortBinding(_testingHostPort, 22)
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(22))
-            .Build();
-
-        await _testingHostContainer.StartAsync()
-            .ConfigureAwait(false);
-    }
-
-    private static string GetDockerfileDirectory()
+    public static string GetDockerfileDirectory()
     {
         var solutionDirectory = GetSolutionDirectory();
         var dockerfileDirectory = Path.Combine(solutionDirectory, "..", "docker", "test-host");
@@ -251,19 +208,7 @@ public class Testing
         return directory?.FullName
                ?? throw new DirectoryNotFoundException("Solution directory not found.");
     }
-
-    [TearDown]
-    public async Task TearDown()
-    {
-        if (_testingHostContainer != null)
-        {
-            await _testingHostContainer.StopAsync()
-                .ConfigureAwait(false);
-
-            await _testingHostContainer.DisposeAsync()
-                .ConfigureAwait(false);
-        }
-    }
+    
 
     [OneTimeTearDown]
     public async Task RunAfterAnyTests()
