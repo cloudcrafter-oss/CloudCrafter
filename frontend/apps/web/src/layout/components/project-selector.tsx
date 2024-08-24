@@ -38,6 +38,7 @@ export const ProjectSelector = () => {
     const [selectedEnvironment, setSelectedEnvironment] = useState('')
     const [selectedProject, setSelectedProject] = useState('')
 
+
     return (
         <div className="flex items-center">
             <Popover open={open} onOpenChange={setOpen}>

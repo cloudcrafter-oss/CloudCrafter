@@ -1,5 +1,6 @@
 export * from './CreateProject'
 export * from './CreateProjectCommandCommand'
+export * from './EnvironmentDto'
 export * from './FilterCriterea'
 export * from './FilterOperatorOption'
 export * from './GetFilterableFields'

@@ -1,5 +1,6 @@
 export * from './createProjectCommandCommandSchema'
 export * from './createProjectSchema'
+export * from './environmentDtoSchema'
 export * from './filterCritereaSchema'
 export * from './filterOperatorOptionSchema'
 export * from './getFilterableFieldsSchema'

@@ -1,4 +1,6 @@
-export type ProjectDto = {
+import { EnvironmentDto } from './EnvironmentDto'
+
+ export type ProjectDto = {
     /**
      * @type string, uuid
     */
@@ -19,4 +21,8 @@ export type ProjectDto = {
      * @type string, date-time
     */
     updatedAt: string;
+    /**
+     * @type array
+    */
+    environments: EnvironmentDto[];
 };

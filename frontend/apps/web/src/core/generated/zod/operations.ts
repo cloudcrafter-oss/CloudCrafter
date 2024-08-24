@@ -2,7 +2,7 @@ import { postCreateDeploymentMutationResponseSchema, postCreateDeploymentPathPar
 import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema } from './postLoginUserSchema'
 import { postCreateUserMutationRequestSchema, postCreateUserMutationResponseSchema } from './postCreateUserSchema'
 import { postRefreshTokensMutationRequestSchema, postRefreshTokensMutationResponseSchema } from './postRefreshTokensSchema'
-import { getProjectsQueryResponseSchema } from './getProjectsSchema'
+import { getProjectsQueryResponseSchema, getProjectsQueryParamsSchema } from './getProjectsSchema'
 import { createProjectMutationRequestSchema, createProjectMutationResponseSchema } from './createProjectSchema'
 import { getProjectQueryResponseSchema, getProject404Schema, getProjectPathParamsSchema } from './getProjectSchema'
 import { postApiProjectsIdMutationRequestSchema, postApiProjectsIdMutationResponseSchema, postApiProjectsIdPathParamsSchema } from './postApiProjectsIdSchema'
@@ -65,7 +65,7 @@ import { testQueryResponseSchema } from './testSchema'
         request: undefined,
         parameters: {
             path: undefined,
-            query: undefined,
+            query: getProjectsQueryParamsSchema,
             header: undefined
         },
         responses: {
