@@ -32,12 +32,13 @@ public static class FakerInstances
         .RuleFor(x => x.Environments, new List<Environment>())
         .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
-    public static Faker<Application> ApplicationFaker => new Faker<Application>()
+    public static Faker<Application> ApplicationFaker(Guid environmentId) => new Faker<Application>()
         .StrictMode(true)
         .RuleFor(x => x.Id, Guid.NewGuid)
         .RuleFor(x => x.Name, f => $"Application {f.Person.FirstName}")
         .RuleFor(x => x.Server, ServerFaker.Generate())
-        .RuleFor(x => x.Project, ProjectFaker.Generate())
+        .RuleFor(x => x.Environment, f => null)
+        .RuleFor(x => x.EnvironmentId, environmentId)
         .RuleFor(x => x.Deployments, f => new List<Deployment>())
         .RuleFor(x => x.Source, f => null)
         .RuleFor(x => x.Services, f => new List<ApplicationService>())

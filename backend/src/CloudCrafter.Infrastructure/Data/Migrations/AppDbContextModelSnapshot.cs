@@ -52,12 +52,12 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("EnvironmentId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ServerId")
                         .HasColumnType("uuid");
@@ -67,7 +67,7 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("EnvironmentId");
 
                     b.HasIndex("ServerId");
 
@@ -564,9 +564,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Application", b =>
                 {
-                    b.HasOne("CloudCrafter.Domain.Entities.Project", "Project")
+                    b.HasOne("CloudCrafter.Domain.Entities.Environment", "Environment")
                         .WithMany()
-                        .HasForeignKey("ProjectId")
+                        .HasForeignKey("EnvironmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -614,7 +614,7 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                             b1.Navigation("Git");
                         });
 
-                    b.Navigation("Project");
+                    b.Navigation("Environment");
 
                     b.Navigation("Server");
 
@@ -723,7 +723,7 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Environment", b =>
                 {
                     b.HasOne("CloudCrafter.Domain.Entities.Project", "Project")
-                        .WithMany()
+                        .WithMany("Environments")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -807,6 +807,11 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Navigation("Deployments");
 
                     b.Navigation("Services");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.Project", b =>
+                {
+                    b.Navigation("Environments");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.User", b =>

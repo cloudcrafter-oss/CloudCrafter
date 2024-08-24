@@ -1,16 +1,16 @@
 'use client'
-import { usePathname } from 'next/navigation'
 import { Button } from '@ui/components/ui/button.tsx'
 
 export const DebugHeader = () => {
-    const pathname = usePathname()
+    // const pathname = usePathname()
+    // const params = useParams()
     return <>
         <Button
             variant="secondary"
             role="combobox"
-            className="w-[250px] justify-between"
+            className="justify-between"
         >
-            usePathname() = {pathname}
+            hi
         </Button>
     </>
 }
