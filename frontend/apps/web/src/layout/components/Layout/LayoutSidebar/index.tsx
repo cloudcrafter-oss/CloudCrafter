@@ -12,25 +12,21 @@ export const NavItems: NavItem[] = [
         title: 'Dashboard',
         icon: LayoutDashboard,
         href: '/admin',
-        color: 'text-sky-500',
     },
     {
         title: 'Users',
         icon: UsersRound,
         href: '/admin/users',
-        color: 'text-orange-500',
         isChildren: true,
         children: [
             {
                 title: 'Overview',
                 icon: List,
-                color: 'text-red-500',
                 href: '/admin/users',
             },
             {
                 title: 'Create user',
                 icon: UserRoundPlus,
-                color: 'text-red-500',
                 href: '/admin/users/create',
             },
         ],
