@@ -15,11 +15,13 @@
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
+    <PackageReference Include="LibGit2Sharp"/>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CloudCrafter.Domain\CloudCrafter.Domain.csproj"/>
     <ProjectReference Include="..\CloudCrafter.Jobs.Service\CloudCrafter.Jobs.Service.csproj"/>
+    <ProjectReference Include="..\CloudCrafter.Shared.Utils\CloudCrafter.Shared.Utils.csproj" />
     <ProjectReference Include="..\engine\CloudCrafter.DeploymentEngine.Domain\CloudCrafter.DeploymentEngine.Domain.csproj"/>
     <ProjectReference Include="..\engine\CloudCrafter.DeploymentEngine.Remote\CloudCrafter.DeploymentEngine.Remote.csproj"/>
   </ItemGroup>

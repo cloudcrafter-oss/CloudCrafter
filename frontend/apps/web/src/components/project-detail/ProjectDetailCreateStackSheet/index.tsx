@@ -22,21 +22,15 @@ export const ProjectDetailCreateStackSheet = () => {
 			</SheetTrigger>
 			<SheetContent>
 				<SheetHeader>
-					<SheetTitle>Add New Docker Stack</SheetTitle>
+					<SheetTitle>Deploy new Stack</SheetTitle>
 					<SheetDescription>
-						Enter the details for your new Docker stack.
+						Enter the details for your new Stack.
 					</SheetDescription>
 				</SheetHeader>
 				<div className='grid gap-4 py-4'>
 					<div className='grid grid-cols-4 items-center gap-4'>
-						<Label htmlFor='stack-name' className='text-right'>
-							Stack Name
-						</Label>
-						<Input id='stack-name' className='col-span-3' />
-					</div>
-					<div className='grid grid-cols-4 items-center gap-4'>
 						<Label htmlFor='github-url' className='text-right'>
-							GitHub URL
+							GitHub Repository (Public)
 						</Label>
 						<Input id='github-url' className='col-span-3' />
 					</div>

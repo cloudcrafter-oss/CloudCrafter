@@ -4,8 +4,8 @@ using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Exceptions;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
-using CloudCrafter.Agent.Runner.Cli;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
+using CloudCrafter.Shared.Utils.Cli.Abstraction;
 
 namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
 

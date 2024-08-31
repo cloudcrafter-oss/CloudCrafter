@@ -1,10 +1,11 @@
 ﻿using System.CommandLine;
 using CloudCrafter.Agent.Runner;
-using CloudCrafter.Agent.Runner.Cli;
 using CloudCrafter.Agent.Runner.Common.Behaviour;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
 using CloudCrafter.Agent.Runner.DeploymentLogPump.Implementation;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
+using CloudCrafter.Shared.Utils.Cli;
+using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

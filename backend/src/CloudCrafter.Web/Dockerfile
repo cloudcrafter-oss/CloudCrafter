@@ -1,4 +1,5 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+RUN apt-get update && apt-get install -y git && apt-get clean && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 EXPOSE 8080
 
@@ -26,4 +27,7 @@ RUN dotnet publish "CloudCrafter.Web.csproj" -c $BUILD_CONFIGURATION -o /app/pub
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+
+
 ENTRYPOINT ["dotnet", "CloudCrafter.Web.dll"]

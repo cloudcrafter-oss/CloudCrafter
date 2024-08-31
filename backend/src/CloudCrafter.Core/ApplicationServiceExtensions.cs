@@ -8,6 +8,7 @@ using CloudCrafter.Core.Interfaces.Domain.Environments;
 using CloudCrafter.Core.Interfaces.Domain.Projects;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Interfaces.Domain.Users;
+using CloudCrafter.Core.Interfaces.Domain.Utils;
 using CloudCrafter.Core.Jobs.Creation;
 using CloudCrafter.Core.Jobs.Dispatcher;
 using CloudCrafter.Core.Jobs.Dispatcher.Factory;
@@ -17,15 +18,16 @@ using CloudCrafter.Core.Services.Domain.Environments;
 using CloudCrafter.Core.Services.Domain.Projects;
 using CloudCrafter.Core.Services.Domain.Servers;
 using CloudCrafter.Core.Services.Domain.Users;
+using CloudCrafter.Core.Services.Domain.Utils;
 using CloudCrafter.Domain;
 using CloudCrafter.Domain.Entities;
-using CloudCrafter.Domain.Entities.Jobs;
+using CloudCrafter.Shared.Utils.Cli;
+using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using FluentValidation;
 using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Environment = CloudCrafter.Domain.Entities.Environment;
 
 namespace CloudCrafter.Core;
 
@@ -34,7 +36,6 @@ public static class ApplicationServiceExtensions
     public static IApplicationBuilder ConfigureRecurringJobs(
         this IApplicationBuilder app)
     {
-
         RecurringJob.AddOrUpdate<ICloudCrafterRecurringJobsDispatcher>(
             "5m-recurring-connectivity-checks",
             service => service.AddRecurringConnectivityChecks(),
@@ -48,7 +49,7 @@ public static class ApplicationServiceExtensions
 
         var handlers = assemblies
             .SelectMany(a => a.GetTypes())
-            .Where(t => t.GetInterfaces().Any(i => 
+            .Where(t => t.GetInterfaces().Any(i =>
                 i.IsGenericType && i.GetGenericTypeDefinition() == handlerType));
 
         foreach (var handler in handlers)
@@ -59,11 +60,11 @@ public static class ApplicationServiceExtensions
             services.AddTransient(handlerInterface, handler);
         }
 
-        
+
         services.AddSingleton<IEventStore, EventStore>();
         return services;
     }
-    
+
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         var mapperAssemblies = new List<Assembly> { Assembly.GetExecutingAssembly(), typeof(IDomainTarget).Assembly };
@@ -84,21 +85,25 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>();
 
 
+        services.AddScoped<ICommandExecutor, CommandExecutor>();
         services.AddScoped<IUsersService, UsersService>()
             .AddScoped<IServersService, ServersService>()
             .AddScoped<IServerConnectivityService, ServerConnectivityService>()
             .AddScoped<IProjectsService, ProjectsService>()
             .AddScoped<IEnvironmentService, EnvironmentsService>()
+            .AddScoped<IGitService, GitService>()
             .AddScoped<IDeploymentService, DeploymentService>();
-        
+
         // Jobs
 
         services.AddScoped<ICloudCrafterDispatcher, CloudCrafterDispatcher>();
         services.AddScoped<ICloudCrafterRecurringJobsDispatcher, CloudCrafterRecurringJobsDispatcher>();
         services.AddScoped<BackgroundJobFactory>();
-        
+
         services.AddScoped<ConnectivityCheckBackgroundJob>();
-        services.AddScoped<IJobCreationStrategy<ConnectivityCheckBackgroundJob, Server>, ConnectivityCheckCreationStrategy>();
+        services
+            .AddScoped<IJobCreationStrategy<ConnectivityCheckBackgroundJob, Server>,
+                ConnectivityCheckCreationStrategy>();
 
 
         return services;

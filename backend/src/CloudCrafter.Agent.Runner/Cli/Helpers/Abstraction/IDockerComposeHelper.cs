@@ -1,4 +1,6 @@
-﻿namespace CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
+﻿using CloudCrafter.Shared.Utils.Cli;
+
+namespace CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 
 public interface IDockerComposeHelper
 {

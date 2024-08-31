@@ -2,9 +2,10 @@
 using System.Text;
 using CliWrap;
 using CliWrap.EventStream;
-using CloudCrafter.Agent.Models.Exceptions;
+using CloudCrafter.Shared.Utils.Cli.Abstraction;
+using CloudCrafter.Shared.Utils.Cli.Exceptions;
 
-namespace CloudCrafter.Agent.Runner.Cli;
+namespace CloudCrafter.Shared.Utils.Cli;
 
 public class CommandExecutor : ICommandExecutor
 {
@@ -71,10 +72,10 @@ public class CommandExecutor : ICommandExecutor
 
             if (!exitCode.HasValue)
             {
-                throw new DeploymentException($"Cannot find exit code for command {command}");
+                throw new CliException($"Cannot find exit code for command {command}");
             }
 
-            return new ExecutorResult()
+            return new ExecutorResult
             {
                 ExitCode = exitCode.Value,
                 IsSuccess = exitCode.Value == 0,

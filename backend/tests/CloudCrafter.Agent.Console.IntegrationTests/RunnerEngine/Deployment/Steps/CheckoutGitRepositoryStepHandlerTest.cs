@@ -1,10 +1,8 @@
 ﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Exceptions;
-using CloudCrafter.Agent.Runner.Cli;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
-using CloudCrafter.Agent.Runner.DeploymentLogPump.Implementation;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
-using CloudCrafter.Agent.Runner.Validators;
+using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CloudCrafter.Agent.Console.IntegrationTests.RunnerEngine.Deployment.Steps;
@@ -28,10 +26,10 @@ public class CheckoutGitRepositoryStepHandlerTest : HandlerBaseCase
     [Test]
     public async Task ShouldBeAbleToExecuteFine()
     {
-        var checkoutParams = new GitCheckoutParams() { Repo = "https://github.com/cloudcrafter-oss/demo-examples.git" };
-        
+        var checkoutParams = new GitCheckoutParams { Repo = "https://github.com/cloudcrafter-oss/demo-examples.git" };
+
         var context = GetContext();
-        
+
         await _handler.ExecuteAsync(checkoutParams, context);
 
         // Should not throw an exception
@@ -41,14 +39,12 @@ public class CheckoutGitRepositoryStepHandlerTest : HandlerBaseCase
     [Test]
     public void ShouldThrowDeploymentExceptionBecauseGitRepositoryIsNotCorrect()
     {
-        var checkoutParams = new GitCheckoutParams() { Repo = "https://github.com/cloudcrafter-oss/not-found.git" };
+        var checkoutParams = new GitCheckoutParams { Repo = "https://github.com/cloudcrafter-oss/not-found.git" };
 
         var context = GetContext();
-        
+
         var exception = Assert.ThrowsAsync<DeploymentException>(() => _handler.ExecuteAsync(checkoutParams, context));
-        
+
         exception.Message.Should().Be("Failed to clone git repository");
     }
-    
-    
 }

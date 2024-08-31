@@ -2,6 +2,8 @@ using CloudCrafter.Agent.Models.Configs;
 using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Exceptions;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
+using CloudCrafter.Shared.Utils.Cli;
+using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Agent.Runner.Cli.Helpers;
@@ -48,7 +50,7 @@ public class NixpacksHelper(ICommandExecutor executor, ICommandParser parser, IL
     public async Task<ExecutorResult> BuildDockerImage(NixpacksBuildDockerImageConfig config)
     {
         await EnsureNixpacksInstalled();
-        
+
         List<string> baseCommand =
         [
             "build",
@@ -72,7 +74,7 @@ public class NixpacksHelper(ICommandExecutor executor, ICommandParser parser, IL
             {
                 // TODO: Save this somewhere
                 logger.LogInformation(streamResult.Log);
-            } );
+            });
 
         if (!result.IsSuccess)
         {
