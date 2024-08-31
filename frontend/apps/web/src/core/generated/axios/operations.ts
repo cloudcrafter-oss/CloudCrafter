@@ -31,6 +31,10 @@ export const operations = {
         'path': '/api/Projects/:id',
         'method': 'delete'
     },
+    'GetProjectEnvironmentEnhanced': {
+        'path': '/api/Projects/:id/:environmentId',
+        'method': 'get'
+    },
     'GetServers': {
         'path': '/api/Servers',
         'method': 'get'

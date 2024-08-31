@@ -15,7 +15,8 @@ public class Projects : EndpointGroupBase
             .MapPost(CreateProject)
             .MapGet(GetProject, "{id}")
             .MapPost(UpdateProject, "{id}")
-            .MapDelete(DeleteProject, "{id}");
+            .MapDelete(DeleteProject, "{id}")
+            .MapGet(GetProjectEnvironmentEnhanced, "{id}/{environmentId}");
     }
 
     public async Task<List<ProjectDto>> GetProjects(ISender sender, [FromQuery] bool includeEnvironments = false)
@@ -52,10 +53,10 @@ public class Projects : EndpointGroupBase
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProjectEnvironmentEnhancedDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IResult> GetProjectEnvironmentEnhanced([FromRoute] Guid projectId, [FromRoute] Guid environmentId,
+    public async Task<IResult> GetProjectEnvironmentEnhanced([FromRoute] Guid id, [FromRoute] Guid environmentId,
         ISender sender)
     {
-        var details = await sender.Send(new GetProjectEnvironmentEnhancedDetailsQuery.Query(projectId, environmentId));
+        var details = await sender.Send(new GetProjectEnvironmentEnhancedDetailsQuery.Query(id, environmentId));
 
         return details is not null ? Results.Ok(details) : Results.NotFound();
     }

@@ -7,6 +7,7 @@ import { createProjectMutationRequestSchema, createProjectMutationResponseSchema
 import { getProjectQueryResponseSchema, getProject404Schema, getProjectPathParamsSchema } from './getProjectSchema'
 import { updateProjectMutationRequestSchema, updateProjectMutationResponseSchema, updateProjectPathParamsSchema } from './updateProjectSchema'
 import { deleteProjectMutationResponseSchema, deleteProjectPathParamsSchema } from './deleteProjectSchema'
+import { getProjectEnvironmentEnhancedQueryResponseSchema, getProjectEnvironmentEnhanced404Schema, getProjectEnvironmentEnhancedPathParamsSchema } from './getProjectEnvironmentEnhancedSchema'
 import { getServersQueryResponseSchema } from './getServersSchema'
 import { getServerByIdQueryResponseSchema, getServerByIdPathParamsSchema } from './getServerByIdSchema'
 import { getFilterableFieldsQueryResponseSchema } from './getFilterableFieldsSchema'
@@ -125,6 +126,21 @@ import { testQueryResponseSchema } from './testSchema'
             default: deleteProjectMutationResponseSchema
         },
         errors: {}
+    }, 'GetProjectEnvironmentEnhanced': {
+        request: undefined,
+        parameters: {
+            path: getProjectEnvironmentEnhancedPathParamsSchema,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: getProjectEnvironmentEnhancedQueryResponseSchema,
+            404: getProjectEnvironmentEnhanced404Schema,
+            default: getProjectEnvironmentEnhancedQueryResponseSchema
+        },
+        errors: {
+            404: getProjectEnvironmentEnhanced404Schema
+        }
     }, 'GetServers': {
         request: undefined,
         parameters: {
@@ -213,6 +229,8 @@ export const paths = { '/api/Applications/{applicationId}/deployment': {
         get: operations['GetProject'],
         post: operations['UpdateProject'],
         delete: operations['DeleteProject']
+    }, '/api/Projects/{id}/{environmentId}': {
+        get: operations['GetProjectEnvironmentEnhanced']
     }, '/api/Servers': {
         get: operations['GetServers']
     }, '/api/Servers/{id}': {

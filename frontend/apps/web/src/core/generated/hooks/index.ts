@@ -1,6 +1,7 @@
 export * from './useCreateProjectHook'
 export * from './useDeleteProjectHook'
 export * from './useGetFilterableFieldsHook'
+export * from './useGetProjectEnvironmentEnhancedHook'
 export * from './useGetProjectHook'
 export * from './useGetProjectsHook'
 export * from './useGetServerByIdHook'

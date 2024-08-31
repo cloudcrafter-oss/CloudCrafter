@@ -9,14 +9,11 @@ import {
     Clock,
     Cloud,
     Database,
-    Home,
     Layers,
     Play,
     Plus,
     RefreshCw,
     Server,
-    Settings,
-    Users,
     XCircle
 } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/components/ui/card.tsx'
@@ -24,14 +21,18 @@ import { Badge } from '@ui/components/ui/badge.tsx'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@ui/components/ui/tabs.tsx'
 import { Button } from '@ui/components/ui/button.tsx'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@ui/components/ui/select.tsx'
+import { getProjectEnvironmentEnhanced } from '@/src/core/generated'
+import React from 'react'
+import ShowDate from '@/src/components/ShowDate'
+import { EnvironmentBadge } from '@/src/components/EnvironmentBadge'
 
 interface PageProps {
     params: ProjectEnvironmentRouteParams;
 }
 
-export default function ProjectEnvironmentPage({ params }: PageProps) {
+export default async function ProjectEnvironmentPage({ params }: PageProps) {
     // Validate the route params
-    validateRouteParams(params)
+    const routeData = validateRouteParams(params)
     const deployedApps = [
         { name: 'Frontend App', healthy: true },
         { name: 'Backend API', healthy: true },
@@ -40,20 +41,28 @@ export default function ProjectEnvironmentPage({ params }: PageProps) {
         { name: 'Message Queue', healthy: true },
         { name: 'Monitoring Service', healthy: false },
     ]
+
+    const projectDetails = await getProjectEnvironmentEnhanced(routeData['project-uuid'], routeData['environment-uuid'])
+
     const mainCard = (
         <>
             <Card className="bg-white dark:bg-gray-800 shadow-lg mb-8">
                 <CardContent className="p-6">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                         <div>
-                            <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">My project</h2>
+                            <div className="flex items-center space-x-3 mb-2">
+                                <h2 className="text-3xl font-bold text-gray-800 dark:text-white">{projectDetails.projectName}</h2>
+                                <EnvironmentBadge environmentName={projectDetails.environmentName} />
+                            </div>
                             <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
                                 <div className="flex items-center">
-                                    <span>Created on: date</span>
+                                    <span>Created on: <ShowDate
+                                        dateString={projectDetails.environmentCreatedAt}/></span>
                                 </div>
                                 <div className="flex items-center">
                                     <Clock className="h-4 w-4 mr-1"/>
-                                    <span>Last deployment:yesterdag</span>
+                                    <span>Last deployment: <ShowDate
+                                        dateString={projectDetails.lastDeploymentAt}/></span>
                                 </div>
                             </div>
                         </div>
@@ -271,63 +280,33 @@ export default function ProjectEnvironmentPage({ params }: PageProps) {
     )
 
     return (
-        <Tabs defaultValue="dashboard" className="flex h-screen bg-gray-100 dark:bg-gray-900">
-            {/* Vertical Menu */}
-            <TabsList className="w-64 h-full flex flex-col p-4 bg-white dark:bg-gray-800 shadow-lg">
-                <div className="space-y-2">
-                    <TabsTrigger value="dashboard" className="flex items-center justify-start px-4 py-2 w-full">
-                        <Home className="mr-2 h-5 w-5"/>
-                        Dashboard
-                    </TabsTrigger>
-                    <TabsTrigger value="deployments" className="flex items-center justify-start px-4 py-2 w-full">
-                        <Layers className="mr-2 h-5 w-5"/>
-                        Deployments
-                    </TabsTrigger>
-                    <TabsTrigger value="servers" className="flex items-center justify-start px-4 py-2 w-full">
-                        <Server className="mr-2 h-5 w-5"/>
-                        Servers
-                    </TabsTrigger>
-                    <TabsTrigger value="team" className="flex items-center justify-start px-4 py-2 w-full">
-                        <Users className="mr-2 h-5 w-5"/>
-                        Team
-                    </TabsTrigger>
+        <div className="flex h-full flex-col">
+            <div className="flex-1 space-y-4 p-8 pt-6">
+                <div className="flex items-center justify-between space-y-2">
+                    <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+                    <div className="flex items-center space-x-2">
+
+                        <Button size="sm">Download</Button>
+                    </div>
                 </div>
-                <TabsTrigger value="settings" className="flex items-center justify-start px-4 py-2 w-full mt-auto">
-                    <Settings className="mr-2 h-5 w-5"/>
-                    Settings
-                </TabsTrigger>
-            </TabsList>
-
-            {/* Main Content Area */}
-            <div className="flex-1 overflow-auto p-8">
-                <TabsContent value="dashboard">
-
-                    {mainCard}
-
-                    {/* Rest of the dashboard content */}
-                    {/* ... (include the grid of cards, deployed applications, and other elements) ... */}
-                </TabsContent>
-
-                <TabsContent value="deployments">
-                    <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Deployments</h2>
-                    {/* Add deployment-specific content here */}
-                </TabsContent>
-
-                <TabsContent value="servers">
-                    <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Servers</h2>
-                    {/* Add server-specific content here */}
-                </TabsContent>
-
-                <TabsContent value="team">
-                    <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Team</h2>
-                    {/* Add team-specific content here */}
-                </TabsContent>
-
-                <TabsContent value="settings">
-                    <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Settings</h2>
-                    {/* Add settings-specific content here */}
-                </TabsContent>
+                <Tabs defaultValue="overview" className="space-y-4">
+                    <TabsList>
+                        <TabsTrigger value="overview">Overview</TabsTrigger>
+                        <TabsTrigger value="analytics" disabled>
+                            Analytics
+                        </TabsTrigger>
+                        <TabsTrigger value="reports" disabled>
+                            Reports
+                        </TabsTrigger>
+                        <TabsTrigger value="notifications" disabled>
+                            Notifications
+                        </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="overview" className="space-y-4">
+                        {mainCard}
+                    </TabsContent>
+                </Tabs>
             </div>
-        </Tabs>
+        </div>
     )
 }

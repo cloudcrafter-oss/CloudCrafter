@@ -47,14 +47,33 @@ public class ProjectsService(
         Guid environmentId)
     {
         var environment = await environmentRepository.GetEnvironment(environmentId, projectId);
-       
-        if (environment is null)
+
+        if (environment?.Project is null)
         {
             return null;
         }
 
+        // TODO: Fix dummy code
 
-        return null;
+        var randomBool = new Random().Next(0, 2) == 1;
+        DateTime? lastDeploymentDate = null;
+        if (randomBool)
+        {
+            lastDeploymentDate = DateTime.UtcNow.AddDays(-1);
+        }
 
+        var randomNumberOfDeployedApplications = new Random().Next(1, 11);
+
+        var dto = new ProjectEnvironmentEnhancedDto
+        {
+            EnvironmentName = environment.Name,
+            DeployedApplications = new List<DeployedApplicationDto>(),
+            EnvironmentCreatedAt = environment.CreatedAt,
+            ProjectName = environment.Project.Name,
+            DeployedApplicationsCount = randomNumberOfDeployedApplications,
+            LastDeploymentAt = lastDeploymentDate
+        };
+
+        return dto;
     }
 }
