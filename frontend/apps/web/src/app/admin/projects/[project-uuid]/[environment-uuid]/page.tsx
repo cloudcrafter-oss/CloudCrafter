@@ -1,12 +1,13 @@
 import { EnvironmentBadge } from '@/src/components/EnvironmentBadge'
 import ShowDate from '@/src/components/ShowDate'
+import { StackHealthBadge } from '@/src/components/Stacks/StackHealthBadge'
+import ProjectConfigPage from '@/src/components/project-detail/ProjectConfigPage'
 import { ProjectHealthStatus } from '@/src/components/project-detail/ProjectHealthStatus'
 import { getProjectEnvironmentEnhanced } from '@/src/core/generated'
 import {
 	type ProjectEnvironmentRouteParams,
 	validateRouteParams,
 } from '@/src/utils/routes/schemas.ts'
-import { Badge } from '@ui/components/ui/badge.tsx'
 import { Button } from '@ui/components/ui/button.tsx'
 import {
 	Card,
@@ -30,8 +31,6 @@ import {
 } from '@ui/components/ui/tabs.tsx'
 import {
 	Activity,
-	ActivityIcon,
-	AlertCircle,
 	Box,
 	CheckCircle,
 	ChevronRight,
@@ -45,7 +44,6 @@ import {
 	Server,
 	XCircle,
 } from 'lucide-react'
-import React from 'react'
 
 interface PageProps {
 	params: ProjectEnvironmentRouteParams
@@ -54,19 +52,26 @@ interface PageProps {
 export default async function ProjectEnvironmentPage({ params }: PageProps) {
 	// Validate the route params
 	const routeData = validateRouteParams(params)
-	const deployedApps = [
-		{ name: 'Frontend App', healthy: true },
-		{ name: 'Backend API', healthy: true },
-		{ name: 'Database Service', healthy: false },
-		{ name: 'Caching Layer', healthy: true },
-		{ name: 'Message Queue', healthy: true },
-		{ name: 'Monitoring Service', healthy: false },
-	]
 
 	const projectDetails = await getProjectEnvironmentEnhanced(
 		routeData['project-uuid'],
 		routeData['environment-uuid'],
 	)
+
+	const tabs = [
+		{
+			name: 'Overview',
+			key: 'overview',
+		},
+		{
+			name: 'Configuration',
+			key: 'configuration',
+		},
+		{
+			name: 'Deployments',
+			key: 'deployments',
+		},
+	]
 
 	const mainCard = (
 		<>
@@ -163,28 +168,26 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 
 			<div className='mb-8'>
 				<h2 className='text-2xl font-bold mb-4 text-gray-800 dark:text-white'>
-					Deployed Applications
+					Deployed Stacks
 				</h2>
 				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-					{deployedApps.map((app) => (
+					{projectDetails.deployedStacks.map((stack) => (
 						<Card
-							key={app.name}
+							key={stack.name}
 							className='bg-white dark:bg-gray-800 shadow hover:shadow-md transition-shadow duration-200'
 						>
 							<CardContent className='p-4 flex items-center justify-between'>
 								<div className='flex items-center space-x-3'>
-									{app.healthy ? (
+									{stack.healthStatus === 'Healthy' ? (
 										<CheckCircle className='text-green-500 h-5 w-5' />
 									) : (
 										<XCircle className='text-red-500 h-5 w-5' />
 									)}
 									<span className='font-medium text-gray-700 dark:text-gray-200'>
-										{app.name}
+										{stack.name}
 									</span>
 								</div>
-								<Badge variant={app.healthy ? 'default' : 'destructive'}>
-									{app.healthy ? 'Healthy' : 'Unhealthy'}
-								</Badge>
+								<StackHealthBadge stack={stack} />
 							</CardContent>
 						</Card>
 					))}
@@ -269,7 +272,7 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 						<CardContent>
 							<ul className='space-y-4'>
 								{[
-									'Web Application',
+									'Web stacklication',
 									'Database Cluster',
 									'Monitoring Stack',
 								].map((stack, index) => (
@@ -348,7 +351,7 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 								<SelectValue placeholder='Select a stack to deploy' />
 							</SelectTrigger>
 							<SelectContent>
-								<SelectItem value='web-app'>Web Application</SelectItem>
+								<SelectItem value='web-stack'>Web stacklication</SelectItem>
 								<SelectItem value='database'>Database Cluster</SelectItem>
 								<SelectItem value='monitoring'>Monitoring Stack</SelectItem>
 							</SelectContent>
@@ -366,27 +369,19 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 	return (
 		<div className='flex h-full flex-col'>
 			<div className='flex-1 space-y-4 p-8 pt-6'>
-				<div className='flex items-center justify-between space-y-2'>
-					<h2 className='text-3xl font-bold tracking-tight'>Dashboard</h2>
-					<div className='flex items-center space-x-2'>
-						<Button size='sm'>Download</Button>
-					</div>
-				</div>
 				<Tabs defaultValue='overview' className='space-y-4'>
 					<TabsList>
-						<TabsTrigger value='overview'>Overview</TabsTrigger>
-						<TabsTrigger value='analytics' disabled>
-							Analytics
-						</TabsTrigger>
-						<TabsTrigger value='reports' disabled>
-							Reports
-						</TabsTrigger>
-						<TabsTrigger value='notifications' disabled>
-							Notifications
-						</TabsTrigger>
+						{tabs.map((tab) => (
+							<TabsTrigger key={tab.key} value={tab.key}>
+								{tab.name}
+							</TabsTrigger>
+						))}
 					</TabsList>
 					<TabsContent value='overview' className='space-y-4'>
 						{mainCard}
+					</TabsContent>
+					<TabsContent value='configuration' className='space-y-4'>
+						<ProjectConfigPage />
 					</TabsContent>
 				</Tabs>
 			</div>

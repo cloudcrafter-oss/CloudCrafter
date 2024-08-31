@@ -250,6 +250,7 @@ export function useDataTable<TData, TValue>({
 
 	const [mounted, setMounted] = React.useState(false)
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: it is being serialized and passed as a dependency
 	React.useEffect(() => {
 		// Opt out when advanced filter is enabled, because it contains additional params
 		if (enableAdvancedFilter) return
