@@ -11,7 +11,6 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@ui/components/ui/dropdown-menu.tsx'
-import React from 'react'
 
 interface DataTableViewOptionsProps<TData> {
 	table: Table<TData>

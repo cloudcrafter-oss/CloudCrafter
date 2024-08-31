@@ -59,4 +59,8 @@ export const operations = {
 		path: '/api/Users/test',
 		method: 'get',
 	},
+	PostValidateGithubRepo: {
+		path: '/api/Utils/validate-git-repository',
+		method: 'post',
+	},
 } as const

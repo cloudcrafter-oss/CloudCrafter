@@ -6,7 +6,6 @@ import { Button } from '@ui/components/ui/button.tsx'
 import { cn } from '@ui/lib/utils.ts'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import React from 'react'
 
 export const LayoutHeader = () => {
 	const { data: sessionData } = useSession()

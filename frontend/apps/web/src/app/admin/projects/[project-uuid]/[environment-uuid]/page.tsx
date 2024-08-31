@@ -40,7 +40,6 @@ import {
 	Database,
 	Layers,
 	Play,
-	Plus,
 	RefreshCw,
 	Server,
 	XCircle,

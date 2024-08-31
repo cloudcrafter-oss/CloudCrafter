@@ -1,6 +1,5 @@
 'use client'
 
-import type React from 'react'
 import {
 	Card,
 	CardContent,
@@ -15,6 +14,7 @@ import {
 	TabsTrigger,
 } from '@ui/components/ui/tabs'
 import { cn } from '@ui/lib/utils'
+import type React from 'react'
 
 // Define the content sections
 const sections = [

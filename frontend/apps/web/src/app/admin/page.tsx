@@ -8,7 +8,6 @@ import {
 } from '@ui/components/ui/card.tsx'
 import { Tabs, TabsContent, TabsTrigger } from '@ui/components/ui/tabs'
 import { TabsList } from '@ui/components/ui/tabs.tsx'
-import React from 'react'
 
 export default function Page() {
 	return (

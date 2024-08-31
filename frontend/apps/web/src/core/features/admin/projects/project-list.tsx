@@ -7,7 +7,7 @@ import { Button } from '@ui/components/ui/button.tsx'
 import { Sheet, SheetContent, SheetTrigger } from '@ui/components/ui/sheet'
 import { RefreshCwIcon, RepeatIcon, SettingsIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useSWRConfig } from 'swr'
 
 function CircleStopIcon({ className }: { className: string }) {

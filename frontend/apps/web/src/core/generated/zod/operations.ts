@@ -50,6 +50,10 @@ import {
 	postRefreshTokensMutationRequestSchema,
 	postRefreshTokensMutationResponseSchema,
 } from './postRefreshTokensSchema'
+import {
+	postValidateGithubRepoMutationRequestSchema,
+	postValidateGithubRepoMutationResponseSchema,
+} from './postValidateGithubRepoSchema'
 import { testQueryResponseSchema } from './testSchema'
 import {
 	updateProjectMutationRequestSchema,
@@ -272,6 +276,19 @@ export const operations = {
 		},
 		errors: {},
 	},
+	PostValidateGithubRepo: {
+		request: postValidateGithubRepoMutationRequestSchema,
+		parameters: {
+			path: undefined,
+			query: undefined,
+			header: undefined,
+		},
+		responses: {
+			200: postValidateGithubRepoMutationResponseSchema,
+			default: postValidateGithubRepoMutationResponseSchema,
+		},
+		errors: {},
+	},
 } as const
 export const paths = {
 	'/api/Applications/{applicationId}/deployment': {
@@ -315,5 +332,8 @@ export const paths = {
 	},
 	'/api/Users/test': {
 		get: operations['Test'],
+	},
+	'/api/Utils/validate-git-repository': {
+		post: operations['PostValidateGithubRepo'],
 	},
 } as const

@@ -4,7 +4,6 @@ import { DataTableColumnHeader } from '@/src/components/datatable/components/dat
 import type { UserDto } from '@/src/core/generated'
 import type { ColumnDef } from '@tanstack/react-table'
 import { Checkbox } from '@ui/components/ui/checkbox.tsx'
-import * as React from 'react'
 
 export function getColumns(): ColumnDef<UserDto>[] {
 	return [

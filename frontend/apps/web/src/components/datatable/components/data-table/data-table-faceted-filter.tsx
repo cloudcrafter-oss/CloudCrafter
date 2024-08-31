@@ -19,7 +19,6 @@ import {
 } from '@ui/components/ui/popover.tsx'
 import { Separator } from '@ui/components/ui/separator.tsx'
 import { cn } from '@ui/lib/utils.ts'
-import React from 'react'
 
 interface DataTableFacetedFilterProps<TData, TValue> {
 	column?: Column<TData, TValue>

@@ -1,5 +1,4 @@
 import { CloudcrafterBreadcrumbs } from '@/src/layout/components/breadcrumbs.tsx'
-import React from 'react'
 
 export function TopNav() {
 	return (

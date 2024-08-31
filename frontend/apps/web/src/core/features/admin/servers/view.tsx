@@ -20,7 +20,6 @@ import {
 import { Textarea } from '@ui/components/ui/textarea.tsx'
 import { DatabaseIcon, PackageIcon, ServerIcon } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
 
 export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
 	console.log({ server })

@@ -33,7 +33,7 @@ import {
 import { Spinner } from '@ui/components/ui/spinner.tsx'
 import { SettingsIcon } from 'lucide-react'
 import { useAction } from 'next-safe-action/hooks'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
