@@ -31,7 +31,7 @@ interface PageProps {
 
 export default function ProjectEnvironmentPage({ params }: PageProps) {
     // Validate the route params
-    const validatedParams = validateRouteParams(params)
+    validateRouteParams(params)
     const deployedApps = [
         { name: 'Frontend App', healthy: true },
         { name: 'Backend API', healthy: true },
@@ -134,7 +134,7 @@ export default function ProjectEnvironmentPage({ params }: PageProps) {
                                     )}
                                     <span className="font-medium text-gray-700 dark:text-gray-200">{app.name}</span>
                                 </div>
-                                <Badge variant={app.healthy ? 'success' : 'destructive'}>
+                                <Badge variant={app.healthy ? 'default' : 'destructive'}>
                                     {app.healthy ? 'Healthy' : 'Unhealthy'}
                                 </Badge>
                             </CardContent>
