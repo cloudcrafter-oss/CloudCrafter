@@ -9,6 +9,15 @@
 			"recommended": true
 		}
 	},
+	"files": {
+		"ignore": [
+			"**/node_modules/**",
+			"**/dist/**",
+			"**/build/**",
+			"**/public/**",
+			"**/.next/**"
+		]
+	},
 	"javascript": {
 		"formatter": {
 			"semicolons": "asNeeded",

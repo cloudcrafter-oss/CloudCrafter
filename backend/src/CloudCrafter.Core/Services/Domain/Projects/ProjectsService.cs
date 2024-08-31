@@ -67,10 +67,10 @@ public class ProjectsService(
         var dto = new ProjectEnvironmentEnhancedDto
         {
             EnvironmentName = environment.Name,
-            DeployedApplications = new List<DeployedApplicationDto>(),
+            DeployedStacks = new List<DeployedStackDto>(),
             EnvironmentCreatedAt = environment.CreatedAt,
             ProjectName = environment.Project.Name,
-            DeployedApplicationsCount = randomNumberOfDeployedApplications,
+            DeployedStackCount = randomNumberOfDeployedApplications,
             LastDeploymentAt = lastDeploymentDate
         };
 
