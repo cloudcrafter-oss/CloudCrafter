@@ -50,7 +50,6 @@ const ProjectConfigPage: React.FC = () => {
 			<div className='flex h-screen'>
 				{/* Sidebar */}
 				<TabsList className='w-64 h-full bg-slate-100 dark:bg-slate-800 flex flex-col items-start justify-start p-6 space-y-4 border-r'>
-					{' '}
 					{sections.map((section) => (
 						<TabsTrigger
 							key={section.id}

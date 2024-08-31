@@ -2,6 +2,7 @@ import { EnvironmentBadge } from '@/src/components/EnvironmentBadge'
 import ShowDate from '@/src/components/ShowDate'
 import { StackHealthBadge } from '@/src/components/Stacks/StackHealthBadge'
 import ProjectConfigPage from '@/src/components/project-detail/ProjectConfigPage'
+import { ProjectDetailCreateStackSheet } from '@/src/components/project-detail/ProjectDetailCreateStackSheet'
 import { ProjectHealthStatus } from '@/src/components/project-detail/ProjectHealthStatus'
 import { getProjectEnvironmentEnhanced } from '@/src/core/generated'
 import {
@@ -153,10 +154,7 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 					</CardHeader>
 					<CardContent>
 						<div className='flex space-x-2'>
-							<Button size='sm' variant='outline'>
-								<Plus className='h-4 w-4 mr-1' />
-								New Stack
-							</Button>
+							<ProjectDetailCreateStackSheet />
 							<Button size='sm' variant='outline'>
 								<RefreshCw className='h-4 w-4 mr-1' />
 								Refresh
