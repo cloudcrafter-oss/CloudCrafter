@@ -2,6 +2,8 @@
   <Sdk Name="Microsoft.Build.CentralPackageVersions" Version="2.1.3"/>
 
   <ItemGroup>
+    <!-- TODO: Remove once there is no demo data anymore -->
+    <PackageReference Include="Bogus"/>
     <PackageReference Include="Ardalis.GuardClauses"/>
     <PackageReference Include="Ardalis.Result"/>
     <PackageReference Include="Ardalis.SharedKernel"/>
@@ -11,19 +13,19 @@
     <PackageReference Include="MediatR"/>
     <PackageReference Include="AutoMapper"/>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CloudCrafter.Domain\CloudCrafter.Domain.csproj"/>
-    <ProjectReference Include="..\CloudCrafter.Jobs.Service\CloudCrafter.Jobs.Service.csproj" />
-    <ProjectReference Include="..\engine\CloudCrafter.DeploymentEngine.Domain\CloudCrafter.DeploymentEngine.Domain.csproj" />
-    <ProjectReference Include="..\engine\CloudCrafter.DeploymentEngine.Remote\CloudCrafter.DeploymentEngine.Remote.csproj" />
+    <ProjectReference Include="..\CloudCrafter.Jobs.Service\CloudCrafter.Jobs.Service.csproj"/>
+    <ProjectReference Include="..\engine\CloudCrafter.DeploymentEngine.Domain\CloudCrafter.DeploymentEngine.Domain.csproj"/>
+    <ProjectReference Include="..\engine\CloudCrafter.DeploymentEngine.Remote\CloudCrafter.DeploymentEngine.Remote.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\Requests\" />
+    <Folder Include="Common\Requests\"/>
   </ItemGroup>
 
 </Project>

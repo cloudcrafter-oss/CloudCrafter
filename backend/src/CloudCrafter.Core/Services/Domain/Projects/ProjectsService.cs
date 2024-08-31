@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bogus;
 using CloudCrafter.Core.Commands.Projects;
 using CloudCrafter.Core.Events;
 using CloudCrafter.Core.Events.Projects;
@@ -64,10 +65,22 @@ public class ProjectsService(
 
         var randomNumberOfDeployedApplications = new Random().Next(1, 11);
 
+        DeployedStackDto randomStack()
+        {
+            return new Faker<DeployedStackDto>()
+                .StrictMode(true)
+                .RuleFor(x => x.StackId, Guid.NewGuid)
+                .RuleFor(x => x.Name, f => f.Commerce.ProductName())
+                .RuleFor(x => x.HealthStatus,
+                    f => randomBool ? StackHealthStatus.Healthy : f.PickRandom<StackHealthStatus>())
+                .Generate();
+        }
+
         var dto = new ProjectEnvironmentEnhancedDto
         {
             EnvironmentName = environment.Name,
-            DeployedStacks = new List<DeployedStackDto>(),
+            DeployedStacks =
+                new List<DeployedStackDto> { randomStack(), randomStack(), randomStack(), randomStack() },
             EnvironmentCreatedAt = environment.CreatedAt,
             ProjectName = environment.Project.Name,
             DeployedStackCount = randomNumberOfDeployedApplications,

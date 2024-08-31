@@ -1,5 +1,6 @@
 import { EnvironmentBadge } from '@/src/components/EnvironmentBadge'
 import ShowDate from '@/src/components/ShowDate'
+import { ProjectHealthStatus } from '@/src/components/project-detail/ProjectHealthStatus'
 import { getProjectEnvironmentEnhanced } from '@/src/core/generated'
 import {
 	type ProjectEnvironmentRouteParams,
@@ -102,10 +103,10 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 						<div className='mt-4 md:mt-0 flex space-x-4'>
 							<div className='text-center'>
 								<div className='text-2xl font-bold text-blue-600 dark:text-blue-400'>
-									5
+									{projectDetails.deployedStackCount}
 								</div>
 								<div className='text-sm text-gray-500 dark:text-gray-400'>
-									Total Deployments
+									Total Stacks
 								</div>
 							</div>
 							<div className='text-center'>
@@ -113,7 +114,7 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 									3
 								</div>
 								<div className='text-sm text-gray-500 dark:text-gray-400'>
-									Active Instances
+									Active Deployments
 								</div>
 							</div>
 						</div>
@@ -129,26 +130,16 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 						<Layers className='h-5 w-5 text-blue-500' />
 					</CardHeader>
 					<CardContent>
-						<div className='text-3xl font-bold'>5</div>
+						<div className='text-3xl font-bold'>
+							{projectDetails.deployedStackCount}
+						</div>
 						<p className='text-sm text-gray-500 dark:text-gray-400'>
 							Total active stacks
 						</p>
 					</CardContent>
 				</Card>
 				<Card className='bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300'>
-					<CardHeader className='flex flex-row items-center justify-between pb-2'>
-						<CardTitle className='text-lg font-medium'>Health Status</CardTitle>
-						<ActivityIcon className='h-5 w-5 text-yellow-500' />
-					</CardHeader>
-					<CardContent>
-						<div className='flex items-center space-x-2'>
-							<AlertCircle className='h-5 w-5 text-yellow-500' />
-							<span className='text-lg font-medium'>Warning</span>
-						</div>
-						<p className='text-sm text-gray-500 dark:text-gray-400'>
-							2 services require attention
-						</p>
-					</CardContent>
+					<ProjectHealthStatus project={projectDetails} />
 				</Card>
 				<Card className='bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300'>
 					<CardHeader className='flex flex-row items-center justify-between pb-2'>
@@ -175,9 +166,9 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 					Deployed Applications
 				</h2>
 				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-					{deployedApps.map((app, index) => (
+					{deployedApps.map((app) => (
 						<Card
-							key={index}
+							key={app.name}
 							className='bg-white dark:bg-gray-800 shadow hover:shadow-md transition-shadow duration-200'
 						>
 							<CardContent className='p-4 flex items-center justify-between'>
@@ -283,7 +274,7 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 									'Monitoring Stack',
 								].map((stack, index) => (
 									<li
-										key={index}
+										key={stack}
 										className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200'
 									>
 										<div className='flex items-center space-x-3'>
@@ -318,9 +309,9 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 									'server-01.example.com',
 									'server-02.example.com',
 									'server-03.example.com',
-								].map((server, index) => (
+								].map((server) => (
 									<li
-										key={index}
+										key={server}
 										className='flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200'
 									>
 										<div className='flex items-center space-x-3'>

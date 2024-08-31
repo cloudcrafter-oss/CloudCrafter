@@ -1,4 +1,4 @@
-import type { DeployedApplicationDto } from './DeployedApplicationDto'
+import type { DeployedStackDto } from './DeployedStackDto'
 
 export type ProjectEnvironmentEnhancedDto = {
 	/**
@@ -8,7 +8,7 @@ export type ProjectEnvironmentEnhancedDto = {
 	/**
 	 * @type integer, int32
 	 */
-	deployedApplicationsCount: number
+	deployedStackCount: number
 	/**
 	 * @type string, date-time
 	 */
@@ -24,5 +24,5 @@ export type ProjectEnvironmentEnhancedDto = {
 	/**
 	 * @type array
 	 */
-	deployedApplications: DeployedApplicationDto[]
+	deployedStacks: DeployedStackDto[]
 }
