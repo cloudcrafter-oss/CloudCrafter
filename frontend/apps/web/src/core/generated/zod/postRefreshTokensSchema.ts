@@ -1,14 +1,18 @@
 import { z } from 'zod'
-import { tokenDtoSchema } from './tokenDtoSchema'
 import { postRefreshUserTokensQuerySchema } from './postRefreshUserTokensQuerySchema'
+import { tokenDtoSchema } from './tokenDtoSchema'
 
- /**
+/**
  * @description OK
  */
 export const postRefreshTokens200Schema = z.lazy(() => tokenDtoSchema)
 
- export const postRefreshTokensMutationRequestSchema = z.lazy(() => postRefreshUserTokensQuerySchema)
+export const postRefreshTokensMutationRequestSchema = z.lazy(
+	() => postRefreshUserTokensQuerySchema,
+)
 /**
  * @description OK
  */
-export const postRefreshTokensMutationResponseSchema = z.lazy(() => tokenDtoSchema)
+export const postRefreshTokensMutationResponseSchema = z.lazy(
+	() => tokenDtoSchema,
+)

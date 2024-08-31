@@ -1,7 +1,7 @@
 import type { Adapter } from 'next-auth/adapters'
 
 function CloudCrafterAdapter(): Adapter {
-    return {}
+	return {}
 }
 
 export default CloudCrafterAdapter

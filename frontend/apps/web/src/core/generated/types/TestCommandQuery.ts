@@ -1,6 +1,6 @@
 export type TestCommandQuery = {
-    /**
-     * @type boolean
-    */
-    fail: boolean;
-};
+	/**
+	 * @type boolean
+	 */
+	fail: boolean
+}

@@ -1,9 +1,9 @@
-import { SortDirection } from './SortDirection'
+import type { SortDirection } from './SortDirection'
 
- export type SortModel = {
-    /**
-     * @type string
-    */
-    field: string;
-    direction: SortDirection;
-};
+export type SortModel = {
+	/**
+	 * @type string
+	 */
+	field: string
+	direction: SortDirection
+}

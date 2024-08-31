@@ -1,8 +1,7 @@
 import { z } from 'zod'
 import { projectDtoSchema } from './projectDtoSchema'
 
-
-export const getProjectPathParamsSchema = z.object({ 'id': z.string().uuid() })
+export const getProjectPathParamsSchema = z.object({ id: z.string().uuid() })
 /**
  * @description OK
  */

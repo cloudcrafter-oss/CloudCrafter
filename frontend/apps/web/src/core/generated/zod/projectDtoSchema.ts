@@ -1,5 +1,11 @@
-import { environmentDtoSchema } from './environmentDtoSchema'
 import { z } from 'zod'
+import { environmentDtoSchema } from './environmentDtoSchema'
 
-
-export const projectDtoSchema = z.object({ 'id': z.string().uuid(), 'name': z.string(), 'description': z.string().nullable().nullish(), 'createdAt': z.string().datetime(), 'updatedAt': z.string().datetime(), 'environments': z.array(z.lazy(() => environmentDtoSchema)) })
+export const projectDtoSchema = z.object({
+	id: z.string().uuid(),
+	name: z.string(),
+	description: z.string().nullable().nullish(),
+	createdAt: z.string().datetime(),
+	updatedAt: z.string().datetime(),
+	environments: z.array(z.lazy(() => environmentDtoSchema)),
+})

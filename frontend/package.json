@@ -1,20 +1,20 @@
 {
-  "private": true,
-  "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint -- --fix",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "ui:add": "pnpm --filter @repo/ui ui:add",
-    "format-and-lint": "biome check .",
-    "format-and-lint:fix": "biome check . --write"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.8.3",
-    "eslint": "^8.57.0",
-    "prettier": "^3.2.5",
-    "turbo": "^2.0.6"
-  },
-  "packageManager": "pnpm@8.15.6",
-  "name": "with-vite"
+	"private": true,
+	"scripts": {
+		"build": "turbo build",
+		"dev": "turbo dev",
+		"lint": "turbo lint -- --fix",
+		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
+		"ui:add": "pnpm --filter @repo/ui ui:add",
+		"format-and-lint": "biome check .",
+		"format-and-lint:fix": "biome check . --write"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.8.3",
+		"eslint": "^8.57.0",
+		"prettier": "^3.2.5",
+		"turbo": "^2.0.6"
+	},
+	"packageManager": "pnpm@8.15.6",
+	"name": "with-vite"
 }

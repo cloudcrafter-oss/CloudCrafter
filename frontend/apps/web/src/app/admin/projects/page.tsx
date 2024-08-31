@@ -1,9 +1,9 @@
 'use server'
-import { getProjects } from '@/src/core/generated'
 import { ProjectList } from '@/src/core/features/admin/projects/project-list.tsx'
+import { getProjects } from '@/src/core/generated'
 
 export default async function Page() {
-    const projects = await getProjects()
+	const projects = await getProjects()
 
-    return <ProjectList projects={projects}/>
+	return <ProjectList projects={projects} />
 }
