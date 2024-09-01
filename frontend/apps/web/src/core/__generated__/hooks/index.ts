@@ -9,6 +9,7 @@ export * from "./useGetServersHook";
 export * from "./useGetTestHook";
 export * from "./useGetUsersHook";
 export * from "./usePostCreateDeploymentHook";
+export * from "./usePostCreateStackHook";
 export * from "./usePostCreateUserHook";
 export * from "./usePostLoginUserHook";
 export * from "./usePostRefreshTokensHook";

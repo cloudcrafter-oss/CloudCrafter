@@ -43,6 +43,10 @@ export const operations = {
         "path": "/api/Servers/:id",
         "method": "get"
     },
+    "PostCreateStack": {
+        "path": "/api/Stacks",
+        "method": "post"
+    },
     "GetFilterableFields": {
         "path": "/api/System/get-fields",
         "method": "get"

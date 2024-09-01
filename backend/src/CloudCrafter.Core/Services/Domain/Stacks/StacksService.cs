@@ -6,10 +6,10 @@ namespace CloudCrafter.Core.Services.Domain.Stacks;
 
 public class StacksService(IStackRepository repository) : IStacksService
 {
-    public async Task<StackCreatedDto> CreateStack(string name, string gitRepository)
+    public async Task<StackCreatedDto> CreateStack(CreateStackArgsDto args)
     {
-        var createdStack = await repository.CreateStack(name, gitRepository);
+        var createdStack = await repository.CreateStack(args);
 
-        return new() { Id = Guid.NewGuid() };
+        return new StackCreatedDto { Id = Guid.NewGuid() };
     }
 }

@@ -7,8 +7,9 @@ public class Stack : IHasTimestamps
     public required Guid Id { get; init; }
     public required string Name { get; init; }
     public Environment? Environment { get; set; }
-    public Guid EnvironmentId { get; set; }
-    public required Server Server { get; set; }
+    public required Guid EnvironmentId { get; set; }
+    public Server? Server { get; set; }
+    public required Guid ServerId { get; set; }
 
     public ApplicationSource? Source { get; set; }
 

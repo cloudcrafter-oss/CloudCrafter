@@ -12,13 +12,25 @@ public static class CreateStackCommand
     {
         public required string Name { get; init; }
         public required string GitRepository { get; init; }
+
+        public required Guid ServerId { get; set; }
+
+        public required Guid EnvironmentId { get; set; }
     }
-    
+
     private class Handler(IStacksService service) : IRequestHandler<Command, StackCreatedDto>
     {
         public async Task<StackCreatedDto> Handle(Command request, CancellationToken cancellationToken)
         {
-            return await service.CreateStack(request.Name, request.GitRepository);
+            var args = new CreateStackArgsDto
+            {
+                Name = request.Name,
+                EnvironmentId = request.EnvironmentId,
+                ServerId = request.ServerId,
+                GitRepository = request.GitRepository
+            };
+
+            return await service.CreateStack(args);
         }
     }
 }

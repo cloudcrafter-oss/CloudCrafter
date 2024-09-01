@@ -1,6 +1,9 @@
-﻿namespace CloudCrafter.Core.Interfaces.Repositories;
+﻿using CloudCrafter.Domain.Domain.Stack;
+using CloudCrafter.Domain.Entities;
+
+namespace CloudCrafter.Core.Interfaces.Repositories;
 
 public interface IStackRepository
 {
-    Task<object> CreateStack(string name, string gitRepository);
+    Task<Stack> CreateStack(CreateStackArgsDto args);
 }
