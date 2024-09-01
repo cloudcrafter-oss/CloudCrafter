@@ -56,7 +56,10 @@ public class Projects : EndpointGroupBase
     public async Task<IResult> GetProjectEnvironmentEnhanced([FromRoute] Guid id, [FromRoute] Guid environmentId,
         ISender sender)
     {
-        var details = await sender.Send(new GetProjectEnvironmentEnhancedDetailsQuery.Query(id, environmentId));
+        var details = await sender.Send(new GetProjectEnvironmentEnhancedDetailsQuery.Query
+        {
+            ProjectId = id, EnvironmentId = environmentId
+        });
 
         return details is not null ? Results.Ok(details) : Results.NotFound();
     }

@@ -1,10 +1,11 @@
 ﻿using CloudCrafter.Core.Interfaces.Domain.Environments;
+using CloudCrafter.Core.Interfaces.Domain.Projects;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Interfaces.Domain.Users;
 
 namespace CloudCrafter.Core.Services.Domain.Users;
 
-public class UserAccessService(IServersService serverService, IEnvironmentService environmentService) : IUserAccessService
+public class UserAccessService(IServersService serverService, IEnvironmentService environmentService, IProjectsService projectsService) : IUserAccessService
 {
     public async Task<bool> CanAccessServer(Guid userId, Guid id)
     {
@@ -20,5 +21,13 @@ public class UserAccessService(IServersService serverService, IEnvironmentServic
         
         // TODO: ACL check
         return environment != null;
+    }
+
+    public async Task<bool> CanAccessProject(Guid userId, Guid id)
+    {
+        var project = await projectsService.GetProject(id);
+
+        // TODO: ACL check
+        return project != null;
     }
 }

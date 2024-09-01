@@ -12,39 +12,41 @@ public class ServerAccessAuthorizationBehavior<TRequest, TResponse>(IUser user, 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-        if (user.Id is null)
-        {
-            throw new UnauthorizedAccessException("User is not authenticated");
-        }
+        await CheckAccess<IRequireServerAccess>(request, 
+            (r, id) => accessService.CanAccessServer(id, r.ServerId),
+            r => $"User does not have access to server {r.ServerId}");
 
-        if (request is IRequireServerAccess serverAccessRequest)
-        {
-            var exception =
-                new UnauthorizedAccessException($"User does not have access to server {serverAccessRequest.ServerId}");
+        await CheckAccess<IRequireEnvironmentAccess>(request, 
+            (r, id) => accessService.CanAccessEnvironment(id, r.EnvironmentId),
+            r => $"User does not have access to environment {r.EnvironmentId}");
 
-            var hasAccess = await accessService.CanAccessServer(user.Id.Value, serverAccessRequest.ServerId);
-
-            if (!hasAccess)
-            {
-                throw exception;
-            }
-        }
-
-        if (request is IRequireEnvironmentAccess environmentAccessRequest)
-        {
-            var exception =
-                new UnauthorizedAccessException(
-                    $"User does not have access to environment {environmentAccessRequest.EnvironmentId}");
-
-            var hasAccess =
-                await accessService.CanAccessEnvironment(user.Id.Value, environmentAccessRequest.EnvironmentId);
-
-            if (!hasAccess)
-            {
-                throw exception;
-            }
-        }
+        await CheckAccess<IRequireProjectAccess>(request, 
+            (r, id) => accessService.CanAccessProject(id, r.ProjectId),
+            r => $"User does not have access to project {r.ProjectId}");
 
         return await next();
     }
+    
+    private async Task CheckAccess<TAccessRequest>(
+        TRequest request,
+        Func<TAccessRequest, Guid, Task<bool>> accessCheck,
+        Func<TAccessRequest, string> exceptionMessageFactory)
+        where TAccessRequest : class
+    {
+        if (request is TAccessRequest accessRequest)
+        {
+            if (user.Id is null)
+            {
+                throw new UnauthorizedAccessException("User is not authenticated");
+            }
+            
+            var hasAccess = await accessCheck(accessRequest, user.Id.Value);
+
+            if (!hasAccess)
+            {
+                throw new UnauthorizedAccessException(exceptionMessageFactory(accessRequest));
+            }
+        }
+    }
+    
 }
