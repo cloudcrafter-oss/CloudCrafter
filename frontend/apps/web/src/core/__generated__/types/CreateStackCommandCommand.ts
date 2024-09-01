@@ -10,9 +10,9 @@ export type CreateStackCommandCommand = {
     /**
      * @type string, uuid
     */
-    serverId: string;
+    environmentId: string;
     /**
      * @type string, uuid
     */
-    environmentId: string;
+    serverId: string;
 };
