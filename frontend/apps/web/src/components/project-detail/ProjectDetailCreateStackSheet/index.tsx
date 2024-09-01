@@ -1,4 +1,5 @@
 'use client'
+import { useState } from 'react'
 import { Button } from '@ui/components/ui/button'
 import { Input } from '@ui/components/ui/input'
 import {
@@ -9,7 +10,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from '@ui/components/ui/sheet'
-import { Plus } from 'lucide-react'
+import { Plus, CheckCircle, Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -28,6 +29,7 @@ const formSchema = z.object({
 })
 
 export const ProjectDetailCreateStackSheet = () => {
+	const [isValidating, setIsValidating] = useState(false)
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -38,6 +40,21 @@ export const ProjectDetailCreateStackSheet = () => {
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		// Handle form submission
 		console.log(values)
+	}
+
+	async function validateRepository(url: string) {
+		setIsValidating(true)
+		try {
+			// TODO: Implement the actual validation logic here
+			// This should call your backend API to validate the repository
+			console.log('Validating repository:', url)
+			// For now, we'll just simulate a delay
+			await new Promise((resolve) => setTimeout(resolve, 1000))
+			// Return true if validation is successful, false otherwise
+			return true
+		} finally {
+			setIsValidating(false)
+		}
 	}
 
 	return (
@@ -63,9 +80,32 @@ export const ProjectDetailCreateStackSheet = () => {
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Git Repository (Public)</FormLabel>
-									<FormControl>
-										<Input {...field} autoComplete='off' />
-									</FormControl>
+									<div className='flex space-x-2'>
+										<FormControl>
+											<Input
+												{...field}
+												disabled={isValidating}
+												autoComplete='off'
+												onBlur={(e) => {
+													field.onBlur()
+													validateRepository(e.target.value)
+												}}
+											/>
+										</FormControl>
+										<Button
+											type='button'
+											size='icon'
+											variant='outline'
+											onClick={() => validateRepository(field.value)}
+											disabled={isValidating}
+										>
+											{isValidating ? (
+												<Loader2 className='h-4 w-4 animate-spin' />
+											) : (
+												<CheckCircle className='h-4 w-4' />
+											)}
+										</Button>
+									</div>
 									<FormDescription>
 										Enter the URL of your public Git repository.
 									</FormDescription>
