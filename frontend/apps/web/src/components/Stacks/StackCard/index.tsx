@@ -1,7 +1,7 @@
-import { Card, CardContent } from '@ui/components/ui/card'
-import { CheckCircle, XCircle, AlertTriangle, HelpCircle } from 'lucide-react'
-import { StackHealthBadge } from '../StackHealthBadge'
 import type { DeployedStackDto } from '@/src/core/__generated__'
+import { Card, CardContent } from '@ui/components/ui/card'
+import { AlertTriangle, CheckCircle, HelpCircle, XCircle } from 'lucide-react'
+import { StackHealthBadge } from '../StackHealthBadge'
 
 export const StackCard = ({ stack }: { stack: DeployedStackDto }) => {
 	const getHealthIcon = () => {

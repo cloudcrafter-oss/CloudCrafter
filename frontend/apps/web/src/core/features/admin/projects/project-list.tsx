@@ -1,7 +1,7 @@
 'use client'
+import type { ProjectDto } from '@/src/core/__generated__'
 import { CreateProjectSheet } from '@/src/core/features/admin/projects/create-project-sheet.tsx'
 import { ProjectListItem } from '@/src/core/features/admin/projects/project-list-item.tsx'
-import type { ProjectDto } from '@/src/core/__generated__'
 import { PlusIcon } from '@radix-ui/react-icons'
 import { Button } from '@ui/components/ui/button.tsx'
 import { Sheet, SheetContent, SheetTrigger } from '@ui/components/ui/sheet'

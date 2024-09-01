@@ -1,18 +1,13 @@
 'use client'
-import { Button } from '@ui/components/ui/button'
-import { Input } from '@ui/components/ui/input'
 import {
-	Sheet,
-	SheetContent,
-	SheetDescription,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger,
-} from '@ui/components/ui/sheet'
-import { CheckCircle, Loader2, Plus, XCircle } from 'lucide-react'
-import { useForm } from 'react-hook-form'
+	type StackCreatedDto,
+	createStackCommandCommandSchema,
+	useGetServersHook,
+	usePostCreateStackHook,
+	usePostValidateGithubRepoHook,
+} from '@/src/core/__generated__'
 import { zodResolver } from '@hookform/resolvers/zod'
-import type * as z from 'zod'
+import { Button } from '@ui/components/ui/button'
 import {
 	Form,
 	FormControl,
@@ -22,21 +17,26 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@ui/components/ui/form'
-import {
-	createStackCommandCommandSchema,
-	type StackCreatedDto,
-	useGetServersHook,
-	usePostCreateStackHook,
-	usePostValidateGithubRepoHook,
-} from '@/src/core/__generated__'
+import { Input } from '@ui/components/ui/input'
 import {
 	Select,
-	SelectTrigger,
 	SelectContent,
 	SelectItem,
+	SelectTrigger,
 } from '@ui/components/ui/select'
-import { useState } from 'react'
+import {
+	Sheet,
+	SheetContent,
+	SheetDescription,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from '@ui/components/ui/sheet'
+import { CheckCircle, Loader2, Plus, XCircle } from 'lucide-react'
 import Link from 'next/link'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import type * as z from 'zod'
 
 const formSchema = createStackCommandCommandSchema
 
