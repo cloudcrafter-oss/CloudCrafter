@@ -53,6 +53,7 @@ public static class FakerInstances
             .RuleFor(x => x.Project, f => null)
             .RuleFor(x => x.ProjectId, project.Id)
             .RuleFor(x => x.Name, f => $"Environment {f.Person.FirstName}")
+            .RuleFor(x => x.Stacks, f => new List<Stack>())
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
     }
