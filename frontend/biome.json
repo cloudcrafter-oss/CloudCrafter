@@ -18,7 +18,8 @@
 			"**/dist/**",
 			"**/build/**",
 			"**/public/**",
-			"**/.next/**"
+			"**/.next/**",
+			"**/__generated__/**"
 		]
 	},
 	"javascript": {

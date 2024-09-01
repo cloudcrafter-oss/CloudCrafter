@@ -4,10 +4,10 @@ import { StackHealthBadge } from '@/src/components/Stacks/StackHealthBadge'
 import ProjectConfigPage from '@/src/components/project-detail/ProjectConfigPage'
 import { ProjectDetailCreateStackSheet } from '@/src/components/project-detail/ProjectDetailCreateStackSheet'
 import { ProjectHealthStatus } from '@/src/components/project-detail/ProjectHealthStatus'
-import { getProjectEnvironmentEnhanced } from '@/src/core/generated'
+import { getProjectEnvironmentEnhanced } from '@/src/core/__generated__'
 import {
 	type ProjectEnvironmentRouteParams,
-	validateRouteParams,
+	validateProjectEnvironmentRouteParams,
 } from '@/src/utils/routes/schemas.ts'
 import { Button } from '@ui/components/ui/button.tsx'
 import {
@@ -51,7 +51,7 @@ interface PageProps {
 
 export default async function ProjectEnvironmentPage({ params }: PageProps) {
 	// Validate the route params
-	const routeData = validateRouteParams(params)
+	const routeData = validateProjectEnvironmentRouteParams(params)
 
 	const projectDetails = await getProjectEnvironmentEnhanced(
 		routeData['project-uuid'],

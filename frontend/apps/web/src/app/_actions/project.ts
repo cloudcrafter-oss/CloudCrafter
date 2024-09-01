@@ -7,7 +7,7 @@ import {
 	getProjects,
 	updateProject,
 	updateProjectArgsSchema,
-} from '@/src/core/generated'
+} from '@/src/core/__generated__'
 import { actionClient } from '@/src/utils/actions/safe-action.ts'
 import { z } from 'zod'
 

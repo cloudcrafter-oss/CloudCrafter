@@ -11,14 +11,14 @@ export default defineConfig({
 		path: 'http://web.127.0.0.1.sslip.io/swagger/v1/swagger.json',
 	},
 	output: {
-		path: './src/core/generated',
+		path: './src/core/__generated__',
 		clean: true,
 	},
 	hooks: {
 		done: [
-			'node src/utils/kubb/post-action.js',
-			'eslint ./src/core/generated --ext ts --fix',
-			'eslint ./src/core/filtering --ext ts --fix',
+			// 'node src/utils/kubb/post-action.js',
+			//'eslint ./src/core/generated --ext ts --fix',
+			// 'eslint ./src/core/filtering --ext ts --fix',
 		],
 	},
 	plugins: [
@@ -33,7 +33,7 @@ export default defineConfig({
 		}),
 		pluginClient({
 			output: {
-				path: './axios',
+				path: './axios-backend',
 			},
 			exclude: [
 				{
@@ -65,7 +65,9 @@ export default defineConfig({
 					return name
 				},
 			},
-
+			client: {
+				importPath: '../../frontend/client.ts',
+			},
 			output: {
 				path: './hooks',
 			},

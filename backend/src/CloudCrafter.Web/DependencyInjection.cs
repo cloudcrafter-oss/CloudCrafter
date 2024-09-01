@@ -33,6 +33,31 @@ public static class DependencyInjection
     }
 
 
+    public static IServiceCollection AddCloudCrafterCors(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy("CloudCrafterCorsPolicy", policy =>
+            {
+                var corsSettings = configuration.GetSection(CorsSettings.KEY).Get<CorsSettings>();
+
+                if (corsSettings?.AllowedOrigins != null && corsSettings.AllowedOrigins.Any())
+                {
+                    policy.WithOrigins(corsSettings.AllowedOrigins.ToArray());
+                }
+                else
+                {
+                    policy.AllowAnyOrigin();
+                }
+
+                policy.AllowAnyMethod()
+                    .AllowAnyHeader();
+                
+            });
+        });
+
+        return services;
+    }
     public static IServiceCollection AddSwaggerServices(this IServiceCollection collection)
     {
         collection.AddEndpointsApiExplorer()
