@@ -82,6 +82,7 @@ public static class ApplicationServiceExtensions
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehaviour<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ServerAccessAuthorizationBehavior<,>));
         });
 
         services.AddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>();
@@ -90,6 +91,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ICommandExecutor, CommandExecutor>();
         services.AddScoped<IUsersService, UsersService>()
             .AddScoped<IServersService, ServersService>()
+            .AddScoped<IUserAccessService, UserAccessService>()
             .AddScoped<IServerConnectivityService, ServerConnectivityService>()
             .AddScoped<IProjectsService, ProjectsService>()
             .AddScoped<IStacksService, StacksService>()

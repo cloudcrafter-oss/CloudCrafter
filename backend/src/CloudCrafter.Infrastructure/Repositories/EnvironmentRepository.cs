@@ -33,4 +33,11 @@ public class EnvironmentRepository(IApplicationDbContext context) : IEnvironment
             .Include(x => x.Project)
             .FirstOrDefaultAsync();
     }
+
+    public Task<Environment?> GetEnvironment(Guid environmentId)
+    {
+        return Environments
+            .Include(x => x.Project)
+            .FirstOrDefaultAsync(x => x.Id == environmentId);
+    }
 }
