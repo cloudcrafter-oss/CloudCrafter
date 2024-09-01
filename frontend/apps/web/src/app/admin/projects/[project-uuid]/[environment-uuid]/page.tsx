@@ -1,6 +1,6 @@
 import { EnvironmentBadge } from '@/src/components/EnvironmentBadge'
 import ShowDate from '@/src/components/ShowDate'
-import { StackHealthBadge } from '@/src/components/Stacks/StackHealthBadge'
+import { StackCard } from '@/src/components/Stacks/StackCard'
 import ProjectConfigPage from '@/src/components/project-detail/ProjectConfigPage'
 import { ProjectDetailCreateStackSheet } from '@/src/components/project-detail/ProjectDetailCreateStackSheet'
 import { ProjectHealthStatus } from '@/src/components/project-detail/ProjectHealthStatus'
@@ -33,7 +33,6 @@ import {
 import {
 	Activity,
 	Box,
-	CheckCircle,
 	ChevronRight,
 	Clock,
 	Cloud,
@@ -42,7 +41,6 @@ import {
 	Play,
 	RefreshCw,
 	Server,
-	XCircle,
 } from 'lucide-react'
 
 interface PageProps {
@@ -171,24 +169,7 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 				</h2>
 				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
 					{projectDetails.deployedStacks.map((stack) => (
-						<Card
-							key={stack.name}
-							className='bg-white dark:bg-gray-800 shadow hover:shadow-md transition-shadow duration-200'
-						>
-							<CardContent className='p-4 flex items-center justify-between'>
-								<div className='flex items-center space-x-3'>
-									{stack.healthStatus === 'Healthy' ? (
-										<CheckCircle className='text-green-500 h-5 w-5' />
-									) : (
-										<XCircle className='text-red-500 h-5 w-5' />
-									)}
-									<span className='font-medium text-gray-700 dark:text-gray-200'>
-										{stack.name}
-									</span>
-								</div>
-								<StackHealthBadge stack={stack} />
-							</CardContent>
-						</Card>
+						<StackCard key={stack.stackId} stack={stack} />
 					))}
 				</div>
 			</div>

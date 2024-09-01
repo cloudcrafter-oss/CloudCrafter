@@ -8,11 +8,13 @@ namespace CloudCrafter.Infrastructure.Repositories;
 public class EnvironmentRepository(IApplicationDbContext context) : IEnvironmentRepository
 {
     private IQueryable<Environment> Environments => context.Environments
+        .Include(x => x.Project)
+        .Include(x => x.Stacks)
         .OrderBy(x => x.CreatedAt);
 
     public Task CreateEnvironment(string name, Guid projectId)
     {
-        var environment = new Environment()
+        var environment = new Environment
         {
             Id = Guid.NewGuid(),
             Name = name,
@@ -30,14 +32,12 @@ public class EnvironmentRepository(IApplicationDbContext context) : IEnvironment
     {
         return Environments
             .Where(x => x.Id == environmentId && x.ProjectId == projectId)
-            .Include(x => x.Project)
             .FirstOrDefaultAsync();
     }
 
     public Task<Environment?> GetEnvironment(Guid environmentId)
     {
         return Environments
-            .Include(x => x.Project)
             .FirstOrDefaultAsync(x => x.Id == environmentId);
     }
 }

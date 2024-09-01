@@ -24,6 +24,7 @@ import {
 } from '@ui/components/ui/form'
 import {
 	createStackCommandCommandSchema,
+	type StackCreatedDto,
 	useGetServersHook,
 	usePostCreateStackHook,
 	usePostValidateGithubRepoHook,
@@ -35,6 +36,7 @@ import {
 	SelectItem,
 } from '@ui/components/ui/select'
 import { useState } from 'react'
+import Link from 'next/link'
 
 const formSchema = createStackCommandCommandSchema
 
@@ -51,10 +53,10 @@ export const ProjectDetailCreateStackSheet = ({
 	})
 
 	const [formIsSubmitting, setFormIsSubmitting] = useState(false)
+	const [createdStack, setCreatedStack] = useState<StackCreatedDto | null>(null)
 
 	const { mutateAsync, isPending } = usePostValidateGithubRepoHook()
-	const { mutateAsync: createStack, isPending: isCreatingStack } =
-		usePostCreateStackHook()
+	const { mutateAsync: createStack } = usePostCreateStackHook()
 	const { data: servers } = useGetServersHook()
 
 	async function validateRepository(url: string) {
@@ -88,8 +90,9 @@ export const ProjectDetailCreateStackSheet = ({
 		}
 		// Handle form submission
 		try {
-			const createdStack = await createStack(values)
-			console.log(createdStack)
+			const createdStackFromApi = await createStack(values)
+			console.log(createdStackFromApi)
+			setCreatedStack(createdStackFromApi)
 		} finally {
 			setFormIsSubmitting(false)
 		}
@@ -112,116 +115,125 @@ export const ProjectDetailCreateStackSheet = ({
 						Enter the details for your new Stack.
 					</SheetDescription>
 				</SheetHeader>
-				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-						{form.formState.errors.gitRepository && (
-							<div className='text-red-500'>
-								{form.formState.errors.gitRepository.message}
-							</div>
-						)}
-						<FormField
-							control={form.control}
-							name='name'
-							render={({ field }) => (
-								<FormItem className='space-y-2'>
-									<FormLabel>Name</FormLabel>
-									<FormControl>
-										<Input
-											disabled={inputDisabled}
-											{...field}
-											autoComplete='off'
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
+				{createdStack ? (
+					<div>
+						<h1>Stack created</h1>
+						<p>Stack ID: {createdStack.id}</p>
+						<Link href={`/admin/stacks/${createdStack.id}`}>Go to Stack</Link>
+					</div>
+				) : (
+					<Form {...form}>
+						<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+							{form.formState.errors.gitRepository && (
+								<div className='text-red-500'>
+									{form.formState.errors.gitRepository.message}
+								</div>
 							)}
-						/>
-						<FormField
-							control={form.control}
-							name='gitRepository'
-							render={({ field }) => (
-								<FormItem className='space-y-2'>
-									<FormLabel>Git Repository (Public)</FormLabel>
-									<div className='flex space-x-2'>
+							<FormField
+								control={form.control}
+								name='name'
+								render={({ field }) => (
+									<FormItem className='space-y-2'>
+										<FormLabel>Name</FormLabel>
 										<FormControl>
 											<Input
+												disabled={inputDisabled}
 												{...field}
-												disabled={inputDisabled || isPending}
 												autoComplete='off'
-												onBlur={(e) => {
-													field.onBlur()
-													validateRepository(e.target.value)
-												}}
 											/>
 										</FormControl>
-										<Button
-											type='button'
-											size='icon'
-											variant={
-												form.formState.errors.gitRepository
-													? 'destructive'
-													: 'outline'
-											} // Update variant
-											onClick={() => validateRepository(field.value)}
-											disabled={inputDisabled || isPending}
-										>
-											{isPending ? (
-												<Loader2 className='h-4 w-4 animate-spin' />
-											) : form.formState.errors.gitRepository ? (
-												<XCircle className='h-4 w-4 ' /> // Show red cross icon
-											) : (
-												<CheckCircle className='h-4 w-4' />
-											)}
-										</Button>
-									</div>
-									<FormDescription>
-										Enter the URL of your public Git repository.
-									</FormDescription>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name='serverId'
-							render={({ field }) => (
-								<FormItem className='space-y-2'>
-									<FormLabel>Server</FormLabel>
-									<FormControl>
-										<Select
-											disabled={inputDisabled}
-											onValueChange={field.onChange}
-											value={field.value}
-										>
-											<SelectTrigger>
-												{field.value
-													? servers?.find((server) => server.id === field.value)
-															?.name
-													: 'Select a server'}
-											</SelectTrigger>
-											<SelectContent>
-												{servers?.map((server) => (
-													<SelectItem key={server.id} value={server.id}>
-														{server.name} ({server.ipAddress})
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<Button type='submit' disabled={inputDisabled}>
-							{formIsSubmitting && (
-								<>
-									<Loader2 className='h-4 w-4 animate-spin' />
-								</>
-							)}
-							Add Stack
-						</Button>
-					</form>
-				</Form>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name='gitRepository'
+								render={({ field }) => (
+									<FormItem className='space-y-2'>
+										<FormLabel>Git Repository (Public)</FormLabel>
+										<div className='flex space-x-2'>
+											<FormControl>
+												<Input
+													{...field}
+													disabled={inputDisabled || isPending}
+													autoComplete='off'
+													onBlur={(e) => {
+														field.onBlur()
+														validateRepository(e.target.value)
+													}}
+												/>
+											</FormControl>
+											<Button
+												type='button'
+												size='icon'
+												variant={
+													form.formState.errors.gitRepository
+														? 'destructive'
+														: 'outline'
+												} // Update variant
+												onClick={() => validateRepository(field.value)}
+												disabled={inputDisabled || isPending}
+											>
+												{isPending ? (
+													<Loader2 className='h-4 w-4 animate-spin' />
+												) : form.formState.errors.gitRepository ? (
+													<XCircle className='h-4 w-4 ' /> // Show red cross icon
+												) : (
+													<CheckCircle className='h-4 w-4' />
+												)}
+											</Button>
+										</div>
+										<FormDescription>
+											Enter the URL of your public Git repository.
+										</FormDescription>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name='serverId'
+								render={({ field }) => (
+									<FormItem className='space-y-2'>
+										<FormLabel>Server</FormLabel>
+										<FormControl>
+											<Select
+												disabled={inputDisabled}
+												onValueChange={field.onChange}
+												value={field.value}
+											>
+												<SelectTrigger>
+													{field.value
+														? servers?.find(
+																(server) => server.id === field.value,
+															)?.name
+														: 'Select a server'}
+												</SelectTrigger>
+												<SelectContent>
+													{servers?.map((server) => (
+														<SelectItem key={server.id} value={server.id}>
+															{server.name} ({server.ipAddress})
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<Button type='submit' disabled={inputDisabled}>
+								{formIsSubmitting && (
+									<>
+										<Loader2 className='h-4 w-4 animate-spin' />
+									</>
+								)}
+								Add Stack
+							</Button>
+						</form>
+					</Form>
+				)}
 			</SheetContent>
 		</Sheet>
 	)
