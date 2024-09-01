@@ -32,7 +32,7 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     public DbSet<Server> Servers => Set<Server>();
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<Environment> Environments => Set<Environment>();
-    public DbSet<Application> Applications => Set<Application>();
+    public DbSet<Stack> Stacks => Set<Stack>();
     public DbSet<Deployment> Deployments => Set<Deployment>();
     public DbSet<BackgroundJob> Jobs => Set<BackgroundJob>();
     public DbSet<ApplicationService> ApplicationServices => Set<ApplicationService>();

@@ -8,7 +8,7 @@ public class ApplicationService : IHasTimestamps
     public required Guid ApplicationId { get; init; }
     public required Guid ApplicationServiceTypeId { get; init; }
 
-    public Application Application { get; set; } = null!;
+    public Stack Stack { get; set; } = null!;
     public ApplicationServiceType Type { get; set; } = null!;
 
     public required string Name { get; init; }

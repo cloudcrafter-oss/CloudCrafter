@@ -39,16 +39,16 @@ public static class SeedData
                 PopulateProjects(dbContext);
             }
 
-            var applicationCount = dbContext.Applications.Count();
+            var applicationCount = dbContext.Stacks.Count();
 
             if (applicationCount == 0)
             {
-                PopulateApplications(dbContext);
+                PopulateStacks(dbContext);
             }
         }
     }
 
-    public static void PopulateApplications(AppDbContext dbContext)
+    public static void PopulateStacks(AppDbContext dbContext)
     {
         var firstServer = dbContext.Servers.FirstOrDefault();
 
@@ -63,13 +63,13 @@ public static class SeedData
         {
             // project should always have at least one environment
 
-            var applications = FakerInstances.ApplicationFaker(project.Environments.FirstOrDefault()!.Id)
+            var applications = FakerInstances.StackFaker(project.Environments.FirstOrDefault()!.Id)
                 .RuleFor(x => x.Server, firstServer)
                 .Generate(10);
 
             foreach (var application in applications)
             {
-                dbContext.Applications.Add(application);
+                dbContext.Stacks.Add(application);
             }
         }
 

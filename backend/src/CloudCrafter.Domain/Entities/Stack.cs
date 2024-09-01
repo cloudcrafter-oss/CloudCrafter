@@ -2,7 +2,7 @@
 
 namespace CloudCrafter.Domain.Entities;
 
-public class Application : IHasTimestamps
+public class Stack : IHasTimestamps
 {
     public required Guid Id { get; init; }
     public required string Name { get; init; }

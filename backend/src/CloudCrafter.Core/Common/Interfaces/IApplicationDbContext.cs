@@ -11,7 +11,7 @@ public interface IApplicationDbContext
     DbSet<Server> Servers { get; }
     DbSet<Project> Projects { get; }
     DbSet<Environment> Environments { get; }
-    DbSet<Application> Applications { get; }
+    DbSet<Stack> Stacks { get; }
     DbSet<Deployment> Deployments { get; }
     DbSet<BackgroundJob> Jobs { get; }
     DbSet<ApplicationService> ApplicationServices { get; }

@@ -7,6 +7,7 @@ using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
 using CloudCrafter.Core.Interfaces.Domain.Environments;
 using CloudCrafter.Core.Interfaces.Domain.Projects;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
+using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Domain.Utils;
 using CloudCrafter.Core.Jobs.Creation;
@@ -17,6 +18,7 @@ using CloudCrafter.Core.Services.Domain.Applications.Deployments;
 using CloudCrafter.Core.Services.Domain.Environments;
 using CloudCrafter.Core.Services.Domain.Projects;
 using CloudCrafter.Core.Services.Domain.Servers;
+using CloudCrafter.Core.Services.Domain.Stacks;
 using CloudCrafter.Core.Services.Domain.Users;
 using CloudCrafter.Core.Services.Domain.Utils;
 using CloudCrafter.Domain;
@@ -90,6 +92,7 @@ public static class ApplicationServiceExtensions
             .AddScoped<IServersService, ServersService>()
             .AddScoped<IServerConnectivityService, ServerConnectivityService>()
             .AddScoped<IProjectsService, ProjectsService>()
+            .AddScoped<IStacksService, StacksService>()
             .AddScoped<IEnvironmentService, EnvironmentsService>()
             .AddScoped<IGitService, GitService>()
             .AddScoped<IDeploymentService, DeploymentService>();
