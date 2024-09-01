@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Core.Common.Interfaces.Access;
+﻿using System.ComponentModel.DataAnnotations;
+using CloudCrafter.Core.Common.Interfaces.Access;
 using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Domain.Domain.Stack;
@@ -11,8 +12,9 @@ public static class CreateStackCommand
     [Authorize]
     public class Command : IRequest<StackCreatedDto>, IRequireServerAccess, IRequireEnvironmentAccess
     {
-        public required string Name { get; init; }
-        public required string GitRepository { get; init; }
+        [MinLength(3)] public required string Name { get; init; }
+
+        [MinLength(1)] public required string GitRepository { get; init; }
 
         public required Guid EnvironmentId { get; set; }
 
