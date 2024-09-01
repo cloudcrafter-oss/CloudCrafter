@@ -1,5 +1,5 @@
 import { createProjectAction } from '@/src/app/_actions.ts'
-import { createProjectCommandCommandSchema } from '@/src/core/generated/zod/createProjectCommandCommandSchema'
+import { createProjectCommandCommandSchema } from '@/src/core/__generated__/zod/createProjectCommandCommandSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/components/ui/button.tsx'
 import {

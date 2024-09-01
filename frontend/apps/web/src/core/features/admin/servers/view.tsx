@@ -1,4 +1,4 @@
-import type { ServerDetailDto } from '@/src/core/generated'
+import type { ServerDetailDto } from '@/src/core/__generated__'
 import { Button } from '@ui/components/ui/button.tsx'
 import {
 	Card,

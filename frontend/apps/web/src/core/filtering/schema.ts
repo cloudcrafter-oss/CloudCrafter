@@ -1,4 +1,4 @@
-import { filterOperatorOption } from '@/src/core/generated'
+import { filterOperatorOption } from '@/src/core/__generated__'
 import { z } from 'zod'
 
 const filterOperatorOptionSchema = z.enum(

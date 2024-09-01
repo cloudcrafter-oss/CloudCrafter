@@ -1,5 +1,5 @@
 'use server'
-import { getServerById } from '@/src/core/generated'
+import { getServerById } from '@/src/core/__generated__'
 
 export async function UpdateProjectSheet({ projectId }: { projectId: string }) {
 	const project = await getServerById(projectId)

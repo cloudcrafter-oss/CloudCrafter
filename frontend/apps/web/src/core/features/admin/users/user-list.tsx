@@ -1,5 +1,5 @@
 import { TasksTableProvider } from '@/src/core/features/admin/users/provider.tsx'
-import { getUsers } from '@/src/core/generated'
+import { getUsers } from '@/src/core/__generated__'
 import type { SearchParams } from 'nuqs/parsers'
 import React from 'react'
 

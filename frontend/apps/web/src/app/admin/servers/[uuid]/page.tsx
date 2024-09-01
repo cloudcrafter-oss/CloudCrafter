@@ -1,5 +1,5 @@
 import { ViewServerDetail } from '@/src/core/features/admin/servers/view.tsx'
-import { getServerById } from '@/src/core/generated'
+import { getServerById } from '@/src/core/)generated__'
 import { addBreadcrumb, resetBreadcrumbs } from '@/src/utils/breadcrumbs'
 import { notFound } from 'next/navigation'
 

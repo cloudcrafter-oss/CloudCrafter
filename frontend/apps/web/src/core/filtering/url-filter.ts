@@ -1,5 +1,5 @@
 import { filterCritereaArraySchema } from '@/src/core/filtering/schema.ts'
-import type { filterOperatorOptionSchema } from '@/src/core/generated'
+import type { filterOperatorOptionSchema } from '@/src/core/__generated__'
 import type { z } from 'zod'
 
 export function parseFilterQuery(

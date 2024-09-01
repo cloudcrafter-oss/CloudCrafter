@@ -1,5 +1,5 @@
 import { ServersList } from '@/src/core/features/admin/servers/list.tsx'
-import { getServers } from '@/src/core/generated'
+import { getServers } from '@/src/core/__generated__'
 import { addBreadcrumb, resetBreadcrumbs } from '@/src/utils/breadcrumbs'
 
 export default async function Page() {

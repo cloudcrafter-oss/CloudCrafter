@@ -1,4 +1,4 @@
-import type { ProjectEnvironmentEnhancedDto } from '@/src/core/generated'
+import type { ProjectEnvironmentEnhancedDto } from '@/src/core/__generated__'
 import { CardContent, CardHeader, CardTitle } from '@ui/components/ui/card'
 import { ActivityIcon, AlertCircle, CheckCircle } from 'lucide-react'
 

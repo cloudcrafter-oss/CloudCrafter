@@ -1,4 +1,4 @@
-import { getProjects } from '@/src/core/generated'
+import { getProjects } from '@/src/core/__generated__'
 import { NextResponse } from 'next/server'
 
 export async function GET() {

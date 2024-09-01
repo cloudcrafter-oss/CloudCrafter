@@ -3,8 +3,8 @@ import {
 	fetchProjectDetail,
 	updateProjectAction,
 } from '@/src/app/_actions/project.ts'
-import type { ProjectDto } from '@/src/core/generated'
-import { updateProjectArgsSchema } from '@/src/core/generated/zod/updateProjectArgsSchema.ts'
+import type { ProjectDto } from '@/src/core/__generated__'
+import { updateProjectArgsSchema } from '@/src/core/__generated__/zod/updateProjectArgsSchema.ts'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/components/ui/button.tsx'
 import {

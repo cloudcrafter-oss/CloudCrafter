@@ -1,4 +1,4 @@
-import type { GetServersQueryResponse } from '@/src/core/generated'
+import type { GetServersQueryResponse } from '@/src/core/__generated__'
 import { Button } from '@ui/components/ui/button.tsx'
 import { Card } from '@ui/components/ui/card.tsx'
 import {

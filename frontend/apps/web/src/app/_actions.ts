@@ -3,7 +3,7 @@
 import {
 	type CreateProjectCommandCommand,
 	createProject,
-} from '@/src/core/generated'
+} from '@/src/core/__generated__'
 import { getCurrentCloudCrafterUser } from '@/src/utils/auth'
 
 export async function createProjectAction(dto: CreateProjectCommandCommand) {
