@@ -12,21 +12,25 @@ public class ServerAccessAuthorizationBehavior<TRequest, TResponse>(IUser user, 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-        await CheckAccess<IRequireServerAccess>(request, 
+        await CheckAccess<IRequireServerAccess>(request,
             (r, id) => accessService.CanAccessServer(id, r.ServerId),
             r => $"User does not have access to server {r.ServerId}");
 
-        await CheckAccess<IRequireEnvironmentAccess>(request, 
+        await CheckAccess<IRequireEnvironmentAccess>(request,
             (r, id) => accessService.CanAccessEnvironment(id, r.EnvironmentId),
             r => $"User does not have access to environment {r.EnvironmentId}");
 
-        await CheckAccess<IRequireProjectAccess>(request, 
+        await CheckAccess<IRequireProjectAccess>(request,
             (r, id) => accessService.CanAccessProject(id, r.ProjectId),
             r => $"User does not have access to project {r.ProjectId}");
 
+        await CheckAccess<IRequireStackAccess>(request,
+            (r, id) => accessService.CanAccessStack(id, r.StackId),
+            r => $"User does not have access to stack {r.StackId}");
+
         return await next();
     }
-    
+
     private async Task CheckAccess<TAccessRequest>(
         TRequest request,
         Func<TAccessRequest, Guid, Task<bool>> accessCheck,
@@ -39,7 +43,7 @@ public class ServerAccessAuthorizationBehavior<TRequest, TResponse>(IUser user, 
             {
                 throw new UnauthorizedAccessException("User is not authenticated");
             }
-            
+
             var hasAccess = await accessCheck(accessRequest, user.Id.Value);
 
             if (!hasAccess)
@@ -48,5 +52,4 @@ public class ServerAccessAuthorizationBehavior<TRequest, TResponse>(IUser user, 
             }
         }
     }
-    
 }

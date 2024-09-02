@@ -35,12 +35,19 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
 
         await context.SaveChangesAsync();
 
-        var stackFromDb = await GetStack(stack.Id);
+        var stackFromDb = await GetStackInternal(stack.Id);
 
-        return stackFromDb;
+        return stackFromDb!;
     }
 
-    private async Task<Stack> GetStack(Guid id)
+    public async Task<Stack?> GetStack(Guid id)
+    {
+        var stack = await GetStackInternal(id, false);
+
+        return stack;
+    }
+
+    private async Task<Stack?> GetStackInternal(Guid id, bool throwExceptionOnNotFound = true)
     {
         var stack = await context.Stacks
             .Include(x => x.Server)
@@ -48,9 +55,9 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             .ThenInclude(x => x!.Project)
             .FirstOrDefaultAsync(x => x.Id == id);
 
-        if (stack is null)
+        if (stack is null && throwExceptionOnNotFound)
         {
-            throw new ArgumentNullException("Stack not found") { HelpLink = null, HResult = 0, Source = null };
+            throw new ArgumentNullException("Stack not found");
         }
 
         return stack;
