@@ -2,6 +2,9 @@ import type { DeployedStackDto } from '@/src/core/__generated__'
 import { Card, CardContent } from '@ui/components/ui/card'
 import { AlertTriangle, CheckCircle, HelpCircle, XCircle } from 'lucide-react'
 import { StackHealthBadge } from '../StackHealthBadge'
+import Link from 'next/link'
+import { Button } from '@ui/components/ui/button'
+import { ExternalLink } from 'lucide-react'
 
 export const StackCard = ({ stack }: { stack: DeployedStackDto }) => {
 	const getHealthIcon = () => {
@@ -27,6 +30,13 @@ export const StackCard = ({ stack }: { stack: DeployedStackDto }) => {
 					<span className='font-medium text-gray-700 dark:text-gray-200'>
 						{stack.name}
 					</span>
+					<Link href={`/admin/stack/${stack.stackId}`} passHref>
+						<Button className='p-2'>
+							{' '}
+							{/* Updated padding */}
+							<ExternalLink className='h-4 w-4' />
+						</Button>
+					</Link>
 				</div>
 				<StackHealthBadge stack={stack} />
 			</CardContent>
