@@ -60,6 +60,7 @@ export function getServerByIdInfiniteQueryOptions(id: GetServerByIdPathParams["i
     const queryKey = getServerByIdInfiniteQueryKey(id);
     return infiniteQueryOptions({
         queryKey,
+// @ts-ignore pageParam is declared but its value is possibly never read
         queryFn: async ({ pageParam }) => {
             const res = await client<GetServerById["data"], GetServerById["error"]>({
                 method: "get",

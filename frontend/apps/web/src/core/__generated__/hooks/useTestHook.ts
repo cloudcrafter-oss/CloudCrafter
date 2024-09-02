@@ -60,6 +60,7 @@ export function testInfiniteQueryOptions(options: Test["client"]["parameters"] =
     const queryKey = testInfiniteQueryKey();
     return infiniteQueryOptions({
         queryKey,
+// @ts-ignore pageParam is declared but its value is possibly never read
         queryFn: async ({ pageParam }) => {
             const res = await client<Test["data"], Test["error"]>({
                 method: "get",

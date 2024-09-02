@@ -60,6 +60,7 @@ export function getProjectInfiniteQueryOptions(id: GetProjectPathParams["id"], o
     const queryKey = getProjectInfiniteQueryKey(id);
     return infiniteQueryOptions({
         queryKey,
+// @ts-ignore pageParam is declared but its value is possibly never read
         queryFn: async ({ pageParam }) => {
             const res = await client<GetProject["data"], GetProject["error"]>({
                 method: "get",

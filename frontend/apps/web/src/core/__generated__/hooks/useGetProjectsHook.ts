@@ -61,6 +61,7 @@ export function getProjectsInfiniteQueryOptions(params?: GetProjects["queryParam
     const queryKey = getProjectsInfiniteQueryKey(params);
     return infiniteQueryOptions({
         queryKey,
+// @ts-ignore pageParam is declared but its value is possibly never read
         queryFn: async ({ pageParam }) => {
             const res = await client<GetProjects["data"], GetProjects["error"]>({
                 method: "get",

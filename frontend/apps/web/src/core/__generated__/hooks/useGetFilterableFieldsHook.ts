@@ -60,6 +60,7 @@ export function getFilterableFieldsInfiniteQueryOptions(options: GetFilterableFi
     const queryKey = getFilterableFieldsInfiniteQueryKey();
     return infiniteQueryOptions({
         queryKey,
+// @ts-ignore pageParam is declared but its value is possibly never read
         queryFn: async ({ pageParam }) => {
             const res = await client<GetFilterableFields["data"], GetFilterableFields["error"]>({
                 method: "get",

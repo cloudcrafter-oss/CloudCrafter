@@ -60,6 +60,7 @@ export function getProjectEnvironmentEnhancedInfiniteQueryOptions(id: GetProject
     const queryKey = getProjectEnvironmentEnhancedInfiniteQueryKey(id, environmentId);
     return infiniteQueryOptions({
         queryKey,
+// @ts-ignore pageParam is declared but its value is possibly never read
         queryFn: async ({ pageParam }) => {
             const res = await client<GetProjectEnvironmentEnhanced["data"], GetProjectEnvironmentEnhanced["error"]>({
                 method: "get",

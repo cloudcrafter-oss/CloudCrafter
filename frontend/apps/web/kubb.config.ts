@@ -15,11 +15,7 @@ export default defineConfig({
 		clean: true,
 	},
 	hooks: {
-		done: [
-			// 'node src/utils/kubb/post-action.js',
-			//'eslint ./src/core/generated --ext ts --fix',
-			// 'eslint ./src/core/filtering --ext ts --fix',
-		],
+		done: ['node src/utils/kubb/post-action.js'],
 	},
 	plugins: [
 		pluginOas({ output: false }),
