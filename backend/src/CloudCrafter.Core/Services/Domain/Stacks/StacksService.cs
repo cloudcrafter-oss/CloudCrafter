@@ -14,7 +14,7 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
         return new StackCreatedDto { Id = Guid.NewGuid() };
     }
 
-    public async Task<SimpleStackDetailsDto?> GetStack(Guid id)
+    public async Task<SimpleStackDetailsDto?> GetSimpleStackDetails(Guid id)
     {
         var stack = await repository.GetStack(id);
 
@@ -24,5 +24,17 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
         }
 
         return mapper.Map<SimpleStackDetailsDto>(stack);
+    }
+
+    public async Task<StackDetailDto?> GetStackDetail(Guid id)
+    {
+        var stack = await repository.GetStack(id);
+
+        if (stack == null)
+        {
+            return null;
+        }
+        
+        return mapper.Map<StackDetailDto>(stack);
     }
 }

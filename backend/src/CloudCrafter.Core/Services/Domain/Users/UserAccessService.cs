@@ -38,7 +38,7 @@ public class UserAccessService(
 
     public async Task<bool> CanAccessStack(Guid userId, Guid id)
     {
-        var stack = await stacksService.GetStack(id);
+        var stack = await stacksService.GetSimpleStackDetails(id);
         // TODO: ACL check
         return stack != null;
     }
