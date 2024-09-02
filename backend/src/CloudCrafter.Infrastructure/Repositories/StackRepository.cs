@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Core.Events.DomainEvents;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Entities;
@@ -33,7 +34,11 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
 
         context.Stacks.Add(stack);
 
+        stack.AddDomainEvent(new StackUpdatedOrCreatedEvent(stack));
+        
         await context.SaveChangesAsync();
+        
+        
 
         var stackFromDb = await GetStackInternal(stack.Id);
 

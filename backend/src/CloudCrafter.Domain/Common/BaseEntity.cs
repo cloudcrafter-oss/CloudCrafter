@@ -4,12 +4,13 @@ namespace CloudCrafter.Domain.Common;
 
 public abstract class BaseEntity
 {
+    public required Guid Id { get; set; }
+    public required DateTime CreatedAt { get; init; }
+    public required DateTime UpdatedAt { get; set; }
+    
+    
     private readonly List<BaseEvent> _domainEvents = new();
-
-    // This can easily be modified to be BaseEntity<T> and public T Id to support different key types.
-    // Using non-generic integer types for simplicity
-    public int Id { get; set; }
-
+    
     [NotMapped] public IReadOnlyCollection<BaseEvent> DomainEvents => _domainEvents.AsReadOnly();
 
     public void AddDomainEvent(BaseEvent domainEvent)

@@ -8,7 +8,7 @@ public class SimpleStackDetailsDto
 
     private class Mapping : Profile
     {
-        private Mapping()
+        public Mapping()
         {
             CreateMap<Entities.Stack, SimpleStackDetailsDto>();
         }
