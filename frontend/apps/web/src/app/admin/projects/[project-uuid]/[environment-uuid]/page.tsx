@@ -1,14 +1,14 @@
 import { EnvironmentBadge } from '@/src/components/EnvironmentBadge'
-import ShowDate from '@/src/components/ShowDate'
-import { StackCard } from '@/src/components/Stacks/StackCard'
-import ProjectConfigPage from '@/src/components/project-detail/ProjectConfigPage'
 import { ProjectDetailCreateStackSheet } from '@/src/components/project-detail/ProjectDetailCreateStackSheet'
 import { ProjectHealthStatus } from '@/src/components/project-detail/ProjectHealthStatus'
+import ShowDate from '@/src/components/ShowDate'
+import { StackCard } from '@/src/components/Stacks/StackCard'
 import { getProjectEnvironmentEnhanced } from '@/src/core/__generated__'
 import {
-	type ProjectEnvironmentRouteParams,
 	validateProjectEnvironmentRouteParams,
-} from '@/src/utils/routes/schemas.ts'
+	type ProjectEnvironmentRouteParams,
+} from '@/src/utils/routes/schemas'
+
 import { Button } from '@ui/components/ui/button.tsx'
 import {
 	Card,
@@ -354,23 +354,7 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 	return (
 		<div className='flex h-full flex-col'>
 			<div className='flex-1 space-y-4 p-8 pt-6 flex flex-row'>
-				<div className='flex-1 space-y-4'>
-					<Tabs defaultValue='overview' className='space-y-4'>
-						<TabsList>
-							{tabs.map((tab) => (
-								<TabsTrigger key={tab.key} value={tab.key}>
-									{tab.name}
-								</TabsTrigger>
-							))}
-						</TabsList>
-						<TabsContent value='overview' className='space-y-4'>
-							{mainCard}
-						</TabsContent>
-						<TabsContent value='configuration' className='space-y-4'>
-							<ProjectConfigPage />
-						</TabsContent>
-					</Tabs>
-				</div>
+				<div className='flex-1 space-y-4'>{mainCard}</div>
 			</div>
 		</div>
 	)
