@@ -41,7 +41,7 @@ public static class FakerInstances
         .RuleFor(x => x.EnvironmentId, environmentId)
         .RuleFor(x => x.Deployments, f => new List<Deployment>())
         .RuleFor(x => x.Source, f => null)
-        .RuleFor(x => x.Services, f => new List<ApplicationService>())
+        .RuleFor(x => x.Services, f => new List<StackService>())
         .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
         .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 

@@ -2,14 +2,14 @@
 
 namespace CloudCrafter.Domain.Entities;
 
-public class ApplicationService : IHasTimestamps
+public class StackService : IHasTimestamps
 {
     public required Guid Id { get; init; }
-    public required Guid ApplicationId { get; init; }
-    public required Guid ApplicationServiceTypeId { get; init; }
+    public required Guid StackId { get; init; }
+    public required Guid StackServiceTypeId { get; init; }
 
     public Stack Stack { get; set; } = null!;
-    public ApplicationServiceType Type { get; set; } = null!;
+    public StackServiceType Type { get; set; } = null!;
 
     public required string Name { get; init; }
 

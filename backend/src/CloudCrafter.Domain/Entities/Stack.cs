@@ -14,7 +14,7 @@ public class Stack : IHasTimestamps
     public ApplicationSource? Source { get; set; }
 
     public List<Deployment> Deployments { get; set; } = new();
-    public List<ApplicationService> Services { get; set; } = new();
+    public List<StackService> Services { get; set; } = new();
     public required DateTime CreatedAt { get; init; }
     public required DateTime UpdatedAt { get; set; }
 }
