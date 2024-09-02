@@ -353,22 +353,24 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 
 	return (
 		<div className='flex h-full flex-col'>
-			<div className='flex-1 space-y-4 p-8 pt-6'>
-				<Tabs defaultValue='overview' className='space-y-4'>
-					<TabsList>
-						{tabs.map((tab) => (
-							<TabsTrigger key={tab.key} value={tab.key}>
-								{tab.name}
-							</TabsTrigger>
-						))}
-					</TabsList>
-					<TabsContent value='overview' className='space-y-4'>
-						{mainCard}
-					</TabsContent>
-					<TabsContent value='configuration' className='space-y-4'>
-						<ProjectConfigPage />
-					</TabsContent>
-				</Tabs>
+			<div className='flex-1 space-y-4 p-8 pt-6 flex flex-row'>
+				<div className='flex-1 space-y-4'>
+					<Tabs defaultValue='overview' className='space-y-4'>
+						<TabsList>
+							{tabs.map((tab) => (
+								<TabsTrigger key={tab.key} value={tab.key}>
+									{tab.name}
+								</TabsTrigger>
+							))}
+						</TabsList>
+						<TabsContent value='overview' className='space-y-4'>
+							{mainCard}
+						</TabsContent>
+						<TabsContent value='configuration' className='space-y-4'>
+							<ProjectConfigPage />
+						</TabsContent>
+					</Tabs>
+				</div>
 			</div>
 		</div>
 	)

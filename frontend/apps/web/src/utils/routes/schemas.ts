@@ -5,7 +5,7 @@ export const projectEnvironmentRouteSchema = z.object({
 	'environment-uuid': z.string().uuid(),
 })
 
-export const stackRouteSchema = z.object({
+export const stackRouteSchema = projectEnvironmentRouteSchema.extend({
 	'stack-uuid': z.string().uuid(),
 })
 
