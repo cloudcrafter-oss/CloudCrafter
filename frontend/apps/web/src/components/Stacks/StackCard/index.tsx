@@ -6,7 +6,15 @@ import Link from 'next/link'
 import { Button } from '@ui/components/ui/button'
 import { ExternalLink } from 'lucide-react'
 
-export const StackCard = ({ stack }: { stack: DeployedStackDto }) => {
+export const StackCard = ({
+	stack,
+	projectId,
+	environmentId,
+}: {
+	stack: DeployedStackDto
+	projectId: string
+	environmentId: string
+}) => {
 	const getHealthIcon = () => {
 		switch (stack.healthStatus) {
 			case 'Healthy':
@@ -30,7 +38,10 @@ export const StackCard = ({ stack }: { stack: DeployedStackDto }) => {
 					<span className='font-medium text-gray-700 dark:text-gray-200'>
 						{stack.name}
 					</span>
-					<Link href={`/admin/stack/${stack.stackId}`} passHref>
+					<Link
+						href={`/admin/projects/${projectId}/${environmentId}/stack/${stack.stackId}`}
+						passHref
+					>
 						<Button className='p-2'>
 							{' '}
 							{/* Updated padding */}

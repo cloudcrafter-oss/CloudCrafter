@@ -169,7 +169,12 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 				</h2>
 				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
 					{projectDetails.deployedStacks.map((stack) => (
-						<StackCard key={stack.stackId} stack={stack} />
+						<StackCard
+							projectId={routeData['project-uuid']}
+							environmentId={routeData['environment-uuid']}
+							key={stack.stackId}
+							stack={stack}
+						/>
 					))}
 				</div>
 			</div>
