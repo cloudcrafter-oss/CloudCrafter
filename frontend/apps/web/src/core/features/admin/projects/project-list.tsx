@@ -70,10 +70,16 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
 							<span className='w-2.5 h-2.5 bg-green-500 rounded-full' />
 						</div>
 						<div className='flex space-x-2'>
-							<button className='p-2 bg-muted rounded-full hover:bg-muted-foreground'>
+							<button
+								type='button'
+								className='p-2 bg-muted rounded-full hover:bg-muted-foreground'
+							>
 								<PlusIcon className='w-4 h-4 text-muted-foreground' />
 							</button>
-							<button className='p-2 bg-muted rounded-full hover:bg-muted-foreground'>
+							<button
+								type='button'
+								className='p-2 bg-muted rounded-full hover:bg-muted-foreground'
+							>
 								<SettingsIcon className='w-4 h-4 text-muted-foreground' />
 							</button>
 						</div>
@@ -114,13 +120,22 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
 											</div>
 										</div>
 										<div className='flex space-x-2'>
-											<button className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'>
+											<button
+												type='button'
+												className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'
+											>
 												<RepeatIcon className='w-4 h-4 text-muted-foreground' />
 											</button>
-											<button className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'>
+											<button
+												type='button'
+												className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'
+											>
 												<RefreshCwIcon className='w-4 h-4 text-muted-foreground' />
 											</button>
-											<button className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'>
+											<button
+												type='button'
+												className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'
+											>
 												<CircleStopIcon className='w-4 h-4 text-muted-foreground' />
 											</button>
 										</div>
@@ -143,10 +158,16 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
 							<span className='w-2.5 h-2.5 bg-yellow-500 rounded-full' />
 						</div>
 						<div className='flex space-x-2'>
-							<button className='p-2 bg-muted rounded-full hover:bg-muted-foreground'>
+							<button
+								type='button'
+								className='p-2 bg-muted rounded-full hover:bg-muted-foreground'
+							>
 								<PlusIcon className='w-4 h-4 text-muted-foreground' />
 							</button>
-							<button className='p-2 bg-muted rounded-full hover:bg-muted-foreground'>
+							<button
+								type='button'
+								className='p-2 bg-muted rounded-full hover:bg-muted-foreground'
+							>
 								<SettingsIcon className='w-4 h-4 text-muted-foreground' />
 							</button>
 						</div>
@@ -187,13 +208,22 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
 											</div>
 										</div>
 										<div className='flex space-x-2'>
-											<button className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'>
+											<button
+												type='button'
+												className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'
+											>
 												<RepeatIcon className='w-4 h-4 text-muted-foreground' />
 											</button>
-											<button className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'>
+											<button
+												type='button'
+												className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'
+											>
 												<RefreshCwIcon className='w-4 h-4 text-muted-foreground' />
 											</button>
-											<button className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'>
+											<button
+												type='button'
+												className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'
+											>
 												<CircleStopIcon className='w-4 h-4 text-muted-foreground' />
 											</button>
 										</div>
@@ -216,10 +246,16 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
 							<span className='w-2.5 h-2.5 bg-green-500 rounded-full' />
 						</div>
 						<div className='flex space-x-2'>
-							<button className='p-2 bg-muted rounded-full hover:bg-muted-foreground'>
+							<button
+								type='button'
+								className='p-2 bg-muted rounded-full hover:bg-muted-foreground'
+							>
 								<PlusIcon className='w-4 h-4 text-muted-foreground' />
 							</button>
-							<button className='p-2 bg-muted rounded-full hover:bg-muted-foreground'>
+							<button
+								type='button'
+								className='p-2 bg-muted rounded-full hover:bg-muted-foreground'
+							>
 								<SettingsIcon className='w-4 h-4 text-muted-foreground' />
 							</button>
 						</div>
@@ -260,13 +296,22 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
 											</div>
 										</div>
 										<div className='flex space-x-2'>
-											<button className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'>
+											<button
+												type='button'
+												className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'
+											>
 												<RepeatIcon className='w-4 h-4 text-muted-foreground' />
 											</button>
-											<button className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'>
+											<button
+												type='button'
+												className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'
+											>
 												<RefreshCwIcon className='w-4 h-4 text-muted-foreground' />
 											</button>
-											<button className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'>
+											<button
+												type='button'
+												className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'
+											>
 												<CircleStopIcon className='w-4 h-4 text-muted-foreground' />
 											</button>
 										</div>
@@ -289,10 +334,16 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
 							<span className='w-2.5 h-2.5 bg-red-500 rounded-full' />
 						</div>
 						<div className='flex space-x-2'>
-							<button className='p-2 bg-muted rounded-full hover:bg-muted-foreground'>
+							<button
+								type='button'
+								className='p-2 bg-muted rounded-full hover:bg-muted-foreground'
+							>
 								<PlusIcon className='w-4 h-4 text-muted-foreground' />
 							</button>
-							<button className='p-2 bg-muted rounded-full hover:bg-muted-foreground'>
+							<button
+								type='button'
+								className='p-2 bg-muted rounded-full hover:bg-muted-foreground'
+							>
 								<SettingsIcon className='w-4 h-4 text-muted-foreground' />
 							</button>
 						</div>
@@ -333,13 +384,22 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
 											</div>
 										</div>
 										<div className='flex space-x-2'>
-											<button className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'>
+											<button
+												type='button'
+												className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'
+											>
 												<RepeatIcon className='w-4 h-4 text-muted-foreground' />
 											</button>
-											<button className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'>
+											<button
+												type='button'
+												className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'
+											>
 												<RefreshCwIcon className='w-4 h-4 text-muted-foreground' />
 											</button>
-											<button className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'>
+											<button
+												type='button'
+												className='p-2 bg-muted-foreground/10 rounded-full hover:bg-muted-foreground/20'
+											>
 												<CircleStopIcon className='w-4 h-4 text-muted-foreground' />
 											</button>
 										</div>

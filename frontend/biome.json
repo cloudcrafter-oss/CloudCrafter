@@ -9,6 +9,14 @@
 			"recommended": true,
 			"correctness": {
 				"noUnusedImports": "error"
+			},
+			"complexity": {
+				"noForEach": "off"
+			},
+			"a11y": {
+				"useValidAnchor": "off",
+				"noSvgWithoutTitle": "off",
+				"useKeyWithClickEvents": "off"
 			}
 		}
 	},

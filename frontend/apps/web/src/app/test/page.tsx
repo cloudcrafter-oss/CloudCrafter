@@ -98,7 +98,7 @@ export default async function Page() {
 						<Card className='flex-1'>
 							<CardContent>
 								<h2 className='font-semibold mb-4 flex items-center'>
-									<span className='w-2 h-2 bg-gray-400 rounded-full mr-2'></span>
+									<span className='w-2 h-2 bg-gray-400 rounded-full mr-2' />
 									Todo
 									<Button variant='ghost' size='sm' className='ml-auto'>
 										+
@@ -138,7 +138,7 @@ export default async function Page() {
 						<Card className='flex-1'>
 							<CardContent>
 								<h2 className='font-semibold mb-4 flex items-center'>
-									<span className='w-2 h-2 bg-yellow-400 rounded-full mr-2'></span>
+									<span className='w-2 h-2 bg-yellow-400 rounded-full mr-2' />
 									In Progress
 									<Button variant='ghost' size='sm' className='ml-auto'>
 										+
@@ -154,7 +154,7 @@ export default async function Page() {
 						<Card className='flex-1'>
 							<CardContent>
 								<h2 className='font-semibold mb-4 flex items-center'>
-									<span className='w-2 h-2 bg-green-400 rounded-full mr-2'></span>
+									<span className='w-2 h-2 bg-green-400 rounded-full mr-2' />
 									Complete
 									<Button variant='ghost' size='sm' className='ml-auto'>
 										+
@@ -241,14 +241,14 @@ function Sidebar() {
 							href='#'
 							className='flex items-center px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-150'
 						>
-							<span className='w-2 h-2 bg-red-400 rounded-full mr-2'></span>
+							<span className='w-2 h-2 bg-red-400 rounded-full mr-2' />
 							Frontend
 						</a>
 						<a
 							href='#'
 							className='flex items-center px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-150'
 						>
-							<span className='w-2 h-2 bg-blue-400 rounded-full mr-2'></span>
+							<span className='w-2 h-2 bg-blue-400 rounded-full mr-2' />
 							Backend
 						</a>
 					</nav>

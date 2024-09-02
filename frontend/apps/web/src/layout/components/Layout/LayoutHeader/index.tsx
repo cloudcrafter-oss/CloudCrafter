@@ -21,7 +21,7 @@ export const LayoutHeader = () => {
 						viewBox='0 0 256 256'
 						className={'transition-all h-8 w-8'}
 					>
-						<rect width='256' height='256' fill='none'></rect>
+						<rect width='256' height='256' fill='none' />
 						<line
 							x1='208'
 							y1='128'
@@ -32,7 +32,7 @@ export const LayoutHeader = () => {
 							strokeLinecap='round'
 							strokeLinejoin='round'
 							strokeWidth='16'
-						></line>
+						/>
 						<line
 							x1='192'
 							y1='40'
@@ -43,7 +43,7 @@ export const LayoutHeader = () => {
 							strokeLinecap='round'
 							strokeLinejoin='round'
 							strokeWidth='16'
-						></line>
+						/>
 						<span className='sr-only'>Website Name</span>
 					</svg>
 					<div className={'flex flex-col justify-end truncate visible w-auto'}>

@@ -39,6 +39,9 @@ export default function Sidebar({
 			{/* Overlay in mobile */}
 			<div
 				onClick={() => setNavOpened(false)}
+				onKeyDown={(e) => e.key === 'Enter' && setNavOpened(false)}
+				role='button'
+				tabIndex={0}
 				className={`absolute inset-0 transition-[opacity] delay-100 duration-700 ${navOpened ? 'h-svh opacity-50' : 'h-0 opacity-0'} w-full bg-black md:hidden`}
 			/>
 
@@ -54,7 +57,7 @@ export default function Sidebar({
 							viewBox='0 0 256 256'
 							className={`transition-all ${isCollapsed ? 'h-6 w-6' : 'h-8 w-8'}`}
 						>
-							<rect width='256' height='256' fill='none'></rect>
+							<rect width='256' height='256' fill='none' />
 							<line
 								x1='208'
 								y1='128'
@@ -65,7 +68,7 @@ export default function Sidebar({
 								strokeLinecap='round'
 								strokeLinejoin='round'
 								strokeWidth='16'
-							></line>
+							/>
 							<line
 								x1='192'
 								y1='40'
@@ -76,7 +79,7 @@ export default function Sidebar({
 								strokeLinecap='round'
 								strokeLinejoin='round'
 								strokeWidth='16'
-							></line>
+							/>
 							<span className='sr-only'>Website Name</span>
 						</svg>
 						<div

@@ -92,11 +92,13 @@ export function DataTableSkeleton(props: DataTableSkeletonProps) {
 				<div className='flex flex-1 items-center space-x-2'>
 					{searchableColumnCount > 0
 						? Array.from({ length: searchableColumnCount }).map((_, i) => (
+								// biome-ignore lint/suspicious/noArrayIndexKey: can be surpressed because we render no content really
 								<Skeleton key={i} className='h-7 w-40 lg:w-60' />
 							))
 						: null}
 					{filterableColumnCount > 0
 						? Array.from({ length: filterableColumnCount }).map((_, i) => (
+								// biome-ignore lint/suspicious/noArrayIndexKey: can be surpressed because we render no content really
 								<Skeleton key={i} className='h-7 w-[4.5rem] border-dashed' />
 							))
 						: null}
@@ -109,9 +111,11 @@ export function DataTableSkeleton(props: DataTableSkeletonProps) {
 				<Table>
 					<TableHeader>
 						{Array.from({ length: 1 }).map((_, i) => (
+							// biome-ignore lint/suspicious/noArrayIndexKey: can be surpressed because we render no content really
 							<TableRow key={i} className='hover:bg-transparent'>
 								{Array.from({ length: columnCount }).map((_, j) => (
 									<TableHead
+										// biome-ignore lint/suspicious/noArrayIndexKey: can be surpressed because we render no content really
 										key={j}
 										style={{
 											width: cellWidths[j],
@@ -126,9 +130,11 @@ export function DataTableSkeleton(props: DataTableSkeletonProps) {
 					</TableHeader>
 					<TableBody>
 						{Array.from({ length: rowCount }).map((_, i) => (
+							// biome-ignore lint/suspicious/noArrayIndexKey: can be surpressed because we render no content really
 							<TableRow key={i} className='hover:bg-transparent'>
 								{Array.from({ length: columnCount }).map((_, j) => (
 									<TableCell
+										// biome-ignore lint/suspicious/noArrayIndexKey: can be surpressed because we render no content really
 										key={j}
 										style={{
 											width: cellWidths[j],

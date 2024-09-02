@@ -16,7 +16,7 @@ export const CloudcrafterBreadcrumbs = async () => {
 			<BreadcrumbList>
 				{breadcrumbs.map((breadcrumb, index) => (
 					<>
-						<BreadcrumbItem key={index}>
+						<BreadcrumbItem key={breadcrumb.label}>
 							<BreadcrumbLink href={breadcrumb.href}>
 								{breadcrumb.label}
 							</BreadcrumbLink>

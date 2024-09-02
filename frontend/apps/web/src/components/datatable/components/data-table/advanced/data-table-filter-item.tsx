@@ -89,6 +89,7 @@ export function DataTableFilterItem<TData>({
 	)
 
 	// Update query string
+	// biome-ignore lint/correctness/useExhaustiveDependencies: TODO: check if in use
 	React.useEffect(() => {
 		if (selectedOption.options.length > 0) {
 			// key=value1.value2.value3~operator

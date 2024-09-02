@@ -46,6 +46,7 @@ export default function Page() {
 										stroke='currentColor'
 										strokeLinecap='round'
 										strokeLinejoin='round'
+										role='img'
 										strokeWidth='2'
 										className='h-4 w-4 text-muted-foreground'
 									>

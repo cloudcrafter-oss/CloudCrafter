@@ -38,7 +38,7 @@ export const LayoutSidebarNav = ({
 			setLastOpenItem(openItem)
 			setOpenItem('')
 		}
-	}, [isOpen])
+	}, [isOpen, lastOpenItem, openItem])
 
 	return (
 		<nav className='space-y-2'>

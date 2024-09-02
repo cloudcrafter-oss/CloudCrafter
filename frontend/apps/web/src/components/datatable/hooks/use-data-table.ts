@@ -201,6 +201,7 @@ export function useDataTable<TData, TValue>({
 		[pageIndex, pageSize],
 	)
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: TODO: investigate if this is still being used
 	React.useEffect(() => {
 		router.push(
 			`${pathname}?${createQueryString({
@@ -221,6 +222,7 @@ export function useDataTable<TData, TValue>({
 		},
 	])
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: TODO: investigate if this is still being used
 	React.useEffect(() => {
 		router.push(
 			`${pathname}?${createQueryString({

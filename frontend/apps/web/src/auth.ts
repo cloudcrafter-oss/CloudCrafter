@@ -12,9 +12,8 @@ export const providerMap = providers.map((provider) => {
 	if (typeof provider === 'function') {
 		const providerData = provider()
 		return { id: providerData.id, name: providerData.name }
-	} else {
-		return { id: provider.id, name: provider.name }
 	}
+	return { id: provider.id, name: provider.name }
 })
 
 async function refreshAccessToken(token: JWT): Promise<JWT> {
@@ -57,7 +56,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				}
 			}
 
-			debugToken(token.accessToken!, 'jwt')
+			debugToken(token.accessToken as string, 'jwt')
 			// Return previous token if the access token has not expired yet
 			if (Date.now() < (token.accessTokenExpires as number)) {
 				return token

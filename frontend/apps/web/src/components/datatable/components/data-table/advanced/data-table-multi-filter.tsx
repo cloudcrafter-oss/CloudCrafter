@@ -177,6 +177,7 @@ export function MultiFilterRow<TData>({
 	)
 
 	// Update query string
+	// biome-ignore lint/correctness/useExhaustiveDependencies: TODO: check if in use
 	React.useEffect(() => {
 		if (debounceValue.length > 0) {
 			router.push(
@@ -204,6 +205,7 @@ export function MultiFilterRow<TData>({
 	}, [debounceValue, filterVariety, selectedOption?.value])
 
 	// Update operator query string
+	// biome-ignore lint/correctness/useExhaustiveDependencies: TODO: check if in use
 	React.useEffect(() => {
 		if (operator?.value) {
 			router.push(

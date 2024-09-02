@@ -197,6 +197,7 @@ export const ProjectListItem = ({
 						</SheetContent>
 					</Sheet>
 					<button
+						type='button'
 						onClick={async () => await openProject(project.id)}
 						className='p-2 bg-muted rounded-full hover:bg-muted-foreground'
 					>

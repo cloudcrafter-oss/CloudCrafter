@@ -147,7 +147,7 @@ function NavLinkDropdown({ title, icon, label, sub, closeNav }: NavLinkProps) {
 			</CollapsibleTrigger>
 			<CollapsibleContent className='collapsibleDropdown' asChild>
 				<ul>
-					{sub!.map((sublink) => (
+					{sub?.map((sublink) => (
 						<li key={sublink.title} className='my-1 ml-8'>
 							<NavLink {...sublink} subLink closeNav={closeNav} />
 						</li>
@@ -224,7 +224,7 @@ function NavLinkIconDropdown({ title, icon, label, sub }: NavLinkProps) {
 					{title} {label ? `(${label})` : ''}
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
-				{sub!.map(({ title, icon, label, href }) => (
+				{sub?.map(({ title, icon, label, href }) => (
 					<DropdownMenuItem key={`${title}-${href}`} asChild>
 						<Link
 							href={href}
