@@ -44,5 +44,5 @@
 			"path": "./tsconfig.node.json"
 		}
 	],
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules", "src/core/__generated__"]
 }
