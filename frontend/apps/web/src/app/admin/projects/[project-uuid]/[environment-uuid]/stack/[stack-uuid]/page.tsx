@@ -1,7 +1,7 @@
 import ProjectConfigPage from '@/src/components/project-detail/ProjectConfigPage'
 import {
-	validateStackRouteParams,
 	type StackRouteParams,
+	validateStackRouteParams,
 } from '@/src/utils/routes/schemas'
 import {
 	Tabs,

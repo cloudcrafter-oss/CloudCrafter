@@ -1,12 +1,12 @@
 import { EnvironmentBadge } from '@/src/components/EnvironmentBadge'
-import { ProjectDetailCreateStackSheet } from '@/src/components/project-detail/ProjectDetailCreateStackSheet'
-import { ProjectHealthStatus } from '@/src/components/project-detail/ProjectHealthStatus'
 import ShowDate from '@/src/components/ShowDate'
 import { StackCard } from '@/src/components/Stacks/StackCard'
+import { ProjectDetailCreateStackSheet } from '@/src/components/project-detail/ProjectDetailCreateStackSheet'
+import { ProjectHealthStatus } from '@/src/components/project-detail/ProjectHealthStatus'
 import { getProjectEnvironmentEnhanced } from '@/src/core/__generated__'
 import {
-	validateProjectEnvironmentRouteParams,
 	type ProjectEnvironmentRouteParams,
+	validateProjectEnvironmentRouteParams,
 } from '@/src/utils/routes/schemas'
 
 import { Button } from '@ui/components/ui/button.tsx'
