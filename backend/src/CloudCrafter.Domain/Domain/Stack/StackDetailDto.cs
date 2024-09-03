@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using AutoMapper;
 using CloudCrafter.Domain.Domain.Project;
 
@@ -8,7 +9,8 @@ public class StackDetailDto
 {
     public required Guid Id { get; init; }
     public required string Name { get; init; }
-
+    
+    [NotMapped]
     public List<StackServiceDto> Services { get; init; } = new();
 
     private class Mapping : Profile
