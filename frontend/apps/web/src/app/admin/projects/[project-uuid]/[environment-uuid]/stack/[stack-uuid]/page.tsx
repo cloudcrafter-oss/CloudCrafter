@@ -18,10 +18,6 @@ export default function StackPage({ params }: PageProps) {
 	const routeData = validateStackRouteParams(params)
 	const tabs = [
 		{
-			name: 'Overview',
-			key: 'overview',
-		},
-		{
 			name: 'Configuration',
 			key: 'configuration',
 		},
@@ -35,7 +31,7 @@ export default function StackPage({ params }: PageProps) {
 		<div className='flex h-full flex-col'>
 			<div className='flex-1 space-y-4 p-8 pt-6 flex flex-row'>
 				<div className='flex-1 space-y-4'>
-					<Tabs defaultValue='overview' className='space-y-4'>
+					<Tabs defaultValue='configuration' className='space-y-4'>
 						<TabsList>
 							{tabs.map((tab) => (
 								<TabsTrigger key={tab.key} value={tab.key}>
@@ -43,11 +39,11 @@ export default function StackPage({ params }: PageProps) {
 								</TabsTrigger>
 							))}
 						</TabsList>
-						<TabsContent value='overview' className='space-y-4'>
-							<pre>{JSON.stringify(routeData, null, 2)}</pre>
-						</TabsContent>
 						<TabsContent value='configuration' className='space-y-4'>
 							<ProjectConfigPage />
+						</TabsContent>
+						<TabsContent value='deployments' className='space-y-4'>
+							<pre>{JSON.stringify(routeData, null, 2)}</pre>
 						</TabsContent>
 					</Tabs>
 				</div>
