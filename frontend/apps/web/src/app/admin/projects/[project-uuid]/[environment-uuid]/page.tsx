@@ -56,21 +56,6 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 		routeData['environment-uuid'],
 	)
 
-	const tabs = [
-		{
-			name: 'Overview',
-			key: 'overview',
-		},
-		{
-			name: 'Configuration',
-			key: 'configuration',
-		},
-		{
-			name: 'Deployments',
-			key: 'deployments',
-		},
-	]
-
 	const mainCard = (
 		<>
 			<Card className='bg-white dark:bg-gray-800 shadow-lg mb-8'>
