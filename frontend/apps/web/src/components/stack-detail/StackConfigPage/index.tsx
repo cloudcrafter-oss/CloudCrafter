@@ -8,6 +8,7 @@ import type React from 'react'
 import { useEffect, useState } from 'react'
 import { DummyInfoTab } from '../DummyInfoTab'
 import { BasicInfo } from '../general-settings/BasicInfo'
+import { ServiceOverview } from '../service-overview'
 
 // Define the base props interface
 interface BaseComponentProps {
@@ -30,6 +31,18 @@ const sections = [
 				id: 'advanced',
 				title: 'Advanced Settings',
 				component: DummyInfoTab as React.ComponentType<BaseComponentProps>,
+			},
+		],
+	},
+	{
+		id: 'services',
+		title: 'Services',
+		description: 'Manage your services',
+		subTabs: [
+			{
+				id: 'overview',
+				title: 'Overview',
+				component: ServiceOverview as React.ComponentType<BaseComponentProps>,
 			},
 		],
 	},

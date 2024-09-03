@@ -75,6 +75,7 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
     private async Task<Stack?> GetStackInternal(Guid id, bool throwExceptionOnNotFound = true)
     {
         var stack = await context.Stacks
+            .Include(x => x.Services)
             .Include(x => x.Server)
             .Include(x => x.Environment)
             .ThenInclude(x => x!.Project)

@@ -11,8 +11,21 @@ import { Input } from '@ui/components/ui/input'
 import { Label } from '@ui/components/ui/label'
 import { Switch } from '@ui/components/ui/switch'
 import { Textarea } from '@ui/components/ui/textarea'
-import { PencilIcon } from 'lucide-react'
+import {
+	PencilIcon,
+	MoreVertical,
+	RefreshCw,
+	FileText,
+	Trash2,
+} from 'lucide-react'
 import { useState } from 'react'
+import { Badge } from '@ui/components/ui/badge'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '@ui/components/ui/dropdown-menu'
 
 export const BasicInfo = ({
 	stackDetails,
@@ -25,14 +38,38 @@ export const BasicInfo = ({
 				<CardHeader className='relative'>
 					<CardTitle>Stack Information</CardTitle>
 					<CardDescription>Basic details about your Stack</CardDescription>
-					<Button
-						variant='ghost'
-						size='icon'
-						className='absolute top-4 right-4'
-						onClick={() => setIsEditing(!isEditing)}
-					>
-						<PencilIcon className='h-4 w-4' />
-					</Button>
+					<div className='absolute top-4 right-4 flex items-center space-x-2'>
+						<Badge variant='destructive'>Unhealthy</Badge>
+
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button variant='ghost' size='icon'>
+									<MoreVertical className='h-4 w-4' />
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent>
+								<DropdownMenuItem>
+									<RefreshCw className='mr-2 h-4 w-4' />
+									Restart Stack
+								</DropdownMenuItem>
+								<DropdownMenuItem>
+									<FileText className='mr-2 h-4 w-4' />
+									View Logs
+								</DropdownMenuItem>
+								<DropdownMenuItem>
+									<Trash2 className='mr-2 h-4 w-4' />
+									Delete Stack
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+						<Button
+							variant='ghost'
+							size='icon'
+							onClick={() => setIsEditing(!isEditing)}
+						>
+							<PencilIcon className='h-4 w-4' />
+						</Button>
+					</div>
 				</CardHeader>
 				<CardContent className='space-y-4'>
 					<div className='space-y-2'>

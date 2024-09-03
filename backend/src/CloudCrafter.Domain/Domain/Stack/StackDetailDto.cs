@@ -21,7 +21,6 @@ public class StackDetailDto
         public Mapping()
         {
             CreateMap<Entities.Stack, StackDetailDto>()
-                .ForMember(x => x.Services, opt => opt.Ignore())
                 .ForMember(x => x.Destination, opt => opt.MapFrom(src => src.Server));
         }
     }
@@ -32,6 +31,14 @@ public class StackServiceDto
     public required Guid Id { get; init; }
     public required string Name { get; init; }
     public required StackHealthStatus HealthStatus { get; init; }
+
+    private class Mapping : Profile
+    {
+        public Mapping()
+        {
+            CreateMap<StackService, StackServiceDto>();
+        }
+    }
 }
 
 public class StackServerDto
