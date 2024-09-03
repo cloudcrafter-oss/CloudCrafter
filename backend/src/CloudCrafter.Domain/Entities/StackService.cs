@@ -1,10 +1,9 @@
-﻿using CloudCrafter.Domain.Interfaces;
+﻿using CloudCrafter.Domain.Common;
 
 namespace CloudCrafter.Domain.Entities;
 
-public class StackService : IHasTimestamps
+public class StackService : BaseAuditableEntity
 {
-    public required Guid Id { get; init; }
     public required Guid StackId { get; init; }
     public required Guid StackServiceTypeId { get; init; }
 
@@ -12,7 +11,4 @@ public class StackService : IHasTimestamps
     public StackServiceType Type { get; set; } = null!;
 
     public required string Name { get; init; }
-
-    public required DateTime CreatedAt { get; init; }
-    public required DateTime UpdatedAt { get; set; }
 }

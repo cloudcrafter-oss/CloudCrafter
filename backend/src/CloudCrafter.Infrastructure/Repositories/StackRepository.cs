@@ -1,6 +1,8 @@
 ﻿using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Events.DomainEvents;
 using CloudCrafter.Core.Interfaces.Repositories;
+using CloudCrafter.Domain.Common;
+using CloudCrafter.Domain.Domain.Application.Services;
 using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +29,8 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             {
                 Type = ApplicationSourceType.Git, Git = new ApplicationSourceGit { Repository = args.GitRepository }
             },
+            // TODO: Allow multiple options
+            BuildPack = StackBuildPack.Nixpacks,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -34,11 +38,10 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
 
         context.Stacks.Add(stack);
 
-        stack.AddDomainEvent(new StackUpdatedOrCreatedEvent(stack));
-        
+        stack.AddDomainEvent(DomainEventDispatchTiming.AfterSaving, new StackCreatedEvent(stack));
+
         await context.SaveChangesAsync();
-        
-        
+
 
         var stackFromDb = await GetStackInternal(stack.Id);
 
@@ -50,6 +53,23 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
         var stack = await GetStackInternal(id, false);
 
         return stack;
+    }
+
+    public async Task AddAppServiceToStack(Guid stackId, string name)
+    {
+        var stackService = new StackService
+        {
+            Id = Guid.NewGuid(),
+            Name = name,
+            StackServiceTypeId = StackServiceTypeConstants.App,
+            StackId = stackId,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+
+        context.StackServices.Add(stackService);
+
+        await context.SaveChangesAsync();
     }
 
     private async Task<Stack?> GetStackInternal(Guid id, bool throwExceptionOnNotFound = true)

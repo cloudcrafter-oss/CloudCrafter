@@ -95,6 +95,7 @@ public static class ApplicationServiceExtensions
             .AddScoped<IServerConnectivityService, ServerConnectivityService>()
             .AddScoped<IProjectsService, ProjectsService>()
             .AddScoped<IStacksService, StacksService>()
+            .AddScoped<IStackServicesService, StackServicesService>()
             .AddScoped<IEnvironmentService, EnvironmentsService>()
             .AddScoped<IGitService, GitService>()
             .AddScoped<IDeploymentService, DeploymentService>();

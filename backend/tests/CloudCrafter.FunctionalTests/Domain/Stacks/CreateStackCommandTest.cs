@@ -3,7 +3,6 @@ using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
 using NUnit.Framework;
-using Environment = CloudCrafter.Domain.Entities.Environment;
 
 namespace CloudCrafter.FunctionalTests.Domain.Stacks;
 
@@ -45,7 +44,7 @@ public class CreateStackCommandTest : BaseTestFixture
         await AddAsync(server);
 
         Command.ServerId = server.Id;
-        
+
         var exception = Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
 
         exception.Message.Should().Be($"User does not have access to environment {Command.EnvironmentId}");
@@ -57,24 +56,24 @@ public class CreateStackCommandTest : BaseTestFixture
     public async Task ShouldBeAbleToCreateStack()
     {
         await RunAsAdministratorAsync();
-        
+
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
 
         var project = FakerInstances.ProjectFaker.Generate();
         await AddAsync(project);
-        
+
         var environment = FakerInstances.EnvironmentFaker(project).Generate();
         await AddAsync(environment);
 
         Command.EnvironmentId = environment.Id;
         Command.ServerId = server.Id;
-        
+
         var result = await SendAsync(Command);
 
         result.Should().NotBeNull();
         result.Id.Should().NotBe(Guid.Empty);
+
+        (await CountAsync<StackService>()).Should().Be(1);
     }
 }
-
-
