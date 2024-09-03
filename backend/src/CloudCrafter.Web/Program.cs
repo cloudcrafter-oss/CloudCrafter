@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core;
+using CloudCrafter.Core.Events;
 using CloudCrafter.DeploymentEngine.Remote;
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Data;
@@ -19,9 +20,11 @@ Log.Logger = LoggingConfiguration.GetLogger();
 Log.Information("Starting CloudCrafter");
 
 builder.Services.AddApiConfiguration(builder.Configuration);
+builder.Services.AddCloudCrafterCors(builder.Configuration);
 builder.Services.AddEngineInfrastructure();
 builder.Services.AddCloudCrafterLogging(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.AddDomainEvents(typeof(IDomainEvent).Assembly);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices();
 builder.Services.AddSwaggerServices();
@@ -71,6 +74,7 @@ app.Map("/", () => Results.Redirect("/api"));
 
 app.MapEndpoints();
 app.SeedDatabase();
+app.UseCors("CloudCrafterCorsPolicy");
 
 
 var hangfireDashboardOptions = new DashboardOptions();

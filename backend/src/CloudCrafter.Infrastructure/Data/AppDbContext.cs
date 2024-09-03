@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Options;
+using Environment = CloudCrafter.Domain.Entities.Environment;
 
 namespace CloudCrafter.Infrastructure.Data;
 
@@ -30,11 +31,12 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     public DbSet<UserRefreshToken> UserRefreshTokens => Set<UserRefreshToken>();
     public DbSet<Server> Servers => Set<Server>();
     public DbSet<Project> Projects => Set<Project>();
-    public DbSet<Application> Applications => Set<Application>();
+    public DbSet<Environment> Environments => Set<Environment>();
+    public DbSet<Stack> Stacks => Set<Stack>();
     public DbSet<Deployment> Deployments => Set<Deployment>();
     public DbSet<BackgroundJob> Jobs => Set<BackgroundJob>();
-    public DbSet<ApplicationService> ApplicationServices => Set<ApplicationService>();
-    public DbSet<ApplicationServiceType> ApplicationServiceTypes => Set<ApplicationServiceType>();
+    public DbSet<StackService> StackServices => Set<StackService>();
+    public DbSet<StackServiceType> StackServiceTypes => Set<StackServiceType>();
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {

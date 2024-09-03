@@ -2,9 +2,10 @@
 using CloudCrafter.Agent.Models.Exceptions;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
-using CloudCrafter.Agent.Runner.Cli;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
+using CloudCrafter.Shared.Utils.Cli;
+using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using Moq;
 
 namespace CloudCrafter.Agent.Runner.Tests.BuildSteps;

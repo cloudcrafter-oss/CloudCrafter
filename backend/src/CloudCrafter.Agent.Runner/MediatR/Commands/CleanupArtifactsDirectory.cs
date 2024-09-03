@@ -1,6 +1,6 @@
 ﻿using CloudCrafter.Agent.Models.Runner;
-using CloudCrafter.Agent.Runner.Cli;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
+using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using MediatR;
 
 namespace CloudCrafter.Agent.Runner.MediatR.Commands;

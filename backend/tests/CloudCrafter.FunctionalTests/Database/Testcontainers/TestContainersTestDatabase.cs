@@ -60,7 +60,7 @@ public class TestContainersTestDatabase : ITestDatabase
         _respawner = await Respawner.CreateAsync(_connection,
             new RespawnerOptions
             {
-                DbAdapter = DbAdapter.Postgres, TablesToIgnore = new Table[] { "__EFMigrationsHistory" }
+                DbAdapter = DbAdapter.Postgres, TablesToIgnore = new Table[] { "__EFMigrationsHistory", "StackServiceTypes" }
             });
     }
 

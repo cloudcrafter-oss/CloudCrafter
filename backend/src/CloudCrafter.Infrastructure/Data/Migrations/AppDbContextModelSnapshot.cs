@@ -43,90 +43,6 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.ToTable("Contributors");
                 });
 
-            modelBuilder.Entity("CloudCrafter.Domain.Entities.Application", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ServerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("ServerId");
-
-                    b.ToTable("Applications");
-                });
-
-            modelBuilder.Entity("CloudCrafter.Domain.Entities.ApplicationService", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ApplicationId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ApplicationServiceTypeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationId");
-
-                    b.HasIndex("ApplicationServiceTypeId");
-
-                    b.ToTable("ApplicationServices");
-                });
-
-            modelBuilder.Entity("CloudCrafter.Domain.Entities.ApplicationServiceType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ApplicationServiceTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("6257aa7c-09f0-42c0-8417-3d0ca0ead213"),
-                            Type = "AppType"
-                        });
-                });
-
             modelBuilder.Entity("CloudCrafter.Domain.Entities.BackgroundJob", b =>
                 {
                     b.Property<Guid>("Id")
@@ -174,20 +90,46 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ApplicationId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("StackId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationId");
+                    b.HasIndex("StackId");
 
                     b.ToTable("Deployments");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.Environment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Environments");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Jobs.ServerConnectivityCheckJob", b =>
@@ -198,6 +140,12 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Result")
                         .HasColumnType("integer");
@@ -226,6 +174,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -298,6 +249,105 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Servers");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.Stack", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("BuildPack")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EnvironmentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ServerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnvironmentId");
+
+                    b.HasIndex("ServerId");
+
+                    b.ToTable("Stacks");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.StackService", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("StackId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("StackServiceTypeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StackId");
+
+                    b.HasIndex("StackServiceTypeId");
+
+                    b.ToTable("StackServices");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.StackServiceType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StackServiceTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("6257aa7c-09f0-42c0-8417-3d0ca0ead213"),
+                            Type = "App"
+                        });
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.User", b =>
@@ -533,84 +583,6 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Navigation("PhoneNumber");
                 });
 
-            modelBuilder.Entity("CloudCrafter.Domain.Entities.Application", b =>
-                {
-                    b.HasOne("CloudCrafter.Domain.Entities.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CloudCrafter.Domain.Entities.Server", "Server")
-                        .WithMany()
-                        .HasForeignKey("ServerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsOne("CloudCrafter.Domain.Entities.ApplicationSource", "Source", b1 =>
-                        {
-                            b1.Property<Guid>("ApplicationId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<int>("Type")
-                                .HasColumnType("integer");
-
-                            b1.HasKey("ApplicationId");
-
-                            b1.ToTable("Applications");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ApplicationId");
-
-                            b1.OwnsOne("CloudCrafter.Domain.Entities.ApplicationSourceGit", "Git", b2 =>
-                                {
-                                    b2.Property<Guid>("ApplicationSourceApplicationId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<string>("Branch")
-                                        .HasColumnType("text");
-
-                                    b2.Property<string>("Repository")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.HasKey("ApplicationSourceApplicationId");
-
-                                    b2.ToTable("Applications");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("ApplicationSourceApplicationId");
-                                });
-
-                            b1.Navigation("Git");
-                        });
-
-                    b.Navigation("Project");
-
-                    b.Navigation("Server");
-
-                    b.Navigation("Source");
-                });
-
-            modelBuilder.Entity("CloudCrafter.Domain.Entities.ApplicationService", b =>
-                {
-                    b.HasOne("CloudCrafter.Domain.Entities.Application", "Application")
-                        .WithMany("Services")
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CloudCrafter.Domain.Entities.ApplicationServiceType", "Type")
-                        .WithMany()
-                        .HasForeignKey("ApplicationServiceTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Application");
-
-                    b.Navigation("Type");
-                });
-
             modelBuilder.Entity("CloudCrafter.Domain.Entities.BackgroundJob", b =>
                 {
                     b.HasOne("CloudCrafter.Domain.Entities.Jobs.ServerConnectivityCheckJob", "ServerConnectivityCheckJob")
@@ -657,9 +629,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Deployment", b =>
                 {
-                    b.HasOne("CloudCrafter.Domain.Entities.Application", "Application")
+                    b.HasOne("CloudCrafter.Domain.Entities.Stack", "Stack")
                         .WithMany("Deployments")
-                        .HasForeignKey("ApplicationId")
+                        .HasForeignKey("StackId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -686,9 +658,20 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                                 .HasForeignKey("DeploymentId");
                         });
 
-                    b.Navigation("Application");
-
                     b.Navigation("Logs");
+
+                    b.Navigation("Stack");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.Environment", b =>
+                {
+                    b.HasOne("CloudCrafter.Domain.Entities.Project", "Project")
+                        .WithMany("Environments")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Jobs.ServerConnectivityCheckJob", b =>
@@ -700,6 +683,84 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Server");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.Stack", b =>
+                {
+                    b.HasOne("CloudCrafter.Domain.Entities.Environment", "Environment")
+                        .WithMany("Stacks")
+                        .HasForeignKey("EnvironmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CloudCrafter.Domain.Entities.Server", "Server")
+                        .WithMany()
+                        .HasForeignKey("ServerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("CloudCrafter.Domain.Entities.ApplicationSource", "Source", b1 =>
+                        {
+                            b1.Property<Guid>("StackId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<int>("Type")
+                                .HasColumnType("integer");
+
+                            b1.HasKey("StackId");
+
+                            b1.ToTable("Stacks");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StackId");
+
+                            b1.OwnsOne("CloudCrafter.Domain.Entities.ApplicationSourceGit", "Git", b2 =>
+                                {
+                                    b2.Property<Guid>("ApplicationSourceStackId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<string>("Branch")
+                                        .HasColumnType("text");
+
+                                    b2.Property<string>("Repository")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.HasKey("ApplicationSourceStackId");
+
+                                    b2.ToTable("Stacks");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("ApplicationSourceStackId");
+                                });
+
+                            b1.Navigation("Git");
+                        });
+
+                    b.Navigation("Environment");
+
+                    b.Navigation("Server");
+
+                    b.Navigation("Source");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.StackService", b =>
+                {
+                    b.HasOne("CloudCrafter.Domain.Entities.Stack", "Stack")
+                        .WithMany("Services")
+                        .HasForeignKey("StackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CloudCrafter.Domain.Entities.StackServiceType", "Type")
+                        .WithMany()
+                        .HasForeignKey("StackServiceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stack");
+
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.UserRefreshToken", b =>
@@ -762,7 +823,17 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CloudCrafter.Domain.Entities.Application", b =>
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.Environment", b =>
+                {
+                    b.Navigation("Stacks");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.Project", b =>
+                {
+                    b.Navigation("Environments");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.Stack", b =>
                 {
                     b.Navigation("Deployments");
 

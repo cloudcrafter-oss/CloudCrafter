@@ -1,24 +1,17 @@
 {
-  "compilerOptions": {
-    "composite": true,
-    "skipLibCheck": true,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "paths": {
-      "@ui/*": [
-        "../../packages/ui/src/*"
-      ],
-      "@/*": [
-        "./*"
-      ],
-      "auth": [
-        "./auth"
-      ]
-    }
-  },
-  "include": [
-    "vite.config.ts"
-  ]
+	"compilerOptions": {
+		"composite": true,
+		"skipLibCheck": true,
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"allowSyntheticDefaultImports": true,
+		"strict": true,
+		"paths": {
+			"@ui/*": ["../../packages/ui/src/*"],
+			"@/*": ["./*"],
+			"auth": ["./auth"]
+		}
+	},
+	"include": ["vite.config.ts"],
+	"exclude": ["node_modules", "src/core/__generated__"]
 }

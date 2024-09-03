@@ -1,11 +1,12 @@
 ﻿using System.Data.Common;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Infrastructure.Data;
-using CloudCrafter.Infrastructure.Logging;
+using CloudCrafter.Infrastructure.Data.Interceptors;
 using Hangfire;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -40,7 +41,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         builder.UseEnvironment("Development"); // will not send real emails
         var host = builder.Build();
         host.Start();
-        
+
         return host;
     }
 
@@ -49,13 +50,13 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         builder.ConfigureAppConfiguration((context, config) =>
         {
             config
-            .AddJsonFile("appsettings.json")
-            .AddJsonFile("appsettings.Development.json", optional: true)
-            .AddInMemoryCollection(new[]
-            {
-                new KeyValuePair<string, string?>("ConnectionStrings:RedisConnection", _redisConnectionString)
-            })
-            .AddEnvironmentVariables();
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.Development.json", true)
+                .AddInMemoryCollection(new[]
+                {
+                    new KeyValuePair<string, string?>("ConnectionStrings:RedisConnection", _redisConnectionString)
+                })
+                .AddEnvironmentVariables();
         });
         builder
             .ConfigureServices((context, services) =>
@@ -64,12 +65,12 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 //GlobalConfiguration.Configuration.UseInMemoryStorage();
                 GlobalConfiguration.Configuration.UseSerilogLogProvider();
                 var configuration = context.Configuration;
-                
+
                 services.AddSerilog(opt =>
                 {
                     opt.ReadFrom.Configuration(configuration);
                 });
-                
+
                 services.AddHangfireServer(options =>
                 {
                     options.WorkerCount = 1; // Ensure jobs are processed immediately
@@ -79,11 +80,14 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
                 services.RemoveAll<IApplicationDbContext>();
 
-                services.AddDbContext<AppDbContext>(options =>
+                services.AddDbContext<AppDbContext>((sp, options) =>
                 {
                     options.UseNpgsql(_postgreSqlConnection);
+                    options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
                 });
 
+                services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+                services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 
                 services.AddScoped<IApplicationDbContext>(provider =>
                 {

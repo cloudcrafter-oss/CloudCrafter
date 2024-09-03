@@ -1,19 +1,18 @@
 ﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Exceptions;
 using CloudCrafter.Agent.Models.Runner;
-using CloudCrafter.Agent.Runner.Cli;
-using CloudCrafter.Agent.Runner.Cli.Helpers;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
+using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CloudCrafter.Agent.Console.IntegrationTests.RunnerEngine.Deployment.Steps;
 
 public class NixpacksDetermineBuildPackHandlerTest : HandlerBaseCase
 {
-    private NixpacksDetermineBuildPackHandler _handler;
     private CheckoutGitRepositoryStepHandler _checkoutHandler;
+    private NixpacksDetermineBuildPackHandler _handler;
 
     [SetUp]
     public void Setup()
@@ -32,7 +31,7 @@ public class NixpacksDetermineBuildPackHandlerTest : HandlerBaseCase
     [Test]
     public void ShouldNotBeAbleToDetermineNixpacksPackBecauseTheGitRepoIsNotCloned()
     {
-        var parameters = new NixpacksDetermineBuildPackParams() { Path = "nixpacks-node-server" };
+        var parameters = new NixpacksDetermineBuildPackParams { Path = "nixpacks-node-server" };
 
         var context = GetContext();
 
@@ -46,15 +45,15 @@ public class NixpacksDetermineBuildPackHandlerTest : HandlerBaseCase
     [Test]
     public async Task ShouldBeAbleToDetermineNixpacksPack()
     {
-        var checkoutParams = new GitCheckoutParams() { Repo = "https://github.com/cloudcrafter-oss/demo-examples.git" };
-        
+        var checkoutParams = new GitCheckoutParams { Repo = "https://github.com/cloudcrafter-oss/demo-examples.git" };
+
         var context = GetContext();
 
         await _checkoutHandler.ExecuteAsync(checkoutParams, context);
-        var parameters = new NixpacksDetermineBuildPackParams() { Path = "nixpacks-node-server" };
+        var parameters = new NixpacksDetermineBuildPackParams { Path = "nixpacks-node-server" };
 
         await _handler.ExecuteAsync(parameters, context);
-        
+
         var pack = context.GetRecipeResult<string>(RecipeResultKeys.NixpacksBuildPack);
 
         pack.Should().Be("node");

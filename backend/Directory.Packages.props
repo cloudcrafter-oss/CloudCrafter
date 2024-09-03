@@ -79,5 +79,7 @@
     <PackageVersion Include="Tomlyn" Version="0.17.0"/>
     <PackageVersion Include="Samboy063.Tomlet" Version="5.4.0"/>
     <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.22272.1"/>
+    <!-- Utils -->
+    <PackageVersion Include="LibGit2Sharp" Version="0.30.0"/>
   </ItemGroup>
 </Project>

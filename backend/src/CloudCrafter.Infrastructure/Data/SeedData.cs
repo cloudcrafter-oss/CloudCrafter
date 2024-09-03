@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Org.BouncyCastle.Crypto.Digests;
+using Environment = System.Environment;
 
 namespace CloudCrafter.Infrastructure.Data;
 
@@ -37,16 +39,16 @@ public static class SeedData
                 PopulateProjects(dbContext);
             }
 
-            var applicationCount = dbContext.Applications.Count();
+            var applicationCount = dbContext.Stacks.Count();
 
             if (applicationCount == 0)
             {
-                PopulateApplications(dbContext);
+                PopulateStacks(dbContext);
             }
         }
     }
 
-    public static void PopulateApplications(AppDbContext dbContext)
+    public static void PopulateStacks(AppDbContext dbContext)
     {
         var firstServer = dbContext.Servers.FirstOrDefault();
 
@@ -59,14 +61,15 @@ public static class SeedData
 
         foreach (var project in projects)
         {
-            var applications = FakerInstances.ApplicationFaker
+            // project should always have at least one environment
+
+            var applications = FakerInstances.StackFaker(project.Environments.FirstOrDefault()!.Id)
                 .RuleFor(x => x.Server, firstServer)
-                .RuleFor(x => x.Project, project)
                 .Generate(10);
 
             foreach (var application in applications)
             {
-                dbContext.Applications.Add(application);
+                dbContext.Stacks.Add(application);
             }
         }
 
@@ -79,6 +82,11 @@ public static class SeedData
         foreach (var project in projects)
         {
             dbContext.Projects.Add(project);
+
+            var environment = FakerInstances.EnvironmentFaker(project).Generate();
+
+
+            dbContext.Environments.Add(environment);
         }
 
         dbContext.SaveChanges();
