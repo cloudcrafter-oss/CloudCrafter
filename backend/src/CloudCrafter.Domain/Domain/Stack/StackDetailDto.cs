@@ -14,13 +14,15 @@ public class StackDetailDto
     public List<StackServiceDto> Services { get; init; } = new();
 
     public required StackSourceDto? Source { get; init; }
+    public required StackServerDto Destination { get; init; }
 
     private class Mapping : Profile
     {
         public Mapping()
         {
             CreateMap<Entities.Stack, StackDetailDto>()
-                .ForMember(x => x.Services, opt => opt.Ignore());
+                .ForMember(x => x.Services, opt => opt.Ignore())
+                .ForMember(x => x.Destination, opt => opt.MapFrom(src => src.Server));
         }
     }
 }
@@ -32,6 +34,19 @@ public class StackServiceDto
     public required StackHealthStatus HealthStatus { get; init; }
 }
 
+public class StackServerDto
+{
+    public required string Name { get; init; }
+    public required string IpAddress { get; init; }
+
+    private class Mapping : Profile
+    {
+        public Mapping()
+        {
+            CreateMap<Entities.Server, StackServerDto>();
+        }
+    }
+}
 public class StackSourceDto
 {
     public required StackSourceType Type { get; init; }

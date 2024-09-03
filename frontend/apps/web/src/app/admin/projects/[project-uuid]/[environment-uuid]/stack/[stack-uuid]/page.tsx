@@ -1,4 +1,5 @@
-import ProjectConfigPage from '@/src/components/project-detail/ProjectConfigPage'
+import StackConfigPage from '@/src/components/stack-detail/StackConfigPage'
+import { getStackDetail } from '@/src/core/__generated__'
 import {
 	type StackRouteParams,
 	validateStackRouteParams,
@@ -14,8 +15,10 @@ interface PageProps {
 	params: StackRouteParams
 }
 
-export default function StackPage({ params }: PageProps) {
+export default async function StackPage({ params }: PageProps) {
 	const routeData = validateStackRouteParams(params)
+
+	const stackDetails = await getStackDetail(routeData['stack-uuid'])
 	const tabs = [
 		{
 			name: 'Configuration',
@@ -40,10 +43,10 @@ export default function StackPage({ params }: PageProps) {
 							))}
 						</TabsList>
 						<TabsContent value='configuration' className='space-y-4'>
-							<ProjectConfigPage />
+							<StackConfigPage stackDetails={stackDetails} />
 						</TabsContent>
 						<TabsContent value='deployments' className='space-y-4'>
-							<pre>{JSON.stringify(routeData, null, 2)}</pre>
+							<pre>{JSON.stringify(stackDetails, null, 2)}</pre>
 						</TabsContent>
 					</Tabs>
 				</div>
