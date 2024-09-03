@@ -6,6 +6,7 @@ export * from "./useGetProjectHook";
 export * from "./useGetProjectsHook";
 export * from "./useGetServerByIdHook";
 export * from "./useGetServersHook";
+export * from "./useGetStackDetailHook";
 export * from "./useGetTestHook";
 export * from "./useGetUsersHook";
 export * from "./usePostCreateDeploymentHook";

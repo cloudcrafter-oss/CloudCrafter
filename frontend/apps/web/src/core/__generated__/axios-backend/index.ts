@@ -6,6 +6,7 @@ export * from "./getProjectEnvironmentEnhanced";
 export * from "./getProjects";
 export * from "./getServerById";
 export * from "./getServers";
+export * from "./getStackDetail";
 export * from "./getTest";
 export * from "./getUsers";
 export * from "./postCreateDeployment";

@@ -18,7 +18,7 @@ public class DeployedStackDto
 {
     public required Guid StackId { get; init; }
     public required string Name { get; init; }
-    public required StackHealthStatus HealthStatus { get; init; }
+    public required ProjectHealthStatus HealthStatus { get; init; }
 
     private class Mapping : Profile
     {
@@ -26,13 +26,13 @@ public class DeployedStackDto
         {
             CreateMap<Entities.Stack, DeployedStackDto>()
                 .ForMember(x => x.StackId, x => x.MapFrom(opt => opt.Id))
-                .ForMember(x => x.HealthStatus, opt => opt.MapFrom(dest => StackHealthStatus.Unknown));
+                .ForMember(x => x.HealthStatus, opt => opt.MapFrom(dest => ProjectHealthStatus.Unknown));
         }
     }
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
-public enum StackHealthStatus
+public enum ProjectHealthStatus
 {
     Healthy,
     Degraded,
