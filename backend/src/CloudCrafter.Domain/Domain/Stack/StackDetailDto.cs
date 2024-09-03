@@ -10,14 +10,14 @@ public class StackDetailDto
     public required Guid Id { get; init; }
     public required string Name { get; init; }
     
-    [NotMapped]
     public List<StackServiceDto> Services { get; init; } = new();
 
     private class Mapping : Profile
     {
         public Mapping()
         {
-            CreateMap<Entities.Stack, StackDetailDto>();
+            CreateMap<Entities.Stack, StackDetailDto>()
+                .ForMember(x => x.Services, opt => opt.Ignore());
         }
     }
 }
