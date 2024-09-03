@@ -1,4 +1,9 @@
 'use client'
+import {
+	type StackDetailDto,
+	useDispatchStackDeploymentHook,
+} from '@/src/core/__generated__'
+import { Badge } from '@ui/components/ui/badge'
 import { Button } from '@ui/components/ui/button'
 import {
 	Card,
@@ -7,29 +12,24 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@ui/components/ui/card'
-import { Input } from '@ui/components/ui/input'
-import { Label } from '@ui/components/ui/label'
-import { Switch } from '@ui/components/ui/switch'
-import { Textarea } from '@ui/components/ui/textarea'
-import {
-	PencilIcon,
-	MoreVertical,
-	RefreshCw,
-	FileText,
-	Trash2,
-} from 'lucide-react'
-import { useState } from 'react'
-import { Badge } from '@ui/components/ui/badge'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@ui/components/ui/dropdown-menu'
+import { Input } from '@ui/components/ui/input'
+import { Label } from '@ui/components/ui/label'
+import { Switch } from '@ui/components/ui/switch'
+import { Textarea } from '@ui/components/ui/textarea'
 import {
-	type StackDetailDto,
-	useDispatchStackDeploymentHook,
-} from '@/src/core/__generated__'
+	FileText,
+	MoreVertical,
+	PencilIcon,
+	RefreshCw,
+	Trash2,
+} from 'lucide-react'
+import { useState } from 'react'
 
 export const BasicInfo = ({
 	stackDetails,
