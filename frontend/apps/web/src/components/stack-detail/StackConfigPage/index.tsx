@@ -1,12 +1,6 @@
 'use client'
 
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@ui/components/ui/card'
+import {} from '@ui/components/ui/card'
 import {} from '@ui/components/ui/tabs'
 import { cn } from '@ui/lib/utils'
 import type React from 'react'
@@ -163,19 +157,11 @@ const StackConfigPage: React.FC<{ stackDetails: StackDetailDto }> = ({
 						(subTab) =>
 							activeSection === section.id &&
 							activeSubTab === subTab.id && (
-								<Card key={`${section.id}-${subTab.id}`}>
-									<CardHeader>
-										<CardTitle>
-											{section.title} - {subTab.title}
-										</CardTitle>
-										<CardDescription>{section.description}</CardDescription>
-									</CardHeader>
-									<CardContent>
-										{subTab.component && (
-											<subTab.component stackDetails={stackDetails} />
-										)}
-									</CardContent>
-								</Card>
+								<div key={`${section.id}-${subTab.id}`}>
+									{subTab.component && (
+										<subTab.component stackDetails={stackDetails} />
+									)}
+								</div>
 							),
 					),
 				)}
