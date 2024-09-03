@@ -51,6 +51,10 @@ export const operations = {
         "path": "/api/Stacks/:id",
         "method": "get"
     },
+    "DispatchStackDeployment": {
+        "path": "/api/Stacks/:id/deploy",
+        "method": "post"
+    },
     "GetFilterableFields": {
         "path": "/api/System/get-fields",
         "method": "get"

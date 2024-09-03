@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core.Commands.Stacks;
+using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Web.Infrastructure;
 using MediatR;
@@ -12,7 +13,8 @@ public class Stacks : EndpointGroupBase
     {
         app.MapGroup(this)
             .MapPost(PostCreateStack)
-            .MapGet(GetStackDetail, "{id}");
+            .MapGet(GetStackDetail, "{id}")
+            .MapPost(DispatchStackDeployment, "{id}/deploy");
     }
 
     public async Task<StackCreatedDto> PostCreateStack(CreateStackCommand.Command command, ISender sender)
@@ -27,5 +29,10 @@ public class Stacks : EndpointGroupBase
     {
         var details = await sender.Send(new GetStackDetail.Query { StackId = id });
         return details is not null ? Results.Ok(details) : Results.NotFound();
+    }
+
+    public async Task<DeploymentCreatedDetailsDto> DispatchStackDeployment([FromRoute] Guid id, ISender sender)
+    {
+        return await sender.Send(new DispatchStack.Command(id));
     }
 }

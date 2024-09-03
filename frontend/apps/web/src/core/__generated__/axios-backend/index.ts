@@ -1,5 +1,6 @@
 export * from "./createProject";
 export * from "./deleteProject";
+export * from "./dispatchStackDeployment";
 export * from "./getFilterableFields";
 export * from "./getProject";
 export * from "./getProjectEnvironmentEnhanced";

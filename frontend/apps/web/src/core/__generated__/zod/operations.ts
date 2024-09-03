@@ -12,6 +12,7 @@ import { getServersQueryResponseSchema } from "./getServersSchema";
 import { getServerByIdQueryResponseSchema, getServerByIdPathParamsSchema } from "./getServerByIdSchema";
 import { postCreateStackMutationRequestSchema, postCreateStackMutationResponseSchema } from "./postCreateStackSchema";
 import { getStackDetailQueryResponseSchema, getStackDetail404Schema, getStackDetailPathParamsSchema } from "./getStackDetailSchema";
+import { dispatchStackDeploymentMutationResponseSchema, dispatchStackDeploymentPathParamsSchema } from "./dispatchStackDeploymentSchema";
 import { getFilterableFieldsQueryResponseSchema } from "./getFilterableFieldsSchema";
 import { getTestMutationRequestSchema, getTestMutationResponseSchema } from "./getTestSchema";
 import { getUsersMutationRequestSchema, getUsersMutationResponseSchema } from "./getUsersSchema";
@@ -195,6 +196,18 @@ import { postValidateGithubRepoMutationRequestSchema, postValidateGithubRepoMuta
         errors: {
             404: getStackDetail404Schema
         }
+    }, "DispatchStackDeployment": {
+        request: undefined,
+        parameters: {
+            path: dispatchStackDeploymentPathParamsSchema,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: dispatchStackDeploymentMutationResponseSchema,
+            default: dispatchStackDeploymentMutationResponseSchema
+        },
+        errors: {}
     }, "GetFilterableFields": {
         request: undefined,
         parameters: {
@@ -281,6 +294,8 @@ export const paths = { "/api/Applications/{applicationId}/deployment": {
         post: operations["PostCreateStack"]
     }, "/api/Stacks/{id}": {
         get: operations["GetStackDetail"]
+    }, "/api/Stacks/{id}/deploy": {
+        post: operations["DispatchStackDeployment"]
     }, "/api/System/get-fields": {
         get: operations["GetFilterableFields"]
     }, "/api/Test": {

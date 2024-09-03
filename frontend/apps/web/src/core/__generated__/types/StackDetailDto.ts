@@ -1,5 +1,6 @@
 import type { StackServiceDto } from "./StackServiceDto";
 import type { StackSourceDto } from "./StackSourceDto";
+import type { StackServerDto } from "./StackServerDto";
 
  export type StackDetailDto = {
     /**
@@ -15,4 +16,5 @@ import type { StackSourceDto } from "./StackSourceDto";
     */
     services: StackServiceDto[];
     source: StackSourceDto;
+    destination: StackServerDto;
 };

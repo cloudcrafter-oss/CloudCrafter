@@ -9,20 +9,22 @@ public class BackgroundJob : IHasTimestamps
     public required Guid Id { get; init; }
     public required string? HangfireJobId { get; set; }
     public required BackgroundJobType Type { get; init; }
-    [EncryptColumn]
-    public string SerializedArguments { get; set; } = string.Empty;
+
+    [EncryptColumn] public string SerializedArguments { get; set; } = string.Empty;
+
     public ServerConnectivityCheckJob? ServerConnectivityCheckJob { get; set; }
     public List<BackgroundJobLog> Logs { get; set; } = new();
     public required BackgroundJobStatus Status { get; set; }
     public DateTime? CompletedAt { get; set; }
+    public long? RunningTime { get; set; }
     public required DateTime CreatedAt { get; init; }
     public required DateTime UpdatedAt { get; set; }
-    public long? RunningTime { get; set; }
 }
 
 public enum BackgroundJobType
 {
-    ServerConnectivityCheck
+    ServerConnectivityCheck,
+    StackDeployment
 }
 
 public enum BackgroundJobStatus
