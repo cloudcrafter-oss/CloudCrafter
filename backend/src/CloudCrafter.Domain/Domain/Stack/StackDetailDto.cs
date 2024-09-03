@@ -36,7 +36,8 @@ public class StackServiceDto
     {
         public Mapping()
         {
-            CreateMap<StackService, StackServiceDto>();
+            CreateMap<StackService, StackServiceDto>()
+                .ForMember(x => x.HealthStatus, opt => opt.Ignore());
         }
     }
 }
