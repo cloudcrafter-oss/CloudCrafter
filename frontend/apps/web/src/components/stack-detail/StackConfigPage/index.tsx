@@ -1,13 +1,13 @@
 'use client'
 
+import type { StackDetailDto } from '@/src/core/__generated__'
 import {} from '@ui/components/ui/card'
 import {} from '@ui/components/ui/tabs'
 import { cn } from '@ui/lib/utils'
 import type React from 'react'
-import { useState, useEffect } from 'react'
-import { BasicInfo } from '../general-settings/BasicInfo'
+import { useEffect, useState } from 'react'
 import { DummyInfoTab } from '../DummyInfoTab'
-import type { StackDetailDto } from '@/src/core/__generated__'
+import { BasicInfo } from '../general-settings/BasicInfo'
 
 // Define the base props interface
 interface BaseComponentProps {

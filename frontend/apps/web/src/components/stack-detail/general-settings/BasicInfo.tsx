@@ -1,3 +1,5 @@
+import type { StackDetailDto } from '@/src/core/__generated__'
+import { Button } from '@ui/components/ui/button'
 import {
 	Card,
 	CardContent,
@@ -7,29 +9,52 @@ import {
 } from '@ui/components/ui/card'
 import { Input } from '@ui/components/ui/input'
 import { Label } from '@ui/components/ui/label'
-import { Button } from '@ui/components/ui/button'
-import { Textarea } from '@ui/components/ui/textarea'
 import { Switch } from '@ui/components/ui/switch'
+import { Textarea } from '@ui/components/ui/textarea'
+import { PencilIcon } from 'lucide-react'
+import { useState } from 'react'
 
-export const BasicInfo = () => {
+export const BasicInfo = ({
+	stackDetails,
+}: { stackDetails: StackDetailDto }) => {
+	const [isEditing, setIsEditing] = useState(false)
+
 	return (
 		<div className='space-y-6'>
 			<Card>
-				<CardHeader>
+				<CardHeader className='relative'>
 					<CardTitle>Stack Information</CardTitle>
 					<CardDescription>Basic details about your Stack</CardDescription>
+					<Button
+						variant='ghost'
+						size='icon'
+						className='absolute top-4 right-4'
+						onClick={() => setIsEditing(!isEditing)}
+					>
+						<PencilIcon className='h-4 w-4' />
+					</Button>
 				</CardHeader>
 				<CardContent className='space-y-4'>
 					<div className='space-y-2'>
 						<Label htmlFor='stack-name'>Stack Name</Label>
-						<Input id='stack-name' placeholder='my-awesome-stack' />
+						{isEditing ? (
+							<Input id='stack-name' placeholder={stackDetails.name} />
+						) : (
+							<div className='p-2 bg-muted rounded-md'>{stackDetails.name}</div>
+						)}
 					</div>
 					<div className='space-y-2'>
 						<Label htmlFor='stack-description'>Description</Label>
-						<Textarea
-							id='stack-description'
-							placeholder='Describe your stack...'
-						/>
+						{isEditing ? (
+							<Textarea
+								id='stack-description'
+								placeholder='Describe your stack...'
+							/>
+						) : (
+							<div className='p-2 bg-muted rounded-md'>
+								Stack description goes here...
+							</div>
+						)}
 					</div>
 				</CardContent>
 			</Card>
