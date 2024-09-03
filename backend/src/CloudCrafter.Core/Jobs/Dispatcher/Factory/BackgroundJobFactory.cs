@@ -4,6 +4,7 @@ using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Jobs.Creation;
 using CloudCrafter.Core.Jobs.Logger;
 using CloudCrafter.Core.Jobs.Servers;
+using CloudCrafter.Core.Jobs.Stacks;
 using CloudCrafter.Domain.Entities;
 using Hangfire;
 using Hangfire.Console;
@@ -93,6 +94,9 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
                 case BackgroundJobType.ServerConnectivityCheck:
                     await ExecuteTypedJobAsync<ConnectivityCheckBackgroundJob, Server>(backgroundJob, performContext,
                         scope);
+                    break;
+                case BackgroundJobType.StackDeployment:
+                    await ExecuteTypedJobAsync<DeployStackBackgroundJob, Guid>(backgroundJob, performContext, scope);
                     break;
                 // Add other job types as needed
                 default:

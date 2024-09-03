@@ -1,4 +1,4 @@
-import type { StackDetailDto } from '@/src/core/__generated__'
+'use client'
 import { Button } from '@ui/components/ui/button'
 import {
 	Card,
@@ -26,11 +26,20 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@ui/components/ui/dropdown-menu'
+import {
+	type StackDetailDto,
+	useDispatchStackDeploymentHook,
+} from '@/src/core/__generated__'
 
 export const BasicInfo = ({
 	stackDetails,
 }: { stackDetails: StackDetailDto }) => {
 	const [isEditing, setIsEditing] = useState(false)
+
+	const { mutateAsync } = useDispatchStackDeploymentHook(stackDetails.id)
+	const handleDeploy = async () => {
+		await mutateAsync({} as never)
+	}
 
 	return (
 		<div className='space-y-6'>
@@ -48,9 +57,9 @@ export const BasicInfo = ({
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent>
-								<DropdownMenuItem>
+								<DropdownMenuItem onClick={handleDeploy}>
 									<RefreshCw className='mr-2 h-4 w-4' />
-									Restart Stack
+									Deploy now
 								</DropdownMenuItem>
 								<DropdownMenuItem>
 									<FileText className='mr-2 h-4 w-4' />

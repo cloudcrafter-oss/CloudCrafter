@@ -14,6 +14,7 @@ using CloudCrafter.Core.Jobs.Creation;
 using CloudCrafter.Core.Jobs.Dispatcher;
 using CloudCrafter.Core.Jobs.Dispatcher.Factory;
 using CloudCrafter.Core.Jobs.Servers;
+using CloudCrafter.Core.Jobs.Stacks;
 using CloudCrafter.Core.Services.Domain.Applications.Deployments;
 using CloudCrafter.Core.Services.Domain.Environments;
 using CloudCrafter.Core.Services.Domain.Projects;
@@ -107,9 +108,13 @@ public static class ApplicationServiceExtensions
         services.AddScoped<BackgroundJobFactory>();
 
         services.AddScoped<ConnectivityCheckBackgroundJob>();
+        services.AddScoped<DeployStackBackgroundJob>();
         services
             .AddScoped<IJobCreationStrategy<ConnectivityCheckBackgroundJob, Server>,
                 ConnectivityCheckCreationStrategy>();
+        services
+            .AddScoped<IJobCreationStrategy<DeployStackBackgroundJob, Guid>,
+                DeployStackJobCreationStrategy>();
 
 
         return services;
