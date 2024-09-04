@@ -1,6 +1,7 @@
 using Bogus;
 using CloudCrafter.Core.Jobs;
 using CloudCrafter.Core.Jobs.Serializer;
+using CloudCrafter.Domain.Entities;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -104,6 +105,7 @@ public class JobSerializerTest
         dummyTestJob.IsTrue.Should().Be(randomBool);
         dummyTestJob.Number.Should().Be(randomNumber);
         dummyTestJob.Name.Should().Be(randomString);
+        dummyTestJob.Type.Should().Be(BackgroundJobType.StackDeployment);
     }
 }
 
@@ -136,6 +138,8 @@ public class DummyTestJob : IJob
     public int Number { get; set; }
 
     public string Name { get; set; } = null!;
+
+    public BackgroundJobType Type => BackgroundJobType.StackDeployment;
 
     public Task Handle(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, string jobId)
     {

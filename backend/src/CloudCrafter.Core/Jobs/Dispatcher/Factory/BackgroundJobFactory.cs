@@ -1,10 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
 using CloudCrafter.Core.Common.Interfaces;
-using CloudCrafter.Core.Jobs.Creation;
 using CloudCrafter.Core.Jobs.Logger;
-using CloudCrafter.Core.Jobs.Servers;
-using CloudCrafter.Core.Jobs.Stacks;
+using CloudCrafter.Core.Jobs.Serializer;
 using CloudCrafter.Domain.Entities;
 using Hangfire;
 using Hangfire.Console;
@@ -18,26 +16,40 @@ namespace CloudCrafter.Core.Jobs.Dispatcher.Factory;
 
 public class BackgroundJobFactory(
     IApplicationDbContext context,
-    IServiceProvider sp,
+    JobSerializer jobSerializer,
     IBackgroundJobClient client,
     ILogger<BackgroundJobFactory> logger)
 {
-    public async Task<string> CreateAndEnqueueJobAsync<TJob, TParam>(TParam parameters) where TJob : IBaseJob<TParam>
+    /// <summary>
+    ///     Creates and enqueues a job on the background
+    /// </summary>
+    /// <param name="parameters"></param>
+    /// <typeparam name="TJob"></typeparam>
+    /// <returns>The Hangfire Job id</returns>
+    public async Task<string> CreateAndEnqueueJobAsync<TJob>(IJob job)
     {
         logger.LogDebug("[CreateAndEnqueueJobAsync] Creating and enqueuing job of type {JobType}", typeof(TJob).Name);
-        var strategy = sp.GetRequiredService<IJobCreationStrategy<TJob, TParam>>();
-
         await using var transaction = await context.BeginTransactionAsync();
         try
         {
-            var backgroundJob = await strategy.CreateJobAsync(parameters);
+            var serializedJob = await jobSerializer.Serialize<TJob>(job);
+            var backgroundJob = new BackgroundJob
+            {
+                Id = Guid.NewGuid(),
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                Status = BackgroundJobStatus.Created,
+                SerializedArguments = JsonSerializer.Serialize(serializedJob),
+                HangfireJobId = string.Empty,
+                Type = job.Type
+            };
 
 
             context.Jobs.Add(backgroundJob);
             await context.SaveChangesAsync();
 
             var hangfireJobId =
-                client.Enqueue<CloudCrafterJob>(job => job.ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type, null));
+                client.Enqueue<CloudCrafterJob>(job => job.ExecuteJobAsync(backgroundJob.Id, null));
 
             backgroundJob.HangfireJobId = hangfireJobId;
             await context.SaveChangesAsync();
@@ -48,7 +60,7 @@ public class BackgroundJobFactory(
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            logger.LogCritical(ex, "Failed to create and enqueue job");
             await transaction.RollbackAsync();
             throw;
         }
@@ -58,16 +70,22 @@ public class BackgroundJobFactory(
 public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider sp)
 {
     [JobDisplayName("{1}")]
-    public async Task ExecuteJobAsync(Guid backgroundJobId, BackgroundJobType jobType, PerformContext? performContext)
+    public async Task ExecuteJobAsync(Guid backgroundJobId, PerformContext? performContext)
     {
 #if IN_TESTS
         // In tests, the job is executed synchronously (in memory)
         // So we need to wait until the DBContext is done saving the job to the database.
+        // So again, sorry. Feel free to open a PR if you're able to fix this.
         System.Console.WriteLine("Sleeping 5000ms");
         await Task.Delay(5000);
 #endif
-        logger.LogDebug("Executing job {BackgroundJobId} of type {JobType}", backgroundJobId, jobType);
-        performContext.WriteLine("Executing job {0} of type {1}", backgroundJobId, jobType);
+        if (performContext == null)
+        {
+            throw new ArgumentNullException("PerformContext should not be null in this context");
+        }
+
+        logger.LogDebug("Executing job {BackgroundJobId}", backgroundJobId);
+        performContext.WriteLine("Executing job {0}");
         using var scope = sp.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
 
@@ -80,6 +98,8 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
             throw new ArgumentException("Background job not found", nameof(backgroundJobId));
         }
 
+        logger.LogDebug("Executing background job of type {Type}", backgroundJob.Type);
+
         var loggerFactory =
             new BackgroundJobLoggerFactory(backgroundJob, performContext, dbContext, scope.ServiceProvider);
 
@@ -89,19 +109,22 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
             backgroundJob.Status = BackgroundJobStatus.Running;
             await dbContext.SaveChangesAsync();
 
-            switch (jobType)
+            var jobSerializer = scope.ServiceProvider.GetRequiredService<JobSerializer>();
+            var jobArgs = JsonSerializer.Deserialize<SerializedJobResult>(backgroundJob.SerializedArguments);
+
+            if (jobArgs is null)
             {
-                case BackgroundJobType.ServerConnectivityCheck:
-                    await ExecuteTypedJobAsync<ConnectivityCheckBackgroundJob, Server>(backgroundJob, performContext,
-                        scope);
-                    break;
-                case BackgroundJobType.StackDeployment:
-                    await ExecuteTypedJobAsync<DeployStackBackgroundJob, Guid>(backgroundJob, performContext, scope);
-                    break;
-                // Add other job types as needed
-                default:
-                    throw new ArgumentException($"Unsupported job type: {jobType}");
+                throw new ArgumentNullException("Failed to deserialize job arguments");
             }
+
+            var jobFromSerializer = await jobSerializer.Deserialize(jobArgs.SerializedJob, jobArgs.JobType);
+
+            if (jobFromSerializer is null)
+            {
+                throw new ArgumentNullException("Failed to deserialize job");
+            }
+
+            await jobFromSerializer.Handle(scope.ServiceProvider, loggerFactory, performContext.BackgroundJob.Id);
 
             backgroundJob.Status = BackgroundJobStatus.Completed;
         }

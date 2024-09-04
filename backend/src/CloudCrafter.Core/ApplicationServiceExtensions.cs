@@ -13,6 +13,7 @@ using CloudCrafter.Core.Interfaces.Domain.Utils;
 using CloudCrafter.Core.Jobs.Creation;
 using CloudCrafter.Core.Jobs.Dispatcher;
 using CloudCrafter.Core.Jobs.Dispatcher.Factory;
+using CloudCrafter.Core.Jobs.Serializer;
 using CloudCrafter.Core.Jobs.Servers;
 using CloudCrafter.Core.Jobs.Stacks;
 using CloudCrafter.Core.Services.Domain.Applications.Deployments;
@@ -106,6 +107,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ICloudCrafterDispatcher, CloudCrafterDispatcher>();
         services.AddScoped<ICloudCrafterRecurringJobsDispatcher, CloudCrafterRecurringJobsDispatcher>();
         services.AddScoped<BackgroundJobFactory>();
+        services.AddSingleton<JobSerializer>();
 
         services.AddScoped<ConnectivityCheckBackgroundJob>();
         services.AddScoped<DeployStackBackgroundJob>();

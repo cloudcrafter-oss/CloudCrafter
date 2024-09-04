@@ -14,9 +14,8 @@ public class Test : EndpointGroupBase
             .MapPost(GetTest);
     }
 
-    public Task GetTest(ISender sender, JobScheduler scheduler, [FromBody] TestCommand.Query query)
+    public Task GetTest(ISender sender, [FromBody] TestCommand.Query query)
     {
-        var result = scheduler.Enqueue<MyTestJob>("a", "b");
         return Task.CompletedTask;
     }
 }

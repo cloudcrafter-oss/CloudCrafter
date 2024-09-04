@@ -1,6 +1,5 @@
 ﻿using CloudCrafter.Core.Jobs.Dispatcher.Factory;
 using CloudCrafter.Core.Jobs.Servers;
-using CloudCrafter.Core.Jobs.Stacks;
 using CloudCrafter.Domain.Entities;
 using Microsoft.Extensions.Logging;
 
@@ -12,7 +11,9 @@ public class CloudCrafterDispatcher(BackgroundJobFactory jobFactory, ILogger<Clo
     public async Task<string> EnqueueConnectivityCheck(Server server)
     {
         logger.LogDebug("Dispatching connectivity check to job factory for server {ServerName}", server.Name);
-        return await jobFactory.CreateAndEnqueueJobAsync<ConnectivityCheckBackgroundJob, Server>(server);
+
+        var job = new ConnectivityCheckBackgroundJob(server.Id);
+        return await jobFactory.CreateAndEnqueueJobAsync<ConnectivityCheckBackgroundJob>(job);
     }
 
     public async Task EnqueueConnectivityCheck(List<Server> servers)
@@ -23,9 +24,11 @@ public class CloudCrafterDispatcher(BackgroundJobFactory jobFactory, ILogger<Clo
         }
     }
 
-    public async Task<string> EnqueueStackDeployment(Guid stackId)
+    public Task<string> EnqueueStackDeployment(Guid stackId)
     {
         logger.LogInformation("Dispatching stack deployment to job factory for stack {StackId}", stackId);
-        return await jobFactory.CreateAndEnqueueJobAsync<DeployStackBackgroundJob, Guid>(stackId);
+        // return await jobFactory.CreateAndEnqueueJobAsync<DeployStackBackgroundJob, Guid>(stackId);
+
+        return Task.FromResult("Not implemented");
     }
 }
