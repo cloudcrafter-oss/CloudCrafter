@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core.Commands;
+using CloudCrafter.Core.Jobs;
 using CloudCrafter.Web.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +14,9 @@ public class Test : EndpointGroupBase
             .MapPost(GetTest);
     }
 
-    public Task GetTest(ISender sender, [FromBody] TestCommand.Query query)
+    public Task GetTest(ISender sender, JobScheduler scheduler, [FromBody] TestCommand.Query query)
     {
-        return sender.Send(query);
+        var result = scheduler.Enqueue<MyTestJob>("a", "b");
+        return Task.CompletedTask;
     }
 }
