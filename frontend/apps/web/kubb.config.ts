@@ -15,7 +15,10 @@ export default defineConfig({
 		clean: true,
 	},
 	hooks: {
-		done: ['node src/utils/kubb/post-action.js'],
+		done: [
+			'node src/utils/kubb/post-action.js',
+			'node src/utils/kubb/get-signal-types.js',
+		],
 	},
 	plugins: [
 		pluginOas({ output: false }),

@@ -81,5 +81,7 @@
     <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.22272.1"/>
     <!-- Utils -->
     <PackageVersion Include="LibGit2Sharp" Version="0.30.0"/>
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Common" Version="8.0.8"/>
+    <PackageVersion Include="TypeGen" Version="5.0.1"/>
   </ItemGroup>
 </Project>

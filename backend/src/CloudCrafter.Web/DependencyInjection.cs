@@ -20,12 +20,12 @@ public static class DependencyInjection
             .BindConfiguration(JwtSettings.KEY)
             .ValidateDataAnnotations()
             .ValidateOnStart();
-        
+
         services.AddOptions<CorsSettings>()
             .BindConfiguration(CorsSettings.KEY)
             .ValidateDataAnnotations()
             .ValidateOnStart();
-        
+
 
         services.AddCloudCrafterConfiguration();
 
@@ -51,13 +51,14 @@ public static class DependencyInjection
                 }
 
                 policy.AllowAnyMethod()
+                    .AllowCredentials()
                     .AllowAnyHeader();
-                
             });
         });
 
         return services;
     }
+
     public static IServiceCollection AddSwaggerServices(this IServiceCollection collection)
     {
         collection.AddEndpointsApiExplorer()

@@ -110,6 +110,8 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ConnectivityCheckBackgroundJob>();
         services.AddScoped<DeployStackBackgroundJob>();
 
+        // SignalR
+        services.AddSignalR();
 
         return services;
     }
