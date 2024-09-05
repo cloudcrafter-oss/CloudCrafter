@@ -41,7 +41,7 @@ public class JobSerializerTest
         string? nullableString = null;
         if (faker.Random.Bool())
         {
-            nullableString = faker.Random.String();
+            nullableString = faker.Internet.DomainName();
         }
 
         // Arrange
@@ -57,7 +57,7 @@ public class JobSerializerTest
         result.JobType.Should().Be(typeof(DummyTestJob).ToString());
 
         var expectedJson =
-            $"{{\"NullableString\":{(nullableString == null ? "null" : $"\"{nullableString}\"")},\"NullableNumber\":{(nullableNumber == null ? "null" : nullableNumber.ToString())},\"NullableBool\":{(nullableBool == null ? "null" : nullableBool.Value.ToString().ToLower())},\"IsTrue\":{job.IsTrue.ToString().ToLower()},\"Number\":{job.Number},\"Name\":\"{job.Name}\"}}";
+            $"{{\"NullableString\":{(nullableString == null ? "null" : $"\"{nullableString}\"")},\"NullableNumber\":{(nullableNumber == null ? "null" : nullableNumber.ToString())},\"NullableBool\":{(nullableBool == null ? "null" : nullableBool.Value.ToString().ToLower())},\"IsTrue\":{job.IsTrue.ToString().ToLower()},\"Number\":{job.Number},\"Name\":\"{job.Name}\",\"Type\":1}}";
         result.SerializedJob.Should().Be(expectedJson);
     }
 
