@@ -3,15 +3,25 @@ using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Jobs.Stacks;
 
-public class DeployStackBackgroundJob : IBaseJob<Guid>
+public class DeployStackBackgroundJob : IJob
 {
-    public string JobName => "Stack Deployment";
-    public BackgroundJobType Type => BackgroundJobType.ServerConnectivityCheck;
+    public DeployStackBackgroundJob()
+    {
+        
+    }
 
-    public Task ExecuteAsync(BackgroundJob backgroundJob, Guid stackId, ILoggerFactory loggerFactory)
+    public DeployStackBackgroundJob(Guid stackId)
+    {
+        StackId = stackId;
+    }
+
+    public Guid StackId { get; set; }
+
+    public BackgroundJobType Type => BackgroundJobType.StackDeployment;
+    public Task Handle(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, string jobId)
     {
         var logger = loggerFactory.CreateLogger<DeployStackBackgroundJob>();
-        logger.LogDebug("Starting deployment for stack ({StackId})", stackId);
+        logger.LogDebug("Starting deployment for stack ({StackId})", StackId);
         
         return Task.CompletedTask;
     }

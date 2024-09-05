@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.Core.Jobs.Dispatcher.Factory;
 using CloudCrafter.Core.Jobs.Servers;
+using CloudCrafter.Core.Jobs.Stacks;
 using CloudCrafter.Domain.Entities;
 using Microsoft.Extensions.Logging;
 
@@ -24,11 +25,11 @@ public class CloudCrafterDispatcher(BackgroundJobFactory jobFactory, ILogger<Clo
         }
     }
 
-    public Task<string> EnqueueStackDeployment(Guid stackId)
+    public async Task<string> EnqueueStackDeployment(Guid stackId)
     {
         logger.LogInformation("Dispatching stack deployment to job factory for stack {StackId}", stackId);
-        // return await jobFactory.CreateAndEnqueueJobAsync<DeployStackBackgroundJob, Guid>(stackId);
-
-        return Task.FromResult("Not implemented");
+        var job = new DeployStackBackgroundJob(stackId);
+        return await jobFactory.CreateAndEnqueueJobAsync<DeployStackBackgroundJob>(job);
+        
     }
 }

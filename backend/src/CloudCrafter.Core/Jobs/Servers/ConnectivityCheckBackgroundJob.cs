@@ -32,7 +32,7 @@ public class ConnectivityCheckBackgroundJob : IJob
 
         if (job == null)
         {
-            throw new ArgumentNullException("Job not found");
+            throw new ArgumentNullException(nameof(jobId), "Job not found");
         }
 
         var connectivityCheckJob = new ServerConnectivityCheckJob
@@ -52,7 +52,7 @@ public class ConnectivityCheckBackgroundJob : IJob
         var server = await context.Servers.FindAsync(ServerId);
         if (server == null)
         {
-            throw new ArgumentNullException("Server not found");
+            throw new ArgumentNullException(nameof(ServerId), "Server not found");
         }
 
         var service = serviceProvider.GetRequiredService<IServerConnectivityService>();
