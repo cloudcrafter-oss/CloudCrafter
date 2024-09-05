@@ -35,7 +35,7 @@ public class ConnectivityCheckBackgroundJob : IJob
             throw new ArgumentNullException("Job not found");
         }
 
-        job.ServerConnectivityCheckJob = new ServerConnectivityCheckJob
+        var connectivityCheckJob = new ServerConnectivityCheckJob
         {
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
@@ -43,7 +43,7 @@ public class ConnectivityCheckBackgroundJob : IJob
             Id = Guid.NewGuid(),
             ServerId = ServerId
         };
-
+         
         await context.SaveChangesAsync();
 
 

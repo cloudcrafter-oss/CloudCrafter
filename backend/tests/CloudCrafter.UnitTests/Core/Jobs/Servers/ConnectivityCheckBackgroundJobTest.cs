@@ -10,9 +10,9 @@
 //
 // public class ConnectivityCheckBackgroundJobTest
 // {
-//     private Mock<IServerConnectivityService> _mockServerConnectivity;
 //     private ConnectivityCheckBackgroundJob _job;
 //     private Mock<ILoggerFactory> _mockLoggerFactory;
+//     private Mock<IServerConnectivityService> _mockServerConnectivity;
 //
 //     [SetUp]
 //     public void Setup()

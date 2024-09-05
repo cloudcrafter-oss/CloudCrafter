@@ -54,7 +54,7 @@ public class JobSerializerTest
 
         // Assert
         result.Should().NotBeNull();
-        result.JobType.Should().Be(typeof(DummyTestJob));
+        result.JobType.Should().Be(typeof(DummyTestJob).ToString());
 
         var expectedJson =
             $"{{\"NullableString\":{(nullableString == null ? "null" : $"\"{nullableString}\"")},\"NullableNumber\":{(nullableNumber == null ? "null" : nullableNumber.ToString())},\"NullableBool\":{(nullableBool == null ? "null" : nullableBool.Value.ToString().ToLower())},\"IsTrue\":{job.IsTrue.ToString().ToLower()},\"Number\":{job.Number},\"Name\":\"{job.Name}\"}}";

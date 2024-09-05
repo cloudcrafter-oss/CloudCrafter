@@ -33,6 +33,7 @@ public class BackgroundJobFactory(
         try
         {
             var serializedJob = await jobSerializer.Serialize<TJob>(job);
+
             var backgroundJob = new BackgroundJob
             {
                 Id = Guid.NewGuid(),
@@ -49,7 +50,7 @@ public class BackgroundJobFactory(
             await context.SaveChangesAsync();
 
             var hangfireJobId =
-                client.Enqueue<CloudCrafterJob>(job => job.ExecuteJobAsync(backgroundJob.Id, null));
+                client.Enqueue<CloudCrafterJob>(job => job.ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type, null));
 
             backgroundJob.HangfireJobId = hangfireJobId;
             await context.SaveChangesAsync();
@@ -70,11 +71,11 @@ public class BackgroundJobFactory(
 public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider sp)
 {
     [JobDisplayName("{1}")]
-    public async Task ExecuteJobAsync(Guid backgroundJobId, PerformContext? performContext)
+    public async Task ExecuteJobAsync(Guid backgroundJobId, BackgroundJobType backgroundJobType, PerformContext? performContext)
     {
 #if IN_TESTS
         // In tests, the job is executed synchronously (in memory)
-        // So we need to wait until the DBContext is done saving the job to the database.
+        // So we need to wait until the DBContext   is done saving the job to the database.
         // So again, sorry. Feel free to open a PR if you're able to fix this.
         System.Console.WriteLine("Sleeping 5000ms");
         await Task.Delay(5000);
@@ -117,7 +118,14 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
                 throw new ArgumentNullException("Failed to deserialize job arguments");
             }
 
-            var jobFromSerializer = await jobSerializer.Deserialize(jobArgs.SerializedJob, jobArgs.JobType);
+            var type = Type.GetType(jobArgs.JobType);
+
+            if (type == null)
+            {
+                throw new ArgumentException("Failed to get job type");
+            }
+
+            var jobFromSerializer = await jobSerializer.Deserialize(jobArgs.SerializedJob, type);
 
             if (jobFromSerializer is null)
             {
