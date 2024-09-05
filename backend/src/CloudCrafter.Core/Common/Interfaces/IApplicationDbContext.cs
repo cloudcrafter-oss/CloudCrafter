@@ -1,4 +1,5 @@
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Domain.Entities.Jobs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Environment = CloudCrafter.Domain.Entities.Environment;
@@ -16,6 +17,7 @@ public interface IApplicationDbContext
     DbSet<BackgroundJob> Jobs { get; }
     DbSet<StackService> StackServices { get; }
     DbSet<StackServiceType> StackServiceTypes { get; }
+    DbSet<ServerConnectivityCheckJob> ServerConnectivityCheckJobs { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     int SaveChanges();

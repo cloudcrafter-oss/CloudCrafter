@@ -43,7 +43,9 @@ public class ConnectivityCheckBackgroundJob : IJob
             Id = Guid.NewGuid(),
             ServerId = ServerId
         };
-         
+
+        context.ServerConnectivityCheckJobs.Add(connectivityCheckJob);
+        job.ServerConnectivityCheckJobId= connectivityCheckJob.Id;
         await context.SaveChangesAsync();
 
 

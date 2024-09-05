@@ -1,12 +1,14 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
 using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Core.Jobs.Hangfire;
 using CloudCrafter.Core.Jobs.Logger;
 using CloudCrafter.Core.Jobs.Serializer;
 using CloudCrafter.Domain.Entities;
 using Hangfire;
 using Hangfire.Console;
 using Hangfire.Server;
+using Hangfire.States;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -49,13 +51,21 @@ public class BackgroundJobFactory(
             context.Jobs.Add(backgroundJob);
             await context.SaveChangesAsync();
 
-            var hangfireJobId =
-                client.Enqueue<CloudCrafterJob>(job => job.ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type, null));
+            // var hangfireJobId =
+            // client.Enqueue<CloudCrafterJob>(job => job.ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type, null));
 
+            var hangfireJobId =
+                client.Create<CloudCrafterJob>(job => job.ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type, null),
+                    new CreatedState());
             backgroundJob.HangfireJobId = hangfireJobId;
+
+
+            // hangfireJobIdclient.
             await context.SaveChangesAsync();
 
             await transaction.CommitAsync();
+
+            client.ChangeState(hangfireJobId, new EnqueuedState());
 
             return hangfireJobId;
         }
@@ -71,7 +81,8 @@ public class BackgroundJobFactory(
 public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider sp)
 {
     [JobDisplayName("{1}")]
-    public async Task ExecuteJobAsync(Guid backgroundJobId, BackgroundJobType backgroundJobType, PerformContext? performContext)
+    public async Task ExecuteJobAsync(Guid backgroundJobId, BackgroundJobType backgroundJobType,
+        PerformContext? performContext)
     {
 #if IN_TESTS
         // In tests, the job is executed synchronously (in memory)
