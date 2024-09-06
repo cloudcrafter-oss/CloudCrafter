@@ -18,9 +18,11 @@
     <PackageReference Include="coverlet.collector"/>
     <PackageReference Include="Testcontainers"/>
     <PackageReference Include="FluentAssertions"/>
+    <PackageReference Include="Verify.NUnit"/>
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\CloudCrafter.Agent.Runner\CloudCrafter.Agent.Runner.csproj"/>
     <ProjectReference Include="..\..\src\CloudCrafter.DeploymentEngine.Engine\CloudCrafter.DeploymentEngine.Engine.csproj"/>
   </ItemGroup>
 
