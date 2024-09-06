@@ -3,6 +3,6 @@
  * Any changes made to this file can be lost when this file is regenerated.
  */
 
-export class MyHubMessage {
+export interface MyHubMessage {
     id: string;
 }
