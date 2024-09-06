@@ -8,11 +8,12 @@ public static class WebApplicationExtensions
 
         var result = app.MapGroup($"/api/{groupName}");
 
+      
         if (!withOpenApi)
         {
-            return result;
+            return result.ExcludeFromDescription();
         }
-
+        
         return result
             .WithOpenApi();
     }

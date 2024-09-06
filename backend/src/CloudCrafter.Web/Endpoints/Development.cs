@@ -17,7 +17,7 @@ public class Development : EndpointGroupBase
         }
 
         app.MapGroup(this, withOpenApi: false)
-            .MapGet(GenerateSignalRTypes, "generate-signalr-types");
+             .MapGet(GenerateSignalRTypes, "generate-signalr-types");
     }
 
 

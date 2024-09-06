@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Text.Json.Serialization;
+using AutoMapper;
 using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.Domain.Domain.Health;
@@ -17,6 +18,7 @@ public class EntityHealthDto
     }
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum EntityHealthDtoValue
 {
     Unknown,
