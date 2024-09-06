@@ -8,7 +8,7 @@ public class SignalRTypesGenerator : GenerationSpec
     public override void OnBeforeGeneration(OnBeforeGenerationArgs options)
     {
         options.GeneratorOptions.TypeScriptFileExtension = "ts";
-
+        options.GeneratorOptions.ExportTypesAsInterfacesByDefault = true;
         AddClass<MyHubMessage>();
     }
 }

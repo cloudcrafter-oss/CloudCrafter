@@ -42,7 +42,7 @@ export * from "./stackDetailDtoSchema";
 export * from "./stackServerDtoSchema";
 export * from "./stackServiceDtoSchema";
 export * from "./stackSourceDtoSchema";
-export * from "./stackSourceTypeSchema";
+export * from "./stackSourceDtoTypeSchema";
 export * from "./testCommandQuerySchema";
 export * from "./testSchema";
 export * from "./tokenDtoSchema";

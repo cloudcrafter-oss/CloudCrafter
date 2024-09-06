@@ -1,5 +1,5 @@
-import { stackSourceTypeSchema } from "./stackSourceTypeSchema";
+import { stackSourceDtoTypeSchema } from "./stackSourceDtoTypeSchema";
 import { z } from "zod";
 
 
-export const stackSourceDtoSchema = z.object({ "type": z.lazy(() => stackSourceTypeSchema) });
+export const stackSourceDtoSchema = z.object({ "type": z.lazy(() => stackSourceDtoTypeSchema) });

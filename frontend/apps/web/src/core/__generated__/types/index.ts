@@ -42,7 +42,7 @@ export * from "./StackDetailDto";
 export * from "./StackServerDto";
 export * from "./StackServiceDto";
 export * from "./StackSourceDto";
-export * from "./StackSourceType";
+export * from "./StackSourceDtoType";
 export * from "./Test";
 export * from "./TestCommandQuery";
 export * from "./TokenDto";
