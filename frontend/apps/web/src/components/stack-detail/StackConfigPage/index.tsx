@@ -1,8 +1,8 @@
 'use client'
 
+import { SourceSettings } from '@/src/components/stack-detail/source-settings'
 import type { StackDetailDto } from '@/src/core/__generated__'
-import {} from '@ui/components/ui/card'
-import {} from '@ui/components/ui/tabs'
+import { useTestHub } from '@/src/hooks/useTestHub.ts'
 import { cn } from '@ui/lib/utils'
 import type React from 'react'
 import { useEffect, useState } from 'react'
@@ -26,6 +26,11 @@ const sections = [
 				id: 'basic',
 				title: 'Basic Info',
 				component: BasicInfo as React.ComponentType<BaseComponentProps>,
+			},
+			{
+				id: 'source',
+				title: 'Source',
+				component: SourceSettings as React.ComponentType<BaseComponentProps>,
 			},
 			{
 				id: 'advanced',
@@ -84,6 +89,8 @@ const StackConfigPage: React.FC<{ stackDetails: StackDetailDto }> = ({
 }) => {
 	const [activeSection, setActiveSection] = useState(sections[0].id)
 	const [activeSubTab, setActiveSubTab] = useState(sections[0].subTabs[0].id)
+
+	useTestHub()
 
 	useEffect(() => {
 		// Parse the hash on component mount and when it changes

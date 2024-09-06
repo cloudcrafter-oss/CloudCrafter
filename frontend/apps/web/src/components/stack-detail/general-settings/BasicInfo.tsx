@@ -3,7 +3,6 @@ import {
 	type StackDetailDto,
 	useDispatchStackDeploymentHook,
 } from '@/src/core/__generated__'
-import { useTestHub } from '@/src/hooks/useTestHub.ts'
 import { Badge } from '@ui/components/ui/badge'
 import { Button } from '@ui/components/ui/button'
 import {
@@ -41,8 +40,6 @@ export const BasicInfo = ({
 	const handleDeploy = async () => {
 		await mutateAsync({} as never)
 	}
-
-	useTestHub()
 
 	return (
 		<div className='space-y-6'>

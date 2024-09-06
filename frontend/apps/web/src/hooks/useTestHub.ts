@@ -8,6 +8,7 @@ export const useTestHub = () => {
 			.withUrl('http://web.127.0.0.1.sslip.io/myHub')
 			.build()
 
+		console.log('rendering now')
 		connection.on('ReceiveMessage', (message: MyHubMessage) => {
 			console.log('ReceiveMessage', message)
 			console.log('Id is ', message.id)
