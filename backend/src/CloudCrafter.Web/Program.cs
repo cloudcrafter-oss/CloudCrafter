@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.Core;
 using CloudCrafter.Core.Events;
+using CloudCrafter.Core.SignalR;
 using CloudCrafter.DeploymentEngine.Remote;
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Data;
@@ -88,7 +89,7 @@ app.UseHangfireDashboard(options: hangfireDashboardOptions);
 
 app.ConfigureRecurringJobs();
 
-
+app.MapHub<MyHub>("/myHub");
 app.Run();
 
 

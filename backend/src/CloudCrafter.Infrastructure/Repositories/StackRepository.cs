@@ -63,6 +63,7 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             Name = name,
             StackServiceTypeId = StackServiceTypeConstants.App,
             StackId = stackId,
+            HealthStatus = new(),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };

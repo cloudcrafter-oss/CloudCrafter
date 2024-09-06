@@ -32,18 +32,26 @@ public static class FakerInstances
         .RuleFor(x => x.Environments, new List<Environment>())
         .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
-    public static Faker<Stack> StackFaker(Guid environmentId) => new Faker<Stack>()
-        .StrictMode(true)
-        .RuleFor(x => x.Id, Guid.NewGuid)
-        .RuleFor(x => x.Name, f => $"Application {f.Person.FirstName}")
-        .RuleFor(x => x.Server, ServerFaker.Generate())
-        .RuleFor(x => x.Environment, f => null)
-        .RuleFor(x => x.EnvironmentId, environmentId)
-        .RuleFor(x => x.Deployments, f => new List<Deployment>())
-        .RuleFor(x => x.Source, f => null)
-        .RuleFor(x => x.Services, f => new List<StackService>())
-        .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
-        .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    public static Faker<Stack> StackFaker(Guid environmentId)
+    {
+        var server = ServerFaker.Generate();
+        return new Faker<Stack>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, Guid.NewGuid)
+            .RuleFor(x => x.Name, f => $"Application {f.Person.FirstName}")
+            .RuleFor(x => x.ServerId, server.Id)
+            .RuleFor(x => x.BuildPack, f => StackBuildPack.Nixpacks)
+            .RuleFor(x => x.CreatedBy, (Guid?)null)
+            .RuleFor(x => x.LastModifiedBy, (Guid?)null)
+            .RuleFor(x => x.Server, server)
+            .RuleFor(x => x.Environment, f => null)
+            .RuleFor(x => x.EnvironmentId, environmentId)
+            .RuleFor(x => x.Deployments, f => new List<Deployment>())
+            .RuleFor(x => x.Source, f => null)
+            .RuleFor(x => x.Services, f => new List<StackService>())
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    }
 
     public static Faker<Environment> EnvironmentFaker(Project project)
     {

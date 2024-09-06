@@ -1,4 +1,4 @@
-import type { StackHealthStatus } from "./StackHealthStatus";
+import type { EntityHealthDto } from "./EntityHealthDto";
 
  export type StackServiceDto = {
     /**
@@ -9,5 +9,5 @@ import type { StackHealthStatus } from "./StackHealthStatus";
      * @type string
     */
     name: string;
-    healthStatus: StackHealthStatus;
+    health: EntityHealthDto;
 };

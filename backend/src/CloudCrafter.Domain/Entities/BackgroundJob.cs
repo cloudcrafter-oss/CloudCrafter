@@ -13,6 +13,7 @@ public class BackgroundJob : IHasTimestamps
     [EncryptColumn] public string SerializedArguments { get; set; } = string.Empty;
 
     public ServerConnectivityCheckJob? ServerConnectivityCheckJob { get; set; }
+    public Guid? ServerConnectivityCheckJobId { get; set; }
     public List<BackgroundJobLog> Logs { get; set; } = new();
     public required BackgroundJobStatus Status { get; set; }
     public DateTime? CompletedAt { get; set; }

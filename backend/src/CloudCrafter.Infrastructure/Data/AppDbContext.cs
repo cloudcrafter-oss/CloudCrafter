@@ -3,6 +3,7 @@ using Ardalis.SharedKernel;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.ContributorAggregate;
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Domain.Entities.Jobs;
 using CloudCrafter.Infrastructure.Core.Configuration;
 using EntityFrameworkCore.EncryptColumn.Extensions;
 using EntityFrameworkCore.EncryptColumn.Util;
@@ -38,6 +39,8 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     public DbSet<StackService> StackServices => Set<StackService>();
     public DbSet<StackServiceType> StackServiceTypes => Set<StackServiceType>();
 
+    public DbSet<ServerConnectivityCheckJob> ServerConnectivityCheckJobs => Set<ServerConnectivityCheckJob>();
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
         var result = await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
@@ -58,7 +61,7 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
 
         return result;
     }
-    
+
 
     public override int SaveChanges()
     {

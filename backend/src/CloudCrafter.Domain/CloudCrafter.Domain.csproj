@@ -1,21 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-  
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="AutoMapper"/>
     <PackageReference Include="Microsoft.Extensions.Identity.Stores"/>
     <PackageReference Include="Ardalis.SharedKernel"/>
+    <PackageReference Include="TypeGen"/>
 
   </ItemGroup>
-  
+
   <ItemGroup>
-    <ProjectReference Include="..\CloudCrafter.Utils\CloudCrafter.Utils.csproj" />
-    <ProjectReference Include="..\Packages\EntityFrameworkCore.EncryptColumn\EntityFrameworkCore.EncryptColumn.csproj" />
+    <ProjectReference Include="..\CloudCrafter.Utils\CloudCrafter.Utils.csproj"/>
+    <ProjectReference Include="..\Packages\EntityFrameworkCore.EncryptColumn\EntityFrameworkCore.EncryptColumn.csproj"/>
   </ItemGroup>
 
 </Project>

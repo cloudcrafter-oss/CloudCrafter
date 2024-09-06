@@ -10,9 +10,9 @@ using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Domain.Utils;
-using CloudCrafter.Core.Jobs.Creation;
 using CloudCrafter.Core.Jobs.Dispatcher;
 using CloudCrafter.Core.Jobs.Dispatcher.Factory;
+using CloudCrafter.Core.Jobs.Serializer;
 using CloudCrafter.Core.Jobs.Servers;
 using CloudCrafter.Core.Jobs.Stacks;
 using CloudCrafter.Core.Services.Domain.Applications.Deployments;
@@ -23,7 +23,6 @@ using CloudCrafter.Core.Services.Domain.Stacks;
 using CloudCrafter.Core.Services.Domain.Users;
 using CloudCrafter.Core.Services.Domain.Utils;
 using CloudCrafter.Domain;
-using CloudCrafter.Domain.Entities;
 using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using FluentValidation;
@@ -106,16 +105,13 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ICloudCrafterDispatcher, CloudCrafterDispatcher>();
         services.AddScoped<ICloudCrafterRecurringJobsDispatcher, CloudCrafterRecurringJobsDispatcher>();
         services.AddScoped<BackgroundJobFactory>();
+        services.AddSingleton<JobSerializer>();
 
         services.AddScoped<ConnectivityCheckBackgroundJob>();
         services.AddScoped<DeployStackBackgroundJob>();
-        services
-            .AddScoped<IJobCreationStrategy<ConnectivityCheckBackgroundJob, Server>,
-                ConnectivityCheckCreationStrategy>();
-        services
-            .AddScoped<IJobCreationStrategy<DeployStackBackgroundJob, Guid>,
-                DeployStackJobCreationStrategy>();
 
+        // SignalR
+        services.AddSignalR();
 
         return services;
     }

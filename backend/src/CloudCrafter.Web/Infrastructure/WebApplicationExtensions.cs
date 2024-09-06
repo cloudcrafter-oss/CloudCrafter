@@ -1,17 +1,20 @@
-using System.Reflection;
-using Microsoft.OpenApi.Models;
-
 namespace CloudCrafter.Web.Infrastructure;
 
 public static class WebApplicationExtensions
 {
-    public static RouteGroupBuilder MapGroup(this WebApplication app, EndpointGroupBase group)
+    public static RouteGroupBuilder MapGroup(this WebApplication app, EndpointGroupBase group, bool withOpenApi = true)
     {
         var groupName = group.GetType().Name;
 
-        return app
-            .MapGroup($"/api/{groupName}")
-           // .WithTags(groupName)
+        var result = app.MapGroup($"/api/{groupName}");
+
+      
+        if (!withOpenApi)
+        {
+            return result.ExcludeFromDescription();
+        }
+        
+        return result
             .WithOpenApi();
     }
 
@@ -30,7 +33,6 @@ public static class WebApplicationExtensions
             {
                 instance.Map(app);
             }
-
         }
 
         return app;

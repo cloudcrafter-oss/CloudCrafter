@@ -163,7 +163,7 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
                     b.HasIndex("ServerId");
 
-                    b.ToTable("ServerConnectivityCheckJob");
+                    b.ToTable("ServerConnectivityCheckJobs");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Project", b =>
@@ -756,6 +756,28 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         .WithMany()
                         .HasForeignKey("StackServiceTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("CloudCrafter.Domain.Entities.EntityHealthStatus", "HealthStatus", b1 =>
+                        {
+                            b1.Property<Guid>("StackServiceId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<DateTime?>("StatusAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<int>("Value")
+                                .HasColumnType("integer");
+
+                            b1.HasKey("StackServiceId");
+
+                            b1.ToTable("StackServices");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StackServiceId");
+                        });
+
+                    b.Navigation("HealthStatus")
                         .IsRequired();
 
                     b.Navigation("Stack");

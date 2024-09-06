@@ -1,17 +1,66 @@
 ﻿using System.Diagnostics;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Domain.Entities.Jobs;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Jobs.Servers;
 
-public class ConnectivityCheckBackgroundJob(IServerConnectivityService serverConnectivity) : IBaseJob<Server>
+public class ConnectivityCheckBackgroundJob : IJob
 {
-    public string JobName => "Server Connectivity Job";
+    public ConnectivityCheckBackgroundJob()
+    {
+    }
+
+    public ConnectivityCheckBackgroundJob(Guid serverId)
+    {
+        ServerId = serverId;
+    }
+
+    public Guid ServerId { get; set; }
     public BackgroundJobType Type => BackgroundJobType.ServerConnectivityCheck;
 
-    public async Task ExecuteAsync(BackgroundJob backgroundJob, Server server, ILoggerFactory loggerFactory)
+
+    public async Task Handle(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, string jobId)
+    {
+        var context = serviceProvider.GetRequiredService<IApplicationDbContext>(); // TODO: Move this to a service
+
+        var job = await context.Jobs.Where(x => x.HangfireJobId == jobId).FirstOrDefaultAsync();
+
+        if (job == null)
+        {
+            throw new ArgumentNullException(nameof(jobId), "Job not found");
+        }
+
+        var connectivityCheckJob = new ServerConnectivityCheckJob
+        {
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            Result = ServerConnectivityCheckResult.Unknown,
+            Id = Guid.NewGuid(),
+            ServerId = ServerId
+        };
+
+        context.ServerConnectivityCheckJobs.Add(connectivityCheckJob);
+        job.ServerConnectivityCheckJobId= connectivityCheckJob.Id;
+        await context.SaveChangesAsync();
+
+
+        var server = await context.Servers.FindAsync(ServerId);
+        if (server == null)
+        {
+            throw new ArgumentNullException(nameof(ServerId), "Server not found");
+        }
+
+        var service = serviceProvider.GetRequiredService<IServerConnectivityService>();
+        await ExecuteAsync(job, service, server, loggerFactory);
+    }
+
+    private async Task ExecuteAsync(BackgroundJob backgroundJob, IServerConnectivityService serverConnectivity,
+        Server server, ILoggerFactory loggerFactory)
     {
         if (backgroundJob.ServerConnectivityCheckJob == null)
         {

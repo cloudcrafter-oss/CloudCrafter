@@ -12,7 +12,9 @@ public class CloudCrafterDispatcher(BackgroundJobFactory jobFactory, ILogger<Clo
     public async Task<string> EnqueueConnectivityCheck(Server server)
     {
         logger.LogDebug("Dispatching connectivity check to job factory for server {ServerName}", server.Name);
-        return await jobFactory.CreateAndEnqueueJobAsync<ConnectivityCheckBackgroundJob, Server>(server);
+
+        var job = new ConnectivityCheckBackgroundJob(server.Id);
+        return await jobFactory.CreateAndEnqueueJobAsync<ConnectivityCheckBackgroundJob>(job);
     }
 
     public async Task EnqueueConnectivityCheck(List<Server> servers)
@@ -26,6 +28,8 @@ public class CloudCrafterDispatcher(BackgroundJobFactory jobFactory, ILogger<Clo
     public async Task<string> EnqueueStackDeployment(Guid stackId)
     {
         logger.LogInformation("Dispatching stack deployment to job factory for stack {StackId}", stackId);
-        return await jobFactory.CreateAndEnqueueJobAsync<DeployStackBackgroundJob, Guid>(stackId);
+        var job = new DeployStackBackgroundJob(stackId);
+        return await jobFactory.CreateAndEnqueueJobAsync<DeployStackBackgroundJob>(job);
+        
     }
 }

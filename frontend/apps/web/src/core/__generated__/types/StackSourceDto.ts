@@ -1,5 +1,5 @@
-import type { StackSourceType } from "./StackSourceType";
+import type { StackSourceDtoType } from "./StackSourceDtoType";
 
  export type StackSourceDto = {
-    type: StackSourceType;
+    type: StackSourceDtoType;
 };
