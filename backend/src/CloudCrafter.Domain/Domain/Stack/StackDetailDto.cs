@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using AutoMapper;
+using CloudCrafter.Domain.Domain.Health;
 using CloudCrafter.Domain.Domain.Project;
 using CloudCrafter.Domain.Entities;
 
@@ -30,14 +31,14 @@ public class StackServiceDto
 {
     public required Guid Id { get; init; }
     public required string Name { get; init; }
-    public required StackHealthStatus HealthStatus { get; init; }
+    public required EntityHealthDto Health { get; init; }
 
     private class Mapping : Profile
     {
         public Mapping()
         {
             CreateMap<StackService, StackServiceDto>()
-                .ForMember(x => x.HealthStatus, opt => opt.Ignore());
+                .ForMember(x => x.Health, opt => opt.MapFrom(src => src.HealthStatus));
         }
     }
 }

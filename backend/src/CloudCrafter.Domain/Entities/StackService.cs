@@ -11,4 +11,6 @@ public class StackService : BaseAuditableEntity
     public StackServiceType Type { get; set; } = null!;
 
     public required string Name { get; init; }
+    
+    public required EntityHealthStatus HealthStatus { get; init; }
 }
