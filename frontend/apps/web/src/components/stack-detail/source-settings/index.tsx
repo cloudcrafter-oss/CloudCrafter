@@ -1,7 +1,4 @@
-import {
-	type StackDetailDto,
-	useDispatchStackDeploymentHook,
-} from '@/src/core/__generated__'
+import type { StackDetailDto } from '@/src/core/__generated__'
 import {
 	Card,
 	CardContent,
@@ -10,19 +7,10 @@ import {
 	CardTitle,
 } from '@ui/components/ui/card.tsx'
 import { Label } from '@ui/components/ui/label.tsx'
-import { Textarea } from '@ui/components/ui/textarea.tsx'
-import { useState } from 'react'
 
 export const SourceSettings = ({
 	stackDetails,
 }: { stackDetails: StackDetailDto }) => {
-	const [isEditing, setIsEditing] = useState(false)
-
-	const { mutateAsync } = useDispatchStackDeploymentHook(stackDetails.id)
-	const handleDeploy = async () => {
-		await mutateAsync({} as never)
-	}
-
 	return (
 		<div className='space-y-6'>
 			<Card>
@@ -40,16 +28,6 @@ export const SourceSettings = ({
 					</div>
 					<div className='space-y-2'>
 						<Label htmlFor='stack-description'>Description</Label>
-						{isEditing ? (
-							<Textarea
-								id='stack-description'
-								placeholder='Describe your stack...'
-							/>
-						) : (
-							<div className='p-2 bg-muted rounded-md'>
-								Stack description goes here...
-							</div>
-						)}
 					</div>
 				</CardContent>
 			</Card>
