@@ -45,9 +45,9 @@ public class ContainerHealthCheckDeploymentStepGeneratorTest
         result.Type.Should().Be(DeploymentBuildStepType.ContainerHealthCheck);
         result.Params.Should().ContainKey("dockerComposeSettings");
         result.Params.Should().ContainKey("services");
-        var services = result.Params["services"] as Dictionary<string, object>;
+        var services = result.Params["services"] as Dictionary<string, Dictionary<string, object>>;
         services.Should().ContainKey("service1");
-        var serviceCheck = services!["service1"] as Dictionary<string, object>;
+        var serviceCheck = services!["service1"];
         serviceCheck.Should().ContainKey("httpMethod").WhoseValue.Should().Be("GET");
         serviceCheck.Should().ContainKey("httpSchema").WhoseValue.Should().Be("http");
         serviceCheck.Should().ContainKey("httpHost").WhoseValue.Should().Be("localhost");
