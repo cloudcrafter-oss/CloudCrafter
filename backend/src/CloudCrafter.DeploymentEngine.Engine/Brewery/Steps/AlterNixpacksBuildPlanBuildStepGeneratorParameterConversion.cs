@@ -3,7 +3,7 @@ using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
 
-public class AlterNixpacksBuildPlanBuildStepGenerator(AlterNixpacksBuildPlanBuildStepGenerator.Args options)
+public class AlterNixpacksBuildPlanBuildStepGeneratorParameterConversion(AlterNixpacksBuildPlanBuildStepGeneratorParameterConversion.Args options)
     : IBuildStepGenerator
 {
     public DeploymentBuildStep Generate()

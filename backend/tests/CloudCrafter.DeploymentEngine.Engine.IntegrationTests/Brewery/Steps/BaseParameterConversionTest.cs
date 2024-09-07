@@ -4,9 +4,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
 
-public abstract class BaseTest
+public abstract class BaseParameterConversionTest<T> where T : class
 {
     public DeploymentStepSerializerFactory Serializer { get; set; }
+
 
     [OneTimeSetUp]
     public void SetUp()
