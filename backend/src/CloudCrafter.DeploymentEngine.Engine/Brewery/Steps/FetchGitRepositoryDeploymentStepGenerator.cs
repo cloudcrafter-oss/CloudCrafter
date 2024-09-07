@@ -15,7 +15,7 @@ public class FetchGitRepositoryDeploymentStepGenerator(FetchGitRepositoryDeploym
             Type = DeploymentBuildStepType.FetchGitRepository,
             Params = new Dictionary<string, object>
             {
-                { "repository", options.Repository }, { "commit", options.Commit }
+                { "repo", options.Repository }, { "commit", options.Commit }
             }
         };
     }
