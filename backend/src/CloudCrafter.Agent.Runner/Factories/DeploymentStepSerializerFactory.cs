@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 using CloudCrafter.Agent.Models;
+using CloudCrafter.Agent.Models.Deployment;
 using CloudCrafter.Agent.Models.Deployment.Steps;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
@@ -29,6 +30,19 @@ public class DeploymentStepSerializerFactory
     public Type GetParamType(DeploymentBuildStepType stepType)
     {
         return _stepTypeToParamType[stepType];
+    }
+
+    public IDeploymentStepConfig<TParams> GetConfig<TParams>(DeploymentBuildStep step)
+    {
+        var config = _factory.GetConfig<TParams>(step.Type);
+
+        return config;
+    }
+    
+    
+    public IDeploymentStepHandler<TParams> CreateHandler<TParams>(DeploymentBuildStep step)
+    {
+        return _factory.CreateHandler<TParams>(step.Type);
     }
     
     public TParams ConvertAndValidateParams<TParams>(Dictionary<string, object> parameters,

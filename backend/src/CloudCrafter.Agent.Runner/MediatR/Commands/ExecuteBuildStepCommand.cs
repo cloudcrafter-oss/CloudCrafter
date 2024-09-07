@@ -15,7 +15,7 @@ public static class ExecuteBuildStepCommand
 {
     public record Query(DeploymentBuildStep Step, DeploymentContext Context) : IRequest;
 
-    private class Handler(IDeploymentStepFactory factory, DeploymentStepSerializerFactory serializerFactory) : IRequestHandler<Query>
+    private class Handler(DeploymentStepSerializerFactory serializerFactory) : IRequestHandler<Query>
     {
         
         public async Task Handle(Query request, CancellationToken cancellationToken)
@@ -37,8 +37,8 @@ public static class ExecuteBuildStepCommand
 
         private async Task ExecuteStepInternal<TParams>(DeploymentBuildStep step, DeploymentContext context)
         {
-            var config = factory.GetConfig<TParams>(step.Type);
-            var handler = factory.CreateHandler<TParams>(step.Type);
+            var config = serializerFactory.GetConfig<TParams>(step);
+            var handler = serializerFactory.CreateHandler<TParams>(step); 
 
             var paramObject = serializerFactory.ConvertAndValidateParams(step.Params, config.Validator);
             if (context.IsDryRun)
