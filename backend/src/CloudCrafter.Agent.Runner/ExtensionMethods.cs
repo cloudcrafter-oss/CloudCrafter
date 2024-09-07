@@ -5,6 +5,7 @@ using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Runner.Cli;
 using CloudCrafter.Agent.Runner.Cli.Helpers;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
+using CloudCrafter.Agent.Runner.Factories;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -50,6 +51,8 @@ public static class ExtensionMethods
             .AddTransient<IDockerComposeHelper, DockerComposeHelper>();
         services.AddTransient<ICommandParser, CommandParser>()
             .AddTransient<IFileSystemHelper, FileSystemHelper>();
+
+        services.AddSingleton<DeploymentStepSerializerFactory>();
 
         return services;
     }
