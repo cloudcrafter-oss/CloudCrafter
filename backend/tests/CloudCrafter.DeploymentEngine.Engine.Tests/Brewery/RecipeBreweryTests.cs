@@ -37,7 +37,7 @@ public class RecipeBreweryTests
         var brewery = new RecipeBrewery("Test");
         var guid = Guid.Parse("f4ccb2c1-0ce2-4ea7-9129-9b6755a1fad2");
         brewery.SetApplication(guid);
-        brewery.SetDestination("/tmp/cloudcrafter");
+        brewery.SetDestination("/var/data/cloudcrafter");
         var recipe = brewery.Build();
         recipe.Should().NotBeNull();
 

@@ -2,7 +2,7 @@
 application:
   id: f4ccb2c1-0ce2-4ea7-9129-9b6755a1fad2
 destination:
-  rootDirectory: /tmp/cloudcrafter
+  rootDirectory: /var/data/cloudcrafter
 environmentVariables:
   variables: {}
 buildOptions:
