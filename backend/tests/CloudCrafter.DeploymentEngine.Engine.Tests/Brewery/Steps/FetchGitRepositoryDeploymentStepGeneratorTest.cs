@@ -22,9 +22,9 @@ public class FetchGitRepositoryDeploymentStepGeneratorTest
 
         // Assert
         step.Type.Should().Be(DeploymentBuildStepType.FetchGitRepository);
-        step.Params.Should().ContainKey("repository");
+        step.Params.Should().ContainKey("repo");
         step.Params.Should().ContainKey("commit");
-        step.Params["repository"].Should().Be(options.Repository);
+        step.Params["repo"].Should().Be(options.Repository);
         step.Params["commit"].Should().Be(options.Commit);
     }
 }
