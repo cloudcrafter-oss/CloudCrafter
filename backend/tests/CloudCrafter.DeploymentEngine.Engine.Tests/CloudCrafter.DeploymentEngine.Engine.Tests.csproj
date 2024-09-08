@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>CloudCrafter.DeploymentEngine.Engine.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+    <PackageReference Include="NUnit"/>
+    <PackageReference Include="NUnit3TestAdapter"/>
+    <PackageReference Include="NUnit.Analyzers"/>
+    <PackageReference Include="coverlet.collector"/>
+    <PackageReference Include="Testcontainers"/>
+    <PackageReference Include="FluentAssertions"/>
+    <PackageReference Include="Verify.NUnit"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CloudCrafter.Agent.Runner\CloudCrafter.Agent.Runner.csproj"/>
+    <ProjectReference Include="..\..\src\CloudCrafter.DeploymentEngine.Engine\CloudCrafter.DeploymentEngine.Engine.csproj"/>
+  </ItemGroup>
+
+</Project>

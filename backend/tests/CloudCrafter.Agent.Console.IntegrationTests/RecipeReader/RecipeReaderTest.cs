@@ -1,6 +1,5 @@
 ﻿using CloudCrafter.Agent.Runner.IO;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -28,7 +27,6 @@ public class RecipeReaderTest
         Log.Logger = new LoggerConfiguration().WriteTo.NUnitOutput().CreateLogger();
 
         var deploymentService = host.Services.GetRequiredService<DeploymentService>();
-
         await deploymentService.ValidateRecipe(recipe);
 
         true.Should().Be(true);
