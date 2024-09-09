@@ -1,7 +1,9 @@
 ﻿using System.Text;
+using System.Text.RegularExpressions;
 using CloudCrafter.DockerCompose.Engine.Exceptions;
 using CloudCrafter.DockerCompose.Engine.Validator;
 using CloudCrafter.DockerCompose.Shared.Labels;
+using Slugify;
 using YamlDotNet.RepresentationModel;
 
 namespace CloudCrafter.DockerCompose.Engine.Yaml;
@@ -12,6 +14,9 @@ public class DockerComposeEditor
     private YamlMappingNode rootNode;
     private YamlMappingNode servicesNode;
     private YamlMappingNode? networksNode;
+    private static readonly Regex ServiceNameRegex = new Regex(@"^[a-z0-9][a-z0-9_-]*$", RegexOptions.Compiled);
+
+    private SlugHelper SlugHelper = new();
 
     public DockerComposeEditor(string yamlString)
     {
@@ -29,6 +34,26 @@ public class DockerComposeEditor
             networksNode = (YamlMappingNode)rootNode["networks"];
         }
     }
+    
+    private bool IsValidServiceName(string serviceName)
+    {
+        return !string.IsNullOrWhiteSpace(serviceName) && ServiceNameRegex.IsMatch(serviceName);
+    }
+
+    private string SanitizeServiceName(string serviceName)
+    {
+        // Slugify the service name
+        string slugified = SlugHelper.GenerateSlug(serviceName);
+        
+        // Ensure it starts with a letter or number (prepend 's' if it doesn't)
+        if (!char.IsLetterOrDigit(slugified[0]))
+        {
+            slugified = "s" + slugified;
+        }
+        
+        return slugified;
+    }
+
 
     public DockerComposeEditor()
     {
