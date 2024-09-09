@@ -265,7 +265,7 @@ public class RollingUpdateTest : AbstractTraefikTest
                             "labels",
                             new List<string>
                             {
-                                $"cloudcrafter.application={applicationId}",
+                                $"cloudcrafter.stack.id={applicationId}",
                                 $"cloudcrafter.deployment!={secondDeploymentId}"
                             }
                         }
