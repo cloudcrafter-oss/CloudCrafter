@@ -9,5 +9,6 @@ public class StackServiceConfiguration : IEntityTypeConfiguration<StackService>
     public void Configure(EntityTypeBuilder<StackService> builder)
     {
         builder.OwnsOne(stack => stack.HealthStatus);
+        builder.OwnsOne(service => service.HttpConfiguration);
     }
 }

@@ -23,6 +23,7 @@ public class StackServiceDtoMapperTest : BaseMapperTest
             {
                 Value = EntityHealthStatusValue.Unsupported, StatusAt = dateYesterday
             },
+            HttpConfiguration = null,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
