@@ -1,18 +1,19 @@
 ﻿namespace CloudCrafter.Shared.Deployment.Docker.Labels;
 
-
 public class CloudCrafterLabel(CloudCrafterLabelKey Key, string Value)
 {
     private string GetLabelKey()
     {
         switch (Key)
         {
-            case CloudCrafterLabelKey.ApplicationId:
-                return CloudCrafterLabelKeys.ApplicationId;
+            case CloudCrafterLabelKey.StackId:
+                return CloudCrafterLabelKeys.StackId;
             case CloudCrafterLabelKey.DeploymentId:
                 return CloudCrafterLabelKeys.DeploymentId;
             case CloudCrafterLabelKey.CloudCrafterManaged:
                 return CloudCrafterLabelKeys.CloudCrafterManaged;
+            case CloudCrafterLabelKey.StackServiceId:
+                return CloudCrafterLabelKeys.StackServiceId;
         }
 
         throw new KeyNotFoundException($"Key not found in CloudCrafterLabel, Key: {Key}");
@@ -35,7 +36,8 @@ public class CloudCrafterLabel(CloudCrafterLabelKey Key, string Value)
 
 public enum CloudCrafterLabelKey
 {
-    ApplicationId,
+    StackId,
+    StackServiceId,
     DeploymentId,
     CloudCrafterManaged
 }

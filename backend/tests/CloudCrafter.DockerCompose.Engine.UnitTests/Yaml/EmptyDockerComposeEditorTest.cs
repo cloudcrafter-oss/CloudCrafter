@@ -1,8 +1,6 @@
-﻿using System.ComponentModel;
-using CloudCrafter.DockerCompose.Engine.Exceptions;
+﻿using CloudCrafter.DockerCompose.Engine.Exceptions;
 using CloudCrafter.DockerCompose.Engine.Yaml;
 using CloudCrafter.DockerCompose.Shared.Labels;
-using Docker.DotNet;
 using FluentAssertions;
 
 namespace CloudCrafter.DockerCompose.Engine.UnitTests.Yaml;
@@ -69,7 +67,7 @@ public class EmptyDockerComposeEditorTest
 
         var service = editor.AddService("my-service")
             .AddNetwork(network);
-        
+
         service.Should().NotBeNull();
     }
 
@@ -83,22 +81,20 @@ public class EmptyDockerComposeEditorTest
 
         var id = Guid.Parse("ddf9e4a2-3358-442d-8781-30daf32fd59d");
         var labelsService = new DockerComposeLabelService();
-        
-        labelsService.AddLabel(LabelFactory.GenerateApplicationLabel(id));
-        labelsService.AddTraefikLabels(new()
+
+        labelsService.AddLabel(LabelFactory.GenerateStackLabel(id));
+        labelsService.AddTraefikLabels(new DockerComposeLabelServiceTraefikOptions
         {
-            AppName = "frontend",
-            Service = "frontend",
-            Rule = "Host(`example.com`)"
+            AppName = "frontend", Service = "frontend", Rule = "Host(`example.com`)"
         });
-        
-        
+
+
         service.AddLabels(labelsService);
 
         var isValid = await editor.IsValid();
 
         isValid.Should().BeTrue();
-        
+
         var yaml = editor.GetYaml();
 
         await Verify(yaml);
@@ -129,7 +125,7 @@ public class EmptyDockerComposeEditorTest
 
         serviceEditor.AddExposedPort(80, 80);
         serviceEditor.AddExposedPort(443, 443);
-        
+
         var yaml = editor.GetYaml();
 
         return Verify(yaml);
@@ -145,10 +141,10 @@ public class EmptyDockerComposeEditorTest
         var network = editor.AddNetwork("network1");
         network.SetNetworkName("network1");
         var yaml = editor.GetYaml();
-        
+
         return Verify(yaml);
     }
-    
+
     [Test]
     public Task ShouldBeAbleToAddNetworkWithExternalNetwork()
     {
@@ -161,9 +157,9 @@ public class EmptyDockerComposeEditorTest
             .SetIsExternalNetwork();
 
         service.AddNetwork(network);
-        
+
         var yaml = editor.GetYaml();
-        
+
         return Verify(yaml);
     }
 }

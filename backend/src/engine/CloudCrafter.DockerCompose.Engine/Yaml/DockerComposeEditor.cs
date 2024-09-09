@@ -2,7 +2,6 @@
 using System.Text.RegularExpressions;
 using CloudCrafter.DockerCompose.Engine.Exceptions;
 using CloudCrafter.DockerCompose.Engine.Validator;
-using CloudCrafter.DockerCompose.Shared.Labels;
 using Slugify;
 using YamlDotNet.RepresentationModel;
 
@@ -10,13 +9,13 @@ namespace CloudCrafter.DockerCompose.Engine.Yaml;
 
 public class DockerComposeEditor
 {
-    private YamlStream yaml;
-    private YamlMappingNode rootNode;
-    private YamlMappingNode servicesNode;
-    private YamlMappingNode? networksNode;
-    private static readonly Regex ServiceNameRegex = new Regex(@"^[a-z0-9][a-z0-9_-]*$", RegexOptions.Compiled);
+    private static readonly Regex ServiceNameRegex = new(@"^[a-z0-9][a-z0-9_-]*$", RegexOptions.Compiled);
+    private readonly YamlMappingNode rootNode;
+    private readonly YamlMappingNode servicesNode;
 
-    private SlugHelper SlugHelper = new();
+    private readonly SlugHelper SlugHelper = new();
+    private readonly YamlStream yaml;
+    private YamlMappingNode? networksNode;
 
     public DockerComposeEditor(string yamlString)
     {
@@ -34,25 +33,6 @@ public class DockerComposeEditor
             networksNode = (YamlMappingNode)rootNode["networks"];
         }
     }
-    
-    private bool IsValidServiceName(string serviceName)
-    {
-        return !string.IsNullOrWhiteSpace(serviceName) && ServiceNameRegex.IsMatch(serviceName);
-    }
-
-    private string SanitizeServiceName(string serviceName)
-    {
-        // Slugify the service name
-        string slugified = SlugHelper.GenerateSlug(serviceName);
-        
-        // Ensure it starts with a letter or number (prepend 's' if it doesn't)
-        if (!char.IsLetterOrDigit(slugified[0]))
-        {
-            slugified = "s" + slugified;
-        }
-        
-        return slugified;
-    }
 
 
     public DockerComposeEditor()
@@ -62,6 +42,25 @@ public class DockerComposeEditor
         rootNode = (YamlMappingNode)yaml.Documents[0].RootNode;
         servicesNode = new YamlMappingNode();
         rootNode.Add("services", servicesNode);
+    }
+
+    private bool IsValidServiceName(string serviceName)
+    {
+        return !string.IsNullOrWhiteSpace(serviceName) && ServiceNameRegex.IsMatch(serviceName);
+    }
+
+    private string SanitizeServiceName(string serviceName)
+    {
+        // Slugify the service name
+        var slugified = SlugHelper.GenerateSlug(serviceName);
+
+        // Ensure it starts with a letter or number (prepend 's' if it doesn't)
+        if (!char.IsLetterOrDigit(slugified[0]))
+        {
+            slugified = "s" + slugified;
+        }
+
+        return slugified;
     }
 
 
@@ -74,14 +73,21 @@ public class DockerComposeEditor
 
     public ServiceEditor AddService(string serviceName)
     {
-        if (servicesNode.Children.ContainsKey(serviceName))
+        var sanitizedName = SanitizeServiceName(serviceName);
+        if (!IsValidServiceName(sanitizedName))
         {
-            throw new ServiceAlreadyExistsException(serviceName);
+            throw new ArgumentException(
+                $"Unable to create a valid service name from '{serviceName}'. Please provide a name that can be converted to a valid Docker Compose service name.");
+        }
+
+        if (servicesNode.Children.ContainsKey(sanitizedName))
+        {
+            throw new ServiceAlreadyExistsException(sanitizedName);
         }
 
         var serviceNode = new YamlMappingNode();
-        servicesNode.Add(serviceName, serviceNode);
-        return new ServiceEditor(this, serviceName);
+        servicesNode.Add(sanitizedName, serviceNode);
+        return new ServiceEditor(this, sanitizedName);
     }
 
     public NetworkEditor AddNetwork(string networkName)
@@ -108,7 +114,6 @@ public class DockerComposeEditor
         var networkNode = GetNetworkNode(networkName);
 
         return new NetworkEditor(this, networkName);
-
     }
 
     public string ToBase64()
@@ -206,13 +211,18 @@ public class DockerComposeEditor
 
     public class ServiceEditor
     {
-        private DockerComposeEditor editor;
-        private string serviceName;
+        private readonly DockerComposeEditor editor;
+        private readonly string serviceName;
 
         public ServiceEditor(DockerComposeEditor editor, string serviceName)
         {
             this.editor = editor;
             this.serviceName = serviceName;
+        }
+
+        public string ServiceName()
+        {
+            return serviceName;
         }
 
         public ServiceEditor AddLabel(string key, string value)
@@ -316,7 +326,7 @@ public class DockerComposeEditor
             {
                 ports = (YamlSequenceNode)serviceNode["ports"];
             }
-            
+
             ports.Add(new YamlScalarNode($"{hostPort}:{containerPort}"));
 
             return this;

@@ -14,9 +14,9 @@ namespace CloudCrafter.Agent.Console.IntegrationTests.Deployments;
 public class RollingUpdateTest : AbstractTraefikTest
 {
     private DeploymentService _deploymentService;
+    private IDockerHelper _dockerHelper;
     private DeploymentRecipe _firstRecipe;
     private DeploymentRecipe _secondRecipe;
-    private IDockerHelper _dockerHelper;
 
     private DeploymentRecipe Create(Guid deploymentId, Guid applicationId, string tag, string dummyEnv)
     {
@@ -32,14 +32,14 @@ public class RollingUpdateTest : AbstractTraefikTest
         service.AddNetwork(network);
 
         var labelService = new DockerComposeLabelService();
-        labelService.AddLabel(LabelFactory.GenerateApplicationLabel(applicationId));
+        labelService.AddLabel(LabelFactory.GenerateStackLabel(applicationId));
         labelService.AddLabel(LabelFactory.GenerateDeploymentLabel(deploymentId));
         labelService.AddLabel(LabelFactory.GenerateManagedLabel());
         labelService.AddTraefikLabels(new DockerComposeLabelServiceTraefikOptions
         {
             AppName = "frontend",
             Rule = "Host(`frontend-rolling.127.0.0.1.sslip.io`)",
-            Service = $"frontend",
+            Service = "frontend",
             LoadBalancerPort = 3000
         });
 
@@ -148,7 +148,7 @@ public class RollingUpdateTest : AbstractTraefikTest
                                     "env",
                                     new Dictionary<string, object>
                                     {
-                                        { "BUILD_MOMENT", DateTime.UtcNow.ToString("F") },
+                                        { "BUILD_MOMENT", DateTime.UtcNow.ToString("F") }
                                     }
                                 }
                             }
@@ -159,7 +159,7 @@ public class RollingUpdateTest : AbstractTraefikTest
                         Description = "Write docker compose file",
                         Type = DeploymentBuildStepType.DockerComposeWriteToFileSystem,
                         Params =
-                            new Dictionary<string, object> { { "dockerComposeFile", $"docker-compose.yml" } }
+                            new Dictionary<string, object> { { "dockerComposeFile", "docker-compose.yml" } }
                     },
                     new()
                     {
@@ -169,7 +169,7 @@ public class RollingUpdateTest : AbstractTraefikTest
                         Params =
                             new Dictionary<string, object>
                             {
-                                { "dockerComposeFile", $"docker-compose.yml" }, { "storeServiceNames", true }
+                                { "dockerComposeFile", "docker-compose.yml" }, { "storeServiceNames", true }
                             }
                     },
                     new()
@@ -217,13 +217,12 @@ public class RollingUpdateTest : AbstractTraefikTest
         var readRecipe = recipeReader.FromString(recipeAsString);
 
         return readRecipe;
-
     }
-    
+
     [TearDown]
     public async Task StopCreatedContainers()
     {
-        var containers = await _dockerHelper.GetContainersFromFilter(new DockerContainerFilter()
+        var containers = await _dockerHelper.GetContainersFromFilter(new DockerContainerFilter
         {
             OnlyCloudCrafterLabels = true
         });
@@ -272,9 +271,7 @@ public class RollingUpdateTest : AbstractTraefikTest
                         }
                     }
                 },
-                {
-                    "onlyCloudCrafterContainers", true
-                }
+                { "onlyCloudCrafterContainers", true }
             }
         });
 
@@ -296,10 +293,11 @@ public class RollingUpdateTest : AbstractTraefikTest
 
         await _deploymentService.DeployAsync(_firstRecipe);
 
-        await ShouldHaveEndpointResponse("http://frontend-rolling.127.0.0.1.sslip.io:8888/env", "DUMMY_ENV_VAR: firstTag");
+        await ShouldHaveEndpointResponse("http://frontend-rolling.127.0.0.1.sslip.io:8888/env",
+            "DUMMY_ENV_VAR: firstTag");
 
         await _deploymentService.DeployAsync(_secondRecipe);
-        await ShouldHaveEndpointResponse("http://frontend-rolling.127.0.0.1.sslip.io:8888/env", "DUMMY_ENV_VAR: secondTag");
-
+        await ShouldHaveEndpointResponse("http://frontend-rolling.127.0.0.1.sslip.io:8888/env",
+            "DUMMY_ENV_VAR: secondTag");
     }
 }

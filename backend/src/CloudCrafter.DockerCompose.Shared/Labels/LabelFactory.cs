@@ -8,10 +8,16 @@ public abstract class LabelFactory
     {
         return new CloudCrafterLabel(CloudCrafterLabelKey.CloudCrafterManaged, "true");
     }
-    public static CloudCrafterLabel GenerateApplicationLabel(Guid applicationId)
+
+    public static CloudCrafterLabel GenerateStackLabel(Guid stackId)
     {
-        var label = new CloudCrafterLabel(CloudCrafterLabelKey.ApplicationId, applicationId.ToString());
+        var label = new CloudCrafterLabel(CloudCrafterLabelKey.StackId, stackId.ToString());
         return label;
+    }
+
+    public static CloudCrafterLabel GenerateStackServiceLabel(Guid stackServiceId)
+    {
+        return new CloudCrafterLabel(CloudCrafterLabelKey.StackServiceId, stackServiceId.ToString());
     }
 
     public static CloudCrafterLabel GenerateDeploymentLabel(Guid deploymentId)
