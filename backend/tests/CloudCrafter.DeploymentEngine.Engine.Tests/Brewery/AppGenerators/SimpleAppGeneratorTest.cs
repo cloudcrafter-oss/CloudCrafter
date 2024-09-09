@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.DockerCompose;
+using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
 
@@ -23,6 +24,10 @@ public class SimpleAppGeneratorTest
 
         var stackService = FakerInstances.StackServiceFaker(stack)
             .RuleFor(x => x.Id, stackServiceId)
+            .RuleFor(x => x.HttpConfiguration, new EntityHttpConfiguration()
+                {
+                    DomainName = "my-custom-domain.com"  
+                })
             .RuleFor(x => x.Name, "My Custom Service : 123")
             .Generate();
         stack.Services.Add(stackService);

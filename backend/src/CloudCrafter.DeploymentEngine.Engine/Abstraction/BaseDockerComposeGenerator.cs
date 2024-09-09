@@ -30,14 +30,20 @@ public abstract class BaseDockerComposeGenerator
         labelService.AddLabel(LabelFactory.GenerateDeploymentLabel(Options.DeploymentId));
     }
 
-    protected void AddProxyLabels(DockerComposeLabelService labelService, string serviceName)
+    protected void AddProxyLabels(DockerComposeLabelService labelService, StackService stackService, string serviceName)
     {
-        labelService.AddTraefikLabels(new DockerComposeLabelServiceTraefikOptions()
+        if (string.IsNullOrWhiteSpace(stackService.HttpConfiguration?.DomainName))
         {
-            AppName = serviceName,
+            // No domain name set, so we add no reverse proxy labels.
+            return;
+        }
+
+        labelService.AddTraefikLabels(new DockerComposeLabelServiceTraefikOptions
+        {
+            AppName =  stackService.Id.ToString(),
             LoadBalancerPort = 3000,
-            Service = serviceName,
-            Rule = $"Host(`{serviceName}.127.0.0.1.sslip.io`)"
+            Service = stackService.Id.ToString(),
+            Rule = $"Host(`{stackService.HttpConfiguration.DomainName}`)"
         });
     }
 

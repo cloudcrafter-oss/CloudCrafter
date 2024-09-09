@@ -38,7 +38,7 @@ public class SimpleAppGenerator(BaseDockerComposeGenerator.Args args) : BaseDock
         var labelService = new DockerComposeLabelService();
 
         AddBasicLabels(labelService, stackService);
-        AddProxyLabels(labelService, service.ServiceName());
+        AddProxyLabels(labelService, stackService, service.ServiceName());
         
         service.AddLabels(labelService);
         service.AddNetwork(network);
