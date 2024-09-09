@@ -52,7 +52,7 @@ public class DockerComposeEditor
     private string SanitizeServiceName(string serviceName)
     {
         // Slugify the service name
-        var slugified = SlugHelper.GenerateSlug(serviceName);
+        var slugified = SlugHelper.GenerateSlug(serviceName).ToLower();
 
         // Ensure it starts with a letter or number (prepend 's' if it doesn't)
         if (!char.IsLetterOrDigit(slugified[0]))
