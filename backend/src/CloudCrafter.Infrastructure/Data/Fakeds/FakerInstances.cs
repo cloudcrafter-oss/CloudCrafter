@@ -75,6 +75,7 @@ public static class FakerInstances
             .RuleFor(x => x.StackId, stack.Id)
             .RuleFor(x => x.StackServiceTypeId, Guid.NewGuid) // TODO: Use proper Guid here
             .RuleFor(x => x.Stack, stack)
+            .RuleFor(x => x.HttpConfiguration, (EntityHttpConfiguration?)null)
             .RuleFor(x => x.CreatedBy, (Guid?)null)
             .RuleFor(x => x.LastModifiedBy, (Guid?)null)
             .RuleFor(x => x.Name, f => f.Person.FullName)

@@ -30,15 +30,15 @@ public class SimpleAppGenerator(BaseDockerComposeGenerator.Args args) : BaseDock
         return editor;
     }
 
-    private void AddAppService(StackService firstService, DockerComposeEditor editor,
+    private void AddAppService(StackService stackService, DockerComposeEditor editor,
         DockerComposeEditor.NetworkEditor network)
     {
-        var dockerComposeServiceName = firstService.Name;
+        var dockerComposeServiceName = stackService.Name;
         var service = editor.AddService(dockerComposeServiceName);
         var labelService = new DockerComposeLabelService();
 
-        AddBasicLabels(labelService, firstService);
-        
+        AddBasicLabels(labelService, stackService);
+        AddProxyLabels(labelService, service.ServiceName());
         
         service.AddLabels(labelService);
         service.AddNetwork(network);

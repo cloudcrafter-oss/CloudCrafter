@@ -22,12 +22,23 @@ public abstract class BaseDockerComposeGenerator
     public abstract DockerComposeEditor Generate();
     public abstract void ValidateGenerator();
 
-    public void AddBasicLabels(DockerComposeLabelService labelService, StackService service)
+    protected void AddBasicLabels(DockerComposeLabelService labelService, StackService service)
     {
         labelService.AddLabel(LabelFactory.GenerateManagedLabel());
         labelService.AddLabel(LabelFactory.GenerateStackLabel(service.StackId));
         labelService.AddLabel(LabelFactory.GenerateStackServiceLabel(service.Id));
         labelService.AddLabel(LabelFactory.GenerateDeploymentLabel(Options.DeploymentId));
+    }
+
+    protected void AddProxyLabels(DockerComposeLabelService labelService, string serviceName)
+    {
+        labelService.AddTraefikLabels(new DockerComposeLabelServiceTraefikOptions()
+        {
+            AppName = serviceName,
+            LoadBalancerPort = 3000,
+            Service = serviceName,
+            Rule = $"Host(`{serviceName}.127.0.0.1.sslip.io`)"
+        });
     }
 
     public class Args
