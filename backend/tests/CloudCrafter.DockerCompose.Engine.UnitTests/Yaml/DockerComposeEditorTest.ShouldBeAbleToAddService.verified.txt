@@ -16,7 +16,7 @@ services:
     - db_data:/var/lib/mysql
     networks:
     - lampnet
-  newService:
+  newservice:
     environment:
       newKey: newValue
     volumes:

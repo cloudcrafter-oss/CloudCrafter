@@ -23,6 +23,6 @@ public class DockerComposeLabelServiceTest
         var labels = _service.ToLabelList();
 
         labels.Count.Should().Be(1);
-        labels[0].Should().Be($"cloudcrafter.application={guid}");
+        labels[0].Should().Be($"cloudcrafter.stack.id={guid}");
     }
 }
