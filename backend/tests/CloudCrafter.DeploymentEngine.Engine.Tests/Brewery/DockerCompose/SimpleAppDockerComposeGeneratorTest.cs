@@ -4,9 +4,9 @@ using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
 
-namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery.AppGenerators;
+namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery.DockerCompose;
 
-public class SimpleAppGeneratorTest
+public class SimpleAppDockerComposeGeneratorTest
 {
     [Test]
     public async Task ShouldCreateDockerComposeEditor()
@@ -34,7 +34,7 @@ public class SimpleAppGeneratorTest
             .Generate();
         stack.Services.Add(stackService);
 
-        var generator = new SimpleAppGenerator(
+        var generator = new SimpleAppDockerComposeGenerator(
             new BaseDockerComposeGenerator.Args { Stack = stack, DeploymentId = deploymentId }
         );
 

@@ -27,4 +27,10 @@
     <ProjectReference Include="..\..\src\CloudCrafter.Infrastructure\CloudCrafter.Infrastructure.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Brewery\AppGenerators\SimpleAppGeneratorTest.ShouldCreateDockerComposeEditor.verified.txt">
+      <DependentUpon>SimpleAppDockerComposeGeneratorTest.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+
 </Project>

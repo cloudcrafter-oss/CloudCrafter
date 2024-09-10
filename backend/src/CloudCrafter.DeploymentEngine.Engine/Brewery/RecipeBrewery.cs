@@ -1,10 +1,12 @@
 ﻿using CloudCrafter.Agent.Models.Recipe;
+using CloudCrafter.DockerCompose.Engine.Yaml;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Brewery;
 
 public class RecipeBrewery(string Name)
 {
     private readonly List<DeploymentBuildStep> _buildSteps = new();
+
     private readonly Dictionary<string, DeploymentRecipeEnvironmentVariable> _environmentVariables =
         new();
 
@@ -12,20 +14,20 @@ public class RecipeBrewery(string Name)
     private DeploymentRecipeDestination? _destination;
     private DeploymentRecipeDockerComposeOptions? _dockerComposeOptions;
 
-    public RecipeBrewery SetApplication(Guid id)
+    public RecipeBrewery SetStackId(Guid id)
     {
         _application = new DeploymentRecipeApplicationInfo { Id = id };
         return this;
     }
 
     public RecipeBrewery SetDockerComposeOptions(
-        string? base64DockerCompose,
+        DockerComposeEditor dockerComposeEditor,
         string? dockerComposeDirectory
     )
     {
         _dockerComposeOptions = new DeploymentRecipeDockerComposeOptions
         {
-            Base64DockerCompose = base64DockerCompose,
+            Base64DockerCompose = dockerComposeEditor.ToBase64(),
             DockerComposeDirectory = dockerComposeDirectory,
         };
         return this;

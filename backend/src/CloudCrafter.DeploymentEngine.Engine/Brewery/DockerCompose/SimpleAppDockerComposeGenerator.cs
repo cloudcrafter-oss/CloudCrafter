@@ -4,7 +4,7 @@ using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Brewery.DockerCompose;
 
-public class SimpleAppGenerator(BaseDockerComposeGenerator.Args args)
+public class SimpleAppDockerComposeGenerator(BaseDockerComposeGenerator.Args args)
     : BaseDockerComposeGenerator(args)
 {
     public override DockerComposeEditor Generate()
