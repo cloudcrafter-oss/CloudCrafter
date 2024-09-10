@@ -53,3 +53,29 @@ buildOptions:
       tag: latest
       disableCache: true
       env: {}
+  - name: Write Docker Compose
+    description: Writes the Docker Compose file to the filesystem
+    type: DockerComposeWriteToFileSystem
+    params:
+      dockerComposeFile: docker-compose.yml
+  - name: Docker Compose Up
+    description: Runs docker compose up and stores the service names in a context, if enabled.
+    type: DockerComposeUp
+    params:
+      dockerComposeFile: docker-compose.yml
+      storeServiceNames: true
+  - name: Container health check
+    description: Checks the health of the containers
+    type: ContainerHealthCheck
+    params:
+      dockerComposeSettings:
+        fetchServicesFromContext: true
+      services:
+        my-custom-service-123:
+          httpMethod: GET
+          httpSchema: http
+          httpHost: localhost
+          httpPath: /
+          httpPort: 3000
+          expectedResponseCode: 200
+          retries: 4

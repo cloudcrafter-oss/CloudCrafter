@@ -8,7 +8,13 @@ namespace CloudCrafter.DockerCompose.Engine.UnitTests.Yaml;
 [TestFixture]
 public class DockerComposeEditorTest
 {
-    private string yamlString =
+    [SetUp]
+    public void Setup()
+    {
+        _editor = new DockerComposeEditor(yamlString);
+    }
+
+    private readonly string yamlString =
         @"
 version: '3.8'
 services:
@@ -39,12 +45,6 @@ networks:
 
     private DockerComposeEditor _editor;
 
-    [SetUp]
-    public void Setup()
-    {
-        _editor = new DockerComposeEditor(yamlString);
-    }
-
     [Test]
     public void ShouldBeAbleToFetchDbService()
     {
@@ -55,7 +55,7 @@ networks:
     [Test]
     public void ShouldNotBeAbleToFetchNonExistingService()
     {
-        InvalidServiceException ex = Assert.Throws<InvalidServiceException>(
+        var ex = Assert.Throws<InvalidServiceException>(
             () => _editor.Service("nonExistingService")
         );
 
@@ -65,9 +65,7 @@ networks:
     [Test]
     public void ShouldNotBeAbleToAddExistingService()
     {
-        ServiceAlreadyExistsException ex = Assert.Throws<ServiceAlreadyExistsException>(
-            () => _editor.AddService("db")
-        );
+        var ex = Assert.Throws<ServiceAlreadyExistsException>(() => _editor.AddService("db"));
 
         ex.Message.Should().Be("Service db already exists");
     }
@@ -173,6 +171,16 @@ networks:
         isValid.Should().BeTrue();
 
         await Verify(yaml);
+    }
+
+    [Test]
+    public void ShouldBeAbleToListServices()
+    {
+        var services = _editor.Services();
+
+        services.Should().HaveCount(2);
+        services.Should().Contain("web");
+        services.Should().Contain("db");
     }
 
     [Test]

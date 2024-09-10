@@ -11,6 +11,7 @@ public class DockerComposeEditor
 {
     private static readonly Regex ServiceNameRegex =
         new(@"^[a-z0-9][a-z0-9_-]*$", RegexOptions.Compiled);
+
     private readonly YamlMappingNode rootNode;
     private readonly YamlMappingNode servicesNode;
 
@@ -68,6 +69,11 @@ public class DockerComposeEditor
         var serviceNode = GetServiceNode(serviceName);
 
         return new ServiceEditor(this, serviceName);
+    }
+
+    public List<string> Services()
+    {
+        return servicesNode.Children.Keys.Select(key => key.ToString()).ToList();
     }
 
     public ServiceEditor AddService(string serviceName)

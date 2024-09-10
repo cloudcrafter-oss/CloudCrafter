@@ -86,7 +86,7 @@ public abstract class BaseRecipeGenerator
     )
     {
         var generator = new NixpacksBuildDockerImageBuildStepGenerator(
-            new NixpacksBuildDockerImageBuildStepGenerator.Args()
+            new NixpacksBuildDockerImageBuildStepGenerator.Args
             {
                 Path = pathInGitRepo ?? string.Empty,
                 ImageRepository = imageRepository,
@@ -95,6 +95,40 @@ public abstract class BaseRecipeGenerator
                 BuildArgs = new Dictionary<string, object>(),
             }
         );
+
+        Recipe.AddBuildStep(generator);
+    }
+
+    protected void AddWriteDockerComposeFileStep(string dockerComposeFilename)
+    {
+        var generator = new WriteDockerComposeBuildStepGenerator(
+            new WriteDockerComposeBuildStepGenerator.Args
+            {
+                DockerComposeFileName = dockerComposeFilename,
+            }
+        );
+
+        Recipe.AddBuildStep(generator);
+    }
+
+    protected void AddStartDockerComposeStep(string dockerComposeFileName)
+    {
+        var generator = new DockerComposeUpBuildStepGenerator(
+            new DockerComposeUpBuildStepGenerator.Args
+            {
+                DockerComposeFile = dockerComposeFileName,
+                StoreServiceNames = true,
+            }
+        );
+
+        Recipe.AddBuildStep(generator);
+    }
+
+    protected void AddCheckContainerHealthCheckStep(
+        ContainerHealthCheckDeploymentStepGenerator.Args args
+    )
+    {
+        var generator = new ContainerHealthCheckDeploymentStepGenerator(args);
 
         Recipe.AddBuildStep(generator);
     }
