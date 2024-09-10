@@ -13,8 +13,9 @@ public class GetProjectQueryTest : BaseTestFixture
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
-        Assert.ThrowsAsync<UnauthorizedAccessException>(async () =>
-            await SendAsync(new GetProjectQuery.Query(Guid.NewGuid())));
+        Assert.ThrowsAsync<UnauthorizedAccessException>(
+            async () => await SendAsync(new GetProjectQuery.Query(Guid.NewGuid()))
+        );
     }
 
     [Test]
@@ -23,7 +24,7 @@ public class GetProjectQueryTest : BaseTestFixture
         await RunAsAdministratorAsync();
 
         (await CountAsync<Project>()).Should().Be(0);
-        
+
         var result = await SendAsync(new GetProjectQuery.Query(Guid.NewGuid()));
         result.Should().BeNull();
     }
@@ -35,7 +36,7 @@ public class GetProjectQueryTest : BaseTestFixture
 
         var project = FakerInstances.ProjectFaker.Generate();
         await AddAsync(project);
-        
+
         var result = await SendAsync(new GetProjectQuery.Query(project.Id));
         result.Should().NotBeNull();
         result!.Id.Should().Be(project.Id);

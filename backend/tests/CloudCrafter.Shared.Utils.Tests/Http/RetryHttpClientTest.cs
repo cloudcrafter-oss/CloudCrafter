@@ -10,16 +10,16 @@ namespace CloudCrafter.Shared.Utils.Tests.Http;
 
 public class RetryHttpClientTest
 {
-   
     [Test]
     public void ShouldNotBeAbleToGetResponse()
     {
         var client = RetryHttpClientFactory.Create(3);
         var sw = Stopwatch.StartNew();
-        
+
         sw.Start();
-        var exception = Assert.ThrowsAsync<HttpRequestException>(() =>
-            client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "http://localhost:12345")));
+        var exception = Assert.ThrowsAsync<HttpRequestException>(
+            () => client.SendAsync(new HttpRequestMessage(HttpMethod.Get, "http://localhost:12345"))
+        );
         sw.Stop();
 
         var elapsedSeconds = sw.Elapsed.TotalSeconds;
@@ -30,11 +30,8 @@ public class RetryHttpClientTest
     public async Task ShouldBeAbleToFetchFromGoogle()
     {
         var client = RetryHttpClientFactory.Create();
-        
+
         var response = await client.GetAsync("https://www.google.com");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
     }
-
-    
 }

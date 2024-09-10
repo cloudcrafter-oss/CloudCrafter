@@ -6,16 +6,17 @@ using NUnit.Framework;
 namespace CloudCrafter.FunctionalTests.Domain.Servers;
 
 using static Testing;
+
 public class GetServerListTest : BaseTestFixture
 {
     private GetServerList.Query Query = new();
-    
+
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Query));
     }
-    
+
     [Test]
     public async Task ShouldBeAbleToFetchServersWhenLoggedIn()
     {

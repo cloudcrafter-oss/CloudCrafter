@@ -19,13 +19,13 @@ public class ConnectivityCheckBackgroundJobTest : BaseTestFixture
     {
         return StartTestingHost();
     }
+
     [Test]
     public async Task ShouldBeAbleToSuccessfullyRunConnectivityJob()
     {
         (await CountAsync<BackgroundJob>()).Should().Be(0);
         (await CountAsync<ServerConnectivityCheckJob>()).Should().Be(0);
         (await CountAsync<Server>()).Should().Be(0);
-
 
         var server = TestingHostServerFaker().Generate();
         await AddAsync(server);
@@ -40,9 +40,12 @@ public class ConnectivityCheckBackgroundJobTest : BaseTestFixture
         (await CountAsync<BackgroundJob>()).Should().Be(1);
         (await CountAsync<ServerConnectivityCheckJob>()).Should().Be(1);
 
-        var job = FetchEntity<BackgroundJob>(x => x.HangfireJobId == jobId,
-            f => f.Include(x => x.ServerConnectivityCheckJob)
-                .ThenInclude(x => x != null ? x.Server : null));
+        var job = FetchEntity<BackgroundJob>(
+            x => x.HangfireJobId == jobId,
+            f =>
+                f.Include(x => x.ServerConnectivityCheckJob)
+                    .ThenInclude(x => x != null ? x.Server : null)
+        );
 
         job.Should().NotBeNull();
         job!.ServerConnectivityCheckJob.Should().NotBeNull();
@@ -66,7 +69,6 @@ public class ConnectivityCheckBackgroundJobTest : BaseTestFixture
         (await CountAsync<ServerConnectivityCheckJob>()).Should().Be(0);
         (await CountAsync<Server>()).Should().Be(0);
 
-
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
 
@@ -80,9 +82,12 @@ public class ConnectivityCheckBackgroundJobTest : BaseTestFixture
         (await CountAsync<BackgroundJob>()).Should().Be(1);
         (await CountAsync<ServerConnectivityCheckJob>()).Should().Be(1);
 
-        var job = FetchEntity<BackgroundJob>(x => x.HangfireJobId == jobId,
-            f => f.Include(x => x.ServerConnectivityCheckJob)
-                .ThenInclude(x => x != null ? x.Server : null));
+        var job = FetchEntity<BackgroundJob>(
+            x => x.HangfireJobId == jobId,
+            f =>
+                f.Include(x => x.ServerConnectivityCheckJob)
+                    .ThenInclude(x => x != null ? x.Server : null)
+        );
 
         job.Should().NotBeNull();
         job!.ServerConnectivityCheckJob.Should().NotBeNull();
@@ -95,6 +100,9 @@ public class ConnectivityCheckBackgroundJobTest : BaseTestFixture
 
         job.RunningTime.Should().BeGreaterThan(1);
         job.ServerConnectivityCheckJob.TimeTakenMs.Should().BeGreaterThan(1);
-        job.Logs.Where(x => !string.IsNullOrEmpty(x.Exception)).ToList().Count.Should().BeGreaterThan(0);
+        job.Logs.Where(x => !string.IsNullOrEmpty(x.Exception))
+            .ToList()
+            .Count.Should()
+            .BeGreaterThan(0);
     }
 }

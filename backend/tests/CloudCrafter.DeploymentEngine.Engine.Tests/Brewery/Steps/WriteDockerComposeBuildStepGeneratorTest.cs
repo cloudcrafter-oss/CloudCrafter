@@ -10,7 +10,10 @@ public class WriteDockerComposeBuildStepGeneratorTest
     public void ShouldBeAbleToGenerateStep()
     {
         // Arrange
-        var options = new WriteDockerComposeBuildStepGenerator.Args { DockerComposeFileName = "docker-compose.yml" };
+        var options = new WriteDockerComposeBuildStepGenerator.Args
+        {
+            DockerComposeFileName = "docker-compose.yml",
+        };
         var generator = new WriteDockerComposeBuildStepGenerator(options);
 
         // Act

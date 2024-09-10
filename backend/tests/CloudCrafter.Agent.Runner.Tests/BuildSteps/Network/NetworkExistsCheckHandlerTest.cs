@@ -25,7 +25,9 @@ public class NetworkExistsCheckHandlerTest : BaseTest
         _mockDockerHelper = new Mock<IDockerHelper>();
         _mockLogger = new Mock<IDeploymentLogger>();
 
-        _mockPump.Setup(x => x.CreateLogger<NetworkExistsCheckHandler>()).Returns(_mockLogger.Object);
+        _mockPump
+            .Setup(x => x.CreateLogger<NetworkExistsCheckHandler>())
+            .Returns(_mockLogger.Object);
 
         _context = new DeploymentContext(GetTestRecipe());
         _handler = new NetworkExistsCheckHandler(_mockPump.Object, _mockDockerHelper.Object);
@@ -35,12 +37,21 @@ public class NetworkExistsCheckHandlerTest : BaseTest
     public async Task ExecuteAsync_AllNetworksExist_ShouldNotThrowException()
     {
         // Arrange
-        var parameters = new NetworkExistsCheckParams { Networks = new List<string> { "network1", "network2" } };
-
-        _mockDockerHelper.Setup(x => x.GetNetworks()).ReturnsAsync(new List<NetworkResponse>
+        var parameters = new NetworkExistsCheckParams
         {
-            new() { Name = "network1" }, new() { Name = "network2" }, new() { Name = "network3" }
-        });
+            Networks = new List<string> { "network1", "network2" },
+        };
+
+        _mockDockerHelper
+            .Setup(x => x.GetNetworks())
+            .ReturnsAsync(
+                new List<NetworkResponse>
+                {
+                    new() { Name = "network1" },
+                    new() { Name = "network2" },
+                    new() { Name = "network3" },
+                }
+            );
 
         // Act
         Func<Task> act = async () => await _handler.ExecuteAsync(parameters, _context);
@@ -55,23 +66,33 @@ public class NetworkExistsCheckHandlerTest : BaseTest
     public async Task ExecuteAsync_SomeNetworksDoNotExist_ShouldThrowDeploymentException()
     {
         // Arrange
-        var parameters =
-            new NetworkExistsCheckParams { Networks = new List<string> { "network1", "network2", "network4" } };
-
-
-        _mockDockerHelper.Setup(x => x.GetNetworks()).ReturnsAsync(new List<NetworkResponse>
+        var parameters = new NetworkExistsCheckParams
         {
-            new() { Name = "network1" }, new() { Name = "network3" }
-        });
+            Networks = new List<string> { "network1", "network2", "network4" },
+        };
+
+        _mockDockerHelper
+            .Setup(x => x.GetNetworks())
+            .ReturnsAsync(
+                new List<NetworkResponse>
+                {
+                    new() { Name = "network1" },
+                    new() { Name = "network3" },
+                }
+            );
 
         // Act
         Func<Task> act = async () => await _handler.ExecuteAsync(parameters, _context);
 
         // Assert
-        await act.Should().ThrowAsync<DeploymentException>()
+        await act.Should()
+            .ThrowAsync<DeploymentException>()
             .WithMessage("Networks network2, network4 do not exist");
         _mockLogger.Verify(x => x.LogInfo("Checking if provided networks exist"), Times.Once);
-        _mockLogger.Verify(x => x.LogCritical("Networks network2, network4 do not exist"), Times.Once);
+        _mockLogger.Verify(
+            x => x.LogCritical("Networks network2, network4 do not exist"),
+            Times.Once
+        );
     }
 
     [Test]
@@ -80,11 +101,13 @@ public class NetworkExistsCheckHandlerTest : BaseTest
         // Arrange
         var parameters = new NetworkExistsCheckParams();
 
-
         // Act
         await _handler.DryRun(parameters, _context);
 
         // Assert
-        _mockLogger.Verify(x => x.LogInfo("Checking if provided networks exist in dry run mode"), Times.Once);
+        _mockLogger.Verify(
+            x => x.LogInfo("Checking if provided networks exist in dry run mode"),
+            Times.Once
+        );
     }
 }

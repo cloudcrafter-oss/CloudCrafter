@@ -32,13 +32,13 @@ public class Testing
         Log.Logger = LoggingConfiguration.GetLogger();
         _database = await TestDatabaseFactory.CreateAsync();
 
-        _factory = new CustomWebApplicationFactory(_database.GetConnection(), _database.GetRedisConnectionString());
+        _factory = new CustomWebApplicationFactory(
+            _database.GetConnection(),
+            _database.GetRedisConnectionString()
+        );
 
         _scopeFactory = _factory.Services.GetRequiredService<IServiceScopeFactory>();
     }
-
-   
-   
 
     public static string GetDockerfileDirectory()
     {
@@ -56,15 +56,19 @@ public class Testing
         return await mediator.Send(request);
     }
 
-    public static TService GetService<TService>() where TService : notnull
+    public static TService GetService<TService>()
+        where TService : notnull
     {
         var scope = _scopeFactory.CreateScope();
 
         return scope.ServiceProvider.GetRequiredService<TService>();
     }
 
-    public static T? FetchEntity<T>(Expression<Func<T, bool>> expression,
-        Func<IQueryable<T>, IQueryable<T>>? includeFunc = null) where T : class
+    public static T? FetchEntity<T>(
+        Expression<Func<T, bool>> expression,
+        Func<IQueryable<T>, IQueryable<T>>? includeFunc = null
+    )
+        where T : class
     {
         using var scope = _scopeFactory.CreateScope();
 
@@ -89,14 +93,16 @@ public class Testing
         var userFaker = FakerInstances.UserFaker.Generate();
 
         var faker = new Faker();
-        var password = "AcdE3" + faker.Internet.Password(16) + faker.Random.String2(3, "!@#$%^&*()_+");
+        var password =
+            "AcdE3" + faker.Internet.Password(16) + faker.Random.String2(3, "!@#$%^&*()_+");
 
         var result = await userManager.CreateAsync(userFaker, password);
 
         if (!result.Succeeded)
         {
             throw new Exception(
-                $"Unable to create {userFaker.UserName}, error: {string.Join(", ", result.Errors.Select(x => x.Description))}");
+                $"Unable to create {userFaker.UserName}, error: {string.Join(", ", result.Errors.Select(x => x.Description))}"
+            );
         }
 
         return new UsernamePasswordDto(userFaker.Email!, password);
@@ -123,7 +129,11 @@ public class Testing
 
     public static async Task<Guid?> RunAsAdministratorAsync()
     {
-        return await RunAsUserAsync("administrator@local", "Administrator1234!", Array.Empty<string>());
+        return await RunAsUserAsync(
+            "administrator@local",
+            "Administrator1234!",
+            Array.Empty<string>()
+        );
     }
 
     public static async Task<Guid?> RunAsUserAsync(string userName, string password, string[] roles)
@@ -188,7 +198,8 @@ public class Testing
         await context.SaveChangesAsync();
     }
 
-    public static async Task<int> CountAsync<TEntity>() where TEntity : class
+    public static async Task<int> CountAsync<TEntity>()
+        where TEntity : class
     {
         using var scope = _scopeFactory.CreateScope();
 
@@ -206,9 +217,8 @@ public class Testing
         }
 
         return directory?.FullName
-               ?? throw new DirectoryNotFoundException("Solution directory not found.");
+            ?? throw new DirectoryNotFoundException("Solution directory not found.");
     }
-    
 
     [OneTimeTearDown]
     public async Task RunAfterAnyTests()

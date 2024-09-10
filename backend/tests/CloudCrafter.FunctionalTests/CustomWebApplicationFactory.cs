@@ -23,12 +23,14 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     private readonly DbConnection _postgreSqlConnection;
     private readonly string _redisConnectionString;
 
-    public CustomWebApplicationFactory(DbConnection postgreSqlConnection, string redisConnectionString)
+    public CustomWebApplicationFactory(
+        DbConnection postgreSqlConnection,
+        string redisConnectionString
+    )
     {
         _postgreSqlConnection = postgreSqlConnection;
         _redisConnectionString = redisConnectionString;
     }
-
 
     /// <summary>
     ///     Overriding CreateHost to avoid creating a separate ServiceProvider per this thread:
@@ -47,19 +49,26 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureAppConfiguration((context, config) =>
-        {
-            config
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile("appsettings.Development.json", true)
-                .AddInMemoryCollection(new[]
-                {
-                    new KeyValuePair<string, string?>("ConnectionStrings:RedisConnection", _redisConnectionString)
-                })
-                .AddEnvironmentVariables();
-        });
-        builder
-            .ConfigureServices((context, services) =>
+        builder.ConfigureAppConfiguration(
+            (context, config) =>
+            {
+                config
+                    .AddJsonFile("appsettings.json")
+                    .AddJsonFile("appsettings.Development.json", true)
+                    .AddInMemoryCollection(
+                        new[]
+                        {
+                            new KeyValuePair<string, string?>(
+                                "ConnectionStrings:RedisConnection",
+                                _redisConnectionString
+                            ),
+                        }
+                    )
+                    .AddEnvironmentVariables();
+            }
+        );
+        builder.ConfigureServices(
+            (context, services) =>
             {
                 // Hangfire context
                 //GlobalConfiguration.Configuration.UseInMemoryStorage();
@@ -80,11 +89,13 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
                 services.RemoveAll<IApplicationDbContext>();
 
-                services.AddDbContext<AppDbContext>((sp, options) =>
-                {
-                    options.UseNpgsql(_postgreSqlConnection);
-                    options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-                });
+                services.AddDbContext<AppDbContext>(
+                    (sp, options) =>
+                    {
+                        options.UseNpgsql(_postgreSqlConnection);
+                        options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+                    }
+                );
 
                 services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
                 services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
@@ -96,29 +107,32 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 });
                 services.AddScoped<ApplicationDbContextInitialiser>();
 
-
                 services
                     .RemoveAll<IUser>()
                     .AddTransient(provider => Mock.Of<IUser>(s => s.Id == GetUserId()));
 
-
                 services.EnsureDbCreated<AppDbContext>();
-            });
+            }
+        );
     }
 }
 
 public static class ServiceCollectionExtensions
 {
-    public static void RemoveDbContext<T>(this IServiceCollection services) where T : DbContext
+    public static void RemoveDbContext<T>(this IServiceCollection services)
+        where T : DbContext
     {
-        var descriptor = services.SingleOrDefault(x => x.ServiceType == typeof(DbContextOptions<T>));
+        var descriptor = services.SingleOrDefault(x =>
+            x.ServiceType == typeof(DbContextOptions<T>)
+        );
         if (descriptor != null)
         {
             services.Remove(descriptor);
         }
     }
 
-    public static void EnsureDbCreated<T>(this IServiceCollection services) where T : DbContext
+    public static void EnsureDbCreated<T>(this IServiceCollection services)
+        where T : DbContext
     {
         using var scope = services.BuildServiceProvider().CreateScope();
         var serviceProvider = scope.ServiceProvider;

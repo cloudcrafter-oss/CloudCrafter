@@ -5,18 +5,18 @@ using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
 
-public class StopContainersBuildStepGeneratorTest : BaseParameterConversionTest<StopContainersParams>
+public class StopContainersBuildStepGeneratorTest
+    : BaseParameterConversionTest<StopContainersParams>
 {
     [Test]
     public void ShouldBeAbleToCreateParams()
     {
         // Arrange
-        var options =
-            new StopContainersBuildStepGenerator.Args
-            {
-                LabelFilters = ["some.label=1", "some.other.label!=2"],
-                OnlyCloudCrafterContainers = true
-            };
+        var options = new StopContainersBuildStepGenerator.Args
+        {
+            LabelFilters = ["some.label=1", "some.other.label!=2"],
+            OnlyCloudCrafterContainers = true,
+        };
         var generator = new StopContainersBuildStepGenerator(options);
 
         // Act
@@ -28,6 +28,9 @@ public class StopContainersBuildStepGeneratorTest : BaseParameterConversionTest<
 
         paramObject.OnlyCloudCrafterContainers.Should().Be(true);
         paramObject.Filters.Should().ContainKey("labels");
-        paramObject.Filters["labels"].Should().BeEquivalentTo(["some.label=1", "some.other.label!=2"]);
+        paramObject
+            .Filters["labels"]
+            .Should()
+            .BeEquivalentTo(["some.label=1", "some.other.label!=2"]);
     }
 }

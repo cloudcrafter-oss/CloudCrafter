@@ -10,13 +10,14 @@ using static Testing;
 
 public class CreateStackCommandTest : BaseTestFixture
 {
-    private readonly CreateStackCommand.Command Command = new()
-    {
-        Name = "Dummy Stack",
-        GitRepository = "https://github.com/cloudcrafter-oss/demo-examples",
-        ServerId = Guid.NewGuid(),
-        EnvironmentId = Guid.NewGuid()
-    };
+    private readonly CreateStackCommand.Command Command =
+        new()
+        {
+            Name = "Dummy Stack",
+            GitRepository = "https://github.com/cloudcrafter-oss/demo-examples",
+            ServerId = Guid.NewGuid(),
+            EnvironmentId = Guid.NewGuid(),
+        };
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
@@ -28,7 +29,9 @@ public class CreateStackCommandTest : BaseTestFixture
     public async Task ShouldThrowExceptionWhenServerIdIsNotFound()
     {
         await RunAsAdministratorAsync();
-        var exception = Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
+        var exception = Assert.ThrowsAsync<UnauthorizedAccessException>(
+            async () => await SendAsync(Command)
+        );
 
         exception.Message.Should().Be($"User does not have access to server {Command.ServerId}");
 
@@ -45,12 +48,15 @@ public class CreateStackCommandTest : BaseTestFixture
 
         Command.ServerId = server.Id;
 
-        var exception = Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
+        var exception = Assert.ThrowsAsync<UnauthorizedAccessException>(
+            async () => await SendAsync(Command)
+        );
 
-        exception.Message.Should().Be($"User does not have access to environment {Command.EnvironmentId}");
+        exception
+            .Message.Should()
+            .Be($"User does not have access to environment {Command.EnvironmentId}");
         (await CountAsync<Stack>()).Should().Be(0);
     }
-
 
     [Test]
     public async Task ShouldBeAbleToCreateStack()

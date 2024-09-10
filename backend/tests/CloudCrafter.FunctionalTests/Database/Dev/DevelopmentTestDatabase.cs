@@ -20,7 +20,6 @@ public class DevelopmentTestDatabase : ITestDatabase
     private NpgsqlConnection _connection = null!;
     private Respawner _respawner = null!;
 
-
     public DevelopmentTestDatabase()
     {
         var config = new ConfigurationBuilder()
@@ -53,18 +52,20 @@ public class DevelopmentTestDatabase : ITestDatabase
         var _fakeEventDispatcher = Substitute.For<IDomainEventDispatcher>();
 
         // inject IOptions<CloudCrafterConfig> into AppDbContext
-        var cloudCrafterOptions = Options.Create(new CloudCrafterConfig
-        {
-            AppKey = "this-is-some-dummy-testing-value"
-        });
+        var cloudCrafterOptions = Options.Create(
+            new CloudCrafterConfig { AppKey = "this-is-some-dummy-testing-value" }
+        );
 
         var context = new AppDbContext(options, _fakeEventDispatcher, cloudCrafterOptions);
         await context.Database.MigrateAsync();
-        _respawner = await Respawner.CreateAsync(_connection,
+        _respawner = await Respawner.CreateAsync(
+            _connection,
             new RespawnerOptions
             {
-                DbAdapter = DbAdapter.Postgres, TablesToIgnore = new Table[] { "__EFMigrationsHistory" , "StackServiceTypes"}
-            });
+                DbAdapter = DbAdapter.Postgres,
+                TablesToIgnore = new Table[] { "__EFMigrationsHistory", "StackServiceTypes" },
+            }
+        );
     }
 
     public DbConnection GetConnection()

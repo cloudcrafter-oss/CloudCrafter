@@ -24,9 +24,14 @@ public class NixpacksWritePlanToFileSystemHandlerTest : BaseTest
         _mockPump = new Mock<IMessagePump>();
         _mockFileSystemHelper = new Mock<IFileSystemHelper>();
         _mockLogger = new Mock<IDeploymentLogger>();
-        _mockPump.Setup(p => p.CreateLogger<NixpacksWritePlanToFileSystemHandler>()).Returns(_mockLogger.Object);
+        _mockPump
+            .Setup(p => p.CreateLogger<NixpacksWritePlanToFileSystemHandler>())
+            .Returns(_mockLogger.Object);
 
-        _handler = new NixpacksWritePlanToFileSystemHandler(_mockPump.Object, _mockFileSystemHelper.Object);
+        _handler = new NixpacksWritePlanToFileSystemHandler(
+            _mockPump.Object,
+            _mockFileSystemHelper.Object
+        );
         _context = new DeploymentContext(GetTestRecipe());
     }
 
@@ -45,10 +50,16 @@ public class NixpacksWritePlanToFileSystemHandlerTest : BaseTest
 
         // Assert
         _mockLogger.Verify(l => l.LogInfo("Writing Nixpacks plan to filesystem"), Times.Once);
-        _mockLogger.Verify(l => l.LogInfo($"Successfully wrote Nixpacks plan to '{expectedPlanPath}'"), Times.Once);
+        _mockLogger.Verify(
+            l => l.LogInfo($"Successfully wrote Nixpacks plan to '{expectedPlanPath}'"),
+            Times.Once
+        );
         _mockFileSystemHelper.Verify(f => f.WriteFile(expectedPlanPath, expectedPlan), Times.Once);
 
-        _context.GetRecipeResult<string>(RecipeResultKeys.NixpacksTomlLocation).Should().Be(expectedPlanPath);
+        _context
+            .GetRecipeResult<string>(RecipeResultKeys.NixpacksTomlLocation)
+            .Should()
+            .Be(expectedPlanPath);
     }
 
     [Test]
@@ -56,16 +67,16 @@ public class NixpacksWritePlanToFileSystemHandlerTest : BaseTest
     {
         // Arrange
         var parameters = new NixpacksWritePlanToFileSystemParams();
-    
 
         _context.SetRecipeResult(RecipeResultKeys.NixpacksBuildPlan, string.Empty);
 
         // Act & Assert
-        _handler.Invoking(h => h.ExecuteAsync(parameters, _context))
-            .Should().ThrowAsync<DeploymentException>()
+        _handler
+            .Invoking(h => h.ExecuteAsync(parameters, _context))
+            .Should()
+            .ThrowAsync<DeploymentException>()
             .WithMessage("Nixpacks plan not found - cannot write to filesystem.");
     }
-    
 
     [Test]
     public async Task DryRun_ShouldLogInfoMessage()

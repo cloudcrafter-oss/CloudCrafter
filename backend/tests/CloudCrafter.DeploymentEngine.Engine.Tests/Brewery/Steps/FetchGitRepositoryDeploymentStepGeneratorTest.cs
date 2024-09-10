@@ -12,7 +12,8 @@ public class FetchGitRepositoryDeploymentStepGeneratorTest
         // Arrange
         var options = new FetchGitRepositoryDeploymentStepGenerator.Args
         {
-            Repository = "https://github.com/cloudcrafter-oss/demo-examples.git", Commit = "HEAD"
+            Repository = "https://github.com/cloudcrafter-oss/demo-examples.git",
+            Commit = "HEAD",
         };
 
         var generator = new FetchGitRepositoryDeploymentStepGenerator(options);

@@ -5,22 +5,21 @@ using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
 
-public class NixpacksBuildDockerImageBuildStepGeneratorTest : BaseParameterConversionTest<NixpacksBuildDockerImageParams
->
+public class NixpacksBuildDockerImageBuildStepGeneratorTest
+    : BaseParameterConversionTest<NixpacksBuildDockerImageParams>
 {
     [Test]
     public void ShouldBeAbleToCreateParams()
     {
         // Arrange
-        var options =
-            new NixpacksBuildDockerImageBuildStepGenerator.Args
-            {
-                Path = "/some/path",
-                BuildArgs = new Dictionary<string, object> { { "ARG_1", 1 } },
-                ImageRepository = "image",
-                ImageTag = "latest",
-                DisableBuildCache = true
-            };
+        var options = new NixpacksBuildDockerImageBuildStepGenerator.Args
+        {
+            Path = "/some/path",
+            BuildArgs = new Dictionary<string, object> { { "ARG_1", 1 } },
+            ImageRepository = "image",
+            ImageTag = "latest",
+            DisableBuildCache = true,
+        };
         var generator = new NixpacksBuildDockerImageBuildStepGenerator(options);
 
         // Act

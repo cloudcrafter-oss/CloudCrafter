@@ -26,10 +26,9 @@ public class DeploymentRecipeValidatorTest
             Application = new DeploymentRecipeApplicationInfo { Id = Guid.NewGuid() },
             EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
             {
-                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>()
+                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),
             },
-            Destination =
-                new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" },
+            Destination = new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" },
             BuildOptions = new DeploymentBuildOptions
             {
                 Steps = new List<DeploymentBuildStep>
@@ -39,15 +38,14 @@ public class DeploymentRecipeValidatorTest
                         Name = "dummy",
                         Description = "description",
                         Type = DeploymentBuildStepType.FetchGitRepository,
-                        Params =
-                            new Dictionary<string, object>
-                            {
-                                { "repo", "https://github.com/cloudcrafter-oss/demo-examples.git" },
-                                { "commit", "HEAD" }
-                            }
-                    }
-                }
-            }
+                        Params = new Dictionary<string, object>
+                        {
+                            { "repo", "https://github.com/cloudcrafter-oss/demo-examples.git" },
+                            { "commit", "HEAD" },
+                        },
+                    },
+                },
+            },
         };
 
         await _deploymentService.ValidateRecipe(recipe);
@@ -65,18 +63,21 @@ public class DeploymentRecipeValidatorTest
             Application = new DeploymentRecipeApplicationInfo { Id = Guid.NewGuid() },
             EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
             {
-                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>()
+                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),
             },
-            Destination =
-                new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" },
-            BuildOptions = new DeploymentBuildOptions { Steps = new List<DeploymentBuildStep>() }
+            Destination = new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" },
+            BuildOptions = new DeploymentBuildOptions { Steps = new List<DeploymentBuildStep>() },
         };
 
-        var exception = Assert.ThrowsAsync<ValidationException>(() => _deploymentService.ValidateRecipe(recipe));
+        var exception = Assert.ThrowsAsync<ValidationException>(
+            () => _deploymentService.ValidateRecipe(recipe)
+        );
         exception.Should().NotBeNull();
 
-        exception.Errors.Count(error => error.PropertyName == "BuildOptions.Steps")
-            .Should().BeGreaterThan(0);
+        exception
+            .Errors.Count(error => error.PropertyName == "BuildOptions.Steps")
+            .Should()
+            .BeGreaterThan(0);
     }
 
     [Test]
@@ -88,20 +89,21 @@ public class DeploymentRecipeValidatorTest
             Application = new DeploymentRecipeApplicationInfo { Id = Guid.NewGuid() },
             EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
             {
-                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>()
+                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),
             },
-            Destination =
-                new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" },
+            Destination = new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" },
             DockerComposeOptions = new DeploymentRecipeDockerComposeOptions(),
-            BuildOptions = new DeploymentBuildOptions { Steps = new List<DeploymentBuildStep>() }
+            BuildOptions = new DeploymentBuildOptions { Steps = new List<DeploymentBuildStep>() },
         };
 
-        var exception =
-            Assert.ThrowsAsync<ValidationException>(
-                () => ((DeploymentService)_deploymentService).ValidateRecipe(recipe));
+        var exception = Assert.ThrowsAsync<ValidationException>(
+            () => ((DeploymentService)_deploymentService).ValidateRecipe(recipe)
+        );
 
         exception.Should().NotBeNull();
-        exception.Errors.Count(error => error.PropertyName == "DockerComposeOptions.Base64DockerCompose")
-            .Should().BeGreaterThan(0);
+        exception
+            .Errors.Count(error => error.PropertyName == "DockerComposeOptions.Base64DockerCompose")
+            .Should()
+            .BeGreaterThan(0);
     }
 }

@@ -4,8 +4,8 @@ using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
 
-public class
-    WriteDockerComposeBuildStepGeneratorTest : BaseParameterConversionTest<DockerComposeWriteToFileSystemParams>
+public class WriteDockerComposeBuildStepGeneratorTest
+    : BaseParameterConversionTest<DockerComposeWriteToFileSystemParams>
 {
     [Test]
     public void ShouldBeAbleToCreateParams()
@@ -13,7 +13,7 @@ public class
         // Arrange
         var options = new WriteDockerComposeBuildStepGenerator.Args
         {
-            DockerComposeFileName = "docker-compose-testing.yml"
+            DockerComposeFileName = "docker-compose-testing.yml",
         };
 
         var generator = new WriteDockerComposeBuildStepGenerator(options);

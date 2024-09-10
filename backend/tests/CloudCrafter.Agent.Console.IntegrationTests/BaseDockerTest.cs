@@ -35,7 +35,6 @@ public abstract class BaseDockerTest
             throw new Exception("Nginx is already running");
         }
 
-
         _nginxContainer = new ContainerBuilder()
             .WithImage("nginx:latest")
             .WithName("my-custom-container")
@@ -65,7 +64,6 @@ public abstract class BaseDockerTest
 
         return _nginxContainer.Id;
     }
-
 
     private async Task RemoveNginx()
     {

@@ -19,7 +19,9 @@ public class EmptyDockerComposeEditorTest
     {
         var editor = new DockerComposeEditor();
 
-        var exception = Assert.Throws<DockerComposeInvalidStateException>(() => editor.Network("test"));
+        var exception = Assert.Throws<DockerComposeInvalidStateException>(
+            () => editor.Network("test")
+        );
         exception.Message.Should().Be("Networks are not created or defined");
     }
 
@@ -27,8 +29,7 @@ public class EmptyDockerComposeEditorTest
     public void ShouldNotBeAbleToGetNonExistingNetwork()
     {
         var editor = new DockerComposeEditor();
-        editor.AddNetwork("my-network")
-            .SetNetworkName("my-network");
+        editor.AddNetwork("my-network").SetNetworkName("my-network");
 
         var exception = Assert.Throws<InvalidNetworkException>(() => editor.Network("test"));
         exception.Message.Should().Be("Network test is invalid");
@@ -38,10 +39,11 @@ public class EmptyDockerComposeEditorTest
     public void ShouldNotBeAbleToAddAlreadyExistingNetwork()
     {
         var editor = new DockerComposeEditor();
-        editor.AddNetwork("my-network")
-            .SetNetworkName("my-network");
+        editor.AddNetwork("my-network").SetNetworkName("my-network");
 
-        var exception = Assert.Throws<NetworkAlreadyExistsException>(() => editor.AddNetwork("my-network"));
+        var exception = Assert.Throws<NetworkAlreadyExistsException>(
+            () => editor.AddNetwork("my-network")
+        );
         exception.Message.Should().Be("Network my-network already exists");
     }
 
@@ -49,8 +51,7 @@ public class EmptyDockerComposeEditorTest
     public void ShouldBeAbleToGetNetwork()
     {
         var editor = new DockerComposeEditor();
-        editor.AddNetwork("my-network")
-            .SetNetworkName("my-network");
+        editor.AddNetwork("my-network").SetNetworkName("my-network");
 
         var networkFromEditor = editor.Network("my-network");
 
@@ -61,12 +62,9 @@ public class EmptyDockerComposeEditorTest
     public void ShouldBeAbleToAddNetworkToService()
     {
         var editor = new DockerComposeEditor();
-        var network = editor.AddNetwork("my-network")
-            .SetNetworkName("my-network");
+        var network = editor.AddNetwork("my-network").SetNetworkName("my-network");
 
-
-        var service = editor.AddService("my-service")
-            .AddNetwork(network);
+        var service = editor.AddService("my-service").AddNetwork(network);
 
         service.Should().NotBeNull();
     }
@@ -83,11 +81,14 @@ public class EmptyDockerComposeEditorTest
         var labelsService = new DockerComposeLabelService();
 
         labelsService.AddLabel(LabelFactory.GenerateStackLabel(id));
-        labelsService.AddTraefikLabels(new DockerComposeLabelServiceTraefikOptions
-        {
-            AppName = "frontend", Service = "frontend", Rule = "Host(`example.com`)"
-        });
-
+        labelsService.AddTraefikLabels(
+            new DockerComposeLabelServiceTraefikOptions
+            {
+                AppName = "frontend",
+                Service = "frontend",
+                Rule = "Host(`example.com`)",
+            }
+        );
 
         service.AddLabels(labelsService);
 
@@ -135,8 +136,7 @@ public class EmptyDockerComposeEditorTest
     public Task ShouldBeAbleToAddNetwork()
     {
         var editor = new DockerComposeEditor();
-        editor.AddService("test")
-            .AddLabel("test", "true");
+        editor.AddService("test").AddLabel("test", "true");
 
         var network = editor.AddNetwork("network1");
         network.SetNetworkName("network1");
@@ -149,12 +149,10 @@ public class EmptyDockerComposeEditorTest
     public Task ShouldBeAbleToAddNetworkWithExternalNetwork()
     {
         var editor = new DockerComposeEditor();
-        var service = editor.AddService("test")
-            .AddLabel("test", "true");
+        var service = editor.AddService("test").AddLabel("test", "true");
 
         var network = editor.AddNetwork("cloudcrafter");
-        network.SetNetworkName("cloudcrafter")
-            .SetIsExternalNetwork();
+        network.SetNetworkName("cloudcrafter").SetIsExternalNetwork();
 
         service.AddNetwork(network);
 

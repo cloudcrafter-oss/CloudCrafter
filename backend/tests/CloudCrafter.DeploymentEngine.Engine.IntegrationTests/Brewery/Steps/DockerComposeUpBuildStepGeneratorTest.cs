@@ -4,17 +4,18 @@ using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
 
-public class DockerComposeUpBuildStepGeneratorTest : BaseParameterConversionTest<DockerComposeUpParams>
+public class DockerComposeUpBuildStepGeneratorTest
+    : BaseParameterConversionTest<DockerComposeUpParams>
 {
     [Test]
     public void ShouldBeAbleToCreateParams()
     {
         // Arrange
-        var options =
-            new DockerComposeUpBuildStepGenerator.Args
-            {
-                DockerComposeFile = "docker-compose-my-test.yml", StoreServiceNames = true
-            };
+        var options = new DockerComposeUpBuildStepGenerator.Args
+        {
+            DockerComposeFile = "docker-compose-my-test.yml",
+            StoreServiceNames = true,
+        };
         var generator = new DockerComposeUpBuildStepGenerator(options);
 
         // Act

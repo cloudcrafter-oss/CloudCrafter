@@ -23,7 +23,9 @@ public class NixpacksAlterPlanHandlerTest : BaseTest
     {
         _mockPump = new Mock<IMessagePump>();
         _mockLogger = new Mock<IDeploymentLogger>();
-        _mockPump.Setup(p => p.CreateLogger<NixpacksAlterPlanHandler>()).Returns(_mockLogger.Object);
+        _mockPump
+            .Setup(p => p.CreateLogger<NixpacksAlterPlanHandler>())
+            .Returns(_mockLogger.Object);
 
         _handler = new NixpacksAlterPlanHandler(_mockPump.Object);
 
@@ -37,11 +39,11 @@ public class NixpacksAlterPlanHandlerTest : BaseTest
     {
         // Arrange
         var initialPlan = """
-                          [phases.setup]
-                          nixPkgs = ['cowsay']
-                          [phases.build]
-                          cmds = ['yarn run server:build']
-                          """;
+            [phases.setup]
+            nixPkgs = ['cowsay']
+            [phases.build]
+            cmds = ['yarn run server:build']
+            """;
         _context.SetRecipeResult(RecipeResultKeys.NixpacksBuildPlan, initialPlan);
 
         // Act
@@ -63,11 +65,13 @@ public class NixpacksAlterPlanHandlerTest : BaseTest
         _context.SetRecipeResult(RecipeResultKeys.NixpacksBuildPlan, "");
 
         // Act & Assert
-        var exception = Assert.Throws<DeploymentException>(() => _handler.ExecuteAsync(_params, _context));
+        var exception = Assert.Throws<DeploymentException>(
+            () => _handler.ExecuteAsync(_params, _context)
+        );
         exception.Message.Should().Be("Nixpacks plan not found.");
         _mockLogger.Verify(l => l.LogInfo("Starting altering nixpacks plan"), Times.Once);
     }
-    
+
     [Test]
     public async Task DryRun_LogsCorrectly()
     {

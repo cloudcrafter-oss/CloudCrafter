@@ -23,11 +23,11 @@ public class TestContainersTestDatabase : ITestDatabase
 
     public TestContainersTestDatabase()
     {
-        _postgreSqlContainer = new PostgreSqlBuilder().WithUsername("postgres")
-            .WithPassword("password").Build();
-        _redisContainer = new RedisBuilder()
-            .WithImage("redis:alpine")
+        _postgreSqlContainer = new PostgreSqlBuilder()
+            .WithUsername("postgres")
+            .WithPassword("password")
             .Build();
+        _redisContainer = new RedisBuilder().WithImage("redis:alpine").Build();
     }
 
     public async Task InitialiseAsync()
@@ -46,22 +46,23 @@ public class TestContainersTestDatabase : ITestDatabase
 
         var _fakeEventDispatcher = Substitute.For<IDomainEventDispatcher>();
 
-
         // inject IOptions<CloudCrafterConfig> into AppDbContext
-        var cloudCrafterOptions = Options.Create(new CloudCrafterConfig
-        {
-            AppKey = "this-is-some-dummy-testing-value"
-        });
+        var cloudCrafterOptions = Options.Create(
+            new CloudCrafterConfig { AppKey = "this-is-some-dummy-testing-value" }
+        );
 
         var context = new AppDbContext(options, _fakeEventDispatcher, cloudCrafterOptions);
 
         context.Database.Migrate();
 
-        _respawner = await Respawner.CreateAsync(_connection,
+        _respawner = await Respawner.CreateAsync(
+            _connection,
             new RespawnerOptions
             {
-                DbAdapter = DbAdapter.Postgres, TablesToIgnore = new Table[] { "__EFMigrationsHistory", "StackServiceTypes" }
-            });
+                DbAdapter = DbAdapter.Postgres,
+                TablesToIgnore = new Table[] { "__EFMigrationsHistory", "StackServiceTypes" },
+            }
+        );
     }
 
     public DbConnection GetConnection()

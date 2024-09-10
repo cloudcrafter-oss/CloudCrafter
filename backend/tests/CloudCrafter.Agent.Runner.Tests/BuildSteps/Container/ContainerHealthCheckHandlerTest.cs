@@ -24,9 +24,14 @@ public class ContainerHealthCheckHandlerTest : BaseTest
         _mockPump = new Mock<IMessagePump>();
         _mockDockerHealthCheckHelper = new Mock<IDockerHealthCheckHelper>();
         _mockLogger = new Mock<IDeploymentLogger>();
-        _mockPump.Setup(p => p.CreateLogger<ContainerHealthCheckHandler>()).Returns(_mockLogger.Object);
+        _mockPump
+            .Setup(p => p.CreateLogger<ContainerHealthCheckHandler>())
+            .Returns(_mockLogger.Object);
 
-        _handler = new ContainerHealthCheckHandler(_mockPump.Object, _mockDockerHealthCheckHelper.Object);
+        _handler = new ContainerHealthCheckHandler(
+            _mockPump.Object,
+            _mockDockerHealthCheckHelper.Object
+        );
         _context = new DeploymentContext(GetTestRecipe());
     }
 
@@ -38,12 +43,21 @@ public class ContainerHealthCheckHandlerTest : BaseTest
         {
             Services = new Dictionary<string, ContainerHealthCheckParamsOptions>
             {
-                { "service1", new ContainerHealthCheckParamsOptions { CheckInterval = 30 } },
-                { "service2", new ContainerHealthCheckParamsOptions { CheckInterval = 60 } }
-            }
+                {
+                    "service1",
+                    new ContainerHealthCheckParamsOptions { CheckInterval = 30 }
+                },
+                {
+                    "service2",
+                    new ContainerHealthCheckParamsOptions { CheckInterval = 60 }
+                },
+            },
         };
 
-        _mockDockerHealthCheckHelper.Setup(d => d.IsHealthyAsync(It.IsAny<string>(), It.IsAny<ContainerHealthCheckParamsOptions>()))
+        _mockDockerHealthCheckHelper
+            .Setup(d =>
+                d.IsHealthyAsync(It.IsAny<string>(), It.IsAny<ContainerHealthCheckParamsOptions>())
+            )
             .ReturnsAsync(true);
 
         // Act
@@ -52,8 +66,14 @@ public class ContainerHealthCheckHandlerTest : BaseTest
         // Assert
         _mockLogger.Verify(l => l.LogInfo("Running container health check"), Times.Once);
         _mockLogger.Verify(l => l.LogInfo("All provided containers are healthy"), Times.Once);
-        _mockDockerHealthCheckHelper.Verify(d => d.IsHealthyAsync("service1", It.IsAny<ContainerHealthCheckParamsOptions>()), Times.Once);
-        _mockDockerHealthCheckHelper.Verify(d => d.IsHealthyAsync("service2", It.IsAny<ContainerHealthCheckParamsOptions>()), Times.Once);
+        _mockDockerHealthCheckHelper.Verify(
+            d => d.IsHealthyAsync("service1", It.IsAny<ContainerHealthCheckParamsOptions>()),
+            Times.Once
+        );
+        _mockDockerHealthCheckHelper.Verify(
+            d => d.IsHealthyAsync("service2", It.IsAny<ContainerHealthCheckParamsOptions>()),
+            Times.Once
+        );
     }
 
     [Test]
@@ -64,20 +84,35 @@ public class ContainerHealthCheckHandlerTest : BaseTest
         {
             Services = new Dictionary<string, ContainerHealthCheckParamsOptions>
             {
-                { "service1", new ContainerHealthCheckParamsOptions { CheckInterval = 30 } },
-                { "service2", new ContainerHealthCheckParamsOptions { CheckInterval = 60 } }
-            }
+                {
+                    "service1",
+                    new ContainerHealthCheckParamsOptions { CheckInterval = 30 }
+                },
+                {
+                    "service2",
+                    new ContainerHealthCheckParamsOptions { CheckInterval = 60 }
+                },
+            },
         };
 
-        _mockDockerHealthCheckHelper.Setup(d => d.IsHealthyAsync("service1", It.IsAny<ContainerHealthCheckParamsOptions>())).ReturnsAsync(true);
-        _mockDockerHealthCheckHelper.Setup(d => d.IsHealthyAsync("service2", It.IsAny<ContainerHealthCheckParamsOptions>())).ReturnsAsync(false);
+        _mockDockerHealthCheckHelper
+            .Setup(d => d.IsHealthyAsync("service1", It.IsAny<ContainerHealthCheckParamsOptions>()))
+            .ReturnsAsync(true);
+        _mockDockerHealthCheckHelper
+            .Setup(d => d.IsHealthyAsync("service2", It.IsAny<ContainerHealthCheckParamsOptions>()))
+            .ReturnsAsync(false);
 
         // Act & Assert
-        _handler.Invoking(h => h.ExecuteAsync(parameters, _context))
-            .Should().ThrowAsync<DeploymentException>()
+        _handler
+            .Invoking(h => h.ExecuteAsync(parameters, _context))
+            .Should()
+            .ThrowAsync<DeploymentException>()
             .WithMessage("Container health checks failed for services: service2");
 
-        _mockLogger.Verify(l => l.LogCritical("The following containers did not become healthy: service2"), Times.Once);
+        _mockLogger.Verify(
+            l => l.LogCritical("The following containers did not become healthy: service2"),
+            Times.Once
+        );
     }
 
     [Test]
@@ -86,12 +121,14 @@ public class ContainerHealthCheckHandlerTest : BaseTest
         // Arrange
         var parameters = new ContainerHealthCheckParams
         {
-            Services = new Dictionary<string, ContainerHealthCheckParamsOptions>()
+            Services = new Dictionary<string, ContainerHealthCheckParamsOptions>(),
         };
 
         // Act & Assert
-        _handler.Invoking(h => h.ExecuteAsync(parameters, _context))
-            .Should().ThrowAsync<DeploymentException>()
+        _handler
+            .Invoking(h => h.ExecuteAsync(parameters, _context))
+            .Should()
+            .ThrowAsync<DeploymentException>()
             .WithMessage("Container health check options not found.");
     }
 
@@ -103,29 +140,47 @@ public class ContainerHealthCheckHandlerTest : BaseTest
         {
             Services = new Dictionary<string, ContainerHealthCheckParamsOptions>
             {
-                { "service1", new ContainerHealthCheckParamsOptions { CheckInterval = 30 } },
-                { "service2", new ContainerHealthCheckParamsOptions { CheckInterval = 60 } }
+                {
+                    "service1",
+                    new ContainerHealthCheckParamsOptions { CheckInterval = 30 }
+                },
+                {
+                    "service2",
+                    new ContainerHealthCheckParamsOptions { CheckInterval = 60 }
+                },
             },
-            DockerComposeSettings =
-                new ContainerHealthCheckParamsOptionsDockerComposeSettings { FetchServicesFromContext = true }
+            DockerComposeSettings = new ContainerHealthCheckParamsOptionsDockerComposeSettings
+            {
+                FetchServicesFromContext = true,
+            },
         };
 
         var dockerComposeServices = new Dictionary<string, string>
         {
-            { "service1", "container1" }, { "service2", "container2" }
+            { "service1", "container1" },
+            { "service2", "container2" },
         };
 
         _context.SetRecipeResult(RecipeResultKeys.DockerComposeServices, dockerComposeServices);
 
-        _mockDockerHealthCheckHelper.Setup(d => d.IsHealthyAsync(It.IsAny<string>(), It.IsAny<ContainerHealthCheckParamsOptions>()))
+        _mockDockerHealthCheckHelper
+            .Setup(d =>
+                d.IsHealthyAsync(It.IsAny<string>(), It.IsAny<ContainerHealthCheckParamsOptions>())
+            )
             .ReturnsAsync(true);
 
         // Act
         await _handler.ExecuteAsync(parameters, _context);
 
         // Assert
-        _mockDockerHealthCheckHelper.Verify(d => d.IsHealthyAsync("container1", It.IsAny<ContainerHealthCheckParamsOptions>()), Times.Once);
-        _mockDockerHealthCheckHelper.Verify(d => d.IsHealthyAsync("container2", It.IsAny<ContainerHealthCheckParamsOptions>()), Times.Once);
+        _mockDockerHealthCheckHelper.Verify(
+            d => d.IsHealthyAsync("container1", It.IsAny<ContainerHealthCheckParamsOptions>()),
+            Times.Once
+        );
+        _mockDockerHealthCheckHelper.Verify(
+            d => d.IsHealthyAsync("container2", It.IsAny<ContainerHealthCheckParamsOptions>()),
+            Times.Once
+        );
     }
 
     [Test]
@@ -138,6 +193,9 @@ public class ContainerHealthCheckHandlerTest : BaseTest
         await _handler.DryRun(parameters, _context);
 
         // Assert
-        _mockLogger.Verify(l => l.LogInfo("Running container health check in dry run mode"), Times.Once);
+        _mockLogger.Verify(
+            l => l.LogInfo("Running container health check in dry run mode"),
+            Times.Once
+        );
     }
 }

@@ -26,7 +26,10 @@ public class CheckoutGitRepositoryStepHandlerTest : HandlerBaseCase
     [Test]
     public async Task ShouldBeAbleToExecuteFine()
     {
-        var checkoutParams = new GitCheckoutParams { Repo = "https://github.com/cloudcrafter-oss/demo-examples.git" };
+        var checkoutParams = new GitCheckoutParams
+        {
+            Repo = "https://github.com/cloudcrafter-oss/demo-examples.git",
+        };
 
         var context = GetContext();
 
@@ -39,11 +42,16 @@ public class CheckoutGitRepositoryStepHandlerTest : HandlerBaseCase
     [Test]
     public void ShouldThrowDeploymentExceptionBecauseGitRepositoryIsNotCorrect()
     {
-        var checkoutParams = new GitCheckoutParams { Repo = "https://github.com/cloudcrafter-oss/not-found.git" };
+        var checkoutParams = new GitCheckoutParams
+        {
+            Repo = "https://github.com/cloudcrafter-oss/not-found.git",
+        };
 
         var context = GetContext();
 
-        var exception = Assert.ThrowsAsync<DeploymentException>(() => _handler.ExecuteAsync(checkoutParams, context));
+        var exception = Assert.ThrowsAsync<DeploymentException>(
+            () => _handler.ExecuteAsync(checkoutParams, context)
+        );
 
         exception.Message.Should().Be("Failed to clone git repository");
     }

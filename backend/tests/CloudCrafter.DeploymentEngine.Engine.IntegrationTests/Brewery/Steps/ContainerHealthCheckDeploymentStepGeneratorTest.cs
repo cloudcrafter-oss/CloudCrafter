@@ -5,36 +5,36 @@ using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
 
-public class ContainerHealthCheckDeploymentStepGeneratorTest : BaseParameterConversionTest<ContainerHealthCheckParams>
+public class ContainerHealthCheckDeploymentStepGeneratorTest
+    : BaseParameterConversionTest<ContainerHealthCheckParams>
 {
     [Test]
     public void ShouldBeAbleToCreateParams()
     {
         // Arrange
-        var options =
-            new ContainerHealthCheckDeploymentStepGenerator.Args
+        var options = new ContainerHealthCheckDeploymentStepGenerator.Args
+        {
+            DockerComposeSettings = new() { FetchServicesFromContext = true },
+            Services = new Dictionary<
+                string,
+                ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings
+            >()
             {
-                DockerComposeSettings = new()
                 {
-                    FetchServicesFromContext = true
-                },
-                Services = new Dictionary<string, ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings>()
-                {
+                    "frontend",
+                    new ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings()
                     {
-                        "frontend",
-                        new ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings()
-                        {
-                            HttpMethod = "GET",
-                            HttpSchema = "http",
-                            HttpHost = "localhost",
-                            HttpPath = "/",
-                            HttpPort = 80,
-                            ExpectedHttpStatusCode = 200,
-                            MaxRetries = 3
-                        }
+                        HttpMethod = "GET",
+                        HttpSchema = "http",
+                        HttpHost = "localhost",
+                        HttpPath = "/",
+                        HttpPort = 80,
+                        ExpectedHttpStatusCode = 200,
+                        MaxRetries = 3,
                     }
-                }
-            };
+                },
+            },
+        };
         var generator = new ContainerHealthCheckDeploymentStepGenerator(options);
 
         // Act
@@ -57,7 +57,5 @@ public class ContainerHealthCheckDeploymentStepGeneratorTest : BaseParameterConv
         paramObject.Services["frontend"].CheckInterval.Should().BeNull();
         paramObject.Services["frontend"].CheckTimeout.Should().BeNull();
         paramObject.Services["frontend"].BackOffPeriod.Should().BeNull();
-        
-
     }
 }

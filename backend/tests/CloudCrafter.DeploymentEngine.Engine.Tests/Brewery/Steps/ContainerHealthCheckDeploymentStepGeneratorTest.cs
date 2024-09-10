@@ -9,17 +9,22 @@ public class ContainerHealthCheckDeploymentStepGeneratorTest
     [Test]
     public void ShouldBeAbleToGenerateStep()
     {
-        
         // Arrange
         var options = new ContainerHealthCheckDeploymentStepGenerator.Args
         {
-            DockerComposeSettings = new ContainerHealthCheckDeploymentStepGenerator.ArgsComposeSettings
+            DockerComposeSettings =
+                new ContainerHealthCheckDeploymentStepGenerator.ArgsComposeSettings
+                {
+                    FetchServicesFromContext = true,
+                },
+            Services = new Dictionary<
+                string,
+                ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings
+            >
             {
-                FetchServicesFromContext = true
-            },
-            Services = new Dictionary<string, ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings>
-            {
-                { "service1", new ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings
+                {
+                    "service1",
+                    new ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings
                     {
                         HttpMethod = "GET",
                         HttpSchema = "http",
@@ -27,10 +32,10 @@ public class ContainerHealthCheckDeploymentStepGeneratorTest
                         HttpPath = "/health",
                         HttpPort = 80,
                         ExpectedHttpStatusCode = 200,
-                        MaxRetries = 3
+                        MaxRetries = 3,
                     }
-                }
-            }
+                },
+            },
         };
 
         var generator = new ContainerHealthCheckDeploymentStepGenerator(options);
@@ -55,6 +60,5 @@ public class ContainerHealthCheckDeploymentStepGeneratorTest
         serviceCheck.Should().ContainKey("httpPort").WhoseValue.Should().Be(80);
         serviceCheck.Should().ContainKey("expectedResponseCode").WhoseValue.Should().Be(200);
         serviceCheck.Should().ContainKey("retries").WhoseValue.Should().Be(3);
-  
     }
 }

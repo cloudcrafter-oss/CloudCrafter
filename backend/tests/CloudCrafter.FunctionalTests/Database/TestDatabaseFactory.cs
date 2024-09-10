@@ -7,7 +7,8 @@ public static class TestDatabaseFactory
 {
     public static async Task<ITestDatabase> CreateAsync()
     {
-        var useLocalTestDatabase = Environment.GetEnvironmentVariable("USE_LOCAL_TEST_DATABASE") == "true";
+        var useLocalTestDatabase =
+            Environment.GetEnvironmentVariable("USE_LOCAL_TEST_DATABASE") == "true";
 
         ITestDatabase database;
 

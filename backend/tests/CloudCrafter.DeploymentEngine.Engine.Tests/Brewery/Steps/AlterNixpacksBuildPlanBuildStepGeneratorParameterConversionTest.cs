@@ -10,11 +10,10 @@ public class AlterNixpacksBuildPlanBuildStepGeneratorParameterConversionTest
     public void ShouldGenerateBuildStep()
     {
         // Arrange
-        var options =
-            new AlterNixpacksBuildPlanBuildStepGeneratorParameterConversion.Args
-            {
-                AddPackages = new List<string> { "package1", "package2" }
-            };
+        var options = new AlterNixpacksBuildPlanBuildStepGeneratorParameterConversion.Args
+        {
+            AddPackages = new List<string> { "package1", "package2" },
+        };
         var generator = new AlterNixpacksBuildPlanBuildStepGeneratorParameterConversion(options);
 
         // Act
@@ -23,6 +22,9 @@ public class AlterNixpacksBuildPlanBuildStepGeneratorParameterConversionTest
         // Assert
         buildStep.Type.Should().Be(DeploymentBuildStepType.NixpacksAlterPlan);
         buildStep.Params.Should().ContainKey("packages");
-        buildStep.Params["packages"].Should().BeEquivalentTo(new List<string> { "package1", "package2" });
+        buildStep
+            .Params["packages"]
+            .Should()
+            .BeEquivalentTo(new List<string> { "package1", "package2" });
     }
 }

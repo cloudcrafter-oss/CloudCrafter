@@ -35,20 +35,25 @@ public class DockerComposeUpHandlerTest : BaseTest
     public async Task ExecuteAsync_ShouldRunDockerComposeUp_Successfully()
     {
         // Arrange
-        var parameters =
-            new DockerComposeUpParams { DockerComposeFile = "docker-compose.yml", StoreServiceNames = true };
+        var parameters = new DockerComposeUpParams
+        {
+            DockerComposeFile = "docker-compose.yml",
+            StoreServiceNames = true,
+        };
         var dockerComposeDirectory = "/app/docker";
         _context.Recipe.DockerComposeOptions = new DeploymentRecipeDockerComposeOptions
         {
-            DockerComposeDirectory = dockerComposeDirectory
+            DockerComposeDirectory = dockerComposeDirectory,
         };
 
         var expectedDockerComposeFile = $"{dockerComposeDirectory}/{parameters.DockerComposeFile}";
         var expectedServices = new Dictionary<string, string> { { "service-one", "containerid" } };
 
-        _mockDockerComposeHelper.Setup(d => d.UpAsync(expectedDockerComposeFile, null))
+        _mockDockerComposeHelper
+            .Setup(d => d.UpAsync(expectedDockerComposeFile, null))
             .ReturnsAsync(new ExecutorResult { IsSuccess = true });
-        _mockDockerComposeHelper.Setup(d => d.GetDockerComposeServices(expectedDockerComposeFile))
+        _mockDockerComposeHelper
+            .Setup(d => d.GetDockerComposeServices(expectedDockerComposeFile))
             .ReturnsAsync(expectedServices);
 
         // Act
@@ -56,9 +61,17 @@ public class DockerComposeUpHandlerTest : BaseTest
 
         // Assert
         _mockLogger.Verify(l => l.LogInfo("Running docker compose up"), Times.Once);
-        _mockDockerComposeHelper.Verify(d => d.UpAsync(expectedDockerComposeFile, null), Times.Once);
-        _mockDockerComposeHelper.Verify(d => d.GetDockerComposeServices(expectedDockerComposeFile), Times.Once);
-        _context.GetRecipeResult<Dictionary<string, string>>(RecipeResultKeys.DockerComposeServices).Should()
+        _mockDockerComposeHelper.Verify(
+            d => d.UpAsync(expectedDockerComposeFile, null),
+            Times.Once
+        );
+        _mockDockerComposeHelper.Verify(
+            d => d.GetDockerComposeServices(expectedDockerComposeFile),
+            Times.Once
+        );
+        _context
+            .GetRecipeResult<Dictionary<string, string>>(RecipeResultKeys.DockerComposeServices)
+            .Should()
             .BeEquivalentTo(expectedServices);
     }
 
@@ -70,8 +83,10 @@ public class DockerComposeUpHandlerTest : BaseTest
         _context.Recipe.DockerComposeOptions = null;
 
         // Act & Assert
-        _handler.Invoking(h => h.ExecuteAsync(parameters, _context))
-            .Should().ThrowAsync<DeploymentException>()
+        _handler
+            .Invoking(h => h.ExecuteAsync(parameters, _context))
+            .Should()
+            .ThrowAsync<DeploymentException>()
             .WithMessage("Docker compose options not found - cannot write docker compose file.");
     }
 
@@ -82,12 +97,14 @@ public class DockerComposeUpHandlerTest : BaseTest
         var parameters = new DockerComposeUpParams { DockerComposeFile = "docker-compose.yml" };
         _context.Recipe.DockerComposeOptions = new DeploymentRecipeDockerComposeOptions
         {
-            DockerComposeDirectory = string.Empty
+            DockerComposeDirectory = string.Empty,
         };
 
         // Act & Assert
-        _handler.Invoking(h => h.ExecuteAsync(parameters, _context))
-            .Should().ThrowAsync<DeploymentException>()
+        _handler
+            .Invoking(h => h.ExecuteAsync(parameters, _context))
+            .Should()
+            .ThrowAsync<DeploymentException>()
             .WithMessage("Docker compose options not found - cannot write docker compose file.");
     }
 
@@ -99,17 +116,20 @@ public class DockerComposeUpHandlerTest : BaseTest
         var dockerComposeDirectory = "/app/docker";
         _context.Recipe.DockerComposeOptions = new DeploymentRecipeDockerComposeOptions
         {
-            DockerComposeDirectory = dockerComposeDirectory
+            DockerComposeDirectory = dockerComposeDirectory,
         };
 
         var expectedDockerComposeFile = $"{dockerComposeDirectory}/{parameters.DockerComposeFile}";
 
-        _mockDockerComposeHelper.Setup(d => d.UpAsync(expectedDockerComposeFile, null))
+        _mockDockerComposeHelper
+            .Setup(d => d.UpAsync(expectedDockerComposeFile, null))
             .ReturnsAsync(new ExecutorResult { IsSuccess = false });
 
         // Act & Assert
-        _handler.Invoking(h => h.ExecuteAsync(parameters, _context))
-            .Should().ThrowAsync<DeploymentException>()
+        _handler
+            .Invoking(h => h.ExecuteAsync(parameters, _context))
+            .Should()
+            .ThrowAsync<DeploymentException>()
             .WithMessage("Failed to run docker compose up, see logs for more information.");
     }
 
@@ -117,26 +137,34 @@ public class DockerComposeUpHandlerTest : BaseTest
     public async Task ExecuteAsync_ShouldNotStoreServiceNames_WhenParameterIsFalse()
     {
         // Arrange
-        var parameters =
-            new DockerComposeUpParams { DockerComposeFile = "docker-compose.yml", StoreServiceNames = false };
+        var parameters = new DockerComposeUpParams
+        {
+            DockerComposeFile = "docker-compose.yml",
+            StoreServiceNames = false,
+        };
         var dockerComposeDirectory = "/app/docker";
         _context.Recipe.DockerComposeOptions = new DeploymentRecipeDockerComposeOptions
         {
-            DockerComposeDirectory = dockerComposeDirectory
+            DockerComposeDirectory = dockerComposeDirectory,
         };
 
         var expectedDockerComposeFile = $"{dockerComposeDirectory}/{parameters.DockerComposeFile}";
 
-        _mockDockerComposeHelper.Setup(d => d.UpAsync(expectedDockerComposeFile, null))
+        _mockDockerComposeHelper
+            .Setup(d => d.UpAsync(expectedDockerComposeFile, null))
             .ReturnsAsync(new ExecutorResult { IsSuccess = true });
 
         // Act
         await _handler.ExecuteAsync(parameters, _context);
 
         // Assert
-        _mockDockerComposeHelper.Verify(d => d.GetDockerComposeServices(It.IsAny<string>()), Times.Never);
-        var exception = Assert.Throws<KeyNotFoundException>(() =>
-            _context.GetRecipeResult<List<string>>(RecipeResultKeys.DockerComposeServices));
+        _mockDockerComposeHelper.Verify(
+            d => d.GetDockerComposeServices(It.IsAny<string>()),
+            Times.Never
+        );
+        var exception = Assert.Throws<KeyNotFoundException>(
+            () => _context.GetRecipeResult<List<string>>(RecipeResultKeys.DockerComposeServices)
+        );
 
         exception.Message.Should().Be("Recipe result with key 'DockerComposeServices' not found");
     }

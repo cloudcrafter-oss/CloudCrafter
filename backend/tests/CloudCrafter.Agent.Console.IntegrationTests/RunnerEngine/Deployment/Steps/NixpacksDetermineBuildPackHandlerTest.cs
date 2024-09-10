@@ -35,17 +35,24 @@ public class NixpacksDetermineBuildPackHandlerTest : HandlerBaseCase
 
         var context = GetContext();
 
-        var exception = Assert.ThrowsAsync<DeploymentException>(() => _handler.ExecuteAsync(parameters, context));
+        var exception = Assert.ThrowsAsync<DeploymentException>(
+            () => _handler.ExecuteAsync(parameters, context)
+        );
 
-        exception.Message.Should()
+        exception
+            .Message.Should()
             .Be(
-                $"Could not determine build pack, directory: {context.GetWorkingDirectory()}/git/nixpacks-node-server");
+                $"Could not determine build pack, directory: {context.GetWorkingDirectory()}/git/nixpacks-node-server"
+            );
     }
 
     [Test]
     public async Task ShouldBeAbleToDetermineNixpacksPack()
     {
-        var checkoutParams = new GitCheckoutParams { Repo = "https://github.com/cloudcrafter-oss/demo-examples.git" };
+        var checkoutParams = new GitCheckoutParams
+        {
+            Repo = "https://github.com/cloudcrafter-oss/demo-examples.git",
+        };
 
         var context = GetContext();
 

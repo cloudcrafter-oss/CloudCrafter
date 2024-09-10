@@ -11,12 +11,13 @@ public class MappingTest
 
     public MappingTest()
     {
-        _configuration = new MapperConfiguration(config => 
-            config.AddMaps(Assembly.GetAssembly(typeof(AppDbContext))));
+        _configuration = new MapperConfiguration(config =>
+            config.AddMaps(Assembly.GetAssembly(typeof(AppDbContext)))
+        );
 
         _mapper = _configuration.CreateMapper();
     }
-    
+
     [Test]
     public void ShouldHaveValidConfiguration()
     {

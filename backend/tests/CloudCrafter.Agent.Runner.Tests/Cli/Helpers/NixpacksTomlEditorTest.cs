@@ -28,7 +28,6 @@ public class NixpacksTomlEditorTest
         return Verify(toml);
     }
 
-
     [Test]
     public Task ShouldBeAbleToAddPackagesToExistingAptPkgs()
     {
@@ -44,95 +43,97 @@ public class NixpacksTomlEditorTest
     public Task ShouldBeAbleToAddEnvironmentVariables()
     {
         var multi = """
-                    test
-                    test1
+            test
+            test1
 
-                    another test
-                    """;
+            another test
+            """;
         var editor = new NixpacksTomlEditor(GetNixpacksTomlWithNoAptPkgs());
-        editor.AddVariables(new Dictionary<string, string>
-        {
-            { "ENV1", "value1" }, { "ENV2", "value2" }, { "MULTILINE", multi }
-        });
+        editor.AddVariables(
+            new Dictionary<string, string>
+            {
+                { "ENV1", "value1" },
+                { "ENV2", "value2" },
+                { "MULTILINE", multi },
+            }
+        );
 
         var toml = editor.GetToml();
 
         return Verify(toml);
     }
 
-
     private string GetNixpacksTomlWithNoAptPkgs()
     {
         var toml = """
-                   providers = []
-                   buildImage = 'ghcr.io/railwayapp/nixpacks:ubuntu-1716249803'
+            providers = []
+            buildImage = 'ghcr.io/railwayapp/nixpacks:ubuntu-1716249803'
 
-                   [variables]
-                   CI = 'true'
-                   NIXPACKS_METADATA = 'node'
-                   NODE_ENV = 'production'
-                   NPM_CONFIG_PRODUCTION = 'false'
-                   [phases.build]
-                   dependsOn = ['install']
-                   cacheDirectories = ['node_modules/.cache']
+            [variables]
+            CI = 'true'
+            NIXPACKS_METADATA = 'node'
+            NODE_ENV = 'production'
+            NPM_CONFIG_PRODUCTION = 'false'
+            [phases.build]
+            dependsOn = ['install']
+            cacheDirectories = ['node_modules/.cache']
 
-                   [phases.install]
-                   dependsOn = ['setup']
-                   cmds = ['npm i']
-                   cacheDirectories = ['/root/.npm']
-                   paths = ['/app/node_modules/.bin']
+            [phases.install]
+            dependsOn = ['setup']
+            cmds = ['npm i']
+            cacheDirectories = ['/root/.npm']
+            paths = ['/app/node_modules/.bin']
 
-                   [phases.setup]
-                   nixPkgs = [
-                       'nodejs_18',
-                       'npm-9_x',
-                   ]
-                   nixOverlays = ['https://github.com/railwayapp/nix-npm-overlay/archive/main.tar.gz']
-                   nixpkgsArchive = 'bdd2f439c62aa0b8aa97f5c784a965c23f968fe6'
+            [phases.setup]
+            nixPkgs = [
+                'nodejs_18',
+                'npm-9_x',
+            ]
+            nixOverlays = ['https://github.com/railwayapp/nix-npm-overlay/archive/main.tar.gz']
+            nixpkgsArchive = 'bdd2f439c62aa0b8aa97f5c784a965c23f968fe6'
 
-                   [start]
-                   cmd = 'npm run start'
+            [start]
+            cmd = 'npm run start'
 
-                   """;
+            """;
 
         return toml;
     }
 
-
     private string GetNixpacksTomlWithExistingAptPkgs()
     {
         var toml = """
-                   providers = []
-                   buildImage = 'ghcr.io/railwayapp/nixpacks:ubuntu-1716249803'
+            providers = []
+            buildImage = 'ghcr.io/railwayapp/nixpacks:ubuntu-1716249803'
 
-                   [variables]
-                   CI = 'true'
-                   NIXPACKS_METADATA = 'node'
-                   NODE_ENV = 'production'
-                   NPM_CONFIG_PRODUCTION = 'false'
-                   [phases.build]
-                   dependsOn = ['install']
-                   cacheDirectories = ['node_modules/.cache']
+            [variables]
+            CI = 'true'
+            NIXPACKS_METADATA = 'node'
+            NODE_ENV = 'production'
+            NPM_CONFIG_PRODUCTION = 'false'
+            [phases.build]
+            dependsOn = ['install']
+            cacheDirectories = ['node_modules/.cache']
 
-                   [phases.install]
-                   dependsOn = ['setup']
-                   cmds = ['npm i']
-                   cacheDirectories = ['/root/.npm']
-                   paths = ['/app/node_modules/.bin']
+            [phases.install]
+            dependsOn = ['setup']
+            cmds = ['npm i']
+            cacheDirectories = ['/root/.npm']
+            paths = ['/app/node_modules/.bin']
 
-                   [phases.setup]
-                   nixPkgs = [
-                       'nodejs_18',
-                       'npm-9_x',
-                   ]
-                   aptPkgs = ["curl"]
-                   nixOverlays = ['https://github.com/railwayapp/nix-npm-overlay/archive/main.tar.gz']
-                   nixpkgsArchive = 'bdd2f439c62aa0b8aa97f5c784a965c23f968fe6'
+            [phases.setup]
+            nixPkgs = [
+                'nodejs_18',
+                'npm-9_x',
+            ]
+            aptPkgs = ["curl"]
+            nixOverlays = ['https://github.com/railwayapp/nix-npm-overlay/archive/main.tar.gz']
+            nixpkgsArchive = 'bdd2f439c62aa0b8aa97f5c784a965c23f968fe6'
 
-                   [start]
-                   cmd = 'npm run start'
+            [start]
+            cmd = 'npm run start'
 
-                   """;
+            """;
 
         return toml;
     }
