@@ -11,6 +11,11 @@
          "name": "Run csharpier",
          "command": "dotnet",
          "args": ["csharpier", "./backend"]
+      },
+      {
+         "name": "Check for unstaged changes",
+         "command": "git",
+         "args": ["diff", "--exit-code"]
       }
    ]
 }
