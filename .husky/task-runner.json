@@ -10,8 +10,8 @@
       {
          "name": "Run csharpier",
          "command": "dotnet",
-         "args": ["csharpier", "${staged}"],
-         "include": ["backend/**/*.cs"]
+         "args": ["csharpier"],
+         "cwd": "./backend"
       }
    ]
 }
