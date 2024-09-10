@@ -48,9 +48,16 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
             );
         }
 
+        var firstService = Options.Stack.Services.First();
+
         AddDetermineBuildpackStep(Options.Stack.Source?.Git?.Path);
         AddGenerateBuildPlan(Options.Stack.Source?.Git?.Path);
         AlterNixpacksPlan(["iputils-ping", "curl"]);
         AddWritePlanToFilesystemStep(Options.Stack.Source?.Git?.Path);
+        AddBuildNixpacksDockerImageStep(
+            firstService.Id.ToString(),
+            "latest",
+            Options.Stack.Source?.Git?.Path
+        );
     }
 }

@@ -79,7 +79,25 @@ public abstract class BaseRecipeGenerator
         Recipe.AddBuildStep(generator);
     }
 
-    protected void AddBuildNixpacksDockerImageStep() { }
+    protected void AddBuildNixpacksDockerImageStep(
+        string imageRepository,
+        string imageTag,
+        string? pathInGitRepo
+    )
+    {
+        var generator = new NixpacksBuildDockerImageBuildStepGenerator(
+            new NixpacksBuildDockerImageBuildStepGenerator.Args()
+            {
+                Path = pathInGitRepo ?? string.Empty,
+                ImageRepository = imageRepository,
+                ImageTag = imageTag,
+                DisableBuildCache = true,
+                BuildArgs = new Dictionary<string, object>(),
+            }
+        );
+
+        Recipe.AddBuildStep(generator);
+    }
 
     protected void AddFetchGitRepositoryStep(string repositoryUrl, string commit)
     {

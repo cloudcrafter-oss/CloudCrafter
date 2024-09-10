@@ -47,7 +47,7 @@ public class SimpleAppDockerComposeGenerator(BaseDockerComposeGenerator.Args arg
         service.AddNetwork(network);
         var name = service.ServiceName();
 
-        service.SetImage(name, "latest");
+        service.SetImage(stackService.Id.ToString(), "latest");
     }
 
     public override void ValidateGenerator()
