@@ -7,10 +7,11 @@ namespace CloudCrafter.Infrastructure.Repositories;
 
 public class EnvironmentRepository(IApplicationDbContext context) : IEnvironmentRepository
 {
-    private IQueryable<Environment> Environments => context.Environments
-        .Include(x => x.Project)
-        .Include(x => x.Stacks)
-        .OrderBy(x => x.CreatedAt);
+    private IQueryable<Environment> Environments =>
+        context
+            .Environments.Include(x => x.Project)
+            .Include(x => x.Stacks)
+            .OrderBy(x => x.CreatedAt);
 
     public Task CreateEnvironment(string name, Guid projectId)
     {
@@ -20,7 +21,7 @@ public class EnvironmentRepository(IApplicationDbContext context) : IEnvironment
             Name = name,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            ProjectId = projectId
+            ProjectId = projectId,
         };
 
         context.Environments.Add(environment);
@@ -37,7 +38,6 @@ public class EnvironmentRepository(IApplicationDbContext context) : IEnvironment
 
     public Task<Environment?> GetEnvironment(Guid environmentId)
     {
-        return Environments
-            .FirstOrDefaultAsync(x => x.Id == environmentId);
+        return Environments.FirstOrDefaultAsync(x => x.Id == environmentId);
     }
 }

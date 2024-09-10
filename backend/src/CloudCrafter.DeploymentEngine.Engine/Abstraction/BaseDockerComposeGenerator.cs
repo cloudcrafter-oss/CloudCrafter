@@ -15,9 +15,7 @@ public abstract class BaseDockerComposeGenerator
         Validate();
     }
 
-    private void Validate()
-    {
-    }
+    private void Validate() { }
 
     public abstract DockerComposeEditor Generate();
     public abstract void ValidateGenerator();
@@ -30,7 +28,11 @@ public abstract class BaseDockerComposeGenerator
         labelService.AddLabel(LabelFactory.GenerateDeploymentLabel(Options.DeploymentId));
     }
 
-    protected void AddProxyLabels(DockerComposeLabelService labelService, StackService stackService, string serviceName)
+    protected void AddProxyLabels(
+        DockerComposeLabelService labelService,
+        StackService stackService,
+        string serviceName
+    )
     {
         if (string.IsNullOrWhiteSpace(stackService.HttpConfiguration?.DomainName))
         {
@@ -38,13 +40,15 @@ public abstract class BaseDockerComposeGenerator
             return;
         }
 
-        labelService.AddTraefikLabels(new DockerComposeLabelServiceTraefikOptions
-        {
-            AppName =  stackService.Id.ToString(),
-            LoadBalancerPort = 3000,
-            Service = stackService.Id.ToString(),
-            Rule = $"Host(`{stackService.HttpConfiguration.DomainName}`)"
-        });
+        labelService.AddTraefikLabels(
+            new DockerComposeLabelServiceTraefikOptions
+            {
+                AppName = stackService.Id.ToString(),
+                LoadBalancerPort = 3000,
+                Service = stackService.Id.ToString(),
+                Rule = $"Host(`{stackService.HttpConfiguration.DomainName}`)",
+            }
+        );
     }
 
     public class Args

@@ -18,7 +18,6 @@ public class RunPlainCommandHandler(IMessagePump pump, ICommandExecutor commandE
     {
         _logger.LogInfo($"Executing provided command: '{parameters.Command}'");
 
-
         // params is a string
         var parts = parameters.Command.Split(' ', 2);
         var command = parts[0];

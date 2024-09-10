@@ -7,6 +7,4 @@ public interface IServersService
 {
     Task<List<ServerDto>> GetServers();
     Task<ServerDetailDto?> GetServer(Guid id);
- 
-
 }

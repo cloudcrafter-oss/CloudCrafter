@@ -1,6 +1,5 @@
 namespace CloudCrafter.Core.Common.Responses;
 
-
 public record PaginatedList<T>
 {
     public int Page { get; init; }
@@ -17,8 +16,5 @@ public record PaginatedList<T>
         Result.AddRange(items);
     }
 
-    public PaginatedList()
-    {
-
-    }
+    public PaginatedList() { }
 }

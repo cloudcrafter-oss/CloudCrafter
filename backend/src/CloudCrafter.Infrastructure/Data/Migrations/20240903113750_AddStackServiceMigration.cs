@@ -15,25 +15,23 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                 name: "CreatedBy",
                 table: "StackServices",
                 type: "uuid",
-                nullable: true);
+                nullable: true
+            );
 
             migrationBuilder.AddColumn<Guid>(
                 name: "LastModifiedBy",
                 table: "StackServices",
                 type: "uuid",
-                nullable: true);
+                nullable: true
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "CreatedBy",
-                table: "StackServices");
+            migrationBuilder.DropColumn(name: "CreatedBy", table: "StackServices");
 
-            migrationBuilder.DropColumn(
-                name: "LastModifiedBy",
-                table: "StackServices");
+            migrationBuilder.DropColumn(name: "LastModifiedBy", table: "StackServices");
         }
     }
 }

@@ -12,10 +12,8 @@ namespace CloudCrafter.Infrastructure.Repositories;
 
 public class ProjectRepository(IApplicationDbContext dbContext, IMapper mapper) : IProjectRepository
 {
+    private IQueryable<Project> ProjectsQueryable => dbContext.Projects.OrderBy(x => x.CreatedAt);
 
-    private IQueryable<Project> ProjectsQueryable => dbContext.Projects
-        .OrderBy(x => x.CreatedAt);
-    
     public async Task<List<ProjectDto>> GetProjects(LoadProjectOptions options)
     {
         IQueryable<Project> projects = ProjectsQueryable;
@@ -32,7 +30,6 @@ public class ProjectRepository(IApplicationDbContext dbContext, IMapper mapper) 
         return result;
     }
 
-
     public async Task<Project> CreateProject(string name)
     {
         var project = new Project
@@ -41,7 +38,7 @@ public class ProjectRepository(IApplicationDbContext dbContext, IMapper mapper) 
             UpdatedAt = DateTime.UtcNow,
             Id = Guid.NewGuid(),
             Name = name,
-            Description = null
+            Description = null,
         };
 
         dbContext.Projects.Add(project);
@@ -53,8 +50,8 @@ public class ProjectRepository(IApplicationDbContext dbContext, IMapper mapper) 
 
     public Task<ProjectDto?> GetProject(Guid id)
     {
-        return dbContext.Projects
-            .ProjectTo<ProjectDto>(mapper.ConfigurationProvider)
+        return dbContext
+            .Projects.ProjectTo<ProjectDto>(mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
@@ -92,13 +89,12 @@ public class ProjectRepository(IApplicationDbContext dbContext, IMapper mapper) 
     public async Task DeleteProject(Guid id)
     {
         var project = ProjectsQueryable.FirstOrDefault(p => p.Id == id);
-        
+
         if (project is null)
         {
             throw new Exception("Project not found");
         }
-        
-        
+
         dbContext.Projects.Remove(project);
         await dbContext.SaveChangesAsync();
     }

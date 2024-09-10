@@ -19,5 +19,5 @@ public class Stack : BaseAuditableEntity
 
 public enum StackBuildPack
 {
-    Nixpacks
+    Nixpacks,
 }

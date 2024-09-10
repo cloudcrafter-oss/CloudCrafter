@@ -28,7 +28,6 @@ public class NixpacksTomlEditor
         }
     }
 
-
     public void AddPackages(IEnumerable<string> packages)
     {
         var phasesTable = (TomlTable)_model["phases"];
@@ -38,9 +37,7 @@ public class NixpacksTomlEditor
         {
             var aptPkgs = (TomlArray)setupTable["aptPkgs"];
 
-            var packagesToAdd = from zz in packages
-                where !aptPkgs.Contains(zz)
-                select zz;
+            var packagesToAdd = from zz in packages where !aptPkgs.Contains(zz) select zz;
 
             foreach (var package in packagesToAdd)
             {
@@ -64,7 +61,12 @@ public class NixpacksTomlEditor
     {
         var result = Toml.FromModel(_model);
 
-        var processedResult = Regex.Replace(result, @"=\s*""([^""]*)""\s*$", "= '$1'", RegexOptions.Multiline);
+        var processedResult = Regex.Replace(
+            result,
+            @"=\s*""([^""]*)""\s*$",
+            "= '$1'",
+            RegexOptions.Multiline
+        );
 
         return processedResult;
     }

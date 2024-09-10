@@ -5,28 +5,41 @@ using MediatR;
 
 namespace CloudCrafter.Core.Common.Behaviours;
 
-public class ServerAccessAuthorizationBehavior<TRequest, TResponse>(IUser user, IUserAccessService accessService)
-    : IPipelineBehavior<TRequest, TResponse>
+public class ServerAccessAuthorizationBehavior<TRequest, TResponse>(
+    IUser user,
+    IUserAccessService accessService
+) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
-        CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(
+        TRequest request,
+        RequestHandlerDelegate<TResponse> next,
+        CancellationToken cancellationToken
+    )
     {
-        await CheckAccess<IRequireServerAccess>(request,
+        await CheckAccess<IRequireServerAccess>(
+            request,
             (r, id) => accessService.CanAccessServer(id, r.ServerId),
-            r => $"User does not have access to server {r.ServerId}");
+            r => $"User does not have access to server {r.ServerId}"
+        );
 
-        await CheckAccess<IRequireEnvironmentAccess>(request,
+        await CheckAccess<IRequireEnvironmentAccess>(
+            request,
             (r, id) => accessService.CanAccessEnvironment(id, r.EnvironmentId),
-            r => $"User does not have access to environment {r.EnvironmentId}");
+            r => $"User does not have access to environment {r.EnvironmentId}"
+        );
 
-        await CheckAccess<IRequireProjectAccess>(request,
+        await CheckAccess<IRequireProjectAccess>(
+            request,
             (r, id) => accessService.CanAccessProject(id, r.ProjectId),
-            r => $"User does not have access to project {r.ProjectId}");
+            r => $"User does not have access to project {r.ProjectId}"
+        );
 
-        await CheckAccess<IRequireStackAccess>(request,
+        await CheckAccess<IRequireStackAccess>(
+            request,
             (r, id) => accessService.CanAccessStack(id, r.StackId),
-            r => $"User does not have access to stack {r.StackId}");
+            r => $"User does not have access to stack {r.StackId}"
+        );
 
         return await next();
     }
@@ -34,7 +47,8 @@ public class ServerAccessAuthorizationBehavior<TRequest, TResponse>(IUser user, 
     private async Task CheckAccess<TAccessRequest>(
         TRequest request,
         Func<TAccessRequest, Guid, Task<bool>> accessCheck,
-        Func<TAccessRequest, string> exceptionMessageFactory)
+        Func<TAccessRequest, string> exceptionMessageFactory
+    )
         where TAccessRequest : class
     {
         if (request is TAccessRequest accessRequest)

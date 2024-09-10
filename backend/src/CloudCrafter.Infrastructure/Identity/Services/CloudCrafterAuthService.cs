@@ -9,7 +9,8 @@ namespace CloudCrafter.Infrastructure.Identity.Services;
 public class CloudCrafterAuthService(
     UserManager<User> userManager,
     IJwtService jwtService,
-    IIdentityService identityService) : ICloudCrafterAuthService
+    IIdentityService identityService
+) : ICloudCrafterAuthService
 {
     public async Task<TokenDto> LoginAsync(string email, string password)
     {
@@ -46,7 +47,6 @@ public class CloudCrafterAuthService(
             throw new UnauthorizedAccessException();
         }
 
-
         return await CreateTokenForUserAsync(userFromManager);
     }
 
@@ -58,7 +58,7 @@ public class CloudCrafterAuthService(
         {
             throw new UnauthorizedAccessException();
         }
-        
+
         var user = await userManager.FindByIdAsync(userId.Value.ToString());
 
         if (user == null)
@@ -69,12 +69,15 @@ public class CloudCrafterAuthService(
         return await CreateTokenForUserAsync(user, refreshToken);
     }
 
-    private async Task<TokenDto> CreateTokenForUserAsync(User user, string? refreshTokenToDisable = null)
+    private async Task<TokenDto> CreateTokenForUserAsync(
+        User user,
+        string? refreshTokenToDisable = null
+    )
     {
         var roles = await userManager.GetRolesAsync(user);
 
         var result = await jwtService.GenerateTokenForUserAsync(user, roles.ToList());
-        
+
         // If refreshtoken is provided, we should disable it
         if (refreshTokenToDisable != null)
         {

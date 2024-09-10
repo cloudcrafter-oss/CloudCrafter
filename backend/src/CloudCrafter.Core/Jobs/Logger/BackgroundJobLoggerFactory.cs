@@ -10,8 +10,8 @@ public class BackgroundJobLoggerFactory(
     BackgroundJob job,
     PerformContext? performContext,
     IApplicationDbContext context,
-    IServiceProvider sp)
-    : ILoggerFactory
+    IServiceProvider sp
+) : ILoggerFactory
 {
     public void AddProvider(ILoggerProvider provider) { }
 

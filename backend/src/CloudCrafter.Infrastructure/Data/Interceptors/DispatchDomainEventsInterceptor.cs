@@ -14,30 +14,43 @@ public class DispatchDomainEventsInterceptor : SaveChangesInterceptor
         _mediator = mediator;
     }
 
-    public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
+    public override InterceptionResult<int> SavingChanges(
+        DbContextEventData eventData,
+        InterceptionResult<int> result
+    )
     {
-        DispatchDomainEvents(eventData.Context, DomainEventDispatchTiming.BeforeSaving).GetAwaiter().GetResult();
+        DispatchDomainEvents(eventData.Context, DomainEventDispatchTiming.BeforeSaving)
+            .GetAwaiter()
+            .GetResult();
 
         return base.SavingChanges(eventData, result);
     }
 
-    public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData,
-        InterceptionResult<int> result, CancellationToken cancellationToken = default)
+    public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
+        DbContextEventData eventData,
+        InterceptionResult<int> result,
+        CancellationToken cancellationToken = default
+    )
     {
         await DispatchDomainEvents(eventData.Context, DomainEventDispatchTiming.BeforeSaving);
 
-       return await base.SavingChangesAsync(eventData, result, cancellationToken);
+        return await base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 
-    
     public override int SavedChanges(SaveChangesCompletedEventData eventData, int result)
     {
-        DispatchDomainEvents(eventData.Context, DomainEventDispatchTiming.AfterSaving).GetAwaiter().GetResult();
-        
+        DispatchDomainEvents(eventData.Context, DomainEventDispatchTiming.AfterSaving)
+            .GetAwaiter()
+            .GetResult();
+
         return base.SavedChanges(eventData, result);
     }
 
-    public override async ValueTask<int> SavedChangesAsync(SaveChangesCompletedEventData eventData, int result, CancellationToken cancellationToken = default)
+    public override async ValueTask<int> SavedChangesAsync(
+        SaveChangesCompletedEventData eventData,
+        int result,
+        CancellationToken cancellationToken = default
+    )
     {
         await DispatchDomainEvents(eventData.Context, DomainEventDispatchTiming.AfterSaving);
         return await base.SavedChangesAsync(eventData, result, cancellationToken);
@@ -50,8 +63,8 @@ public class DispatchDomainEventsInterceptor : SaveChangesInterceptor
             return;
         }
 
-        var entities = context.ChangeTracker
-            .Entries<BaseEntity>()
+        var entities = context
+            .ChangeTracker.Entries<BaseEntity>()
             .Where(e => e.Entity.DomainEvents.Any(de => de.Timing == timing))
             .Select(e => e.Entity);
 

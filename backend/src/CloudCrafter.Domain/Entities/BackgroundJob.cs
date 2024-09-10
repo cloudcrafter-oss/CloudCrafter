@@ -10,7 +10,8 @@ public class BackgroundJob : IHasTimestamps
     public required string? HangfireJobId { get; set; }
     public required BackgroundJobType Type { get; init; }
 
-    [EncryptColumn] public string SerializedArguments { get; set; } = string.Empty;
+    [EncryptColumn]
+    public string SerializedArguments { get; set; } = string.Empty;
 
     public ServerConnectivityCheckJob? ServerConnectivityCheckJob { get; set; }
     public Guid? ServerConnectivityCheckJobId { get; set; }
@@ -25,7 +26,7 @@ public class BackgroundJob : IHasTimestamps
 public enum BackgroundJobType
 {
     ServerConnectivityCheck,
-    StackDeployment
+    StackDeployment,
 }
 
 public enum BackgroundJobStatus
@@ -34,7 +35,7 @@ public enum BackgroundJobStatus
     Enqueued,
     Running,
     Failed,
-    Completed
+    Completed,
 }
 
 public class BackgroundJobLog

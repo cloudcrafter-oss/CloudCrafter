@@ -1,10 +1,9 @@
 ﻿using System.Text;
 using CloudCrafter.Agent.Models.Recipe;
 using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
-using YamlDotNet.Core.Events;
-
 
 namespace CloudCrafter.Agent.Runner.IO;
 
@@ -28,17 +27,14 @@ public class YamlRecipeReader
     {
         try
         {
-
             var reader = new CustomYamlHandler();
-            
-            var recipe = reader.Deserialize<DeploymentRecipe>(yaml);
 
+            var recipe = reader.Deserialize<DeploymentRecipe>(yaml);
 
             if (recipe == null)
             {
                 throw new InvalidOperationException("Deserialization resulted in a null object.");
             }
-
 
             return recipe;
         }
@@ -48,9 +44,10 @@ public class YamlRecipeReader
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException("An unexpected error occurred while deserializing YAML: " + ex.Message,
-                ex);
+            throw new InvalidOperationException(
+                "An unexpected error occurred while deserializing YAML: " + ex.Message,
+                ex
+            );
         }
     }
 }
-

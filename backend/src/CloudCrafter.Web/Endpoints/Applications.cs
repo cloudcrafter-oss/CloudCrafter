@@ -8,8 +8,7 @@ public class Applications : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup(this)
-            .MapPost(PostCreateDeployment, "{applicationId}/deployment");
+        app.MapGroup(this).MapPost(PostCreateDeployment, "{applicationId}/deployment");
     }
 
     public Task PostCreateDeployment(ISender sender, Guid applicationId)

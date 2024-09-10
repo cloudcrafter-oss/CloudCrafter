@@ -37,11 +37,17 @@ public class AgentRunner(IHost host)
         if (args.UseDummyDeployment)
         {
             var random = new Random();
-            var randomString = new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
+            var randomString = new string(
+                Enumerable
+                    .Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 10)
+                    .Select(s => s[random.Next(s.Length)])
+                    .ToArray()
+            );
 
             var applicationId = Guid.Parse("4676dae2-08a5-4a5d-a5f6-5b02a3a77ac7");
-            recipe = await mediator.Send(new GetDummyDeployment.Query("custom-image", randomString, applicationId));
+            recipe = await mediator.Send(
+                new GetDummyDeployment.Query("custom-image", randomString, applicationId)
+            );
         }
 
         if (!string.IsNullOrWhiteSpace(args.Base64Recipe))
@@ -61,7 +67,6 @@ public class AgentRunner(IHost host)
             return -1;
         }
 
-
         var deploymentService = host.Services.GetRequiredService<DeploymentService>();
 
         try
@@ -79,7 +84,6 @@ public class AgentRunner(IHost host)
         {
             return 0;
         }
-
 
         try
         {
@@ -117,7 +121,9 @@ public class AgentRunner(IHost host)
 
         if (!File.Exists(filename))
         {
-            logger.LogInformation("No recipe file found in current directory (looking for recipe.yml)");
+            logger.LogInformation(
+                "No recipe file found in current directory (looking for recipe.yml)"
+            );
             return null;
         }
 

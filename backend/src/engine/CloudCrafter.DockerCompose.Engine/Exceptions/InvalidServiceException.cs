@@ -2,7 +2,6 @@
 
 public class InvalidServiceException : Exception
 {
-    public InvalidServiceException(string serviceName) : base($"Service {serviceName} is invalid")
-    {
-    }
+    public InvalidServiceException(string serviceName)
+        : base($"Service {serviceName} is invalid") { }
 }

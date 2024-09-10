@@ -28,9 +28,7 @@ public class PhoneNumber : ValueObject
     public string Number { get; private set; } = string.Empty;
     public string? Extension { get; private set; } = string.Empty;
 
-    public PhoneNumber(string countryCode,
-        string number,
-        string? extension)
+    public PhoneNumber(string countryCode, string number, string? extension)
     {
         CountryCode = countryCode;
         Number = number;

@@ -12,23 +12,20 @@ public class Servers : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup(this)
-            .MapGet(GetServers)
-            .MapGet(GetServerById, "{id}");
+        app.MapGroup(this).MapGet(GetServers).MapGet(GetServerById, "{id}");
     }
 
     public async Task<List<ServerDto>> GetServers(ISender sender)
     {
         return await sender.Send(new GetServerList.Query());
     }
-    
-    
+
     [ProducesResponseType<ServerDetailDto>(StatusCodes.Status200OK)]
     public async Task<IResult> GetServerById(ISender sender, Guid id)
     {
-        var result = await  sender.Send(new GetServerDetail.Query(id));
-        
-        if(result == null)
+        var result = await sender.Send(new GetServerDetail.Query(id));
+
+        if (result == null)
         {
             return Results.NotFound();
         }

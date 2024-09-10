@@ -12,12 +12,14 @@ public static class GetProjectList
 
     public class Handler(IProjectsService service) : IRequestHandler<Query, List<ProjectDto>>
     {
-        public async Task<List<ProjectDto>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<List<ProjectDto>> Handle(
+            Query request,
+            CancellationToken cancellationToken
+        )
         {
-            return await service.GetProjects(new LoadProjectOptions
-            {
-                IncludeEnvironments = request.IncludeEnvironments
-            });
+            return await service.GetProjects(
+                new LoadProjectOptions { IncludeEnvironments = request.IncludeEnvironments }
+            );
         }
     }
 }

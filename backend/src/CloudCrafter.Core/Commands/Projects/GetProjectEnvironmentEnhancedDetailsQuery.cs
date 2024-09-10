@@ -9,18 +9,28 @@ namespace CloudCrafter.Core.Commands.Projects;
 public static class GetProjectEnvironmentEnhancedDetailsQuery
 {
     [Authorize]
-    public class Query : IRequest<ProjectEnvironmentEnhancedDto?>, IRequireEnvironmentAccess, IRequireProjectAccess
+    public class Query
+        : IRequest<ProjectEnvironmentEnhancedDto?>,
+            IRequireEnvironmentAccess,
+            IRequireProjectAccess
     {
         // TODO: Add tests for IRequireEnvironmentAccess, IRequireProjectAccess
         public required Guid EnvironmentId { get; init; }
         public required Guid ProjectId { get; init; }
     }
 
-    private class Handler(IProjectsService service) : IRequestHandler<Query, ProjectEnvironmentEnhancedDto?>
+    private class Handler(IProjectsService service)
+        : IRequestHandler<Query, ProjectEnvironmentEnhancedDto?>
     {
-        public Task<ProjectEnvironmentEnhancedDto?> Handle(Query request, CancellationToken cancellationToken)
+        public Task<ProjectEnvironmentEnhancedDto?> Handle(
+            Query request,
+            CancellationToken cancellationToken
+        )
         {
-            return service.GetProjectEnvironmentEnhancedDetails(request.ProjectId, request.EnvironmentId);
+            return service.GetProjectEnvironmentEnhancedDetails(
+                request.ProjectId,
+                request.EnvironmentId
+            );
         }
     }
 }

@@ -27,21 +27,20 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             // TODO: Handle source different
             Source = new ApplicationSource
             {
-                Type = ApplicationSourceType.Git, Git = new ApplicationSourceGit { Repository = args.GitRepository }
+                Type = ApplicationSourceType.Git,
+                Git = new ApplicationSourceGit { Repository = args.GitRepository },
             },
             // TODO: Allow multiple options
             BuildPack = StackBuildPack.Nixpacks,
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
         };
-
 
         context.Stacks.Add(stack);
 
         stack.AddDomainEvent(DomainEventDispatchTiming.AfterSaving, new StackCreatedEvent(stack));
 
         await context.SaveChangesAsync();
-
 
         var stackFromDb = await GetStackInternal(stack.Id);
 
@@ -68,7 +67,7 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             // E.g. databases should not get this.
             HttpConfiguration = null,
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
         };
 
         context.StackServices.Add(stackService);
@@ -78,8 +77,8 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
 
     private async Task<Stack?> GetStackInternal(Guid id, bool throwExceptionOnNotFound = true)
     {
-        var stack = await context.Stacks
-            .Include(x => x.Services)
+        var stack = await context
+            .Stacks.Include(x => x.Services)
             .Include(x => x.Server)
             .Include(x => x.Environment)
             .ThenInclude(x => x!.Project)

@@ -12,8 +12,10 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CloudCrafter.Infrastructure.Identity.Services;
 
-public class JwtService(IOptions<JwtSettings> jwtSettings, IUserRefreshTokenRepository userRefreshTokenRepository)
-    : IJwtService
+public class JwtService(
+    IOptions<JwtSettings> jwtSettings,
+    IUserRefreshTokenRepository userRefreshTokenRepository
+) : IJwtService
 {
     public async Task<TokenDto> GenerateTokenForUserAsync(User user, List<string> roles)
     {
@@ -21,16 +23,18 @@ public class JwtService(IOptions<JwtSettings> jwtSettings, IUserRefreshTokenRepo
         {
             new(ClaimTypes.Name, user.UserName!),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(ClaimTypes.NameIdentifier, user.Id.ToString())
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
         };
 
         var tokenDto = GenerateForClaims(authClaims);
 
         // Store refresh token
         var refreshToken = GenerateRefreshToken();
-        await userRefreshTokenRepository.AddRefreshTokenToUserAsync(user.Id, refreshToken,
-            DateTime.UtcNow.AddSeconds(jwtSettings.Value.RefreshTokenValidInSeconds));
-
+        await userRefreshTokenRepository.AddRefreshTokenToUserAsync(
+            user.Id,
+            refreshToken,
+            DateTime.UtcNow.AddSeconds(jwtSettings.Value.RefreshTokenValidInSeconds)
+        );
 
         return new TokenDto(tokenDto.Item1, refreshToken, tokenDto.Item2);
     }
@@ -72,15 +76,19 @@ public class JwtService(IOptions<JwtSettings> jwtSettings, IUserRefreshTokenRepo
 
     private JwtSecurityToken GetToken(List<Claim> authClaims)
     {
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            jwtSettings.Value.SecretKey));
+        var authSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(jwtSettings.Value.SecretKey)
+        );
 
         var token = new JwtSecurityToken(
             jwtSettings.Value.Issuer,
             jwtSettings.Value.Audience,
             expires: DateTime.UtcNow.AddSeconds(jwtSettings.Value.AccessTokenValidInSeconds),
             claims: authClaims,
-            signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+            signingCredentials: new SigningCredentials(
+                authSigningKey,
+                SecurityAlgorithms.HmacSha256
+            )
         );
 
         return token;

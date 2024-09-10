@@ -17,21 +17,26 @@ public class Stacks : EndpointGroupBase
             .MapPost(DispatchStackDeployment, "{id}/deploy");
     }
 
-    public async Task<StackCreatedDto> PostCreateStack(CreateStackCommand.Command command, ISender sender)
+    public async Task<StackCreatedDto> PostCreateStack(
+        CreateStackCommand.Command command,
+        ISender sender
+    )
     {
         return await sender.Send(command);
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StackDetailDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IResult> GetStackDetail([FromRoute] Guid id,
-        ISender sender)
+    public async Task<IResult> GetStackDetail([FromRoute] Guid id, ISender sender)
     {
         var details = await sender.Send(new GetStackDetail.Query { StackId = id });
         return details is not null ? Results.Ok(details) : Results.NotFound();
     }
 
-    public async Task<DeploymentCreatedDetailsDto> DispatchStackDeployment([FromRoute] Guid id, ISender sender)
+    public async Task<DeploymentCreatedDetailsDto> DispatchStackDeployment(
+        [FromRoute] Guid id,
+        ISender sender
+    )
     {
         return await sender.Send(new DispatchStack.Command(id));
     }

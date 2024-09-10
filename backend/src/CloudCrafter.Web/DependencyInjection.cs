@@ -13,47 +13,55 @@ namespace CloudCrafter.Web;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApiConfiguration(this IServiceCollection services,
-        IConfiguration configuration)
+    public static IServiceCollection AddApiConfiguration(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
-        services.AddOptions<JwtSettings>()
+        services
+            .AddOptions<JwtSettings>()
             .BindConfiguration(JwtSettings.KEY)
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        services.AddOptions<CorsSettings>()
+        services
+            .AddOptions<CorsSettings>()
             .BindConfiguration(CorsSettings.KEY)
             .ValidateDataAnnotations()
             .ValidateOnStart();
-
 
         services.AddCloudCrafterConfiguration();
 
         return services;
     }
 
-
-    public static IServiceCollection AddCloudCrafterCors(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddCloudCrafterCors(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         services.AddCors(options =>
         {
-            options.AddPolicy("CloudCrafterCorsPolicy", policy =>
-            {
-                var corsSettings = configuration.GetSection(CorsSettings.KEY).Get<CorsSettings>();
-
-                if (corsSettings?.AllowedOrigins != null && corsSettings.AllowedOrigins.Any())
+            options.AddPolicy(
+                "CloudCrafterCorsPolicy",
+                policy =>
                 {
-                    policy.WithOrigins(corsSettings.AllowedOrigins.ToArray());
-                }
-                else
-                {
-                    policy.AllowAnyOrigin();
-                }
+                    var corsSettings = configuration
+                        .GetSection(CorsSettings.KEY)
+                        .Get<CorsSettings>();
 
-                policy.AllowAnyMethod()
-                    .AllowCredentials()
-                    .AllowAnyHeader();
-            });
+                    if (corsSettings?.AllowedOrigins != null && corsSettings.AllowedOrigins.Any())
+                    {
+                        policy.WithOrigins(corsSettings.AllowedOrigins.ToArray());
+                    }
+                    else
+                    {
+                        policy.AllowAnyOrigin();
+                    }
+
+                    policy.AllowAnyMethod().AllowCredentials().AllowAnyHeader();
+                }
+            );
         });
 
         return services;
@@ -61,7 +69,8 @@ public static class DependencyInjection
 
     public static IServiceCollection AddSwaggerServices(this IServiceCollection collection)
     {
-        collection.AddEndpointsApiExplorer()
+        collection
+            .AddEndpointsApiExplorer()
             .AddSwaggerGen(swagger =>
             {
                 var defaultSchemaIdSelector = swagger.SchemaGeneratorOptions.SchemaIdSelector;
@@ -80,7 +89,8 @@ public static class DependencyInjection
                 swagger.SchemaFilter<RequireNotNullableSchemaFilter>();
                 swagger.OperationFilter<FilterableFieldsOperationFilter>();
 
-                swagger.AddSecurityDefinition("Bearer",
+                swagger.AddSecurityDefinition(
+                    "Bearer",
                     new OpenApiSecurityScheme
                     {
                         In = ParameterLocation.Header,
@@ -88,20 +98,26 @@ public static class DependencyInjection
                         Name = "Authorization",
                         Type = SecuritySchemeType.Http,
                         BearerFormat = "JWT",
-                        Scheme = "Bearer"
-                    });
-
-
-                swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-                        },
-                        new string[] { }
+                        Scheme = "Bearer",
                     }
-                });
+                );
+
+                swagger.AddSecurityRequirement(
+                    new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer",
+                                },
+                            },
+                            new string[] { }
+                        },
+                    }
+                );
             });
 
         return collection;
@@ -115,8 +131,7 @@ public static class DependencyInjection
 
         services.AddHttpContextAccessor();
 
-        services.AddHealthChecks()
-            .AddDbContextCheck<AppDbContext>();
+        services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
 
         services.AddExceptionHandler<CustomExceptionHandler>();
 
@@ -124,10 +139,10 @@ public static class DependencyInjection
 
         // Customise default API behaviour
         services.Configure<ApiBehaviorOptions>(options =>
-            options.SuppressModelStateInvalidFilter = true);
+            options.SuppressModelStateInvalidFilter = true
+        );
 
         services.AddEndpointsApiExplorer();
-
 
         return services;
     }

@@ -11,11 +11,16 @@ public class CloudCrafterEngineManager(EngineServerModel serverModel)
     {
         var tempKeyPath = CreateTemporarySshKeyFile(serverModel.SshKey);
 
-        var connectionInfo = new SshConnectionInfo(serverModel.Host, serverModel.Port, serverModel.Username, tempKeyPath);
+        var connectionInfo = new SshConnectionInfo(
+            serverModel.Host,
+            serverModel.Port,
+            serverModel.Username,
+            tempKeyPath
+        );
 
         return new CloudCrafterSshClient(connectionInfo);
     }
-    
+
     private string CreateTemporarySshKeyFile(string sshKey)
     {
         var tempKeyPath = Path.GetTempFileName();

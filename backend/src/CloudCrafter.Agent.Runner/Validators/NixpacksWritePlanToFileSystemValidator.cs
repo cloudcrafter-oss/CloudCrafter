@@ -6,12 +6,13 @@ using FluentValidation;
 
 namespace CloudCrafter.Agent.Runner.Validators;
 
-public class NixpacksWritePlanToFileSystemValidator : AbstractValidator<NixpacksWritePlanToFileSystemParams>
-{
-}
+public class NixpacksWritePlanToFileSystemValidator
+    : AbstractValidator<NixpacksWritePlanToFileSystemParams> { }
 
 [DeploymentStep(DeploymentBuildStepType.NixpacksWritePlanToFileSystem)]
-public class NixpacksWritePlanToFileSystemConfig : IDeploymentStepConfig<NixpacksWritePlanToFileSystemParams>
+public class NixpacksWritePlanToFileSystemConfig
+    : IDeploymentStepConfig<NixpacksWritePlanToFileSystemParams>
 {
-    public IValidator<NixpacksWritePlanToFileSystemParams> Validator => new NixpacksWritePlanToFileSystemValidator();
+    public IValidator<NixpacksWritePlanToFileSystemParams> Validator =>
+        new NixpacksWritePlanToFileSystemValidator();
 }

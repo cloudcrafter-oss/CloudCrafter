@@ -11,25 +11,33 @@ public static class JobsInfrastructureServiceExtensions
 {
     public static IServiceCollection AddJobInfrastructure(
         this IServiceCollection services,
-        IConfiguration config, bool withServer, string prefix)
+        IConfiguration config,
+        bool withServer,
+        string prefix
+    )
     {
         services.AddScoped<IDeploymentTracker, DeploymentTracker>();
-        services.AddHangfire((sp, hangfireConfig) =>
-        {
-            var connectionString = config.GetConnectionString("RedisConnection");
+        services.AddHangfire(
+            (sp, hangfireConfig) =>
+            {
+                var connectionString = config.GetConnectionString("RedisConnection");
 
+                hangfireConfig.UseRedisStorage(
+                    connectionString,
+                    new RedisStorageOptions
+                    {
+                        Prefix = "cloudCrafter:",
+                        Db = 0,
+                        FetchTimeout = TimeSpan.FromSeconds(1),
+                    }
+                );
 
-            hangfireConfig.UseRedisStorage(connectionString,
-                new RedisStorageOptions { Prefix = "cloudCrafter:", Db = 0, FetchTimeout = TimeSpan.FromSeconds(1) });
+                hangfireConfig.UseFilter(new LogEverythingAttribute());
 
-
-            hangfireConfig.UseFilter(new LogEverythingAttribute());
-
-            hangfireConfig.UseSerilogLogProvider();
-            hangfireConfig
-                .UseConsole();
-        });
-
+                hangfireConfig.UseSerilogLogProvider();
+                hangfireConfig.UseConsole();
+            }
+        );
 
         if (withServer)
         {

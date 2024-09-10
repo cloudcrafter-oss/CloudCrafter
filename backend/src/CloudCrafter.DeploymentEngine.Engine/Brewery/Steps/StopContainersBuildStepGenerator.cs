@@ -3,7 +3,8 @@ using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
 
-public class StopContainersBuildStepGenerator(StopContainersBuildStepGenerator.Args options) : IBuildStepGenerator
+public class StopContainersBuildStepGenerator(StopContainersBuildStepGenerator.Args options)
+    : IBuildStepGenerator
 {
     public DeploymentBuildStep Generate()
     {
@@ -22,8 +23,9 @@ public class StopContainersBuildStepGenerator(StopContainersBuildStepGenerator.A
             Type = DeploymentBuildStepType.StopContainers,
             Params = new Dictionary<string, object>
             {
-                { "filters", filters }, { "onlyCloudCrafterContainers", options.OnlyCloudCrafterContainers }
-            }
+                { "filters", filters },
+                { "onlyCloudCrafterContainers", options.OnlyCloudCrafterContainers },
+            },
         };
     }
 

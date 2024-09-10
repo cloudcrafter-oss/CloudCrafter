@@ -15,26 +15,24 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                 name: "HealthStatus_StatusAt",
                 table: "StackServices",
                 type: "timestamp with time zone",
-                nullable: true);
+                nullable: true
+            );
 
             migrationBuilder.AddColumn<int>(
                 name: "HealthStatus_Value",
                 table: "StackServices",
                 type: "integer",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: 0
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "HealthStatus_StatusAt",
-                table: "StackServices");
+            migrationBuilder.DropColumn(name: "HealthStatus_StatusAt", table: "StackServices");
 
-            migrationBuilder.DropColumn(
-                name: "HealthStatus_Value",
-                table: "StackServices");
+            migrationBuilder.DropColumn(name: "HealthStatus_Value", table: "StackServices");
         }
     }
 }

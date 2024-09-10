@@ -8,8 +8,12 @@ using Hangfire.Storage;
 
 namespace CloudCrafter.Jobs.Service;
 
-public class LogEverythingAttribute : JobFilterAttribute,
-    IClientFilter, IServerFilter, IElectStateFilter, IApplyStateFilter
+public class LogEverythingAttribute
+    : JobFilterAttribute,
+        IClientFilter,
+        IServerFilter,
+        IElectStateFilter,
+        IApplyStateFilter
 {
     private static readonly ILog Logger = LogProvider.GetCurrentClassLogger();
 
@@ -23,7 +27,8 @@ public class LogEverythingAttribute : JobFilterAttribute,
         Logger.InfoFormat(
             "Job that is based on method `{0}` has been created with id `{1}`",
             context.Job.Method.Name,
-            context.BackgroundJob?.Id);
+            context.BackgroundJob?.Id
+        );
     }
 
     public void OnPerforming(PerformingContext context)
@@ -43,7 +48,8 @@ public class LogEverythingAttribute : JobFilterAttribute,
             Logger.WarnFormat(
                 "Job `{0}` has been failed due to an exception `{1}`",
                 context.BackgroundJob.Id,
-                failedState.Exception);
+                failedState.Exception
+            );
         }
     }
 
@@ -53,7 +59,8 @@ public class LogEverythingAttribute : JobFilterAttribute,
             "Job `{0}` state was changed from `{1}` to `{2}`",
             context.BackgroundJob.Id,
             context.OldStateName,
-            context.NewState.Name);
+            context.NewState.Name
+        );
     }
 
     public void OnStateUnapplied(ApplyStateContext context, IWriteOnlyTransaction transaction)
@@ -61,6 +68,7 @@ public class LogEverythingAttribute : JobFilterAttribute,
         Logger.InfoFormat(
             "Job `{0}` state `{1}` was unapplied.",
             context.BackgroundJob.Id,
-            context.OldStateName);
+            context.OldStateName
+        );
     }
 }

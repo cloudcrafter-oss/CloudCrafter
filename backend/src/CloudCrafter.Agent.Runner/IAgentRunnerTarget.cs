@@ -1,6 +1,3 @@
 ﻿namespace CloudCrafter.Agent.Runner;
 
-public interface IAgentRunnerTarget
-{
-    
-}
+public interface IAgentRunnerTarget { }

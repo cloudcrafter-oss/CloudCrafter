@@ -6,8 +6,9 @@ namespace CloudCrafter.Agent.Runner.DeploymentLogPump.Implementation;
 public class MessagePump(ILoggerFactory loggerFactory) : IMessagePump
 {
     private readonly List<DeploymentMessage> _logEntries = new List<DeploymentMessage>();
-    
-    public IDeploymentLogger CreateLogger<T>() where T : class
+
+    public IDeploymentLogger CreateLogger<T>()
+        where T : class
     {
         var logger = loggerFactory.CreateLogger<T>();
         return new ServiceLogger<T>(this, logger);
@@ -17,17 +18,14 @@ public class MessagePump(ILoggerFactory loggerFactory) : IMessagePump
     {
         return _logEntries;
     }
-    
+
     private void AddLogEntry(Type target, string text)
     {
-        _logEntries.Add(new DeploymentMessage()
-        {
-            Message = text,
-            Target = target
-        });
+        _logEntries.Add(new DeploymentMessage() { Message = text, Target = target });
     }
-    
-    private class ServiceLogger<T> : IDeploymentLogger where T : class
+
+    private class ServiceLogger<T> : IDeploymentLogger
+        where T : class
     {
         private readonly MessagePump _pump;
         private readonly ILogger<T> _logger;

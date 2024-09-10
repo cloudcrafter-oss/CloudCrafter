@@ -7,7 +7,6 @@ public class DockerClientProvider : IDockerClientProvider
 {
     public IDockerClient GetClient()
     {
-        return new DockerClientConfiguration()
-            .CreateClient();
+        return new DockerClientConfiguration().CreateClient();
     }
 }

@@ -20,13 +20,10 @@ public class DeploymentStepSerializerFactory
         _stepTypeToParamType = assembly
             .GetTypes()
             .Where(t => t.GetCustomAttribute<DeploymentStepAttribute>() != null)
-            .ToDictionary(
-                t => t.GetCustomAttribute<DeploymentStepAttribute>()!.StepType,
-                t => t
-            );
+            .ToDictionary(t => t.GetCustomAttribute<DeploymentStepAttribute>()!.StepType, t => t);
         _factory = factory;
     }
-    
+
     public Type GetParamType(DeploymentBuildStepType stepType)
     {
         return _stepTypeToParamType[stepType];
@@ -38,21 +35,23 @@ public class DeploymentStepSerializerFactory
 
         return config;
     }
-    
-    
+
     public IDeploymentStepHandler<TParams> CreateHandler<TParams>(DeploymentBuildStep step)
     {
         return _factory.CreateHandler<TParams>(step.Type);
     }
-    
-    public TParams ConvertAndValidateParams<TParams>(Dictionary<string, object> parameters,
-        IValidator<TParams> validator)
+
+    public TParams ConvertAndValidateParams<TParams>(
+        Dictionary<string, object> parameters,
+        IValidator<TParams> validator
+    )
     {
         var jsonString = JsonSerializer.Serialize(parameters);
 
         var options = new JsonSerializerOptions
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase, WriteIndented = true
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true,
         };
 
         // Deserialize JSON string to TParams object

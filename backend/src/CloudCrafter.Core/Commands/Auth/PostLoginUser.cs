@@ -1,4 +1,3 @@
-
 using CloudCrafter.Core.Interfaces.Domain.Auth;
 using CloudCrafter.Domain.Domain.Auth;
 using MediatR;
@@ -17,4 +16,3 @@ public static class PostLoginUser
         }
     }
 }
-    

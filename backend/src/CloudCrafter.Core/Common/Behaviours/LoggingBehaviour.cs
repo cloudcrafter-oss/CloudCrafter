@@ -4,8 +4,11 @@ using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Common.Behaviours;
 
-public class LoggingBehaviour<TRequest>(ILogger<TRequest> logger, IUser user, IIdentityService identityService)
-    : IRequestPreProcessor<TRequest>
+public class LoggingBehaviour<TRequest>(
+    ILogger<TRequest> logger,
+    IUser user,
+    IIdentityService identityService
+) : IRequestPreProcessor<TRequest>
     where TRequest : notnull
 {
     private readonly ILogger _logger = logger;
@@ -21,7 +24,12 @@ public class LoggingBehaviour<TRequest>(ILogger<TRequest> logger, IUser user, II
             userName = await identityService.GetUserNameAsync(userId.Value);
         }
 
-        _logger.LogInformation("CloudCrafter Request: {Name} {@UserId} {@UserName} {@Request}",
-            requestName, userId, userName, request);
+        _logger.LogInformation(
+            "CloudCrafter Request: {Name} {@UserId} {@UserName} {@Request}",
+            requestName,
+            userId,
+            userName,
+            request
+        );
     }
 }

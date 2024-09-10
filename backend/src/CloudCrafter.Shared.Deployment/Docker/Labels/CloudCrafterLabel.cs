@@ -39,5 +39,5 @@ public enum CloudCrafterLabelKey
     StackId,
     StackServiceId,
     DeploymentId,
-    CloudCrafterManaged
+    CloudCrafterManaged,
 }

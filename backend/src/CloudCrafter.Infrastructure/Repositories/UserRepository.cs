@@ -16,18 +16,15 @@ public class UserRepository(AppDbContext context, IMapper mapper) : IUserReposit
 {
     private IQueryable<User> GetBaseQuery()
     {
-        return context.Users
-            .OrderBy(x => x.Email);
+        return context.Users.OrderBy(x => x.Email);
     }
-    
+
     public async Task<PaginatedList<UserDto>> GetUsers(PaginatedRequest<UserDto> filter)
     {
-        var users = GetBaseQuery()
-            .AsQueryable();
+        var users = GetBaseQuery().AsQueryable();
 
         var result = await users.ToPaginatedListAsync<User, UserDto>(filter, mapper);
-        
+
         return result;
     }
-    
 }

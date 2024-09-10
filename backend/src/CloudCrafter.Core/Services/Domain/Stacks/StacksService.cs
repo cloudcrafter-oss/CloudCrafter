@@ -34,7 +34,7 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
         {
             return null;
         }
-        
+
         return mapper.Map<StackDetailDto>(stack);
     }
 }

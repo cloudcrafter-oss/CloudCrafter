@@ -6,9 +6,7 @@ using FluentValidation;
 
 namespace CloudCrafter.Agent.Runner.Validators;
 
-public class NixpacksAlterPlanParamsValidator : AbstractValidator<NixpacksAlterPlanParams>
-{
-}
+public class NixpacksAlterPlanParamsValidator : AbstractValidator<NixpacksAlterPlanParams> { }
 
 [DeploymentStep(DeploymentBuildStepType.NixpacksAlterPlan)]
 public class NixpacksAlterPlanConfig : IDeploymentStepConfig<NixpacksAlterPlanParams>

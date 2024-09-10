@@ -1,6 +1,3 @@
 namespace CloudCrafter.Domain;
 
-public interface IDomainTarget
-{
-    
-}
+public interface IDomainTarget { }

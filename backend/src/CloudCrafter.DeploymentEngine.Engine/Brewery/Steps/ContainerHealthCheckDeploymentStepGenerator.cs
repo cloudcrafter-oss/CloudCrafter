@@ -3,13 +3,16 @@ using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
 
-public class ContainerHealthCheckDeploymentStepGenerator(ContainerHealthCheckDeploymentStepGenerator.Args options)
-    : IBuildStepGenerator
+public class ContainerHealthCheckDeploymentStepGenerator(
+    ContainerHealthCheckDeploymentStepGenerator.Args options
+) : IBuildStepGenerator
 {
     public DeploymentBuildStep Generate()
     {
-
-        var services = options.Services.ToDictionary(service => service.Key, service => GenerateServiceCheck(service.Value));
+        var services = options.Services.ToDictionary(
+            service => service.Key,
+            service => GenerateServiceCheck(service.Value)
+        );
 
         return new DeploymentBuildStep
         {
@@ -19,15 +22,17 @@ public class ContainerHealthCheckDeploymentStepGenerator(ContainerHealthCheckDep
             Params = new Dictionary<string, object>
             {
                 {
-                    "dockerComposeSettings", new Dictionary<string, object>
+                    "dockerComposeSettings",
+                    new Dictionary<string, object>
                     {
-                        { "fetchServicesFromContext", options.DockerComposeSettings.FetchServicesFromContext }
+                        {
+                            "fetchServicesFromContext",
+                            options.DockerComposeSettings.FetchServicesFromContext
+                        },
                     }
                 },
-                {
-                    "services", services
-                }
-            }
+                { "services", services },
+            },
         };
     }
 
@@ -41,7 +46,7 @@ public class ContainerHealthCheckDeploymentStepGenerator(ContainerHealthCheckDep
             { "httpPath", settings.HttpPath },
             { "httpPort", settings.HttpPort },
             { "expectedResponseCode", settings.ExpectedHttpStatusCode },
-            { "retries", settings.MaxRetries }
+            { "retries", settings.MaxRetries },
         };
     }
 

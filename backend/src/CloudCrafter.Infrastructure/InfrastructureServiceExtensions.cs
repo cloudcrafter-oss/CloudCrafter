@@ -26,7 +26,8 @@ public static class InfrastructureServiceExtensions
 {
     public static IServiceCollection AddCloudCrafterConfiguration(this IServiceCollection services)
     {
-        services.AddOptions<CloudCrafterConfig>()
+        services
+            .AddOptions<CloudCrafterConfig>()
             .BindConfiguration(CloudCrafterConfig.KEY)
             .ValidateDataAnnotations()
             .ValidateOnStart();
@@ -36,27 +37,31 @@ public static class InfrastructureServiceExtensions
 
     public static IServiceCollection AddInfrastructureServices(
         this IServiceCollection services,
-        IConfiguration config)
+        IConfiguration config
+    )
     {
         var connectionString = config.GetConnectionString("PostgresConnection");
         Guard.Against.Null(connectionString, "PostgresConnection is not set.");
 
-
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 
-        services.AddDbContext<AppDbContext>((sp, options) =>
-        {
-            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+        services.AddDbContext<AppDbContext>(
+            (sp, options) =>
+            {
+                options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
 
-            options.UseNpgsql(connectionString);
-        });
+                options.UseNpgsql(connectionString);
+            }
+        );
 
-
-        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<AppDbContext>());
+        services.AddScoped<IApplicationDbContext>(provider =>
+            provider.GetRequiredService<AppDbContext>()
+        );
         services.AddScoped<ApplicationDbContextInitialiser>();
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(x =>
             {
                 var jwtSettings = new JwtSettings();
@@ -65,14 +70,14 @@ public static class InfrastructureServiceExtensions
                 {
                     ValidIssuer = jwtSettings.Issuer,
                     ValidAudience = jwtSettings.Audience,
-                    IssuerSigningKey =
-                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                            jwtSettings.SecretKey)),
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwtSettings.SecretKey)
+                    ),
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ClockSkew = TimeSpan.FromSeconds(5)
+                    ClockSkew = TimeSpan.FromSeconds(5),
                 };
             });
 
@@ -88,10 +93,12 @@ public static class InfrastructureServiceExtensions
         services.AddTransient<IIdentityService, IdentityService>();
 
         services.AddAuthorization(options =>
-            options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
+            options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator))
+        );
 
         // Add services
-        services.AddScoped<ICloudCrafterAuthService, CloudCrafterAuthService>()
+        services
+            .AddScoped<ICloudCrafterAuthService, CloudCrafterAuthService>()
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IServerRepository, ServerRepository>()
             .AddScoped<IEnvironmentRepository, EnvironmentRepository>()

@@ -13,7 +13,8 @@ public static class QueryableExtensions
     public static async Task<PaginatedList<TDto>> ToPaginatedListAsync<TEntity, TDto>(
         this IQueryable<TEntity> query,
         PaginatedRequest<TDto> request,
-        IMapper mapper)
+        IMapper mapper
+    )
         where TDto : class
         where TEntity : class
     {
@@ -32,8 +33,10 @@ public static class QueryableExtensions
         return new PaginatedList<TDto>(items, totalCount, request.Page, request.PageSize);
     }
 
-    public static IQueryable<TEntity> ApplyFiltering<TDto, TEntity>(this IQueryable<TEntity> query,
-        System.Collections.Generic.List<FilterCriterea> filters)
+    public static IQueryable<TEntity> ApplyFiltering<TDto, TEntity>(
+        this IQueryable<TEntity> query,
+        System.Collections.Generic.List<FilterCriterea> filters
+    )
     {
         if (filters == null || !filters.Any())
             return query;
@@ -46,7 +49,9 @@ public static class QueryableExtensions
         {
             if (!filterableProperties.Contains(filter.PropertyName))
             {
-                throw new ArgumentException($"Filtering on property '{filter.PropertyName}' is not allowed.");
+                throw new ArgumentException(
+                    $"Filtering on property '{filter.PropertyName}' is not allowed."
+                );
             }
 
             var property = Expression.Property(parameter, filter.PropertyName);
@@ -57,11 +62,23 @@ public static class QueryableExtensions
                 FilterOperatorOption.Equal => Expression.Equal(property, constant),
                 FilterOperatorOption.NotEqual => Expression.NotEqual(property, constant),
                 FilterOperatorOption.GreaterThan => Expression.GreaterThan(property, constant),
-                FilterOperatorOption.GreaterThanOrEqual => Expression.GreaterThanOrEqual(property, constant),
+                FilterOperatorOption.GreaterThanOrEqual => Expression.GreaterThanOrEqual(
+                    property,
+                    constant
+                ),
                 FilterOperatorOption.LessThan => Expression.LessThan(property, constant),
-                FilterOperatorOption.LessThanOrEqual => Expression.LessThanOrEqual(property, constant),
-                FilterOperatorOption.Contains => Expression.Call(property, typeof(string).GetMethod("Contains", new[] { typeof(string) })!, constant),
-                _ => throw new NotSupportedException($"Operator {filter.Operator} is not supported.")
+                FilterOperatorOption.LessThanOrEqual => Expression.LessThanOrEqual(
+                    property,
+                    constant
+                ),
+                FilterOperatorOption.Contains => Expression.Call(
+                    property,
+                    typeof(string).GetMethod("Contains", new[] { typeof(string) })!,
+                    constant
+                ),
+                _ => throw new NotSupportedException(
+                    $"Operator {filter.Operator} is not supported."
+                ),
             };
 
             var lambda = Expression.Lambda<Func<TEntity, bool>>(comparison, parameter);

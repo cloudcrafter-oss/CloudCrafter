@@ -10,20 +10,23 @@ public class System : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup(this)
-            .MapGet(GetFilterableFields, "get-fields");
+        app.MapGroup(this).MapGet(GetFilterableFields, "get-fields");
     }
 
     public Dictionary<string, List<string>> GetFilterableFields()
     {
-        var filterableDtos = typeof(IFilterableDto).Assembly.GetTypes()
-            .Where(t => typeof(IFilterableDto).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+        var filterableDtos = typeof(IFilterableDto)
+            .Assembly.GetTypes()
+            .Where(t =>
+                typeof(IFilterableDto).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract
+            )
             .ToDictionary(
                 t => t.Name,
-                t => t.GetProperties()
-                    .Where(p => p.GetCustomAttribute<FilterableAttribute>() != null)
-                    .Select(p => p.Name)
-                    .ToList()
+                t =>
+                    t.GetProperties()
+                        .Where(p => p.GetCustomAttribute<FilterableAttribute>() != null)
+                        .Select(p => p.Name)
+                        .ToList()
             );
 
         return filterableDtos;

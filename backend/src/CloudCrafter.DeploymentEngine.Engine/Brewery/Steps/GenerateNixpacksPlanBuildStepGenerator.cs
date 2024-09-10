@@ -3,8 +3,9 @@ using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
 
-public class GenerateNixpacksPlanBuildStepGenerator(GenerateNixpacksPlanBuildStepGenerator.Args options)
-    : IBuildStepGenerator
+public class GenerateNixpacksPlanBuildStepGenerator(
+    GenerateNixpacksPlanBuildStepGenerator.Args options
+) : IBuildStepGenerator
 {
     public DeploymentBuildStep Generate()
     {
@@ -13,7 +14,7 @@ public class GenerateNixpacksPlanBuildStepGenerator(GenerateNixpacksPlanBuildSte
             Name = "Generate Nixpacks plan",
             Description = "Generates the Nixpacks plan for the application",
             Type = DeploymentBuildStepType.NixpacksGeneratePlan,
-            Params = new Dictionary<string, object> { { "path", options.Path } }
+            Params = new Dictionary<string, object> { { "path", options.Path } },
         };
     }
 

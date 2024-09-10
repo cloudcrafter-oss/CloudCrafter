@@ -5,7 +5,8 @@ namespace CloudCrafter.Core.Events.Store;
 
 public class EventStore(IServiceProvider serviceProvider, ILogger<EventStore> logger) : IEventStore
 {
-    public async Task PublishAsync<TEvent>(TEvent domainEvent) where TEvent : IDomainEvent
+    public async Task PublishAsync<TEvent>(TEvent domainEvent)
+        where TEvent : IDomainEvent
     {
         using var scope = serviceProvider.CreateScope();
         var handlers = scope.ServiceProvider.GetServices<IDomainEventHandler<TEvent>>();

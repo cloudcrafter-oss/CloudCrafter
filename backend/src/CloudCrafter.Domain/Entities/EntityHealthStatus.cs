@@ -12,5 +12,5 @@ public enum EntityHealthStatusValue
     Unsupported,
     Degraded,
     Unhealthy,
-    Healthy
+    Healthy,
 }

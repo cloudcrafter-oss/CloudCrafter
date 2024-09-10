@@ -10,15 +10,24 @@ namespace CloudCrafter.Core.ContributorAggregate.Handlers;
 /// </summary>
 internal class ContributorDeletedHandler(
     ILogger<ContributorDeletedHandler> logger,
-    IEmailSender emailSender) : INotificationHandler<ContributorDeletedEvent>
+    IEmailSender emailSender
+) : INotificationHandler<ContributorDeletedEvent>
 {
-    public async Task Handle(ContributorDeletedEvent domainEvent, CancellationToken cancellationToken)
+    public async Task Handle(
+        ContributorDeletedEvent domainEvent,
+        CancellationToken cancellationToken
+    )
     {
-        logger.LogInformation("Handling Contributed Deleted event for {contributorId}", domainEvent.ContributorId);
+        logger.LogInformation(
+            "Handling Contributed Deleted event for {contributorId}",
+            domainEvent.ContributorId
+        );
 
-        await emailSender.SendEmailAsync("to@test.com",
+        await emailSender.SendEmailAsync(
+            "to@test.com",
             "from@test.com",
             "Contributor Deleted",
-            $"Contributor with id {domainEvent.ContributorId} was deleted.");
+            $"Contributor with id {domainEvent.ContributorId} was deleted."
+        );
     }
 }

@@ -1,5 +1,3 @@
 ﻿namespace CloudCrafter.Agent.Models.Deployment.Steps.Params;
 
-public abstract class BaseParams
-{
-}
+public abstract class BaseParams { }

@@ -13,12 +13,14 @@ public abstract class RetryHttpClientFactory
         AsyncRetryPolicy<HttpResponseMessage> retryPolicy = HttpPolicyExtensions
             .HandleTransientHttpError()
             .OrResult(msg => (int)msg.StatusCode == 429) // Too Many Requests
-            .WaitAndRetryAsync(maxRetryAttempts, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+            .WaitAndRetryAsync(
+                maxRetryAttempts,
+                retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
+            );
 
         // Register the HttpClient with the retry policy
-        serviceCollection.AddHttpClient<RetryHttpClient>(client =>
-            {
-            })
+        serviceCollection
+            .AddHttpClient<RetryHttpClient>(client => { })
             .AddPolicyHandler(retryPolicy);
 
         var serviceProvider = serviceCollection.BuildServiceProvider();

@@ -25,11 +25,19 @@ public class Program
         var host = CreateHostBuilder(args).Build();
 
         var demoOption = new Option<bool>("--demo", "Runs the dummy deployment recipe 123");
-        var fromBase64Option = new Option<string>("--from-base64", "Runs the deployment recipe from a base64 string");
-        var onlyDryRun = new Option<bool>("--dry-run",
-            "Only runs the Agent in dry-run mode. Does not execute the actual recipe, but validates the recipe.");
+        var fromBase64Option = new Option<string>(
+            "--from-base64",
+            "Runs the deployment recipe from a base64 string"
+        );
+        var onlyDryRun = new Option<bool>(
+            "--dry-run",
+            "Only runs the Agent in dry-run mode. Does not execute the actual recipe, but validates the recipe."
+        );
 
-        var generateSampleRecipe = new Option<bool>("--generate-sample-recipe", "Generates a sample recipe and exits");
+        var generateSampleRecipe = new Option<bool>(
+            "--generate-sample-recipe",
+            "Generates a sample recipe and exits"
+        );
 
         var rootCommand = new RootCommand("CloudCrafter Agent");
         rootCommand.AddOption(demoOption);
@@ -39,18 +47,29 @@ public class Program
 
         int? resultCode = null;
         rootCommand.SetHandler(
-            async (demoOptionValue, fromBase64OptionValue, onlyDryRunValue, generateSampleRecipeValue) =>
+            async (
+                demoOptionValue,
+                fromBase64OptionValue,
+                onlyDryRunValue,
+                generateSampleRecipeValue
+            ) =>
             {
                 var agentRunner = new AgentRunner(host);
-                resultCode = await agentRunner.Run(new AgentRunner.AgentRunnerArgs
-                {
-                    UseDummyDeployment = demoOptionValue,
-                    Base64Recipe = fromBase64OptionValue,
-                    OnlyDryRun = onlyDryRunValue,
-                    GenerateSampleRecipe = generateSampleRecipeValue
-                });
-            }, demoOption, fromBase64Option, onlyDryRun, generateSampleRecipe);
-
+                resultCode = await agentRunner.Run(
+                    new AgentRunner.AgentRunnerArgs
+                    {
+                        UseDummyDeployment = demoOptionValue,
+                        Base64Recipe = fromBase64OptionValue,
+                        OnlyDryRun = onlyDryRunValue,
+                        GenerateSampleRecipe = generateSampleRecipeValue,
+                    }
+                );
+            },
+            demoOption,
+            fromBase64Option,
+            onlyDryRun,
+            generateSampleRecipe
+        );
 
         var intResult = await rootCommand.InvokeAsync(args);
 
@@ -59,29 +78,31 @@ public class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
-        Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console()
-            .CreateLogger();
-
+        Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
 
         return Host.CreateDefaultBuilder(args)
-            .ConfigureServices((hostContext, services) =>
-            {
-                services.AddDeploymentStepsConfig();
-                services.AddSingleton<IMessagePump, MessagePump>();
-                services.AddTransient<ICommandExecutor, CommandExecutor>();
-                services.AddSingleton<IDeploymentStepFactory, DeploymentStepFactory>();
-
-                services.AddTransient<DeploymentService>();
-                services.AddMediatR(cfg =>
+            .ConfigureServices(
+                (hostContext, services) =>
                 {
-                    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
-                    cfg.RegisterServicesFromAssembly(typeof(IAgentRunnerTarget).Assembly);
+                    services.AddDeploymentStepsConfig();
+                    services.AddSingleton<IMessagePump, MessagePump>();
+                    services.AddTransient<ICommandExecutor, CommandExecutor>();
+                    services.AddSingleton<IDeploymentStepFactory, DeploymentStepFactory>();
 
-                    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
-                });
+                    services.AddTransient<DeploymentService>();
+                    services.AddMediatR(cfg =>
+                    {
+                        cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+                        cfg.RegisterServicesFromAssembly(typeof(IAgentRunnerTarget).Assembly);
 
-                services.AddSerilog();
-            });
+                        cfg.AddBehavior(
+                            typeof(IPipelineBehavior<,>),
+                            typeof(PerformanceBehaviour<,>)
+                        );
+                    });
+
+                    services.AddSerilog();
+                }
+            );
     }
 }

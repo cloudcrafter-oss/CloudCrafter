@@ -15,7 +15,6 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 Log.Logger = LoggingConfiguration.GetLogger();
 
 Log.Information("Starting CloudCrafter");
@@ -61,9 +60,7 @@ else
     app.UseHsts();
 }
 
-app.MapControllerRoute(
-    "default",
-    "{controller}/{action=Index}/{id?}");
+app.MapControllerRoute("default", "{controller}/{action=Index}/{id?}");
 
 app.MapRazorPages();
 
@@ -76,7 +73,6 @@ app.Map("/", () => Results.Redirect("/api"));
 app.MapEndpoints();
 app.SeedDatabase();
 app.UseCors("CloudCrafterCorsPolicy");
-
 
 var hangfireDashboardOptions = new DashboardOptions();
 
@@ -92,8 +88,5 @@ app.ConfigureRecurringJobs();
 app.MapHub<MyHub>("/myHub");
 app.Run();
 
-
 // Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
-public partial class Program
-{
-}
+public partial class Program { }

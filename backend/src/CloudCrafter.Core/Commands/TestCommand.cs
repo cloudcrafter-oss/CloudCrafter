@@ -10,7 +10,8 @@ public static class TestCommand
 {
     public record Query(bool Fail) : IRequest;
 
-    private class Handler(ICloudCrafterDispatcher dispatcher, IApplicationDbContext context) : IRequestHandler<Query>
+    private class Handler(ICloudCrafterDispatcher dispatcher, IApplicationDbContext context)
+        : IRequestHandler<Query>
     {
         public async Task Handle(Query request, CancellationToken cancellationToken)
         {

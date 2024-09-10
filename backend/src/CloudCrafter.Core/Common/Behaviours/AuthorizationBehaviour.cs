@@ -4,14 +4,19 @@ using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Exceptions;
 using MediatR;
 
-namespace  CloudCrafter.Core.Common.Behaviours;
+namespace CloudCrafter.Core.Common.Behaviours;
 
 public class AuthorizationBehaviour<TRequest, TResponse>(
     IUser user,
-    IIdentityService identityService) : IPipelineBehavior<TRequest, TResponse>
+    IIdentityService identityService
+) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
 {
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(
+        TRequest request,
+        RequestHandlerDelegate<TResponse> next,
+        CancellationToken cancellationToken
+    )
     {
         var authorizeAttributes = request.GetType().GetCustomAttributes<AuthorizeAttribute>();
 
@@ -24,7 +29,9 @@ public class AuthorizationBehaviour<TRequest, TResponse>(
             }
 
             // Role-based authorization
-            var authorizeAttributesWithRoles = authorizeAttributes.Where(a => !string.IsNullOrWhiteSpace(a.Roles));
+            var authorizeAttributesWithRoles = authorizeAttributes.Where(a =>
+                !string.IsNullOrWhiteSpace(a.Roles)
+            );
 
             if (authorizeAttributesWithRoles.Any())
             {
@@ -34,7 +41,10 @@ public class AuthorizationBehaviour<TRequest, TResponse>(
                 {
                     foreach (var role in roles)
                     {
-                        var isInRole = await identityService.IsInRoleAsync(user.Id.Value, role.Trim());
+                        var isInRole = await identityService.IsInRoleAsync(
+                            user.Id.Value,
+                            role.Trim()
+                        );
                         if (isInRole)
                         {
                             authorized = true;
@@ -51,7 +61,9 @@ public class AuthorizationBehaviour<TRequest, TResponse>(
             }
 
             // Policy-based authorization
-            var authorizeAttributesWithPolicies = authorizeAttributes.Where(a => !string.IsNullOrWhiteSpace(a.Policy));
+            var authorizeAttributesWithPolicies = authorizeAttributes.Where(a =>
+                !string.IsNullOrWhiteSpace(a.Policy)
+            );
             if (authorizeAttributesWithPolicies.Any())
             {
                 foreach (var policy in authorizeAttributesWithPolicies.Select(a => a.Policy))

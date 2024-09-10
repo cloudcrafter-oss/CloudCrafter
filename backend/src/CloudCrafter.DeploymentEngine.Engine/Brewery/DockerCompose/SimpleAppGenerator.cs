@@ -4,7 +4,8 @@ using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Brewery.DockerCompose;
 
-public class SimpleAppGenerator(BaseDockerComposeGenerator.Args args) : BaseDockerComposeGenerator(args)
+public class SimpleAppGenerator(BaseDockerComposeGenerator.Args args)
+    : BaseDockerComposeGenerator(args)
 {
     public override DockerComposeEditor Generate()
     {
@@ -15,9 +16,9 @@ public class SimpleAppGenerator(BaseDockerComposeGenerator.Args args) : BaseDock
         if (firstService == null)
         {
             throw new InvalidOperationException(
-                "SimpleAppGenerator can only be used with stacks that have at least one service.");
+                "SimpleAppGenerator can only be used with stacks that have at least one service."
+            );
         }
-
 
         var editor = new DockerComposeEditor();
 
@@ -26,12 +27,14 @@ public class SimpleAppGenerator(BaseDockerComposeGenerator.Args args) : BaseDock
 
         AddAppService(firstService, editor, network);
 
-
         return editor;
     }
 
-    private void AddAppService(StackService stackService, DockerComposeEditor editor,
-        DockerComposeEditor.NetworkEditor network)
+    private void AddAppService(
+        StackService stackService,
+        DockerComposeEditor editor,
+        DockerComposeEditor.NetworkEditor network
+    )
     {
         var dockerComposeServiceName = stackService.Name;
         var service = editor.AddService(dockerComposeServiceName);
@@ -39,7 +42,7 @@ public class SimpleAppGenerator(BaseDockerComposeGenerator.Args args) : BaseDock
 
         AddBasicLabels(labelService, stackService);
         AddProxyLabels(labelService, stackService, service.ServiceName());
-        
+
         service.AddLabels(labelService);
         service.AddNetwork(network);
         var name = service.ServiceName();
@@ -54,7 +57,8 @@ public class SimpleAppGenerator(BaseDockerComposeGenerator.Args args) : BaseDock
         if (Options.Stack.Services.Count != 1)
         {
             throw new InvalidOperationException(
-                "SimpleAppGenerator can only be used with stacks that have exactly one service.");
+                "SimpleAppGenerator can only be used with stacks that have exactly one service."
+            );
         }
     }
 }

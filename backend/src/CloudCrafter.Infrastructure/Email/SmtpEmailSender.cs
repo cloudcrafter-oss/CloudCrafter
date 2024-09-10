@@ -14,8 +14,10 @@ public class SmtpEmailSender : IEmailSender
     private readonly MailserverConfiguration _mailserverConfiguration;
     private readonly ILogger<SmtpEmailSender> _logger;
 
-    public SmtpEmailSender(ILogger<SmtpEmailSender> logger,
-        IOptions<MailserverConfiguration> mailserverOptions)
+    public SmtpEmailSender(
+        ILogger<SmtpEmailSender> logger,
+        IOptions<MailserverConfiguration> mailserverOptions
+    )
     {
         _mailserverConfiguration = mailserverOptions.Value!;
         _logger = logger;
@@ -23,12 +25,25 @@ public class SmtpEmailSender : IEmailSender
 
     public async Task SendEmailAsync(string to, string from, string subject, string body)
     {
-        var emailClient = new SmtpClient(_mailserverConfiguration.Hostname, _mailserverConfiguration.Port);
+        var emailClient = new SmtpClient(
+            _mailserverConfiguration.Hostname,
+            _mailserverConfiguration.Port
+        );
 
-        var message = new MailMessage { From = new MailAddress(from), Subject = subject, Body = body };
+        var message = new MailMessage
+        {
+            From = new MailAddress(from),
+            Subject = subject,
+            Body = body,
+        };
         message.To.Add(new MailAddress(to));
         await emailClient.SendMailAsync(message);
-        _logger.LogWarning("Sending email to {to} from {from} with subject {subject} using {type}.", to, from, subject,
-            this.ToString());
+        _logger.LogWarning(
+            "Sending email to {to} from {from} with subject {subject} using {type}.",
+            to,
+            from,
+            subject,
+            this.ToString()
+        );
     }
 }

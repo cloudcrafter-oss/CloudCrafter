@@ -9,7 +9,8 @@ public class JobSerializer(ILogger<JobSerializer> logger)
 {
     public Task<SerializedJobResult> Serialize<TJob>(IJob job)
     {
-        var jobProperties = job.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
+        var jobProperties = job.GetType()
+            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
             .ToDictionary(prop => prop.Name, prop => prop.GetValue(job));
 
         var serializedJob = JsonSerializer.Serialize(jobProperties);
@@ -29,7 +30,9 @@ public class JobSerializer(ILogger<JobSerializer> logger)
 
         if (job is null)
         {
-            throw new InvalidOperationException($"Failed to deserialize job of type {jobType.FullName}");
+            throw new InvalidOperationException(
+                $"Failed to deserialize job of type {jobType.FullName}"
+            );
         }
 
         return Task.FromResult(job);
@@ -74,9 +77,10 @@ public class JobSerializer(ILogger<JobSerializer> logger)
 
         if (targetType == typeof(BackgroundJobType))
         {
-            return element.ValueKind == JsonValueKind.Null ? null : Enum.Parse<BackgroundJobType>(element.GetString()!);
+            return element.ValueKind == JsonValueKind.Null
+                ? null
+                : Enum.Parse<BackgroundJobType>(element.GetString()!);
         }
-
 
         return element.ValueKind switch
         {
@@ -85,7 +89,7 @@ public class JobSerializer(ILogger<JobSerializer> logger)
             JsonValueKind.True => true,
             JsonValueKind.False => false,
             JsonValueKind.Null => null,
-            _ => throw new ArgumentException($"Unsupported JSON value kind: {element.ValueKind}")
+            _ => throw new ArgumentException($"Unsupported JSON value kind: {element.ValueKind}"),
         };
     }
 }

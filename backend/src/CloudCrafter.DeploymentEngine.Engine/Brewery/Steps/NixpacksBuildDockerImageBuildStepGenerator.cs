@@ -3,8 +3,9 @@ using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
 
-public class NixpacksBuildDockerImageBuildStepGenerator(NixpacksBuildDockerImageBuildStepGenerator.Args options)
-    : IBuildStepGenerator
+public class NixpacksBuildDockerImageBuildStepGenerator(
+    NixpacksBuildDockerImageBuildStepGenerator.Args options
+) : IBuildStepGenerator
 {
     public DeploymentBuildStep Generate()
     {
@@ -19,8 +20,8 @@ public class NixpacksBuildDockerImageBuildStepGenerator(NixpacksBuildDockerImage
                 { "image", options.ImageRepository },
                 { "tag", options.ImageTag },
                 { "disableCache", options.DisableBuildCache },
-                { "env", options.BuildArgs }
-            }
+                { "env", options.BuildArgs },
+            },
         };
     }
 

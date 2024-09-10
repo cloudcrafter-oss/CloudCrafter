@@ -8,9 +8,12 @@ public class ApplicationConfiguration : IEntityTypeConfiguration<Stack>
 {
     public void Configure(EntityTypeBuilder<Stack> builder)
     {
-        builder.OwnsOne(app => app.Source, source =>
-        {
-            source.OwnsOne(x => x.Git);
-        });
+        builder.OwnsOne(
+            app => app.Source,
+            source =>
+            {
+                source.OwnsOne(x => x.Git);
+            }
+        );
     }
 }

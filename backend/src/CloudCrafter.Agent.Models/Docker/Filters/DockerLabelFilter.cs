@@ -10,7 +10,11 @@ public class DockerLabelFilter
 
     public static DockerLabelFilter Parse(string filterString)
     {
-        var parts = filterString.Split(new[] { "=", "!=" }, 2, StringSplitOptions.RemoveEmptyEntries);
+        var parts = filterString.Split(
+            new[] { "=", "!=" },
+            2,
+            StringSplitOptions.RemoveEmptyEntries
+        );
 
         if (parts.Length != 2)
         {
@@ -19,7 +23,9 @@ public class DockerLabelFilter
 
         return new DockerLabelFilter
         {
-            Key = parts[0].Trim(), Operator = filterString.Contains("!=") ? "!=" : "=", Value = parts[1].Trim()
+            Key = parts[0].Trim(),
+            Operator = filterString.Contains("!=") ? "!=" : "=",
+            Value = parts[1].Trim(),
         };
     }
 
@@ -45,6 +51,7 @@ public class DockerLabelFilter
     {
         return $"{Key}={Value}";
     }
+
     public override string ToString()
     {
         return $"{Key}{Operator}{Value}";

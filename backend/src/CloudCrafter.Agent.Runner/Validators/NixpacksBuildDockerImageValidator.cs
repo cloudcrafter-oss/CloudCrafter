@@ -18,7 +18,8 @@ public class NixpacksBuildDockerImageValidator : AbstractValidator<NixpacksBuild
 }
 
 [DeploymentStep(DeploymentBuildStepType.NixpacksBuildDockerImage)]
-public class NixpacksBuildDockerImageConfig: IDeploymentStepConfig<NixpacksBuildDockerImageParams>
+public class NixpacksBuildDockerImageConfig : IDeploymentStepConfig<NixpacksBuildDockerImageParams>
 {
-    public IValidator<NixpacksBuildDockerImageParams> Validator => new NixpacksBuildDockerImageValidator();
+    public IValidator<NixpacksBuildDockerImageParams> Validator =>
+        new NixpacksBuildDockerImageValidator();
 }

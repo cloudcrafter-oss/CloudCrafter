@@ -10,7 +10,8 @@ public class UserAccessService(
     IServersService serverService,
     IEnvironmentService environmentService,
     IProjectsService projectsService,
-    IStacksService stacksService) : IUserAccessService
+    IStacksService stacksService
+) : IUserAccessService
 {
     public async Task<bool> CanAccessServer(Guid userId, Guid id)
     {

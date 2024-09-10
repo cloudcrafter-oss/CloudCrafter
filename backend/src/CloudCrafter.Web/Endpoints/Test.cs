@@ -12,13 +12,15 @@ public class Test : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup(this)
-            .MapPost(GetTest);
+        app.MapGroup(this).MapPost(GetTest);
     }
 
-    public async Task GetTest(ISender sender, IHubContext<MyHub> hub, [FromBody] TestCommand.Query query)
+    public async Task GetTest(
+        ISender sender,
+        IHubContext<MyHub> hub,
+        [FromBody] TestCommand.Query query
+    )
     {
-        await hub.Clients.All.SendAsync("ReceiveMessage",
-            new MyHubMessage { Id = Guid.NewGuid() });
+        await hub.Clients.All.SendAsync("ReceiveMessage", new MyHubMessage { Id = Guid.NewGuid() });
     }
 }

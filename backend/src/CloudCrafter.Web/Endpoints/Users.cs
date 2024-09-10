@@ -15,12 +15,13 @@ public class Users : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup(this)
-            .MapPost(GetUsers)
-            .MapGet(Test, "test");
+        app.MapGroup(this).MapPost(GetUsers).MapGet(Test, "test");
     }
-    
-    public async Task<PaginatedList<UserDto>> GetUsers(ISender sender, [FromBody] PaginatedRequest<UserDto> paginationRequest)
+
+    public async Task<PaginatedList<UserDto>> GetUsers(
+        ISender sender,
+        [FromBody] PaginatedRequest<UserDto> paginationRequest
+    )
     {
         return await sender.Send(new GetUserList.Query(paginationRequest));
     }

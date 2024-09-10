@@ -17,7 +17,10 @@ public abstract class LabelFactory
 
     public static CloudCrafterLabel GenerateStackServiceLabel(Guid stackServiceId)
     {
-        return new CloudCrafterLabel(CloudCrafterLabelKey.StackServiceId, stackServiceId.ToString());
+        return new CloudCrafterLabel(
+            CloudCrafterLabelKey.StackServiceId,
+            stackServiceId.ToString()
+        );
     }
 
     public static CloudCrafterLabel GenerateDeploymentLabel(Guid deploymentId)

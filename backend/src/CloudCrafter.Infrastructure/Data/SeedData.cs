@@ -15,8 +15,13 @@ public static class SeedData
     public static void Initialize(IServiceProvider serviceProvider)
     {
         var cloudCrafterConfig = serviceProvider.GetRequiredService<IOptions<CloudCrafterConfig>>();
-        using (var dbContext = new AppDbContext(
-                   serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(), null, cloudCrafterConfig))
+        using (
+            var dbContext = new AppDbContext(
+                serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(),
+                null,
+                cloudCrafterConfig
+            )
+        )
         {
             var userCount = dbContext.Users.Count();
 
@@ -63,7 +68,8 @@ public static class SeedData
         {
             // project should always have at least one environment
 
-            var applications = FakerInstances.StackFaker(project.Environments.FirstOrDefault()!.Id)
+            var applications = FakerInstances
+                .StackFaker(project.Environments.FirstOrDefault()!.Id)
                 .RuleFor(x => x.Server, firstServer)
                 .Generate(10);
 
@@ -84,7 +90,6 @@ public static class SeedData
             dbContext.Projects.Add(project);
 
             var environment = FakerInstances.EnvironmentFaker(project).Generate();
-
 
             dbContext.Environments.Add(environment);
         }
@@ -134,7 +139,7 @@ public static class SeedData
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Name = "Local Test Server",
-            Id = Guid.NewGuid()
+            Id = Guid.NewGuid(),
         };
 
         dbContext.Servers.Add(localTestServer);
@@ -162,9 +167,8 @@ public static class SeedData
         }
 
         return directory?.FullName
-               ?? throw new DirectoryNotFoundException("Solution directory not found.");
+            ?? throw new DirectoryNotFoundException("Solution directory not found.");
     }
-
 
     public static void InitializeIdentity(IServiceProvider services)
     {

@@ -3,8 +3,9 @@ using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
 
-public class FetchGitRepositoryDeploymentStepGenerator(FetchGitRepositoryDeploymentStepGenerator.Args options)
-    : IBuildStepGenerator
+public class FetchGitRepositoryDeploymentStepGenerator(
+    FetchGitRepositoryDeploymentStepGenerator.Args options
+) : IBuildStepGenerator
 {
     public DeploymentBuildStep Generate()
     {
@@ -15,8 +16,9 @@ public class FetchGitRepositoryDeploymentStepGenerator(FetchGitRepositoryDeploym
             Type = DeploymentBuildStepType.FetchGitRepository,
             Params = new Dictionary<string, object>
             {
-                { "repo", options.Repository }, { "commit", options.Commit }
-            }
+                { "repo", options.Repository },
+                { "commit", options.Commit },
+            },
         };
     }
 

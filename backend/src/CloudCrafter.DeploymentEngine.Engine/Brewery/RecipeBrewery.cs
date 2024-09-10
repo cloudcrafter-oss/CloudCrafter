@@ -5,12 +5,12 @@ namespace CloudCrafter.DeploymentEngine.Engine.Brewery;
 public class RecipeBrewery(string Name)
 {
     private readonly List<DeploymentBuildStep> _buildSteps = new();
-    private readonly Dictionary<string, DeploymentRecipeEnvironmentVariable> _environmentVariables = new();
+    private readonly Dictionary<string, DeploymentRecipeEnvironmentVariable> _environmentVariables =
+        new();
 
     private DeploymentRecipeApplicationInfo? _application;
     private DeploymentRecipeDestination? _destination;
     private DeploymentRecipeDockerComposeOptions? _dockerComposeOptions;
-
 
     public RecipeBrewery SetApplication(Guid id)
     {
@@ -18,11 +18,15 @@ public class RecipeBrewery(string Name)
         return this;
     }
 
-    public RecipeBrewery SetDockerComposeOptions(string? base64DockerCompose, string? dockerComposeDirectory)
+    public RecipeBrewery SetDockerComposeOptions(
+        string? base64DockerCompose,
+        string? dockerComposeDirectory
+    )
     {
         _dockerComposeOptions = new DeploymentRecipeDockerComposeOptions
         {
-            Base64DockerCompose = base64DockerCompose, DockerComposeDirectory = dockerComposeDirectory
+            Base64DockerCompose = base64DockerCompose,
+            DockerComposeDirectory = dockerComposeDirectory,
         };
         return this;
     }
@@ -33,22 +37,39 @@ public class RecipeBrewery(string Name)
         return this;
     }
 
-    public RecipeBrewery AddEnvironmentVariable(string name, string value, bool isBuildVariable, bool isRuntimeVariable)
+    public RecipeBrewery AddEnvironmentVariable(
+        string name,
+        string value,
+        bool isBuildVariable,
+        bool isRuntimeVariable
+    )
     {
         _environmentVariables[name] = new DeploymentRecipeEnvironmentVariable
         {
-            Name = name, Value = value, IsBuildVariable = isBuildVariable, IsRuntimeVariable = isRuntimeVariable
+            Name = name,
+            Value = value,
+            IsBuildVariable = isBuildVariable,
+            IsRuntimeVariable = isRuntimeVariable,
         };
         return this;
     }
 
-    public RecipeBrewery AddBuildStep(string name, string description, DeploymentBuildStepType type,
-        Dictionary<string, object> parameters)
+    public RecipeBrewery AddBuildStep(
+        string name,
+        string description,
+        DeploymentBuildStepType type,
+        Dictionary<string, object> parameters
+    )
     {
-        _buildSteps.Add(new DeploymentBuildStep
-        {
-            Name = name, Description = description, Type = type, Params = parameters
-        });
+        _buildSteps.Add(
+            new DeploymentBuildStep
+            {
+                Name = name,
+                Description = description,
+                Type = type,
+                Params = parameters,
+            }
+        );
         return this;
     }
 
@@ -70,9 +91,11 @@ public class RecipeBrewery(string Name)
             Application = _application,
             DockerComposeOptions = _dockerComposeOptions,
             Destination = _destination,
-            EnvironmentVariables =
-                new DeploymentRecipeEnvironmentVariableConfig { Variables = _environmentVariables },
-            BuildOptions = new DeploymentBuildOptions { Steps = _buildSteps }
+            EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
+            {
+                Variables = _environmentVariables,
+            },
+            BuildOptions = new DeploymentBuildOptions { Steps = _buildSteps },
         };
     }
 }

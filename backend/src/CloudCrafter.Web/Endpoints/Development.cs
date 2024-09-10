@@ -17,9 +17,8 @@ public class Development : EndpointGroupBase
         }
 
         app.MapGroup(this, withOpenApi: false)
-             .MapGet(GenerateSignalRTypes, "generate-signalr-types");
+            .MapGet(GenerateSignalRTypes, "generate-signalr-types");
     }
-
 
     public async Task<Dictionary<string, string>> GenerateSignalRTypes()
     {
@@ -33,7 +32,6 @@ public class Development : EndpointGroupBase
             files.Add(args.FilePath, args.FileContent);
         };
         var result = await generator.GenerateAsync(new SignalRTypesGenerator());
-
 
         return files;
     }

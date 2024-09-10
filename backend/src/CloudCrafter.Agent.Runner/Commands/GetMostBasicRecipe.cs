@@ -30,17 +30,19 @@ public static class GetMostBasicRecipe
             {
                 Name = "Most basic recipe",
                 Application = new DeploymentRecipeApplicationInfo { Id = Guid.NewGuid() },
-                EnvironmentVariables =
-                    new DeploymentRecipeEnvironmentVariableConfig
-                    {
-                        Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>()
-                    },
-                Destination = new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter" },
-                DockerComposeOptions =
-                    new DeploymentRecipeDockerComposeOptions
-                    {
-                        Base64DockerCompose = dockerComposeBase64, DockerComposeDirectory = "/tmp/cloudcrafter"
-                    },
+                EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
+                {
+                    Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),
+                },
+                Destination = new DeploymentRecipeDestination
+                {
+                    RootDirectory = "/tmp/cloudcrafter",
+                },
+                DockerComposeOptions = new DeploymentRecipeDockerComposeOptions
+                {
+                    Base64DockerCompose = dockerComposeBase64,
+                    DockerComposeDirectory = "/tmp/cloudcrafter",
+                },
                 BuildOptions = new DeploymentBuildOptions
                 {
                     Steps = new List<DeploymentBuildStep>
@@ -52,11 +54,12 @@ public static class GetMostBasicRecipe
                             Type = DeploymentBuildStepType.RunPlainCommand,
                             Params = new Dictionary<string, object>
                             {
-                                { "command", "echo 'Hello, World!'" }, { "allowFailure", false }
-                            }
-                        }
-                    }
-                }
+                                { "command", "echo 'Hello, World!'" },
+                                { "allowFailure", false },
+                            },
+                        },
+                    },
+                },
             };
 
             return Task.FromResult(recipe);

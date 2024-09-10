@@ -4,7 +4,8 @@ namespace CloudCrafter.Domain.Common;
 
 public abstract class BaseEntity
 {
-    private readonly List<(BaseEvent Event, DomainEventDispatchTiming Timing)> _domainEvents = new();
+    private readonly List<(BaseEvent Event, DomainEventDispatchTiming Timing)> _domainEvents =
+        new();
     public required Guid Id { get; set; }
     public required DateTime CreatedAt { get; init; }
     public required DateTime UpdatedAt { get; set; }
@@ -32,5 +33,5 @@ public abstract class BaseEntity
 public enum DomainEventDispatchTiming
 {
     BeforeSaving,
-    AfterSaving
+    AfterSaving,
 }

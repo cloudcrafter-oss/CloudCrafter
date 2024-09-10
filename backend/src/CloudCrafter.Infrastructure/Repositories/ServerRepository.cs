@@ -1,5 +1,4 @@
-﻿
-using Ardalis.GuardClauses;
+﻿using Ardalis.GuardClauses;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using CloudCrafter.Core.Common.Interfaces;
@@ -14,9 +13,9 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
 {
     private IQueryable<Server> GetBaseQuery()
     {
-        return context.Servers
-            .OrderBy(x => x.Name);
+        return context.Servers.OrderBy(x => x.Name);
     }
+
     public async Task<List<ServerDto>> GetServers()
     {
         var servers = GetBaseQuery().AsQueryable();
@@ -38,15 +37,13 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
 
     public async Task<Server> GetServerEntityOrFail(Guid serverId)
     {
-        var server = await GetBaseQuery()
-            .Where(x => x.Id == serverId)
-            .FirstOrDefaultAsync();
+        var server = await GetBaseQuery().Where(x => x.Id == serverId).FirstOrDefaultAsync();
 
         if (server == null)
         {
             throw new NotFoundException("server", "Server not found");
         }
-        
+
         return server;
     }
 }

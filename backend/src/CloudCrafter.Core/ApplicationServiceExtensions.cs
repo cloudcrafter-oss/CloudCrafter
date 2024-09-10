@@ -35,33 +35,38 @@ namespace CloudCrafter.Core;
 
 public static class ApplicationServiceExtensions
 {
-    public static IApplicationBuilder ConfigureRecurringJobs(
-        this IApplicationBuilder app)
+    public static IApplicationBuilder ConfigureRecurringJobs(this IApplicationBuilder app)
     {
         RecurringJob.AddOrUpdate<ICloudCrafterRecurringJobsDispatcher>(
             "5m-recurring-connectivity-checks",
             service => service.AddRecurringConnectivityChecks(),
-            "*/5 * * * *");
+            "*/5 * * * *"
+        );
         return app;
     }
 
-    public static IServiceCollection AddDomainEvents(this IServiceCollection services, params Assembly[] assemblies)
+    public static IServiceCollection AddDomainEvents(
+        this IServiceCollection services,
+        params Assembly[] assemblies
+    )
     {
         var handlerType = typeof(IDomainEventHandler<>);
 
         var handlers = assemblies
             .SelectMany(a => a.GetTypes())
-            .Where(t => t.GetInterfaces().Any(i =>
-                i.IsGenericType && i.GetGenericTypeDefinition() == handlerType));
+            .Where(t =>
+                t.GetInterfaces()
+                    .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == handlerType)
+            );
 
         foreach (var handler in handlers)
         {
-            var handlerInterface = handler.GetInterfaces()
+            var handlerInterface = handler
+                .GetInterfaces()
                 .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == handlerType);
 
             services.AddTransient(handlerInterface, handler);
         }
-
 
         services.AddSingleton<IEventStore, EventStore>();
         return services;
@@ -69,7 +74,11 @@ public static class ApplicationServiceExtensions
 
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        var mapperAssemblies = new List<Assembly> { Assembly.GetExecutingAssembly(), typeof(IDomainTarget).Assembly };
+        var mapperAssemblies = new List<Assembly>
+        {
+            Assembly.GetExecutingAssembly(),
+            typeof(IDomainTarget).Assembly,
+        };
 
         services.AddAutoMapper(mapperAssemblies);
 
@@ -82,14 +91,17 @@ public static class ApplicationServiceExtensions
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehaviour<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
-            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ServerAccessAuthorizationBehavior<,>));
+            cfg.AddBehavior(
+                typeof(IPipelineBehavior<,>),
+                typeof(ServerAccessAuthorizationBehavior<,>)
+            );
         });
 
         services.AddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>();
 
-
         services.AddScoped<ICommandExecutor, CommandExecutor>();
-        services.AddScoped<IUsersService, UsersService>()
+        services
+            .AddScoped<IUsersService, UsersService>()
             .AddScoped<IServersService, ServersService>()
             .AddScoped<IUserAccessService, UserAccessService>()
             .AddScoped<IServerConnectivityService, ServerConnectivityService>()
@@ -103,7 +115,10 @@ public static class ApplicationServiceExtensions
         // Jobs
 
         services.AddScoped<ICloudCrafterDispatcher, CloudCrafterDispatcher>();
-        services.AddScoped<ICloudCrafterRecurringJobsDispatcher, CloudCrafterRecurringJobsDispatcher>();
+        services.AddScoped<
+            ICloudCrafterRecurringJobsDispatcher,
+            CloudCrafterRecurringJobsDispatcher
+        >();
         services.AddScoped<BackgroundJobFactory>();
         services.AddSingleton<JobSerializer>();
 

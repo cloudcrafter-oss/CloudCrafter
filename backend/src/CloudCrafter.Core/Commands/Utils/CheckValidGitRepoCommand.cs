@@ -8,9 +8,13 @@ public static class CheckValidGitRepoCommand
 {
     public record Command(string Repository) : IRequest<GitRepositoryCheckResultDto>;
 
-    private class Handler(IGitService service) : IRequestHandler<Command, GitRepositoryCheckResultDto>
+    private class Handler(IGitService service)
+        : IRequestHandler<Command, GitRepositoryCheckResultDto>
     {
-        public Task<GitRepositoryCheckResultDto> Handle(Command request, CancellationToken cancellationToken)
+        public Task<GitRepositoryCheckResultDto> Handle(
+            Command request,
+            CancellationToken cancellationToken
+        )
         {
             return service.ValidateRepository(request.Repository);
         }

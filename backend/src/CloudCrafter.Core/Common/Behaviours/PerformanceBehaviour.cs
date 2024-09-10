@@ -8,13 +8,17 @@ namespace CloudCrafter.Core.Common.Behaviours;
 public class PerformanceBehaviour<TRequest, TResponse>(
     ILogger<TRequest> logger,
     IUser user,
-    IIdentityService identityService)
-    : IPipelineBehavior<TRequest, TResponse>
+    IIdentityService identityService
+) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
 {
     private readonly Stopwatch _timer = new();
 
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(
+        TRequest request,
+        RequestHandlerDelegate<TResponse> next,
+        CancellationToken cancellationToken
+    )
     {
         _timer.Start();
 
@@ -35,8 +39,14 @@ public class PerformanceBehaviour<TRequest, TResponse>(
                 userName = await identityService.GetUserNameAsync(userId.Value);
             }
 
-            logger.LogWarning("CloudCrafter Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
-                requestName, elapsedMilliseconds, userId, userName, request);
+            logger.LogWarning(
+                "CloudCrafter Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
+                requestName,
+                elapsedMilliseconds,
+                userId,
+                userName,
+                request
+            );
         }
 
         return response;

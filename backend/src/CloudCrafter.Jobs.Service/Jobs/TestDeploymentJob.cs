@@ -17,7 +17,6 @@ public class TestDeploymentJob(IDeploymentTracker tracker)
 
         tracker.SetDeploymentId(args.Id);
 
-
         // Simulate some work
         for (var i = 0; i < 10; i++)
         {

@@ -14,7 +14,8 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                 name: "HttpConfiguration_DomainName",
                 table: "StackServices",
                 type: "text",
-                nullable: true);
+                nullable: true
+            );
         }
 
         /// <inheritdoc />
@@ -22,7 +23,8 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "HttpConfiguration_DomainName",
-                table: "StackServices");
+                table: "StackServices"
+            );
         }
     }
 }

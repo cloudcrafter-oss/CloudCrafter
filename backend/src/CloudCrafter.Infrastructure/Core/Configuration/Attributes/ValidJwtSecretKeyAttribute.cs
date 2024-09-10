@@ -13,7 +13,6 @@ public class ValidJwtSecretKeyAttribute : ValidationAttribute
         {
             return new ValidationResult("The JWT secret key cannot be null.");
         }
-        
 
         string? secretKey = value.ToString();
 
@@ -24,7 +23,9 @@ public class ValidJwtSecretKeyAttribute : ValidationAttribute
 
         if (Encoding.UTF8.GetByteCount(secretKey) < MinimumKeyLength)
         {
-            return new ValidationResult($"The JWT secret key should be at least {MinimumKeyLength} bytes long when encoded in UTF-8.");
+            return new ValidationResult(
+                $"The JWT secret key should be at least {MinimumKeyLength} bytes long when encoded in UTF-8."
+            );
         }
 
         return ValidationResult.Success;

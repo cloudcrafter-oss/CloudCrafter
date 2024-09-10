@@ -10,9 +10,7 @@ public class RunPlainCommandValidator : AbstractValidator<RunPlainCommandParams>
 {
     public RunPlainCommandValidator()
     {
-        RuleFor(x => x.Command)
-            .NotEmpty()
-            .WithMessage("Provide a command.");
+        RuleFor(x => x.Command).NotEmpty().WithMessage("Provide a command.");
     }
 }
 

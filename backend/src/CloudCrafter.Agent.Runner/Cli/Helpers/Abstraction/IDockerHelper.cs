@@ -5,8 +5,11 @@ namespace CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 
 public interface IDockerHelper
 {
-    Task<DockerHelperResponseResult> RunCommandInContainer(string containerName, IList<string> commands,
-        Action<DockerHelperResponse>? onLog = null);
+    Task<DockerHelperResponseResult> RunCommandInContainer(
+        string containerName,
+        IList<string> commands,
+        Action<DockerHelperResponse>? onLog = null
+    );
 
     Task<ContainerInspectResponse> GetDockerContainer(string containerId);
 

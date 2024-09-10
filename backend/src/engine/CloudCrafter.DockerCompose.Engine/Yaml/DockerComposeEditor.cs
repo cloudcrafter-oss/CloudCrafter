@@ -9,7 +9,8 @@ namespace CloudCrafter.DockerCompose.Engine.Yaml;
 
 public class DockerComposeEditor
 {
-    private static readonly Regex ServiceNameRegex = new(@"^[a-z0-9][a-z0-9_-]*$", RegexOptions.Compiled);
+    private static readonly Regex ServiceNameRegex =
+        new(@"^[a-z0-9][a-z0-9_-]*$", RegexOptions.Compiled);
     private readonly YamlMappingNode rootNode;
     private readonly YamlMappingNode servicesNode;
 
@@ -33,7 +34,6 @@ public class DockerComposeEditor
             networksNode = (YamlMappingNode)rootNode["networks"];
         }
     }
-
 
     public DockerComposeEditor()
     {
@@ -63,7 +63,6 @@ public class DockerComposeEditor
         return slugified;
     }
 
-
     public ServiceEditor Service(string serviceName)
     {
         var serviceNode = GetServiceNode(serviceName);
@@ -77,7 +76,8 @@ public class DockerComposeEditor
         if (!IsValidServiceName(sanitizedName))
         {
             throw new ArgumentException(
-                $"Unable to create a valid service name from '{serviceName}'. Please provide a name that can be converted to a valid Docker Compose service name.");
+                $"Unable to create a valid service name from '{serviceName}'. Please provide a name that can be converted to a valid Docker Compose service name."
+            );
         }
 
         if (servicesNode.Children.ContainsKey(sanitizedName))
@@ -129,7 +129,6 @@ public class DockerComposeEditor
         {
             throw new DockerComposeInvalidStateException("No services defined");
         }
-
 
         using (var writer = new StringWriter())
         {

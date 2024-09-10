@@ -13,7 +13,10 @@ public class WriteDockerComposeBuildStepGenerator(WriteDockerComposeBuildStepGen
             Name = "Write Docker Compose",
             Description = "Writes the Docker Compose file to the filesystem",
             Type = DeploymentBuildStepType.DockerComposeWriteToFileSystem,
-            Params = new Dictionary<string, object> { { "dockerComposeFile", options.DockerComposeFileName } }
+            Params = new Dictionary<string, object>
+            {
+                { "dockerComposeFile", options.DockerComposeFileName },
+            },
         };
     }
 

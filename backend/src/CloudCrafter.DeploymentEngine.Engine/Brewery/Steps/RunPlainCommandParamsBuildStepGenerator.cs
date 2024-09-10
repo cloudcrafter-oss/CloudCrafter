@@ -3,8 +3,9 @@ using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
 
-public class RunPlainCommandParamsBuildStepGenerator(RunPlainCommandParamsBuildStepGenerator.Args args)
-    : IBuildStepGenerator
+public class RunPlainCommandParamsBuildStepGenerator(
+    RunPlainCommandParamsBuildStepGenerator.Args args
+) : IBuildStepGenerator
 {
     public DeploymentBuildStep Generate()
     {
@@ -15,8 +16,9 @@ public class RunPlainCommandParamsBuildStepGenerator(RunPlainCommandParamsBuildS
             Type = DeploymentBuildStepType.RunPlainCommand,
             Params = new Dictionary<string, object>
             {
-                { "command", args.Command }, { "allowFailure", args.AllowFailure }
-            }
+                { "command", args.Command },
+                { "allowFailure", args.AllowFailure },
+            },
         };
     }
 
