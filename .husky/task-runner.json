@@ -10,8 +10,7 @@
       {
          "name": "Run csharpier",
          "command": "dotnet",
-         "args": ["csharpier"],
-         "cwd": "./backend"
+         "args": ["csharpier", "./backend/src"]
       }
    ]
 }
