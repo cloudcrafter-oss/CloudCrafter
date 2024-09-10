@@ -9,4 +9,38 @@ destination:
 environmentVariables:
   variables: {}
 buildOptions:
-  steps: []
+  steps:
+  - name: Check if network 'cloudcrafter' exists
+    description: Validates if the network exists. If it does not, create the network regardless
+    type: DockerValidateNetworksExists
+    params:
+      networks:
+      - cloudcrafter
+  - name: Fetch git repository
+    description: Fetches the git repository
+    type: FetchGitRepository
+    params:
+      repo: https://github.com/cloudcrafter-oss/demo-examples
+      commit: HEAD
+  - name: Determine Nixpacks buildpack
+    description: Determines the Nixpacks buildpack to use for the application
+    type: NixpacksDetermineBuildPack
+    params:
+      path: nixpacks-node-server
+  - name: Generate Nixpacks plan
+    description: Generates the Nixpacks plan for the application
+    type: NixpacksGeneratePlan
+    params:
+      path: nixpacks-node-server
+  - name: Alter Nixpacks build plan
+    description: Alters the Nixpacks build plan for the application
+    type: NixpacksAlterPlan
+    params:
+      packages:
+      - iputils-ping
+      - curl
+  - name: Write Nixpacks plan to filesystem
+    description: Writes the Nixpacks plan to the filesystem
+    type: NixpacksWritePlanToFileSystem
+    params:
+      path: nixpacks-node-server

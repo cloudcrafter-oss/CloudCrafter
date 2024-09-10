@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Agent.Models.Recipe;
+using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 using CloudCrafter.DockerCompose.Engine.Yaml;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Brewery;
@@ -56,22 +57,9 @@ public class RecipeBrewery(string Name)
         return this;
     }
 
-    public RecipeBrewery AddBuildStep(
-        string name,
-        string description,
-        DeploymentBuildStepType type,
-        Dictionary<string, object> parameters
-    )
+    public RecipeBrewery AddBuildStep(IBuildStepGenerator generator)
     {
-        _buildSteps.Add(
-            new DeploymentBuildStep
-            {
-                Name = name,
-                Description = description,
-                Type = type,
-                Params = parameters,
-            }
-        );
+        _buildSteps.Add(generator.Generate());
         return this;
     }
 

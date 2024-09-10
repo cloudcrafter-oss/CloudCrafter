@@ -4,18 +4,18 @@ using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
 
-public class AlterNixpacksBuildPlanBuildStepGeneratorParameterConversionTest
+public class AlterNixpacksBuildPlanBuildStepGeneratorTest
     : BaseParameterConversionTest<NixpacksAlterPlanParams>
 {
     [Test]
     public void ShouldBeAbleToCreateParams()
     {
         // Arrange
-        var options = new AlterNixpacksBuildPlanBuildStepGeneratorParameterConversion.Args
+        var options = new AlterNixpacksBuildPlanBuildStepGenerator.Args
         {
             AddPackages = new List<string> { "package1", "package2" },
         };
-        var generator = new AlterNixpacksBuildPlanBuildStepGeneratorParameterConversion(options);
+        var generator = new AlterNixpacksBuildPlanBuildStepGenerator(options);
 
         // Act
         var buildStep = generator.Generate();

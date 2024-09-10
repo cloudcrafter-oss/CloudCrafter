@@ -1,7 +1,5 @@
 ﻿using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.DockerCompose;
-using CloudCrafter.Domain.Entities;
-using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery.DockerCompose;
@@ -17,23 +15,17 @@ public class SimpleAppDockerComposeGeneratorTest
         var stackId = Guid.Parse("35223e08-9c9f-4322-972e-51c610c202e3");
         var stackServiceId = Guid.Parse("b34a6560-701d-4f0e-b024-b4b7b2155bcf");
 
-        var stack = FakerInstances
-            .StackFaker(environmentId)
-            .RuleFor(x => x.Id, stackId)
-            .RuleFor(x => x.Name, "My Custom Stack 123")
-            .Generate();
-
-        var stackService = FakerInstances
-            .StackServiceFaker(stack)
-            .RuleFor(x => x.Id, stackServiceId)
-            .RuleFor(
-                x => x.HttpConfiguration,
-                new EntityHttpConfiguration { DomainName = "my-custom-domain.com" }
-            )
-            .RuleFor(x => x.Name, "My Custom Service : 123")
-            .Generate();
-        stack.Services.Add(stackService);
-
+        var stack = Helper.GenerateBasicAppStack(
+            new Helper.GenerateBasicAppArgs
+            {
+                DomainName = "my-custom-domain.com",
+                EnvironmentId = environmentId,
+                StackId = stackId,
+                StackServiceId = stackServiceId,
+                StackName = "My Custom Stack 123",
+                StackServiceName = "My Custom Service : 123",
+            }
+        );
         var generator = new SimpleAppDockerComposeGenerator(
             new BaseDockerComposeGenerator.Args { Stack = stack, DeploymentId = deploymentId }
         );
