@@ -13,7 +13,8 @@ namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
 public class CheckoutGitRepositoryStepHandler(IMessagePump pump, ICommandExecutor executor)
     : IDeploymentStepHandler<GitCheckoutParams>
 {
-    private readonly IDeploymentLogger _logger = pump.CreateLogger<CheckoutGitRepositoryStepHandler>();
+    private readonly IDeploymentLogger _logger =
+        pump.CreateLogger<CheckoutGitRepositoryStepHandler>();
 
     public async Task ExecuteAsync(GitCheckoutParams parameters, DeploymentContext context)
     {

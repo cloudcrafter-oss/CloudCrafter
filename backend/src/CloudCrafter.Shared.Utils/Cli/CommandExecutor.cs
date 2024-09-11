@@ -16,7 +16,8 @@ public class CommandExecutor : ICommandExecutor
 
         try
         {
-            var result = await CliWrap.Cli.Wrap(command)
+            var result = await CliWrap
+                .Cli.Wrap(command)
                 .WithArguments(arguments)
                 .WithValidation(CommandResultValidation.None)
                 .WithStandardOutputPipe(PipeTarget.ToStringBuilder(stdOutBuffer))
@@ -28,26 +29,38 @@ public class CommandExecutor : ICommandExecutor
                 StdOut = stdOutBuffer.ToString(),
                 StdErr = stdErrBuffer.ToString(),
                 ExitCode = result.ExitCode,
-                IsSuccess = result.ExitCode == 0
+                IsSuccess = result.ExitCode == 0,
             };
         }
         catch (Win32Exception ex) when (ex.NativeErrorCode == 2)
         {
-            return new ExecutorResult { StdErr = $"Command not found: {command}", ExitCode = -1, IsSuccess = false };
+            return new ExecutorResult
+            {
+                StdErr = $"Command not found: {command}",
+                ExitCode = -1,
+                IsSuccess = false,
+            };
         }
         catch (Exception ex)
         {
-            return new ExecutorResult { StdErr = $"An error occurred: {ex.Message}", ExitCode = -1, IsSuccess = false };
+            return new ExecutorResult
+            {
+                StdErr = $"An error occurred: {ex.Message}",
+                ExitCode = -1,
+                IsSuccess = false,
+            };
         }
     }
 
-    public async Task<ExecutorResult> ExecuteWithStreamAsync(string command, IEnumerable<string> arguments,
-        Action<ExecutorStreamResult>? onLog = null)
+    public async Task<ExecutorResult> ExecuteWithStreamAsync(
+        string command,
+        IEnumerable<string> arguments,
+        Action<ExecutorStreamResult>? onLog = null
+    )
     {
         try
         {
-            var cmd = CliWrap.Cli.Wrap(command)
-                .WithArguments(arguments);
+            var cmd = CliWrap.Cli.Wrap(command).WithArguments(arguments);
             var stdOutBuffer = new StringBuilder();
             var stdErrBuffer = new StringBuilder();
 
@@ -80,16 +93,26 @@ public class CommandExecutor : ICommandExecutor
                 ExitCode = exitCode.Value,
                 IsSuccess = exitCode.Value == 0,
                 StdErr = stdErrBuffer.ToString(),
-                StdOut = stdOutBuffer.ToString()
+                StdOut = stdOutBuffer.ToString(),
             };
         }
         catch (Win32Exception ex) when (ex.NativeErrorCode == 2)
         {
-            return new ExecutorResult { StdErr = $"Command not found: {command}", ExitCode = -1, IsSuccess = false };
+            return new ExecutorResult
+            {
+                StdErr = $"Command not found: {command}",
+                ExitCode = -1,
+                IsSuccess = false,
+            };
         }
         catch (Exception ex)
         {
-            return new ExecutorResult { StdErr = $"An error occurred: {ex.Message}", ExitCode = -1, IsSuccess = false };
+            return new ExecutorResult
+            {
+                StdErr = $"An error occurred: {ex.Message}",
+                ExitCode = -1,
+                IsSuccess = false,
+            };
         }
     }
 }

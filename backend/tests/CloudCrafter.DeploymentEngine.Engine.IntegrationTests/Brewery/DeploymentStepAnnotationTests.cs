@@ -21,13 +21,15 @@ public class DeploymentStepAnnotationTests
             throw new Exception("Could not load assembly");
         }
 
-
-        var deploymentStepClasses = assembly.GetTypes()
-            .Where(t => t.Namespace != null &&
-                        t.Namespace.StartsWith(namespaceToCheck) &&
-                        t.IsClass &&
-                        !t.IsAbstract &&
-                        t.GetCustomAttributes(typeof(DeploymentStepAttribute), true).Any());
+        var deploymentStepClasses = assembly
+            .GetTypes()
+            .Where(t =>
+                t.Namespace != null
+                && t.Namespace.StartsWith(namespaceToCheck)
+                && t.IsClass
+                && !t.IsAbstract
+                && t.GetCustomAttributes(typeof(DeploymentStepAttribute), true).Any()
+            );
 
         return deploymentStepClasses.Select(t => t.FullName!);
     }
@@ -38,10 +40,14 @@ public class DeploymentStepAnnotationTests
         var baseParamsAssembly = typeof(BaseParams).Assembly;
 
         var classesWithAnnotation = GetClassesWithDeploymentStepAnnotation().ToList();
-        var testClasses = Assembly.GetExecutingAssembly()
+        var testClasses = Assembly
+            .GetExecutingAssembly()
             .GetTypes()
-            .Where(t => t.BaseType != null && t.BaseType.IsGenericType &&
-                        t.BaseType.GetGenericTypeDefinition() == typeof(BaseParameterConversionTest<>))
+            .Where(t =>
+                t.BaseType != null
+                && t.BaseType.IsGenericType
+                && t.BaseType.GetGenericTypeDefinition() == typeof(BaseParameterConversionTest<>)
+            )
             .ToList();
 
         var missingTests = new List<string>();
@@ -56,9 +62,10 @@ public class DeploymentStepAnnotationTests
             }
 
             var hasMatchingTestClass = testClasses.Any(t =>
-                t.BaseType != null &&
-                t.BaseType.IsGenericType &&
-                t.BaseType.GetGenericArguments().FirstOrDefault() == type);
+                t.BaseType != null
+                && t.BaseType.IsGenericType
+                && t.BaseType.GetGenericArguments().FirstOrDefault() == type
+            );
 
             if (!hasMatchingTestClass)
             {
@@ -66,9 +73,11 @@ public class DeploymentStepAnnotationTests
             }
         }
 
-        missingTests.Should()
+        missingTests
+            .Should()
             .BeEmpty(
-                $"All classes with DeploymentStepAttribute should have a corresponding test class extending BaseParameterConversionTest<>. Missing tests for: {string.Join(", ", missingTests)}");
+                $"All classes with DeploymentStepAttribute should have a corresponding test class extending BaseParameterConversionTest<>. Missing tests for: {string.Join(", ", missingTests)}"
+            );
         classesWithAnnotation.Count().Should().Be(testClasses.Count());
     }
 }

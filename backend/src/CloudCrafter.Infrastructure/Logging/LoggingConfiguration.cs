@@ -11,20 +11,19 @@ public static class LoggingConfiguration
     public static Logger GetLogger(IConfiguration? config = null)
     {
         var loggerConfig = new LoggerConfiguration();
-        
+
         if (config != null)
         {
             loggerConfig = loggerConfig.ReadFrom.Configuration(config);
         }
-        
-        return loggerConfig
-            .CreateLogger();
-     
+
+        return loggerConfig.CreateLogger();
     }
 
     public static IServiceCollection AddCloudCrafterLogging(
         this IServiceCollection services,
-        IConfiguration config)
+        IConfiguration config
+    )
     {
         Log.Logger = GetLogger(config);
 
@@ -33,7 +32,7 @@ public static class LoggingConfiguration
             logger.ClearProviders();
             logger.AddSerilog();
         });
-        
+
         return services;
     }
 }

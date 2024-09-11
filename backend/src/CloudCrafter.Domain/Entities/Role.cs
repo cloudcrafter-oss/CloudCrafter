@@ -5,7 +5,6 @@ namespace CloudCrafter.Domain.Entities;
 
 public class Role : IdentityRole<Guid>, IAggregateRoot
 {
-    public Role(string name) : base(name)
-    {
-    }
+    public Role(string name)
+        : base(name) { }
 }

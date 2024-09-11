@@ -11,7 +11,8 @@ public abstract class BaseMapperTest
     public BaseMapperTest()
     {
         _configuration = new MapperConfiguration(config =>
-            config.AddMaps(Assembly.GetAssembly(typeof(IDomainTarget))));
+            config.AddMaps(Assembly.GetAssembly(typeof(IDomainTarget)))
+        );
 
         _mapper = _configuration.CreateMapper();
     }

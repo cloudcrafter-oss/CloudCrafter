@@ -4,15 +4,14 @@ using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
 
-public class
-    NixpacksWritePlanToFsBuildStepGeneratorTest : BaseParameterConversionTest<NixpacksWritePlanToFileSystemParams>
+public class NixpacksWritePlanToFsBuildStepGeneratorTest
+    : BaseParameterConversionTest<NixpacksWritePlanToFileSystemParams>
 {
     [Test]
     public void ShouldBeAbleToCreateParams()
     {
         // Arrange
-        var options =
-            new NixpacksWritePlanToFsBuildStepGenerator.Args { Path = "/some/path" };
+        var options = new NixpacksWritePlanToFsBuildStepGenerator.Args { Path = "/some/path" };
         var generator = new NixpacksWritePlanToFsBuildStepGenerator(options);
 
         // Act

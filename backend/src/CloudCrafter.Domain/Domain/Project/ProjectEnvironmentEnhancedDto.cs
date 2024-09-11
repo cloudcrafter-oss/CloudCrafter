@@ -26,7 +26,10 @@ public class DeployedStackDto
         {
             CreateMap<Entities.Stack, DeployedStackDto>()
                 .ForMember(x => x.StackId, x => x.MapFrom(opt => opt.Id))
-                .ForMember(x => x.HealthStatus, opt => opt.MapFrom(dest => ProjectHealthStatus.Unknown));
+                .ForMember(
+                    x => x.HealthStatus,
+                    opt => opt.MapFrom(dest => ProjectHealthStatus.Unknown)
+                );
         }
     }
 }
@@ -37,5 +40,5 @@ public enum ProjectHealthStatus
     Healthy,
     Degraded,
     Unhealthy,
-    Unknown
+    Unknown,
 }

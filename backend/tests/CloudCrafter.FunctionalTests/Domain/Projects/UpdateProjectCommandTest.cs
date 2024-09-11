@@ -12,8 +12,12 @@ public class UpdateProjectCommandTest : BaseTestFixture
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
-        Assert.ThrowsAsync<UnauthorizedAccessException>(async () =>
-            await SendAsync(new UpdateProjectCommand.Command(Guid.NewGuid(), new UpdateProjectArgs())));
+        Assert.ThrowsAsync<UnauthorizedAccessException>(
+            async () =>
+                await SendAsync(
+                    new UpdateProjectCommand.Command(Guid.NewGuid(), new UpdateProjectArgs())
+                )
+        );
     }
 
     [Test]

@@ -12,7 +12,9 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
 {
     private readonly IDockerClient _client = provider.GetClient();
 
-    public async Task<IList<ContainerListResponse>> GetContainersFromFilter(DockerContainerFilter filter)
+    public async Task<IList<ContainerListResponse>> GetContainersFromFilter(
+        DockerContainerFilter filter
+    )
     {
         var dockerFilter = new ContainersListParameters { All = true };
 
@@ -24,12 +26,14 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
                 dockerFilter.Filters = new Dictionary<string, IDictionary<string, bool>>();
             }
 
-            var labelFilter = new Dictionary<string, bool>() { { CloudCrafterLabelKeys.CloudCrafterManaged, true } };
+            var labelFilter = new Dictionary<string, bool>()
+            {
+                { CloudCrafterLabelKeys.CloudCrafterManaged, true },
+            };
             dockerFilter.Filters.Add("label", labelFilter);
         }
 
         var containers = await _client.Containers.ListContainersAsync(dockerFilter);
-
 
         if (filter.LabelFilters.Count == 0)
         {
@@ -42,14 +46,15 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
 
         List<ContainerListResponse> filteredContainers = new();
 
-
         foreach (var container in containers)
         {
             bool allLabelsMatch = true;
             foreach (var labelFilter in filter.LabelFilters)
             {
-                if (!container.Labels.TryGetValue(labelFilter.Key, out var value) ||
-                    (value == labelFilter.Value) != labelFilter.ShouldMatch)
+                if (
+                    !container.Labels.TryGetValue(labelFilter.Key, out var value)
+                    || (value == labelFilter.Value) != labelFilter.ShouldMatch
+                )
                 {
                     allLabelsMatch = false;
                     break;
@@ -94,39 +99,58 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
 
         foreach (var containerId in containerIds)
         {
-            await _client.Containers.RemoveContainerAsync(containerId, new ContainerRemoveParameters());
+            await _client.Containers.RemoveContainerAsync(
+                containerId,
+                new ContainerRemoveParameters()
+            );
         }
     }
 
-    public async Task<DockerHelperResponseResult> RunCommandInContainer(string containerName, IList<string> commands,
-        Action<DockerHelperResponse>? onLog = null)
+    public async Task<DockerHelperResponseResult> RunCommandInContainer(
+        string containerName,
+        IList<string> commands,
+        Action<DockerHelperResponse>? onLog = null
+    )
     {
         var container = await GetContainer(containerName);
 
-        var execParams = new ContainerExecCreateParameters { AttachStdout = true, AttachStderr = true, Cmd = commands };
+        var execParams = new ContainerExecCreateParameters
+        {
+            AttachStdout = true,
+            AttachStderr = true,
+            Cmd = commands,
+        };
 
-        var execCreateResponse =
-            await _client.Exec.ExecCreateContainerAsync(container.ID, execParams);
+        var execCreateResponse = await _client.Exec.ExecCreateContainerAsync(
+            container.ID,
+            execParams
+        );
 
         // Get the stream
-        using var stream = await _client.Exec.StartAndAttachContainerExecAsync(execCreateResponse.ID, false);
+        using var stream = await _client.Exec.StartAndAttachContainerExecAsync(
+            execCreateResponse.ID,
+            false
+        );
         // Now you can read from the stream
 
         var buffer = new byte[81920];
         var stdout = new MemoryStream();
         var stderr = new MemoryStream();
 
-
         while (true)
         {
-            var result = await stream.ReadOutputAsync(buffer, 0, buffer.Length, CancellationToken.None);
+            var result = await stream.ReadOutputAsync(
+                buffer,
+                0,
+                buffer.Length,
+                CancellationToken.None
+            );
             if (result.EOF)
             {
                 break;
             }
 
             var content = Encoding.UTF8.GetString(buffer, 0, result.Count);
-
 
             switch (result.Target)
             {
@@ -135,7 +159,9 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
                     stdout.Write(buffer, 0, result.Count);
                     break;
                 case MultiplexedStream.TargetStream.StandardError:
-                    onLog?.Invoke(new DockerHelperResponse { Response = content, IsStdOut = false });
+                    onLog?.Invoke(
+                        new DockerHelperResponse { Response = content, IsStdOut = false }
+                    );
                     stderr.Write(buffer, 0, result.Count);
                     break;
             }
@@ -144,16 +170,22 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
         var stdoutContent = Encoding.UTF8.GetString(stdout.ToArray());
         var stderrContent = Encoding.UTF8.GetString(stderr.ToArray());
 
-        var execInspectResponse = await _client.Exec.InspectContainerExecAsync(execCreateResponse.ID);
+        var execInspectResponse = await _client.Exec.InspectContainerExecAsync(
+            execCreateResponse.ID
+        );
         var exitCode = execInspectResponse.ExitCode;
-        return new DockerHelperResponseResult { ExitCode = exitCode, StdOut = stdoutContent, StdErr = stderrContent };
+        return new DockerHelperResponseResult
+        {
+            ExitCode = exitCode,
+            StdOut = stdoutContent,
+            StdErr = stderrContent,
+        };
     }
 
     public Task<ContainerInspectResponse> GetDockerContainer(string containerId)
     {
         return _client.Containers.InspectContainerAsync(containerId);
     }
-
 
     private async Task<ContainerInspectResponse> GetContainer(string containerName)
     {
@@ -163,7 +195,9 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
 
             if (container.State is not { Running: true })
             {
-                throw new AgentDockerException($"Container with name '{containerName}' is not in running state");
+                throw new AgentDockerException(
+                    $"Container with name '{containerName}' is not in running state"
+                );
             }
 
             return container;

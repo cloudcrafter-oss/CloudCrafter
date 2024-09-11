@@ -18,11 +18,11 @@ public class DockerComposeLabelServiceTest
     public void ShouldBeAbleToAddCloudCrafterLabel()
     {
         var guid = Guid.NewGuid();
-        _service.AddLabel(LabelFactory.GenerateApplicationLabel(guid));
-        
+        _service.AddLabel(LabelFactory.GenerateStackLabel(guid));
+
         var labels = _service.ToLabelList();
 
         labels.Count.Should().Be(1);
-        labels[0].Should().Be($"cloudcrafter.application={guid}");
+        labels[0].Should().Be($"cloudcrafter.stack.id={guid}");
     }
 }

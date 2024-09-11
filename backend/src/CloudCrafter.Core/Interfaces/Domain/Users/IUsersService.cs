@@ -1,4 +1,3 @@
-
 using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Domain.Common.Pagination;
 using CloudCrafter.Domain.Domain.User;

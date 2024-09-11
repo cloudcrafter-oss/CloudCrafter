@@ -15,9 +15,13 @@ namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
 public class NixpacksDetermineBuildPackHandler(IMessagePump pump, INixpacksHelper nixpacksHelper)
     : IDeploymentStepHandler<NixpacksDetermineBuildPackParams>
 {
-    private readonly IDeploymentLogger _logger = pump.CreateLogger<NixpacksDetermineBuildPackHandler>();
+    private readonly IDeploymentLogger _logger =
+        pump.CreateLogger<NixpacksDetermineBuildPackHandler>();
 
-    public async Task ExecuteAsync(NixpacksDetermineBuildPackParams parameters, DeploymentContext context)
+    public async Task ExecuteAsync(
+        NixpacksDetermineBuildPackParams parameters,
+        DeploymentContext context
+    )
     {
         _logger.LogInfo("Starting nixpacks build pack handler");
 
@@ -29,7 +33,6 @@ public class NixpacksDetermineBuildPackHandler(IMessagePump pump, INixpacksHelpe
         {
             throw new DeploymentException("Failed to determine build pack");
         }
-
 
         _logger.LogInfo($"Determined build pack: '{nixpacksPack}'");
 

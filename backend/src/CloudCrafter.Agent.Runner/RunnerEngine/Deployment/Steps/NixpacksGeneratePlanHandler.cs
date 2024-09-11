@@ -23,7 +23,6 @@ public class NixpacksGeneratePlanHandler(IMessagePump pump, INixpacksHelper nixp
 
         var plan = await nixpacksHelper.GetBuildPlanAsync(fullPath, parameters);
 
-
         context.SetRecipeResult(RecipeResultKeys.NixpacksBuildPlan, plan);
         _logger.LogInfo("Saved nixpacks plan to to context.");
     }

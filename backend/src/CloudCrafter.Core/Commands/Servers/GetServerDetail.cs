@@ -12,7 +12,10 @@ public static class GetServerDetail
 
     private class Handler(IServersService service) : IRequestHandler<Query, ServerDetailDto?>
     {
-        public async Task<ServerDetailDto?> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<ServerDetailDto?> Handle(
+            Query request,
+            CancellationToken cancellationToken
+        )
         {
             return await service.GetServer(request.Id);
         }

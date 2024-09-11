@@ -9,7 +9,10 @@ public class StackSourceDtoMapperTest : BaseMapperTest
     [Test]
     [TestCase(ApplicationSourceType.Git, StackSourceDtoType.Git)]
     [TestCase(ApplicationSourceType.GitSsh, StackSourceDtoType.GitSsh)]
-    public void ShouldBeAbleToMapStackSourceDto(ApplicationSourceType type, StackSourceDtoType dtoType)
+    public void ShouldBeAbleToMapStackSourceDto(
+        ApplicationSourceType type,
+        StackSourceDtoType dtoType
+    )
     {
         var entity = new ApplicationSource { Type = type };
 

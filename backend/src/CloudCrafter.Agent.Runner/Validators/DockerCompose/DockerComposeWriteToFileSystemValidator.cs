@@ -6,7 +6,8 @@ using FluentValidation;
 
 namespace CloudCrafter.Agent.Runner.Validators.DockerCompose;
 
-public class DockerComposeWriteToFileSystemValidator : AbstractValidator<DockerComposeWriteToFileSystemParams>
+public class DockerComposeWriteToFileSystemValidator
+    : AbstractValidator<DockerComposeWriteToFileSystemParams>
 {
     public DockerComposeWriteToFileSystemValidator()
     {
@@ -15,7 +16,9 @@ public class DockerComposeWriteToFileSystemValidator : AbstractValidator<DockerC
 }
 
 [DeploymentStep(DeploymentBuildStepType.DockerComposeWriteToFileSystem)]
-public class DockerComposeWriteToFileSystemConfig : IDeploymentStepConfig<DockerComposeWriteToFileSystemParams>
+public class DockerComposeWriteToFileSystemConfig
+    : IDeploymentStepConfig<DockerComposeWriteToFileSystemParams>
 {
-    public IValidator<DockerComposeWriteToFileSystemParams> Validator => new DockerComposeWriteToFileSystemValidator();
+    public IValidator<DockerComposeWriteToFileSystemParams> Validator =>
+        new DockerComposeWriteToFileSystemValidator();
 }

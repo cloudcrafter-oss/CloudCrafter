@@ -13,6 +13,4 @@ public class UsersService(IUserRepository userRepository) : IUsersService
     {
         return userRepository.GetUsers(filter);
     }
-
-   
 }

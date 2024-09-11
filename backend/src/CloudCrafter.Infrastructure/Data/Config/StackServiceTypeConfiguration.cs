@@ -9,13 +9,15 @@ public class StackServiceTypeConfiguration : IEntityTypeConfiguration<StackServi
 {
     public void Configure(EntityTypeBuilder<StackServiceType> builder)
     {
-        builder.HasData(new List<StackServiceType>()
-        {
-            new StackServiceType()
+        builder.HasData(
+            new List<StackServiceType>()
             {
-                Id = StackServiceTypeConstants.App,
-                Type = nameof(StackServiceTypeConstants.App)
+                new StackServiceType()
+                {
+                    Id = StackServiceTypeConstants.App,
+                    Type = nameof(StackServiceTypeConstants.App),
+                },
             }
-        });
+        );
     }
 }

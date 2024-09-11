@@ -20,10 +20,14 @@ public class DockerComposeUpHandler(IMessagePump pump, IDockerComposeHelper dock
     {
         _logger.LogInfo("Running docker compose up");
 
-        if (context.Recipe.DockerComposeOptions == null ||
-            string.IsNullOrWhiteSpace(context.Recipe.DockerComposeOptions.DockerComposeDirectory))
+        if (
+            context.Recipe.DockerComposeOptions == null
+            || string.IsNullOrWhiteSpace(context.Recipe.DockerComposeOptions.DockerComposeDirectory)
+        )
         {
-            throw new DeploymentException("Docker compose options not found - cannot write docker compose file.");
+            throw new DeploymentException(
+                "Docker compose options not found - cannot write docker compose file."
+            );
         }
 
         var dockerComposeFile =
@@ -33,7 +37,9 @@ public class DockerComposeUpHandler(IMessagePump pump, IDockerComposeHelper dock
 
         if (!result.IsSuccess)
         {
-            throw new DeploymentException("Failed to run docker compose up, see logs for more information.");
+            throw new DeploymentException(
+                "Failed to run docker compose up, see logs for more information."
+            );
         }
 
         if (parameters.StoreServiceNames.GetValueOrDefault())

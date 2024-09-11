@@ -12,10 +12,14 @@ public class Auth : EndpointGroupBase
         app.MapGroup(this)
             .MapPost(PostLoginUser, "login")
             .MapPost(PostCreateUser, "create")
-            .MapPost(PostRefreshTokens, "refresh", config =>
-            {
-                config.WithTags(new[] { "cloudCrafterAuthTest" });
-            });
+            .MapPost(
+                PostRefreshTokens,
+                "refresh",
+                config =>
+                {
+                    config.WithTags(new[] { "cloudCrafterAuthTest" });
+                }
+            );
     }
 
     public async Task<TokenDto> PostLoginUser(ISender sender, PostLoginUser.Query query)

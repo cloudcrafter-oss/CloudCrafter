@@ -9,5 +9,4 @@ public class SshConnectionInfo(string host, int port, string username, string pr
     public int Port { get; } = port;
     public string Username { get; } = username;
     public string PrivateKeyPath { get; } = privateKeyPath;
-
 }

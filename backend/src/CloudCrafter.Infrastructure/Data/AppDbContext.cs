@@ -20,8 +20,11 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     private readonly IDomainEventDispatcher? _dispatcher;
     private readonly GenerateEncryptionProvider _encryptionProvider;
 
-    public AppDbContext(DbContextOptions<AppDbContext> options,
-        IDomainEventDispatcher? dispatcher, IOptions<CloudCrafterConfig> cloudCrafterConfig)
+    public AppDbContext(
+        DbContextOptions<AppDbContext> options,
+        IDomainEventDispatcher? dispatcher,
+        IOptions<CloudCrafterConfig> cloudCrafterConfig
+    )
         : base(options)
     {
         _dispatcher = dispatcher;
@@ -39,7 +42,8 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     public DbSet<StackService> StackServices => Set<StackService>();
     public DbSet<StackServiceType> StackServiceTypes => Set<StackServiceType>();
 
-    public DbSet<ServerConnectivityCheckJob> ServerConnectivityCheckJobs => Set<ServerConnectivityCheckJob>();
+    public DbSet<ServerConnectivityCheckJob> ServerConnectivityCheckJobs =>
+        Set<ServerConnectivityCheckJob>();
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
@@ -52,7 +56,8 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
         }
 
         // dispatch events only if save was successful
-        var entitiesWithEvents = ChangeTracker.Entries<EntityBase>()
+        var entitiesWithEvents = ChangeTracker
+            .Entries<EntityBase>()
             .Select(e => e.Entity)
             .Where(e => e.DomainEvents.Any())
             .ToArray();
@@ -62,13 +67,14 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
         return result;
     }
 
-
     public override int SaveChanges()
     {
         return SaveChangesAsync().GetAwaiter().GetResult();
     }
 
-    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+    public Task<IDbContextTransaction> BeginTransactionAsync(
+        CancellationToken cancellationToken = default
+    )
     {
         return Database.BeginTransactionAsync(cancellationToken);
     }

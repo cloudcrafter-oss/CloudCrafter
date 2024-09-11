@@ -722,6 +722,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                                     b2.Property<string>("Branch")
                                         .HasColumnType("text");
 
+                                    b2.Property<string>("Path")
+                                        .HasColumnType("text");
+
                                     b2.Property<string>("Repository")
                                         .IsRequired()
                                         .HasColumnType("text");
@@ -777,8 +780,64 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                                 .HasForeignKey("StackServiceId");
                         });
 
+                    b.OwnsOne("CloudCrafter.Domain.Entities.EntityHealthcheckConfiguration", "HealthcheckConfiguration", b1 =>
+                        {
+                            b1.Property<Guid>("StackServiceId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<int?>("ExpectedHttpStatusCode")
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("HttpHost")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("HttpMethod")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("HttpPath")
+                                .HasColumnType("text");
+
+                            b1.Property<int?>("HttpPort")
+                                .HasColumnType("integer");
+
+                            b1.Property<string>("HttpSchema")
+                                .HasColumnType("text");
+
+                            b1.Property<int?>("MaxRetries")
+                                .HasColumnType("integer");
+
+                            b1.HasKey("StackServiceId");
+
+                            b1.ToTable("StackServices");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StackServiceId");
+                        });
+
+                    b.OwnsOne("CloudCrafter.Domain.Entities.EntityHttpConfiguration", "HttpConfiguration", b1 =>
+                        {
+                            b1.Property<Guid>("StackServiceId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("DomainName")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.HasKey("StackServiceId");
+
+                            b1.ToTable("StackServices");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StackServiceId");
+                        });
+
                     b.Navigation("HealthStatus")
                         .IsRequired();
+
+                    b.Navigation("HealthcheckConfiguration")
+                        .IsRequired();
+
+                    b.Navigation("HttpConfiguration");
 
                     b.Navigation("Stack");
 

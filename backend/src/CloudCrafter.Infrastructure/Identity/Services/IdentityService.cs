@@ -9,8 +9,8 @@ namespace CloudCrafter.Infrastructure.Identity.Services;
 public class IdentityService(
     UserManager<User> userManager,
     IUserClaimsPrincipalFactory<User> userClaimsPrincipalFactory,
-    IAuthorizationService authorizationService)
-    : IIdentityService
+    IAuthorizationService authorizationService
+) : IIdentityService
 {
     public async Task<string?> GetUserNameAsync(Guid userId)
     {
@@ -19,18 +19,29 @@ public class IdentityService(
         return user?.UserName;
     }
 
-    public async Task<(Result Result, Guid UserId)> CreateUserAsync(string userName, string password)
+    public async Task<(Result Result, Guid UserId)> CreateUserAsync(
+        string userName,
+        string password
+    )
     {
-        var user = new User() { UserName = userName, Email = userName, };
+        var user = new User() { UserName = userName, Email = userName };
 
         var result = await userManager.CreateAsync(user, password);
 
         return (result.ToApplicationResult(), user.Id);
     }
 
-    public async Task<(Result Result, Guid UserId)> CreateUserWithoutPassword(string email, string name)
+    public async Task<(Result Result, Guid UserId)> CreateUserWithoutPassword(
+        string email,
+        string name
+    )
     {
-        var user = new User() { UserName = email, Email = email, FullName = name };
+        var user = new User()
+        {
+            UserName = email,
+            Email = email,
+            FullName = name,
+        };
 
         var result = await userManager.CreateAsync(user);
 

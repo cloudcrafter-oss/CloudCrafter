@@ -8,8 +8,11 @@ using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Agent.Runner.Cli.Helpers;
 
-public class NixpacksHelper(ICommandExecutor executor, ICommandParser parser, ILogger<NixpacksHelper> logger)
-    : INixpacksHelper
+public class NixpacksHelper(
+    ICommandExecutor executor,
+    ICommandParser parser,
+    ILogger<NixpacksHelper> logger
+) : INixpacksHelper
 {
     private const string NixpacksExecutable = "nixpacks";
 
@@ -21,25 +24,34 @@ public class NixpacksHelper(ICommandExecutor executor, ICommandParser parser, IL
 
         if (!result.IsSuccess || string.IsNullOrWhiteSpace(result.StdOut))
         {
-            throw new DeploymentException($"Could not determine build pack, directory: {nixpacksPath}");
+            throw new DeploymentException(
+                $"Could not determine build pack, directory: {nixpacksPath}"
+            );
         }
-
 
         var parsedResult = parser.ParseSingleOutput(result.StdOut);
 
         return parsedResult;
     }
 
-    public async Task<string> GetBuildPlanAsync(string fullPath, NixpacksGeneratePlanParams parameters)
+    public async Task<string> GetBuildPlanAsync(
+        string fullPath,
+        NixpacksGeneratePlanParams parameters
+    )
     {
         // TODO: Inject build args eventually.
         await EnsureNixpacksInstalled();
 
-        var result = await executor.ExecuteAsync(NixpacksExecutable, ["plan", "-f", "toml", fullPath]);
+        var result = await executor.ExecuteAsync(
+            NixpacksExecutable,
+            ["plan", "-f", "toml", fullPath]
+        );
 
         if (!result.IsSuccess || string.IsNullOrWhiteSpace(result.StdOut))
         {
-            throw new DeploymentException($"Could not generate nixpacks plan for directory: '{fullPath}");
+            throw new DeploymentException(
+                $"Could not generate nixpacks plan for directory: '{fullPath}"
+            );
         }
 
         var parsedResult = parser.ParseSingleOutput(result.StdOut);
@@ -51,30 +63,24 @@ public class NixpacksHelper(ICommandExecutor executor, ICommandParser parser, IL
     {
         await EnsureNixpacksInstalled();
 
-        List<string> baseCommand =
-        [
-            "build",
-            "-c",
-            config.PlanPath,
-            "-t",
-            config.ImageName
-        ];
+        List<string> baseCommand = ["build", "-c", config.PlanPath, "-t", config.ImageName];
 
         if (!config.DisableCache)
         {
             baseCommand.Add("--no-cache");
         }
 
-        baseCommand.AddRange([
-            config.WorkDir
-        ]);
+        baseCommand.AddRange([config.WorkDir]);
 
-        var result = await executor.ExecuteWithStreamAsync(NixpacksExecutable,
-            baseCommand, streamResult =>
+        var result = await executor.ExecuteWithStreamAsync(
+            NixpacksExecutable,
+            baseCommand,
+            streamResult =>
             {
                 // TODO: Save this somewhere
                 logger.LogInformation(streamResult.Log);
-            });
+            }
+        );
 
         if (!result.IsSuccess)
         {
@@ -90,7 +96,9 @@ public class NixpacksHelper(ICommandExecutor executor, ICommandParser parser, IL
 
         if (!result.IsSuccess)
         {
-            throw new DeploymentException("Nixpacks is not installed or version cannot be determined");
+            throw new DeploymentException(
+                "Nixpacks is not installed or version cannot be determined"
+            );
         }
     }
 }

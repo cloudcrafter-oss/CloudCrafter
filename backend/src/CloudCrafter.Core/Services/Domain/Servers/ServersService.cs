@@ -18,6 +18,4 @@ public class ServersService(IServerRepository repository) : IServersService
     {
         return repository.GetServer(id);
     }
-
-  
 }

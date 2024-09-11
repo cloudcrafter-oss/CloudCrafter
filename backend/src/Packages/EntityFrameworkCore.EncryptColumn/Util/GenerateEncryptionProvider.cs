@@ -1,8 +1,8 @@
-﻿using EntityFrameworkCore.EncryptColumn.Interfaces;
-using System;
+﻿using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using EntityFrameworkCore.EncryptColumn.Interfaces;
 
 namespace EntityFrameworkCore.EncryptColumn.Util;
 
@@ -11,11 +11,13 @@ public class GenerateEncryptionProvider(string Key) : IEncryptionProvider
     public string Encrypt(string dataToEncrypt)
     {
         if (string.IsNullOrEmpty(Key))
-            throw new ArgumentNullException("EncryptionKey", "Please initialize your encryption key.");
+            throw new ArgumentNullException(
+                "EncryptionKey",
+                "Please initialize your encryption key."
+            );
 
         if (string.IsNullOrEmpty(dataToEncrypt))
             return string.Empty;
-
 
         return Helper.EncryptString(dataToEncrypt, Key);
     }
@@ -23,7 +25,10 @@ public class GenerateEncryptionProvider(string Key) : IEncryptionProvider
     public string Decrypt(string dataToDecrypt)
     {
         if (string.IsNullOrEmpty(Key))
-            throw new ArgumentNullException("EncryptionKey", "Please initialize your encryption key.");
+            throw new ArgumentNullException(
+                "EncryptionKey",
+                "Please initialize your encryption key."
+            );
 
         if (string.IsNullOrEmpty(dataToDecrypt))
             return string.Empty;

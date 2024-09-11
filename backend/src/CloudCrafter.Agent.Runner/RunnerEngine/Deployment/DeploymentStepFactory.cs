@@ -12,7 +12,9 @@ public class DeploymentStepFactory(IServiceProvider serviceProvider) : IDeployme
         var handler = serviceProvider.GetKeyedService<IDeploymentStepHandler<TParams>>(type);
         if (handler == null)
         {
-            throw new InvalidOperationException($"No handler registered for step type {type} with params type {typeof(TParams).Name}");
+            throw new InvalidOperationException(
+                $"No handler registered for step type {type} with params type {typeof(TParams).Name}"
+            );
         }
         return handler;
     }
@@ -22,7 +24,9 @@ public class DeploymentStepFactory(IServiceProvider serviceProvider) : IDeployme
         var config = serviceProvider.GetKeyedService<IDeploymentStepConfig<TParams>>(type);
         if (config == null)
         {
-            throw new InvalidOperationException($"No config registered for step type {type} with params type {typeof(TParams).Name}");
+            throw new InvalidOperationException(
+                $"No config registered for step type {type} with params type {typeof(TParams).Name}"
+            );
         }
         return config;
     }

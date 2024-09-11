@@ -28,7 +28,7 @@ public class DockerComposeValidator(string JsonOrYaml)
             {
                 return false;
             }
-            
+
             jsonToParse = YamlFactory.YamlToJson(JsonOrYaml);
         }
 
@@ -43,12 +43,15 @@ public class DockerComposeValidator(string JsonOrYaml)
             return false;
         }
     }
-    
+
     public static bool IsJson(string input)
     {
         input = input.Trim();
-        if ((input.StartsWith("{") && input.EndsWith("}")) || // For object
-            (input.StartsWith("[") && input.EndsWith("]"))) // For array
+        if (
+            (input.StartsWith("{") && input.EndsWith("}"))
+            || // For object
+            (input.StartsWith("[") && input.EndsWith("]"))
+        ) // For array
         {
             try
             {
@@ -59,7 +62,7 @@ public class DockerComposeValidator(string JsonOrYaml)
         }
         return false;
     }
-    
+
     public static bool IsYaml(string input)
     {
         try
@@ -73,7 +76,6 @@ public class DockerComposeValidator(string JsonOrYaml)
         catch (Exception) { }
         return false;
     }
-
 
     private string GetSchema()
     {

@@ -7,9 +7,9 @@ public class ServerConnectivityCheckJob : BaseAuditableEntity
 {
     public required Guid ServerId { get; init; }
     public Server Server { get; init; } = null!;
-    public required ServerConnectivityCheckResult Result { get; set; } = ServerConnectivityCheckResult.Unknown;
+    public required ServerConnectivityCheckResult Result { get; set; } =
+        ServerConnectivityCheckResult.Unknown;
     public long? TimeTakenMs { get; set; }
- 
 }
 
 public enum ServerConnectivityCheckResult
@@ -17,5 +17,5 @@ public enum ServerConnectivityCheckResult
     Unknown,
     Healthy,
     Degraded,
-    Unhealthy
+    Unhealthy,
 }

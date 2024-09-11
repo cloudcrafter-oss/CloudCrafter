@@ -8,7 +8,8 @@ namespace CloudCrafter.Core.Events.Handlers;
 
 public class StackCreatedEventHandler(
     ILogger<StackCreatedEventHandler> logger,
-    IStackServicesService stackServicesService) : INotificationHandler<StackCreatedEvent>
+    IStackServicesService stackServicesService
+) : INotificationHandler<StackCreatedEvent>
 {
     public async Task Handle(StackCreatedEvent notification, CancellationToken cancellationToken)
     {

@@ -3,7 +3,8 @@ using CloudCrafter.Core.Interfaces.Domain.Environments;
 
 namespace CloudCrafter.Core.Events.Handlers;
 
-public class ProjectCreatedEventHandler(IEnvironmentService environmentService) : IDomainEventHandler<ProjectCreatedEvent>
+public class ProjectCreatedEventHandler(IEnvironmentService environmentService)
+    : IDomainEventHandler<ProjectCreatedEvent>
 {
     public Task HandleAsync(ProjectCreatedEvent domainEvent)
     {

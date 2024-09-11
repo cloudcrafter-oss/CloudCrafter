@@ -45,9 +45,14 @@ public class JobSerializerTest
         }
 
         // Arrange
-        var job = new DummyTestJob(faker.Internet.DomainName(), faker.Random.Number(), faker.Random.Bool(),
+        var job = new DummyTestJob(
+            faker.Internet.DomainName(),
+            faker.Random.Number(),
+            faker.Random.Bool(),
             nullableBool,
-            nullableNumber, nullableString);
+            nullableNumber,
+            nullableString
+        );
 
         // Act
         var result = await _serializer.Serialize<DummyTestJob>(job);
@@ -112,12 +117,16 @@ public class JobSerializerTest
 public class DummyTestJob : IJob
 {
     // required for deserialization
-    public DummyTestJob()
-    {
-    }
+    public DummyTestJob() { }
 
-    public DummyTestJob(string name, int number, bool isTrue, bool? nullableBool, int? nullableNumber,
-        string? nullableString)
+    public DummyTestJob(
+        string name,
+        int number,
+        bool isTrue,
+        bool? nullableBool,
+        int? nullableNumber,
+        string? nullableString
+    )
     {
         Name = name;
         Number = number;

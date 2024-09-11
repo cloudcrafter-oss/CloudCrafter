@@ -4,18 +4,18 @@ using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
 
-public class FetchGitRepositoryDeploymentStepGeneratorTest : BaseParameterConversionTest<GitCheckoutParams>
+public class FetchGitRepositoryDeploymentStepGeneratorTest
+    : BaseParameterConversionTest<GitCheckoutParams>
 {
     [Test]
     public void ShouldBeAbleToCreateParams()
     {
         // Arrange
-        var options =
-            new FetchGitRepositoryDeploymentStepGenerator.Args
-            {
-                Repository = "some-repository.git",
-                Commit = "HEAD"
-            };
+        var options = new FetchGitRepositoryDeploymentStepGenerator.Args
+        {
+            Repository = "some-repository.git",
+            Commit = "HEAD",
+        };
         var generator = new FetchGitRepositoryDeploymentStepGenerator(options);
 
         // Act

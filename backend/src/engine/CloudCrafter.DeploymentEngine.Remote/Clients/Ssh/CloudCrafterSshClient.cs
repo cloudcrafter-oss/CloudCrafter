@@ -7,7 +7,7 @@ namespace CloudCrafter.DeploymentEngine.Remote.Clients.Ssh;
 public class CloudCrafterSshClient(ISshConnectionInfo connectionInfo) : ICloudCrafterRemoteClient
 {
     private SshClient? _client;
-    
+
     public bool IsConnected => _client?.IsConnected ?? false;
 
     public void Dispose()
@@ -18,11 +18,15 @@ public class CloudCrafterSshClient(ISshConnectionInfo connectionInfo) : ICloudCr
     public Task ConnectAsync(CancellationToken cancellationToken = default)
     {
         var privateKey = new PrivateKeyFile(connectionInfo.PrivateKeyPath);
-        _client = new SshClient(connectionInfo.Host, connectionInfo.Port, connectionInfo.Username, privateKey);
+        _client = new SshClient(
+            connectionInfo.Host,
+            connectionInfo.Port,
+            connectionInfo.Username,
+            privateKey
+        );
 
         return _client.ConnectAsync(cancellationToken);
     }
-    
 
     public async Task<ExecutedCommandDetails> ExecuteCommandAsync(string command)
     {
@@ -36,14 +40,13 @@ public class CloudCrafterSshClient(ISshConnectionInfo connectionInfo) : ICloudCr
         await cmd.ExecuteAsync();
 
         var result = cmd.Result;
-        
+
         // TODO: Move this to a factory
         return new ExecutedCommandDetails
         {
             Command = command,
             Result = result,
-            ExitStatus = cmd.ExitStatus
+            ExitStatus = cmd.ExitStatus,
         };
     }
-    
 }

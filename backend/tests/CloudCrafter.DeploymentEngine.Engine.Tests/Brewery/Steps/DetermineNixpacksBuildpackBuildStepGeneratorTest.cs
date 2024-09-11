@@ -10,7 +10,10 @@ public class DetermineNixpacksBuildpackBuildStepGeneratorTest
     public void ShouldBeAbleToGenerateBuildStep()
     {
         // Arrange
-        var options = new DetermineNixpacksBuildpackBuildStepGenerator.Args { Path = "relative-path" };
+        var options = new DetermineNixpacksBuildpackBuildStepGenerator.Args
+        {
+            Path = "relative-path",
+        };
         var generator = new DetermineNixpacksBuildpackBuildStepGenerator(options);
 
         // Act

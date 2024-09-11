@@ -15,18 +15,19 @@ public class NixpacksBuildDockerImageBuildStepGeneratorTest
         var image = "my-image";
         var path = "my-path";
         // Arrange
-        var options =
-            new NixpacksBuildDockerImageBuildStepGenerator.Args
+        var options = new NixpacksBuildDockerImageBuildStepGenerator.Args
+        {
+            Path = path,
+            ImageRepository = image,
+            ImageTag = imageTag,
+            DisableBuildCache = disableCache,
+            BuildArgs = new Dictionary<string, object>
             {
-                Path = path,
-                ImageRepository = image,
-                ImageTag = imageTag,
-                DisableBuildCache = disableCache,
-                BuildArgs = new Dictionary<string, object>
-                {
-                    { "BUILD_ARG_ONE", 1 }, { "BUILD_ARG_TWO", true }, { "BUILD_ARG_THREE", "three" }
-                }
-            };
+                { "BUILD_ARG_ONE", 1 },
+                { "BUILD_ARG_TWO", true },
+                { "BUILD_ARG_THREE", "three" },
+            },
+        };
         var generator = new NixpacksBuildDockerImageBuildStepGenerator(options);
 
         // Act
@@ -39,9 +40,16 @@ public class NixpacksBuildDockerImageBuildStepGeneratorTest
         buildStep.Params["path"].Should().Be(path);
         buildStep.Params["image"].Should().Be(image);
         buildStep.Params["tag"].Should().Be(imageTag);
-        buildStep.Params["env"].Should().BeEquivalentTo(new Dictionary<string, object>
-        {
-            { "BUILD_ARG_ONE", 1 }, { "BUILD_ARG_TWO", true }, { "BUILD_ARG_THREE", "three" }
-        });
+        buildStep
+            .Params["env"]
+            .Should()
+            .BeEquivalentTo(
+                new Dictionary<string, object>
+                {
+                    { "BUILD_ARG_ONE", 1 },
+                    { "BUILD_ARG_TWO", true },
+                    { "BUILD_ARG_THREE", "three" },
+                }
+            );
     }
 }

@@ -4,17 +4,14 @@ using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
 
-public class DetermineNixpacksBuildpackBuildStepGeneratorTest : BaseParameterConversionTest<NixpacksDetermineBuildPackParams>
+public class DetermineNixpacksBuildpackBuildStepGeneratorTest
+    : BaseParameterConversionTest<NixpacksDetermineBuildPackParams>
 {
     [Test]
     public void ShouldBeAbleToCreateParams()
     {
         // Arrange
-        var options =
-            new DetermineNixpacksBuildpackBuildStepGenerator.Args
-            {
-                Path = "/some/path"
-            };
+        var options = new DetermineNixpacksBuildpackBuildStepGenerator.Args { Path = "/some/path" };
         var generator = new DetermineNixpacksBuildpackBuildStepGenerator(options);
 
         // Act

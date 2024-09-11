@@ -7,12 +7,13 @@ using FluentAssertions;
 using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Users;
+
 using static Testing;
 
 public class GetUserListQueryTest : BaseTestFixture
 {
     private GetUserList.Query _query = new GetUserList.Query(new());
-    
+
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
@@ -29,7 +30,7 @@ public class GetUserListQueryTest : BaseTestFixture
         result.Should().NotBeNull();
         result.Result.Count.Should().Be(1);
     }
-    
+
     [Test]
     public async Task ShouldBeAbleToFetchUsersWithFilter()
     {
@@ -47,48 +48,51 @@ public class GetUserListQueryTest : BaseTestFixture
 
         // grab random user from users
         var randomUser = users[4];
-        
-        var query = new GetUserList.Query(new()
-        {
-            Filters = new List<FilterCriterea>()
+
+        var query = new GetUserList.Query(
+            new()
             {
-                new FilterCriterea()
+                Filters = new List<FilterCriterea>()
                 {
-                    Operator = FilterOperatorOption.Contains,
-                    PropertyName = "Email",
-                    Value = randomUser.Email
-                }
+                    new FilterCriterea()
+                    {
+                        Operator = FilterOperatorOption.Contains,
+                        PropertyName = "Email",
+                        Value = randomUser.Email,
+                    },
+                },
             }
-        });
+        );
 
         var result = await SendAsync(query);
 
         result.Should().NotBeNull();
         result.Result.Count.Should().Be(1);
-        
+
         var userFromResult = result.Result.First();
         userFromResult.Id.Should().Be(randomUser.Id);
-        
+
         // Now we should fetch for not equal
-        query = new GetUserList.Query(new()
-        {
-            Filters = new List<FilterCriterea>()
+        query = new GetUserList.Query(
+            new()
             {
-                new FilterCriterea()
+                Filters = new List<FilterCriterea>()
                 {
-                    Operator = FilterOperatorOption.NotEqual,
-                    PropertyName = "Email",
-                    Value = randomUser.Email
-                }
+                    new FilterCriterea()
+                    {
+                        Operator = FilterOperatorOption.NotEqual,
+                        PropertyName = "Email",
+                        Value = randomUser.Email,
+                    },
+                },
             }
-        });
-        
+        );
+
         result = await SendAsync(query);
 
         result.Should().NotBeNull();
         result.Result.Count.Should().Be(10);
-        
-        result.Result.Any(x => x.Email == randomUser.Email).Should().BeFalse();
 
+        result.Result.Any(x => x.Email == randomUser.Email).Should().BeFalse();
     }
 }

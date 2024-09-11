@@ -2,7 +2,6 @@
 
 public class ServiceAlreadyExistsException : Exception
 {
-    public ServiceAlreadyExistsException(string serviceName) : base($"Service {serviceName} already exists")
-    {
-    }
+    public ServiceAlreadyExistsException(string serviceName)
+        : base($"Service {serviceName} already exists") { }
 }

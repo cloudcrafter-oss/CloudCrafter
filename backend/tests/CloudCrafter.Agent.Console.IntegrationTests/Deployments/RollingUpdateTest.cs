@@ -14,16 +14,22 @@ namespace CloudCrafter.Agent.Console.IntegrationTests.Deployments;
 public class RollingUpdateTest : AbstractTraefikTest
 {
     private DeploymentService _deploymentService;
+    private IDockerHelper _dockerHelper;
     private DeploymentRecipe _firstRecipe;
     private DeploymentRecipe _secondRecipe;
-    private IDockerHelper _dockerHelper;
 
-    private DeploymentRecipe Create(Guid deploymentId, Guid applicationId, string tag, string dummyEnv)
+    private DeploymentRecipe Create(
+        Guid deploymentId,
+        Guid applicationId,
+        string tag,
+        string dummyEnv
+    )
     {
         var mainImageRepository = "rolling-update";
         var dockerComposeEditor = new DockerComposeEditor();
 
-        var network = dockerComposeEditor.AddNetwork("cloudcrafter")
+        var network = dockerComposeEditor
+            .AddNetwork("cloudcrafter")
             .SetNetworkName("cloudcrafter")
             .SetIsExternalNetwork();
 
@@ -32,19 +38,20 @@ public class RollingUpdateTest : AbstractTraefikTest
         service.AddNetwork(network);
 
         var labelService = new DockerComposeLabelService();
-        labelService.AddLabel(LabelFactory.GenerateApplicationLabel(applicationId));
+        labelService.AddLabel(LabelFactory.GenerateStackLabel(applicationId));
         labelService.AddLabel(LabelFactory.GenerateDeploymentLabel(deploymentId));
         labelService.AddLabel(LabelFactory.GenerateManagedLabel());
-        labelService.AddTraefikLabels(new DockerComposeLabelServiceTraefikOptions
-        {
-            AppName = "frontend",
-            Rule = "Host(`frontend-rolling.127.0.0.1.sslip.io`)",
-            Service = $"frontend",
-            LoadBalancerPort = 3000
-        });
+        labelService.AddTraefikLabels(
+            new DockerComposeLabelServiceTraefikOptions
+            {
+                AppName = "frontend",
+                Rule = "Host(`frontend-rolling.127.0.0.1.sslip.io`)",
+                Service = "frontend",
+                LoadBalancerPort = 3000,
+            }
+        );
 
         service.AddLabels(labelService);
-
 
         var dockerComposeBase64 = dockerComposeEditor.ToBase64();
         var randomString = RandomGenerator.String();
@@ -53,30 +60,31 @@ public class RollingUpdateTest : AbstractTraefikTest
         {
             Name = "My Application",
             Application = new DeploymentRecipeApplicationInfo { Id = applicationId },
-            Destination =
-                new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" + randomString },
-            DockerComposeOptions =
-                new DeploymentRecipeDockerComposeOptions
+            Destination = new DeploymentRecipeDestination
+            {
+                RootDirectory = "/tmp/cloudcrafter/" + randomString,
+            },
+            DockerComposeOptions = new DeploymentRecipeDockerComposeOptions
+            {
+                Base64DockerCompose = dockerComposeBase64,
+                // In production envs, this will have the application stack guid in it
+                DockerComposeDirectory = "/tmp/cloudcrafter-data/my-application",
+            },
+            EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
+            {
+                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>
                 {
-                    Base64DockerCompose = dockerComposeBase64,
-                    // In production envs, this will have the application stack guid in it
-                    DockerComposeDirectory =
-                        "/tmp/cloudcrafter-data/my-application"
-                },
-            EnvironmentVariables =
-                new DeploymentRecipeEnvironmentVariableConfig
-                {
-                    Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>
                     {
+                        "DUMMY_ENV_VAR",
+                        new DeploymentRecipeEnvironmentVariable
                         {
-                            "DUMMY_ENV_VAR",
-                            new DeploymentRecipeEnvironmentVariable
-                            {
-                                Name = "DUMMY_ENV_VAR", Value = dummyEnv, IsBuildVariable = true
-                            }
+                            Name = "DUMMY_ENV_VAR",
+                            Value = dummyEnv,
+                            IsBuildVariable = true,
                         }
-                    }
+                    },
                 },
+            },
             BuildOptions = new DeploymentBuildOptions
             {
                 Steps = new List<DeploymentBuildStep>
@@ -88,89 +96,106 @@ public class RollingUpdateTest : AbstractTraefikTest
                         Type = DeploymentBuildStepType.DockerValidateNetworksExists,
                         Params = new Dictionary<string, object>
                         {
-                            { "networks", new List<string> { "cloudcrafter" } }
-                        }
+                            {
+                                "networks",
+                                new List<string> { "cloudcrafter" }
+                            },
+                        },
                     },
                     new()
                     {
                         Name = "Fetch git",
                         Description = "Fetch the git application",
                         Type = DeploymentBuildStepType.FetchGitRepository,
-                        Params =
-                            new Dictionary<string, object>
-                            {
-                                { "repo", "https://github.com/cloudcrafter-oss/demo-examples.git" },
-                                { "commit", "HEAD" }
-                            }
+                        Params = new Dictionary<string, object>
+                        {
+                            { "repo", "https://github.com/cloudcrafter-oss/demo-examples.git" },
+                            { "commit", "HEAD" },
+                        },
                     },
                     new()
                     {
                         Name = "Determine Buildpack",
                         Description = "Determine the buildpack",
                         Type = DeploymentBuildStepType.NixpacksDetermineBuildPack,
-                        Params = new Dictionary<string, object> { { "path", "nixpacks-node-server" } }
+                        Params = new Dictionary<string, object>
+                        {
+                            { "path", "nixpacks-node-server" },
+                        },
                     },
                     new()
                     {
                         Name = "Generate Build plan",
                         Description = "Generate the build plan",
                         Type = DeploymentBuildStepType.NixpacksGeneratePlan,
-                        Params = new Dictionary<string, object> { { "path", "nixpacks-node-server" } }
+                        Params = new Dictionary<string, object>
+                        {
+                            { "path", "nixpacks-node-server" },
+                        },
                     },
                     new()
                     {
                         Name = "Alter plan",
                         Description = "Alter plan",
                         Type = DeploymentBuildStepType.NixpacksAlterPlan,
-                        Params =
-                            new Dictionary<string, object> { { "packages", new List<string> { "iputils-ping" } } }
+                        Params = new Dictionary<string, object>
+                        {
+                            {
+                                "packages",
+                                new List<string> { "iputils-ping" }
+                            },
+                        },
                     },
                     new()
                     {
                         Name = "Write plan to filesystem",
                         Description = "Write plan to filesystem",
                         Type = DeploymentBuildStepType.NixpacksWritePlanToFileSystem,
-                        Params = new Dictionary<string, object> { { "path", "nixpacks-node-server" } }
+                        Params = new Dictionary<string, object>
+                        {
+                            { "path", "nixpacks-node-server" },
+                        },
                     },
                     new()
                     {
                         Name = "Build Nixpacks docker image",
                         Description = "Builds Nixpacks docker image",
                         Type = DeploymentBuildStepType.NixpacksBuildDockerImage,
-                        Params =
-                            new Dictionary<string, object>
+                        Params = new Dictionary<string, object>
+                        {
+                            { "path", "nixpacks-node-server" },
+                            { "image", mainImageRepository },
+                            { "tag", tag },
+                            { "disableCache", true },
                             {
-                                { "path", "nixpacks-node-server" },
-                                { "image", mainImageRepository },
-                                { "tag", tag },
-                                { "disableCache", true },
+                                "env",
+                                new Dictionary<string, object>
                                 {
-                                    "env",
-                                    new Dictionary<string, object>
-                                    {
-                                        { "BUILD_MOMENT", DateTime.UtcNow.ToString("F") },
-                                    }
+                                    { "BUILD_MOMENT", DateTime.UtcNow.ToString("F") },
                                 }
-                            }
+                            },
+                        },
                     },
                     new()
                     {
                         Name = "Write docker compose file",
                         Description = "Write docker compose file",
                         Type = DeploymentBuildStepType.DockerComposeWriteToFileSystem,
-                        Params =
-                            new Dictionary<string, object> { { "dockerComposeFile", $"docker-compose.yml" } }
+                        Params = new Dictionary<string, object>
+                        {
+                            { "dockerComposeFile", "docker-compose.yml" },
+                        },
                     },
                     new()
                     {
                         Name = "Start docker compose",
                         Description = "Start docker compose",
                         Type = DeploymentBuildStepType.DockerComposeUp,
-                        Params =
-                            new Dictionary<string, object>
-                            {
-                                { "dockerComposeFile", $"docker-compose.yml" }, { "storeServiceNames", true }
-                            }
+                        Params = new Dictionary<string, object>
+                        {
+                            { "dockerComposeFile", "docker-compose.yml" },
+                            { "storeServiceNames", true },
+                        },
                     },
                     new()
                     {
@@ -181,7 +206,10 @@ public class RollingUpdateTest : AbstractTraefikTest
                         {
                             {
                                 "dockerComposeSettings",
-                                new Dictionary<string, object> { { "fetchServicesFromContext", true } }
+                                new Dictionary<string, object>
+                                {
+                                    { "fetchServicesFromContext", true },
+                                }
                             },
                             {
                                 "services",
@@ -197,15 +225,15 @@ public class RollingUpdateTest : AbstractTraefikTest
                                             { "httpPath", "/" },
                                             { "httpPort", 3000 },
                                             { "expectedResponseCode", 200 },
-                                            { "retries", 4 }
+                                            { "retries", 4 },
                                         }
-                                    }
+                                    },
                                 }
-                            }
-                        }
-                    }
-                }
-            }
+                            },
+                        },
+                    },
+                },
+            },
         };
 
         var recipeWriter = new YamlRecipeWriter(recipe);
@@ -217,16 +245,14 @@ public class RollingUpdateTest : AbstractTraefikTest
         var readRecipe = recipeReader.FromString(recipeAsString);
 
         return readRecipe;
-
     }
-    
+
     [TearDown]
     public async Task StopCreatedContainers()
     {
-        var containers = await _dockerHelper.GetContainersFromFilter(new DockerContainerFilter()
-        {
-            OnlyCloudCrafterLabels = true
-        });
+        var containers = await _dockerHelper.GetContainersFromFilter(
+            new DockerContainerFilter { OnlyCloudCrafterLabels = true }
+        );
 
         foreach (var container in containers)
         {
@@ -250,34 +276,32 @@ public class RollingUpdateTest : AbstractTraefikTest
         _firstRecipe = Create(firstDeploymentId, applicationId, firstTag, "firstTag");
         _secondRecipe = Create(secondDeploymentId, applicationId, secondTag, "secondTag");
 
-
-        _secondRecipe.BuildOptions.Steps.Add(new DeploymentBuildStep
-        {
-            Name = "Stop previous containers for rolling restart",
-            Description = "Stop previous containers for rolling restart",
-            Type = DeploymentBuildStepType.StopContainers,
-            Params = new Dictionary<string, object>
+        _secondRecipe.BuildOptions.Steps.Add(
+            new DeploymentBuildStep
             {
+                Name = "Stop previous containers for rolling restart",
+                Description = "Stop previous containers for rolling restart",
+                Type = DeploymentBuildStepType.StopContainers,
+                Params = new Dictionary<string, object>
                 {
-                    "filters",
-                    new Dictionary<string, object>
                     {
+                        "filters",
+                        new Dictionary<string, object>
                         {
-                            "labels",
-                            new List<string>
                             {
-                                $"cloudcrafter.application={applicationId}",
-                                $"cloudcrafter.deployment!={secondDeploymentId}"
-                            }
+                                "labels",
+                                new List<string>
+                                {
+                                    $"cloudcrafter.stack.id={applicationId}",
+                                    $"cloudcrafter.deployment!={secondDeploymentId}",
+                                }
+                            },
                         }
-                    }
+                    },
+                    { "onlyCloudCrafterContainers", true },
                 },
-                {
-                    "onlyCloudCrafterContainers", true
-                }
             }
-        });
-
+        );
 
         var builder = Program.CreateHostBuilder([]);
         var host = builder.Build();
@@ -296,10 +320,15 @@ public class RollingUpdateTest : AbstractTraefikTest
 
         await _deploymentService.DeployAsync(_firstRecipe);
 
-        await ShouldHaveEndpointResponse("http://frontend-rolling.127.0.0.1.sslip.io:8888/env", "DUMMY_ENV_VAR: firstTag");
+        await ShouldHaveEndpointResponse(
+            "http://frontend-rolling.127.0.0.1.sslip.io:8888/env",
+            "DUMMY_ENV_VAR: firstTag"
+        );
 
         await _deploymentService.DeployAsync(_secondRecipe);
-        await ShouldHaveEndpointResponse("http://frontend-rolling.127.0.0.1.sslip.io:8888/env", "DUMMY_ENV_VAR: secondTag");
-
+        await ShouldHaveEndpointResponse(
+            "http://frontend-rolling.127.0.0.1.sslip.io:8888/env",
+            "DUMMY_ENV_VAR: secondTag"
+        );
     }
 }

@@ -65,5 +65,5 @@ public enum DeploymentBuildStepType
     DockerValidateNetworksExists,
     ContainerHealthCheck,
     StopContainers,
-    RunPlainCommand
+    RunPlainCommand,
 }

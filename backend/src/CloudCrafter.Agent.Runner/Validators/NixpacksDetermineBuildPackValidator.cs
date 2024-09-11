@@ -6,7 +6,8 @@ using FluentValidation;
 
 namespace CloudCrafter.Agent.Runner.Validators;
 
-public class NixpacksDetermineBuildPackValidator : AbstractValidator<NixpacksDetermineBuildPackParams>
+public class NixpacksDetermineBuildPackValidator
+    : AbstractValidator<NixpacksDetermineBuildPackParams>
 {
     public NixpacksDetermineBuildPackValidator()
     {
@@ -15,7 +16,9 @@ public class NixpacksDetermineBuildPackValidator : AbstractValidator<NixpacksDet
 }
 
 [DeploymentStep(DeploymentBuildStepType.NixpacksDetermineBuildPack)]
-public class NixpacksDetermineBuildPackConfig : IDeploymentStepConfig<NixpacksDetermineBuildPackParams>
+public class NixpacksDetermineBuildPackConfig
+    : IDeploymentStepConfig<NixpacksDetermineBuildPackParams>
 {
-    public IValidator<NixpacksDetermineBuildPackParams> Validator => new NixpacksDetermineBuildPackValidator();
+    public IValidator<NixpacksDetermineBuildPackParams> Validator =>
+        new NixpacksDetermineBuildPackValidator();
 }

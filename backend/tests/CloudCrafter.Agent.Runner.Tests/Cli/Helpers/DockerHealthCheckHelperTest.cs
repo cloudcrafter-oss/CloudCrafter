@@ -20,7 +20,10 @@ public class DockerHealthCheckHelperTest
     {
         _mockDockerHelper = new Mock<IDockerHelper>();
         _mockLogger = new Mock<ILogger<DockerHealthCheckHelper>>();
-        _dockerHealthCheckHelper = new DockerHealthCheckHelper(_mockDockerHelper.Object, _mockLogger.Object);
+        _dockerHealthCheckHelper = new DockerHealthCheckHelper(
+            _mockDockerHelper.Object,
+            _mockLogger.Object
+        );
     }
 
     [Test]
@@ -36,19 +39,29 @@ public class DockerHealthCheckHelperTest
             HttpPort = 8080,
             HttpPath = "/health",
             ExpectedResponseCode = 200,
-            Retries = 1
+            Retries = 1,
         };
 
-        _mockDockerHelper.Setup(x => x.GetDockerContainer(containerId))
-            .ReturnsAsync(new ContainerInspectResponse
-            {
-                State = new ContainerState { Health = new () { Status = "healthy" } }
-            });
-
-        _mockDockerHelper.Setup(x => x.RunCommandInContainer(containerId, It.IsAny<IList<string>>(), null))
+        _mockDockerHelper
+            .Setup(x => x.GetDockerContainer(containerId))
             .ReturnsAsync(
-                new() { ExitCode = 0, StdOut = "{\"response_code\":\"200\",\"response_body\":\"OK\"}", StdErr = "" },
-                TimeSpan.FromMicroseconds(100));
+                new ContainerInspectResponse
+                {
+                    State = new ContainerState { Health = new() { Status = "healthy" } },
+                }
+            );
+
+        _mockDockerHelper
+            .Setup(x => x.RunCommandInContainer(containerId, It.IsAny<IList<string>>(), null))
+            .ReturnsAsync(
+                new()
+                {
+                    ExitCode = 0,
+                    StdOut = "{\"response_code\":\"200\",\"response_body\":\"OK\"}",
+                    StdErr = "",
+                },
+                TimeSpan.FromMicroseconds(100)
+            );
 
         // Act
         var result = await _dockerHealthCheckHelper.IsHealthyAsync(containerId, options);
@@ -62,13 +75,20 @@ public class DockerHealthCheckHelperTest
     {
         // Arrange
         var containerId = "test-container";
-        var options = new ContainerHealthCheckParamsOptions { CheckForDockerHealth = true, Retries = 1 };
+        var options = new ContainerHealthCheckParamsOptions
+        {
+            CheckForDockerHealth = true,
+            Retries = 1,
+        };
 
-        _mockDockerHelper.Setup(x => x.GetDockerContainer(containerId))
-            .ReturnsAsync(new ContainerInspectResponse
-            {
-                State = new ContainerState { Health = new () { Status = "unhealthy" } }
-            });
+        _mockDockerHelper
+            .Setup(x => x.GetDockerContainer(containerId))
+            .ReturnsAsync(
+                new ContainerInspectResponse
+                {
+                    State = new ContainerState { Health = new() { Status = "unhealthy" } },
+                }
+            );
 
         // Act
         var result = await _dockerHealthCheckHelper.IsHealthyAsync(containerId, options);
@@ -82,16 +102,26 @@ public class DockerHealthCheckHelperTest
     {
         // Arrange
         var containerId = "test-container";
-        var options = new ContainerHealthCheckParamsOptions { CheckForDockerHealth = true, Retries = 1 };
+        var options = new ContainerHealthCheckParamsOptions
+        {
+            CheckForDockerHealth = true,
+            Retries = 1,
+        };
 
-        _mockDockerHelper.Setup(x => x.GetDockerContainer(containerId))
-            .ReturnsAsync(new ContainerInspectResponse { State = new ContainerState { Health = null } });
+        _mockDockerHelper
+            .Setup(x => x.GetDockerContainer(containerId))
+            .ReturnsAsync(
+                new ContainerInspectResponse { State = new ContainerState { Health = null } }
+            );
 
         // Act & Assert
-        Func<Task> act = async () => await _dockerHealthCheckHelper.IsHealthyAsync(containerId, options);
-        act.Should().ThrowAsync<AgentDockerException>()
+        Func<Task> act = async () =>
+            await _dockerHealthCheckHelper.IsHealthyAsync(containerId, options);
+        act.Should()
+            .ThrowAsync<AgentDockerException>()
             .WithMessage(
-                "Provided container does not have health check enabled but check options has CheckForDockerHealth = true.");
+                "Provided container does not have health check enabled but check options has CheckForDockerHealth = true."
+            );
     }
 
     [Test]
@@ -107,14 +137,20 @@ public class DockerHealthCheckHelperTest
             HttpPort = 8080,
             HttpPath = "/health",
             ExpectedResponseCode = 200,
-            Retries = 1
+            Retries = 1,
         };
 
-        _mockDockerHelper.Setup(x => x.RunCommandInContainer(containerId, It.IsAny<IList<string>>(), null))
-            .ReturnsAsync(new DockerHelperResponseResult()
-            {
-                ExitCode = 0, StdOut = "{\"response_code\":\"500\",\"response_body\":\"Internal Server Error\"}", StdErr = ""
-            });
+        _mockDockerHelper
+            .Setup(x => x.RunCommandInContainer(containerId, It.IsAny<IList<string>>(), null))
+            .ReturnsAsync(
+                new DockerHelperResponseResult()
+                {
+                    ExitCode = 0,
+                    StdOut =
+                        "{\"response_code\":\"500\",\"response_body\":\"Internal Server Error\"}",
+                    StdErr = "",
+                }
+            );
 
         // Act
         var result = await _dockerHealthCheckHelper.IsHealthyAsync(containerId, options);

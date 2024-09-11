@@ -11,8 +11,10 @@ using CloudCrafter.Agent.Runner.DeploymentLogPump;
 namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps.Container;
 
 [DeploymentStep(DeploymentBuildStepType.ContainerHealthCheck)]
-public class ContainerHealthCheckHandler(IMessagePump pump, IDockerHealthCheckHelper dockerHealthCheckHelper)
-    : IDeploymentStepHandler<ContainerHealthCheckParams>
+public class ContainerHealthCheckHandler(
+    IMessagePump pump,
+    IDockerHealthCheckHelper dockerHealthCheckHelper
+) : IDeploymentStepHandler<ContainerHealthCheckParams>
 {
     private readonly IDeploymentLogger _logger = pump.CreateLogger<ContainerHealthCheckHandler>();
 
@@ -26,30 +28,35 @@ public class ContainerHealthCheckHandler(IMessagePump pump, IDockerHealthCheckHe
             throw new DeploymentException("Container health check options not found.");
         }
 
-
         var dockerComposeServiceContainerIdMap = new Dictionary<string, string>();
 
         if (parameters.DockerComposeSettings?.FetchServicesFromContext == true)
         {
-            dockerComposeServiceContainerIdMap = context.GetRecipeResult<Dictionary<string, string>>(RecipeResultKeys.DockerComposeServices);
+            dockerComposeServiceContainerIdMap = context.GetRecipeResult<
+                Dictionary<string, string>
+            >(RecipeResultKeys.DockerComposeServices);
         }
-        
-        var taskDictionary = new Dictionary<string, Task<bool>>();
 
+        var taskDictionary = new Dictionary<string, Task<bool>>();
 
         foreach (var service in parameters.Services)
         {
-            
-            var containerId = dockerComposeServiceContainerIdMap.TryGetValue(service.Key, out var value) ? value : service.Key;
-            
-            var containerIsHealthyForService = dockerHealthCheckHelper.IsHealthyAsync(containerId, service.Value);
+            var containerId = dockerComposeServiceContainerIdMap.TryGetValue(
+                service.Key,
+                out var value
+            )
+                ? value
+                : service.Key;
+
+            var containerIsHealthyForService = dockerHealthCheckHelper.IsHealthyAsync(
+                containerId,
+                service.Value
+            );
 
             taskDictionary[service.Key] = containerIsHealthyForService;
         }
 
-
         await Task.WhenAll(taskDictionary.Values);
-
 
         var unhealthyServices = new List<string>();
 
@@ -64,14 +71,16 @@ public class ContainerHealthCheckHandler(IMessagePump pump, IDockerHealthCheckHe
             }
         }
 
-
         if (unhealthyServices.Any())
         {
             var unhealthyServicesString = string.Join(", ", unhealthyServices);
-            _logger.LogCritical($"The following containers did not become healthy: {unhealthyServicesString}");
-            throw new DeploymentException($"Container health checks failed for services: {unhealthyServicesString}");
+            _logger.LogCritical(
+                $"The following containers did not become healthy: {unhealthyServicesString}"
+            );
+            throw new DeploymentException(
+                $"Container health checks failed for services: {unhealthyServicesString}"
+            );
         }
-
 
         _logger.LogInfo("All provided containers are healthy");
     }

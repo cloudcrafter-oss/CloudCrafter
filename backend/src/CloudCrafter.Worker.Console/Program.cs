@@ -28,49 +28,43 @@ public class Program
         var validator = host.Services.GetRequiredService<IStartupValidator>();
         validator.Validate();
 
-
         await host.RunAsync();
         return 0;
     }
 
-
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
-        Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console()
-            .CreateLogger();
-
+        Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
 
         var builder = Host.CreateDefaultBuilder(args);
 
-      
-
-
         return builder
-            .ConfigureAppConfiguration((ctx, config) =>
-            {
-                config.AddJsonFile("appsettings.json", optional: false);
-                config.AddJsonFile("appsettings.Development.json", optional: true);
-                config.AddEnvironmentVariables();
-                config.AddConfiguration(config.Build());
-            })
-            .ConfigureServices((hostContext, services) =>
-            {
-                services.AddMediatR(cfg =>
+            .ConfigureAppConfiguration(
+                (ctx, config) =>
                 {
-                    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
-                });
-                
+                    config.AddJsonFile("appsettings.json", optional: false);
+                    config.AddJsonFile("appsettings.Development.json", optional: true);
+                    config.AddEnvironmentVariables();
+                    config.AddConfiguration(config.Build());
+                }
+            )
+            .ConfigureServices(
+                (hostContext, services) =>
+                {
+                    services.AddMediatR(cfg =>
+                    {
+                        cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+                    });
 
+                    services.AddScoped<IUser, NullUser>();
 
-                services.AddScoped<IUser, NullUser>();
-
-                services.AddEngineInfrastructure();
-                services.AddCloudCrafterConfiguration();
-                services.AddCloudCrafterLogging(hostContext.Configuration);
-                services.AddInfrastructureServices(hostContext.Configuration);
-                services.AddJobInfrastructure(hostContext.Configuration, true, "worker");
-                services.AddApplicationServices();
-            });
+                    services.AddEngineInfrastructure();
+                    services.AddCloudCrafterConfiguration();
+                    services.AddCloudCrafterLogging(hostContext.Configuration);
+                    services.AddInfrastructureServices(hostContext.Configuration);
+                    services.AddJobInfrastructure(hostContext.Configuration, true, "worker");
+                    services.AddApplicationServices();
+                }
+            );
     }
 }

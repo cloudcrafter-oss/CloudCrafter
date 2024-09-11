@@ -15,6 +15,7 @@ public abstract class BaseTestFixture
 {
     public int TestingHostPort;
     private IContainer? TestingHostContainer;
+
     [SetUp]
     public async Task TestSetUp()
     {
@@ -26,15 +27,13 @@ public abstract class BaseTestFixture
     {
         if (TestingHostContainer != null)
         {
-            await TestingHostContainer.StopAsync()
-                .ConfigureAwait(false);
-        
-            await TestingHostContainer.DisposeAsync()
-                .ConfigureAwait(false);
+            await TestingHostContainer.StopAsync().ConfigureAwait(false);
+
+            await TestingHostContainer.DisposeAsync().ConfigureAwait(false);
         }
     }
-    
-    public  Faker<Server> TestingHostServerFaker()
+
+    public Faker<Server> TestingHostServerFaker()
     {
         var sshKeyContents = File.ReadLines(GetDockerfileDirectory() + "/id_rsa");
 
@@ -52,20 +51,18 @@ public abstract class BaseTestFixture
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
     }
 
-
-    
-    public  async Task StartTestingHost()
+    public async Task StartTestingHost()
     {
         var dockerfileDirectory = GetDockerfileDirectory();
 
         var testingHostImage = new ImageFromDockerfileBuilder()
-            .WithDockerfileDirectory(dockerfileDirectory).WithDockerfile("Dockerfile")
+            .WithDockerfileDirectory(dockerfileDirectory)
+            .WithDockerfile("Dockerfile")
             .Build();
 
         var faker = new Faker();
         TestingHostPort = faker.Random.Number(3000, 4000);
-        await testingHostImage.CreateAsync()
-            .ConfigureAwait(false);
+        await testingHostImage.CreateAsync().ConfigureAwait(false);
 
         TestingHostContainer = new ContainerBuilder()
             .WithImage(testingHostImage)
@@ -73,10 +70,9 @@ public abstract class BaseTestFixture
             .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(22))
             .Build();
 
-        await TestingHostContainer.StartAsync()
-            .ConfigureAwait(false);
+        await TestingHostContainer.StartAsync().ConfigureAwait(false);
     }
-    
+
     public void WaitForJobCompletion(string jobId, int timeoutInSeconds = 30)
     {
         var startTime = DateTime.Now;
@@ -92,7 +88,9 @@ public abstract class BaseTestFixture
 
                 if ((DateTime.Now - startTime).TotalSeconds > timeoutInSeconds)
                 {
-                    throw new TimeoutException($"Job {jobId} did not complete within the timeout period.");
+                    throw new TimeoutException(
+                        $"Job {jobId} did not complete within the timeout period."
+                    );
                 }
 
                 Thread.Sleep(500); // Check every 500 milliseconds

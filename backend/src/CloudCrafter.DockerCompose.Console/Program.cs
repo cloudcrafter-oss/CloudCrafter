@@ -3,7 +3,8 @@
 using YamlDotNet.RepresentationModel;
 
 Console.WriteLine("Hello, World!");
-string yamlString = @"
+string yamlString =
+    @"
 version: '3.8'
 services:
   web:
@@ -30,7 +31,6 @@ volumes:
 networks:
   lampnet:
 ";
-
 
 var yaml = new YamlStream();
 using (var reader = new StringReader(yamlString))

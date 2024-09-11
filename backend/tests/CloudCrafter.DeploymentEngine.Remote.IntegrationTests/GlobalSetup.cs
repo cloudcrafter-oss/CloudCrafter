@@ -18,7 +18,7 @@ public class GlobalSetup
         }
 
         return directory?.FullName
-               ?? throw new DirectoryNotFoundException("Solution directory not found.");
+            ?? throw new DirectoryNotFoundException("Solution directory not found.");
     }
 
     [OneTimeSetUp]
@@ -31,12 +31,11 @@ public class GlobalSetup
 
         // Define and start the container
         var futureImage = new ImageFromDockerfileBuilder()
-            .WithDockerfileDirectory(dockerfileDirectory).WithDockerfile("Dockerfile")
+            .WithDockerfileDirectory(dockerfileDirectory)
+            .WithDockerfile("Dockerfile")
             .Build();
 
-        await futureImage.CreateAsync()
-            .ConfigureAwait(false);
-
+        await futureImage.CreateAsync().ConfigureAwait(false);
 
         _container = new ContainerBuilder()
             .WithImage(futureImage)
@@ -44,18 +43,18 @@ public class GlobalSetup
             .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(22))
             .Build();
 
-        await _container.StartAsync()
-            .ConfigureAwait(false);
+        await _container.StartAsync().ConfigureAwait(false);
     }
 
     [OneTimeTearDown]
     public async Task GlobalTeardown()
     {
-        if (_container == null) { return; }
+        if (_container == null)
+        {
+            return;
+        }
 
-        await _container.StopAsync()
-            .ConfigureAwait(false);
-        await _container.DisposeAsync()
-            .ConfigureAwait(false);
+        await _container.StopAsync().ConfigureAwait(false);
+        await _container.DisposeAsync().ConfigureAwait(false);
     }
 }

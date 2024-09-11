@@ -25,28 +25,24 @@ public abstract class HandlerBaseCase
         service.SetImage(imageRepository, imageTag);
         service.AddExposedPort(3000, 3000);
 
-
         var recipe = new DeploymentRecipe
         {
             Name = "My Application",
             Application = new DeploymentRecipeApplicationInfo { Id = Guid.NewGuid() },
             EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
             {
-                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>()
+                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),
             },
-            Destination =
-                new DeploymentRecipeDestination
-                {
-                    RootDirectory = "/tmp/cloudcrafter-testing/" + RandomGenerator.String()
-                },
-            DockerComposeOptions =
-                new DeploymentRecipeDockerComposeOptions
-                {
-                    Base64DockerCompose = editor.ToBase64(),
-                    // In production envs, this will have the application stack guid in it
-                    DockerComposeDirectory =
-                        "/tmp/cloudcrafter-data/my-application"
-                },
+            Destination = new DeploymentRecipeDestination
+            {
+                RootDirectory = "/tmp/cloudcrafter-testing/" + RandomGenerator.String(),
+            },
+            DockerComposeOptions = new DeploymentRecipeDockerComposeOptions
+            {
+                Base64DockerCompose = editor.ToBase64(),
+                // In production envs, this will have the application stack guid in it
+                DockerComposeDirectory = "/tmp/cloudcrafter-data/my-application",
+            },
             BuildOptions = new DeploymentBuildOptions
             {
                 Steps = new List<DeploymentBuildStep>
@@ -56,41 +52,54 @@ public abstract class HandlerBaseCase
                         Name = "Fetch git",
                         Description = "Fetch the git application",
                         Type = DeploymentBuildStepType.FetchGitRepository,
-                        Params =
-                            new Dictionary<string, object>
-                            {
-                                { "repo", "https://github.com/cloudcrafter-oss/demo-examples.git" },
-                                { "commit", "HEAD" }
-                            }
+                        Params = new Dictionary<string, object>
+                        {
+                            { "repo", "https://github.com/cloudcrafter-oss/demo-examples.git" },
+                            { "commit", "HEAD" },
+                        },
                     },
                     new()
                     {
                         Name = "Determine Buildpack",
                         Description = "Determine the buildpack",
                         Type = DeploymentBuildStepType.NixpacksDetermineBuildPack,
-                        Params = new Dictionary<string, object> { { "path", "nixpacks-node-server" } }
+                        Params = new Dictionary<string, object>
+                        {
+                            { "path", "nixpacks-node-server" },
+                        },
                     },
                     new()
                     {
                         Name = "Generate Build plan",
                         Description = "Generate the build plan",
                         Type = DeploymentBuildStepType.NixpacksGeneratePlan,
-                        Params = new Dictionary<string, object> { { "path", "nixpacks-node-server" } }
+                        Params = new Dictionary<string, object>
+                        {
+                            { "path", "nixpacks-node-server" },
+                        },
                     },
                     new()
                     {
                         Name = "Alter plan",
                         Description = "Alter plan",
                         Type = DeploymentBuildStepType.NixpacksAlterPlan,
-                        Params =
-                            new Dictionary<string, object> { { "packages", new List<string> { "iputils-ping" } } }
+                        Params = new Dictionary<string, object>
+                        {
+                            {
+                                "packages",
+                                new List<string> { "iputils-ping" }
+                            },
+                        },
                     },
                     new()
                     {
                         Name = "Write plan to filesystem",
                         Description = "Write plan to filesystem",
                         Type = DeploymentBuildStepType.NixpacksWritePlanToFileSystem,
-                        Params = new Dictionary<string, object> { { "path", "nixpacks-node-server" } }
+                        Params = new Dictionary<string, object>
+                        {
+                            { "path", "nixpacks-node-server" },
+                        },
                     },
                     new()
                     {
@@ -102,18 +111,21 @@ public abstract class HandlerBaseCase
                             { "path", "nixpacks-node-server" },
                             { "image", imageRepository },
                             { "tag", imageTag },
-                            { "disableCache", true }
-                        }
+                            { "disableCache", true },
+                        },
                     },
                     new()
                     {
                         Name = "Write docker compose file",
                         Description = "Write docker compose file",
                         Type = DeploymentBuildStepType.DockerComposeWriteToFileSystem,
-                        Params = new Dictionary<string, object> { { "dockerComposeFile", "docker-compose.yml" } }
-                    }
-                }
-            }
+                        Params = new Dictionary<string, object>
+                        {
+                            { "dockerComposeFile", "docker-compose.yml" },
+                        },
+                    },
+                },
+            },
         };
 
         return recipe;

@@ -3,7 +3,8 @@ using MediatR;
 
 namespace CloudCrafter.Core.Jobs.Dispatcher;
 
-public class CloudCrafterRecurringJobsDispatcher(ISender sender) : ICloudCrafterRecurringJobsDispatcher
+public class CloudCrafterRecurringJobsDispatcher(ISender sender)
+    : ICloudCrafterRecurringJobsDispatcher
 {
     public Task AddRecurringConnectivityChecks()
     {

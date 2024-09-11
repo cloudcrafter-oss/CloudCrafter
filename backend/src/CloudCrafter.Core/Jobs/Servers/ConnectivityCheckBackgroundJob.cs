@@ -11,9 +11,7 @@ namespace CloudCrafter.Core.Jobs.Servers;
 
 public class ConnectivityCheckBackgroundJob : IJob
 {
-    public ConnectivityCheckBackgroundJob()
-    {
-    }
+    public ConnectivityCheckBackgroundJob() { }
 
     public ConnectivityCheckBackgroundJob(Guid serverId)
     {
@@ -23,8 +21,11 @@ public class ConnectivityCheckBackgroundJob : IJob
     public Guid ServerId { get; set; }
     public BackgroundJobType Type => BackgroundJobType.ServerConnectivityCheck;
 
-
-    public async Task Handle(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, string jobId)
+    public async Task Handle(
+        IServiceProvider serviceProvider,
+        ILoggerFactory loggerFactory,
+        string jobId
+    )
     {
         var context = serviceProvider.GetRequiredService<IApplicationDbContext>(); // TODO: Move this to a service
 
@@ -41,13 +42,12 @@ public class ConnectivityCheckBackgroundJob : IJob
             UpdatedAt = DateTime.UtcNow,
             Result = ServerConnectivityCheckResult.Unknown,
             Id = Guid.NewGuid(),
-            ServerId = ServerId
+            ServerId = ServerId,
         };
 
         context.ServerConnectivityCheckJobs.Add(connectivityCheckJob);
-        job.ServerConnectivityCheckJobId= connectivityCheckJob.Id;
+        job.ServerConnectivityCheckJobId = connectivityCheckJob.Id;
         await context.SaveChangesAsync();
-
 
         var server = await context.Servers.FindAsync(ServerId);
         if (server == null)
@@ -59,8 +59,12 @@ public class ConnectivityCheckBackgroundJob : IJob
         await ExecuteAsync(job, service, server, loggerFactory);
     }
 
-    private async Task ExecuteAsync(BackgroundJob backgroundJob, IServerConnectivityService serverConnectivity,
-        Server server, ILoggerFactory loggerFactory)
+    private async Task ExecuteAsync(
+        BackgroundJob backgroundJob,
+        IServerConnectivityService serverConnectivity,
+        Server server,
+        ILoggerFactory loggerFactory
+    )
     {
         if (backgroundJob.ServerConnectivityCheckJob == null)
         {
@@ -69,9 +73,11 @@ public class ConnectivityCheckBackgroundJob : IJob
         }
 
         var logger = loggerFactory.CreateLogger<ConnectivityCheckBackgroundJob>();
-        logger.LogDebug("Starting connectivity job for server ({ServerId}) with hostname ({Hostname})", server.Id,
-            server.IpAddress);
-
+        logger.LogDebug(
+            "Starting connectivity job for server ({ServerId}) with hostname ({Hostname})",
+            server.Id,
+            server.IpAddress
+        );
 
         var stopwatch = Stopwatch.StartNew();
 
@@ -83,10 +89,14 @@ public class ConnectivityCheckBackgroundJob : IJob
         }
         catch (Exception ex)
         {
-            backgroundJob.ServerConnectivityCheckJob.Result = ServerConnectivityCheckResult.Unhealthy;
-            logger.LogCritical(ex,
+            backgroundJob.ServerConnectivityCheckJob.Result =
+                ServerConnectivityCheckResult.Unhealthy;
+            logger.LogCritical(
+                ex,
                 "Something went wrong during the connectivity check for server ({ServerId}) ({ServerName})",
-                server.Id, server.Name);
+                server.Id,
+                server.Name
+            );
         }
 
         stopwatch.Stop();

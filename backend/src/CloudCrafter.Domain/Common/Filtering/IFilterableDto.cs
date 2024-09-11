@@ -1,6 +1,3 @@
 namespace CloudCrafter.Domain.Common.Filtering;
 
-public interface IFilterableDto
-{
-    
-}
+public interface IFilterableDto { }

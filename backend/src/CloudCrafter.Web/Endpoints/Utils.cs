@@ -9,12 +9,13 @@ public class Utils : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup(this)
-            .MapPost(PostValidateGithubRepo, "validate-git-repository");
+        app.MapGroup(this).MapPost(PostValidateGithubRepo, "validate-git-repository");
     }
 
-    public Task<GitRepositoryCheckResultDto> PostValidateGithubRepo(CheckValidGitRepoCommand.Command command,
-        ISender sender)
+    public Task<GitRepositoryCheckResultDto> PostValidateGithubRepo(
+        CheckValidGitRepoCommand.Command command,
+        ISender sender
+    )
     {
         return sender.Send(command);
     }

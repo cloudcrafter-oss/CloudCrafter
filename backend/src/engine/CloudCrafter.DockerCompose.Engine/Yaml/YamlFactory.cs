@@ -14,23 +14,18 @@ public static class YamlFactory
             .Build();
         var yamlObject = deserializer.Deserialize(yaml);
 
-        var serializer = new SerializerBuilder()
-            .JsonCompatible()
-            .Build();
+        var serializer = new SerializerBuilder().JsonCompatible().Build();
 
         var json = serializer.Serialize(yamlObject);
 
         return json;
     }
 
-  
-    
     private class InferTypeFromValue : INodeTypeResolver
     {
-
         public bool Resolve(NodeEvent? nodeEvent, ref Type currentType)
         {
-            if(nodeEvent == null)
+            if (nodeEvent == null)
             {
                 return false;
             }

@@ -49,14 +49,17 @@ public class PostRefreshUserTokensTest : BaseTestFixture
 
         var refreshQuery = new PostRefreshUserTokens.Query(createUserResult.RefreshToken);
         var result = await SendAsync(refreshQuery);
-        
-        Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(new PostRefreshUserTokens.Query(createUserResult.RefreshToken)));
-        
+
+        Assert.ThrowsAsync<UnauthorizedAccessException>(
+            async () =>
+                await SendAsync(new PostRefreshUserTokens.Query(createUserResult.RefreshToken))
+        );
+
         // Assert that new one still works
         var newTokenResult = await SendAsync(new PostRefreshUserTokens.Query(result.RefreshToken));
         newTokenResult.RefreshToken.Length.Should().BeGreaterThan(10);
         newTokenResult.AccessToken.Length.Should().BeGreaterThan(10);
-        
+
         (await CountAsync<UserRefreshToken>()).Should().Be(3);
     }
 }

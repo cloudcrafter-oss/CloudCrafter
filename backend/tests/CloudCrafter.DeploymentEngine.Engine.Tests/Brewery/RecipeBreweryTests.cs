@@ -1,7 +1,6 @@
 ﻿using CloudCrafter.Agent.Runner.IO;
 using CloudCrafter.DeploymentEngine.Engine.Brewery;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery;
 
@@ -26,7 +25,7 @@ public class RecipeBreweryTests
     public void ShouldNotBeAbleToBuildRecipeBecauseDestinationIsNotSet()
     {
         var brewery = new RecipeBrewery("Test");
-        brewery.SetApplication(Guid.NewGuid());
+        brewery.SetStackId(Guid.NewGuid());
         var act = () => brewery.Build();
         act.Should().Throw<InvalidOperationException>().WithMessage("Destination must be set.");
     }
@@ -36,7 +35,7 @@ public class RecipeBreweryTests
     {
         var brewery = new RecipeBrewery("Test");
         var guid = Guid.Parse("f4ccb2c1-0ce2-4ea7-9129-9b6755a1fad2");
-        brewery.SetApplication(guid);
+        brewery.SetStackId(guid);
         brewery.SetDestination("/var/data/cloudcrafter");
         var recipe = brewery.Build();
         recipe.Should().NotBeNull();

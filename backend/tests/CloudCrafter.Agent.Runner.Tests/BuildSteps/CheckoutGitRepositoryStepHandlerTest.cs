@@ -27,7 +27,9 @@ public class CheckoutGitRepositoryStepHandlerTest : BaseTest
         _mockPump = new Mock<IMessagePump>();
         _mockExecutor = new Mock<ICommandExecutor>();
         _mockLogger = new Mock<IDeploymentLogger>();
-        _mockPump.Setup(p => p.CreateLogger<CheckoutGitRepositoryStepHandler>()).Returns(_mockLogger.Object);
+        _mockPump
+            .Setup(p => p.CreateLogger<CheckoutGitRepositoryStepHandler>())
+            .Returns(_mockLogger.Object);
 
         _handler = new CheckoutGitRepositoryStepHandler(_mockPump.Object, _mockExecutor.Object);
 
@@ -36,13 +38,13 @@ public class CheckoutGitRepositoryStepHandlerTest : BaseTest
         _context = new DeploymentContext(_recipe);
     }
 
-
     [Test]
     public async Task ExecuteAsync_SuccessfulClone_LogsCorrectly()
     {
         var result = new ExecutorResult { ExitCode = 0 };
         // Arrange
-        _mockExecutor.Setup(e => e.ExecuteAsync("git", It.IsAny<IEnumerable<string>>()))
+        _mockExecutor
+            .Setup(e => e.ExecuteAsync("git", It.IsAny<IEnumerable<string>>()))
             .ReturnsAsync(result);
 
         var gitDir = _context.GetWorkingDirectory() + "/git";
@@ -51,10 +53,18 @@ public class CheckoutGitRepositoryStepHandlerTest : BaseTest
 
         // Assert
         _mockLogger.Verify(l => l.LogInfo("Start ExecuteAsync"), Times.Once);
-        _mockLogger.Verify(l => l.LogInfo($"Cloning repository https://github.com/example/repo.git to {gitDir}"),
-            Times.Once);
+        _mockLogger.Verify(
+            l => l.LogInfo($"Cloning repository https://github.com/example/repo.git to {gitDir}"),
+            Times.Once
+        );
         _mockExecutor.Verify(
-            e => e.ExecuteAsync("git", new[] { "clone", "https://github.com/example/repo.git", gitDir }), Times.Once);
+            e =>
+                e.ExecuteAsync(
+                    "git",
+                    new[] { "clone", "https://github.com/example/repo.git", gitDir }
+                ),
+            Times.Once
+        );
     }
 
     [Test]
@@ -62,11 +72,14 @@ public class CheckoutGitRepositoryStepHandlerTest : BaseTest
     {
         var result = new ExecutorResult { ExitCode = 1 };
         // Arrange
-        _mockExecutor.Setup(e => e.ExecuteAsync("git", It.IsAny<IEnumerable<string>>()))
+        _mockExecutor
+            .Setup(e => e.ExecuteAsync("git", It.IsAny<IEnumerable<string>>()))
             .ReturnsAsync(result);
 
         // Act & Assert
-        Assert.ThrowsAsync<DeploymentException>(async () => await _handler.ExecuteAsync(_params, _context));
+        Assert.ThrowsAsync<DeploymentException>(
+            async () => await _handler.ExecuteAsync(_params, _context)
+        );
         _mockLogger.Verify(l => l.LogCritical("Failed to clone git repository"), Times.Once);
     }
 

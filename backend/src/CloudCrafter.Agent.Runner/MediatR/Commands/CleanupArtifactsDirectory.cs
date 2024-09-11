@@ -9,7 +9,8 @@ public static class CleanupArtifactsDirectory
 {
     public record Query(DeploymentContext Context) : IRequest;
 
-    private class Handler(IMessagePump pump, ICommandExecutor commandExecutor) : IRequestHandler<Query>
+    private class Handler(IMessagePump pump, ICommandExecutor commandExecutor)
+        : IRequestHandler<Query>
     {
         private readonly IDeploymentLogger Logger = pump.CreateLogger<Handler>();
 

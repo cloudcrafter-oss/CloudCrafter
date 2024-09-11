@@ -20,7 +20,8 @@ public class BackgroundJobFactory(
     IApplicationDbContext context,
     JobSerializer jobSerializer,
     IBackgroundJobClient client,
-    ILogger<BackgroundJobFactory> logger)
+    ILogger<BackgroundJobFactory> logger
+)
 {
     /// <summary>
     ///     Creates and enqueues a job on the background
@@ -30,7 +31,10 @@ public class BackgroundJobFactory(
     /// <returns>The Hangfire Job id</returns>
     public async Task<string> CreateAndEnqueueJobAsync<TJob>(IJob job)
     {
-        logger.LogDebug("[CreateAndEnqueueJobAsync] Creating and enqueuing job of type {JobType}", typeof(TJob).Name);
+        logger.LogDebug(
+            "[CreateAndEnqueueJobAsync] Creating and enqueuing job of type {JobType}",
+            typeof(TJob).Name
+        );
         await using var transaction = await context.BeginTransactionAsync();
         try
         {
@@ -44,9 +48,8 @@ public class BackgroundJobFactory(
                 Status = BackgroundJobStatus.Created,
                 SerializedArguments = JsonSerializer.Serialize(serializedJob),
                 HangfireJobId = string.Empty,
-                Type = job.Type
+                Type = job.Type,
             };
-
 
             context.Jobs.Add(backgroundJob);
             await context.SaveChangesAsync();
@@ -54,11 +57,11 @@ public class BackgroundJobFactory(
             // var hangfireJobId =
             // client.Enqueue<CloudCrafterJob>(job => job.ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type, null));
 
-            var hangfireJobId =
-                client.Create<CloudCrafterJob>(job => job.ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type, null),
-                    new CreatedState());
+            var hangfireJobId = client.Create<CloudCrafterJob>(
+                job => job.ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type, null),
+                new CreatedState()
+            );
             backgroundJob.HangfireJobId = hangfireJobId;
-
 
             // hangfireJobIdclient.
             await context.SaveChangesAsync();
@@ -81,8 +84,11 @@ public class BackgroundJobFactory(
 public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider sp)
 {
     [JobDisplayName("{1}")]
-    public async Task ExecuteJobAsync(Guid backgroundJobId, BackgroundJobType backgroundJobType,
-        PerformContext? performContext)
+    public async Task ExecuteJobAsync(
+        Guid backgroundJobId,
+        BackgroundJobType backgroundJobType,
+        PerformContext? performContext
+    )
     {
 #if IN_TESTS
         // In tests, the job is executed synchronously (in memory)
@@ -101,8 +107,8 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
         using var scope = sp.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
 
-        var backgroundJob = await dbContext.Jobs
-            .Include(x => x.ServerConnectivityCheckJob)
+        var backgroundJob = await dbContext
+            .Jobs.Include(x => x.ServerConnectivityCheckJob)
             .ThenInclude(x => x != null ? x.Server : null)
             .FirstOrDefaultAsync(x => x.Id == backgroundJobId);
         if (backgroundJob == null)
@@ -112,8 +118,12 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
 
         logger.LogDebug("Executing background job of type {Type}", backgroundJob.Type);
 
-        var loggerFactory =
-            new BackgroundJobLoggerFactory(backgroundJob, performContext, dbContext, scope.ServiceProvider);
+        var loggerFactory = new BackgroundJobLoggerFactory(
+            backgroundJob,
+            performContext,
+            dbContext,
+            scope.ServiceProvider
+        );
 
         var stopwatch = Stopwatch.StartNew();
         try
@@ -122,7 +132,9 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
             await dbContext.SaveChangesAsync();
 
             var jobSerializer = scope.ServiceProvider.GetRequiredService<JobSerializer>();
-            var jobArgs = JsonSerializer.Deserialize<SerializedJobResult>(backgroundJob.SerializedArguments);
+            var jobArgs = JsonSerializer.Deserialize<SerializedJobResult>(
+                backgroundJob.SerializedArguments
+            );
 
             if (jobArgs is null)
             {
@@ -143,7 +155,11 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
                 throw new ArgumentNullException("Failed to deserialize job");
             }
 
-            await jobFromSerializer.Handle(scope.ServiceProvider, loggerFactory, performContext.BackgroundJob.Id);
+            await jobFromSerializer.Handle(
+                scope.ServiceProvider,
+                loggerFactory,
+                performContext.BackgroundJob.Id
+            );
 
             backgroundJob.Status = BackgroundJobStatus.Completed;
         }
@@ -162,8 +178,11 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
         }
     }
 
-    private async Task ExecuteTypedJobAsync<TJob, TParam>(BackgroundJob backgroundJob, PerformContext? performContext,
-        IServiceScope scope)
+    private async Task ExecuteTypedJobAsync<TJob, TParam>(
+        BackgroundJob backgroundJob,
+        PerformContext? performContext,
+        IServiceScope scope
+    )
         where TJob : IBaseJob<TParam>
     {
         var job = scope.ServiceProvider.GetRequiredService<TJob>();
@@ -174,8 +193,12 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
         }
 
         logger.LogDebug("Creating background job factory");
-        var loggerFactory = new BackgroundJobLoggerFactory(backgroundJob, performContext,
-            scope.ServiceProvider.GetRequiredService<IApplicationDbContext>(), scope.ServiceProvider);
+        var loggerFactory = new BackgroundJobLoggerFactory(
+            backgroundJob,
+            performContext,
+            scope.ServiceProvider.GetRequiredService<IApplicationDbContext>(),
+            scope.ServiceProvider
+        );
 
         await job.ExecuteAsync(backgroundJob, parameter, loggerFactory);
     }

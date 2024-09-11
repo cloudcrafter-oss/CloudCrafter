@@ -41,10 +41,14 @@ public class CommandExecutorTest
     {
         var messages = new List<ExecutorStreamResult>();
 
-        var result = await _executor.ExecuteWithStreamAsync("this-command-does-not-exists", ["-V"], streamResult =>
-        {
-            messages.Add(streamResult);
-        });
+        var result = await _executor.ExecuteWithStreamAsync(
+            "this-command-does-not-exists",
+            ["-V"],
+            streamResult =>
+            {
+                messages.Add(streamResult);
+            }
+        );
 
         result.Should().NotBeNull();
         result.ExitCode.Should().Be(-1);
@@ -53,17 +57,19 @@ public class CommandExecutorTest
         messages.Should().BeEmpty();
     }
 
-
     [Test]
     public async Task ShouldBeAbleToExecuteExistingCommandStreaming()
     {
         var messages = new List<ExecutorStreamResult>();
 
-        var result = await _executor.ExecuteWithStreamAsync("bash",
-            new[] { "-c", "echo 'Hello, World!' && echo 'Error message' >&2" }, streamResult =>
+        var result = await _executor.ExecuteWithStreamAsync(
+            "bash",
+            new[] { "-c", "echo 'Hello, World!' && echo 'Error message' >&2" },
+            streamResult =>
             {
                 messages.Add(streamResult);
-            });
+            }
+        );
 
         result.Should().NotBeNull();
         result.ExitCode.Should().Be(0);

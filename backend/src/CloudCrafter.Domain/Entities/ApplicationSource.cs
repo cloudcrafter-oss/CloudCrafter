@@ -11,6 +11,12 @@ public class ApplicationSource
 public class ApplicationSourceGit
 {
     public required string Repository { get; init; }
+
+    /// <summary>
+    ///     Path in the Git repository where the stack is located.
+    /// </summary>
+    public string? Path { get; init; }
+
     public string? Branch { get; init; }
 }
 

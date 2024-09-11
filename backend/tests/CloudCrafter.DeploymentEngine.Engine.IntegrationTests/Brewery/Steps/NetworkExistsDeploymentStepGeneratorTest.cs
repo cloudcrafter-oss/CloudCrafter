@@ -4,7 +4,8 @@ using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
 
-public class NetworkExistsDeploymentStepGeneratorTest : BaseParameterConversionTest<NetworkExistsCheckParams>
+public class NetworkExistsDeploymentStepGeneratorTest
+    : BaseParameterConversionTest<NetworkExistsCheckParams>
 {
     [Test]
     public void ShouldBeAbleToCreateParams()

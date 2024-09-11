@@ -20,18 +20,15 @@ public class StopContainersHandler(IMessagePump pump, IDockerHelper dockerHelper
         _logger.LogInfo("Stopping containers based on the provided filters");
 
         DockerContainerFilter filter = new();
-        
+
         if (parameters.Filters.TryGetValue("labels", out var rawLabelFilters))
         {
-            var labelFilters = rawLabelFilters
-                .Select(DockerLabelFilter.Parse)
-                .ToList();
+            var labelFilters = rawLabelFilters.Select(DockerLabelFilter.Parse).ToList();
 
             filter.LabelFilters = labelFilters;
         }
 
         filter.OnlyCloudCrafterLabels = parameters.OnlyCloudCrafterContainers;
-
 
         var containers = await dockerHelper.GetContainersFromFilter(filter);
 
@@ -39,16 +36,13 @@ public class StopContainersHandler(IMessagePump pump, IDockerHelper dockerHelper
         {
             _logger.LogInfo($"Found {containers.Count()} containers to stop and remove");
 
-            var containerIds = containers.Select(x => x.ID)
-                .ToList();
+            var containerIds = containers.Select(x => x.ID).ToList();
 
             await dockerHelper.StopContainers(containerIds);
             await dockerHelper.RemoveContainers(containerIds);
         }
 
         _logger.LogInfo("All containers stopped based on the provided filters");
-
- 
     }
 
     public Task DryRun(StopContainersParams parameters, DeploymentContext context)

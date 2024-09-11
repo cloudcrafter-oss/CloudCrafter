@@ -11,7 +11,7 @@ public class FilterableFieldsOperationFilter : IOperationFilter
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         var filterableFields = GetFilterableFields(context.MethodInfo.DeclaringType);
-        
+
         if (filterableFields.Any())
         {
             var openApiArray = new OpenApiArray();
@@ -20,16 +20,14 @@ public class FilterableFieldsOperationFilter : IOperationFilter
                 openApiArray.Add(new OpenApiString(field));
             }
 
-            operation.Extensions.Add(
-                "x-filterable-fields",
-                openApiArray
-            );
+            operation.Extensions.Add("x-filterable-fields", openApiArray);
         }
     }
-    
+
     private static IEnumerable<string> GetFilterableFields(Type? type)
     {
-        if (type == null) return Enumerable.Empty<string>();
+        if (type == null)
+            return Enumerable.Empty<string>();
 
         return type.GetProperties()
             .Where(p => p.GetCustomAttribute<FilterableAttribute>() != null)

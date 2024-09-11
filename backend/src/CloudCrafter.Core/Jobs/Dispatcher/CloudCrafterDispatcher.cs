@@ -6,12 +6,17 @@ using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Jobs.Dispatcher;
 
-public class CloudCrafterDispatcher(BackgroundJobFactory jobFactory, ILogger<CloudCrafterDispatcher> logger)
-    : ICloudCrafterDispatcher
+public class CloudCrafterDispatcher(
+    BackgroundJobFactory jobFactory,
+    ILogger<CloudCrafterDispatcher> logger
+) : ICloudCrafterDispatcher
 {
     public async Task<string> EnqueueConnectivityCheck(Server server)
     {
-        logger.LogDebug("Dispatching connectivity check to job factory for server {ServerName}", server.Name);
+        logger.LogDebug(
+            "Dispatching connectivity check to job factory for server {ServerName}",
+            server.Name
+        );
 
         var job = new ConnectivityCheckBackgroundJob(server.Id);
         return await jobFactory.CreateAndEnqueueJobAsync<ConnectivityCheckBackgroundJob>(job);
@@ -27,9 +32,11 @@ public class CloudCrafterDispatcher(BackgroundJobFactory jobFactory, ILogger<Clo
 
     public async Task<string> EnqueueStackDeployment(Guid stackId)
     {
-        logger.LogInformation("Dispatching stack deployment to job factory for stack {StackId}", stackId);
+        logger.LogInformation(
+            "Dispatching stack deployment to job factory for stack {StackId}",
+            stackId
+        );
         var job = new DeployStackBackgroundJob(stackId);
         return await jobFactory.CreateAndEnqueueJobAsync<DeployStackBackgroundJob>(job);
-        
     }
 }

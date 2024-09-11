@@ -13,10 +13,13 @@ public static class GetStackDetail
     {
         public required Guid StackId { get; init; }
     }
-    
+
     private class Handler(IStacksService stacksService) : IRequestHandler<Query, StackDetailDto?>
-    { 
-        public async Task<StackDetailDto?> Handle(Query request, CancellationToken cancellationToken)
+    {
+        public async Task<StackDetailDto?> Handle(
+            Query request,
+            CancellationToken cancellationToken
+        )
         {
             return await stacksService.GetStackDetail(request.StackId);
         }

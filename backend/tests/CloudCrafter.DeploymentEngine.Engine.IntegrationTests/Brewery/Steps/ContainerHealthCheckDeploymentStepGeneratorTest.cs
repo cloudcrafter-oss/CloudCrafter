@@ -1,40 +1,47 @@
-﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params;
-using CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
+﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
 using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
 
-public class ContainerHealthCheckDeploymentStepGeneratorTest : BaseParameterConversionTest<ContainerHealthCheckParams>
+public class ContainerHealthCheckDeploymentStepGeneratorTest
+    : BaseParameterConversionTest<ContainerHealthCheckParams>
 {
     [Test]
-    public void ShouldBeAbleToCreateParams()
+    [TestCase(null)]
+    [TestCase(true)]
+    [TestCase(false)]
+    public void ShouldBeAbleToCreateParams(bool? checkDockerHealth)
     {
         // Arrange
-        var options =
-            new ContainerHealthCheckDeploymentStepGenerator.Args
-            {
-                DockerComposeSettings = new()
+        var options = new ContainerHealthCheckDeploymentStepGenerator.Args
+        {
+            DockerComposeSettings =
+                new ContainerHealthCheckDeploymentStepGenerator.ArgsComposeSettings
                 {
-                    FetchServicesFromContext = true
+                    FetchServicesFromContext = true,
                 },
-                Services = new Dictionary<string, ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings>()
+            Services = new Dictionary<
+                string,
+                ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings
+            >
+            {
                 {
+                    "frontend",
+                    new ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings
                     {
-                        "frontend",
-                        new ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings()
-                        {
-                            HttpMethod = "GET",
-                            HttpSchema = "http",
-                            HttpHost = "localhost",
-                            HttpPath = "/",
-                            HttpPort = 80,
-                            ExpectedHttpStatusCode = 200,
-                            MaxRetries = 3
-                        }
+                        HttpMethod = "GET",
+                        HttpSchema = "http",
+                        HttpHost = "localhost",
+                        HttpPath = "/",
+                        HttpPort = 80,
+                        ExpectedHttpStatusCode = 200,
+                        MaxRetries = 3,
+                        CheckForDockerHealth = checkDockerHealth,
                     }
-                }
-            };
+                },
+            },
+        };
         var generator = new ContainerHealthCheckDeploymentStepGenerator(options);
 
         // Act
@@ -57,7 +64,6 @@ public class ContainerHealthCheckDeploymentStepGeneratorTest : BaseParameterConv
         paramObject.Services["frontend"].CheckInterval.Should().BeNull();
         paramObject.Services["frontend"].CheckTimeout.Should().BeNull();
         paramObject.Services["frontend"].BackOffPeriod.Should().BeNull();
-        
-
+        paramObject.Services["frontend"].CheckForDockerHealth.Should().Be(checkDockerHealth);
     }
 }

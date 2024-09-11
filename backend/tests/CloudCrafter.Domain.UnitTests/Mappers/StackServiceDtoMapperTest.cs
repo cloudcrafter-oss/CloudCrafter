@@ -21,10 +21,13 @@ public class StackServiceDtoMapperTest : BaseMapperTest
             Type = new StackServiceType { Id = stackTypeId, Type = "App" },
             HealthStatus = new EntityHealthStatus
             {
-                Value = EntityHealthStatusValue.Unsupported, StatusAt = dateYesterday
+                Value = EntityHealthStatusValue.Unsupported,
+                StatusAt = dateYesterday,
             },
+            HealthcheckConfiguration = new(),
+            HttpConfiguration = null,
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
         };
 
         var stackServiceDto = _mapper.Map<StackServiceDto>(stackService);

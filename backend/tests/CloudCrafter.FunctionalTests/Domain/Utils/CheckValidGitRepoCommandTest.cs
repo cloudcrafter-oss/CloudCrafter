@@ -5,6 +5,7 @@ using NUnit.Framework;
 namespace CloudCrafter.FunctionalTests.Domain.Utils;
 
 using static Testing;
+
 public class CheckValidGitRepoCommandTest : BaseTestFixture
 {
     [TestCase("https://github.com/cloudcrafter-oss/CloudCrafter")]
@@ -18,7 +19,7 @@ public class CheckValidGitRepoCommandTest : BaseTestFixture
         result.Should().NotBeNull();
         result.IsValid.Should().BeTrue();
     }
-    
+
     [TestCase("https://github.com/cloudcrafter-oss/CloudCrafter-not-existing")]
     [TestCase("https://www.google.nl")]
     public async Task ShouldBeInvalidGitRepo(string repo)

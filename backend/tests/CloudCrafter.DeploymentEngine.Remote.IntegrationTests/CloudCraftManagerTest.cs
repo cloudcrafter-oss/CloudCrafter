@@ -4,7 +4,6 @@ using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Remote.Tests;
 
-
 [TestFixture]
 public class CloudCraftManagerTest
 {
@@ -22,19 +21,17 @@ public class CloudCraftManagerTest
             Username = "root",
             Port = 2222, // TODO: Move this to random port as per the Testcontainer port
             Host = "localhost",
-            SshKey = sshKey
+            SshKey = sshKey,
         };
     }
-    
+
     [Test]
     public async Task ShouldBeAbleToRunCommandOnTestHost()
     {
-
         var manager = new CloudCrafterEngineManager(_engineServer);
 
         var client = manager.CreateSshClient();
         await client.ConnectAsync();
-        
 
         var result = await client.ExecuteCommandAsync("whoami");
 

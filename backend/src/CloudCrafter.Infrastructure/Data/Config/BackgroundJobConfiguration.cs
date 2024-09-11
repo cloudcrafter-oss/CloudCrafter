@@ -9,10 +9,13 @@ public class BackgroundJobConfiguration : IEntityTypeConfiguration<BackgroundJob
 {
     public void Configure(EntityTypeBuilder<BackgroundJob> builder)
     {
-        builder.OwnsMany(d => d.Logs, b =>
-        {
-            b.ToJson();
-        });
+        builder.OwnsMany(
+            d => d.Logs,
+            b =>
+            {
+                b.ToJson();
+            }
+        );
 
         // builder.HasOne(x => x.ServerConnectivityCheckJob);
     }

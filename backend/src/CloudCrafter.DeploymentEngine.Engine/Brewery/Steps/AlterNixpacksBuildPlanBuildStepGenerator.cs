@@ -3,8 +3,9 @@ using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
 
-public class AlterNixpacksBuildPlanBuildStepGeneratorParameterConversion(AlterNixpacksBuildPlanBuildStepGeneratorParameterConversion.Args options)
-    : IBuildStepGenerator
+public class AlterNixpacksBuildPlanBuildStepGenerator(
+    AlterNixpacksBuildPlanBuildStepGenerator.Args options
+) : IBuildStepGenerator
 {
     public DeploymentBuildStep Generate()
     {
@@ -13,7 +14,7 @@ public class AlterNixpacksBuildPlanBuildStepGeneratorParameterConversion(AlterNi
             Name = "Alter Nixpacks build plan",
             Description = "Alters the Nixpacks build plan for the application",
             Type = DeploymentBuildStepType.NixpacksAlterPlan,
-            Params = new Dictionary<string, object> { { "packages", options.AddPackages } }
+            Params = new Dictionary<string, object> { { "packages", options.AddPackages } },
         };
     }
 

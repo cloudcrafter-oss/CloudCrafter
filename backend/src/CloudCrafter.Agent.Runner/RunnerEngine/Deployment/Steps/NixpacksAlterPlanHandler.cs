@@ -41,7 +41,6 @@ public class NixpacksAlterPlanHandler(IMessagePump pump)
             editor.AddVariables(buildVariables);
         }
 
-
         var packagesToAdd = parameters.Packages;
         editor.AddPackages(packagesToAdd);
         editor.AddPackages(["curl", "wget"]);

@@ -12,7 +12,8 @@ public class ProjectsService(
     IProjectRepository repository,
     IEnvironmentRepository environmentRepository,
     IMapper mapper,
-    IEventStore eventStore) : IProjectsService
+    IEventStore eventStore
+) : IProjectsService
 {
     public Task<List<ProjectDto>> GetProjects(LoadProjectOptions options)
     {
@@ -43,8 +44,10 @@ public class ProjectsService(
         return repository.DeleteProject(id);
     }
 
-    public async Task<ProjectEnvironmentEnhancedDto?> GetProjectEnvironmentEnhancedDetails(Guid projectId,
-        Guid environmentId)
+    public async Task<ProjectEnvironmentEnhancedDto?> GetProjectEnvironmentEnhancedDetails(
+        Guid projectId,
+        Guid environmentId
+    )
     {
         var environment = await environmentRepository.GetEnvironment(environmentId, projectId);
 
@@ -73,7 +76,7 @@ public class ProjectsService(
             EnvironmentCreatedAt = environment.CreatedAt,
             ProjectName = environment.Project.Name,
             DeployedStackCount = randomNumberOfDeployedApplications,
-            LastDeploymentAt = lastDeploymentDate
+            LastDeploymentAt = lastDeploymentDate,
         };
 
         return dto;

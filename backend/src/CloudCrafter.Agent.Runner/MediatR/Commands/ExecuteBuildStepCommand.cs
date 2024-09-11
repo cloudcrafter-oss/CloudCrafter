@@ -15,14 +15,16 @@ public static class ExecuteBuildStepCommand
 {
     public record Query(DeploymentBuildStep Step, DeploymentContext Context) : IRequest;
 
-    private class Handler(DeploymentStepSerializerFactory serializerFactory) : IRequestHandler<Query>
+    private class Handler(DeploymentStepSerializerFactory serializerFactory)
+        : IRequestHandler<Query>
     {
-        
         public async Task Handle(Query request, CancellationToken cancellationToken)
         {
             var paramType = serializerFactory.GetParamType(request.Step.Type);
-            var method = typeof(Handler).GetMethod(nameof(ExecuteStepInternal),
-                BindingFlags.NonPublic | BindingFlags.Instance);
+            var method = typeof(Handler).GetMethod(
+                nameof(ExecuteStepInternal),
+                BindingFlags.NonPublic | BindingFlags.Instance
+            );
 
             if (method == null)
             {
@@ -34,13 +36,18 @@ public static class ExecuteBuildStepCommand
             await (Task)genericMethod.Invoke(this, new object[] { request.Step, request.Context })!;
         }
 
-
-        private async Task ExecuteStepInternal<TParams>(DeploymentBuildStep step, DeploymentContext context)
+        private async Task ExecuteStepInternal<TParams>(
+            DeploymentBuildStep step,
+            DeploymentContext context
+        )
         {
             var config = serializerFactory.GetConfig<TParams>(step);
-            var handler = serializerFactory.CreateHandler<TParams>(step); 
+            var handler = serializerFactory.CreateHandler<TParams>(step);
 
-            var paramObject = serializerFactory.ConvertAndValidateParams(step.Params, config.Validator);
+            var paramObject = serializerFactory.ConvertAndValidateParams(
+                step.Params,
+                config.Validator
+            );
             if (context.IsDryRun)
             {
                 await handler.DryRun(paramObject, context);

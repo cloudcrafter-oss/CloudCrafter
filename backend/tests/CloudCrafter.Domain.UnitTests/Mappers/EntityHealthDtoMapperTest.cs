@@ -12,7 +12,10 @@ public class EntityHealthDtoMapperTest : BaseMapperTest
     [TestCase(EntityHealthStatusValue.Degraded, EntityHealthDtoValue.Degraded)]
     [TestCase(EntityHealthStatusValue.Unhealthy, EntityHealthDtoValue.Unhealthy)]
     [TestCase(EntityHealthStatusValue.Healthy, EntityHealthDtoValue.Healthy)]
-    public void ShouldMapEntityHealthStatus(EntityHealthStatusValue entity, EntityHealthDtoValue dto)
+    public void ShouldMapEntityHealthStatus(
+        EntityHealthStatusValue entity,
+        EntityHealthDtoValue dto
+    )
     {
         var dateTime = DateTime.UtcNow.AddDays(-1);
         // Arrange

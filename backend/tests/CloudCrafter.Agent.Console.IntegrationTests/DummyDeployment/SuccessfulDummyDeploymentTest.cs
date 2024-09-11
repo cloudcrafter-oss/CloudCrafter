@@ -16,7 +16,6 @@ public class SuccessfulDummyDeploymentTest
     private DeploymentRecipe _recipe;
     private IDockerHelper _dockerHelper;
 
-
     [SetUp]
     public async Task SetUp()
     {
@@ -27,20 +26,21 @@ public class SuccessfulDummyDeploymentTest
         var mediator = host.Services.GetRequiredService<IMediator>();
 
         var applicationId = Guid.Parse("7547f1d4-0bbc-49f5-8a93-2f1b20fe1307");
-        _recipe = await mediator.Send(new GetDummyDeployment.Query("custom-image", "testing", applicationId));
+        _recipe = await mediator.Send(
+            new GetDummyDeployment.Query("custom-image", "testing", applicationId)
+        );
 
         _deploymentService = host.Services.GetRequiredService<DeploymentService>();
         _dockerHelper = host.Services.GetRequiredService<IDockerHelper>();
     }
-    
+
     [TearDown]
     public async Task Cleanup()
     {
-        var cloudCrafterContainers = await _dockerHelper.GetContainersFromFilter(new DockerContainerFilter()
-        {
-            OnlyCloudCrafterLabels = true
-        });
-        
+        var cloudCrafterContainers = await _dockerHelper.GetContainersFromFilter(
+            new DockerContainerFilter() { OnlyCloudCrafterLabels = true }
+        );
+
         foreach (var container in cloudCrafterContainers)
         {
             await _dockerHelper.StopContainers([container.ID]);
@@ -62,7 +62,8 @@ public class SuccessfulDummyDeploymentTest
     {
         await EnsureNetworkExists("cloudcrafter");
         var nixpacksDockerBuildStep = _recipe.BuildOptions.Steps.FirstOrDefault(x =>
-            x.Type == DeploymentBuildStepType.NixpacksBuildDockerImage);
+            x.Type == DeploymentBuildStepType.NixpacksBuildDockerImage
+        );
 
         nixpacksDockerBuildStep.Should().NotBeNull();
         var repository = nixpacksDockerBuildStep!.Params["image"].ToString();
@@ -85,7 +86,8 @@ public class SuccessfulDummyDeploymentTest
 
         _recipe.DockerComposeOptions = new DeploymentRecipeDockerComposeOptions
         {
-            Base64DockerCompose = base64Yaml, DockerComposeDirectory = tmpDirectory
+            Base64DockerCompose = base64Yaml,
+            DockerComposeDirectory = tmpDirectory,
         };
 
         await _deploymentService.ValidateRecipe(_recipe);
@@ -94,7 +96,6 @@ public class SuccessfulDummyDeploymentTest
 
         // it at least should not throw an exception
         true.Should().BeTrue();
-
 
         await ShouldHaveDockerImage(fullImage);
         await ShouldHaveEndpointResponse("http://localhost:3000", "Hello World!");

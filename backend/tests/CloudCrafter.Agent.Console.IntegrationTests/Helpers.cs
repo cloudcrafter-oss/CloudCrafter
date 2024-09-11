@@ -12,14 +12,12 @@ public static class Helpers
 
     static Helpers()
     {
-        _client = new DockerClientConfiguration()
-            .CreateClient();
+        _client = new DockerClientConfiguration().CreateClient();
     }
 
     public static async Task ShouldHaveDockerImage(string image)
     {
-        var result = await _client.Images
-            .InspectImageAsync(image);
+        var result = await _client.Images.InspectImageAsync(image);
 
         result.Should().NotBeNull();
     }
@@ -31,17 +29,18 @@ public static class Helpers
 
         if (network == null)
         {
-            await _client.Networks.CreateNetworkAsync(new NetworksCreateParameters
-            {
-                Name = networkName
-            });
+            await _client.Networks.CreateNetworkAsync(
+                new NetworksCreateParameters { Name = networkName }
+            );
         }
     }
 
-
-    public static async Task ShouldHaveEndpointResponse(string url, string responseContains, int statusCode = 200)
+    public static async Task ShouldHaveEndpointResponse(
+        string url,
+        string responseContains,
+        int statusCode = 200
+    )
     {
-
         var client = RetryHttpClientFactory.Create();
         var request = new HttpRequestMessage(HttpMethod.Get, url);
 
@@ -62,7 +61,7 @@ public static class Helpers
         var labelService = new DockerComposeLabelService();
         labelService.AddLabel(LabelFactory.GenerateManagedLabel());
         service.AddLabels(labelService);
-        
+
         service.AddExposedPort(3000, 3000);
 
         return editor;

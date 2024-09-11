@@ -8,9 +8,10 @@ public class Server : IHasTimestamps
     public required Guid Id { get; init; }
     public required string Name { get; set; }
     public required string IpAddress { get; set; }
-    
+
     [EncryptColumn]
     public string? SshUsername { get; set; }
+
     [EncryptColumn]
     public string? SshPrivateKey { get; set; }
 

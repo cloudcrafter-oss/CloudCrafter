@@ -3,13 +3,16 @@ using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
 
-public class ContainerHealthCheckDeploymentStepGenerator(ContainerHealthCheckDeploymentStepGenerator.Args options)
-    : IBuildStepGenerator
+public class ContainerHealthCheckDeploymentStepGenerator(
+    ContainerHealthCheckDeploymentStepGenerator.Args options
+) : IBuildStepGenerator
 {
     public DeploymentBuildStep Generate()
     {
-
-        var services = options.Services.ToDictionary(service => service.Key, service => GenerateServiceCheck(service.Value));
+        var services = options.Services.ToDictionary(
+            service => service.Key,
+            service => GenerateServiceCheck(service.Value)
+        );
 
         return new DeploymentBuildStep
         {
@@ -19,21 +22,23 @@ public class ContainerHealthCheckDeploymentStepGenerator(ContainerHealthCheckDep
             Params = new Dictionary<string, object>
             {
                 {
-                    "dockerComposeSettings", new Dictionary<string, object>
+                    "dockerComposeSettings",
+                    new Dictionary<string, object>
                     {
-                        { "fetchServicesFromContext", options.DockerComposeSettings.FetchServicesFromContext }
+                        {
+                            "fetchServicesFromContext",
+                            options.DockerComposeSettings.FetchServicesFromContext
+                        },
                     }
                 },
-                {
-                    "services", services
-                }
-            }
+                { "services", services },
+            },
         };
     }
 
-    private Dictionary<string, object> GenerateServiceCheck(ArgsHealthCheckSettings settings)
+    private Dictionary<string, object?> GenerateServiceCheck(ArgsHealthCheckSettings settings)
     {
-        return new Dictionary<string, object>
+        return new Dictionary<string, object?>
         {
             { "httpMethod", settings.HttpMethod },
             { "httpSchema", settings.HttpSchema },
@@ -41,7 +46,8 @@ public class ContainerHealthCheckDeploymentStepGenerator(ContainerHealthCheckDep
             { "httpPath", settings.HttpPath },
             { "httpPort", settings.HttpPort },
             { "expectedResponseCode", settings.ExpectedHttpStatusCode },
-            { "retries", settings.MaxRetries }
+            { "retries", settings.MaxRetries },
+            { "checkForDockerHealth", settings.CheckForDockerHealth },
         };
     }
 
@@ -58,12 +64,13 @@ public class ContainerHealthCheckDeploymentStepGenerator(ContainerHealthCheckDep
 
     public class ArgsHealthCheckSettings
     {
-        public required string HttpMethod { get; init; }
-        public required string HttpSchema { get; init; }
-        public required string HttpHost { get; init; }
-        public required string HttpPath { get; init; }
-        public required int HttpPort { get; init; }
-        public required int ExpectedHttpStatusCode { get; init; }
-        public required int MaxRetries { get; init; }
+        public required string? HttpMethod { get; init; }
+        public required string? HttpSchema { get; init; }
+        public required string? HttpHost { get; init; }
+        public required string? HttpPath { get; init; }
+        public required int? HttpPort { get; init; }
+        public required int? ExpectedHttpStatusCode { get; init; }
+        public required bool? CheckForDockerHealth { get; init; }
+        public required int? MaxRetries { get; init; }
     }
 }

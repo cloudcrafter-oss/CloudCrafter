@@ -22,7 +22,7 @@ public class PostLoginUserQueryTest : BaseTestFixture
         var user = await CreateAdminUser();
 
         var query = new PostLoginUser.Query(user.Email, user.Password);
-        
+
         var result = await SendAsync(query);
 
         result.RefreshToken.Length.Should().BeGreaterThan(10); // safe to assume its there

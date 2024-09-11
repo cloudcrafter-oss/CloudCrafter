@@ -23,7 +23,9 @@ public class NixpacksGeneratePlanHandlerTest : BaseTest
         _mockPump = new Mock<IMessagePump>();
         _mockNixpacksHelper = new Mock<INixpacksHelper>();
         _mockLogger = new Mock<IDeploymentLogger>();
-        _mockPump.Setup(p => p.CreateLogger<NixpacksGeneratePlanHandler>()).Returns(_mockLogger.Object);
+        _mockPump
+            .Setup(p => p.CreateLogger<NixpacksGeneratePlanHandler>())
+            .Returns(_mockLogger.Object);
 
         _handler = new NixpacksGeneratePlanHandler(_mockPump.Object, _mockNixpacksHelper.Object);
         _context = new DeploymentContext(GetTestRecipe());
@@ -37,7 +39,8 @@ public class NixpacksGeneratePlanHandlerTest : BaseTest
         var expectedFullPath = $"{_context.GetWorkingDirectory()}/git/testPath";
         var expectedPlan = "sample build plan";
 
-        _mockNixpacksHelper.Setup(n => n.GetBuildPlanAsync(expectedFullPath, parameters))
+        _mockNixpacksHelper
+            .Setup(n => n.GetBuildPlanAsync(expectedFullPath, parameters))
             .ReturnsAsync(expectedPlan);
 
         // Act
@@ -46,9 +49,15 @@ public class NixpacksGeneratePlanHandlerTest : BaseTest
         // Assert
         _mockLogger.Verify(l => l.LogInfo("Starting nixpacks plan handler"), Times.Once);
         _mockLogger.Verify(l => l.LogInfo("Saved nixpacks plan to to context."), Times.Once);
-        _mockNixpacksHelper.Verify(n => n.GetBuildPlanAsync(expectedFullPath, parameters), Times.Once);
+        _mockNixpacksHelper.Verify(
+            n => n.GetBuildPlanAsync(expectedFullPath, parameters),
+            Times.Once
+        );
 
-        _context.GetRecipeResult<string>(RecipeResultKeys.NixpacksBuildPlan).Should().Be(expectedPlan);
+        _context
+            .GetRecipeResult<string>(RecipeResultKeys.NixpacksBuildPlan)
+            .Should()
+            .Be(expectedPlan);
     }
 
     [Test]
@@ -58,7 +67,8 @@ public class NixpacksGeneratePlanHandlerTest : BaseTest
         var parameters = new NixpacksGeneratePlanParams { Path = "testPath" };
         var expectedFullPath = $"{_context.GetWorkingDirectory()}/git/testPath";
 
-        _mockNixpacksHelper.Setup(n => n.GetBuildPlanAsync(expectedFullPath, parameters))
+        _mockNixpacksHelper
+            .Setup(n => n.GetBuildPlanAsync(expectedFullPath, parameters))
             .ReturnsAsync(string.Empty);
 
         // Act
@@ -67,7 +77,10 @@ public class NixpacksGeneratePlanHandlerTest : BaseTest
         // Assert
         _mockLogger.Verify(l => l.LogInfo("Starting nixpacks plan handler"), Times.Once);
         _mockLogger.Verify(l => l.LogInfo("Saved nixpacks plan to to context."), Times.Once);
-        _mockNixpacksHelper.Verify(n => n.GetBuildPlanAsync(expectedFullPath, parameters), Times.Once);
+        _mockNixpacksHelper.Verify(
+            n => n.GetBuildPlanAsync(expectedFullPath, parameters),
+            Times.Once
+        );
 
         _context.GetRecipeResult<string>(RecipeResultKeys.NixpacksBuildPlan).Should().BeEmpty();
     }

@@ -18,25 +18,32 @@ public class YamlRecipeReaderTest
     [Test]
     public void ShouldNotBeAbleToCreateRecipeFromEmptyString()
     {
-        Assert.Throws<InvalidOperationException>(() => _reader.FromString(string.Empty))
+        Assert
+            .Throws<InvalidOperationException>(() => _reader.FromString(string.Empty))
             .Message.Should()
-            .Be("An unexpected error occurred while deserializing YAML: Deserialization resulted in a null object.");
+            .Be(
+                "An unexpected error occurred while deserializing YAML: Deserialization resulted in a null object."
+            );
     }
 
     [Test]
     public void ShouldNotBeAbleToCreateRecipeFromMalformedString()
     {
-        var exception = Assert.Throws<InvalidOperationException>(() => _reader.FromString("malformed"));
+        var exception = Assert.Throws<InvalidOperationException>(
+            () => _reader.FromString("malformed")
+        );
 
-        exception.Message.Should().Be("Failed to deserialize YAML: Exception during deserialization");
+        exception
+            .Message.Should()
+            .Be("Failed to deserialize YAML: Exception during deserialization");
     }
-    
+
     [Test]
     public void ShouldBeAbleToCreateRecipeFromValidString()
     {
         var recipe = AgentFakers.DeploymentRecipeFaker().Generate();
         var yaml = new YamlRecipeWriter(recipe).WriteString();
-        
+
         var result = _reader.FromString(yaml);
 
         result.Should().BeEquivalentTo(recipe);
@@ -49,10 +56,9 @@ public class YamlRecipeReaderTest
         var yaml = new YamlRecipeWriter(recipe).WriteString();
 
         var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(yaml));
-        
+
         var result = _reader.FromBase64(base64);
 
         result.Should().BeEquivalentTo(recipe);
-        
     }
 }

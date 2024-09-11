@@ -15,9 +15,13 @@ namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
 public class NixpacksBuildDockerImageHandler(IMessagePump pump, INixpacksHelper nixpacksHelper)
     : IDeploymentStepHandler<NixpacksBuildDockerImageParams>
 {
-    private readonly IDeploymentLogger _logger = pump.CreateLogger<NixpacksBuildDockerImageHandler>();
+    private readonly IDeploymentLogger _logger =
+        pump.CreateLogger<NixpacksBuildDockerImageHandler>();
 
-    public async Task ExecuteAsync(NixpacksBuildDockerImageParams parameters, DeploymentContext context)
+    public async Task ExecuteAsync(
+        NixpacksBuildDockerImageParams parameters,
+        DeploymentContext context
+    )
     {
         _logger.LogInfo("Building Docker image via Nixpacks");
 
@@ -32,20 +36,21 @@ public class NixpacksBuildDockerImageHandler(IMessagePump pump, INixpacksHelper 
 
         var image = $"{parameters.Image}:{parameters.Tag}";
 
-        var buildEnvironmentVariables = context.Recipe.EnvironmentVariables.Variables
-            .Select(x => x.Value)
+        var buildEnvironmentVariables = context
+            .Recipe.EnvironmentVariables.Variables.Select(x => x.Value)
             .Where(x => x.IsBuildVariable)
             .ToDictionary(x => x.Name, x => x.Value);
 
-        var result = await nixpacksHelper.BuildDockerImage(new NixpacksBuildDockerImageConfig
-        {
-            PlanPath = planPath,
-            WorkDir = workDir,
-            ImageName = image,
-            DisableCache = parameters.DisableCache.GetValueOrDefault(),
-            EnvironmentVariables = buildEnvironmentVariables
-        });
-
+        var result = await nixpacksHelper.BuildDockerImage(
+            new NixpacksBuildDockerImageConfig
+            {
+                PlanPath = planPath,
+                WorkDir = workDir,
+                ImageName = image,
+                DisableCache = parameters.DisableCache.GetValueOrDefault(),
+                EnvironmentVariables = buildEnvironmentVariables,
+            }
+        );
 
         _logger.LogInfo($"Successfully built Docker image: {image}");
     }

@@ -12,7 +12,6 @@ public class GetProjectListTest : BaseTestFixture
 {
     private GetProjectList.Query Query = new(false);
 
-
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {

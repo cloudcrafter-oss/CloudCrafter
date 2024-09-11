@@ -10,11 +10,16 @@ namespace CloudCrafter.Core.Commands.Stacks;
 public static class CreateStackCommand
 {
     [Authorize]
-    public class Command : IRequest<StackCreatedDto>, IRequireServerAccess, IRequireEnvironmentAccess
+    public class Command
+        : IRequest<StackCreatedDto>,
+            IRequireServerAccess,
+            IRequireEnvironmentAccess
     {
-        [MinLength(3)] public required string Name { get; init; }
+        [MinLength(3)]
+        public required string Name { get; init; }
 
-        [MinLength(1)] public required string GitRepository { get; init; }
+        [MinLength(1)]
+        public required string GitRepository { get; init; }
 
         public required Guid EnvironmentId { get; set; }
 
@@ -23,14 +28,17 @@ public static class CreateStackCommand
 
     private class Handler(IStacksService service) : IRequestHandler<Command, StackCreatedDto>
     {
-        public async Task<StackCreatedDto> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<StackCreatedDto> Handle(
+            Command request,
+            CancellationToken cancellationToken
+        )
         {
             var args = new CreateStackArgsDto
             {
                 Name = request.Name,
                 EnvironmentId = request.EnvironmentId,
                 ServerId = request.ServerId,
-                GitRepository = request.GitRepository
+                GitRepository = request.GitRepository,
             };
 
             return await service.CreateStack(args);

@@ -1,6 +1,3 @@
 ﻿namespace CloudCrafter.Web;
 
-public interface IWebSelector
-{
-    
-}
+public interface IWebSelector { }

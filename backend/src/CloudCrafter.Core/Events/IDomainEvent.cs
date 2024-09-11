@@ -1,6 +1,3 @@
 namespace CloudCrafter.Core.Events;
 
-public interface IDomainEvent
-{
-    
-}
+public interface IDomainEvent { }

@@ -10,9 +10,16 @@ public class NetworkExistsDeploymentStepGenerator(string networkName) : IBuildSt
         return new DeploymentBuildStep
         {
             Name = $"Check if network '{networkName}' exists",
-            Description = "Validates if the network exists. If it does not, create the network regardless",
+            Description =
+                "Validates if the network exists. If it does not, create the network regardless",
             Type = DeploymentBuildStepType.DockerValidateNetworksExists,
-            Params = new Dictionary<string, object> { { "networks", new List<string> { networkName } } }
+            Params = new Dictionary<string, object>
+            {
+                {
+                    "networks",
+                    new List<string> { networkName }
+                },
+            },
         };
     }
 }

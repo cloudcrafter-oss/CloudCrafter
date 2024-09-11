@@ -8,13 +8,13 @@ namespace CloudCrafter.Web.Infrastructure;
 
 public static class WebExtensions
 {
-    public static IServiceCollection AddWebConfig(this IServiceCollection services, ConfigurationManager config)
+    public static IServiceCollection AddWebConfig(
+        this IServiceCollection services,
+        ConfigurationManager config
+    )
     {
-        
-
         services.AddHttpContextAccessor();
- 
-      
+
         return services;
     }
 }

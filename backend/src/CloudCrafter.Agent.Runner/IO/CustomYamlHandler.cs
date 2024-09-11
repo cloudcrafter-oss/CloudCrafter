@@ -11,14 +11,13 @@ public class CustomYamlHandler
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
         .WithTypeConverter(new CustomObjectConverter())
         .Build();
-    
+
     private readonly ISerializer _serializer = new SerializerBuilder()
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
         .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
         .Build();
 
-    public 
-        T Deserialize<T>(string input)
+    public T Deserialize<T>(string input)
     {
         return _deserializer.Deserialize<T>(input);
     }

@@ -1,0 +1,21 @@
+{
+   "$schema": "https://alirezanet.github.io/Husky.Net/schema.json",
+   "tasks": [
+      {
+         "name": "Run Biome on frontend projects",
+         "command": "pnpm",
+         "args": ["run", "format-and-lint:fix"],
+         "cwd": "./frontend"
+      },
+      {
+         "name": "Run csharpier",
+         "command": "dotnet",
+         "args": ["csharpier", "./backend"]
+      },
+      {
+         "name": "Check for unstaged changes",
+         "command": "git",
+         "args": ["diff", "--exit-code"]
+      }
+   ]
+}

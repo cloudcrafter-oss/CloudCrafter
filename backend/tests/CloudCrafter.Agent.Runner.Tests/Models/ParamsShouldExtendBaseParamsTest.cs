@@ -21,24 +21,30 @@ public class ParamsShouldExtendBaseParamsTest
             throw new Exception("Could not load assembly");
         }
 
-
-        var deploymentStepClasses = assembly.GetTypes()
-            .Where(t => t.Namespace != null &&
-                        t.Namespace.StartsWith(namespaceToCheck) &&
-                        t.IsClass &&
-                        !t.IsAbstract &&
-                        t.GetCustomAttributes(typeof(DeploymentStepAttribute), true).Any());
+        var deploymentStepClasses = assembly
+            .GetTypes()
+            .Where(t =>
+                t.Namespace != null
+                && t.Namespace.StartsWith(namespaceToCheck)
+                && t.IsClass
+                && !t.IsAbstract
+                && t.GetCustomAttributes(typeof(DeploymentStepAttribute), true).Any()
+            );
 
         deploymentStepClasses.Count().Should().BeGreaterThan(0);
         // Check each type
         foreach (var type in deploymentStepClasses)
         {
-            Assert.IsTrue(baseClassType.IsAssignableFrom(type),
-                $"DeploymentStep class {type.Name} in namespace {type.Namespace} does not inherit from {baseClassType.Name}");
+            Assert.IsTrue(
+                baseClassType.IsAssignableFrom(type),
+                $"DeploymentStep class {type.Name} in namespace {type.Namespace} does not inherit from {baseClassType.Name}"
+            );
         }
 
         // Ensure we found at least one DeploymentStep class
-        Assert.IsTrue(deploymentStepClasses.Any(),
-            $"No classes with [DeploymentStep] attribute found in namespace {namespaceToCheck} or its sub-namespaces");
+        Assert.IsTrue(
+            deploymentStepClasses.Any(),
+            $"No classes with [DeploymentStep] attribute found in namespace {namespaceToCheck} or its sub-namespaces"
+        );
     }
 }

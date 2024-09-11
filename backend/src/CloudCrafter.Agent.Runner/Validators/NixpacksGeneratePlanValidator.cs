@@ -17,5 +17,6 @@ public class NixpacksGeneratePlanParamsValidator : AbstractValidator<NixpacksGen
 [DeploymentStep(DeploymentBuildStepType.NixpacksGeneratePlan)]
 public class NixpacksGeneratePlanConfig : IDeploymentStepConfig<NixpacksGeneratePlanParams>
 {
-    public IValidator<NixpacksGeneratePlanParams> Validator => new NixpacksGeneratePlanParamsValidator();
+    public IValidator<NixpacksGeneratePlanParams> Validator =>
+        new NixpacksGeneratePlanParamsValidator();
 }
