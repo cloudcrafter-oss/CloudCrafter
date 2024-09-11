@@ -8,7 +8,10 @@ public class ContainerHealthCheckDeploymentStepGeneratorTest
     : BaseParameterConversionTest<ContainerHealthCheckParams>
 {
     [Test]
-    public void ShouldBeAbleToCreateParams()
+    [TestCase(null)]
+    [TestCase(true)]
+    [TestCase(false)]
+    public void ShouldBeAbleToCreateParams(bool? checkDockerHealth)
     {
         // Arrange
         var options = new ContainerHealthCheckDeploymentStepGenerator.Args
@@ -34,7 +37,7 @@ public class ContainerHealthCheckDeploymentStepGeneratorTest
                         HttpPort = 80,
                         ExpectedHttpStatusCode = 200,
                         MaxRetries = 3,
-                        CheckForDockerHealth = true,
+                        CheckForDockerHealth = checkDockerHealth,
                     }
                 },
             },
@@ -61,6 +64,6 @@ public class ContainerHealthCheckDeploymentStepGeneratorTest
         paramObject.Services["frontend"].CheckInterval.Should().BeNull();
         paramObject.Services["frontend"].CheckTimeout.Should().BeNull();
         paramObject.Services["frontend"].BackOffPeriod.Should().BeNull();
-        paramObject.Services["frontend"].CheckForDockerHealth.Should().Be(true);
+        paramObject.Services["frontend"].CheckForDockerHealth.Should().Be(checkDockerHealth);
     }
 }
