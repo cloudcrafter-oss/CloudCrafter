@@ -42,6 +42,9 @@ public static class FakerInstances
             .RuleFor(x => x.Value, f => f.PickRandom<EntityHealthStatusValue>())
             .RuleFor(x => x.StatusAt, DateTime.UtcNow);
 
+    public static StackServiceType StackServiceAppTypeType =>
+        new() { Id = StackServiceTypeConstants.App, Type = nameof(StackServiceTypeConstants.App) };
+
     public static Faker<Stack> StackFaker(Guid environmentId)
     {
         var server = ServerFaker.Generate();
@@ -63,13 +66,6 @@ public static class FakerInstances
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
     }
 
-    public static StackServiceType StackServiceAppTypeType =>
-        new StackServiceType()
-        {
-            Id = StackServiceTypeConstants.App,
-            Type = nameof(StackServiceTypeConstants.App),
-        };
-
     public static Faker<StackService> StackServiceFaker(Stack stack)
     {
         return new Faker<StackService>()
@@ -78,6 +74,7 @@ public static class FakerInstances
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow)
             .RuleFor(x => x.StackId, stack.Id)
+            .RuleFor(x => x.HealthcheckConfiguration, f => new EntityHealthcheckConfiguration())
             .RuleFor(x => x.StackServiceTypeId, Guid.NewGuid) // TODO: Use proper Guid here
             .RuleFor(x => x.Stack, stack)
             .RuleFor(x => x.HttpConfiguration, (EntityHttpConfiguration?)null)

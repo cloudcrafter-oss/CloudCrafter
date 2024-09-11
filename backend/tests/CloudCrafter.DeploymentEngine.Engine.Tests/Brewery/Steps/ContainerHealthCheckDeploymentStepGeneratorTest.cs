@@ -33,6 +33,7 @@ public class ContainerHealthCheckDeploymentStepGeneratorTest
                         HttpPort = 80,
                         ExpectedHttpStatusCode = 200,
                         MaxRetries = 3,
+                        CheckForDockerHealth = true,
                     }
                 },
             },
@@ -60,5 +61,6 @@ public class ContainerHealthCheckDeploymentStepGeneratorTest
         serviceCheck.Should().ContainKey("httpPort").WhoseValue.Should().Be(80);
         serviceCheck.Should().ContainKey("expectedResponseCode").WhoseValue.Should().Be(200);
         serviceCheck.Should().ContainKey("retries").WhoseValue.Should().Be(3);
+        serviceCheck.Should().ContainKey("checkForDockerHealth").WhoseValue.Should().Be(true);
     }
 }

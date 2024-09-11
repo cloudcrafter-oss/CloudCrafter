@@ -36,9 +36,9 @@ public class ContainerHealthCheckDeploymentStepGenerator(
         };
     }
 
-    private Dictionary<string, object> GenerateServiceCheck(ArgsHealthCheckSettings settings)
+    private Dictionary<string, object?> GenerateServiceCheck(ArgsHealthCheckSettings settings)
     {
-        return new Dictionary<string, object>
+        return new Dictionary<string, object?>
         {
             { "httpMethod", settings.HttpMethod },
             { "httpSchema", settings.HttpSchema },
@@ -47,6 +47,7 @@ public class ContainerHealthCheckDeploymentStepGenerator(
             { "httpPort", settings.HttpPort },
             { "expectedResponseCode", settings.ExpectedHttpStatusCode },
             { "retries", settings.MaxRetries },
+            { "checkForDockerHealth", settings.CheckForDockerHealth },
         };
     }
 
@@ -63,12 +64,13 @@ public class ContainerHealthCheckDeploymentStepGenerator(
 
     public class ArgsHealthCheckSettings
     {
-        public required string HttpMethod { get; init; }
-        public required string HttpSchema { get; init; }
-        public required string HttpHost { get; init; }
-        public required string HttpPath { get; init; }
-        public required int HttpPort { get; init; }
-        public required int ExpectedHttpStatusCode { get; init; }
-        public required int MaxRetries { get; init; }
+        public required string? HttpMethod { get; init; }
+        public required string? HttpSchema { get; init; }
+        public required string? HttpHost { get; init; }
+        public required string? HttpPath { get; init; }
+        public required int? HttpPort { get; init; }
+        public required int? ExpectedHttpStatusCode { get; init; }
+        public required bool? CheckForDockerHealth { get; init; }
+        public required int? MaxRetries { get; init; }
     }
 }

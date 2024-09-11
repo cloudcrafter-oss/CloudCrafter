@@ -9,4 +9,15 @@ public class EntityHealthcheckConfiguration
     public int? HttpPort { get; set; } = 80;
     public int? ExpectedHttpStatusCode { get; set; } = 200;
     public int? MaxRetries { get; set; } = 3;
+
+    public bool ConfigurationValid()
+    {
+        return !string.IsNullOrWhiteSpace(HttpMethod)
+            && !string.IsNullOrWhiteSpace(HttpSchema)
+            && !string.IsNullOrWhiteSpace(HttpHost)
+            && !string.IsNullOrWhiteSpace(HttpPath)
+            && HttpPort.HasValue
+            && ExpectedHttpStatusCode.HasValue
+            && MaxRetries.HasValue;
+    }
 }

@@ -75,6 +75,30 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
         AddWriteDockerComposeFileStep(dockerComposeFileName);
         AddStartDockerComposeStep(dockerComposeFileName);
 
+        var healthCheckConfiguration = firstService.HealthcheckConfiguration;
+        var hasValidHealthConfiguration = healthCheckConfiguration.ConfigurationValid();
+
+        var healthCheckOptionForAppService =
+            new ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings
+            {
+                HttpHost = hasValidHealthConfiguration ? healthCheckConfiguration.HttpHost : null,
+                HttpMethod = hasValidHealthConfiguration
+                    ? healthCheckConfiguration.HttpMethod
+                    : null,
+                HttpPath = hasValidHealthConfiguration ? healthCheckConfiguration.HttpPath : null,
+                HttpPort = hasValidHealthConfiguration ? healthCheckConfiguration.HttpPort : null,
+                HttpSchema = hasValidHealthConfiguration
+                    ? healthCheckConfiguration.HttpSchema
+                    : null,
+                ExpectedHttpStatusCode = hasValidHealthConfiguration
+                    ? healthCheckConfiguration.ExpectedHttpStatusCode
+                    : null,
+                MaxRetries = hasValidHealthConfiguration
+                    ? healthCheckConfiguration.MaxRetries
+                    : null,
+                CheckForDockerHealth = true,
+            };
+
         AddCheckContainerHealthCheckStep(
             new ContainerHealthCheckDeploymentStepGenerator.Args
             {
@@ -88,19 +112,7 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
                     ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings
                 >
                 {
-                    {
-                        dockerComposeServices.First(),
-                        new ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings
-                        {
-                            HttpHost = "localhost",
-                            HttpMethod = "GET",
-                            HttpPath = "/",
-                            HttpPort = 3000,
-                            HttpSchema = "http",
-                            ExpectedHttpStatusCode = 200,
-                            MaxRetries = 4,
-                        }
-                    },
+                    { dockerComposeServices.First(), healthCheckOptionForAppService },
                 },
             }
         );

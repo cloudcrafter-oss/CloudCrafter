@@ -1,5 +1,4 @@
-﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params;
-using CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
+﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
 using FluentAssertions;
 
@@ -14,15 +13,19 @@ public class ContainerHealthCheckDeploymentStepGeneratorTest
         // Arrange
         var options = new ContainerHealthCheckDeploymentStepGenerator.Args
         {
-            DockerComposeSettings = new() { FetchServicesFromContext = true },
+            DockerComposeSettings =
+                new ContainerHealthCheckDeploymentStepGenerator.ArgsComposeSettings
+                {
+                    FetchServicesFromContext = true,
+                },
             Services = new Dictionary<
                 string,
                 ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings
-            >()
+            >
             {
                 {
                     "frontend",
-                    new ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings()
+                    new ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings
                     {
                         HttpMethod = "GET",
                         HttpSchema = "http",
@@ -31,6 +34,7 @@ public class ContainerHealthCheckDeploymentStepGeneratorTest
                         HttpPort = 80,
                         ExpectedHttpStatusCode = 200,
                         MaxRetries = 3,
+                        CheckForDockerHealth = true,
                     }
                 },
             },
@@ -57,5 +61,6 @@ public class ContainerHealthCheckDeploymentStepGeneratorTest
         paramObject.Services["frontend"].CheckInterval.Should().BeNull();
         paramObject.Services["frontend"].CheckTimeout.Should().BeNull();
         paramObject.Services["frontend"].BackOffPeriod.Should().BeNull();
+        paramObject.Services["frontend"].CheckForDockerHealth.Should().Be(true);
     }
 }

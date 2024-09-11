@@ -74,8 +74,9 @@ buildOptions:
         my-custom-service-123:
           httpMethod: GET
           httpSchema: http
-          httpHost: localhost
+          httpHost: 127.0.0.1
           httpPath: /
           httpPort: 3000
           expectedResponseCode: 200
-          retries: 4
+          retries: 3
+          checkForDockerHealth: true
