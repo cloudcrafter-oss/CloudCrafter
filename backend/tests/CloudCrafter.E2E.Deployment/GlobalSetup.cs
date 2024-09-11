@@ -1,6 +1,6 @@
 ﻿using CloudCrafter.TestUtilities;
 
-namespace CloudCrafter.DeploymentEngine.Remote.Tests;
+namespace CloudCrafter.E2E.Deployment;
 
 [SetUpFixture]
 public class GlobalSetup : SharedDockerTestHostSetup { }

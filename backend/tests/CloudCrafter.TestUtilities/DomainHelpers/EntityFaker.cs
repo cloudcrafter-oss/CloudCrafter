@@ -1,9 +1,9 @@
 ﻿using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 
-namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery;
+namespace CloudCrafter.TestUtilities.DomainHelpers;
 
-public static class Helper
+public static class EntityFaker
 {
     public static Stack GenerateBasicAppStack(GenerateBasicAppArgs args)
     {

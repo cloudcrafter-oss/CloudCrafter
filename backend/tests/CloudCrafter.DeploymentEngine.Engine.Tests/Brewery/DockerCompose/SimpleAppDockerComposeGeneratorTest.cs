@@ -1,5 +1,7 @@
 ﻿using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.DockerCompose;
+using CloudCrafter.TestUtilities.DomainHelpers;
+using EntityFrameworkCore.EncryptColumn.Util;
 using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery.DockerCompose;
@@ -15,8 +17,8 @@ public class SimpleAppDockerComposeGeneratorTest
         var stackId = Guid.Parse("35223e08-9c9f-4322-972e-51c610c202e3");
         var stackServiceId = Guid.Parse("b34a6560-701d-4f0e-b024-b4b7b2155bcf");
 
-        var stack = Helper.GenerateBasicAppStack(
-            new Helper.GenerateBasicAppArgs
+        var stack = EntityFaker.GenerateBasicAppStack(
+            new EntityFaker.GenerateBasicAppArgs
             {
                 DomainName = "my-custom-domain.com",
                 EnvironmentId = environmentId,

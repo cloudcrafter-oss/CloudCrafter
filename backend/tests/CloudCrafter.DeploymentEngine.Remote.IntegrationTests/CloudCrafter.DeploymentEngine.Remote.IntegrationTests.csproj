@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\engine\CloudCrafter.DeploymentEngine.Remote\CloudCrafter.DeploymentEngine.Remote.csproj"/>
+    <ProjectReference Include="..\CloudCrafter.TestUtilities\CloudCrafter.TestUtilities.csproj"/>
   </ItemGroup>
 
 </Project>
