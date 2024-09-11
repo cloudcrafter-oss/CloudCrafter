@@ -834,7 +834,8 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Navigation("HealthStatus")
                         .IsRequired();
 
-                    b.Navigation("HealthcheckConfiguration");
+                    b.Navigation("HealthcheckConfiguration")
+                        .IsRequired();
 
                     b.Navigation("HttpConfiguration");
 

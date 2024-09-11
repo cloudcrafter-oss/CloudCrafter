@@ -66,7 +66,7 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             // TODO: Based on the StackServiceType, we should add HttpConfiguration
             // E.g. databases should not get this.
             HttpConfiguration = null,
-            HealthcheckConfiguration = null,
+            HealthcheckConfiguration = new(),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
         };

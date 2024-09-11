@@ -24,7 +24,7 @@ public class StackServiceDtoMapperTest : BaseMapperTest
                 Value = EntityHealthStatusValue.Unsupported,
                 StatusAt = dateYesterday,
             },
-            HealthcheckConfiguration = null,
+            HealthcheckConfiguration = new(),
             HttpConfiguration = null,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
