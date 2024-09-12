@@ -7,9 +7,9 @@ namespace CloudCrafter.TestUtilities;
 public class SharedDockerTestHostSetup
 {
     public static IContainer? _container { get; private set; }
-    public static string? DockerFileLocation { get; private set; }
+    public static string? TestHostDockerfileLocation { get; private set; }
 
-    private string GetSolutionDirectory()
+    public string GetSolutionDirectory()
     {
         var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
         while (directory != null && !directory.GetFiles("*.sln").Any())
@@ -27,7 +27,7 @@ public class SharedDockerTestHostSetup
         var solutionDirectory = GetSolutionDirectory();
 
         var dockerfileDirectory = Path.Combine(solutionDirectory, "..", "docker", "test-host");
-        DockerFileLocation = dockerfileDirectory;
+        TestHostDockerfileLocation = dockerfileDirectory;
 
         // Define and start the container
         var futureImage = new ImageFromDockerfileBuilder()
@@ -40,6 +40,7 @@ public class SharedDockerTestHostSetup
         _container = new ContainerBuilder()
             .WithImage(futureImage)
             .WithPortBinding(2222, 22)
+            .WithVolumeMount("/var/run/docker.sock", "/var/run/docker.sock")
             .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(22))
             .Build();
 

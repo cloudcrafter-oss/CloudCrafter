@@ -12,7 +12,7 @@ public class CloudCraftManagerTest
     [SetUp]
     public void SetUp()
     {
-        var sshKeyContents = File.ReadLines(GlobalSetup.DockerFileLocation! + "/id_rsa");
+        var sshKeyContents = File.ReadLines(GlobalSetup.TestHostDockerfileLocation! + "/id_rsa");
 
         var sshKey = string.Join("\n", sshKeyContents);
 
