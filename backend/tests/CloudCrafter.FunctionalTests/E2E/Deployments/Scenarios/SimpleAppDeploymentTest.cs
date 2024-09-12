@@ -1,8 +1,9 @@
 ﻿using CloudCrafter.Domain.Entities;
 using CloudCrafter.TestUtilities.DomainHelpers;
 using FluentAssertions;
+using NUnit.Framework;
 
-namespace CloudCrafter.E2E.Deployment.Scenarios;
+namespace CloudCrafter.FunctionalTests.E2E.Deployments.Scenarios;
 
 public class SimpleAppDeploymentTest
 {
