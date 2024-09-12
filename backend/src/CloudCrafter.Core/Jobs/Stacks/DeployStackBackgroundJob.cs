@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Domain.Entities;
+﻿using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Domain.Entities;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Jobs.Stacks;
@@ -16,7 +17,17 @@ public class DeployStackBackgroundJob : IJob
 
     public BackgroundJobType Type => BackgroundJobType.StackDeployment;
 
-    public Task Handle(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, string jobId)
+    public Task HandleEntity(IApplicationDbContext context, string jobId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task Handle(
+        IServiceProvider serviceProvider,
+        IApplicationDbContext context,
+        ILoggerFactory loggerFactory,
+        string jobId
+    )
     {
         var logger = loggerFactory.CreateLogger<DeployStackBackgroundJob>();
         logger.LogDebug("Starting deployment for stack ({StackId})", StackId);

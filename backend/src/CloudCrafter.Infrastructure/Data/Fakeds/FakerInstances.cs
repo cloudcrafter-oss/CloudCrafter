@@ -75,13 +75,13 @@ public static class FakerInstances
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow)
             .RuleFor(x => x.StackId, stack.Id)
             .RuleFor(x => x.HealthcheckConfiguration, f => new EntityHealthcheckConfiguration())
-            .RuleFor(x => x.StackServiceTypeId, Guid.NewGuid) // TODO: Use proper Guid here
+            .RuleFor(x => x.StackServiceTypeId, StackServiceTypeConstants.App)
             .RuleFor(x => x.Stack, stack)
             .RuleFor(x => x.HttpConfiguration, (EntityHttpConfiguration?)null)
             .RuleFor(x => x.CreatedBy, (Guid?)null)
             .RuleFor(x => x.LastModifiedBy, (Guid?)null)
             .RuleFor(x => x.Name, f => f.Person.FullName)
-            .RuleFor(x => x.Type, f => StackServiceAppTypeType)
+            .RuleFor(x => x.Type, (StackServiceType?)null)
             .RuleFor(x => x.HealthStatus, f => EntityHealthStatusFaker.Generate());
     }
 

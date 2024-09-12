@@ -1,4 +1,5 @@
 using Bogus;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Jobs;
 using CloudCrafter.Core.Jobs.Serializer;
 using CloudCrafter.Domain.Entities;
@@ -150,7 +151,17 @@ public class DummyTestJob : IJob
 
     public BackgroundJobType Type => BackgroundJobType.StackDeployment;
 
-    public Task Handle(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, string jobId)
+    public Task HandleEntity(IApplicationDbContext context, string jobId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task Handle(
+        IServiceProvider serviceProvider,
+        IApplicationDbContext context,
+        ILoggerFactory loggerFactory,
+        string jobId
+    )
     {
         throw new NotImplementedException();
     }

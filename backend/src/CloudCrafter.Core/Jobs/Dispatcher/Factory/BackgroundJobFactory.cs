@@ -155,8 +155,11 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
                 throw new ArgumentNullException("Failed to deserialize job");
             }
 
+            await jobFromSerializer.HandleEntity(dbContext, performContext.BackgroundJob.Id);
+
             await jobFromSerializer.Handle(
                 scope.ServiceProvider,
+                dbContext,
                 loggerFactory,
                 performContext.BackgroundJob.Id
             );
