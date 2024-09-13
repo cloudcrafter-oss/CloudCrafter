@@ -6,5 +6,5 @@ public interface ICloudCrafterDispatcher
 {
     Task<string> EnqueueConnectivityCheck(Server server);
     Task EnqueueConnectivityCheck(List<Server> servers);
-    Task<string> EnqueueStackDeployment(Guid stackId);
+    Task<string> EnqueueStackDeployment(Guid deploymentId);
 }

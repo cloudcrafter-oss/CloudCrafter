@@ -76,6 +76,23 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
         await context.SaveChangesAsync();
     }
 
+    public async Task<Guid> CreateDeployment(Guid stackId)
+    {
+        var deployment = new Deployment()
+        {
+            Id = Guid.NewGuid(),
+            StackId = stackId,
+            Logs = new(),
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+        };
+
+        context.Deployments.Add(deployment);
+        await context.SaveChangesAsync();
+
+        return deployment.Id;
+    }
+
     private async Task<Stack?> GetStackInternal(Guid id, bool throwExceptionOnNotFound = true)
     {
         var stack = await context

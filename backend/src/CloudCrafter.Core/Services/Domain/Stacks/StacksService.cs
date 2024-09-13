@@ -37,4 +37,9 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
 
         return mapper.Map<StackDetailDto>(stack);
     }
+
+    public Task<Guid> CreateDeployment(Guid stackId)
+    {
+        return repository.CreateDeployment(stackId);
+    }
 }

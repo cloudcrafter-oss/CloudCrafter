@@ -2,5 +2,5 @@
 
 public class DeploymentCreatedDetailsDto
 {
-    public required string DeploymentId { get; init; }
+    public required Guid DeploymentId { get; init; }
 }

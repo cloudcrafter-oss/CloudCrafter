@@ -1,25 +1,33 @@
 ﻿using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Jobs.Stacks;
 
 public class DeployStackBackgroundJob : IJob
 {
+    private BackgroundJob? _job;
+
     public DeployStackBackgroundJob() { }
 
-    public DeployStackBackgroundJob(Guid stackId)
+    public DeployStackBackgroundJob(Guid deploymentId)
     {
-        StackId = stackId;
+        DeploymentId = deploymentId;
     }
 
-    public Guid StackId { get; set; }
+    public Guid DeploymentId { get; set; }
 
     public BackgroundJobType Type => BackgroundJobType.StackDeployment;
 
-    public Task HandleEntity(IApplicationDbContext context, string jobId)
+    public async Task HandleEntity(IApplicationDbContext context, string jobId)
     {
-        throw new NotImplementedException();
+        _job = await context.Jobs.Where(x => x.HangfireJobId == jobId).FirstOrDefaultAsync();
+
+        if (_job == null)
+        {
+            throw new ArgumentNullException(nameof(jobId), "Job not found");
+        }
     }
 
     public Task Handle(
@@ -30,7 +38,7 @@ public class DeployStackBackgroundJob : IJob
     )
     {
         var logger = loggerFactory.CreateLogger<DeployStackBackgroundJob>();
-        logger.LogDebug("Starting deployment for stack ({StackId})", StackId);
+        logger.LogDebug("Starting deployment for stack ({StackId})", DeploymentId);
 
         return Task.CompletedTask;
     }
