@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Jobs.Dispatcher;
+﻿using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Jobs.Stacks;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
@@ -35,14 +35,9 @@ public class SimpleAppDeploymentTest : BaseTestFixture
                 StackId = StackId,
                 StackServiceId = StackServiceId,
                 StackName = "My Custom Stack 123",
-                StackServiceName = "My Custom Service : 123"
+                StackServiceName = "My Custom Service : 123",
             }
         );
-    }
-
-    private class TestConfig
-    {
-        
     }
 
     private async Task<TestConfig> EnsureConfigCreated()
@@ -61,27 +56,62 @@ public class SimpleAppDeploymentTest : BaseTestFixture
             StackId = Stack.Id,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            Logs = new List<DeploymentLog>()
+            Logs = new List<DeploymentLog>(),
         };
         await AddAsync(environment);
         await AddAsync(Stack);
         await AddAsync(deployment);
         await RunAsAdministratorAsync();
-        
-        return new()
-        {
-            
-        }
+
+        return new TestConfig { Deployment = deployment };
     }
 
     [Test]
-    public async Task ShouldBeAbleToDispatchJob()
+    public async Task ShouldNotBeAbleToRunJobBecauseJobIsMissing()
     {
-       
+        // Setup
+        var config = await EnsureConfigCreated();
 
-        var job = new DeployStackBackgroundJob(deployment.Id);
+        var job = new DeployStackBackgroundJob(config.Deployment.Id);
+
+        var context = GetService<IApplicationDbContext>();
+        // Act
+        var act = async () => await job.HandleEntity(context, "jobId");
+
+        // Assert
+        await act.Should().ThrowAsync<ArgumentNullException>().WithMessage("Job not found*");
+    }
+
+    [Test]
+    public async Task ShouldNotBeAbleToRunJobBecauseDeploymentIsMissing()
+    {
+        // Setup
+        var context = GetService<IApplicationDbContext>();
+        await AddAsync(
+            new BackgroundJob
+            {
+                Id = Guid.NewGuid(),
+                HangfireJobId = "jobId",
+                Type = BackgroundJobType.StackDeployment,
+                Status = BackgroundJobStatus.Enqueued,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+            }
+        );
+
+        var job = new DeployStackBackgroundJob(Guid.NewGuid());
 
         // Act
-        var dispatcher = GetService<ICloudCrafterDispatcher>();
+        var act = async () => await job.HandleEntity(context, "jobId");
+
+        // Assert
+        await act.Should()
+            .ThrowAsync<ArgumentNullException>()
+            .WithMessage("Deployment or stack not found*");
+    }
+
+    private class TestConfig
+    {
+        public required Deployment Deployment { get; set; }
     }
 }
