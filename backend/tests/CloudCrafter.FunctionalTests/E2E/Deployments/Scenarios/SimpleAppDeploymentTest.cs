@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core.Jobs.Dispatcher;
+using CloudCrafter.Core.Jobs.Stacks;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using CloudCrafter.TestUtilities.DomainHelpers;
@@ -34,13 +35,17 @@ public class SimpleAppDeploymentTest : BaseTestFixture
                 StackId = StackId,
                 StackServiceId = StackServiceId,
                 StackName = "My Custom Stack 123",
-                StackServiceName = "My Custom Service : 123",
+                StackServiceName = "My Custom Service : 123"
             }
         );
     }
 
-    [Test]
-    public async Task ShouldBeAbleToDispatchJob()
+    private class TestConfig
+    {
+        
+    }
+
+    private async Task<TestConfig> EnsureConfigCreated()
     {
         (await CountAsync<Stack>()).Should().Be(0);
         var project = FakerInstances.ProjectFaker.Generate();
@@ -50,10 +55,31 @@ public class SimpleAppDeploymentTest : BaseTestFixture
             .EnvironmentFaker(project)
             .RuleFor(x => x.Id, EnvironmentId)
             .Generate();
+        var deployment = new Deployment
+        {
+            Id = Guid.NewGuid(),
+            StackId = Stack.Id,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            Logs = new List<DeploymentLog>()
+        };
         await AddAsync(environment);
         await AddAsync(Stack);
-
+        await AddAsync(deployment);
         await RunAsAdministratorAsync();
+        
+        return new()
+        {
+            
+        }
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToDispatchJob()
+    {
+       
+
+        var job = new DeployStackBackgroundJob(deployment.Id);
 
         // Act
         var dispatcher = GetService<ICloudCrafterDispatcher>();
