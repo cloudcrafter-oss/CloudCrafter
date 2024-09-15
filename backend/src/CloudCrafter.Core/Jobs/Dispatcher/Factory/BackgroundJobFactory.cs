@@ -170,7 +170,7 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
         {
             backgroundJob.Status = BackgroundJobStatus.Failed;
             var logger = loggerFactory.CreateLogger<BackgroundJobFactory>();
-            logger.LogError(ex, "Job execution failed");
+            logger.LogError(ex, "Job execution failed, exception: {Exception}", ex.Message);
         }
         finally
         {

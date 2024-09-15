@@ -1,13 +1,15 @@
 ﻿using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.RecipeGenerators;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Jobs.Stacks;
 
-public class DeployStackBackgroundJob : IJob
+public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
 {
     private Deployment? _deployment;
     private BackgroundJob? _job;
@@ -35,15 +37,18 @@ public class DeployStackBackgroundJob : IJob
         _deployment = await context
             .Deployments.Where(x => x.Id == DeploymentId)
             .Include(x => x.Stack)
+            .ThenInclude(x => x.Services)
+            .Include(x => x.Stack)
+            .ThenInclude(stack => stack.Server)
             .FirstOrDefaultAsync();
 
-        if (_deployment == null || _deployment.Stack == null)
+        if (_deployment == null || _deployment.Stack == null || _deployment.Stack.Server == null)
         {
             throw new ArgumentNullException(nameof(DeploymentId), "Deployment or stack not found");
         }
     }
 
-    public Task Handle(
+    public async Task Handle(
         IServiceProvider serviceProvider,
         IApplicationDbContext context,
         ILoggerFactory loggerFactory,
@@ -51,7 +56,21 @@ public class DeployStackBackgroundJob : IJob
     )
     {
         var logger = loggerFactory.CreateLogger<DeployStackBackgroundJob>();
+
         logger.LogDebug("Starting deployment for stack ({StackId})", DeploymentId);
+
+        var engineManager = GetEngineManager(
+            serviceProvider.GetRequiredService<IServerConnectivityService>(),
+            _deployment!.Stack.Server!
+        );
+
+        using var sshClient = engineManager.CreateSshClient();
+        logger.LogDebug("Connecting to server ({ServerId})", _deployment.Stack.ServerId);
+        await sshClient.ConnectAsync();
+        logger.LogDebug("Connected to server!");
+
+        var resultWhoAmI = await sshClient.ExecuteCommandAsync("whoami");
+        logger.LogDebug("Result of whoami: {Result}", resultWhoAmI.Result);
 
         var recipeGenerator = new SimpleAppRecipeGenerator(
             new BaseRecipeGenerator.Args
@@ -62,7 +81,5 @@ public class DeployStackBackgroundJob : IJob
         );
 
         var recipe = recipeGenerator.Generate();
-
-        return Task.CompletedTask;
     }
 }

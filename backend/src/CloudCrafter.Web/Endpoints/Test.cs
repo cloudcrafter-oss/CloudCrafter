@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core.Commands;
+using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
 using CloudCrafter.Core.SignalR;
 using CloudCrafter.Domain.Domain.SignalR;
 using CloudCrafter.Web.Infrastructure;
@@ -12,7 +13,7 @@ public class Test : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup(this).MapPost(GetTest);
+        app.MapGroup(this).MapPost(GetTest).MapGet(SendExampleDeployment);
     }
 
     public async Task GetTest(
@@ -22,5 +23,14 @@ public class Test : EndpointGroupBase
     )
     {
         await hub.Clients.All.SendAsync("ReceiveMessage", new MyHubMessage { Id = Guid.NewGuid() });
+    }
+
+    public async Task<Guid> SendExampleDeployment(IDeploymentService deploymentService)
+    {
+        var result = await deploymentService.DeployAsync(
+            Guid.Parse("a6512d2d-ee30-4d44-8064-2ae9475e1f16")
+        );
+
+        return result;
     }
 }

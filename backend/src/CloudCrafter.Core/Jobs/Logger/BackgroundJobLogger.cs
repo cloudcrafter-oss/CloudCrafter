@@ -48,6 +48,10 @@ public class BackgroundJobLogger(
         logger.Log(logLevel, eventId, state, exception, formatter);
 
         performContext.WriteLine($"[{logLevel}] [{categoryName}] {message}");
+        if (exception != null)
+        {
+            performContext.WriteLine($"[{logLevel}] Exception: {exception}");
+        }
 
         job.Logs.Add(logEntry);
         context.SaveChanges(); // Note: This might impact performance for high-frequency logging

@@ -11,6 +11,26 @@ public class ServerConnectivityService(
     ICloudCrafterEngineManagerFactory engineManagerFactory
 ) : IServerConnectivityService
 {
+    public async Task PerformConnectivityCheckAsync(Guid serverId)
+    {
+        var server = await repository.GetServerEntityOrFail(serverId);
+        var engineModel = GetDeploymentEngineModelForServer(server);
+
+        var engineManager = engineManagerFactory.CreateFromModel(engineModel);
+
+        var client = engineManager.CreateSshClient();
+
+        await client.ConnectAsync();
+
+        var result = await client.ExecuteCommandAsync("ls -la");
+    }
+
+    public CloudCrafterEngineManager CreateEngineManager(Server server)
+    {
+        var engineModel = GetDeploymentEngineModelForServer(server);
+        return engineManagerFactory.CreateFromModel(engineModel);
+    }
+
     private EngineServerModel GetDeploymentEngineModelForServer(Server server)
     {
         if (string.IsNullOrEmpty(server.SshUsername) || string.IsNullOrEmpty(server.SshPrivateKey))
@@ -28,19 +48,5 @@ public class ServerConnectivityService(
             };
 
         return engineModel;
-    }
-
-    public async Task PerformConnectivityCheckAsync(Guid serverId)
-    {
-        var server = await repository.GetServerEntityOrFail(serverId);
-        var engineModel = GetDeploymentEngineModelForServer(server);
-
-        var engineManager = engineManagerFactory.CreateFromModel(engineModel);
-
-        var client = engineManager.CreateSshClient();
-
-        await client.ConnectAsync();
-
-        var result = await client.ExecuteCommandAsync("ls -la");
     }
 }
