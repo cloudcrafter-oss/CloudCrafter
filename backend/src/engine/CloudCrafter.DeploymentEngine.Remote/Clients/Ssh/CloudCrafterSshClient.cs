@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.DeploymentEngine.Domain.Commands;
 using CloudCrafter.DeploymentEngine.Remote.Clients.Contracts;
+using CloudCrafter.DeploymentEngine.Remote.Exceptions;
 using Renci.SshNet;
 
 namespace CloudCrafter.DeploymentEngine.Remote.Clients.Ssh;
@@ -28,7 +29,10 @@ public class CloudCrafterSshClient(ISshConnectionInfo connectionInfo) : ICloudCr
         return _client.ConnectAsync(cancellationToken);
     }
 
-    public async Task<ExecutedCommandDetails> ExecuteCommandAsync(string command)
+    public async Task<ExecutedCommandDetails> ExecuteCommandAsync(
+        string command,
+        bool ignoreFailure = false
+    )
     {
         if (!IsConnected || _client is null)
         {
@@ -39,13 +43,22 @@ public class CloudCrafterSshClient(ISshConnectionInfo connectionInfo) : ICloudCr
 
         await cmd.ExecuteAsync();
 
-        var result = cmd.Result;
+        if (cmd.ExitStatus != 0 && !ignoreFailure)
+        {
+            throw new CommandFailedException(
+                command,
+                cmd.Error.TrimEnd('\n'),
+                cmd.Result.TrimEnd('\n'),
+                cmd.ExitStatus.GetValueOrDefault(-1)
+            );
+        }
 
         // TODO: Move this to a factory
         return new ExecutedCommandDetails
         {
             Command = command,
-            Result = result,
+            Result = cmd.Result.TrimEnd('\n'),
+            Error = cmd.Error.TrimEnd('\n'),
             ExitStatus = cmd.ExitStatus,
         };
     }

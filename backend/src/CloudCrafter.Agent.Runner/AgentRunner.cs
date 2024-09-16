@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Agent.Models.Recipe;
+﻿using CloudCrafter.Agent.Models.IO;
+using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Runner.Commands;
 using CloudCrafter.Agent.Runner.IO;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
@@ -54,6 +55,11 @@ public class AgentRunner(IHost host)
         {
             var reader = new YamlRecipeReader();
             recipe = reader.FromBase64(args.Base64Recipe);
+        }
+
+        if (!string.IsNullOrWhiteSpace(args.RecipePath))
+        {
+            recipe = GetFromFile(logger, args.RecipePath);
         }
 
         if (recipe == null)
@@ -114,25 +120,27 @@ public class AgentRunner(IHost host)
         logger.LogInformation("Sample recipe written to {0}", filename);
     }
 
+    private DeploymentRecipe? GetFromFile(ILogger<AgentRunner> logger, string file)
+    {
+        if (!File.Exists(file))
+        {
+            logger.LogInformation("Recipe file not found: {0}", file);
+            return null;
+        }
+
+        var recipeReader = new YamlRecipeReader();
+
+        var recipe = recipeReader.FromFile(file);
+
+        return recipe;
+    }
+
     private DeploymentRecipe? GetFromCurrentDirectory(ILogger<AgentRunner> logger)
     {
         var currentPath = Directory.GetCurrentDirectory();
         var filename = Path.Combine(currentPath, "recipe.yml");
 
-        if (!File.Exists(filename))
-        {
-            logger.LogInformation(
-                "No recipe file found in current directory (looking for recipe.yml)"
-            );
-            return null;
-        }
-
-        // read file
-        var recipeReader = new YamlRecipeReader();
-
-        var recipe = recipeReader.FromFile(filename);
-
-        return recipe;
+        return GetFromFile(logger, filename);
     }
 
     public class AgentRunnerArgs
@@ -141,5 +149,6 @@ public class AgentRunner(IHost host)
         public required string Base64Recipe { get; init; }
         public required bool OnlyDryRun { get; init; }
         public required bool GenerateSampleRecipe { get; init; }
+        public required string RecipePath { get; set; }
     }
 }

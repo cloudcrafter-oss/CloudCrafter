@@ -58,7 +58,11 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
     {
         var logger = loggerFactory.CreateLogger<DeployStackBackgroundJob>();
 
-        logger.LogDebug("Starting deployment for stack ({StackId})", DeploymentId);
+        logger.LogDebug(
+            "Starting deployment for stack ({StackId}), deploymentId: {DeploymentId}",
+            _deployment!.StackId,
+            DeploymentId
+        );
 
         var engineManager = GetEngineManager(
             serviceProvider.GetRequiredService<IServerConnectivityService>(),
@@ -67,14 +71,15 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
 
         var commandGenerator = serviceProvider.GetRequiredService<ICommonCommandGenerator>();
 
-        using var sshClient = engineManager.CreateSshClient();
+        using var client = engineManager.CreateSshClient();
         logger.LogDebug("Connecting to server ({ServerId})", _deployment.Stack.ServerId);
-        await sshClient.ConnectAsync();
+        await client.ConnectAsync();
         logger.LogDebug("Connected to server!");
 
-        var resultWhoAmI = await sshClient.ExecuteCommandAsync("whoami");
-        logger.LogDebug("Result of whoami: {Result}", resultWhoAmI.Result);
+        var resultWhoAmI = await client.ExecuteCommandAsync("whoami");
+        logger.LogDebug("Using user on remote server: {Result}", resultWhoAmI.Result);
 
+        logger.LogDebug("Brewing recipe...");
         var recipeGenerator = new SimpleAppRecipeGenerator(
             new BaseRecipeGenerator.Args
             {
@@ -82,9 +87,26 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
                 DeploymentId = _deployment!.Id,
             }
         );
-
         var recipe = recipeGenerator.Generate();
-        
-        var targetDirectory = CloudCrafterDynamicConfig
+        logger.LogDebug("Recipe brewed!");
+
+        await PullHelperImage(logger, client, commandGenerator);
+
+        var helperContainerId = await CreateDockerContainer(
+            logger,
+            client,
+            commandGenerator,
+            DeploymentId
+        );
+
+        var recipeFileDetails = await WriteRecipeToFile(
+            logger,
+            client,
+            commandGenerator,
+            recipe,
+            helperContainerId
+        );
+
+        await RunRecipe(logger, client, commandGenerator, helperContainerId, recipeFileDetails);
     }
 }
