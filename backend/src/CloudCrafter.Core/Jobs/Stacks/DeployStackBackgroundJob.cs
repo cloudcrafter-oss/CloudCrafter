@@ -2,6 +2,7 @@
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.RecipeGenerators;
+using CloudCrafter.DeploymentEngine.Remote.Clients.Contracts;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -64,6 +65,8 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
             _deployment!.Stack.Server!
         );
 
+        var commandGenerator = serviceProvider.GetRequiredService<ICommonCommandGenerator>();
+
         using var sshClient = engineManager.CreateSshClient();
         logger.LogDebug("Connecting to server ({ServerId})", _deployment.Stack.ServerId);
         await sshClient.ConnectAsync();
@@ -81,5 +84,7 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
         );
 
         var recipe = recipeGenerator.Generate();
+        
+        var targetDirectory = CloudCrafterDynamicConfig
     }
 }
