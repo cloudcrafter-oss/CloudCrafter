@@ -35,7 +35,7 @@ public class CustomObjectConverter : IYamlTypeConverter
         return type == typeof(object);
     }
 
-    public object ReadYaml(IParser parser, Type type)
+    public object? ReadYaml(IParser parser, Type type)
     {
         var scalar = parser.Consume<Scalar>();
         var value = scalar.Value;
@@ -58,7 +58,15 @@ public class CustomObjectConverter : IYamlTypeConverter
             return doubleResult;
         }
 
-        // If all else fails, return as string
+        // If it is an object and an empty string (scalar maps "nullish" values to empty strings)
+        // example:
+        // httpPort: (WHITESPACE)
+        // the value of (WHITESPACE) will be an empty string.
+        if (type == typeof(object) && string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
         return value;
     }
 

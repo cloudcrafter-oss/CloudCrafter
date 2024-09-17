@@ -14,10 +14,10 @@ public class ContainerHealthCheckParams : BaseParams
 public class ContainerHealthCheckParamsOptions
 {
     public bool? CheckForDockerHealth { get; init; }
-    public string HttpMethod { get; init; } = string.Empty;
-    public string HttpSchema { get; init; } = string.Empty;
-    public string HttpHost { get; init; } = string.Empty;
-    public string HttpPath { get; init; } = string.Empty;
+    public string? HttpMethod { get; init; } = string.Empty;
+    public string? HttpSchema { get; init; } = string.Empty;
+    public string? HttpHost { get; init; } = string.Empty;
+    public string? HttpPath { get; init; } = string.Empty;
     public int? HttpPort { get; init; }
 
     public int? ExpectedResponseCode { get; init; }

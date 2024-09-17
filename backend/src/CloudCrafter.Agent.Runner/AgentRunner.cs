@@ -82,7 +82,7 @@ public class AgentRunner(IHost host)
         }
         catch (Exception ex)
         {
-            logger.LogCritical("Error validating recipe: {0}", ex.Message);
+            logger.LogCritical(ex, "Error validating recipe: {0}", ex.Message);
             return -1;
         }
 

@@ -96,25 +96,32 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
                 MaxRetries = hasValidHealthConfiguration
                     ? healthCheckConfiguration.MaxRetries
                     : null,
-                CheckForDockerHealth = true,
+                CheckForDockerHealth =
+                    healthCheckConfiguration.UseDockerHealthCheck.GetValueOrDefault(),
             };
 
-        AddCheckContainerHealthCheckStep(
-            new ContainerHealthCheckDeploymentStepGenerator.Args
-            {
-                DockerComposeSettings =
-                    new ContainerHealthCheckDeploymentStepGenerator.ArgsComposeSettings
-                    {
-                        FetchServicesFromContext = true,
-                    },
-                Services = new Dictionary<
-                    string,
-                    ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings
-                >
+        if (
+            hasValidHealthConfiguration
+            || healthCheckConfiguration.UseDockerHealthCheck.GetValueOrDefault()
+        )
+        {
+            AddCheckContainerHealthCheckStep(
+                new ContainerHealthCheckDeploymentStepGenerator.Args
                 {
-                    { dockerComposeServices.First(), healthCheckOptionForAppService },
-                },
-            }
-        );
+                    DockerComposeSettings =
+                        new ContainerHealthCheckDeploymentStepGenerator.ArgsComposeSettings
+                        {
+                            FetchServicesFromContext = true,
+                        },
+                    Services = new Dictionary<
+                        string,
+                        ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings
+                    >
+                    {
+                        { dockerComposeServices.First(), healthCheckOptionForAppService },
+                    },
+                }
+            );
+        }
     }
 }
