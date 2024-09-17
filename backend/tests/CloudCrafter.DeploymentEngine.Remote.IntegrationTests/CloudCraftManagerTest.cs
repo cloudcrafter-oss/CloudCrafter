@@ -62,7 +62,7 @@ public class CloudCraftManagerTest
         exception.Which.ExitCode.Should().Be(1);
         exception
             .Which.ErrorMessage.Should()
-            .Be("bash: line 1: /some/non/existing/directory/file.txt: No such file or directory");
+            .Be("sh: can't create /some/non/existing/directory/file.txt: nonexistent directory");
     }
 
     [Test]

@@ -40,7 +40,7 @@ public class SharedDockerTestHostSetup
         _container = new ContainerBuilder()
             .WithImage(futureImage)
             .WithPortBinding(2222, 22)
-            .WithBindMount("/var/run/docker.sock", "/var/run/docker.sock")
+            .WithPrivileged(true)
             .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(22))
             .Build();
 

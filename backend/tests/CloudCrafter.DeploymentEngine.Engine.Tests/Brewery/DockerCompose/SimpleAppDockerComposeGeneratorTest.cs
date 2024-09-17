@@ -26,6 +26,7 @@ public class SimpleAppDockerComposeGeneratorTest
                 StackServiceId = stackServiceId,
                 StackName = "My Custom Stack 123",
                 StackServiceName = "My Custom Service : 123",
+                ContainerHttpPort = 3000,
             }
         );
         var generator = new SimpleAppDockerComposeGenerator(
