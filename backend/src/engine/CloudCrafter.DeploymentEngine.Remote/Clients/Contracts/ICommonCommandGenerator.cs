@@ -5,7 +5,7 @@ public interface ICommonCommandGenerator
     string WriteContentsToFile(string contents, string filePath);
     string PullDockerImage(string image);
     string VerifyDockerImageExists(string image);
-    string CreateHelperContainer(Guid deploymentId, string image);
+    string CreateHelperContainer(Guid deploymentId, string image, List<(string, string)> volumes);
     string StopAndRemoveContainer(string containerId);
     string GenerateRandomFile();
     string RunRecipe(string recipeFileDetails);

@@ -12,9 +12,8 @@ namespace CloudCrafter.Core.Jobs.Stacks;
 
 public abstract class BaseDeploymentJob
 {
-    private string? _helperContainerId;
-
     protected ICloudCrafterRemoteClient? _client = null;
+    private string? _helperContainerId;
     private string? _stopAndRemoveContainerCommand;
 
     protected CloudCrafterEngineManager GetEngineManager(
@@ -107,9 +106,11 @@ public abstract class BaseDeploymentJob
 
         logger.LogDebug("Creating Agent-container for deployment");
 
+        var dataDir = DynamicConfig.DataDir;
         var command = commonCommandGenerator.CreateHelperContainer(
             deploymentId,
-            DynamicConfig.HelperImage
+            DynamicConfig.HelperImage,
+            [(dataDir, dataDir)]
         );
 
         var result = await _client!.ExecuteCommandAsync(command);
@@ -120,7 +121,6 @@ public abstract class BaseDeploymentJob
         _stopAndRemoveContainerCommand = commonCommandGenerator.StopAndRemoveContainer(
             _helperContainerId
         );
-        return;
     }
 
     protected async Task<string> WriteRecipeToFile(

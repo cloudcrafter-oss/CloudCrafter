@@ -15,7 +15,7 @@ services:
       - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-  
+
   whoami:
     image: "traefik/whoami"
     container_name: "simple-service"
@@ -38,7 +38,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     ports:
       - '5432:5432'
-  
+
   postgres-tests:
     networks:
       - cloudcrafter
@@ -58,8 +58,9 @@ services:
     build:
       context: ./docker/test-host
       dockerfile: Dockerfile
+    privileged: true
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - testhostdata:/data/cloudcrafter
     ports:
       - 2222:22
 
@@ -85,4 +86,6 @@ volumes:
   pgdata:
     driver: local
   pgdata-testing:
+    driver: local
+  testhostdata:
     driver: local

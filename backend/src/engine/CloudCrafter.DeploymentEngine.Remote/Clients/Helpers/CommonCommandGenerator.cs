@@ -21,9 +21,15 @@ public class CommonCommandGenerator : ICommonCommandGenerator
         return $"docker image inspect {image} --format=\"{{{{.Id}}}}\"";
     }
 
-    public string CreateHelperContainer(Guid deploymentId, string image)
+    public string CreateHelperContainer(
+        Guid deploymentId,
+        string image,
+        List<(string, string)> volumes
+    )
     {
-        return $"docker run -d --rm -v /var/run/docker.sock:/var/run/docker.sock --name deployment-{deploymentId} {image}";
+        var volumeArgs = volumes.Select(v => $"-v {v.Item1}:{v.Item2}");
+        var volumeArgsString = string.Join(" ", volumeArgs);
+        return $"docker run -d --rm -v /var/run/docker.sock:/var/run/docker.sock {volumeArgsString} --name deployment-{deploymentId} {image}";
     }
 
     public string StopAndRemoveContainer(string containerId)
