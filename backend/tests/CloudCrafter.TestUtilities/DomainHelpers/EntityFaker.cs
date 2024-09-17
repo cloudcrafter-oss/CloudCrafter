@@ -1,9 +1,9 @@
 ﻿using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 
-namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery;
+namespace CloudCrafter.TestUtilities.DomainHelpers;
 
-public static class Helper
+public static class EntityFaker
 {
     public static Stack GenerateBasicAppStack(GenerateBasicAppArgs args)
     {
@@ -31,7 +31,11 @@ public static class Helper
             .RuleFor(x => x.HealthcheckConfiguration, args.HealthcheckConfiguration)
             .RuleFor(
                 x => x.HttpConfiguration,
-                new EntityHttpConfiguration { DomainName = args.DomainName }
+                new EntityHttpConfiguration
+                {
+                    DomainName = args.DomainName,
+                    ContainerHttpPort = args.ContainerHttpPort,
+                }
             )
             .RuleFor(x => x.Name, args.StackServiceName)
             .Generate();
@@ -68,5 +72,7 @@ public static class Helper
                 ExpectedHttpStatusCode = 200,
                 MaxRetries = 3,
             };
+
+        public int? ContainerHttpPort { get; set; }
     }
 }

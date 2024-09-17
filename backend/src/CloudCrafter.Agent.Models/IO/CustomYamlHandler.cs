@@ -3,7 +3,7 @@ using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace CloudCrafter.Agent.Runner.IO;
+namespace CloudCrafter.Agent.Models.IO;
 
 public class CustomYamlHandler
 {
@@ -30,26 +30,43 @@ public class CustomYamlHandler
 
 public class CustomObjectConverter : IYamlTypeConverter
 {
-    public bool Accepts(Type type) => type == typeof(object);
+    public bool Accepts(Type type)
+    {
+        return type == typeof(object);
+    }
 
-    public object ReadYaml(IParser parser, Type type)
+    public object? ReadYaml(IParser parser, Type type)
     {
         var scalar = parser.Consume<Scalar>();
         var value = scalar.Value;
 
         // Try parsing as boolean
-        if (bool.TryParse(value, out bool boolResult))
+        if (bool.TryParse(value, out var boolResult))
+        {
             return boolResult;
+        }
 
         // Try parsing as integer
-        if (int.TryParse(value, out int intResult))
+        if (int.TryParse(value, out var intResult))
+        {
             return intResult;
+        }
 
         // Try parsing as double
-        if (double.TryParse(value, out double doubleResult))
+        if (double.TryParse(value, out var doubleResult))
+        {
             return doubleResult;
+        }
 
-        // If all else fails, return as string
+        // If it is an object and an empty string (scalar maps "nullish" values to empty strings)
+        // example:
+        // httpPort: (WHITESPACE)
+        // the value of (WHITESPACE) will be an empty string.
+        if (type == typeof(object) && string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
         return value;
     }
 

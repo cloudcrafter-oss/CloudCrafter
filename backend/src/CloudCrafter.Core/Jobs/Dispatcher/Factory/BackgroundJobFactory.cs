@@ -155,11 +155,17 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
                 throw new ArgumentNullException("Failed to deserialize job");
             }
 
+            await jobFromSerializer.HandleEntity(dbContext, performContext.BackgroundJob.Id);
+
             await jobFromSerializer.Handle(
                 scope.ServiceProvider,
+                dbContext,
                 loggerFactory,
                 performContext.BackgroundJob.Id
             );
+            logger.LogDebug("Tearing down job");
+
+            await jobFromSerializer.TearDown();
 
             backgroundJob.Status = BackgroundJobStatus.Completed;
         }
@@ -167,7 +173,7 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
         {
             backgroundJob.Status = BackgroundJobStatus.Failed;
             var logger = loggerFactory.CreateLogger<BackgroundJobFactory>();
-            logger.LogError(ex, "Job execution failed");
+            logger.LogError(ex, "Job execution failed, exception: {Exception}", ex.Message);
         }
         finally
         {

@@ -93,6 +93,12 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("StackId")
                         .HasColumnType("uuid");
 
@@ -806,6 +812,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                             b1.Property<int?>("MaxRetries")
                                 .HasColumnType("integer");
 
+                            b1.Property<bool?>("UseDockerHealthCheck")
+                                .HasColumnType("boolean");
+
                             b1.HasKey("StackServiceId");
 
                             b1.ToTable("StackServices");
@@ -819,8 +828,10 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                             b1.Property<Guid>("StackServiceId")
                                 .HasColumnType("uuid");
 
+                            b1.Property<int?>("ContainerHttpPort")
+                                .HasColumnType("integer");
+
                             b1.Property<string>("DomainName")
-                                .IsRequired()
                                 .HasColumnType("text");
 
                             b1.HasKey("StackServiceId");

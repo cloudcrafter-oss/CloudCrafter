@@ -30,13 +30,13 @@ public class CloudCrafterDispatcher(
         }
     }
 
-    public async Task<string> EnqueueStackDeployment(Guid stackId)
+    public async Task<string> EnqueueStackDeployment(Guid deploymentId)
     {
         logger.LogInformation(
-            "Dispatching stack deployment to job factory for stack {StackId}",
-            stackId
+            "Dispatching stack deployment to job factory for deployment {DeploymentId}",
+            deploymentId
         );
-        var job = new DeployStackBackgroundJob(stackId);
+        var job = new DeployStackBackgroundJob(deploymentId);
         return await jobFactory.CreateAndEnqueueJobAsync<DeployStackBackgroundJob>(job);
     }
 }

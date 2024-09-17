@@ -1,6 +1,6 @@
 ﻿using CloudCrafter.Core.Common.Interfaces.Access;
 using CloudCrafter.Core.Common.Security;
-using CloudCrafter.Core.Jobs.Dispatcher;
+using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
 using CloudCrafter.Domain.Domain.Deployment;
 using MediatR;
 
@@ -13,7 +13,7 @@ public static class DispatchStack
         : IRequest<DeploymentCreatedDetailsDto>,
             IRequireStackAccess;
 
-    private class Handler(ICloudCrafterDispatcher dispatcher)
+    private class Handler(IDeploymentService deploymentService)
         : IRequestHandler<Command, DeploymentCreatedDetailsDto>
     {
         public async Task<DeploymentCreatedDetailsDto> Handle(
@@ -21,7 +21,7 @@ public static class DispatchStack
             CancellationToken cancellationToken
         )
         {
-            var deploymentId = await dispatcher.EnqueueStackDeployment(request.StackId);
+            var deploymentId = await deploymentService.DeployAsync(request.StackId);
 
             return new DeploymentCreatedDetailsDto { DeploymentId = deploymentId };
         }

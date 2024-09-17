@@ -1,13 +1,18 @@
 ﻿using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
+using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Jobs.Dispatcher;
 
 namespace CloudCrafter.Core.Services.Domain.Applications.Deployments;
 
-public class DeploymentService() : IDeploymentService
+public class DeploymentService(ICloudCrafterDispatcher dispatcher, IStacksService stackService)
+    : IDeploymentService
 {
-    public Task<Guid> DeployAsync(Guid requestApplicationId)
+    public async Task<Guid> DeployAsync(Guid stackId)
     {
-        var newGuid = Guid.NewGuid();
-        return Task.FromResult(newGuid);
+        var deploymentId = await stackService.CreateDeployment(stackId);
+
+        await dispatcher.EnqueueStackDeployment(deploymentId);
+
+        return deploymentId;
     }
 }

@@ -1,0 +1,25 @@
+﻿name: Dummy
+application:
+  id: 00000000-0000-0000-0000-000000000000
+destination:
+  rootDirectory: /root
+environmentVariables:
+  variables: {}
+buildOptions:
+  steps:
+  - name: Container health check
+    description: Checks the health of the containers
+    type: ContainerHealthCheck
+    params:
+      dockerComposeSettings:
+        fetchServicesFromContext: true
+      services:
+        service-one:
+          httpMethod: GET
+          httpSchema: http
+          httpHost: localhost
+          httpPath: /health
+          httpPort: 80
+          expectedResponseCode: 200
+          retries: 5
+          checkForDockerHealth: true

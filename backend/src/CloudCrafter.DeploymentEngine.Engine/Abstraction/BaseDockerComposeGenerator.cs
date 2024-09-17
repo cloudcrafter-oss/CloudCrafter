@@ -44,7 +44,8 @@ public abstract class BaseDockerComposeGenerator
             new DockerComposeLabelServiceTraefikOptions
             {
                 AppName = stackService.Id.ToString(),
-                LoadBalancerPort = 3000,
+                LoadBalancerPort =
+                    stackService.HttpConfiguration.ContainerHttpPort.GetValueOrDefault(-1),
                 Service = stackService.Id.ToString(),
                 Rule = $"Host(`{stackService.HttpConfiguration.DomainName}`)",
             }

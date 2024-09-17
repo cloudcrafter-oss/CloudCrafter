@@ -54,10 +54,10 @@ check_file_exists() {
 
 
 echo "### 1: Validating basic usage\n"
-run_and_validate "docker run --rm console" "No Recipe found - cannot continue"
+run_and_validate "docker run --rm console /usr/local/bin/cloudcrafter-agent" "No Recipe found - cannot continue"
 
 echo "### 2: Validating help command\n"
-run_and_validate "docker run --rm console --help" "Show version information"
+run_and_validate "docker run --rm console /usr/local/bin/cloudcrafter-agent --help" "Show version information"
 
 # Validate that recipe.yml file does not exists
 echo "### 3: Validating recipe.yml file does not exists\n"
@@ -65,7 +65,7 @@ check_file_exists "recipe.yml" false
 
 
 echo "### 4: Save basic recipe\n"
-run_and_validate "docker run --rm -v \"$(pwd):/app\" console --generate-sample-recipe" "Sample recipe generated and saved"
+run_and_validate "docker run --rm -v \"$(pwd):/app\" console /usr/local/bin/cloudcrafter-agent --generate-sample-recipe" "Sample recipe generated and saved"
 
 # Validate that recipe.yml file exists
 echo "#### 5: Validating recipe.yml file exists\n"

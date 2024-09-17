@@ -37,11 +37,13 @@ public static class ApplicationServiceExtensions
 {
     public static IApplicationBuilder ConfigureRecurringJobs(this IApplicationBuilder app)
     {
+#if !IN_TESTS
         RecurringJob.AddOrUpdate<ICloudCrafterRecurringJobsDispatcher>(
             "5m-recurring-connectivity-checks",
             service => service.AddRecurringConnectivityChecks(),
             "*/5 * * * *"
         );
+#endif
         return app;
     }
 

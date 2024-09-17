@@ -8,4 +8,6 @@ public interface IStackRepository
     Task<Stack> CreateStack(CreateStackArgsDto args);
     Task<Stack?> GetStack(Guid id);
     Task AddAppServiceToStack(Guid stackId, string name);
+
+    Task<Guid> CreateDeployment(Guid stackId);
 }

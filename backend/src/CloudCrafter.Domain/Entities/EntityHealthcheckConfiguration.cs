@@ -9,6 +9,7 @@ public class EntityHealthcheckConfiguration
     public int? HttpPort { get; set; } = 80;
     public int? ExpectedHttpStatusCode { get; set; } = 200;
     public int? MaxRetries { get; set; } = 3;
+    public bool? UseDockerHealthCheck { get; set; }
 
     public bool ConfigurationValid()
     {

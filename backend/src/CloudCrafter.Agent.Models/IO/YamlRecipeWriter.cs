@@ -1,6 +1,6 @@
 ﻿using CloudCrafter.Agent.Models.Recipe;
 
-namespace CloudCrafter.Agent.Runner.IO;
+namespace CloudCrafter.Agent.Models.IO;
 
 public class YamlRecipeWriter(DeploymentRecipe recipe)
 {

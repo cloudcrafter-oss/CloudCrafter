@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using CloudCrafter.Agent.Models.IO;
 using CloudCrafter.Agent.Runner.IO;
 using CloudCrafter.Agent.Runner.Tests.Fakers;
 using FluentAssertions;

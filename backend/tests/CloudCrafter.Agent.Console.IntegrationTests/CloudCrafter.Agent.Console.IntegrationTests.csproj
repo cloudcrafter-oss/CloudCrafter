@@ -43,10 +43,11 @@
 
   <ItemGroup>
     <Folder Include="Client\"/>
+    <Folder Include="StepsParsing\"/>
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="recipe.yml" />
+    <None Remove="recipe.yml"/>
     <Content Include="recipe.yml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

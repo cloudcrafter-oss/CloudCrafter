@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Agent.Runner.IO;
+﻿using CloudCrafter.Agent.Models.IO;
 using CloudCrafter.DeploymentEngine.Engine.Brewery;
 using FluentAssertions;
 

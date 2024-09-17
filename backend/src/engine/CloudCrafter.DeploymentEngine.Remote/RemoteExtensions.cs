@@ -1,4 +1,6 @@
-﻿using CloudCrafter.DeploymentEngine.Remote.Manager;
+﻿using CloudCrafter.DeploymentEngine.Remote.Clients.Contracts;
+using CloudCrafter.DeploymentEngine.Remote.Clients.Helpers;
+using CloudCrafter.DeploymentEngine.Remote.Manager;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CloudCrafter.DeploymentEngine.Remote;
@@ -11,6 +13,8 @@ public static class RemoteExtensions
             ICloudCrafterEngineManagerFactory,
             CloudCrafterEngineManagerFactory
         >();
+
+        services.AddSingleton<ICommonCommandGenerator, CommonCommandGenerator>();
 
         return services;
     }

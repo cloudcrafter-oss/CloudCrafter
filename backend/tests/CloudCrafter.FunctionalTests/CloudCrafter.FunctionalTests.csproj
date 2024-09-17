@@ -30,6 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\CloudCrafter.Infrastructure\CloudCrafter.Infrastructure.csproj"/>
     <ProjectReference Include="..\..\src\CloudCrafter.Web\CloudCrafter.Web.csproj"/>
+    <ProjectReference Include="..\CloudCrafter.TestUtilities\CloudCrafter.TestUtilities.csproj" />
   </ItemGroup>
 
 </Project>

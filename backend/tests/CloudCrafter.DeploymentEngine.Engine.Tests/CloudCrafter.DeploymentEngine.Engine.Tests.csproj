@@ -25,6 +25,7 @@
     <ProjectReference Include="..\..\src\CloudCrafter.Agent.Runner\CloudCrafter.Agent.Runner.csproj"/>
     <ProjectReference Include="..\..\src\CloudCrafter.DeploymentEngine.Engine\CloudCrafter.DeploymentEngine.Engine.csproj"/>
     <ProjectReference Include="..\..\src\CloudCrafter.Infrastructure\CloudCrafter.Infrastructure.csproj"/>
+    <ProjectReference Include="..\CloudCrafter.TestUtilities\CloudCrafter.TestUtilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

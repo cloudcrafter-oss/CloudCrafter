@@ -39,11 +39,14 @@ public class Program
             "Generates a sample recipe and exits"
         );
 
+        var recipePath = new Option<string>("--recipe", "Path to the recipe file");
+
         var rootCommand = new RootCommand("CloudCrafter Agent");
         rootCommand.AddOption(demoOption);
         rootCommand.AddOption(fromBase64Option);
         rootCommand.AddOption(onlyDryRun);
         rootCommand.AddOption(generateSampleRecipe);
+        rootCommand.AddOption(recipePath);
 
         int? resultCode = null;
         rootCommand.SetHandler(
@@ -51,7 +54,8 @@ public class Program
                 demoOptionValue,
                 fromBase64OptionValue,
                 onlyDryRunValue,
-                generateSampleRecipeValue
+                generateSampleRecipeValue,
+                recipePathValue
             ) =>
             {
                 var agentRunner = new AgentRunner(host);
@@ -62,13 +66,15 @@ public class Program
                         Base64Recipe = fromBase64OptionValue,
                         OnlyDryRun = onlyDryRunValue,
                         GenerateSampleRecipe = generateSampleRecipeValue,
+                        RecipePath = recipePathValue,
                     }
                 );
             },
             demoOption,
             fromBase64Option,
             onlyDryRun,
-            generateSampleRecipe
+            generateSampleRecipe,
+            recipePath
         );
 
         var intResult = await rootCommand.InvokeAsync(args);
