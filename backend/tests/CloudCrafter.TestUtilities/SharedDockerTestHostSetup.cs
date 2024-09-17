@@ -1,11 +1,12 @@
-﻿using DotNet.Testcontainers.Containers;
+﻿using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Containers;
 
 namespace CloudCrafter.TestUtilities;
 
 [SetUpFixture]
 public class SharedDockerTestHostSetup
 {
-    public static IContainer? _container { get; }
+    public static IContainer? _container { get; set; }
     public static string? TestHostDockerfileLocation { get; private set; }
 
     public string GetSolutionDirectory()
@@ -21,29 +22,29 @@ public class SharedDockerTestHostSetup
     }
 
     [OneTimeSetUp]
-    public Task Setup()
+    public async Task Setup()
     {
         var solutionDirectory = GetSolutionDirectory();
 
         var dockerfileDirectory = Path.Combine(solutionDirectory, "..", "docker", "test-host");
         TestHostDockerfileLocation = dockerfileDirectory;
-        return Task.CompletedTask;
+
         // Define and start the container
-        // var futureImage = new ImageFromDockerfileBuilder()
-        //     .WithDockerfileDirectory(dockerfileDirectory)
-        //     .WithDockerfile("Dockerfile")
-        //     .Build();
-        //
-        // await futureImage.CreateAsync().ConfigureAwait(false);
-        //
-        // _container = new ContainerBuilder()
-        //     .WithImage(futureImage)
-        //     .WithPortBinding(2222, 22)
-        //     .WithBindMount("/var/run/docker.sock", "/var/run/docker.sock")
-        //     .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(22))
-        //     .Build();
-        //
-        // await _container.StartAsync().ConfigureAwait(false);
+        var futureImage = new ImageFromDockerfileBuilder()
+            .WithDockerfileDirectory(dockerfileDirectory)
+            .WithDockerfile("Dockerfile")
+            .Build();
+
+        await futureImage.CreateAsync().ConfigureAwait(false);
+
+        _container = new ContainerBuilder()
+            .WithImage(futureImage)
+            .WithPortBinding(2222, 22)
+            .WithBindMount("/var/run/docker.sock", "/var/run/docker.sock")
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(22))
+            .Build();
+
+        await _container.StartAsync().ConfigureAwait(false);
     }
 
     [OneTimeTearDown]
