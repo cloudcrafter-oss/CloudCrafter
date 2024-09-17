@@ -31,7 +31,11 @@ public static class EntityFaker
             .RuleFor(x => x.HealthcheckConfiguration, args.HealthcheckConfiguration)
             .RuleFor(
                 x => x.HttpConfiguration,
-                new EntityHttpConfiguration { DomainName = args.DomainName }
+                new EntityHttpConfiguration
+                {
+                    DomainName = args.DomainName,
+                    ContainerHttpPort = args.ContainerHttpPort,
+                }
             )
             .RuleFor(x => x.Name, args.StackServiceName)
             .Generate();
@@ -68,5 +72,7 @@ public static class EntityFaker
                 ExpectedHttpStatusCode = 200,
                 MaxRetries = 3,
             };
+
+        public int? ContainerHttpPort { get; set; }
     }
 }

@@ -54,6 +54,11 @@ public class ConnectivityCheckBackgroundJob : IJob
         await context.SaveChangesAsync();
     }
 
+    public Task TearDown()
+    {
+        return Task.CompletedTask;
+    }
+
     public async Task Handle(
         IServiceProvider serviceProvider,
         IApplicationDbContext context,

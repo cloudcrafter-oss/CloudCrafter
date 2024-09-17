@@ -26,6 +26,11 @@ public class CommonCommandGenerator : ICommonCommandGenerator
         return $"docker run -d --rm -v /var/run/docker.sock:/var/run/docker.sock --name deployment-{deploymentId} {image}";
     }
 
+    public string StopAndRemoveContainer(string containerId)
+    {
+        return $"docker stop {containerId} >/dev/null 2>&1";
+    }
+
     public string GenerateRandomFile()
     {
         return "mktemp";

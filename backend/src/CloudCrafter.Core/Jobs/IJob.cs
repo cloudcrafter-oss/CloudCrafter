@@ -8,6 +8,7 @@ public interface IJob
 {
     BackgroundJobType Type { get; }
     Task HandleEntity(IApplicationDbContext context, string jobId);
+    Task TearDown();
 
     Task Handle(
         IServiceProvider serviceProvider,

@@ -12,6 +12,11 @@ namespace CloudCrafter.Core.Jobs.Stacks;
 
 public abstract class BaseDeploymentJob
 {
+    private string? _helperContainerId;
+
+    protected ICloudCrafterRemoteClient? _client = null;
+    private string? _stopAndRemoveContainerCommand;
+
     protected CloudCrafterEngineManager GetEngineManager(
         IServerConnectivityService connectivityService,
         Server server
@@ -20,19 +25,45 @@ public abstract class BaseDeploymentJob
         return connectivityService.CreateEngineManager(server);
     }
 
+    protected async Task RemoveHelperImage()
+    {
+        if (string.IsNullOrEmpty(_helperContainerId))
+        {
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(_stopAndRemoveContainerCommand) && _client != null)
+        {
+            await _client.ExecuteCommandAsync(_stopAndRemoveContainerCommand);
+        }
+
+        _client?.Dispose();
+    }
+
+    private void EnsureClientCreated(ILogger<BaseDeploymentJob> logger)
+    {
+        if (_client != null)
+        {
+            return;
+        }
+
+        logger.LogCritical("Client not initialized");
+        throw new Exception("Client not initialized");
+    }
+
     protected async Task PullHelperImage(
         ILogger<BaseDeploymentJob> logger,
-        ICloudCrafterRemoteClient client,
         ICommonCommandGenerator commonCommandGenerator
     )
     {
+        EnsureClientCreated(logger);
         logger.LogDebug("Pulling helper image");
-        await client.ExecuteCommandAsync(
+        await _client!.ExecuteCommandAsync(
             commonCommandGenerator.PullDockerImage(DynamicConfig.HelperImage),
             true
         );
 
-        var imageIdResult = await client.ExecuteCommandAsync(
+        var imageIdResult = await _client.ExecuteCommandAsync(
             commonCommandGenerator.VerifyDockerImageExists(DynamicConfig.HelperImage)
         );
         logger.LogDebug("Helper image pulled with ID: {ImageId}", imageIdResult.Result);
@@ -40,12 +71,12 @@ public abstract class BaseDeploymentJob
 
     protected async Task<ExecutedCommandDetails> RunInContainer(
         ILogger<BaseDeploymentJob> logger,
-        ICloudCrafterRemoteClient client,
         ICommonCommandGenerator commonCommandGenerator,
         string containerId,
         string command
     )
     {
+        EnsureClientCreated(logger);
         logger.LogDebug(
             "Running command in container {ContainerId}: {Command}",
             containerId,
@@ -55,20 +86,25 @@ public abstract class BaseDeploymentJob
 
         logger.LogDebug("Running command: {Command}", containerCommand);
 
-        var result = await client.ExecuteCommandAsync(containerCommand);
+        var result = await _client!.ExecuteCommandAsync(containerCommand);
 
         logger.LogDebug("Command executed with result: {Result}", result.Result);
 
         return result;
     }
 
-    protected async Task<string> CreateDockerContainer(
+    protected async Task CreateDockerContainer(
         ILogger<BaseDeploymentJob> logger,
-        ICloudCrafterRemoteClient client,
         ICommonCommandGenerator commonCommandGenerator,
         Guid deploymentId
     )
     {
+        EnsureClientCreated(logger);
+        if (!string.IsNullOrEmpty(_helperContainerId))
+        {
+            return;
+        }
+
         logger.LogDebug("Creating Agent-container for deployment");
 
         var command = commonCommandGenerator.CreateHelperContainer(
@@ -76,29 +112,38 @@ public abstract class BaseDeploymentJob
             DynamicConfig.HelperImage
         );
 
-        var result = await client.ExecuteCommandAsync(command);
+        var result = await _client!.ExecuteCommandAsync(command);
         logger.LogDebug("Agent-container created with ID: {ContainerId}", result.Result);
 
-        return result.Result;
+        _helperContainerId = result.Result;
+
+        _stopAndRemoveContainerCommand = commonCommandGenerator.StopAndRemoveContainer(
+            _helperContainerId
+        );
+        return;
     }
 
     protected async Task<string> WriteRecipeToFile(
         ILogger<BaseDeploymentJob> logger,
-        ICloudCrafterRemoteClient client,
         ICommonCommandGenerator commonCommandGenerator,
-        DeploymentRecipe recipe,
-        string dockerContainerId
+        DeploymentRecipe recipe
     )
     {
+        EnsureClientCreated(logger);
+        if (string.IsNullOrEmpty(_helperContainerId))
+        {
+            logger.LogCritical("Helper container not created");
+            throw new Exception("Helper container not created");
+        }
+
         logger.LogDebug("Requesting temporary directory to write recipe to");
 
         var randomFileCommand = commonCommandGenerator.GenerateRandomFile();
 
         var result = await RunInContainer(
             logger,
-            client,
             commonCommandGenerator,
-            dockerContainerId,
+            _helperContainerId,
             randomFileCommand
         );
 
@@ -113,9 +158,8 @@ public abstract class BaseDeploymentJob
 
         var writeContainerResult = await RunInContainer(
             logger,
-            client,
             commonCommandGenerator,
-            dockerContainerId,
+            _helperContainerId,
             writeCommand
         );
 
@@ -124,12 +168,17 @@ public abstract class BaseDeploymentJob
 
     protected async Task RunRecipe(
         ILogger<BaseDeploymentJob> logger,
-        ICloudCrafterRemoteClient client,
         ICommonCommandGenerator commonCommandGenerator,
-        string dockerContainerId,
         string recipePath
     )
     {
+        EnsureClientCreated(logger);
+        if (string.IsNullOrEmpty(_helperContainerId))
+        {
+            logger.LogCritical("Helper container not created");
+            throw new Exception("Helper container not created");
+        }
+
         logger.LogDebug("Running recipe");
         var recipeRunCommand = commonCommandGenerator.RunRecipe(recipePath);
 
@@ -137,9 +186,8 @@ public abstract class BaseDeploymentJob
 
         var result = await RunInContainer(
             logger,
-            client,
             commonCommandGenerator,
-            dockerContainerId,
+            _helperContainerId,
             recipeRunCommand
         );
 

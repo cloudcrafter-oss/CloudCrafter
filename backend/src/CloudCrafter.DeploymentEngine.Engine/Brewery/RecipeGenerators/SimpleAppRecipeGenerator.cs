@@ -105,6 +105,7 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
             || healthCheckConfiguration.UseDockerHealthCheck.GetValueOrDefault()
         )
         {
+            // Only add health check when it is configured or when the docker health check is enabled.
             AddCheckContainerHealthCheckStep(
                 new ContainerHealthCheckDeploymentStepGenerator.Args
                 {

@@ -156,6 +156,11 @@ public class DummyTestJob : IJob
         throw new NotImplementedException();
     }
 
+    public Task TearDown()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task Handle(
         IServiceProvider serviceProvider,
         IApplicationDbContext context,

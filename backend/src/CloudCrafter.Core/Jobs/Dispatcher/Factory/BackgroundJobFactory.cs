@@ -163,6 +163,9 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
                 loggerFactory,
                 performContext.BackgroundJob.Id
             );
+            logger.LogDebug("Tearing down job");
+
+            await jobFromSerializer.TearDown();
 
             backgroundJob.Status = BackgroundJobStatus.Completed;
         }

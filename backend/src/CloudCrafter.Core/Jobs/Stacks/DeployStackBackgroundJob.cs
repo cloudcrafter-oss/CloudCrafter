@@ -49,6 +49,11 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
         }
     }
 
+    public async Task TearDown()
+    {
+        await RemoveHelperImage();
+    }
+
     public async Task Handle(
         IServiceProvider serviceProvider,
         IApplicationDbContext context,
@@ -71,12 +76,12 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
 
         var commandGenerator = serviceProvider.GetRequiredService<ICommonCommandGenerator>();
 
-        using var client = engineManager.CreateSshClient();
+        _client = engineManager.CreateSshClient();
         logger.LogDebug("Connecting to server ({ServerId})", _deployment.Stack.ServerId);
-        await client.ConnectAsync();
+        await _client.ConnectAsync();
         logger.LogDebug("Connected to server!");
 
-        var resultWhoAmI = await client.ExecuteCommandAsync("whoami");
+        var resultWhoAmI = await _client.ExecuteCommandAsync("whoami");
         logger.LogDebug("Using user on remote server: {Result}", resultWhoAmI.Result);
 
         logger.LogDebug("Brewing recipe...");
@@ -90,23 +95,12 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
         var recipe = recipeGenerator.Generate();
         logger.LogDebug("Recipe brewed!");
 
-        await PullHelperImage(logger, client, commandGenerator);
+        await PullHelperImage(logger, commandGenerator);
 
-        var helperContainerId = await CreateDockerContainer(
-            logger,
-            client,
-            commandGenerator,
-            DeploymentId
-        );
+        await CreateDockerContainer(logger, commandGenerator, DeploymentId);
 
-        var recipeFileDetails = await WriteRecipeToFile(
-            logger,
-            client,
-            commandGenerator,
-            recipe,
-            helperContainerId
-        );
+        var recipeFileDetails = await WriteRecipeToFile(logger, commandGenerator, recipe);
 
-        await RunRecipe(logger, client, commandGenerator, helperContainerId, recipeFileDetails);
+        await RunRecipe(logger, commandGenerator, recipeFileDetails);
     }
 }
