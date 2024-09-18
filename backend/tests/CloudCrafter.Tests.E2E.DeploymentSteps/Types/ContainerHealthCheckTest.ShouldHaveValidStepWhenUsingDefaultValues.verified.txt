@@ -3,6 +3,7 @@ application:
   id: 00000000-0000-0000-0000-000000000000
 destination:
   rootDirectory: /root
+  gitCheckoutDirectory: /tmp/tmp-36693043-e258-43d8-a13a-971a2dc42486
 environmentVariables:
   variables: {}
 buildOptions:

@@ -47,6 +47,14 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
         {
             throw new ArgumentNullException(nameof(DeploymentId), "Deployment or stack not found");
         }
+
+        if (string.IsNullOrEmpty(_deployment.Stack.Server.DockerDataDirectoryMount))
+        {
+            throw new ArgumentNullException(
+                nameof(_deployment.Stack.Server.DockerDataDirectoryMount),
+                "DockerDataDirectoryMount is not set"
+            );
+        }
     }
 
     public async Task TearDown()
@@ -97,7 +105,12 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
 
         await PullHelperImage(logger, commandGenerator);
 
-        await CreateDockerContainer(logger, commandGenerator, DeploymentId);
+        await CreateDockerContainer(
+            logger,
+            commandGenerator,
+            _deployment.Stack.Server!.DockerDataDirectoryMount,
+            DeploymentId
+        );
 
         var recipeFileDetails = await WriteRecipeToFile(logger, commandGenerator, recipe);
 

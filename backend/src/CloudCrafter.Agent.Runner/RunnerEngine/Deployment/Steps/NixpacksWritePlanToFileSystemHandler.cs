@@ -34,7 +34,7 @@ public class NixpacksWritePlanToFileSystemHandler(
             throw new DeploymentException("Nixpacks plan not found - cannot write to filesystem.");
         }
 
-        var planPath = context.GetWorkingDirectory() + "/nixpacks-plan.toml";
+        var planPath = context.GetGitDirectory() + "/nixpacks-plan.toml";
         await fileSystemHelper.WriteFile(planPath, plan);
 
         context.SetRecipeResult(RecipeResultKeys.NixpacksTomlLocation, planPath);

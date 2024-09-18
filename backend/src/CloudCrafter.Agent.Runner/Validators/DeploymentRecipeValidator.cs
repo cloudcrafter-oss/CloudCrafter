@@ -29,6 +29,7 @@ public class DeploymentRecipeDestinationValidator : AbstractValidator<Deployment
     public DeploymentRecipeDestinationValidator()
     {
         RuleFor(x => x.RootDirectory).NotEmpty();
+        RuleFor(x => x.GitCheckoutDirectory).NotEmpty();
     }
 }
 

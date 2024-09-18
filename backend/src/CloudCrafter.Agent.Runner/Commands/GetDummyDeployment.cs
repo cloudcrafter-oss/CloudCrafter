@@ -58,6 +58,7 @@ public static class GetDummyDeployment
                 Destination = new DeploymentRecipeDestination
                 {
                     RootDirectory = "/tmp/cloudcrafter/" + randomString,
+                    GitCheckoutDirectory = "/tmp/tmp-" + RandomGenerator.String(),
                 },
                 DockerComposeOptions = new DeploymentRecipeDockerComposeOptions
                 {

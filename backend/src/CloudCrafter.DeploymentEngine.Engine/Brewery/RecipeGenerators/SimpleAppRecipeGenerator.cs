@@ -27,9 +27,10 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
         // TODO: Move to some constant (and in the future a configurable option.
         // For now, it's fine.
         var dockerComposeLocation = $"/data/cloudcrafter/stacks/{Options.Stack.Id}";
+        var gitCheckoutDirectory = $"/tmp/cc-{Options.DeploymentId}";
         Recipe
             .SetDockerComposeOptions(dockerComposeEditor, dockerComposeLocation)
-            .SetDestination(dockerComposeLocation);
+            .SetDestination(dockerComposeLocation, gitCheckoutDirectory);
 
         AddSteps(dockerComposeEditor);
 

@@ -37,6 +37,7 @@ public class DeploymentRecipeDockerComposeOptions
 public class DeploymentRecipeDestination
 {
     public required string RootDirectory { get; init; }
+    public required string GitCheckoutDirectory { get; init; }
 }
 
 public class DeploymentBuildOptions

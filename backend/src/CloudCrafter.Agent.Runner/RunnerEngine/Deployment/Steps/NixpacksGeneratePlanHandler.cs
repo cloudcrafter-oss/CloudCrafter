@@ -19,7 +19,7 @@ public class NixpacksGeneratePlanHandler(IMessagePump pump, INixpacksHelper nixp
     public async Task ExecuteAsync(NixpacksGeneratePlanParams parameters, DeploymentContext context)
     {
         _logger.LogInfo("Starting nixpacks plan handler");
-        var fullPath = context.GetWorkingDirectory() + $"/git/{parameters.Path}";
+        var fullPath = context.GetGitDirectory() + $"/git/{parameters.Path}";
 
         var plan = await nixpacksHelper.GetBuildPlanAsync(fullPath, parameters);
 

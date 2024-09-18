@@ -15,6 +15,16 @@ public class Server : IHasTimestamps
     [EncryptColumn]
     public string? SshPrivateKey { get; set; }
 
+    /// <summary>
+    ///     This is the data directory. When mounting the Agent container on this server,
+    ///     this is the data directory that will be mounted into the container.
+    ///     This may be a docker volume name or an absolute path.
+    ///     When running on Mac or Windows, this most likely needs to be a docker volume.
+    ///     We're using Docker in Docker, so the test-container uses the docker socket of the host.
+    ///     So, when using a path, it needs to be a path that is accessible from the host.
+    /// </summary>
+    public string DockerDataDirectoryMount { get; set; } = string.Empty;
+
     public required int SshPort { get; set; } = 22;
 
     public required DateTime CreatedAt { get; init; }

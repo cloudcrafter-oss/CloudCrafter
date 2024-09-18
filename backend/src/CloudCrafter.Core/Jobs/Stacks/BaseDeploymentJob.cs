@@ -95,6 +95,7 @@ public abstract class BaseDeploymentJob
     protected async Task CreateDockerContainer(
         ILogger<BaseDeploymentJob> logger,
         ICommonCommandGenerator commonCommandGenerator,
+        string dockerDataDirOnHost,
         Guid deploymentId
     )
     {
@@ -106,11 +107,11 @@ public abstract class BaseDeploymentJob
 
         logger.LogDebug("Creating Agent-container for deployment");
 
-        var dataDir = DynamicConfig.DataDir;
+        var dataDir = DynamicConfig.DataDirInContainer;
         var command = commonCommandGenerator.CreateHelperContainer(
             deploymentId,
             DynamicConfig.HelperImage,
-            [(dataDir, dataDir)]
+            [(dockerDataDirOnHost, dataDir)]
         );
 
         var result = await _client!.ExecuteCommandAsync(command);

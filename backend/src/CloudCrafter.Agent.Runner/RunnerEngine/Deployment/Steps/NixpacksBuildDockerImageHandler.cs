@@ -32,7 +32,7 @@ public class NixpacksBuildDockerImageHandler(IMessagePump pump, INixpacksHelper 
             throw new DeploymentException("Nixpacks plan not found - cannot build Docker image.");
         }
 
-        var workDir = context.GetWorkingDirectory() + $"/git/{parameters.Path}";
+        var workDir = context.GetGitDirectory() + $"/git/{parameters.Path}";
 
         var image = $"{parameters.Image}:{parameters.Tag}";
 

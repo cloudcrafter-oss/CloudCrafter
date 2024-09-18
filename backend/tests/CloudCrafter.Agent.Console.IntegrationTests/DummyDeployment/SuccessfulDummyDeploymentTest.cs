@@ -1,7 +1,9 @@
 ﻿using CloudCrafter.Agent.Models.Docker.Filters;
+using CloudCrafter.Agent.Models.IO;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.Agent.Runner.Commands;
+using CloudCrafter.Agent.Runner.IO;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.Shared.Utils;
 using MediatR;
@@ -90,9 +92,15 @@ public class SuccessfulDummyDeploymentTest
             DockerComposeDirectory = tmpDirectory,
         };
 
-        await _deploymentService.ValidateRecipe(_recipe);
+        var recipeYaml = new YamlRecipeWriter(_recipe);
+        var recipeYamlString = recipeYaml.WriteString();
 
-        await _deploymentService.DeployAsync(_recipe);
+        var recipeReader = new YamlRecipeReader();
+
+        var recipeFromYaml = recipeReader.FromString(recipeYamlString);
+        await _deploymentService.ValidateRecipe(recipeFromYaml);
+
+        await _deploymentService.DeployAsync(recipeFromYaml);
 
         // it at least should not throw an exception
         true.Should().BeTrue();

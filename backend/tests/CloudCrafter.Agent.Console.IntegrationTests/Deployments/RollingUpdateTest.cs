@@ -64,6 +64,7 @@ public class RollingUpdateTest : AbstractTraefikTest
             Destination = new DeploymentRecipeDestination
             {
                 RootDirectory = "/tmp/cloudcrafter/" + randomString,
+                GitCheckoutDirectory = "/tmp/tmp-" + RandomGenerator.String(),
             },
             DockerComposeOptions = new DeploymentRecipeDockerComposeOptions
             {

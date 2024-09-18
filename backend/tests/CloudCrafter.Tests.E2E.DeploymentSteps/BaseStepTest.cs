@@ -53,7 +53,11 @@ public abstract class BaseStepTest
         {
             Name = "Dummy",
             Application = new DeploymentRecipeApplicationInfo { Id = Guid.Empty },
-            Destination = new DeploymentRecipeDestination { RootDirectory = "/root" },
+            Destination = new DeploymentRecipeDestination
+            {
+                RootDirectory = "/root",
+                GitCheckoutDirectory = $"/tmp/tmp-{Guid.NewGuid()}",
+            },
             EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
             {
                 Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),

@@ -28,7 +28,11 @@ public class DeploymentRecipeValidatorTest
             {
                 Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),
             },
-            Destination = new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" },
+            Destination = new DeploymentRecipeDestination
+            {
+                RootDirectory = "/tmp/cloudcrafter/",
+                GitCheckoutDirectory = $"/tmp/tmp-{Guid.NewGuid()}",
+            },
             BuildOptions = new DeploymentBuildOptions
             {
                 Steps = new List<DeploymentBuildStep>
@@ -65,7 +69,11 @@ public class DeploymentRecipeValidatorTest
             {
                 Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),
             },
-            Destination = new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" },
+            Destination = new DeploymentRecipeDestination
+            {
+                RootDirectory = "/tmp/cloudcrafter/",
+                GitCheckoutDirectory = $"/tmp/tmp-{Guid.NewGuid()}",
+            },
             BuildOptions = new DeploymentBuildOptions { Steps = new List<DeploymentBuildStep>() },
         };
 
@@ -91,7 +99,11 @@ public class DeploymentRecipeValidatorTest
             {
                 Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),
             },
-            Destination = new DeploymentRecipeDestination { RootDirectory = "/tmp/cloudcrafter/" },
+            Destination = new DeploymentRecipeDestination
+            {
+                RootDirectory = "/tmp/cloudcrafter/",
+                GitCheckoutDirectory = $"/tmp/tmp-{Guid.NewGuid()}",
+            },
             DockerComposeOptions = new DeploymentRecipeDockerComposeOptions(),
             BuildOptions = new DeploymentBuildOptions { Steps = new List<DeploymentBuildStep>() },
         };
