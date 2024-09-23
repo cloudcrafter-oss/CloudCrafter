@@ -53,7 +53,7 @@ public class NixpacksBuildDockerImageHandlerTest : BaseTest
 
         _context.SetRecipeResult(RecipeResultKeys.NixpacksTomlLocation, "testPlanPath");
 
-        var workingDirectory = _context.GetWorkingDirectory();
+        var workingDirectory = _context.GetGitDirectory();
         // Act
         await _handler.ExecuteAsync(parameters, _context);
 

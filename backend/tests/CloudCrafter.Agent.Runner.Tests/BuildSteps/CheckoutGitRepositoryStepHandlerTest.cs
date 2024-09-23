@@ -47,7 +47,7 @@ public class CheckoutGitRepositoryStepHandlerTest : BaseTest
             .Setup(e => e.ExecuteAsync("git", It.IsAny<IEnumerable<string>>()))
             .ReturnsAsync(result);
 
-        var gitDir = _context.GetWorkingDirectory() + "/git";
+        var gitDir = _context.GetGitDirectory() + "/git";
         // Act
         await _handler.ExecuteAsync(_params, _context);
 

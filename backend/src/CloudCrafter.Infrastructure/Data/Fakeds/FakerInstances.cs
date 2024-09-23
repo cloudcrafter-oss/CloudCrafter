@@ -22,6 +22,7 @@ public static class FakerInstances
             .RuleFor(x => x.Name, f => $"Server {f.Person.FirstName}")
             .RuleFor(x => x.IpAddress, f => f.Internet.Ip())
             .RuleFor(x => x.SshUsername, "root")
+            .RuleFor(x => x.DockerDataDirectoryMount, "/data/random/dir")
             .RuleFor(x => x.SshPrivateKey, f => f.Random.AlphaNumeric(100))
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);

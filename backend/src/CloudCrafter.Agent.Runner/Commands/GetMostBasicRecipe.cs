@@ -37,6 +37,7 @@ public static class GetMostBasicRecipe
                 Destination = new DeploymentRecipeDestination
                 {
                     RootDirectory = "/tmp/cloudcrafter",
+                    GitCheckoutDirectory = $"/tmp/tmp-{Guid.NewGuid()}",
                 },
                 DockerComposeOptions = new DeploymentRecipeDockerComposeOptions
                 {

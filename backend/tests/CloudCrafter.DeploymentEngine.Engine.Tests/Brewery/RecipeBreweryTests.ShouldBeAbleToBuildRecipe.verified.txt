@@ -3,6 +3,7 @@ application:
   id: f4ccb2c1-0ce2-4ea7-9129-9b6755a1fad2
 destination:
   rootDirectory: /var/data/cloudcrafter
+  gitCheckoutDirectory: /data/cloudcrafter/cc-f4ccb2c1-0ce2-4ea7-9129-9b6755a1fad2
 environmentVariables:
   variables: {}
 buildOptions:

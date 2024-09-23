@@ -36,6 +36,7 @@ public abstract class HandlerBaseCase
             Destination = new DeploymentRecipeDestination
             {
                 RootDirectory = "/tmp/cloudcrafter-testing/" + RandomGenerator.String(),
+                GitCheckoutDirectory = "/tmp/tmp-" + RandomGenerator.String(),
             },
             DockerComposeOptions = new DeploymentRecipeDockerComposeOptions
             {

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Org.BouncyCastle.Crypto.Digests;
 using Environment = System.Environment;
 
 namespace CloudCrafter.Infrastructure.Data;
@@ -139,6 +138,7 @@ public static class SeedData
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Name = "Local Test Server",
+            DockerDataDirectoryMount = "cloudcrafter_testhostdata",
             Id = Guid.NewGuid(),
         };
 

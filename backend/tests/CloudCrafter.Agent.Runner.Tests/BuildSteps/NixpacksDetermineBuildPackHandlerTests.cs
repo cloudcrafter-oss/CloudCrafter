@@ -40,7 +40,7 @@ public class NixpacksDetermineBuildPackHandlerTests : BaseTest
     {
         // Arrange
         var parameters = new NixpacksDetermineBuildPackParams { Path = "testPath" };
-        var expectedFullPath = $"{_context.GetWorkingDirectory()}/git/testPath";
+        var expectedFullPath = $"{_context.GetGitDirectory()}/git/testPath";
         var expectedBuildPack = "nodejs";
 
         _mockNixpacksHelper

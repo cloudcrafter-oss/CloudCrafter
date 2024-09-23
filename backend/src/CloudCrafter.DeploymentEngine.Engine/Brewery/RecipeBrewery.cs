@@ -34,9 +34,13 @@ public class RecipeBrewery(string Name)
         return this;
     }
 
-    public RecipeBrewery SetDestination(string rootDirectory)
+    public RecipeBrewery SetDestination(string rootDirectory, string gitDirectory)
     {
-        _destination = new DeploymentRecipeDestination { RootDirectory = rootDirectory };
+        _destination = new DeploymentRecipeDestination
+        {
+            RootDirectory = rootDirectory,
+            GitCheckoutDirectory = gitDirectory,
+        };
         return this;
     }
 

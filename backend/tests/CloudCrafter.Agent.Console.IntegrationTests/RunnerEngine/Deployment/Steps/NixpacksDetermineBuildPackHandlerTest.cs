@@ -42,7 +42,7 @@ public class NixpacksDetermineBuildPackHandlerTest : HandlerBaseCase
         exception
             .Message.Should()
             .Be(
-                $"Could not determine build pack, directory: {context.GetWorkingDirectory()}/git/nixpacks-node-server"
+                $"Could not determine build pack, directory: {context.GetGitDirectory()}/git/nixpacks-node-server"
             );
     }
 

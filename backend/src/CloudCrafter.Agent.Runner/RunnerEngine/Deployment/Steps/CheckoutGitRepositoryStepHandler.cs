@@ -21,13 +21,16 @@ public class CheckoutGitRepositoryStepHandler(IMessagePump pump, ICommandExecuto
         _logger.LogInfo("Start ExecuteAsync");
 
         var repositoryUrl = parameters.Repo;
-        var workingDir = context.GetWorkingDirectory();
+        var gitDirectory = context.GetGitDirectory();
 
-        var gitDirectory = $"{workingDir}/git";
+        var gitCheckoutDirectory = $"{gitDirectory}/git";
 
-        _logger.LogInfo($"Cloning repository {repositoryUrl} to {gitDirectory}");
+        _logger.LogInfo($"Cloning repository {repositoryUrl} to {gitCheckoutDirectory}");
 
-        var result = await executor.ExecuteAsync("git", ["clone", repositoryUrl, gitDirectory]);
+        var result = await executor.ExecuteAsync(
+            "git",
+            ["clone", repositoryUrl, gitCheckoutDirectory]
+        );
 
         if (result.ExitCode != 0)
         {

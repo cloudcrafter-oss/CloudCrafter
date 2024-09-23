@@ -49,11 +49,16 @@ public abstract class BaseStepTest
 
     protected DeploymentRecipe GetRecipeWithStep(DeploymentBuildStep step)
     {
+        var guid = Guid.Parse("96ca27ea-518d-4e2c-83ea-c2ea08be24aa");
         var recipe = new DeploymentRecipe
         {
             Name = "Dummy",
             Application = new DeploymentRecipeApplicationInfo { Id = Guid.Empty },
-            Destination = new DeploymentRecipeDestination { RootDirectory = "/root" },
+            Destination = new DeploymentRecipeDestination
+            {
+                RootDirectory = "/root",
+                GitCheckoutDirectory = $"/data/cloudcrafter/{guid}",
+            },
             EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
             {
                 Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),

@@ -41,7 +41,7 @@ public class NixpacksWritePlanToFileSystemHandlerTest : BaseTest
         // Arrange
         var parameters = new NixpacksWritePlanToFileSystemParams();
         var expectedPlan = "sample build plan";
-        var expectedPlanPath = $"{_context.GetWorkingDirectory()}/nixpacks-plan.toml";
+        var expectedPlanPath = $"{_context.GetGitDirectory()}/nixpacks-plan.toml";
 
         _context.SetRecipeResult(RecipeResultKeys.NixpacksBuildPlan, expectedPlan);
 

@@ -25,7 +25,7 @@ public class NixpacksDetermineBuildPackHandler(IMessagePump pump, INixpacksHelpe
     {
         _logger.LogInfo("Starting nixpacks build pack handler");
 
-        var fullPath = context.GetWorkingDirectory() + $"/git/{parameters.Path}";
+        var fullPath = context.GetGitDirectory() + $"/git/{parameters.Path}";
 
         var nixpacksPack = await nixpacksHelper.DetermineBuildPackAsync(fullPath);
 

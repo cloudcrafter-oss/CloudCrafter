@@ -14,6 +14,11 @@ public class DeploymentContext(DeploymentRecipe recipe, bool dryRun = false)
         return Recipe.Destination.RootDirectory;
     }
 
+    public string GetGitDirectory()
+    {
+        return Recipe.Destination.GitCheckoutDirectory;
+    }
+
     public void SetRecipeResult(string stepName, object result)
     {
         _recipeResults[stepName] = result;
