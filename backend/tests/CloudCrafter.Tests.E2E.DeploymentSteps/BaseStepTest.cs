@@ -57,7 +57,7 @@ public abstract class BaseStepTest
             Destination = new DeploymentRecipeDestination
             {
                 RootDirectory = "/root",
-                GitCheckoutDirectory = $"/data/cloudcrafter/tmp-{guid}",
+                GitCheckoutDirectory = $"/data/cloudcrafter/{guid}",
             },
             EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
             {
