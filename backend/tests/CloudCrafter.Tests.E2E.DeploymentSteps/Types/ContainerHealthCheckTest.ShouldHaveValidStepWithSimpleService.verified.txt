@@ -3,7 +3,7 @@ application:
   id: 00000000-0000-0000-0000-000000000000
 destination:
   rootDirectory: /root
-  gitCheckoutDirectory: /tmp/tmp-791845c1-e65f-43b2-ac1e-274143b34476
+  gitCheckoutDirectory: /data/cloudcrafter/96ca27ea-518d-4e2c-83ea-c2ea08be24aa
 environmentVariables:
   variables: {}
 buildOptions:
