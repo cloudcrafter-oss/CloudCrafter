@@ -47,6 +47,7 @@ public abstract class BaseTestFixture
             .RuleFor(x => x.IpAddress, "127.0.0.1")
             .RuleFor(x => x.SshUsername, "root")
             .RuleFor(x => x.SshPrivateKey, sshKey)
+            .RuleFor(x => x.DockerDataDirectoryMount, "/data/cloudcrafter")
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
     }

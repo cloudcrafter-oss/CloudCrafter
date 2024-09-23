@@ -36,7 +36,7 @@ public class NixpacksGeneratePlanHandlerTest : BaseTest
     {
         // Arrange
         var parameters = new NixpacksGeneratePlanParams { Path = "testPath" };
-        var expectedFullPath = $"{_context.GetWorkingDirectory()}/git/testPath";
+        var expectedFullPath = $"{_context.GetGitDirectory()}/git/testPath";
         var expectedPlan = "sample build plan";
 
         _mockNixpacksHelper
@@ -65,7 +65,7 @@ public class NixpacksGeneratePlanHandlerTest : BaseTest
     {
         // Arrange
         var parameters = new NixpacksGeneratePlanParams { Path = "testPath" };
-        var expectedFullPath = $"{_context.GetWorkingDirectory()}/git/testPath";
+        var expectedFullPath = $"{_context.GetGitDirectory()}/git/testPath";
 
         _mockNixpacksHelper
             .Setup(n => n.GetBuildPlanAsync(expectedFullPath, parameters))

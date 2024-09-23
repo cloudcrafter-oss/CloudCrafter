@@ -49,6 +49,7 @@ public abstract class BaseStepTest
 
     protected DeploymentRecipe GetRecipeWithStep(DeploymentBuildStep step)
     {
+        var guid = Guid.Parse("96ca27ea-518d-4e2c-83ea-c2ea08be24aa");
         var recipe = new DeploymentRecipe
         {
             Name = "Dummy",
@@ -56,7 +57,7 @@ public abstract class BaseStepTest
             Destination = new DeploymentRecipeDestination
             {
                 RootDirectory = "/root",
-                GitCheckoutDirectory = $"/tmp/tmp-{Guid.NewGuid()}",
+                GitCheckoutDirectory = $"/tmp/tmp-{guid}",
             },
             EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
             {
