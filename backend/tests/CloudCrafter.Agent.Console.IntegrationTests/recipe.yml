@@ -6,6 +6,7 @@ dockerComposeOptions:
   dockerComposeDirectory: /tmp/cloudcrafter
 destination:
   rootDirectory: /tmp/cloudcrafter
+  gitCheckoutDirectory: /tmp/cloucrafter/repo
 environmentVariables:
   variables: { }
 buildOptions:
