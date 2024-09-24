@@ -15,6 +15,9 @@ public class Server : IHasTimestamps
     [EncryptColumn]
     public string? SshPrivateKey { get; set; }
 
+    [EncryptColumn]
+    public string? AgentSecretKey { get; set; }
+
     /// <summary>
     ///     This is the data directory. When mounting the Agent container on this server,
     ///     this is the data directory that will be mounted into the container.

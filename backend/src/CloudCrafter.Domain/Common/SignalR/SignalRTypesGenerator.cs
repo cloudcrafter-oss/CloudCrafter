@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Domain.Domain.SignalR;
+﻿using CloudCrafter.Agent.Models.SignalR;
 using TypeGen.Core.SpecGeneration;
 
 namespace CloudCrafter.Domain.Common.SignalR;

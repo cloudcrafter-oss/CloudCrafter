@@ -15,8 +15,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CloudCrafter.Agent.Models\CloudCrafter.Agent.Models.csproj"/>
     <ProjectReference Include="..\CloudCrafter.Utils\CloudCrafter.Utils.csproj"/>
     <ProjectReference Include="..\Packages\EntityFrameworkCore.EncryptColumn\EntityFrameworkCore.EncryptColumn.csproj"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Domain\SignalR\"/>
   </ItemGroup>
 
 </Project>

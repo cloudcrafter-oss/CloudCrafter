@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using CloudCrafter.Agent.Models.SignalR;
 using CloudCrafter.Agent.Runner;
 using CloudCrafter.Agent.Runner.Common.Behaviour;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
@@ -7,8 +8,10 @@ using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using MediatR;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 
 namespace CloudCrafter.Agent.Console;
@@ -17,7 +20,57 @@ public class Program
 {
     public static async Task<int> Main(string[] args)
     {
-        return await RunApp(args);
+        var host = CreateHostBuilder(args).Build();
+
+        var logger = host.Services.GetRequiredService<ILogger<Program>>();
+
+        var connection = new HubConnectionBuilder()
+            .WithUrl(
+                "http://web.127.0.0.1.sslip.io/hub/agent?agentId=ffcdd9ee-ff31-4344-a3ab-efdc9b5e44f1&agentKey=vHh7mZ5ntR"
+            )
+            .Build();
+
+        connection.On<MyHubMessage>(
+            "ReceiveMessage",
+            user =>
+            {
+                logger.LogInformation($"Received ID: {user.Id}");
+            }
+        );
+
+        // Add a handler for the Closed event
+        connection.Closed += error =>
+        {
+            if (error != null)
+            {
+                logger.LogCritical(error, "Connection closed due to an error");
+            }
+            else
+            {
+                logger.LogCritical("Connection closed by the CloudCrafter server");
+            }
+
+            Environment.Exit(1);
+            return null;
+        };
+
+        try
+        {
+            logger.LogInformation("Attempting to open the connection to the CloudCrafter servers");
+            await connection.StartAsync();
+            logger.LogInformation(
+                "Connected to the CloudCrafter servers. Listening for messages..."
+            );
+            // Keep the application running
+            await Task.Delay(Timeout.Infinite);
+        }
+        catch (Exception ex)
+        {
+            logger.LogCritical(ex, "Something went wrong during listening for messages");
+            return 1;
+        }
+
+        return 0;
     }
 
     public static async Task<int> RunApp(string[] args)

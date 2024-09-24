@@ -86,6 +86,7 @@ app.UseHangfireDashboard(options: hangfireDashboardOptions);
 app.ConfigureRecurringJobs();
 
 app.MapHub<MyHub>("/myHub");
+app.MapHub<AgentHub>("/hub/agent");
 app.Run();
 
 // Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building

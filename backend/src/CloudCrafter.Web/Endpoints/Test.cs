@@ -1,7 +1,7 @@
-﻿using CloudCrafter.Core.Commands;
+﻿using CloudCrafter.Agent.Models.SignalR;
+using CloudCrafter.Core.Commands;
 using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
 using CloudCrafter.Core.SignalR;
-using CloudCrafter.Domain.Domain.SignalR;
 using CloudCrafter.Web.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +13,10 @@ public class Test : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup(this).MapPost(GetTest).MapGet(SendExampleDeployment);
+        app.MapGroup(this)
+            .MapPost(GetTest)
+            .MapGet(SendExampleDeployment)
+            .MapGet(GetSendExampleMessageToAgent, "agent");
     }
 
     public async Task GetTest(
@@ -21,6 +24,11 @@ public class Test : EndpointGroupBase
         IHubContext<MyHub> hub,
         [FromBody] TestCommand.Query query
     )
+    {
+        await hub.Clients.All.SendAsync("ReceiveMessage", new MyHubMessage { Id = Guid.NewGuid() });
+    }
+
+    public async Task GetSendExampleMessageToAgent(IHubContext<AgentHub> hub)
     {
         await hub.Clients.All.SendAsync("ReceiveMessage", new MyHubMessage { Id = Guid.NewGuid() });
     }
