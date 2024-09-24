@@ -3,6 +3,7 @@ using Ardalis.SharedKernel;
 using CloudCrafter.Core.Common.Behaviours;
 using CloudCrafter.Core.Events;
 using CloudCrafter.Core.Events.Store;
+using CloudCrafter.Core.Interfaces.Domain.Agent;
 using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
 using CloudCrafter.Core.Interfaces.Domain.Environments;
 using CloudCrafter.Core.Interfaces.Domain.Projects;
@@ -15,6 +16,7 @@ using CloudCrafter.Core.Jobs.Dispatcher.Factory;
 using CloudCrafter.Core.Jobs.Serializer;
 using CloudCrafter.Core.Jobs.Servers;
 using CloudCrafter.Core.Jobs.Stacks;
+using CloudCrafter.Core.Services.Domain.Agent;
 using CloudCrafter.Core.Services.Domain.Applications.Deployments;
 using CloudCrafter.Core.Services.Domain.Environments;
 using CloudCrafter.Core.Services.Domain.Projects;
@@ -110,6 +112,7 @@ public static class ApplicationServiceExtensions
             .AddScoped<IProjectsService, ProjectsService>()
             .AddScoped<IStacksService, StacksService>()
             .AddScoped<IStackServicesService, StackServicesService>()
+            .AddScoped<IAgentManager, AgentManager>()
             .AddScoped<IEnvironmentService, EnvironmentsService>()
             .AddScoped<IGitService, GitService>()
             .AddScoped<IDeploymentService, DeploymentService>();

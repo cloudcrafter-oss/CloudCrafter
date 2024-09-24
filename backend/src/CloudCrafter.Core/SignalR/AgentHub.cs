@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Core.Interfaces.Domain.Servers;
+﻿using System.Collections.Concurrent;
+using CloudCrafter.Core.Interfaces.Domain.Servers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,8 @@ namespace CloudCrafter.Core.SignalR;
 
 public class AgentHub(IServersService serversService, ILogger<AgentHub> logger) : Hub
 {
+    public static ConcurrentDictionary<string, Guid> ConnectedClients { get; } = new();
+
     public async Task SendCloudCrafter(string user, string message)
     {
         await Clients.All.SendAsync("ReceiveMessage", user, message);
@@ -53,7 +56,16 @@ public class AgentHub(IServersService serversService, ILogger<AgentHub> logger) 
 
         logger.LogDebug("Agent connected from : {AgentId}@{Ip}", agentId, ip);
 
+        var clientId = Context.ConnectionId;
+        ConnectedClients.TryAdd(clientId, serverId);
         await base.OnConnectedAsync();
+    }
+
+    public override Task OnDisconnectedAsync(Exception? exception)
+    {
+        var clientId = Context.ConnectionId;
+        ConnectedClients.TryRemove(clientId, out _);
+        return base.OnDisconnectedAsync(exception);
     }
 
     private string GetClientIpAddress(HttpContext context)

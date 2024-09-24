@@ -30,11 +30,11 @@ public class Program
             )
             .Build();
 
-        connection.On<MyHubMessage>(
-            "ReceiveMessage",
+        connection.On<AgentHubPingMessage>(
+            "AgentMessage",
             user =>
             {
-                logger.LogInformation($"Received ID: {user.Id}");
+                logger.LogInformation($"Received ID: {user.MessageId}");
             }
         );
 
