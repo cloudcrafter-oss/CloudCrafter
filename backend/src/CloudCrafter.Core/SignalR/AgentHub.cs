@@ -10,9 +10,16 @@ public class AgentHub(IServersService serversService, ILogger<AgentHub> logger) 
 {
     public static ConcurrentDictionary<string, Guid> ConnectedClients { get; } = new();
 
-    public async Task SendCloudCrafter(string user, string message)
+    public Task TestCommand(string test)
     {
-        await Clients.All.SendAsync("ReceiveMessage", user, message);
+        var clientId = Context.ConnectionId;
+        logger.LogCritical(
+            "Received TestCommand from client {ClientId} with value: {Value}",
+            clientId,
+            test
+        );
+
+        return Task.CompletedTask;
     }
 
     public override async Task OnConnectedAsync()

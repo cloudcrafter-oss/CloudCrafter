@@ -22,5 +22,6 @@
     <PackageReference Include="Tomlyn"/>
     <PackageReference Include="Microsoft.Extensions.Hosting"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client"/>
   </ItemGroup>
 </Project>

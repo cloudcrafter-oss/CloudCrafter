@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.Net.Sockets;
 using CloudCrafter.Agent.Models.SignalR;
 using CloudCrafter.Agent.Runner;
 using CloudCrafter.Agent.Runner.Common.Behaviour;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace CloudCrafter.Agent.Console;
 
@@ -24,49 +26,15 @@ public class Program
 
         var logger = host.Services.GetRequiredService<ILogger<Program>>();
 
-        var connection = new HubConnectionBuilder()
-            .WithUrl(
-                "http://web.127.0.0.1.sslip.io/hub/agent?agentId=ffcdd9ee-ff31-4344-a3ab-efdc9b5e44f1&agentKey=vHh7mZ5ntR"
-            )
-            .Build();
-
-        connection.On<AgentHubPingMessage>(
-            "AgentMessage",
-            user =>
-            {
-                logger.LogInformation($"Received ID: {user.MessageId}");
-            }
-        );
-
-        // Add a handler for the Closed event
-        connection.Closed += error =>
-        {
-            if (error != null)
-            {
-                logger.LogCritical(error, "Connection closed due to an error");
-            }
-            else
-            {
-                logger.LogCritical("Connection closed by the CloudCrafter server");
-            }
-
-            Environment.Exit(1);
-            return null;
-        };
+        var manager = host.Services.GetRequiredService<SocketManager>();
 
         try
         {
-            logger.LogInformation("Attempting to open the connection to the CloudCrafter servers");
-            await connection.StartAsync();
-            logger.LogInformation(
-                "Connected to the CloudCrafter servers. Listening for messages..."
-            );
-            // Keep the application running
-            await Task.Delay(Timeout.Infinite);
+            await manager.ConnectAsync();
         }
         catch (Exception ex)
         {
-            logger.LogCritical(ex, "Something went wrong during listening for messages");
+            logger.LogCritical(ex, "Something went wrong, exiting...");
             return 1;
         }
 
@@ -137,7 +105,10 @@ public class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
-        Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console(theme: AnsiConsoleTheme.Sixteen)
+            .MinimumLevel.Debug()
+            .CreateLogger();
 
         return Host.CreateDefaultBuilder(args)
             .ConfigureServices(
@@ -147,7 +118,7 @@ public class Program
                     services.AddSingleton<IMessagePump, MessagePump>();
                     services.AddTransient<ICommandExecutor, CommandExecutor>();
                     services.AddSingleton<IDeploymentStepFactory, DeploymentStepFactory>();
-
+                    services.AddScoped<SocketManager>();
                     services.AddTransient<DeploymentService>();
                     services.AddMediatR(cfg =>
                     {
