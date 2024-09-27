@@ -28,7 +28,7 @@ builder.Services.AddDomainEvents(typeof(IDomainEvent).Assembly);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices();
 builder.Services.AddSwaggerServices();
-builder.Services.AddJobInfrastructure(builder.Configuration, false, "web");
+builder.Services.AddJobInfrastructure(builder.Configuration, true, JobServiceType.Web);
 
 var app = builder.Build();
 
