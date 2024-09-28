@@ -3,7 +3,6 @@ using CloudCrafter.Agent.Runner.MediatR.SignalR;
 using MediatR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
-using Polly;
 
 namespace CloudCrafter.Agent.Runner;
 
@@ -13,6 +12,7 @@ public class SocketManager
         .WithUrl(
             "http://web.127.0.0.1.sslip.io/hub/agent?agentId=ffcdd9ee-ff31-4344-a3ab-efdc9b5e44f1&agentKey=vHh7mZ5ntR"
         )
+        .WithAutomaticReconnect()
         .Build();
 
     private readonly ILogger<SocketManager> _logger;
@@ -20,23 +20,36 @@ public class SocketManager
 
     public SocketManager(ILogger<SocketManager> logger, ISender sender)
     {
-        this._logger = logger;
-        this._sender = sender;
+        _logger = logger;
+        _sender = sender;
 
         _connection.Closed += error =>
         {
             if (error != null)
             {
-                this._logger.LogCritical(error, "Connection closed due to an error");
+                _logger.LogCritical(error, "\u274c Connection closed due to an error");
             }
             else
             {
-                this._logger.LogCritical("Connection closed by the CloudCrafter server");
+                _logger.LogCritical("Connection closed by the CloudCrafter server");
             }
 
             // TODO: Handle this better
-            Environment.Exit(1);
-            return null;
+            // Environment.Exit(1);
+            // return null;
+            return Task.CompletedTask;
+        };
+
+        _connection.Reconnected += connectionId =>
+        {
+            _logger.LogInformation("\u2705 Reconnected to the CloudCrafter server!");
+            return Task.CompletedTask;
+        };
+
+        _connection.Reconnecting += error =>
+        {
+            _logger.LogInformation("\u267b\ufe0f Reconnecting to the CloudCrafter server...");
+            return Task.CompletedTask;
         };
 
         AttachMessageHandlers();

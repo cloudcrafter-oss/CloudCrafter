@@ -57,10 +57,21 @@ public class BackgroundJobFactory(
             // var hangfireJobId =
             // client.Enqueue<CloudCrafterJob>(job => job.ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type, null));
 
-            var hangfireJobId = client.Create<CloudCrafterJob>(
-                job => job.ExecuteBackgroundJobAsync(backgroundJob.Id, backgroundJob.Type, null),
-                new CreatedState()
-            );
+            var hangfireJobId = job.ShouldRunOnApiServer
+                ? client.Create<CloudCrafterJob>(
+                    clientJob =>
+                        clientJob.ExecuteJobOnHubServer(backgroundJob.Id, backgroundJob.Type, null),
+                    new CreatedState()
+                )
+                : client.Create<CloudCrafterJob>(
+                    clientJob =>
+                        clientJob.ExecuteBackgroundJobAsync(
+                            backgroundJob.Id,
+                            backgroundJob.Type,
+                            null
+                        ),
+                    new CreatedState()
+                );
             backgroundJob.HangfireJobId = hangfireJobId;
 
             // hangfireJobIdclient.

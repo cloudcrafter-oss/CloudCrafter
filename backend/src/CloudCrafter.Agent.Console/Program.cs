@@ -1,6 +1,4 @@
 ﻿using System.CommandLine;
-using System.Net.Sockets;
-using CloudCrafter.Agent.Models.SignalR;
 using CloudCrafter.Agent.Runner;
 using CloudCrafter.Agent.Runner.Common.Behaviour;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
@@ -9,7 +7,6 @@ using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using MediatR;
-using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -22,6 +19,11 @@ public class Program
 {
     public static async Task<int> Main(string[] args)
     {
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console(theme: AnsiConsoleTheme.Sixteen)
+            .MinimumLevel.Debug()
+            .CreateLogger();
+
         var host = CreateHostBuilder(args).Build();
 
         var logger = host.Services.GetRequiredService<ILogger<Program>>();
@@ -105,11 +107,6 @@ public class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
-        Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console(theme: AnsiConsoleTheme.Sixteen)
-            .MinimumLevel.Debug()
-            .CreateLogger();
-
         return Host.CreateDefaultBuilder(args)
             .ConfigureServices(
                 (hostContext, services) =>
