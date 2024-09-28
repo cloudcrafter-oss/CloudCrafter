@@ -1,5 +1,7 @@
 ﻿using CloudCrafter.Agent.Models.SignalR;
 using CloudCrafter.Agent.Runner.MediatR.SignalR;
+using CloudCrafter.Agent.Runner.SignalR;
+using CloudCrafter.Agent.SignalR;
 using MediatR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
@@ -17,12 +19,13 @@ public class SocketManager
 
     private readonly ILogger<SocketManager> _logger;
     private readonly ISender _sender;
+    private readonly TypedHubConnection<IAgentHub> _typedHubConnection;
 
     public SocketManager(ILogger<SocketManager> logger, ISender sender)
     {
         _logger = logger;
         _sender = sender;
-
+        _typedHubConnection = new TypedHubConnection<IAgentHub>(_connection);
         _connection.Closed += error =>
         {
             if (error != null)
@@ -65,7 +68,9 @@ public class SocketManager
                     $"Received AgentMessage [AgentHubPingMessage] ID: {message.MessageId}"
                 );
 
-                await _sender.Send(new AgentHubPingMessageHandler.Query(message, _connection));
+                await _sender.Send(
+                    new AgentHubPingMessageHandler.Query(message, _typedHubConnection)
+                );
             }
         );
     }

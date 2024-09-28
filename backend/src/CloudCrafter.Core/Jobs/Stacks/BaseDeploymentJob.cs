@@ -1,11 +1,8 @@
 ﻿using CloudCrafter.Agent.Models.IO;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Core.Config;
-using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.DeploymentEngine.Domain.Commands;
 using CloudCrafter.DeploymentEngine.Remote.Clients.Contracts;
-using CloudCrafter.DeploymentEngine.Remote.Manager;
-using CloudCrafter.Domain.Entities;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Jobs.Stacks;
@@ -15,14 +12,6 @@ public abstract class BaseDeploymentJob
     protected ICloudCrafterRemoteClient? _client = null;
     private string? _helperContainerId;
     private string? _stopAndRemoveContainerCommand;
-
-    protected CloudCrafterEngineManager GetEngineManager(
-        IServerConnectivityService connectivityService,
-        Server server
-    )
-    {
-        return connectivityService.CreateEngineManager(server);
-    }
 
     protected async Task RemoveHelperImage()
     {

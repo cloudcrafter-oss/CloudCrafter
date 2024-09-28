@@ -1,52 +1,16 @@
+using CloudCrafter.Core.Interfaces.Domain.Agent;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Interfaces.Repositories;
-using CloudCrafter.DeploymentEngine.Domain.Models;
-using CloudCrafter.DeploymentEngine.Remote.Manager;
-using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.Core.Services.Domain.Servers;
 
-public class ServerConnectivityService(
-    IServerRepository repository,
-    ICloudCrafterEngineManagerFactory engineManagerFactory
-) : IServerConnectivityService
+public class ServerConnectivityService(IServerRepository repository, IAgentManager agentManager)
+    : IServerConnectivityService
 {
     public async Task PerformConnectivityCheckAsync(Guid serverId)
     {
-        var server = await repository.GetServerEntityOrFail(serverId);
-        var engineModel = GetDeploymentEngineModelForServer(server);
+        await repository.GetServerEntityOrFail(serverId);
 
-        var engineManager = engineManagerFactory.CreateFromModel(engineModel);
-
-        var client = engineManager.CreateSshClient();
-
-        await client.ConnectAsync();
-
-        var result = await client.ExecuteCommandAsync("ls -la");
-    }
-
-    public CloudCrafterEngineManager CreateEngineManager(Server server)
-    {
-        var engineModel = GetDeploymentEngineModelForServer(server);
-        return engineManagerFactory.CreateFromModel(engineModel);
-    }
-
-    private EngineServerModel GetDeploymentEngineModelForServer(Server server)
-    {
-        if (string.IsNullOrEmpty(server.SshUsername) || string.IsNullOrEmpty(server.SshPrivateKey))
-        {
-            throw new ArgumentException("Server SSH username or private key is not set");
-        }
-
-        EngineServerModel engineModel =
-            new()
-            {
-                Host = server.IpAddress,
-                Username = server.SshUsername,
-                Port = server.SshPort,
-                SshKey = server.SshPrivateKey,
-            };
-
-        return engineModel;
+        await agentManager.SendPingToAgent(serverId);
     }
 }

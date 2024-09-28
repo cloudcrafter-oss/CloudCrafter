@@ -1,4 +1,6 @@
 ﻿using System.Collections.Concurrent;
+using CloudCrafter.Agent.SignalR;
+using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
@@ -6,17 +8,17 @@ using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.SignalR;
 
-public class AgentHub(IServersService serversService, ILogger<AgentHub> logger) : Hub
+public class AgentHub(IServersService serversService, ILogger<AgentHub> logger) : Hub, IAgentHub
 {
     public static ConcurrentDictionary<string, Guid> ConnectedClients { get; } = new();
 
-    public Task TestCommand(string test)
+    public Task HealthCheckCommand(HealthCheckCommandArgs args)
     {
         var clientId = Context.ConnectionId;
         logger.LogCritical(
             "Received TestCommand from client {ClientId} with value: {Value}",
             clientId,
-            test
+            args
         );
 
         return Task.CompletedTask;
