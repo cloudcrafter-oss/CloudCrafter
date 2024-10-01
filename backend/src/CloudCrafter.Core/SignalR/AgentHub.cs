@@ -14,14 +14,26 @@ public class AgentHub(IServersService serversService, ILogger<AgentHub> logger) 
 
     public Task HealthCheckCommand(HealthCheckCommandArgs args)
     {
-        var clientId = Context.ConnectionId;
+        var serverId = GetServerForClient();
+
         logger.LogCritical(
-            "Received TestCommand from client {ClientId} with value: {Value}",
-            clientId,
+            "Received TestCommand from server {ServerId} with value: {Value}",
+            serverId,
             args
         );
 
         return Task.CompletedTask;
+    }
+
+    private Guid GetServerForClient()
+    {
+        var clientId = Context.ConnectionId;
+        if (ConnectedClients.TryGetValue(clientId, out var serverId))
+        {
+            return serverId;
+        }
+
+        throw new InvalidOperationException("Client is not connected to any server");
     }
 
     public override async Task OnConnectedAsync()

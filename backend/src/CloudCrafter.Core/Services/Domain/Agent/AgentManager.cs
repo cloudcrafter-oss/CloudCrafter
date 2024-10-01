@@ -47,7 +47,8 @@ public class AgentManager(IHubContext<AgentHub> hub, ILogger<AgentManager> logge
     private List<string> GetConnectedClientIdsForServer(Guid serverId)
     {
         var connectedAgents = AgentHub
-            .ConnectedClients.Select(client => client.Key.ToString())
+            .ConnectedClients.Where(x => x.Value == serverId)
+            .Select(client => client.Key.ToString())
             .ToList();
 
         return connectedAgents;
