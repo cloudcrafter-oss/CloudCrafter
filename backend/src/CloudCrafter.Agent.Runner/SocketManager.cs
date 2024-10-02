@@ -1,31 +1,41 @@
-﻿using CloudCrafter.Agent.Models.SignalR;
+﻿using CloudCrafter.Agent.Models.Configs;
+using CloudCrafter.Agent.Models.SignalR;
 using CloudCrafter.Agent.Runner.MediatR.SignalR;
 using CloudCrafter.Agent.Runner.SignalR;
 using CloudCrafter.Agent.SignalR;
 using MediatR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace CloudCrafter.Agent.Runner;
 
 public class SocketManager
 {
-    private readonly HubConnection _connection = new HubConnectionBuilder()
-        .WithUrl(
-            "http://web:8080/hub/agent?agentId=ffcdd9ee-ff31-4344-a3ab-efdc9b5e44f1&agentKey=vHh7mZ5ntR"
-        )
-        .WithAutomaticReconnect()
-        .Build();
-
+    private readonly AgentConfig _agentConfig;
+    private readonly HubConnection _connection;
     private readonly ILogger<SocketManager> _logger;
     private readonly ISender _sender;
     private readonly TypedHubConnection<IAgentHub> _typedHubConnection;
 
-    public SocketManager(ILogger<SocketManager> logger, ISender sender)
+    public SocketManager(
+        ILogger<SocketManager> logger,
+        ISender sender,
+        IOptions<AgentConfig> config
+    )
     {
         _logger = logger;
         _sender = sender;
+        _agentConfig = config.Value;
+        _connection = new HubConnectionBuilder()
+            .WithUrl(
+                $"{_agentConfig.CloudCrafterHost}/hub/agent?agentId={_agentConfig.ServerId}&agentKey={_agentConfig.AgentKey}"
+            )
+            .WithAutomaticReconnect()
+            .Build();
+
         _typedHubConnection = new TypedHubConnection<IAgentHub>(_connection);
+
         _connection.Closed += error =>
         {
             if (error != null)
@@ -77,7 +87,10 @@ public class SocketManager
 
     public async Task ConnectAsync()
     {
-        _logger.LogInformation("Connecting to CloudCrafter upstream server");
+        _logger.LogInformation(
+            "Connecting to CloudCrafter upstream server at {Host}...",
+            _agentConfig.CloudCrafterHost
+        );
         const int maxRetries = 5;
         const int initialBackoffMs = 1000;
         for (var attempt = 1; attempt <= maxRetries; attempt++)

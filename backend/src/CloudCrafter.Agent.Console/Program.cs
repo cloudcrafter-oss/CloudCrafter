@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using CloudCrafter.Agent.Models.Configs;
 using CloudCrafter.Agent.Runner;
 using CloudCrafter.Agent.Runner.Common.Behaviour;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
@@ -7,9 +8,12 @@ using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using MediatR;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 
@@ -27,6 +31,9 @@ public class Program
         var host = CreateHostBuilder(args).Build();
 
         var logger = host.Services.GetRequiredService<ILogger<Program>>();
+
+        var validator = host.Services.GetRequiredService<IStartupValidator>();
+        validator.Validate();
 
         var manager = host.Services.GetRequiredService<SocketManager>();
 
@@ -108,6 +115,17 @@ public class Program
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
         return Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration(
+                (hostingContext, config) =>
+                {
+                    config.Sources.Remove(
+                        config.Sources.First(source =>
+                            source.GetType() == typeof(EnvironmentVariablesConfigurationSource)
+                        )
+                    ); //remove the default one first
+                    config.AddEnvironmentVariables("CLOUDCRAFTER_");
+                }
+            )
             .ConfigureServices(
                 (hostContext, services) =>
                 {
@@ -129,6 +147,12 @@ public class Program
                     });
 
                     services.AddSerilog();
+
+                    services
+                        .AddOptions<AgentConfig>()
+                        .BindConfiguration(AgentConfig.KEY)
+                        .ValidateDataAnnotations()
+                        .ValidateOnStart();
                 }
             );
     }
