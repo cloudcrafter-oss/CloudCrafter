@@ -12,7 +12,7 @@ public class SocketManager
 {
     private readonly HubConnection _connection = new HubConnectionBuilder()
         .WithUrl(
-            "http://web.127.0.0.1.sslip.io/hub/agent?agentId=ffcdd9ee-ff31-4344-a3ab-efdc9b5e44f1&agentKey=vHh7mZ5ntR"
+            "http://web:8080/hub/agent?agentId=ffcdd9ee-ff31-4344-a3ab-efdc9b5e44f1&agentKey=vHh7mZ5ntR"
         )
         .WithAutomaticReconnect()
         .Build();
@@ -78,7 +78,29 @@ public class SocketManager
     public async Task ConnectAsync()
     {
         _logger.LogInformation("Connecting to CloudCrafter upstream server");
-        await _connection.StartAsync();
+        const int maxRetries = 5;
+        const int initialBackoffMs = 1000;
+        for (var attempt = 1; attempt <= maxRetries; attempt++)
+        {
+            try
+            {
+                await _connection.StartAsync();
+                break; // Connection successful, exit the loop
+            }
+            catch (Exception)
+            {
+                if (attempt == maxRetries)
+                {
+                    throw; // Rethrow the exception if all attempts failed
+                }
+
+                _logger.LogWarning(
+                    $"Connection attempt {attempt} failed. Retrying in {initialBackoffMs * attempt}ms..."
+                );
+                await Task.Delay(initialBackoffMs * attempt);
+            }
+        }
+
         _logger.LogInformation("Connected to the CloudCrafter servers. Listening for messages...");
 
         // TODO: Is there a better way for this? We dont want the task to return actually,

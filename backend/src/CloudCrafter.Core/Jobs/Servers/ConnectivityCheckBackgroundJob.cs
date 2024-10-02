@@ -24,7 +24,7 @@ public class ConnectivityCheckBackgroundJob : IJob
 
     private BackgroundJob? _job { get; set; }
     public BackgroundJobType Type => BackgroundJobType.ServerConnectivityCheck;
-    public bool ShouldRunOnApiServer => true;
+    public bool ShouldRunOnApiServer => false;
 
     public async Task HandleEntity(IApplicationDbContext context, string jobId)
     {

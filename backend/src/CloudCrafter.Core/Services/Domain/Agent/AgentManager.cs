@@ -6,7 +6,11 @@ using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Services.Domain.Agent;
 
-public class AgentManager(IHubContext<AgentHub> hub, ILogger<AgentManager> logger) : IAgentManager
+public class AgentManager(
+    IHubContext<AgentHub> hub,
+    ILogger<AgentManager> logger,
+    ConnectedServerManager connectedServerManager
+) : IAgentManager
 {
     public Task SendPingToAgent(Guid serverId)
     {
@@ -21,9 +25,9 @@ public class AgentManager(IHubContext<AgentHub> hub, ILogger<AgentManager> logge
 
     private async Task SendMessage(AgentBaseMessage message, Guid serverId)
     {
-        var connectedClients = GetConnectedClientIdsForServer(serverId);
+        var connectedClientId = await GetConnectedClientIdForServer(serverId);
 
-        if (connectedClients.Count == 0)
+        if (connectedClientId is null)
         {
             logger.LogDebug(
                 "Attempting to send message of type {Type} to server {ServerId}, but no connected clients",
@@ -33,23 +37,17 @@ public class AgentManager(IHubContext<AgentHub> hub, ILogger<AgentManager> logge
             return;
         }
 
-        foreach (var clientId in connectedClients)
-        {
-            logger.LogDebug(
-                "Sending message of type {Type} to client {ClientId}",
-                message.GetType(),
-                clientId
-            );
-            await hub.Clients.Client(clientId).SendAsync("AgentMessage", message);
-        }
+        logger.LogDebug(
+            "Sending message of type {Type} to client {ClientId}",
+            message.GetType(),
+            connectedClientId
+        );
+        await hub.Clients.Client(connectedClientId).SendAsync("AgentMessage", message);
     }
 
-    private List<string> GetConnectedClientIdsForServer(Guid serverId)
+    private async Task<string?> GetConnectedClientIdForServer(Guid serverId)
     {
-        var connectedAgents = AgentHub
-            .ConnectedClients.Where(x => x.Value == serverId)
-            .Select(client => client.Key.ToString())
-            .ToList();
+        var connectedAgents = await connectedServerManager.GetConnectionIdForServer(serverId);
 
         return connectedAgents;
     }

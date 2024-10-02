@@ -124,7 +124,10 @@ public static class DependencyInjection
         return collection;
     }
 
-    public static IServiceCollection AddWebServices(this IServiceCollection services)
+    public static IServiceCollection AddWebServices(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         services.AddDatabaseDeveloperPageExceptionFilter();
 

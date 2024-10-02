@@ -23,10 +23,10 @@ builder.Services.AddApiConfiguration(builder.Configuration);
 builder.Services.AddCloudCrafterCors(builder.Configuration);
 builder.Services.AddEngineInfrastructure();
 builder.Services.AddCloudCrafterLogging(builder.Configuration);
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddDomainEvents(typeof(IDomainEvent).Assembly);
 builder.Services.AddInfrastructureServices(builder.Configuration);
-builder.Services.AddWebServices();
+builder.Services.AddWebServices(builder.Configuration);
 builder.Services.AddSwaggerServices();
 builder.Services.AddJobInfrastructure(builder.Configuration, true, JobServiceType.Web);
 

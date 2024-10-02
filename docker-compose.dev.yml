@@ -28,6 +28,19 @@ services:
       - JwtSettings__RefreshTokenValidInSeconds=900
       - SPECIAL_TESTHOST_PATH=/test-host/id_rsa
 
+  agent:
+    container_name: agent
+    build:
+      context: backend/
+      dockerfile: src/CloudCrafter.Agent.Console/Dockerfile
+    depends_on:
+      - web
+    networks:
+      - cloudcrafter
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+
   job-runner:
     container_name: job-runner
     build:

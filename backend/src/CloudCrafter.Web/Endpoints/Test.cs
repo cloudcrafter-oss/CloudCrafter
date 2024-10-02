@@ -37,7 +37,7 @@ public class Test : EndpointGroupBase
 
     public IResult GetConnectedClients()
     {
-        var connectedClients = AgentHub.ConnectedClients.ToList();
+        var connectedClients = new List<string>();
         return Results.Ok(connectedClients);
     }
 

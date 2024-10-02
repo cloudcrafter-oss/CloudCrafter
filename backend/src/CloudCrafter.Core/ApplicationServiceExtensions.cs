@@ -24,6 +24,7 @@ using CloudCrafter.Core.Services.Domain.Servers;
 using CloudCrafter.Core.Services.Domain.Stacks;
 using CloudCrafter.Core.Services.Domain.Users;
 using CloudCrafter.Core.Services.Domain.Utils;
+using CloudCrafter.Core.SignalR;
 using CloudCrafter.Domain;
 using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
@@ -31,7 +32,9 @@ using FluentValidation;
 using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 
 namespace CloudCrafter.Core;
 
@@ -76,7 +79,10 @@ public static class ApplicationServiceExtensions
         return services;
     }
 
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         var mapperAssemblies = new List<Assembly>
         {
@@ -126,12 +132,33 @@ public static class ApplicationServiceExtensions
         >();
         services.AddScoped<BackgroundJobFactory>();
         services.AddSingleton<JobSerializer>();
+        services.AddSingleton<ConnectedServerManager>();
 
         services.AddScoped<ConnectivityCheckBackgroundJob>();
         services.AddScoped<DeployStackBackgroundJob>();
 
-        // SignalR
-        services.AddSignalR();
+        var connectionString = configuration.GetConnectionString("RedisConnection");
+
+        if (connectionString is null)
+        {
+            throw new InvalidOperationException("Redis connection string is not configured");
+        }
+
+        services
+            .AddSignalR()
+            .AddStackExchangeRedis(
+                connectionString,
+                opt =>
+                {
+                    opt.Configuration.ChannelPrefix = RedisChannel.Literal("CloudCrafter-WS");
+                }
+            );
+
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = connectionString;
+            options.InstanceName = "CloudCrafter-Cache";
+        });
 
         return services;
     }

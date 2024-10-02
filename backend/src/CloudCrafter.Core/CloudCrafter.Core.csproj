@@ -17,6 +17,8 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
     <PackageReference Include="LibGit2Sharp"/>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Common"/>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis"/>
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis"/>
   </ItemGroup>
 
   <ItemGroup>

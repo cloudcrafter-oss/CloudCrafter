@@ -73,7 +73,7 @@ public class Program
                         true,
                         JobServiceType.Worker
                     );
-                    services.AddApplicationServices();
+                    services.AddApplicationServices(hostContext.Configuration);
                 }
             );
     }

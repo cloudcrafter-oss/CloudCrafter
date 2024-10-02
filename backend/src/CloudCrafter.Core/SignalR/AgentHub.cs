@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using CloudCrafter.Agent.SignalR;
+﻿using CloudCrafter.Agent.SignalR;
 using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using Microsoft.AspNetCore.Http;
@@ -8,10 +7,12 @@ using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.SignalR;
 
-public class AgentHub(IServersService serversService, ILogger<AgentHub> logger) : Hub, IAgentHub
+public class AgentHub(
+    IServersService serversService,
+    ILogger<AgentHub> logger,
+    ConnectedServerManager serverManager
+) : Hub, IAgentHub
 {
-    public static ConcurrentDictionary<string, Guid> ConnectedClients { get; } = new();
-
     public Task HealthCheckCommand(HealthCheckCommandArgs args)
     {
         var serverId = GetServerForClient();
@@ -25,12 +26,14 @@ public class AgentHub(IServersService serversService, ILogger<AgentHub> logger) 
         return Task.CompletedTask;
     }
 
-    private Guid GetServerForClient()
+    private async Task<Guid> GetServerForClient()
     {
-        var clientId = Context.ConnectionId;
-        if (ConnectedClients.TryGetValue(clientId, out var serverId))
+        var connectionId = Context.ConnectionId;
+        var serverId = await serverManager.GetServerIdForConnectionId(connectionId);
+
+        if (serverId.HasValue)
         {
-            return serverId;
+            return serverId.Value;
         }
 
         throw new InvalidOperationException("Client is not connected to any server");
@@ -75,18 +78,18 @@ public class AgentHub(IServersService serversService, ILogger<AgentHub> logger) 
 
         var ip = GetClientIpAddress(httpContext);
 
+        await serverManager.SaveConnection(serverId, Context.ConnectionId);
         logger.LogDebug("Agent connected from : {AgentId}@{Ip}", agentId, ip);
 
-        var clientId = Context.ConnectionId;
-        ConnectedClients.TryAdd(clientId, serverId);
         await base.OnConnectedAsync();
     }
 
-    public override Task OnDisconnectedAsync(Exception? exception)
+    public override async Task OnDisconnectedAsync(Exception? exception)
     {
         var clientId = Context.ConnectionId;
-        ConnectedClients.TryRemove(clientId, out _);
-        return base.OnDisconnectedAsync(exception);
+        await serverManager.RemoveConnection(Context.ConnectionId);
+
+        await base.OnDisconnectedAsync(exception);
     }
 
     private string GetClientIpAddress(HttpContext context)
