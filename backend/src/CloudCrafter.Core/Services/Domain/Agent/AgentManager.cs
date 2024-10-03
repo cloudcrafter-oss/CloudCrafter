@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Agent.Models.SignalR;
+﻿using CloudCrafter.Agent.Models.Recipe;
+using CloudCrafter.Agent.Models.SignalR;
 using CloudCrafter.Core.Interfaces.Domain.Agent;
 using CloudCrafter.Core.SignalR;
 using Microsoft.AspNetCore.SignalR;
@@ -23,6 +24,18 @@ public class AgentManager(
         return SendMessage(message, serverId);
     }
 
+    public Task SendRecipeToAgent(Guid serverId, DeploymentRecipe recipe)
+    {
+        var message = new AgentHubDeployRecipeMessage
+        {
+            MessageId = Guid.NewGuid(),
+            Timestamp = DateTime.UtcNow,
+            Recipe = recipe,
+        };
+
+        return SendMessage(message, serverId);
+    }
+
     private async Task SendMessage(AgentBaseMessage message, Guid serverId)
     {
         var connectedClientId = await GetConnectedClientIdForServer(serverId);
@@ -37,12 +50,13 @@ public class AgentManager(
             return;
         }
 
+        var name = message.GetType().Name;
         logger.LogDebug(
             "Sending message of type {Type} to client {ClientId}",
             message.GetType(),
             connectedClientId
         );
-        await hub.Clients.Client(connectedClientId).SendAsync("AgentMessage", message);
+        await hub.Clients.Client(connectedClientId).SendAsync(name, message);
     }
 
     private async Task<string?> GetConnectedClientIdForServer(Guid serverId)

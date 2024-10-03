@@ -6,6 +6,7 @@ using CloudCrafter.Agent.Models.Deployment.Steps;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Agent.Runner.Factories;
 
@@ -13,8 +14,12 @@ public class DeploymentStepSerializerFactory
 {
     private readonly Dictionary<DeploymentBuildStepType, Type> _stepTypeToParamType;
     private readonly IDeploymentStepFactory _factory;
+    private readonly ILogger<DeploymentStepSerializerFactory> _logger;
 
-    public DeploymentStepSerializerFactory(IDeploymentStepFactory factory)
+    public DeploymentStepSerializerFactory(
+        IDeploymentStepFactory factory,
+        ILogger<DeploymentStepSerializerFactory> logger
+    )
     {
         var assembly = typeof(IAgentModelsTarget).Assembly;
         _stepTypeToParamType = assembly
@@ -22,6 +27,7 @@ public class DeploymentStepSerializerFactory
             .Where(t => t.GetCustomAttribute<DeploymentStepAttribute>() != null)
             .ToDictionary(t => t.GetCustomAttribute<DeploymentStepAttribute>()!.StepType, t => t);
         _factory = factory;
+        _logger = logger;
     }
 
     public Type GetParamType(DeploymentBuildStepType stepType)
@@ -65,6 +71,7 @@ public class DeploymentStepSerializerFactory
         var validationResult = validator.Validate(paramObject);
         if (!validationResult.IsValid)
         {
+            _logger.LogCritical("Validation failed type {0}", validator.GetType().Name);
             throw new ValidationException(validationResult.Errors);
         }
 

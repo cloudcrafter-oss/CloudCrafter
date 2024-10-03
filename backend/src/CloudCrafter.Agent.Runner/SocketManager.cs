@@ -71,7 +71,7 @@ public class SocketManager
     private void AttachMessageHandlers()
     {
         _connection.On<AgentHubPingMessage>(
-            "AgentMessage",
+            "AgentHubPingMessage",
             async message =>
             {
                 _logger.LogInformation(
@@ -80,6 +80,20 @@ public class SocketManager
 
                 await _sender.Send(
                     new AgentHubPingMessageHandler.Query(message, _typedHubConnection)
+                );
+            }
+        );
+
+        _connection.On<AgentHubDeployRecipeMessage>(
+            "AgentHubDeployRecipeMessage",
+            async message =>
+            {
+                _logger.LogInformation(
+                    $"Received AgentMessage [AgentHubDeployRecipeMessage] ID: {message.MessageId}"
+                );
+
+                await _sender.Send(
+                    new AgentHubDeployRecipeMessageHandler.Command(message, _typedHubConnection)
                 );
             }
         );

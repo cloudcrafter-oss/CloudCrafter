@@ -1,6 +1,10 @@
 ﻿using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Core.Interfaces.Domain.Agent;
+using CloudCrafter.DeploymentEngine.Engine.Abstraction;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.RecipeGenerators;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Jobs.Stacks;
@@ -20,7 +24,7 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
     public Guid DeploymentId { get; set; }
 
     public BackgroundJobType Type => BackgroundJobType.StackDeployment;
-    public bool ShouldRunOnApiServer => true;
+    public bool ShouldRunOnApiServer => false;
 
     public async Task HandleEntity(IApplicationDbContext context, string jobId)
     {
@@ -58,7 +62,7 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
         await RemoveHelperImage();
     }
 
-    public Task Handle(
+    public async Task Handle(
         IServiceProvider serviceProvider,
         IApplicationDbContext context,
         ILoggerFactory loggerFactory,
@@ -73,39 +77,21 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
             DeploymentId
         );
 
-        return Task.CompletedTask;
+        logger.LogDebug("Brewing recipe...");
+        var recipeGenerator = new SimpleAppRecipeGenerator(
+            new BaseRecipeGenerator.Args
+            {
+                Stack = _deployment!.Stack,
+                DeploymentId = _deployment!.Id,
+            }
+        );
+        var recipe = recipeGenerator.Generate();
+        logger.LogDebug("Recipe brewed!");
 
-        //var commandGenerator = serviceProvider.GetRequiredService<ICommonCommandGenerator>();
+        var agentManager = serviceProvider.GetRequiredService<IAgentManager>();
 
-        // logger.LogDebug("Connecting to server ({ServerId})", _deployment.Stack.ServerId);
-        // // await _client.ConnectAsync();
-        // logger.LogDebug("Connected to server!");
-        //
-        // var resultWhoAmI = await _client.ExecuteCommandAsync("whoami");
-        // logger.LogDebug("Using user on remote server: {Result}", resultWhoAmI.Result);
-        //
-        // logger.LogDebug("Brewing recipe...");
-        // var recipeGenerator = new SimpleAppRecipeGenerator(
-        //     new BaseRecipeGenerator.Args
-        //     {
-        //         Stack = _deployment!.Stack,
-        //         DeploymentId = _deployment!.Id,
-        //     }
-        // );
-        // var recipe = recipeGenerator.Generate();
-        // logger.LogDebug("Recipe brewed!");
-        //
-        // await PullHelperImage(logger, commandGenerator);
-        //
-        // await CreateDockerContainer(
-        //     logger,
-        //     commandGenerator,
-        //     _deployment.Stack.Server!.DockerDataDirectoryMount,
-        //     DeploymentId
-        // );
-
-        // var recipeFileDetails = await WriteRecipeToFile(logger, commandGenerator, recipe);
-
-        // await RunRecipe(logger, commandGenerator, recipeFileDetails);
+        logger.LogDebug("Sending recipe to agent...");
+        await agentManager.SendRecipeToAgent(_deployment.Stack.ServerId, recipe);
+        logger.LogDebug("Recipe sent to agent!");
     }
 }
