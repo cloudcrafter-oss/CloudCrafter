@@ -47,6 +47,7 @@ public abstract class BaseTestFixture
             .RuleFor(x => x.IpAddress, "127.0.0.1")
             .RuleFor(x => x.SshUsername, "root")
             .RuleFor(x => x.SshPrivateKey, sshKey)
+            .RuleFor(x => x.PingHealthData, new ServerPingData())
             .RuleFor(x => x.DockerDataDirectoryMount, "/data/cloudcrafter")
             .RuleFor(x => x.AgentSecretKey, f => f.Internet.Password(16))
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
