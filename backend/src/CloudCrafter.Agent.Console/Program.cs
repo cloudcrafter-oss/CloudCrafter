@@ -148,6 +148,7 @@ public class Program
                         );
                     });
 
+                    services.AddScoped<HubWrapper>();
                     services.AddSingleton<HostInfoService>();
                     services.AddSingleton<IHubConnectionProvider, HubConnectionProvider>();
 
