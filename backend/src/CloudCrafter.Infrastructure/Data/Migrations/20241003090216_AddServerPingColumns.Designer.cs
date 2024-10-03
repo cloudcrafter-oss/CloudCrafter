@@ -3,6 +3,7 @@ using System;
 using CloudCrafter.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CloudCrafter.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241003090216_AddServerPingColumns")]
+    partial class AddServerPingColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,6 +244,12 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
                     b.Property<string>("IpAddress")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastHealthPingReceivedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastServerData")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -696,46 +705,6 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Server");
-                });
-
-            modelBuilder.Entity("CloudCrafter.Domain.Entities.Server", b =>
-                {
-                    b.OwnsOne("CloudCrafter.Domain.Entities.ServerPingData", "PingHealthData", b1 =>
-                        {
-                            b1.Property<Guid>("ServerId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<double?>("CpuUsagePercentage")
-                                .HasColumnType("double precision");
-
-                            b1.Property<string>("DockerVersion")
-                                .HasColumnType("text");
-
-                            b1.Property<DateTime?>("LastPingAt")
-                                .HasColumnType("timestamp with time zone");
-
-                            b1.Property<double?>("MemoryUsagePercentage")
-                                .HasColumnType("double precision");
-
-                            b1.Property<string>("OsInfo")
-                                .HasColumnType("text");
-
-                            b1.Property<int?>("TotalCpuCount")
-                                .HasColumnType("integer");
-
-                            b1.Property<long?>("TotalMemoryBytes")
-                                .HasColumnType("bigint");
-
-                            b1.HasKey("ServerId");
-
-                            b1.ToTable("Servers");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ServerId");
-                        });
-
-                    b.Navigation("PingHealthData")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Stack", b =>

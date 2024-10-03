@@ -30,6 +30,8 @@ public class Server : IHasTimestamps
 
     public required int SshPort { get; set; } = 22;
 
+    public ServerPingData PingHealthData { get; set; } = new();
+
     public required DateTime CreatedAt { get; init; }
     public required DateTime UpdatedAt { get; set; }
 }

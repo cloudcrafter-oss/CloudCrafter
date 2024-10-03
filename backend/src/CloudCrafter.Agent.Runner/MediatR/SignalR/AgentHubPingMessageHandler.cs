@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Agent.Models.SignalR;
+using CloudCrafter.Agent.Runner.Services;
 using CloudCrafter.Agent.Runner.SignalR;
 using CloudCrafter.Agent.SignalR;
 using CloudCrafter.Agent.SignalR.Models;
@@ -14,13 +15,17 @@ public static class AgentHubPingMessageHandler
         TypedHubConnection<IAgentHub> TypedHubConnection
     ) : IRequest;
 
-    private class Handler(ILogger<Handler> logger) : IRequestHandler<Query>
+    private class Handler(ILogger<Handler> logger, HostInfoService service) : IRequestHandler<Query>
     {
         public async Task Handle(Query request, CancellationToken cancellationToken)
         {
             logger.LogDebug("Received message in agent handler");
+
+            var hostInfo = await service.GetHostInfo();
             await request.TypedHubConnection.InvokeAsync(hub =>
-                hub.HealthCheckCommand(new HealthCheckCommandArgs { Timestamp = DateTime.UtcNow })
+                hub.HealthCheckCommand(
+                    new HealthCheckCommandArgs { Timestamp = DateTime.UtcNow, HostInfo = hostInfo }
+                )
             );
         }
     }

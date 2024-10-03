@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Interfaces.Domain.Agent;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Interfaces.Repositories;
@@ -28,5 +29,10 @@ public class ServerConnectivityService(
         var elapsedMs2 = stopwatch2.ElapsedMilliseconds;
 
         logger.LogCritical("Elapsed time to send ping to agent: {ElapsedMs2}ms", elapsedMs2);
+    }
+
+    public Task StoreServerInfo(Guid serverId, HealthCheckCommandArgs data)
+    {
+        return repository.StoreServerInfo(serverId, data);
     }
 }

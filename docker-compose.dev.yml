@@ -37,6 +37,9 @@ services:
       - web
     networks:
       - cloudcrafter
+    volumes:
+      - testhostdata:/data/cloudcrafter
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - CLOUDCRAFTER_Agent__ServerId=ffcdd9ee-ff31-4344-a3ab-efdc9b5e44f1

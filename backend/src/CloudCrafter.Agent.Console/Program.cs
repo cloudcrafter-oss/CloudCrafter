@@ -5,6 +5,7 @@ using CloudCrafter.Agent.Runner.Common.Behaviour;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
 using CloudCrafter.Agent.Runner.DeploymentLogPump.Implementation;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
+using CloudCrafter.Agent.Runner.Services;
 using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using MediatR;
@@ -145,6 +146,8 @@ public class Program
                             typeof(PerformanceBehaviour<,>)
                         );
                     });
+
+                    services.AddSingleton<HostInfoService>();
 
                     services.AddSerilog();
 
