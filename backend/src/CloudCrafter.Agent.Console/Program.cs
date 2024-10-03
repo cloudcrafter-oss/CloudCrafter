@@ -6,6 +6,7 @@ using CloudCrafter.Agent.Runner.DeploymentLogPump;
 using CloudCrafter.Agent.Runner.DeploymentLogPump.Implementation;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.Agent.Runner.Services;
+using CloudCrafter.Agent.Runner.SignalR.Providers;
 using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using MediatR;
@@ -148,6 +149,7 @@ public class Program
                     });
 
                     services.AddSingleton<HostInfoService>();
+                    services.AddSingleton<IHubConnectionProvider, HubConnectionProvider>();
 
                     services.AddSerilog();
 

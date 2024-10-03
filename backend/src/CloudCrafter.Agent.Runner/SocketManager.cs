@@ -2,6 +2,7 @@
 using CloudCrafter.Agent.Models.SignalR;
 using CloudCrafter.Agent.Runner.MediatR.SignalR;
 using CloudCrafter.Agent.Runner.SignalR;
+using CloudCrafter.Agent.Runner.SignalR.Providers;
 using CloudCrafter.Agent.SignalR;
 using MediatR;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -17,22 +18,24 @@ public class SocketManager
     private readonly ILogger<SocketManager> _logger;
     private readonly ISender _sender;
     private readonly TypedHubConnection<IAgentHub> _typedHubConnection;
+    private readonly IHubConnectionProvider _connectionProvider;
 
     public SocketManager(
         ILogger<SocketManager> logger,
         ISender sender,
-        IOptions<AgentConfig> config
+        IOptions<AgentConfig> config,
+        IHubConnectionProvider connectionProvider
     )
     {
         _logger = logger;
         _sender = sender;
         _agentConfig = config.Value;
-        _connection = new HubConnectionBuilder()
-            .WithUrl(
-                $"{_agentConfig.CloudCrafterHost}/hub/agent?agentId={_agentConfig.ServerId}&agentKey={_agentConfig.AgentKey}"
-            )
-            .WithAutomaticReconnect()
-            .Build();
+        _connectionProvider = connectionProvider;
+        _connection = connectionProvider.CreateConnection(
+            _agentConfig.CloudCrafterHost,
+            _agentConfig.ServerId,
+            _agentConfig.AgentKey
+        );
 
         _typedHubConnection = new TypedHubConnection<IAgentHub>(_connection);
 
