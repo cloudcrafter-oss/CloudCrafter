@@ -6,7 +6,15 @@ using Microsoft.Extensions.Options;
 
 namespace CloudCrafter.Agent.Runner.SignalR.Providers;
 
-public class HubWrapper
+public interface IHubWrapper
+{
+    TypedHubConnection<IAgentHub> TypedHubConnection { get; }
+    void AttachEvents();
+    void On<TMessage>(string methodName, Func<TMessage, Task> handler);
+    Task StartAsync();
+}
+
+public class HubWrapper : IHubWrapper
 {
     private readonly HubConnection _connection;
     private readonly ILogger<HubWrapper> _logger;

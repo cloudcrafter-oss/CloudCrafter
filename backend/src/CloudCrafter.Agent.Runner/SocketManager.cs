@@ -1,11 +1,8 @@
 ﻿using CloudCrafter.Agent.Models.Configs;
 using CloudCrafter.Agent.Models.SignalR;
 using CloudCrafter.Agent.Runner.MediatR.SignalR;
-using CloudCrafter.Agent.Runner.SignalR;
 using CloudCrafter.Agent.Runner.SignalR.Providers;
-using CloudCrafter.Agent.SignalR;
 using MediatR;
-using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -17,15 +14,13 @@ public class SocketManager
     private readonly ILogger<SocketManager> _logger;
     private readonly ISender _sender;
 
-    private readonly HubWrapper _wrapper;
-
-    //   private readonly IHubConnectionProvider _connectionProvider;
+    private readonly IHubWrapper _wrapper;
 
     public SocketManager(
         ILogger<SocketManager> logger,
         ISender sender,
         IOptions<AgentConfig> config,
-        HubWrapper hubWrapper
+        IHubWrapper hubWrapper
     )
     {
         _logger = logger;

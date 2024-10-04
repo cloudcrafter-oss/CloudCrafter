@@ -6,7 +6,6 @@
 // using CloudCrafter.Agent.Runner.SignalR.Providers;
 // using CloudCrafter.Agent.SignalR;
 // using MediatR;
-// using Microsoft.AspNetCore.SignalR.Client;
 // using Microsoft.Extensions.Logging;
 // using Microsoft.Extensions.Options;
 // using Moq;
@@ -15,57 +14,68 @@
 //
 // public class SocketManagerTest
 // {
+//     private Mock<ILogger<SocketManager>> _loggerMock;
+//     private Mock<ISender> _senderMock;
+//     private Mock<IOptions<AgentConfig>> _configMock;
+//     private Mock<IHubWrapper> _hubWrapperMock;
+//     private SocketManager _socketManager;
+//
+//     [SetUp]
+//     public void Setup()
+//     {
+//         _loggerMock = new Mock<ILogger<SocketManager>>();
+//         _senderMock = new Mock<ISender>();
+//         _configMock = new Mock<IOptions<AgentConfig>>();
+//         _hubWrapperMock = new Mock<IHubWrapper>();
+//
+//         _configMock.Setup(c => c.Value).Returns(new AgentConfig { AgentKey = "dummy", ServerId = Guid.NewGuid(), CloudCrafterHost = "http://localhost" });
+//
+//         _socketManager = new SocketManager(
+//             _loggerMock.Object,
+//             _senderMock.Object,
+//             _configMock.Object,
+//             _hubWrapperMock.Object
+//         );
+//     }
+//
 //     [Test]
-//     public async Task ReceiveAgentHubPingMessage_SendsToMediator()
+//     public void AttachMessageHandlers_ShouldAttachHandlers()
 //     {
 //         // Arrange
-//         var mockLogger = new Mock<ILogger<SocketManager>>();
-//         var mockSender = new Mock<ISender>();
-//         var mockConfig = new Mock<IOptions<AgentConfig>>();
-//         mockConfig.Setup(x => x.Value).Returns(new AgentConfig
-//         {
-//             CloudCrafterHost = "http://test.com", ServerId = Guid.NewGuid(), AgentKey = "testKey"
-//         });
-//
-//         var mockHubConnection = new Mock<HubConnection>(MockBehavior.Strict);
-//         var mockHubConnectionObject = mockHubConnection.Object;
-//         var mockHubConnectionProvider = new Mock<IHubConnectionProvider>();
-//         mockHubConnectionProvider
-//             .Setup(x => x.CreateConnection(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<string>()))
-//             .Returns(mockHubConnectionObject);
-//
-//         AgentHubPingMessage? capturedMessage = null;
-//         TypedHubConnection<IAgentHub>? capturedConnection = null;
-//
-//         mockSender
-//             .Setup(x => x.Send(It.IsAny<AgentHubPingMessageHandler.Query>(), It.IsAny<CancellationToken>()))
-//             .Callback<IRequest<Unit>, CancellationToken>((query, token) =>
-//             {
-//                 var typedQuery = (AgentHubPingMessageHandler.Query)query;
-//                 capturedMessage = typedQuery.Message;
-//                 capturedConnection = typedQuery.TypedHubConnection;
-//             });
+//         var pingMessage = new AgentHubPingMessage() { Timestamp = DateTime.UtcNow, MessageId = Guid.NewGuid() };
 //
 //         // Act
-//         var socketManager = new SocketManager(
-//             mockLogger.Object,
-//             mockSender.Object,
-//             mockConfig.Object,
-//             mockHubConnectionProvider.Object
-//         );
 //
-//         // Simulate receiving a message
-//         var testMessage = new AgentHubPingMessage { MessageId = Guid.NewGuid(), Timestamp = DateTime.UtcNow};
-//         await mockHubConnection.RaiseAsync(
-//             h => h.On<AgentHubPingMessage>("AgentHubPingMessage", It.IsAny<Action<AgentHubPingMessage>>()),
-//             testMessage);
+//         _hubWrapperMock.Raise(
+//             h => h.On<AgentHubPingMessage>("Test", It.IsAny<Func<AgentHubPingMessage, Task>>()),
+//             pingMessage);
+//
 //
 //         // Assert
-//         mockSender.Verify(x => x.Send(It.IsAny<AgentHubPingMessageHandler.Query>(), It.IsAny<CancellationToken>()),
-//             Times.Once);
-//         capturedMessage.Should().NotBeNull();
-//         capturedMessage!.MessageId.Should().NotBeEmpty();
+//         _senderMock.Verify(s => s.Send(It.IsAny<AgentHubPingMessageHandler.Query>(), default), Times.Once);
+//     }
 //
-//         capturedConnection.Should().NotBeNull();
+//     private class DummyMock<TMessage> : IHubWrapper
+//     {
+//         public DummyMock(Func<TMessage, Task> handler)
+//         {
+//                 _handler = handler
+//         }
+//
+//         public TypedHubConnection<IAgentHub> TypedHubConnection { get; }
+//         public void AttachEvents()
+//         {
+//             throw new NotImplementedException();
+//         }
+//
+//         public void On<TMessage>(string methodName, Func<TMessage, Task> handler)
+//         {
+//             throw new NotImplementedException();
+//         }
+//
+//         public Task StartAsync()
+//         {
+//             throw new NotImplementedException();
+//         }
 //     }
 // }

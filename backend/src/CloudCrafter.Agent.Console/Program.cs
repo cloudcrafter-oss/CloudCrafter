@@ -134,6 +134,7 @@ public class Program
                     services.AddDeploymentStepsConfig();
                     services.AddSingleton<IMessagePump, MessagePump>();
                     services.AddTransient<ICommandExecutor, CommandExecutor>();
+                    services.AddTransient<IHubWrapper, HubWrapper>();
                     services.AddSingleton<IDeploymentStepFactory, DeploymentStepFactory>();
                     services.AddScoped<SocketManager>();
                     services.AddTransient<DeploymentService>();
