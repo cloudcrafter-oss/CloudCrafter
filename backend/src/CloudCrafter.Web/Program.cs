@@ -87,6 +87,7 @@ app.ConfigureRecurringJobs();
 
 app.MapHub<MyHub>("/myHub");
 app.MapHub<AgentHub>("/hub/agent");
+app.MapHub<TestHub>("/hub/test");
 app.Run();
 
 // Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
