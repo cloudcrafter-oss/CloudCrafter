@@ -14,6 +14,7 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -150,7 +151,9 @@ public class Program
                             typeof(AgentLoggingBehaviour<,>)
                         );
                     });
-
+                    
+                    
+               
                     services.AddScoped<HubWrapper>();
                     services.AddSingleton<HostInfoService>();
                     services.AddSingleton<IHubConnectionProvider, HubConnectionProvider>();
