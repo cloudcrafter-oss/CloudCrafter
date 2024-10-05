@@ -4,6 +4,7 @@ using CloudCrafter.Agent.Runner;
 using CloudCrafter.Agent.Runner.Common.Behaviour;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
 using CloudCrafter.Agent.Runner.DeploymentLogPump.Implementation;
+using CloudCrafter.Agent.Runner.Logging;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.Agent.Runner.Services;
 using CloudCrafter.Agent.Runner.SignalR.Providers;
@@ -17,7 +18,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Serilog;
-using Serilog.Sinks.SystemConsole.Themes;
 
 namespace CloudCrafter.Agent.Console;
 
@@ -25,10 +25,7 @@ public class Program
 {
     public static async Task<int> Main(string[] args)
     {
-        Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console(theme: AnsiConsoleTheme.Sixteen)
-            .MinimumLevel.Debug()
-            .CreateLogger();
+        Log.Logger = AgentLoggerConfiguration.CreateConfiguration().CreateLogger();
 
         var host = CreateHostBuilder(args).Build();
 
@@ -146,6 +143,11 @@ public class Program
                         cfg.AddBehavior(
                             typeof(IPipelineBehavior<,>),
                             typeof(PerformanceBehaviour<,>)
+                        );
+
+                        cfg.AddBehavior(
+                            typeof(IPipelineBehavior<,>),
+                            typeof(AgentLoggingBehaviour<,>)
                         );
                     });
 

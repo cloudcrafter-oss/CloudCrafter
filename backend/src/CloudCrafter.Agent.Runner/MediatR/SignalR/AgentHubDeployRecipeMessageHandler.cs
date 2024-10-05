@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Agent.Models.SignalR;
+using CloudCrafter.Agent.Runner.Common.Interfaces;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.Agent.Runner.SignalR;
 using CloudCrafter.Agent.SignalR;
@@ -11,8 +12,9 @@ public static class AgentHubDeployRecipeMessageHandler
 {
     public record Command(
         AgentHubDeployRecipeMessage Message,
-        TypedHubConnection<IAgentHub> TypedHubConnection
-    ) : IRequest;
+        TypedHubConnection<IAgentHub> TypedHubConnection,
+        Guid ChannelId
+    ) : IRequest, IAgentLoggable;
 
     private class Handler(DeploymentService deploymentService, ILogger<Handler> logger)
         : IRequestHandler<Command>

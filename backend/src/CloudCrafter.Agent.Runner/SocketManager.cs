@@ -37,7 +37,11 @@ public class SocketManager
             async message =>
             {
                 await _sender.Send(
-                    new AgentHubPingMessageHandler.Query(message, _wrapper.TypedHubConnection)
+                    new AgentHubPingMessageHandler.Query(
+                        message,
+                        _wrapper.TypedHubConnection,
+                        Guid.NewGuid()
+                    )
                 );
             }
         );
@@ -49,7 +53,8 @@ public class SocketManager
                 await _sender.Send(
                     new AgentHubDeployRecipeMessageHandler.Command(
                         message,
-                        _wrapper.TypedHubConnection
+                        _wrapper.TypedHubConnection,
+                        message.MessageId
                     )
                 );
             }

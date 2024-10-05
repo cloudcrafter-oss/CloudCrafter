@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Agent.Models.SignalR;
+using CloudCrafter.Agent.Runner.Common.Interfaces;
 using CloudCrafter.Agent.Runner.Services;
 using CloudCrafter.Agent.Runner.SignalR;
 using CloudCrafter.Agent.SignalR;
@@ -12,8 +13,9 @@ public static class AgentHubPingMessageHandler
 {
     public record Query(
         AgentHubPingMessage Message,
-        TypedHubConnection<IAgentHub> TypedHubConnection
-    ) : IRequest;
+        TypedHubConnection<IAgentHub> TypedHubConnection,
+        Guid ChannelId
+    ) : IRequest, IAgentLoggable;
 
     private class Handler(ILogger<Handler> logger, HostInfoService service) : IRequestHandler<Query>
     {
