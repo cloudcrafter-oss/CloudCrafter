@@ -18,6 +18,11 @@ public class TypedHubConnection<THub>(HubConnection connection)
         return connection.InvokeAsync(methodName, args?[0]);
     }
 
+    public bool IsConnected()
+    {
+        return connection.State == HubConnectionState.Connected;
+    }
+
     private (string MethodName, object?[] Args) ExtractMethodInfo(LambdaExpression methodExpression)
     {
         if (methodExpression.Body is MethodCallExpression methodCallExpression)

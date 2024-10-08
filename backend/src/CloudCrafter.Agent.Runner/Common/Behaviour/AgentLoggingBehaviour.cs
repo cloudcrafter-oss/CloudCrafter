@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Agent.Runner.Common.Interfaces;
+using CloudCrafter.Agent.Runner.Logging;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
@@ -29,7 +30,11 @@ public class AgentLoggingBehaviour<TRequest, TResponse>(ILogger<TRequest> logger
                 typeof(TRequest).Name,
                 guidScope
             );
+
             var response = await next();
+
+            // Wrap the next delegate in a new scope to ensure the LogContext is preserved
+
             logger.LogInformation(
                 "Completed request {RequestType} for deployment {ChannelId}",
                 typeof(TRequest).Name,

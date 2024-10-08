@@ -26,5 +26,7 @@
     <PackageReference Include="Serilog.Sinks.Console"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client"/>
+
+    <PackageReference Include="Serilog.AspNetCore"/>
   </ItemGroup>
 </Project>

@@ -1,10 +1,8 @@
 ﻿using CloudCrafter.Agent.Models.Configs;
-using CloudCrafter.Agent.Runner.Logging;
 using CloudCrafter.Agent.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Serilog;
 
 namespace CloudCrafter.Agent.Runner.SignalR.Providers;
 
@@ -36,10 +34,9 @@ public class HubWrapper : IHubWrapper
         );
         TypedHubConnection = new TypedHubConnection<IAgentHub>(_connection);
 
-        Log.Logger = AgentLoggerConfiguration
-            .CreateConfiguration()
-            .WriteTo.Sink(new SignalRSink(TypedHubConnection))
-            .CreateLogger();
+        // Log.Logger = AgentLoggerConfiguration
+        //     .CreateConfiguration()
+        //     .CreateLogger();
     }
 
     public TypedHubConnection<IAgentHub> TypedHubConnection { get; }

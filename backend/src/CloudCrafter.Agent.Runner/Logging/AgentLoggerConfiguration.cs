@@ -9,6 +9,7 @@ public class AgentLoggerConfiguration
     {
         return new LoggerConfiguration()
             .WriteTo.Console(theme: AnsiConsoleTheme.Sixteen)
+            .WriteTo.Sink(new SignalRSink())
             .MinimumLevel.Debug();
     }
 }

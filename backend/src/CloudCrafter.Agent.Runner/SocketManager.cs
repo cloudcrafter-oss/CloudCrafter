@@ -1,8 +1,10 @@
 ﻿using CloudCrafter.Agent.Models.Configs;
 using CloudCrafter.Agent.Models.SignalR;
+using CloudCrafter.Agent.Runner.Hosts;
 using CloudCrafter.Agent.Runner.MediatR.SignalR;
 using CloudCrafter.Agent.Runner.SignalR.Providers;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -12,20 +14,20 @@ public class SocketManager
 {
     private readonly AgentConfig _agentConfig;
     private readonly ILogger<SocketManager> _logger;
-    private readonly ISender _sender;
 
     private readonly IHubWrapper _wrapper;
+    private readonly IServiceScopeFactory _scopeFactory;
 
     public SocketManager(
         ILogger<SocketManager> logger,
-        ISender sender,
+        IServiceScopeFactory scopeFactory,
         IOptions<AgentConfig> config,
         IHubWrapper hubWrapper
     )
     {
         _logger = logger;
-        _sender = sender;
         _agentConfig = config.Value;
+        _scopeFactory = scopeFactory;
         _wrapper = hubWrapper;
         AttachMessageHandlers();
     }
@@ -36,7 +38,10 @@ public class SocketManager
             "AgentHubPingMessage",
             async message =>
             {
-                await _sender.Send(
+                using var scope = _scopeFactory.CreateScope();
+
+                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                await mediator.Send(
                     new AgentHubPingMessageHandler.Query(
                         message,
                         _wrapper.TypedHubConnection,
@@ -50,7 +55,10 @@ public class SocketManager
             "AgentHubDeployRecipeMessage",
             async message =>
             {
-                await _sender.Send(
+                using var scope = _scopeFactory.CreateScope();
+
+                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                await mediator.Send(
                     new AgentHubDeployRecipeMessageHandler.Command(
                         message,
                         _wrapper.TypedHubConnection,
