@@ -1,7 +1,6 @@
 ﻿using CloudCrafter.Core;
 using CloudCrafter.Core.Events;
 using CloudCrafter.Core.SignalR;
-using CloudCrafter.DeploymentEngine.Remote;
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Logging;
@@ -21,7 +20,6 @@ Log.Information("Starting CloudCrafter");
 
 builder.Services.AddApiConfiguration(builder.Configuration);
 builder.Services.AddCloudCrafterCors(builder.Configuration);
-builder.Services.AddEngineInfrastructure();
 builder.Services.AddCloudCrafterLogging(builder.Configuration);
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddDomainEvents(typeof(IDomainEvent).Assembly);

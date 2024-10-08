@@ -1,7 +1,6 @@
 ﻿using CloudCrafter.Core;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces;
-using CloudCrafter.DeploymentEngine.Remote;
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Logging;
 using CloudCrafter.Jobs.Service;
@@ -64,7 +63,6 @@ public class Program
                         WorkerCloudCrafterEnvironmentConfig
                     >();
 
-                    services.AddEngineInfrastructure();
                     services.AddCloudCrafterConfiguration();
                     services.AddCloudCrafterLogging(hostContext.Configuration);
                     services.AddInfrastructureServices(hostContext.Configuration);

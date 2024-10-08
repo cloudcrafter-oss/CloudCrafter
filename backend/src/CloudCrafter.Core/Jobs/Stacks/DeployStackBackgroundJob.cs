@@ -57,9 +57,9 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
         }
     }
 
-    public async Task TearDown()
+    public Task TearDown()
     {
-        await RemoveHelperImage();
+        return Task.CompletedTask;
     }
 
     public async Task Handle(

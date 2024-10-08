@@ -105,35 +105,9 @@ public static class SeedData
             dbContext.Servers.Add(server);
         }
 
-        IEnumerable<string>? privateKeyEntry = null;
-
-        try
-        {
-            var solutionDirectory = GetSolutionDirectory();
-
-            var dockerfileDirectory = Path.Combine(solutionDirectory, "..", "docker", "test-host");
-
-            privateKeyEntry = File.ReadLines(dockerfileDirectory + "/id_rsa");
-        }
-        catch (DirectoryNotFoundException)
-        {
-            var path = Environment.GetEnvironmentVariable("SPECIAL_TESTHOST_PATH");
-
-            if (string.IsNullOrEmpty(path))
-            {
-                throw new Exception("Private key file not found");
-            }
-
-            privateKeyEntry = File.ReadLines(path);
-        }
-
-        var sshKey = string.Join("\n", privateKeyEntry);
-
         var localTestServer = new Server
         {
             SshPort = 22,
-            SshUsername = "root",
-            SshPrivateKey = sshKey,
             IpAddress = "test-host",
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
@@ -156,18 +130,6 @@ public static class SeedData
         }
 
         dbContext.SaveChanges();
-    }
-
-    private static string GetSolutionDirectory()
-    {
-        var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
-        while (directory != null && !directory.GetFiles("*.sln").Any())
-        {
-            directory = directory.Parent;
-        }
-
-        return directory?.FullName
-            ?? throw new DirectoryNotFoundException("Solution directory not found.");
     }
 
     public static void InitializeIdentity(IServiceProvider services)
