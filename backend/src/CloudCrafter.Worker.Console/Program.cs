@@ -1,10 +1,12 @@
 ﻿using CloudCrafter.Core;
 using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Core.Interfaces;
 using CloudCrafter.DeploymentEngine.Remote;
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Logging;
 using CloudCrafter.Jobs.Service;
 using CloudCrafter.Worker.Console.Common;
+using CloudCrafter.Worker.Console.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -42,8 +44,8 @@ public class Program
             .ConfigureAppConfiguration(
                 (ctx, config) =>
                 {
-                    config.AddJsonFile("appsettings.json", optional: false);
-                    config.AddJsonFile("appsettings.Development.json", optional: true);
+                    config.AddJsonFile("appsettings.json", false);
+                    config.AddJsonFile("appsettings.Development.json", true);
                     config.AddEnvironmentVariables();
                     config.AddConfiguration(config.Build());
                 }
@@ -57,13 +59,21 @@ public class Program
                     });
 
                     services.AddScoped<IUser, NullUser>();
+                    services.AddScoped<
+                        ICloudCrafterEnvironmentConfig,
+                        WorkerCloudCrafterEnvironmentConfig
+                    >();
 
                     services.AddEngineInfrastructure();
                     services.AddCloudCrafterConfiguration();
                     services.AddCloudCrafterLogging(hostContext.Configuration);
                     services.AddInfrastructureServices(hostContext.Configuration);
-                    services.AddJobInfrastructure(hostContext.Configuration, true, "worker");
-                    services.AddApplicationServices();
+                    services.AddJobInfrastructure(
+                        hostContext.Configuration,
+                        true,
+                        JobServiceType.Worker
+                    );
+                    services.AddApplicationServices(hostContext.Configuration);
                 }
             );
     }

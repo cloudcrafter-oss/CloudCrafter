@@ -13,7 +13,7 @@ public static class JobsInfrastructureServiceExtensions
         this IServiceCollection services,
         IConfiguration config,
         bool withServer,
-        string prefix
+        JobServiceType type
     )
     {
         services.AddScoped<IDeploymentTracker, DeploymentTracker>();
@@ -21,7 +21,6 @@ public static class JobsInfrastructureServiceExtensions
             (sp, hangfireConfig) =>
             {
                 var connectionString = config.GetConnectionString("RedisConnection");
-
                 hangfireConfig.UseRedisStorage(
                     connectionString,
                     new RedisStorageOptions
@@ -31,24 +30,34 @@ public static class JobsInfrastructureServiceExtensions
                         FetchTimeout = TimeSpan.FromSeconds(1),
                     }
                 );
-
                 hangfireConfig.UseFilter(new LogEverythingAttribute());
 
                 hangfireConfig.UseSerilogLogProvider();
                 hangfireConfig.UseConsole();
+
+                // Add queue configuration
             }
         );
 
         if (withServer)
         {
+            string[] queues = type == JobServiceType.Worker ? ["worker", "default"] : ["web"];
+
             services.AddHangfireServer(opt =>
             {
+                opt.Queues = queues;
                 var random = new Random();
                 var randomValue = random.Next(1, 1000);
-                opt.ServerName = $"{prefix}-{randomValue}";
+                opt.ServerName = $"{type}-{randomValue}";
             });
         }
 
         return services;
     }
+}
+
+public enum JobServiceType
+{
+    Worker,
+    Web,
 }

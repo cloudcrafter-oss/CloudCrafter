@@ -5,11 +5,11 @@ import { useEffect } from 'react'
 export const useTestHub = () => {
 	useEffect(() => {
 		const connection = new signalR.HubConnectionBuilder()
-			.withUrl('http://web.127.0.0.1.sslip.io/myHub')
+			.withUrl('http://web.127.0.0.1.sslip.io/hub/test')
 			.build()
 
 		console.log('rendering now')
-		connection.on('ReceiveMessage', (message: MyHubMessage) => {
+		connection.on('DeploymentOutput', (message: MyHubMessage) => {
 			console.log('ReceiveMessage', message)
 			console.log('Id is ', message.id)
 		})

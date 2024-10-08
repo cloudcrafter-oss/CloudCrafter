@@ -21,11 +21,16 @@
     <PackageReference Include="Serilog.AspNetCore"/>
     <PackageReference Include="Microsoft.Extensions.Hosting"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client"/>
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="..\..\.dockerignore">
       <Link>.dockerignore</Link>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Config\"/>
   </ItemGroup>
 </Project>

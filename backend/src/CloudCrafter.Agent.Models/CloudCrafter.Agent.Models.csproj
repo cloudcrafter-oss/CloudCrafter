@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CloudCrafter.Agent.SignalR\CloudCrafter.Agent.SignalR.csproj"/>
     <ProjectReference Include="..\CloudCrafter.DockerCompose.Shared\CloudCrafter.DockerCompose.Shared.csproj"/>
   </ItemGroup>
 

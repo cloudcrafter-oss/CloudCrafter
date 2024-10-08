@@ -13,9 +13,6 @@ using static Testing;
 [TestFixture]
 public abstract class BaseTestFixture
 {
-    public int TestingHostPort;
-    private IContainer? TestingHostContainer;
-
     [SetUp]
     public async Task TestSetUp()
     {
@@ -33,6 +30,9 @@ public abstract class BaseTestFixture
         }
     }
 
+    public int TestingHostPort;
+    private IContainer? TestingHostContainer;
+
     public Faker<Server> TestingHostServerFaker()
     {
         var sshKeyContents = File.ReadLines(GetDockerfileDirectory() + "/id_rsa");
@@ -47,7 +47,9 @@ public abstract class BaseTestFixture
             .RuleFor(x => x.IpAddress, "127.0.0.1")
             .RuleFor(x => x.SshUsername, "root")
             .RuleFor(x => x.SshPrivateKey, sshKey)
+            .RuleFor(x => x.PingHealthData, new ServerPingData())
             .RuleFor(x => x.DockerDataDirectoryMount, "/data/cloudcrafter")
+            .RuleFor(x => x.AgentSecretKey, f => f.Internet.Password(16))
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
     }

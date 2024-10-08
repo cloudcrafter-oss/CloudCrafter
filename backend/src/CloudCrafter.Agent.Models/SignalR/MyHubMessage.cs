@@ -1,4 +1,4 @@
-﻿namespace CloudCrafter.Domain.Domain.SignalR;
+﻿namespace CloudCrafter.Agent.Models.SignalR;
 
 public class MyHubMessage
 {

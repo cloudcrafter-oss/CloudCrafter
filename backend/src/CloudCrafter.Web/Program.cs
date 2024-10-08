@@ -23,12 +23,12 @@ builder.Services.AddApiConfiguration(builder.Configuration);
 builder.Services.AddCloudCrafterCors(builder.Configuration);
 builder.Services.AddEngineInfrastructure();
 builder.Services.AddCloudCrafterLogging(builder.Configuration);
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddDomainEvents(typeof(IDomainEvent).Assembly);
 builder.Services.AddInfrastructureServices(builder.Configuration);
-builder.Services.AddWebServices();
+builder.Services.AddWebServices(builder.Configuration);
 builder.Services.AddSwaggerServices();
-builder.Services.AddJobInfrastructure(builder.Configuration, false, "web");
+builder.Services.AddJobInfrastructure(builder.Configuration, true, JobServiceType.Web);
 
 var app = builder.Build();
 
@@ -86,6 +86,8 @@ app.UseHangfireDashboard(options: hangfireDashboardOptions);
 app.ConfigureRecurringJobs();
 
 app.MapHub<MyHub>("/myHub");
+app.MapHub<AgentHub>("/hub/agent");
+app.MapHub<TestHub>("/hub/test");
 app.Run();
 
 // Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building

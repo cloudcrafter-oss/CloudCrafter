@@ -15,6 +15,9 @@ public class Server : IHasTimestamps
     [EncryptColumn]
     public string? SshPrivateKey { get; set; }
 
+    [EncryptColumn]
+    public string? AgentSecretKey { get; set; }
+
     /// <summary>
     ///     This is the data directory. When mounting the Agent container on this server,
     ///     this is the data directory that will be mounted into the container.
@@ -26,6 +29,8 @@ public class Server : IHasTimestamps
     public string DockerDataDirectoryMount { get; set; } = string.Empty;
 
     public required int SshPort { get; set; } = 22;
+
+    public ServerPingData PingHealthData { get; set; } = new();
 
     public required DateTime CreatedAt { get; init; }
     public required DateTime UpdatedAt { get; set; }

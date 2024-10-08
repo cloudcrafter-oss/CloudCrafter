@@ -11,7 +11,7 @@ public class NixpacksDetermineBuildPackValidator
 {
     public NixpacksDetermineBuildPackValidator()
     {
-        RuleFor(x => x.Path).NotEmpty();
+        RuleFor(x => x.Path).NotNull();
     }
 }
 

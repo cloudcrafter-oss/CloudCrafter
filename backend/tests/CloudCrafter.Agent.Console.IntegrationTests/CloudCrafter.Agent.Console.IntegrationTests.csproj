@@ -19,6 +19,7 @@
     <PackageReference Include="Serilog.Sinks.NUnit"/>
     <PackageReference Include="Testcontainers"/>
     <PackageReference Include="Polly"/>
+    <PackageReference Include="Moq"/>
     <PackageReference Include="Verify.NUnit"/>
     <PackageReference Include="Docker.DotNet"/>
     <PackageReference Include="NUnit.Analyzers">

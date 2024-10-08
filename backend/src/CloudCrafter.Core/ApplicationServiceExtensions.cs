@@ -3,6 +3,7 @@ using Ardalis.SharedKernel;
 using CloudCrafter.Core.Common.Behaviours;
 using CloudCrafter.Core.Events;
 using CloudCrafter.Core.Events.Store;
+using CloudCrafter.Core.Interfaces.Domain.Agent;
 using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
 using CloudCrafter.Core.Interfaces.Domain.Environments;
 using CloudCrafter.Core.Interfaces.Domain.Projects;
@@ -15,6 +16,7 @@ using CloudCrafter.Core.Jobs.Dispatcher.Factory;
 using CloudCrafter.Core.Jobs.Serializer;
 using CloudCrafter.Core.Jobs.Servers;
 using CloudCrafter.Core.Jobs.Stacks;
+using CloudCrafter.Core.Services.Domain.Agent;
 using CloudCrafter.Core.Services.Domain.Applications.Deployments;
 using CloudCrafter.Core.Services.Domain.Environments;
 using CloudCrafter.Core.Services.Domain.Projects;
@@ -22,6 +24,7 @@ using CloudCrafter.Core.Services.Domain.Servers;
 using CloudCrafter.Core.Services.Domain.Stacks;
 using CloudCrafter.Core.Services.Domain.Users;
 using CloudCrafter.Core.Services.Domain.Utils;
+using CloudCrafter.Core.SignalR;
 using CloudCrafter.Domain;
 using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
@@ -29,7 +32,9 @@ using FluentValidation;
 using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 
 namespace CloudCrafter.Core;
 
@@ -74,7 +79,10 @@ public static class ApplicationServiceExtensions
         return services;
     }
 
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         var mapperAssemblies = new List<Assembly>
         {
@@ -110,6 +118,7 @@ public static class ApplicationServiceExtensions
             .AddScoped<IProjectsService, ProjectsService>()
             .AddScoped<IStacksService, StacksService>()
             .AddScoped<IStackServicesService, StackServicesService>()
+            .AddScoped<IAgentManager, AgentManager>()
             .AddScoped<IEnvironmentService, EnvironmentsService>()
             .AddScoped<IGitService, GitService>()
             .AddScoped<IDeploymentService, DeploymentService>();
@@ -123,12 +132,33 @@ public static class ApplicationServiceExtensions
         >();
         services.AddScoped<BackgroundJobFactory>();
         services.AddSingleton<JobSerializer>();
+        services.AddSingleton<ConnectedServerManager>();
 
         services.AddScoped<ConnectivityCheckBackgroundJob>();
         services.AddScoped<DeployStackBackgroundJob>();
 
-        // SignalR
-        services.AddSignalR();
+        var connectionString = configuration.GetConnectionString("RedisConnection");
+
+        if (connectionString is null)
+        {
+            throw new InvalidOperationException("Redis connection string is not configured");
+        }
+
+        services
+            .AddSignalR()
+            .AddStackExchangeRedis(
+                connectionString,
+                opt =>
+                {
+                    opt.Configuration.ChannelPrefix = RedisChannel.Literal("CloudCrafter-WS");
+                }
+            );
+
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = connectionString;
+            options.InstanceName = "CloudCrafter-Cache";
+        });
 
         return services;
     }

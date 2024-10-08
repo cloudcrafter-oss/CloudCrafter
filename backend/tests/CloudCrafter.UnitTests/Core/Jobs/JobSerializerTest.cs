@@ -63,7 +63,7 @@ public class JobSerializerTest
         result.JobType.Should().Be(typeof(DummyTestJob).ToString());
 
         var expectedJson =
-            $"{{\"NullableString\":{(nullableString == null ? "null" : $"\"{nullableString}\"")},\"NullableNumber\":{(nullableNumber == null ? "null" : nullableNumber.ToString())},\"NullableBool\":{(nullableBool == null ? "null" : nullableBool.Value.ToString().ToLower())},\"IsTrue\":{job.IsTrue.ToString().ToLower()},\"Number\":{job.Number},\"Name\":\"{job.Name}\",\"Type\":1}}";
+            $"{{\"NullableString\":{(nullableString == null ? "null" : $"\"{nullableString}\"")},\"NullableNumber\":{(nullableNumber == null ? "null" : nullableNumber.ToString())},\"NullableBool\":{(nullableBool == null ? "null" : nullableBool.Value.ToString().ToLower())},\"IsTrue\":{job.IsTrue.ToString().ToLower()},\"Number\":{job.Number},\"Name\":\"{job.Name}\",\"Type\":1,\"ShouldRunOnApiServer\":false}}";
         result.SerializedJob.Should().Be(expectedJson);
     }
 
@@ -150,6 +150,7 @@ public class DummyTestJob : IJob
     public string Name { get; set; } = null!;
 
     public BackgroundJobType Type => BackgroundJobType.StackDeployment;
+    public bool ShouldRunOnApiServer => false;
 
     public Task HandleEntity(IApplicationDbContext context, string jobId)
     {

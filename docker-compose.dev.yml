@@ -28,8 +28,25 @@ services:
       - JwtSettings__RefreshTokenValidInSeconds=900
       - SPECIAL_TESTHOST_PATH=/test-host/id_rsa
 
-  job-runner:
-    container_name: job-runner
+  agent:
+    container_name: agent
+    build:
+      context: backend/
+      dockerfile: src/CloudCrafter.Agent.Console/Dockerfile
+    depends_on:
+      - web
+    networks:
+      - cloudcrafter
+    volumes:
+      - testhostdata:/data/cloudcrafter
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - CLOUDCRAFTER_Agent__ServerId=ffcdd9ee-ff31-4344-a3ab-efdc9b5e44f1
+      - CLOUDCRAFTER_Agent__AgentKey=vHh7mZ5ntR
+      - CLOUDCRAFTER_Agent__CloudCrafterHost=http://web:8080
+
+  job-runner-base:
     build:
       context: backend/
       dockerfile: src/CloudCrafter.Worker.Console/Dockerfile
@@ -43,3 +60,18 @@ services:
       - ConnectionStrings__PostgresConnection=Host=postgres;Username=cloudcrafter;Password=password;Database=cloudcrafter
       - ConnectionStrings__RedisConnection=redis
       - CloudCrafter__AppKey=QCE4ndQUfPUOBE1cSzH3txf21YwR9yZQ
+
+  job-runner-1:
+    extends:
+      service: job-runner-base
+    container_name: job-runner-1
+
+  job-runner-2:
+    extends:
+      service: job-runner-base
+    container_name: job-runner-2
+
+  job-runner-3:
+    extends:
+      service: job-runner-base
+    container_name: job-runner-3

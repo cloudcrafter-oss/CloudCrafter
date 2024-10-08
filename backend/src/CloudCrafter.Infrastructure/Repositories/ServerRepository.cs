@@ -1,6 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Server;
@@ -11,11 +12,6 @@ namespace CloudCrafter.Infrastructure.Repositories;
 
 public class ServerRepository(IApplicationDbContext context, IMapper mapper) : IServerRepository
 {
-    private IQueryable<Server> GetBaseQuery()
-    {
-        return context.Servers.OrderBy(x => x.Name);
-    }
-
     public async Task<List<ServerDto>> GetServers()
     {
         var servers = GetBaseQuery().AsQueryable();
@@ -45,5 +41,41 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
         }
 
         return server;
+    }
+
+    public async Task<bool> HasAgent(Guid serverId, string serverKey)
+    {
+        // We check first for the server ID, because the key is encrypted.
+        // Thus, we cannot query on it.
+        var serverDetails = await GetBaseQuery().Where(x => x.Id == serverId).FirstOrDefaultAsync();
+
+        if (serverDetails is null)
+        {
+            return false;
+        }
+
+        return serverDetails.AgentSecretKey == serverKey;
+    }
+
+    public async Task StoreServerInfo(Guid serverId, HealthCheckCommandArgs data)
+    {
+        var server = await GetServerEntityOrFail(serverId);
+
+        server.PingHealthData.LastPingAt = data.Timestamp;
+        server.PingHealthData.DockerVersion = data.HostInfo.DockerVersion;
+        server.PingHealthData.CpuUsagePercentage = data.HostInfo.SystemInfo.CpuUsagePercentage;
+        server.PingHealthData.TotalCpuCount = data.HostInfo.SystemInfo.TotalCpuCount;
+        server.PingHealthData.MemoryUsagePercentage = data.HostInfo
+            .SystemInfo
+            .MemoryUsagePercentage;
+        server.PingHealthData.TotalMemoryBytes = data.HostInfo.SystemInfo.TotalMemoryBytes;
+        server.PingHealthData.OsInfo = data.HostInfo.OsInfo;
+
+        await context.SaveChangesAsync();
+    }
+
+    private IQueryable<Server> GetBaseQuery()
+    {
+        return context.Servers.OrderBy(x => x.Name);
     }
 }

@@ -59,14 +59,17 @@ ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "CloudCrafter.Agent.Console.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
-WORKDIR /console
-COPY --from=publish /app/publish .
-RUN echo '#!/bin/sh' > /usr/local/bin/cloudcrafter-agent && \
-    echo 'dotnet /console/CloudCrafter.Agent.Console.dll "$@"' >> /usr/local/bin/cloudcrafter-agent && \
-    chmod +x /usr/local/bin/cloudcrafter-agent
 
 WORKDIR /app
+COPY --from=publish /app/publish .
+# RUN echo '#!/bin/sh' > /usr/local/bin/cloudcrafter-agent && \
+#     echo 'dotnet /console/CloudCrafter.Agent.Console.dll "$@"' >> /usr/local/bin/cloudcrafter-agent && \
+#     chmod +x /usr/local/bin/cloudcrafter-agent
 
-ENTRYPOINT ["/sbin/tini", "--"]
-# Set the entrypoint to a shell
-CMD ["tail", "-f", "/dev/null"]
+
+
+ENTRYPOINT ["dotnet", "CloudCrafter.Agent.Console.dll"]
+
+# ENTRYPOINT ["/sbin/tini", "--"]
+# # Set the entrypoint to a shell
+# CMD ["tail", "-f", "/dev/null"]

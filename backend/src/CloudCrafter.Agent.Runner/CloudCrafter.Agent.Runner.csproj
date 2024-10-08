@@ -8,11 +8,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CloudCrafter.Agent.Models\CloudCrafter.Agent.Models.csproj"/>
+    <ProjectReference Include="..\CloudCrafter.Agent.SignalR\CloudCrafter.Agent.SignalR.csproj"/>
     <ProjectReference Include="..\CloudCrafter.Shared.Utils\CloudCrafter.Shared.Utils.csproj"/>
     <ProjectReference Include="..\engine\CloudCrafter.DockerCompose.Engine\CloudCrafter.DockerCompose.Engine.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog"/>
     <PackageReference Include="YamlDotNet"/>
     <PackageReference Include="MediatR"/>
     <PackageReference Include="CliWrap"/>
@@ -21,6 +23,10 @@
     <PackageReference Include="Samboy063.Tomlet"/>
     <PackageReference Include="Tomlyn"/>
     <PackageReference Include="Microsoft.Extensions.Hosting"/>
+    <PackageReference Include="Serilog.Sinks.Console"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client"/>
+
+    <PackageReference Include="Serilog.AspNetCore"/>
   </ItemGroup>
 </Project>

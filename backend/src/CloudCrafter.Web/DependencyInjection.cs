@@ -1,5 +1,6 @@
 using System.Reflection;
 using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Core.Interfaces;
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Data;
@@ -123,11 +124,15 @@ public static class DependencyInjection
         return collection;
     }
 
-    public static IServiceCollection AddWebServices(this IServiceCollection services)
+    public static IServiceCollection AddWebServices(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         services.AddDatabaseDeveloperPageExceptionFilter();
 
         services.AddScoped<IUser, CurrentUser>();
+        services.AddScoped<ICloudCrafterEnvironmentConfig, WebCloudCrafterEnvironmentConfig>();
 
         services.AddHttpContextAccessor();
 

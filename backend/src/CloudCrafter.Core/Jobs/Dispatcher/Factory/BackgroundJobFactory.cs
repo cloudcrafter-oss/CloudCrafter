@@ -57,10 +57,21 @@ public class BackgroundJobFactory(
             // var hangfireJobId =
             // client.Enqueue<CloudCrafterJob>(job => job.ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type, null));
 
-            var hangfireJobId = client.Create<CloudCrafterJob>(
-                job => job.ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type, null),
-                new CreatedState()
-            );
+            var hangfireJobId = job.ShouldRunOnApiServer
+                ? client.Create<CloudCrafterJob>(
+                    clientJob =>
+                        clientJob.ExecuteJobOnHubServer(backgroundJob.Id, backgroundJob.Type, null),
+                    new CreatedState()
+                )
+                : client.Create<CloudCrafterJob>(
+                    clientJob =>
+                        clientJob.ExecuteBackgroundJobAsync(
+                            backgroundJob.Id,
+                            backgroundJob.Type,
+                            null
+                        ),
+                    new CreatedState()
+                );
             backgroundJob.HangfireJobId = hangfireJobId;
 
             // hangfireJobIdclient.
@@ -83,8 +94,30 @@ public class BackgroundJobFactory(
 
 public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider sp)
 {
+    [Queue("worker")]
     [JobDisplayName("{1}")]
-    public async Task ExecuteJobAsync(
+    public Task ExecuteBackgroundJobAsync(
+        Guid backgroundJobId,
+        BackgroundJobType backgroundJobType,
+        PerformContext? performContext
+    )
+    {
+        return ExecuteJobInternalAsync(backgroundJobId, backgroundJobType, performContext);
+    }
+
+    [Queue("web")]
+    [JobDisplayName("{1}")]
+    [DisableConcurrentExecution(60)]
+    public Task ExecuteJobOnHubServer(
+        Guid backgroundJobId,
+        BackgroundJobType backgroundJobType,
+        PerformContext? performContext
+    )
+    {
+        return ExecuteJobInternalAsync(backgroundJobId, backgroundJobType, performContext);
+    }
+
+    private async Task ExecuteJobInternalAsync(
         Guid backgroundJobId,
         BackgroundJobType backgroundJobType,
         PerformContext? performContext
@@ -187,30 +220,5 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
             backgroundJob.CompletedAt = DateTime.UtcNow;
             await dbContext.SaveChangesAsync();
         }
-    }
-
-    private async Task ExecuteTypedJobAsync<TJob, TParam>(
-        BackgroundJob backgroundJob,
-        PerformContext? performContext,
-        IServiceScope scope
-    )
-        where TJob : IBaseJob<TParam>
-    {
-        var job = scope.ServiceProvider.GetRequiredService<TJob>();
-        var parameter = JsonSerializer.Deserialize<TParam>(backgroundJob.SerializedArguments);
-        if (parameter == null)
-        {
-            throw new ArgumentException("Failed to deserialize job parameters");
-        }
-
-        logger.LogDebug("Creating background job factory");
-        var loggerFactory = new BackgroundJobLoggerFactory(
-            backgroundJob,
-            performContext,
-            scope.ServiceProvider.GetRequiredService<IApplicationDbContext>(),
-            scope.ServiceProvider
-        );
-
-        await job.ExecuteAsync(backgroundJob, parameter, loggerFactory);
     }
 }

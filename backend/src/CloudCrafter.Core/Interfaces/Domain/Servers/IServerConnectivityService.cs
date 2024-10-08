@@ -1,11 +1,9 @@
-using CloudCrafter.DeploymentEngine.Remote.Manager;
-using CloudCrafter.Domain.Entities;
+using CloudCrafter.Agent.SignalR.Models;
 
 namespace CloudCrafter.Core.Interfaces.Domain.Servers;
 
 public interface IServerConnectivityService
 {
     Task PerformConnectivityCheckAsync(Guid serverId);
-
-    CloudCrafterEngineManager CreateEngineManager(Server server);
+    Task StoreServerInfo(Guid serverId, HealthCheckCommandArgs data);
 }

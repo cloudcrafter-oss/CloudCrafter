@@ -1,8 +1,7 @@
 ﻿using CloudCrafter.Core.Common.Interfaces;
-using CloudCrafter.Core.Interfaces.Domain.Servers;
+using CloudCrafter.Core.Interfaces.Domain.Agent;
 using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.RecipeGenerators;
-using CloudCrafter.DeploymentEngine.Remote.Clients.Contracts;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +24,7 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
     public Guid DeploymentId { get; set; }
 
     public BackgroundJobType Type => BackgroundJobType.StackDeployment;
+    public bool ShouldRunOnApiServer => false;
 
     public async Task HandleEntity(IApplicationDbContext context, string jobId)
     {
@@ -77,21 +77,6 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
             DeploymentId
         );
 
-        var engineManager = GetEngineManager(
-            serviceProvider.GetRequiredService<IServerConnectivityService>(),
-            _deployment!.Stack.Server!
-        );
-
-        var commandGenerator = serviceProvider.GetRequiredService<ICommonCommandGenerator>();
-
-        _client = engineManager.CreateSshClient();
-        logger.LogDebug("Connecting to server ({ServerId})", _deployment.Stack.ServerId);
-        await _client.ConnectAsync();
-        logger.LogDebug("Connected to server!");
-
-        var resultWhoAmI = await _client.ExecuteCommandAsync("whoami");
-        logger.LogDebug("Using user on remote server: {Result}", resultWhoAmI.Result);
-
         logger.LogDebug("Brewing recipe...");
         var recipeGenerator = new SimpleAppRecipeGenerator(
             new BaseRecipeGenerator.Args
@@ -103,17 +88,10 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
         var recipe = recipeGenerator.Generate();
         logger.LogDebug("Recipe brewed!");
 
-        await PullHelperImage(logger, commandGenerator);
+        var agentManager = serviceProvider.GetRequiredService<IAgentManager>();
 
-        await CreateDockerContainer(
-            logger,
-            commandGenerator,
-            _deployment.Stack.Server!.DockerDataDirectoryMount,
-            DeploymentId
-        );
-
-        var recipeFileDetails = await WriteRecipeToFile(logger, commandGenerator, recipe);
-
-        await RunRecipe(logger, commandGenerator, recipeFileDetails);
+        logger.LogDebug("Sending recipe to agent...");
+        await agentManager.SendRecipeToAgent(_deployment.Stack.ServerId, recipe);
+        logger.LogDebug("Recipe sent to agent!");
     }
 }
