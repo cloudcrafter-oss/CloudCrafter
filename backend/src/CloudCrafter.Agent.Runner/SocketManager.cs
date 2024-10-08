@@ -16,18 +16,18 @@ public class SocketManager
     private readonly ILogger<SocketManager> _logger;
 
     private readonly IHubWrapper _wrapper;
-    private readonly IServiceScopeFactory _scopeFactory;
+    private readonly ISender _sender;
 
     public SocketManager(
         ILogger<SocketManager> logger,
-        IServiceScopeFactory scopeFactory,
+        ISender sender,
         IOptions<AgentConfig> config,
         IHubWrapper hubWrapper
     )
     {
         _logger = logger;
         _agentConfig = config.Value;
-        _scopeFactory = scopeFactory;
+        _sender = sender;
         _wrapper = hubWrapper;
         AttachMessageHandlers();
     }
@@ -38,10 +38,7 @@ public class SocketManager
             "AgentHubPingMessage",
             async message =>
             {
-                using var scope = _scopeFactory.CreateScope();
-
-                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-                await mediator.Send(
+                await _sender.Send(
                     new AgentHubPingMessageHandler.Query(
                         message,
                         _wrapper.TypedHubConnection,
@@ -55,10 +52,7 @@ public class SocketManager
             "AgentHubDeployRecipeMessage",
             async message =>
             {
-                using var scope = _scopeFactory.CreateScope();
-
-                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-                await mediator.Send(
+                await _sender.Send(
                     new AgentHubDeployRecipeMessageHandler.Command(
                         message,
                         _wrapper.TypedHubConnection,
