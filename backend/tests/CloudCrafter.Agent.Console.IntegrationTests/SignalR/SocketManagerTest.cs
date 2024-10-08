@@ -46,7 +46,7 @@ public class SocketManagerTest
     }
 
     [Test]
-    public async Task AttachMessageHandlers_ShouldAttachHandlers()
+    public async Task ShouldSendAgentHubPingMessageWhenReceived()
     {
         // Arrange
         var pingMessage = new AgentHubPingMessage()
