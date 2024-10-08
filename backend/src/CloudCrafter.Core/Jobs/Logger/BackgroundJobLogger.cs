@@ -1,5 +1,4 @@
 ﻿using CloudCrafter.Core.Common.Interfaces;
-using CloudCrafter.DeploymentEngine.Remote.Exceptions;
 using CloudCrafter.Domain.Entities;
 using Hangfire.Console;
 using Hangfire.Server;
@@ -49,18 +48,8 @@ public class BackgroundJobLogger(
         logger.Log(logLevel, eventId, state, exception, formatter);
 
         performContext.WriteLine($"[{logLevel}] [{categoryName}] {message}");
-        if (exception is CommandFailedException failedException)
-        {
-            performContext.WriteLine(
-                $"[{logLevel}] Command failed with exit code {failedException.ExitCode}"
-            );
-            performContext.WriteLine($"[{logLevel}] Command: {failedException.Command}");
-            performContext.WriteLine($"[{logLevel}] Command Output: {failedException.Output}");
-            performContext.WriteLine(
-                $"[{logLevel}] Command ErrorMessage: {failedException.ErrorMessage}"
-            );
-        }
-        else if (exception != null)
+
+        if (exception != null)
         {
             performContext.WriteLine($"[{logLevel}] Exception: {exception}");
         }

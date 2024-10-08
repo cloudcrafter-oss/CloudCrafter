@@ -10,12 +10,6 @@ public class Server : IHasTimestamps
     public required string IpAddress { get; set; }
 
     [EncryptColumn]
-    public string? SshUsername { get; set; }
-
-    [EncryptColumn]
-    public string? SshPrivateKey { get; set; }
-
-    [EncryptColumn]
     public string? AgentSecretKey { get; set; }
 
     /// <summary>
