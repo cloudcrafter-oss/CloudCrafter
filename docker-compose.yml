@@ -51,20 +51,7 @@ services:
       - pgdata-testing:/var/lib/postgresql/data
     ports:
       - '5678:5432'
-
-  test-host:
-    networks:
-      - cloudcrafter
-    build:
-      context: ./docker/test-host
-      dockerfile: Dockerfile
-    privileged: true
-    volumes:
-      - testhostdata:/data/cloudcrafter
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - 2222:22
-
+      
   redis:
     image: redis:alpine
     networks:
