@@ -14,7 +14,6 @@ COPY ["src/CloudCrafter.Utils/CloudCrafter.Utils.csproj", "src/CloudCrafter.Util
 COPY ["src/Packages/EntityFrameworkCore.EncryptColumn/EntityFrameworkCore.EncryptColumn.csproj", "src/Packages/EntityFrameworkCore.EncryptColumn/"]
 COPY ["src/CloudCrafter.Jobs.Service/CloudCrafter.Jobs.Service.csproj", "src/CloudCrafter.Jobs.Service/"]
 COPY ["src/engine/CloudCrafter.DeploymentEngine.Domain/CloudCrafter.DeploymentEngine.Domain.csproj", "src/engine/CloudCrafter.DeploymentEngine.Domain/"]
-COPY ["src/engine/CloudCrafter.DeploymentEngine.Remote/CloudCrafter.DeploymentEngine.Remote.csproj", "src/engine/CloudCrafter.DeploymentEngine.Remote/"]
 COPY . .
 RUN dotnet restore "src/CloudCrafter.Web/CloudCrafter.Web.csproj"
 WORKDIR "/src/src/CloudCrafter.Web"
