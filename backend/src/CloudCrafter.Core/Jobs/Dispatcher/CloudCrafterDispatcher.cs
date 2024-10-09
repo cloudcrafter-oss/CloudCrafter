@@ -11,23 +11,12 @@ public class CloudCrafterDispatcher(
     ILogger<CloudCrafterDispatcher> logger
 ) : ICloudCrafterDispatcher
 {
-    public async Task<string> EnqueueConnectivityCheck(Server server)
+    public Task EnqueueConnectivityChecks()
     {
-        logger.LogDebug(
-            "Dispatching connectivity check to job factory for server {ServerName}",
-            server.Name
-        );
+        logger.LogDebug("Dispatching connectivity check to job factory");
 
-        var job = new ConnectivityCheckBackgroundJob(server.Id);
-        return await jobFactory.CreateAndEnqueueJobAsync<ConnectivityCheckBackgroundJob>(job);
-    }
-
-    public async Task EnqueueConnectivityCheck(List<Server> servers)
-    {
-        foreach (var server in servers)
-        {
-            await EnqueueConnectivityCheck(server);
-        }
+        var job = new ConnectivityCheckBackgroundJob();
+        return jobFactory.CreateAndEnqueueJobAsync<ConnectivityCheckBackgroundJob>(job);
     }
 
     public async Task<string> EnqueueStackDeployment(Guid deploymentId)

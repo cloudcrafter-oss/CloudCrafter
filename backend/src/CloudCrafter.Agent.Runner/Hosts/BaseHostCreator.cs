@@ -6,20 +6,15 @@ using CloudCrafter.Agent.Runner.DeploymentLogPump.Implementation;
 using CloudCrafter.Agent.Runner.Logging;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.Agent.Runner.Services;
-using CloudCrafter.Agent.Runner.SignalR;
 using CloudCrafter.Agent.Runner.SignalR.Providers;
-using CloudCrafter.Agent.SignalR;
 using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
-using Serilog.Core;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace CloudCrafter.Agent.Runner.Hosts;
@@ -85,6 +80,7 @@ public class BaseHostCreator
                 (context, services, configuration) =>
                     configuration
                         .Enrich.FromLogContext()
+                        .MinimumLevel.Debug()
                         // Add an instance of the enricher:
                         .Enrich.With(services.GetRequiredService<ChannelIdEnricher>())
                         .Enrich.FromLogContext()

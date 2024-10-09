@@ -10,13 +10,11 @@ public static class DispatchConnectivityChecksCommand
 {
     public record Query() : IRequest;
 
-    private class Handler(ICloudCrafterDispatcher dispatcher, IApplicationDbContext context)
-        : IRequestHandler<Query>
+    private class Handler(ICloudCrafterDispatcher dispatcher) : IRequestHandler<Query>
     {
         public async Task Handle(Query request, CancellationToken cancellationToken)
         {
-            var servers = await context.Servers.ToListAsync(cancellationToken); // TOOD: move to service or something, fine for now
-            await dispatcher.EnqueueConnectivityCheck(servers);
+            await dispatcher.EnqueueConnectivityChecks();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Jobs.Service.Jobs.Context.Deployments;
+﻿using CloudCrafter.Jobs.Service.Services;
 using Hangfire;
 using Hangfire.Console;
 using Hangfire.Redis.StackExchange;
@@ -16,7 +16,8 @@ public static class JobsInfrastructureServiceExtensions
         JobServiceType type
     )
     {
-        services.AddScoped<IDeploymentTracker, DeploymentTracker>();
+        services.AddSingleton<HangfireServerSelector>();
+        services.AddHostedService<HangfireServerMonitorService>();
         services.AddHangfire(
             (sp, hangfireConfig) =>
             {
@@ -43,12 +44,11 @@ public static class JobsInfrastructureServiceExtensions
         {
             string[] queues = type == JobServiceType.Worker ? ["worker", "default"] : ["web"];
 
+            var machineName = Environment.MachineName;
             services.AddHangfireServer(opt =>
             {
                 opt.Queues = queues;
-                var random = new Random();
-                var randomValue = random.Next(1, 1000);
-                opt.ServerName = $"{type}-{randomValue}";
+                opt.ServerName = machineName;
             });
         }
 
