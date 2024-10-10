@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 
-namespace CloudCrafter.Jobs.Service.Services;
+namespace CloudCrafter.Core.Jobs.Hangfire;
 
 public class HangfireServerMonitorService(HangfireServerSelector serverSelector) : BackgroundService
 {

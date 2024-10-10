@@ -22,4 +22,9 @@
   <ItemGroup>
     <ProjectReference Include="..\CloudCrafter.Domain\CloudCrafter.Domain.csproj"/>
   </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
 </Project>

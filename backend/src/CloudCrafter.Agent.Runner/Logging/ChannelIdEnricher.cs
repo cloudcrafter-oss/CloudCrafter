@@ -8,6 +8,8 @@ namespace CloudCrafter.Agent.Runner.Logging;
 
 public class ChannelIdEnricher(IServiceProvider serviceProvider) : ILogEventEnricher
 {
+    private static int SEQUENCE;
+
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
         if (logEvent.Properties.TryGetValue("ChannelId", out var value))
@@ -20,16 +22,21 @@ public class ChannelIdEnricher(IServiceProvider serviceProvider) : ILogEventEnri
 
                 if (hubWrapper.TypedHubConnection.IsConnected())
                 {
-                    var logMessage = logEvent.RenderMessage(null);
+                    var logMessage = logEvent.RenderMessage();
                     hubWrapper.TypedHubConnection.InvokeAsync(hub =>
                         hub.DeploymentOutput(
-                            new DeploymentOutputArgs()
+                            new DeploymentOutputArgs
                             {
                                 ChannelId = channelId,
-                                Output = logMessage,
+                                Output = new ChannelOutputLogLine
+                                {
+                                    Output = logMessage,
+                                    InternalOrder = SEQUENCE,
+                                },
                             }
                         )
                     );
+                    SEQUENCE++;
                 }
             }
         }

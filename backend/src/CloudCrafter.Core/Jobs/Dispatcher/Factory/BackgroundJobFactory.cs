@@ -23,6 +23,29 @@ public class BackgroundJobFactory(
     ILogger<BackgroundJobFactory> logger
 )
 {
+    public Task<string> CreateAndEnqueueJobAsync<TJob>(IJob job, IState state)
+    {
+        logger.LogDebug(
+            "[CreateAndEnqueueJobAsync] Creating and enqueuing job of type {JobType} with state {State}",
+            typeof(TJob).Name,
+            state.Name
+        );
+
+        var jobId = client.Create<CloudCrafterJob>(
+            cloudCrafterJob => cloudCrafterJob.RunPlainJob(job.Type, job, null),
+            state
+        );
+
+        if (!string.IsNullOrEmpty(jobId))
+        {
+            logger.LogDebug("Job {JobId} created and enqueued", jobId);
+            return Task.FromResult(jobId);
+        }
+
+        logger.LogDebug("Failed to create job");
+        throw new Exception("Failed to create job");
+    }
+
     /// <summary>
     ///     Creates and enqueues a job on the background
     /// </summary>
@@ -115,6 +138,21 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
     )
     {
         return ExecuteJobInternalAsync(backgroundJobId, backgroundJobType, performContext);
+    }
+
+    [JobDisplayName("{0}")]
+    public async Task RunPlainJob(BackgroundJobType type, IJob job, PerformContext? performContext)
+    {
+        if (performContext == null)
+        {
+            return;
+        }
+        using var scope = sp.CreateScope();
+        var serviceProvider = scope.ServiceProvider;
+        var dbContext = serviceProvider.GetRequiredService<IApplicationDbContext>();
+        var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
+        var jobId = performContext.BackgroundJob.Id;
+        await job.Handle(serviceProvider, dbContext, loggerFactory, jobId);
     }
 
     private async Task ExecuteJobInternalAsync(

@@ -1,24 +1,30 @@
 ﻿using System.Collections.Concurrent;
-using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Text;
+using CloudCrafter.Core.Jobs.Dispatcher;
 using Hangfire;
 using Hangfire.States;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace CloudCrafter.Jobs.Service;
+namespace CloudCrafter.Core.Jobs.Hangfire;
 
 public class HangfireServerSelector
 {
     private const int VirtualNodes = 100;
+    private readonly ILogger<HangfireServerSelector> _logger;
     private readonly ConcurrentDictionary<string, string> _userServerMapping = new();
     private HashSet<string> _currentServers = new();
     private SortedDictionary<uint, string> _hashRing = new();
-    private readonly ILogger<HangfireServerSelector> _logger;
+    private readonly IServiceProvider _serviceProvider;
 
-    public HangfireServerSelector(ILogger<HangfireServerSelector> logger)
+    public HangfireServerSelector(
+        ILogger<HangfireServerSelector> logger,
+        IServiceProvider serviceProvider
+    )
     {
         _logger = logger;
+        _serviceProvider = serviceProvider;
         RefreshServerList();
     }
 
@@ -99,23 +105,5 @@ public class HangfireServerSelector
                 return serverNode.Value ?? _hashRing.First().Value;
             }
         );
-    }
-
-    public void DispatchJob<T>(string hashId, Expression<Action<T>> methodCall)
-    {
-        var server = GetServerForHash(hashId);
-        var client = new BackgroundJobClient();
-        var state = new EnqueuedState { Queue = server };
-        var jobId = client.Create(methodCall, state);
-        Console.WriteLine($"Job {jobId} dispatched to server {server} for hash {hashId}");
-    }
-
-    public void DispatchJob(string hashId, Expression<Action> methodCall)
-    {
-        var server = GetServerForHash(hashId);
-        var client = new BackgroundJobClient();
-        var state = new EnqueuedState { Queue = server };
-        var jobId = client.Create(methodCall, state);
-        Console.WriteLine($"Job {jobId} dispatched to server {server} for user {hashId}");
     }
 }
