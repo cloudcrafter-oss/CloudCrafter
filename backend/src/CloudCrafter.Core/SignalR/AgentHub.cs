@@ -2,6 +2,9 @@
 using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Commands.SignalR;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
+using CloudCrafter.Core.Jobs.Channels;
+using CloudCrafter.Core.Jobs.Dispatcher;
+using CloudCrafter.Core.Jobs.Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
@@ -13,7 +16,8 @@ public class AgentHub(
     ILogger<AgentHub> logger,
     ConnectedServerManager serverManager,
     ISender sender,
-    IHubContext<TestHub> testHub
+    IHubContext<WebHub> testHub,
+    ICloudCrafterDispatcher dispatcher
 ) : CloudCrafterBaseHub(serversService, logger, serverManager), IAgentHub
 {
     public async Task HealthCheckCommand(HealthCheckCommandArgs args)
@@ -27,6 +31,8 @@ public class AgentHub(
 
     public async Task DeploymentOutput(DeploymentOutputArgs args)
     {
+        var job = new ChannelLogJob(args);
+        dispatcher.DispatchJob(args.ChannelId.ToString(), job);
         await testHub.Clients.All.SendAsync("DeploymentOutput", args);
     }
 }

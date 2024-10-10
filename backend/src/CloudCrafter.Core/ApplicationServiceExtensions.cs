@@ -13,6 +13,7 @@ using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Domain.Utils;
 using CloudCrafter.Core.Jobs.Dispatcher;
 using CloudCrafter.Core.Jobs.Dispatcher.Factory;
+using CloudCrafter.Core.Jobs.Hangfire;
 using CloudCrafter.Core.Jobs.Serializer;
 using CloudCrafter.Core.Jobs.Servers;
 using CloudCrafter.Core.Jobs.Stacks;
@@ -93,7 +94,8 @@ public static class ApplicationServiceExtensions
         services.AddAutoMapper(mapperAssemblies);
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-
+        services.AddSingleton<HangfireServerSelector>();
+        services.AddHostedService<HangfireServerMonitorService>();
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
@@ -130,7 +132,7 @@ public static class ApplicationServiceExtensions
             ICloudCrafterRecurringJobsDispatcher,
             CloudCrafterRecurringJobsDispatcher
         >();
-        services.AddScoped<BackgroundJobFactory>();
+        services.AddSingleton<BackgroundJobFactory>();
         services.AddSingleton<JobSerializer>();
         services.AddSingleton<ConnectedServerManager>();
 
