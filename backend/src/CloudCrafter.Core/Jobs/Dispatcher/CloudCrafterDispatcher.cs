@@ -1,4 +1,6 @@
-﻿using CloudCrafter.Core.Jobs.Dispatcher.Factory;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using CloudCrafter.Core.Jobs.Dispatcher.Factory;
 using CloudCrafter.Core.Jobs.Hangfire;
 using CloudCrafter.Core.Jobs.Servers;
 using CloudCrafter.Core.Jobs.Stacks;
@@ -31,18 +33,26 @@ public class CloudCrafterDispatcher(
         return await jobFactory.CreateAndEnqueueJobAsync<DeployStackBackgroundJob>(job);
     }
 
-    public Task<string> EnqueueJob(IJob job, IState state)
+    public void DispatchJob<TJob, TArg>(string hashId, TArg arg)
+        where TJob : ISimpleJob<TArg>
+    {
+        jobFactory.DispatchJob<TJob, TArg>(hashId, arg);
+    }
+
+    public Task<string> EnqueueJob<TJob>(IJob job, IState state)
+        where TJob : IJob
     {
         logger.LogInformation("Dispatching job {Job} to job factory", job.GetType().FullName);
 
-        return jobFactory.CreateAndEnqueueJobAsync<IJob>(job, state);
+        return jobFactory.CreateAndEnqueueJobAsync<TJob>(job);
     }
 
-    public void DispatchJob(string hashId, IJob job)
+    public void DispatchJob<TJob>(string hashId, IJob job)
+        where TJob : IJob
     {
         var server = serverSelector.GetServerForHash(hashId);
         var state = new EnqueuedState { Queue = server };
-        var jobId = EnqueueJob(job, state);
+        var jobId = EnqueueJob<TJob>(job, state);
         logger.LogInformation(
             "Job {JobId} dispatched to server {Server} for hashId {HashId}",
             jobId,

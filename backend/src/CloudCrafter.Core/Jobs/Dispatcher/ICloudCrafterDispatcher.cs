@@ -1,13 +1,9 @@
-﻿using Hangfire.States;
-
-namespace CloudCrafter.Core.Jobs.Dispatcher;
+﻿namespace CloudCrafter.Core.Jobs.Dispatcher;
 
 public interface ICloudCrafterDispatcher
 {
     Task EnqueueConnectivityChecks();
     Task<string> EnqueueStackDeployment(Guid deploymentId);
-
-    Task<string> EnqueueJob(IJob job, IState state);
-
-    void DispatchJob(string hashId, IJob job);
+    void DispatchJob<TJob, TArg>(string hashId, TArg arg)
+        where TJob : ISimpleJob<TArg>;
 }

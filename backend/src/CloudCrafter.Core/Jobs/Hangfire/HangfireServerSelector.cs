@@ -1,22 +1,18 @@
 ﻿using System.Collections.Concurrent;
 using System.Security.Cryptography;
 using System.Text;
-using CloudCrafter.Core.Jobs.Dispatcher;
 using Hangfire;
-using Hangfire.States;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Jobs.Hangfire;
 
 public class HangfireServerSelector
 {
-    private const int VirtualNodes = 100;
     private readonly ILogger<HangfireServerSelector> _logger;
+    private readonly IServiceProvider _serviceProvider;
     private readonly ConcurrentDictionary<string, string> _userServerMapping = new();
     private HashSet<string> _currentServers = new();
     private SortedDictionary<uint, string> _hashRing = new();
-    private readonly IServiceProvider _serviceProvider;
 
     public HangfireServerSelector(
         ILogger<HangfireServerSelector> logger,
@@ -33,7 +29,8 @@ public class HangfireServerSelector
         List<string> servers = [];
         try
         {
-            servers = JobStorage.Current.GetMonitoringApi().Servers().Select(s => s.Name).ToList();
+            var allServers = JobStorage.Current.GetMonitoringApi().Servers().ToList();
+            servers = allServers.Select(s => s.Name.Split(':').FirstOrDefault() ?? s.Name).ToList();
         }
         catch
         {
@@ -49,11 +46,8 @@ public class HangfireServerSelector
             _logger.LogDebug("Detected changes in server list, updating hash ring");
             foreach (var server in servers)
             {
-                for (var i = 0; i < VirtualNodes; i++)
-                {
-                    var key = HashKey($"{server}:{i}");
-                    newHashRing[key] = server;
-                }
+                var key = HashKey($"{server}");
+                newHashRing[key] = server;
             }
 
             var removedServers = _currentServers.Except(newServers).ToList();
@@ -94,13 +88,13 @@ public class HangfireServerSelector
         }
     }
 
-    public string GetServerForHash(string userId)
+    public string GetServerForHash(string hashId)
     {
         return _userServerMapping.GetOrAdd(
-            userId,
+            hashId,
             _ =>
             {
-                var userHash = HashKey(userId);
+                var userHash = HashKey(hashId);
                 var serverNode = _hashRing.FirstOrDefault(x => x.Key >= userHash);
                 return serverNode.Value ?? _hashRing.First().Value;
             }

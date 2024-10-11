@@ -132,7 +132,7 @@ public static class ApplicationServiceExtensions
             ICloudCrafterRecurringJobsDispatcher,
             CloudCrafterRecurringJobsDispatcher
         >();
-        services.AddSingleton<BackgroundJobFactory>();
+        services.AddScoped<BackgroundJobFactory>();
         services.AddSingleton<JobSerializer>();
         services.AddSingleton<ConnectedServerManager>();
 

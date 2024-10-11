@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Jobs.Hangfire;
 using CloudCrafter.Core.Jobs.Logger;
@@ -23,29 +24,6 @@ public class BackgroundJobFactory(
     ILogger<BackgroundJobFactory> logger
 )
 {
-    public Task<string> CreateAndEnqueueJobAsync<TJob>(IJob job, IState state)
-    {
-        logger.LogDebug(
-            "[CreateAndEnqueueJobAsync] Creating and enqueuing job of type {JobType} with state {State}",
-            typeof(TJob).Name,
-            state.Name
-        );
-
-        var jobId = client.Create<CloudCrafterJob>(
-            cloudCrafterJob => cloudCrafterJob.RunPlainJob(job.Type, job, null),
-            state
-        );
-
-        if (!string.IsNullOrEmpty(jobId))
-        {
-            logger.LogDebug("Job {JobId} created and enqueued", jobId);
-            return Task.FromResult(jobId);
-        }
-
-        logger.LogDebug("Failed to create job");
-        throw new Exception("Failed to create job");
-    }
-
     /// <summary>
     ///     Creates and enqueues a job on the background
     /// </summary>
@@ -113,10 +91,64 @@ public class BackgroundJobFactory(
             throw;
         }
     }
+
+    public void DispatchJob<TJob, TArg>(string hashId, TArg arg)
+        where TJob : ISimpleJob<TArg>
+    {
+        logger.LogDebug(
+            "[DispatchJob] Enqueueing job of type {JobType} with hashId {HashId}",
+            typeof(TJob).Name,
+            hashId
+        );
+
+        try
+        {
+            var serializedArg = JsonSerializer.Serialize(arg);
+            var hangfireJobId = client.Create<CloudCrafterJob>(
+                j => j.RunPlainJob<TJob, TArg>(serializedArg, null),
+                new EnqueuedState()
+            );
+
+            logger.LogInformation(
+                "[DispatchJob] Successfully enqueued job with Hangfire JobId {HangfireJobId}",
+                hangfireJobId
+            );
+        }
+        catch (Exception ex)
+        {
+            logger.LogCritical(ex, "[DispatchJob] Failed to enqueue job");
+            throw;
+        }
+    }
 }
 
 public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider sp)
 {
+    [JobDisplayName("{0}")]
+    public async Task RunPlainJob<TJob, TArgs>(
+        string serializedArgs,
+        PerformContext? performContext
+    )
+        where TJob : ISimpleJob<TArgs>
+    {
+        if (performContext == null)
+        {
+            return;
+        }
+        using var scope = sp.CreateScope();
+
+        var arg = JsonSerializer.Deserialize<TArgs>(serializedArgs);
+
+        var job = Activator.CreateInstance<TJob>();
+        if (arg == null)
+        {
+            logger.LogCritical("Failed to deserialize job arguments");
+            return;
+        }
+        var serviceProvider = scope.ServiceProvider;
+        await job.HandleAsync(serviceProvider, arg);
+    }
+
     [Queue("worker")]
     [JobDisplayName("{1}")]
     public Task ExecuteBackgroundJobAsync(
@@ -138,21 +170,6 @@ public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider s
     )
     {
         return ExecuteJobInternalAsync(backgroundJobId, backgroundJobType, performContext);
-    }
-
-    [JobDisplayName("{0}")]
-    public async Task RunPlainJob(BackgroundJobType type, IJob job, PerformContext? performContext)
-    {
-        if (performContext == null)
-        {
-            return;
-        }
-        using var scope = sp.CreateScope();
-        var serviceProvider = scope.ServiceProvider;
-        var dbContext = serviceProvider.GetRequiredService<IApplicationDbContext>();
-        var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
-        var jobId = performContext.BackgroundJob.Id;
-        await job.Handle(serviceProvider, dbContext, loggerFactory, jobId);
     }
 
     private async Task ExecuteJobInternalAsync(

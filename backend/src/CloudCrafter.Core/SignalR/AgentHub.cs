@@ -4,7 +4,6 @@ using CloudCrafter.Core.Commands.SignalR;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Jobs.Channels;
 using CloudCrafter.Core.Jobs.Dispatcher;
-using CloudCrafter.Core.Jobs.Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
@@ -31,8 +30,10 @@ public class AgentHub(
 
     public async Task DeploymentOutput(DeploymentOutputArgs args)
     {
-        var job = new ChannelLogJob(args);
-        dispatcher.DispatchJob(args.ChannelId.ToString(), job);
+        dispatcher.DispatchJob<ChannelLogJob, DeploymentOutputArgs>(
+            args.ChannelId.ToString(),
+            args
+        );
         await testHub.Clients.All.SendAsync("DeploymentOutput", args);
     }
 }
