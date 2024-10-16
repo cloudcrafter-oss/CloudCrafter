@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Jobs.Hangfire;
 using CloudCrafter.Core.Jobs.Logger;
@@ -92,21 +91,18 @@ public class BackgroundJobFactory(
         }
     }
 
-    public void DispatchJob<TJob, TArg>(string hashId, TArg arg)
-        where TJob : ISimpleJob<TArg>
+    public void DispatchJob(ISimpleJob job, IState state)
     {
-        logger.LogDebug(
-            "[DispatchJob] Enqueueing job of type {JobType} with hashId {HashId}",
-            typeof(TJob).Name,
-            hashId
-        );
+        var jobType = job.GetType();
+        logger.LogDebug("[DispatchJob] Enqueueing job of type {JobType}", jobType.Name);
 
         try
         {
-            var serializedArg = JsonSerializer.Serialize(arg);
+            var jobSerialized = JsonSerializer.Serialize(job, jobType);
+
             var hangfireJobId = client.Create<CloudCrafterJob>(
-                j => j.RunPlainJob<TJob, TArg>(serializedArg, null),
-                new EnqueuedState()
+                j => j.RunSimpleJob(jobType.FullName!, jobSerialized, null),
+                state
             );
 
             logger.LogInformation(
@@ -125,28 +121,45 @@ public class BackgroundJobFactory(
 public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider sp)
 {
     [JobDisplayName("{0}")]
-    public async Task RunPlainJob<TJob, TArgs>(
-        string serializedArgs,
+    public async Task RunSimpleJob(
+        string jobType,
+        string serializedJob,
         PerformContext? performContext
     )
-        where TJob : ISimpleJob<TArgs>
     {
         if (performContext == null)
         {
             return;
         }
-        using var scope = sp.CreateScope();
 
-        var arg = JsonSerializer.Deserialize<TArgs>(serializedArgs);
-
-        var job = Activator.CreateInstance<TJob>();
-        if (arg == null)
+        var jobTypeObj = Type.GetType(jobType);
+        if (jobTypeObj == null)
         {
-            logger.LogCritical("Failed to deserialize job arguments");
+            logger.LogCritical("Failed to get job type: {JobType}", jobType);
             return;
         }
+
+        using var scope = sp.CreateScope();
         var serviceProvider = scope.ServiceProvider;
-        await job.HandleAsync(serviceProvider, arg);
+
+        try
+        {
+            if (JsonSerializer.Deserialize(serializedJob, jobTypeObj) is not ISimpleJob job)
+            {
+                logger.LogCritical(
+                    "Failed to deserialize job or job is not ISimpleJob: {JobType}",
+                    jobType
+                );
+                return;
+            }
+
+            await job.HandleAsync(serviceProvider);
+        }
+        catch (Exception ex)
+        {
+            logger.LogCritical(ex, "Error executing job of type {JobType}", jobType);
+            throw;
+        }
     }
 
     [Queue("worker")]

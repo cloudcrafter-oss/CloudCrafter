@@ -30,10 +30,8 @@ public class AgentHub(
 
     public async Task DeploymentOutput(DeploymentOutputArgs args)
     {
-        dispatcher.DispatchJob<ChannelLogJob, DeploymentOutputArgs>(
-            args.ChannelId.ToString(),
-            args
-        );
+        var job = new ChannelLogJob(args);
+        dispatcher.DispatchJob(job);
         await testHub.Clients.All.SendAsync("DeploymentOutput", args);
     }
 }

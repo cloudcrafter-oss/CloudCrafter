@@ -33,10 +33,22 @@ public class CloudCrafterDispatcher(
         return await jobFactory.CreateAndEnqueueJobAsync<DeployStackBackgroundJob>(job);
     }
 
-    public void DispatchJob<TJob, TArg>(string hashId, TArg arg)
-        where TJob : ISimpleJob<TArg>
+    public void DispatchJob(ISimpleJob job, string? hashId = null)
     {
-        jobFactory.DispatchJob<TJob, TArg>(hashId, arg);
+        if (string.IsNullOrEmpty(hashId))
+        {
+            jobFactory.DispatchJob(job, new EnqueuedState());
+            return;
+        }
+        var server = serverSelector.GetServerForHash(hashId);
+        var state = new EnqueuedState { Queue = server };
+        // var jobId = EnqueueJob<TJob>(job, state);
+        // logger.LogInformation(
+        //     "Job {JobId} dispatched to server {Server} for hashId {HashId}",
+        //     jobId,
+        //     server,
+        //     hashId
+        // );
     }
 
     public Task<string> EnqueueJob<TJob>(IJob job, IState state)
@@ -45,19 +57,5 @@ public class CloudCrafterDispatcher(
         logger.LogInformation("Dispatching job {Job} to job factory", job.GetType().FullName);
 
         return jobFactory.CreateAndEnqueueJobAsync<TJob>(job);
-    }
-
-    public void DispatchJob<TJob>(string hashId, IJob job)
-        where TJob : IJob
-    {
-        var server = serverSelector.GetServerForHash(hashId);
-        var state = new EnqueuedState { Queue = server };
-        var jobId = EnqueueJob<TJob>(job, state);
-        logger.LogInformation(
-            "Job {JobId} dispatched to server {Server} for hashId {HashId}",
-            jobId,
-            server,
-            hashId
-        );
     }
 }

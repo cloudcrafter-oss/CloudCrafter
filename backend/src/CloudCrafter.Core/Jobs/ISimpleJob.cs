@@ -1,6 +1,6 @@
 namespace CloudCrafter.Core.Jobs;
 
-public interface ISimpleJob<in TArg>
+public interface ISimpleJob
 {
-    Task HandleAsync(IServiceProvider serviceProvider, TArg arg);
+    Task HandleAsync(IServiceProvider serviceProvider);
 }

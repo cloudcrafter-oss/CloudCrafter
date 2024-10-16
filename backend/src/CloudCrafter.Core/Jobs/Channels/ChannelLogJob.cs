@@ -4,16 +4,18 @@ using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Jobs.Channels;
 
-public class ChannelLogJob : ISimpleJob<DeploymentOutputArgs>
+public class ChannelLogJob(DeploymentOutputArgs args) : ISimpleJob
 {
-    public Task HandleAsync(IServiceProvider serviceProvider, DeploymentOutputArgs arg)
+    public DeploymentOutputArgs Args => args;
+
+    public Task HandleAsync(IServiceProvider serviceProvider)
     {
         var logger = serviceProvider.GetRequiredService<ILogger<ChannelLogJob>>();
 
         logger.LogInformation(
             "ChannelLogJob: {ChannelId} {Message}",
-            arg.ChannelId,
-            arg.Output.Output
+            args.ChannelId,
+            args.Output.Output
         );
 
         return Task.CompletedTask;

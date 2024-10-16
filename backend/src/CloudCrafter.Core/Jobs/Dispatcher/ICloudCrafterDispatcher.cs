@@ -4,6 +4,5 @@ public interface ICloudCrafterDispatcher
 {
     Task EnqueueConnectivityChecks();
     Task<string> EnqueueStackDeployment(Guid deploymentId);
-    void DispatchJob<TJob, TArg>(string hashId, TArg arg)
-        where TJob : ISimpleJob<TArg>;
+    void DispatchJob(ISimpleJob job, string? hashId = null);
 }
