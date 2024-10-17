@@ -26,7 +26,7 @@ public class PerformanceBehaviour<TRequest, TResponse>(ILogger<TRequest> logger)
 
         logger.LogDebug(
             "CloudCrafter Agent Running Request: {Name} ({ElapsedMilliseconds} milliseconds)",
-            typeof(TRequest).Name,
+            typeof(TRequest).FullName,
             elapsedMilliseconds
         );
 

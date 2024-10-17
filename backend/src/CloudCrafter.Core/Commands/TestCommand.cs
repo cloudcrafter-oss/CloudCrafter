@@ -23,7 +23,7 @@ public static class TestCommand
             // }
 
             var servers = await context.Servers.ToListAsync(cancellationToken);
-            await dispatcher.EnqueueConnectivityCheck(servers);
+            await dispatcher.EnqueueConnectivityChecks();
         }
     }
 }

@@ -90,10 +90,78 @@ public class BackgroundJobFactory(
             throw;
         }
     }
+
+    public void DispatchJob(ISimpleJob job, IState state)
+    {
+        var jobType = job.GetType();
+        logger.LogDebug("[DispatchJob] Enqueueing job of type {JobType}", jobType.Name);
+
+        try
+        {
+            var jobSerialized = JsonSerializer.Serialize(job, jobType);
+
+            var hangfireJobId = client.Create<CloudCrafterJob>(
+                j => j.RunSimpleJob(jobType.FullName!, jobSerialized, null),
+                state
+            );
+
+            logger.LogInformation(
+                "[DispatchJob] Successfully enqueued job with Hangfire JobId {HangfireJobId}",
+                hangfireJobId
+            );
+        }
+        catch (Exception ex)
+        {
+            logger.LogCritical(ex, "[DispatchJob] Failed to enqueue job");
+            throw;
+        }
+    }
 }
 
 public class CloudCrafterJob(ILogger<CloudCrafterJob> logger, IServiceProvider sp)
 {
+    [JobDisplayName("{0}")]
+    public async Task RunSimpleJob(
+        string jobType,
+        string serializedJob,
+        PerformContext? performContext
+    )
+    {
+        if (performContext == null)
+        {
+            return;
+        }
+
+        var jobTypeObj = Type.GetType(jobType);
+        if (jobTypeObj == null)
+        {
+            logger.LogCritical("Failed to get job type: {JobType}", jobType);
+            return;
+        }
+
+        using var scope = sp.CreateScope();
+        var serviceProvider = scope.ServiceProvider;
+
+        try
+        {
+            if (JsonSerializer.Deserialize(serializedJob, jobTypeObj) is not ISimpleJob job)
+            {
+                logger.LogCritical(
+                    "Failed to deserialize job or job is not ISimpleJob: {JobType}",
+                    jobType
+                );
+                return;
+            }
+
+            await job.HandleAsync(serviceProvider);
+        }
+        catch (Exception ex)
+        {
+            logger.LogCritical(ex, "Error executing job of type {JobType}", jobType);
+            throw;
+        }
+    }
+
     [Queue("worker")]
     [JobDisplayName("{1}")]
     public Task ExecuteBackgroundJobAsync(
