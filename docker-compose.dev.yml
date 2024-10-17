@@ -1,6 +1,7 @@
 services:
   web:
     container_name: web
+    hostname: web
     build:
       context: backend/
       dockerfile: src/CloudCrafter.Web/Dockerfile
@@ -52,6 +53,7 @@ services:
       dockerfile: src/CloudCrafter.Worker.Console/Dockerfile
     networks:
       - cloudcrafter
+    hostname: job-runner-base
     depends_on:
       - postgres
       - redis
@@ -65,13 +67,16 @@ services:
     extends:
       service: job-runner-base
     container_name: job-runner-1
+    hostname: job-runner-1
 
   job-runner-2:
     extends:
       service: job-runner-base
     container_name: job-runner-2
+    hostname: job-runner-2
 
   job-runner-3:
     extends:
       service: job-runner-base
     container_name: job-runner-3
+    hostname: job-runner-3

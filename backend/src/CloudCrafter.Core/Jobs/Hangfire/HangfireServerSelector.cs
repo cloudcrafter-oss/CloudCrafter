@@ -30,6 +30,7 @@ public class HangfireServerSelector
         try
         {
             var allServers = JobStorage.Current.GetMonitoringApi().Servers().ToList();
+
             servers = allServers.Select(s => s.Name.Split(':').FirstOrDefault() ?? s.Name).ToList();
         }
         catch

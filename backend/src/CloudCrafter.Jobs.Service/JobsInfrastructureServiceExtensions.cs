@@ -46,6 +46,7 @@ public static class JobsInfrastructureServiceExtensions
             {
                 opt.Queues = [.. queues, machineName];
                 opt.ServerName = machineName;
+                opt.HeartbeatInterval = TimeSpan.FromSeconds(5);
             });
         }
 

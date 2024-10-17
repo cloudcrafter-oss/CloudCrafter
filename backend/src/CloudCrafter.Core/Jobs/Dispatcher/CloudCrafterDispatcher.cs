@@ -42,13 +42,13 @@ public class CloudCrafterDispatcher(
         }
         var server = serverSelector.GetServerForHash(hashId);
         var state = new EnqueuedState { Queue = server };
-        // var jobId = EnqueueJob<TJob>(job, state);
-        // logger.LogInformation(
-        //     "Job {JobId} dispatched to server {Server} for hashId {HashId}",
-        //     jobId,
-        //     server,
-        //     hashId
-        // );
+
+        logger.LogInformation(
+            "Dispatching job of type {Type} to queue {Queue}",
+            job.GetType().Name,
+            server
+        );
+        jobFactory.DispatchJob(job, state);
     }
 
     public Task<string> EnqueueJob<TJob>(IJob job, IState state)
