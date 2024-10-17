@@ -16,7 +16,7 @@ public static class AgentHubPingMessageHandler
         AgentHubPingMessage Message,
         TypedHubConnection<IAgentHub> TypedHubConnection,
         Guid ChannelId
-    ) : IRequest, IAgentLoggable;
+    ) : IRequest;
 
     private class Handler(ILogger<Handler> logger, HostInfoService service) : IRequestHandler<Query>
     {

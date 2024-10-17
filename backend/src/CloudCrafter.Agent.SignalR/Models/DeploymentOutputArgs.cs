@@ -9,6 +9,8 @@ public class DeploymentOutputArgs
 public class ChannelOutputLogLine
 {
     public required string Output { get; init; }
+    public required bool IsError { get; init; }
+    public required DateTime Date { get; init; }
 
     // TODO: Enrich stderr/stdout
     public required int InternalOrder { get; init; }

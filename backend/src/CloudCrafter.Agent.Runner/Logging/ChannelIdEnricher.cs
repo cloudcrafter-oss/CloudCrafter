@@ -30,6 +30,8 @@ public class ChannelIdEnricher(IServiceProvider serviceProvider) : ILogEventEnri
                                 ChannelId = channelId,
                                 Output = new ChannelOutputLogLine
                                 {
+                                    Date = logEvent.Timestamp.UtcDateTime,
+                                    IsError = logEvent.Level == LogEventLevel.Error,
                                     Output = logMessage,
                                     InternalOrder = SEQUENCE,
                                 },

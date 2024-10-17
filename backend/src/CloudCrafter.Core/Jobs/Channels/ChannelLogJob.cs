@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Agent.SignalR.Models;
+using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -8,16 +9,15 @@ public class ChannelLogJob(DeploymentOutputArgs args) : ISimpleJob
 {
     public DeploymentOutputArgs Args => args;
 
-    public Task HandleAsync(IServiceProvider serviceProvider)
+    public async Task HandleAsync(IServiceProvider serviceProvider)
     {
         var logger = serviceProvider.GetRequiredService<ILogger<ChannelLogJob>>();
-
+        var deploymentService = serviceProvider.GetRequiredService<IDeploymentService>();
         logger.LogInformation(
-            "ChannelLogJob: {ChannelId} {Message}",
-            args.ChannelId,
-            args.Output.Output
+            "Saving message to deployment service, deploymentId: {DeploymentId}",
+            args.ChannelId
         );
 
-        return Task.CompletedTask;
+        await deploymentService.StoreDeploymentLogAsync(Args.ChannelId, Args.Output);
     }
 }
