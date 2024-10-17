@@ -17,6 +17,7 @@ using CloudCrafter.Core.Jobs.Hangfire;
 using CloudCrafter.Core.Jobs.Serializer;
 using CloudCrafter.Core.Jobs.Servers;
 using CloudCrafter.Core.Jobs.Stacks;
+using CloudCrafter.Core.Services.Core;
 using CloudCrafter.Core.Services.Domain.Agent;
 using CloudCrafter.Core.Services.Domain.Applications.Deployments;
 using CloudCrafter.Core.Services.Domain.Environments;
@@ -162,6 +163,9 @@ public static class ApplicationServiceExtensions
             options.InstanceName = "CloudCrafter-Cache";
         });
 
+        services.AddSingleton<IDistributedLockService>(sp => new DistributedLockService(
+            connectionString
+        ));
         return services;
     }
 }
