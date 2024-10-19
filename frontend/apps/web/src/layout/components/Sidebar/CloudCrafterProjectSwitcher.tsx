@@ -8,7 +8,6 @@ import {
 	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
-	DropdownMenuShortcut,
 	DropdownMenuSub,
 	DropdownMenuSubContent,
 	DropdownMenuSubTrigger,
@@ -27,6 +26,7 @@ import {
 	Plus,
 	ServerIcon,
 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import * as React from 'react'
 
 export function CloudCrafterProjectSwitcher({
@@ -41,6 +41,8 @@ export function CloudCrafterProjectSwitcher({
 	projects: ProjectDto[]
 }) {
 	const { isMobile } = useSidebar()
+
+	const router = useRouter()
 	const [activeTeam, setActiveTeam] = React.useState(teams[0])
 
 	const { selectedProjectId, selectedEnvironmentId } =
@@ -74,23 +76,6 @@ export function CloudCrafterProjectSwitcher({
 						sideOffset={4}
 					>
 						<DropdownMenuLabel className='text-xs text-muted-foreground'>
-							Teams
-						</DropdownMenuLabel>
-						{teams.map((team, index) => (
-							<DropdownMenuItem
-								key={team.name}
-								onClick={() => setActiveTeam(team)}
-								className='gap-2 p-2'
-							>
-								<div className='flex size-6 items-center justify-center rounded-sm border'>
-									<team.logo className='size-4 shrink-0' />
-								</div>
-								{team.name}
-								<DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
-							</DropdownMenuItem>
-						))}
-						<DropdownMenuSeparator />
-						<DropdownMenuLabel className='text-xs text-muted-foreground'>
 							Projects
 						</DropdownMenuLabel>
 						{projects.map((project) => (
@@ -98,7 +83,19 @@ export function CloudCrafterProjectSwitcher({
 								<DropdownMenuSub>
 									<DropdownMenuSubTrigger className='gap-2 p-2'>
 										<FolderIcon className='size-4' />
-										{project.name}
+										{selectedProjectId === project.id ? (
+											<>
+												<span className='font-semibold'>
+													{project.name} ({project.environments.length})
+												</span>
+											</>
+										) : (
+											<>
+												<span>
+													{project.name} ({project.environments.length})
+												</span>
+											</>
+										)}
 									</DropdownMenuSubTrigger>
 									<DropdownMenuSubContent>
 										{project.environments.map((env) => (
@@ -106,7 +103,7 @@ export function CloudCrafterProjectSwitcher({
 												key={env.id}
 												className='gap-2 p-2'
 												onClick={() => {
-													// Handle environment selection
+													router.push(`/admin/projects/${project.id}/${env.id}`)
 												}}
 											>
 												<ServerIcon className='size-4' />
