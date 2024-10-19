@@ -1,5 +1,5 @@
 'use client'
-import type { ProjectDto } from '@/src/core/__generated__'
+import { useProjects } from '@/src/hooks/useProjects'
 import { useSelectedProjectAndEnvironment } from '@/src/hooks/useSelectedProjectAndEnvironment'
 import {
 	DropdownMenu,
@@ -22,6 +22,7 @@ import {
 import {
 	Check,
 	ChevronsUpDown,
+	Cloud,
 	FolderIcon,
 	Plus,
 	ServerIcon,
@@ -29,24 +30,44 @@ import {
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 
+const ActiveProject = () => {
+	const { selectedProject, selectedEnvironment } =
+		useSelectedProjectAndEnvironment()
+
+	const title = selectedProject ? selectedProject.name : 'Select a project'
+
+	return (
+		<>
+			<div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
+				<Cloud className='size-4' />
+			</div>
+			<div className='grid flex-1 text-left text-sm leading-tight'>
+				<span className='truncate font-semibold'>{title}</span>
+				<span className='truncate text-xs'>{selectedEnvironment?.name}</span>
+			</div>
+			<ChevronsUpDown className='ml-auto' />
+		</>
+	)
+}
+
 export function CloudCrafterProjectSwitcher({
 	teams,
-	projects,
 }: {
 	teams: {
 		name: string
 		logo: React.ElementType
 		plan: string
 	}[]
-	projects: ProjectDto[]
 }) {
 	const { isMobile } = useSidebar()
 
 	const router = useRouter()
 	const [activeTeam, setActiveTeam] = React.useState(teams[0])
 
+	const { projects } = useProjects()
+
 	const { selectedProjectId, selectedEnvironmentId } =
-		useSelectedProjectAndEnvironment(projects)
+		useSelectedProjectAndEnvironment()
 
 	return (
 		<SidebarMenu>
@@ -57,16 +78,7 @@ export function CloudCrafterProjectSwitcher({
 							size='lg'
 							className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
 						>
-							<div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
-								<activeTeam.logo className='size-4' />
-							</div>
-							<div className='grid flex-1 text-left text-sm leading-tight'>
-								<span className='truncate font-semibold'>
-									{activeTeam.name}
-								</span>
-								<span className='truncate text-xs'>{activeTeam.plan}</span>
-							</div>
-							<ChevronsUpDown className='ml-auto' />
+							<ActiveProject />
 						</SidebarMenuButton>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent

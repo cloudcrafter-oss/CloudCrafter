@@ -1,5 +1,4 @@
 'use client'
-import { fetchProjectsWithEnvironments } from '@/src/app/_actions/project'
 import {
 	Sidebar,
 	SidebarContent,
@@ -20,7 +19,6 @@ import {
 	UsersRound,
 } from 'lucide-react'
 import type * as React from 'react'
-import useSWR from 'swr'
 import { CloudCrafterNav } from './CloudCrafterNav'
 import { CloudCrafterProjectSwitcher } from './CloudCrafterProjectSwitcher'
 import { CloudCrafterUserNav } from './CloudCrafterUserNav'
@@ -104,18 +102,10 @@ const data = {
 export function CloudCrafterSidebar({
 	...props
 }: React.ComponentProps<typeof Sidebar>) {
-	const { data: projects } = useSWR(
-		'userProjects',
-		fetchProjectsWithEnvironments,
-	)
-
 	return (
 		<Sidebar collapsible='icon' {...props}>
 			<SidebarHeader>
-				<CloudCrafterProjectSwitcher
-					teams={data.teams}
-					projects={projects ?? []}
-				/>
+				<CloudCrafterProjectSwitcher teams={data.teams} />
 			</SidebarHeader>
 			<SidebarContent>
 				<CloudCrafterNav items={data.navMain} />
