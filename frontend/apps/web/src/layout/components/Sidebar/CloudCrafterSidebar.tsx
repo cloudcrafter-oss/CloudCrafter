@@ -23,6 +23,7 @@ import type * as React from 'react'
 import useSWR from 'swr'
 import { CloudCrafterNav } from './CloudCrafterNav'
 import { CloudCrafterProjectSwitcher } from './CloudCrafterProjectSwitcher'
+import { CloudCrafterUserNav } from './CloudCrafterUserNav'
 
 // This is sample data.
 const data = {
@@ -111,7 +112,10 @@ export function CloudCrafterSidebar({
 	return (
 		<Sidebar collapsible='icon' {...props}>
 			<SidebarHeader>
-				<CloudCrafterProjectSwitcher teams={data.teams} />
+				<CloudCrafterProjectSwitcher
+					teams={data.teams}
+					projects={projects ?? []}
+				/>
 			</SidebarHeader>
 			<SidebarContent>
 				<CloudCrafterNav items={data.navMain} />
