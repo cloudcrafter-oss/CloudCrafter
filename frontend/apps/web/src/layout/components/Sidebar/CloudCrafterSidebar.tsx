@@ -1,9 +1,5 @@
 'use client'
-
-import { NavMain } from '@ui/components/nav-main'
-import { NavProjects } from '@ui/components/nav-projects'
-import { NavUser } from '@ui/components/nav-user'
-import { TeamSwitcher } from '@ui/components/team-switcher'
+import { fetchProjectsWithEnvironments } from '@/src/app/_actions/project'
 import {
 	Sidebar,
 	SidebarContent,
@@ -24,6 +20,9 @@ import {
 	UsersRound,
 } from 'lucide-react'
 import type * as React from 'react'
+import useSWR from 'swr'
+import { CloudCrafterNav } from './CloudCrafterNav'
+import { CloudCrafterProjectSwitcher } from './CloudCrafterProjectSwitcher'
 
 // This is sample data.
 const data = {
@@ -101,18 +100,24 @@ const data = {
 	],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function CloudCrafterSidebar({
+	...props
+}: React.ComponentProps<typeof Sidebar>) {
+	const { data: projects } = useSWR(
+		'userProjects',
+		fetchProjectsWithEnvironments,
+	)
+
 	return (
 		<Sidebar collapsible='icon' {...props}>
 			<SidebarHeader>
-				<TeamSwitcher teams={data.teams} />
+				<CloudCrafterProjectSwitcher teams={data.teams} />
 			</SidebarHeader>
 			<SidebarContent>
-				<NavMain items={data.navMain} />
-				<NavProjects projects={data.projects} />
+				<CloudCrafterNav items={data.navMain} />
 			</SidebarContent>
 			<SidebarFooter>
-				<NavUser user={data.user} />
+				<CloudCrafterUserNav user={data.user} />
 			</SidebarFooter>
 			<SidebarRail />
 		</Sidebar>

@@ -23,7 +23,7 @@ import {
 	Sparkles,
 } from 'lucide-react'
 
-export function NavUser({
+export function CloudCrafterUserNav({
 	user,
 }: {
 	user: {

@@ -17,7 +17,7 @@ import {
 import { ChevronsUpDown, Plus } from 'lucide-react'
 import * as React from 'react'
 
-export function TeamSwitcher({
+export function CloudCrafterProjectSwitcher({
 	teams,
 }: {
 	teams: {

@@ -15,7 +15,7 @@ import {
 } from '@ui/components/ui/sidebar'
 import { ChevronRight, type LucideIcon } from 'lucide-react'
 
-export function NavMain({
+export function CloudCrafterNav({
 	items,
 }: {
 	items: {
