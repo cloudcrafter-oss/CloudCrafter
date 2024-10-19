@@ -13,15 +13,15 @@ import {
 } from '@ui/components/ui/sidebar'
 import {
 	AudioWaveform,
-	BookOpen,
-	Bot,
 	Command,
+	FolderKey,
 	Frame,
 	GalleryVerticalEnd,
+	LayoutDashboard,
 	Map as MapIcon,
 	PieChart,
-	Settings2,
-	SquareTerminal,
+	Server,
+	UsersRound,
 } from 'lucide-react'
 import type * as React from 'react'
 
@@ -51,89 +51,35 @@ const data = {
 	],
 	navMain: [
 		{
-			title: 'Playground',
-			url: '#',
-			icon: SquareTerminal,
+			title: 'Dashboard',
+			url: '/admin',
+			icon: LayoutDashboard,
 			isActive: true,
+		},
+		{
+			title: 'Users',
+			url: '/admin/users',
+			icon: UsersRound,
 			items: [
 				{
-					title: 'History',
-					url: '#',
+					title: 'Overview',
+					url: '/admin/users',
 				},
 				{
-					title: 'Starred',
-					url: '#',
-				},
-				{
-					title: 'Settings',
-					url: '#',
+					title: 'Create User',
+					url: '/admin/users/create',
 				},
 			],
 		},
 		{
-			title: 'Models',
-			url: '#',
-			icon: Bot,
-			items: [
-				{
-					title: 'Genesis',
-					url: '#',
-				},
-				{
-					title: 'Explorer',
-					url: '#',
-				},
-				{
-					title: 'Quantum',
-					url: '#',
-				},
-			],
+			title: 'Projects',
+			url: '/admin/projects',
+			icon: FolderKey,
 		},
 		{
-			title: 'Documentation',
-			url: '#',
-			icon: BookOpen,
-			items: [
-				{
-					title: 'Introduction',
-					url: '#',
-				},
-				{
-					title: 'Get Started',
-					url: '#',
-				},
-				{
-					title: 'Tutorials',
-					url: '#',
-				},
-				{
-					title: 'Changelog',
-					url: '#',
-				},
-			],
-		},
-		{
-			title: 'Settings',
-			url: '#',
-			icon: Settings2,
-			items: [
-				{
-					title: 'General',
-					url: '#',
-				},
-				{
-					title: 'Team',
-					url: '#',
-				},
-				{
-					title: 'Billing',
-					url: '#',
-				},
-				{
-					title: 'Limits',
-					url: '#',
-				},
-			],
+			title: 'Servers',
+			url: '/admin/servers',
+			icon: Server,
 		},
 	],
 	projects: [
