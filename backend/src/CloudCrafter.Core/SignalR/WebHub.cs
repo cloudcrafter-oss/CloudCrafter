@@ -2,4 +2,7 @@
 
 namespace CloudCrafter.Core.SignalR;
 
-public class WebHub : Hub { }
+public class WebHub : Hub
+{
+    public void Test() { }
+}

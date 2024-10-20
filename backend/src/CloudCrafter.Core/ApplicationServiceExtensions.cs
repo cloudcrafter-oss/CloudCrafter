@@ -1,5 +1,6 @@
 using System.Reflection;
 using Ardalis.SharedKernel;
+using CloudCrafter.Core.BackgroundServices;
 using CloudCrafter.Core.Common.Behaviours;
 using CloudCrafter.Core.Events;
 using CloudCrafter.Core.Events.Store;
@@ -97,6 +98,7 @@ public static class ApplicationServiceExtensions
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddSingleton<HangfireServerSelector>();
         services.AddHostedService<HangfireServerMonitorService>();
+        services.AddHostedService<DummyDataService>();
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());

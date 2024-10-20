@@ -3,7 +3,6 @@ import {
 	type StackDetailDto,
 	useDispatchStackDeploymentHook,
 } from '@/src/core/__generated__'
-import { LazyLog } from '@melloware/react-logviewer'
 import { Badge } from '@ui/components/ui/badge'
 import { Button } from '@ui/components/ui/button'
 import {
@@ -37,6 +36,7 @@ import {
 	Trash2,
 } from 'lucide-react'
 import { useState } from 'react'
+import { ChannelLogViewer } from '../../logviewer/ChannelLogViewer'
 
 export const BasicInfo = ({
 	stackDetails,
@@ -97,10 +97,7 @@ export const BasicInfo = ({
 							<SheetTitle>Stack Logs</SheetTitle>
 						</SheetHeader>
 						<>
-							<LazyLog
-								width={700}
-								url='https://gist.githubusercontent.com/helfi92/96d4444aa0ed46c5f9060a789d316100/raw/ba0d30a9877ea5cc23c7afcd44505dbc2bab1538/typical-live_backing.log'
-							/>
+							<ChannelLogViewer channelId='dummy' />
 						</>
 					</SheetContent>
 				</Sheet>

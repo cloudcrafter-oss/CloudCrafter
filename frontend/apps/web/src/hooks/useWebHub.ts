@@ -1,4 +1,4 @@
-import type { MyHubMessage } from '@/src/core/__generated__/signal-types/my-hub-message.ts'
+import type { DeploymentOutputArgs } from '@/src/core/__generated__/signal-types/deployment-output-args'
 import * as signalR from '@microsoft/signalr'
 import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
@@ -16,9 +16,9 @@ export const useWebHub = () => {
 			.build()
 
 		console.log('rendering now')
-		connection.on('DeploymentOutput', (message: MyHubMessage) => {
+		connection.on('DeploymentOutput', (message: DeploymentOutputArgs) => {
 			console.log('ReceiveMessage', message)
-			console.log('Id is ', message.id)
+			console.log('Id is ', message.channelId)
 		})
 
 		connection.start().catch((err) => console.error(err))

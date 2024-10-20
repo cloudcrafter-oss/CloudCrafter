@@ -2,7 +2,6 @@
 
 import { SourceSettings } from '@/src/components/stack-detail/source-settings'
 import type { StackDetailDto } from '@/src/core/__generated__'
-import { useWebHub } from '@/src/hooks/useWebHub'
 import { cn } from '@ui/lib/utils'
 import type React from 'react'
 import { useEffect, useState } from 'react'
@@ -89,8 +88,6 @@ const StackConfigPage: React.FC<{ stackDetails: StackDetailDto }> = ({
 }) => {
 	const [activeSection, setActiveSection] = useState(sections[0].id)
 	const [activeSubTab, setActiveSubTab] = useState(sections[0].subTabs[0].id)
-
-	useWebHub()
 
 	useEffect(() => {
 		// Parse the hash on component mount and when it changes
