@@ -9,7 +9,7 @@ export const ChannelLogViewer = ({ channelId }: { channelId: string }) => {
 
 	return (
 		<>
-			<LazyLog width={700} text={logText} />
+			<LazyLog height={200} follow width={700} text={logText} />
 		</>
 	)
 }
