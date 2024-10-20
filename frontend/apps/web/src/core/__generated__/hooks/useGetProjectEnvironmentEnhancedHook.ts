@@ -1,7 +1,7 @@
 import client from "../../frontend/client.ts";
 import { useQuery, queryOptions, useInfiniteQuery, infiniteQueryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import type { GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhancedPathParams, GetProjectEnvironmentEnhanced404 } from "../types/GetProjectEnvironmentEnhanced";
-import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, InfiniteData, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
+import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
 
  type GetProjectEnvironmentEnhancedClient = typeof client<GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhanced404, never>;
 type GetProjectEnvironmentEnhanced = {
@@ -77,7 +77,7 @@ export function getProjectEnvironmentEnhancedInfiniteQueryOptions(id: GetProject
 /**
  * @link /api/Projects/:id/:environmentId
  */
-export function useGetProjectEnvironmentEnhancedHookInfinite<TData = InfiniteData<GetProjectEnvironmentEnhanced["response"]>, TQueryData = GetProjectEnvironmentEnhanced["response"], TQueryKey extends QueryKey = GetProjectEnvironmentEnhancedInfiniteQueryKey>(id: GetProjectEnvironmentEnhancedPathParams["id"], environmentId: GetProjectEnvironmentEnhancedPathParams["environmentId"], options: {
+export function useGetProjectEnvironmentEnhancedHookInfinite<TData = GetProjectEnvironmentEnhanced["response"], TQueryData = GetProjectEnvironmentEnhanced["response"], TQueryKey extends QueryKey = GetProjectEnvironmentEnhancedInfiniteQueryKey>(id: GetProjectEnvironmentEnhancedPathParams["id"], environmentId: GetProjectEnvironmentEnhancedPathParams["environmentId"], options: {
     query?: Partial<InfiniteQueryObserverOptions<GetProjectEnvironmentEnhanced["response"], GetProjectEnvironmentEnhanced["error"], TData, TQueryData, TQueryKey>>;
     client?: GetProjectEnvironmentEnhanced["client"]["parameters"];
 } = {}): UseInfiniteQueryResult<TData, GetProjectEnvironmentEnhanced["error"]> & {

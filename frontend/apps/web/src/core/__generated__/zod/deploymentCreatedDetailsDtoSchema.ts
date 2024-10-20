@@ -1,4 +1,4 @@
 import { z } from "zod";
 
 
-export const deploymentCreatedDetailsDtoSchema = z.object({ "deploymentId": z.string() });
+export const deploymentCreatedDetailsDtoSchema = z.object({ "deploymentId": z.string().uuid() });

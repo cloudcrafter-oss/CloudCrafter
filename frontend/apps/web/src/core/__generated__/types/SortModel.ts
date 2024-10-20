@@ -5,5 +5,8 @@ import type { SortDirection } from "./SortDirection";
      * @type string
     */
     field: string;
+    /**
+     * @type integer, int32
+    */
     direction: SortDirection;
 };

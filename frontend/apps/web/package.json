@@ -23,6 +23,7 @@
 		"@kubb/swagger-ts": "^2.25.2",
 		"@kubb/swagger-zod": "^2.25.2",
 		"@lifespikes/next-datatable": "^1.7.5",
+		"@melloware/react-logviewer": "^5.2.3",
 		"@microsoft/signalr": "^8.0.7",
 		"@radix-ui/react-avatar": "^1.1.0",
 		"@radix-ui/react-icons": "^1.3.0",

@@ -1,7 +1,7 @@
 import client from "../../frontend/client.ts";
 import { useQuery, queryOptions, useInfiniteQuery, infiniteQueryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import type { GetStackDetailQueryResponse, GetStackDetailPathParams, GetStackDetail404 } from "../types/GetStackDetail";
-import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, InfiniteData, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
+import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
 
  type GetStackDetailClient = typeof client<GetStackDetailQueryResponse, GetStackDetail404, never>;
 type GetStackDetail = {
@@ -77,7 +77,7 @@ export function getStackDetailInfiniteQueryOptions(id: GetStackDetailPathParams[
 /**
  * @link /api/Stacks/:id
  */
-export function useGetStackDetailHookInfinite<TData = InfiniteData<GetStackDetail["response"]>, TQueryData = GetStackDetail["response"], TQueryKey extends QueryKey = GetStackDetailInfiniteQueryKey>(id: GetStackDetailPathParams["id"], options: {
+export function useGetStackDetailHookInfinite<TData = GetStackDetail["response"], TQueryData = GetStackDetail["response"], TQueryKey extends QueryKey = GetStackDetailInfiniteQueryKey>(id: GetStackDetailPathParams["id"], options: {
     query?: Partial<InfiniteQueryObserverOptions<GetStackDetail["response"], GetStackDetail["error"], TData, TQueryData, TQueryKey>>;
     client?: GetStackDetail["client"]["parameters"];
 } = {}): UseInfiniteQueryResult<TData, GetStackDetail["error"]> & {

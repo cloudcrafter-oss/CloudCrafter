@@ -1,12 +1,12 @@
 import client from "../../frontend/client.ts";
 import { useQuery, queryOptions, useInfiniteQuery, infiniteQueryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import type { GetProjectsQueryResponse, GetProjectsQueryParams } from "../types/GetProjects";
-import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, InfiniteData, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
+import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
 
- type GetProjectsClient = typeof client<GetProjectsQueryResponse, never, never>;
+ type GetProjectsClient = typeof client<GetProjectsQueryResponse, Error, never>;
 type GetProjects = {
     data: GetProjectsQueryResponse;
-    error: never;
+    error: Error;
     request: never;
     pathParams: never;
     queryParams: GetProjectsQueryParams;
@@ -83,7 +83,7 @@ export function getProjectsInfiniteQueryOptions(params?: GetProjects["queryParam
 /**
  * @link /api/Projects
  */
-export function useGetProjectsHookInfinite<TData = InfiniteData<GetProjects["response"]>, TQueryData = GetProjects["response"], TQueryKey extends QueryKey = GetProjectsInfiniteQueryKey>(params?: GetProjects["queryParams"], options: {
+export function useGetProjectsHookInfinite<TData = GetProjects["response"], TQueryData = GetProjects["response"], TQueryKey extends QueryKey = GetProjectsInfiniteQueryKey>(params?: GetProjects["queryParams"], options: {
     query?: Partial<InfiniteQueryObserverOptions<GetProjects["response"], GetProjects["error"], TData, TQueryData, TQueryKey>>;
     client?: GetProjects["client"]["parameters"];
 } = {}): UseInfiniteQueryResult<TData, GetProjects["error"]> & {

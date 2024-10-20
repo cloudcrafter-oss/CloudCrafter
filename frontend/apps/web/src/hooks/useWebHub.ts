@@ -3,7 +3,7 @@ import * as signalR from '@microsoft/signalr'
 import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 
-export const useTestHub = () => {
+export const useWebHub = () => {
 	const { data: session } = useSession()
 
 	useEffect(() => {

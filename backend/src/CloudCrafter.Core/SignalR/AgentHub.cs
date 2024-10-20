@@ -15,7 +15,7 @@ public class AgentHub(
     ILogger<AgentHub> logger,
     ConnectedServerManager serverManager,
     ISender sender,
-    IHubContext<WebHub> testHub,
+    IHubContext<WebHub> webHub,
     ICloudCrafterDispatcher dispatcher
 ) : CloudCrafterBaseHub(serversService, logger, serverManager), IAgentHub
 {
@@ -32,6 +32,6 @@ public class AgentHub(
     {
         var job = new ChannelLogJob(args);
         dispatcher.DispatchJob(job, args.ChannelId.ToString());
-        await testHub.Clients.All.SendAsync("DeploymentOutput", args);
+        await webHub.Clients.All.SendAsync("DeploymentOutput", args);
     }
 }

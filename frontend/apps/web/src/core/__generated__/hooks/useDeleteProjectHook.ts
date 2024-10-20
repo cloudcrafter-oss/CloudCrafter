@@ -3,10 +3,10 @@ import { useMutation } from "@tanstack/react-query";
 import type { DeleteProjectMutationResponse, DeleteProjectPathParams } from "../types/DeleteProject";
 import type { UseMutationOptions } from "@tanstack/react-query";
 
- type DeleteProjectClient = typeof client<DeleteProjectMutationResponse, never, never>;
+ type DeleteProjectClient = typeof client<DeleteProjectMutationResponse, Error, never>;
 type DeleteProject = {
     data: DeleteProjectMutationResponse;
-    error: never;
+    error: Error;
     request: never;
     pathParams: DeleteProjectPathParams;
     queryParams: never;
