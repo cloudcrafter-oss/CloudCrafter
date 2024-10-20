@@ -28,6 +28,7 @@ using CloudCrafter.Core.Services.Domain.Stacks;
 using CloudCrafter.Core.Services.Domain.Users;
 using CloudCrafter.Core.Services.Domain.Utils;
 using CloudCrafter.Core.SignalR;
+using CloudCrafter.Core.SignalR.HubActions;
 using CloudCrafter.Domain;
 using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
@@ -138,6 +139,8 @@ public static class ApplicationServiceExtensions
         services.AddScoped<BackgroundJobFactory>();
         services.AddSingleton<JobSerializer>();
         services.AddSingleton<ConnectedServerManager>();
+
+        services.AddSingleton<WebHubActions>();
 
         services.AddScoped<ConnectivityCheckBackgroundJob>();
         services.AddScoped<DeployStackBackgroundJob>();

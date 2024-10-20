@@ -97,7 +97,7 @@ export const BasicInfo = ({
 							<SheetTitle>Stack Logs</SheetTitle>
 						</SheetHeader>
 						<>
-							<ChannelLogViewer channelId='dummy' />
+							<ChannelLogViewer channelId={stackDetails.id} />
 						</>
 					</SheetContent>
 				</Sheet>

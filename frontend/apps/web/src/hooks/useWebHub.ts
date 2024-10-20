@@ -3,7 +3,7 @@ import * as signalR from '@microsoft/signalr'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
-export const useWebHub = () => {
+export const useWebHub = ({ channelId }: { channelId: string }) => {
 	const { data: session } = useSession()
 
 	const [messages, setMessages] = useState<DeploymentOutputArgs[]>([])
@@ -15,6 +15,7 @@ export const useWebHub = () => {
 					return session?.accessToken || ''
 				},
 			})
+			.withAutomaticReconnect()
 			.build()
 
 		console.log('rendering now')
@@ -22,12 +23,17 @@ export const useWebHub = () => {
 			setMessages((prev) => [...prev, message])
 		})
 
-		connection.start().catch((err) => console.error(err))
+		connection
+			.start()
+			.then(() => {
+				connection.invoke('JoinChannel', channelId)
+			})
+			.catch((err) => console.error(err))
 
 		return () => {
 			connection.stop()
 		}
-	}, [session?.accessToken])
+	}, [session?.accessToken, channelId])
 
 	return {
 		messages,

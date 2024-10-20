@@ -1,13 +1,14 @@
 ﻿using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.SignalR;
+using CloudCrafter.Core.SignalR.HubActions;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
 
 namespace CloudCrafter.Core.BackgroundServices;
 
-public class DummyDataService(IHubContext<WebHub> webHub) : BackgroundService
+public class DummyDataService(WebHubActions webHubActions) : BackgroundService
 {
-    private readonly TimeSpan _waitInterval = TimeSpan.FromSeconds(1);
+    private readonly TimeSpan _waitInterval = TimeSpan.FromMilliseconds(600);
 
     private static int _counter = 0;
 
@@ -17,7 +18,7 @@ public class DummyDataService(IHubContext<WebHub> webHub) : BackgroundService
         {
             var args = new DeploymentOutputArgs()
             {
-                ChannelId = Guid.Parse("8bda05e9-dafa-4171-baf9-c332a3a82bde"),
+                ChannelId = Guid.Parse("12fa115d-9b23-4400-9fa9-24d1631ff33d"),
                 Output = new()
                 {
                     InternalOrder = _counter,
@@ -27,9 +28,8 @@ public class DummyDataService(IHubContext<WebHub> webHub) : BackgroundService
                 },
             };
 
+            await webHubActions.SendDeploymentOutput(args.ChannelId, args);
             _counter++;
-            await webHub.Clients.All.SendAsync("DeploymentOutput", args);
-
             await Task.Delay(_waitInterval, stoppingToken);
         }
     }
