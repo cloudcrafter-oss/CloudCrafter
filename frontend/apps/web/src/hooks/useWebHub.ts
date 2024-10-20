@@ -1,10 +1,12 @@
 import type { DeploymentOutputArgs } from '@/src/core/__generated__/signal-types/deployment-output-args'
 import * as signalR from '@microsoft/signalr'
 import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export const useWebHub = () => {
 	const { data: session } = useSession()
+
+	const [messages, setMessages] = useState<DeploymentOutputArgs[]>([])
 
 	useEffect(() => {
 		const connection = new signalR.HubConnectionBuilder()
@@ -17,8 +19,7 @@ export const useWebHub = () => {
 
 		console.log('rendering now')
 		connection.on('DeploymentOutput', (message: DeploymentOutputArgs) => {
-			console.log('ReceiveMessage', message)
-			console.log('Id is ', message.channelId)
+			setMessages((prev) => [...prev, message])
 		})
 
 		connection.start().catch((err) => console.error(err))
@@ -27,4 +28,8 @@ export const useWebHub = () => {
 			connection.stop()
 		}
 	}, [session?.accessToken])
+
+	return {
+		messages,
+	}
 }
