@@ -20,6 +20,12 @@ import {
 } from '@ui/components/ui/dropdown-menu'
 import { Input } from '@ui/components/ui/input'
 import { Label } from '@ui/components/ui/label'
+import {
+	Sheet,
+	SheetContent,
+	SheetHeader,
+	SheetTitle,
+} from '@ui/components/ui/sheet'
 import { Switch } from '@ui/components/ui/switch'
 import { Textarea } from '@ui/components/ui/textarea'
 import {
@@ -30,6 +36,7 @@ import {
 	Trash2,
 } from 'lucide-react'
 import { useState } from 'react'
+import { ChannelLogViewer } from '../../logviewer/ChannelLogViewer'
 
 export const BasicInfo = ({
 	stackDetails,
@@ -41,6 +48,8 @@ export const BasicInfo = ({
 		await mutateAsync({} as never)
 	}
 
+	const [showLogsSheet, setShowLogsSheet] = useState(false)
+
 	return (
 		<div className='space-y-6'>
 			<Card>
@@ -48,7 +57,9 @@ export const BasicInfo = ({
 					<CardTitle>Stack Information</CardTitle>
 					<CardDescription>Basic details about your Stack</CardDescription>
 					<div className='absolute top-4 right-4 flex items-center space-x-2'>
-						<Badge variant='destructive'>Unhealthy</Badge>
+						<Badge onClick={() => setShowLogsSheet(true)} variant='destructive'>
+							Unhealthy
+						</Badge>
 
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
@@ -80,6 +91,16 @@ export const BasicInfo = ({
 						</Button>
 					</div>
 				</CardHeader>
+				<Sheet open={showLogsSheet} onOpenChange={setShowLogsSheet}>
+					<SheetContent className='min-w-[800px]'>
+						<SheetHeader>
+							<SheetTitle>Stack Logs</SheetTitle>
+						</SheetHeader>
+						<>
+							<ChannelLogViewer channelId={stackDetails.id} />
+						</>
+					</SheetContent>
+				</Sheet>
 				<CardContent className='space-y-4'>
 					<div className='space-y-2'>
 						<Label htmlFor='stack-name'>Stack Name</Label>
@@ -114,7 +135,9 @@ export const BasicInfo = ({
 				</CardHeader>
 				<CardContent className='space-y-4'>
 					{/* Add a component for managing env variables */}
-					<Button>Add Environment Variable</Button>
+					<Button onClick={() => setShowLogsSheet(true)}>
+						Add Environment Variable
+					</Button>
 				</CardContent>
 			</Card>
 

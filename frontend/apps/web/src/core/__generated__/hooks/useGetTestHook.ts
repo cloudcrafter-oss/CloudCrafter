@@ -3,10 +3,10 @@ import { useMutation } from "@tanstack/react-query";
 import type { GetTestMutationRequest, GetTestMutationResponse } from "../types/GetTest";
 import type { UseMutationOptions } from "@tanstack/react-query";
 
- type GetTestClient = typeof client<GetTestMutationResponse, never, GetTestMutationRequest>;
+ type GetTestClient = typeof client<GetTestMutationResponse, Error, GetTestMutationRequest>;
 type GetTest = {
     data: GetTestMutationResponse;
-    error: never;
+    error: Error;
     request: GetTestMutationRequest;
     pathParams: never;
     queryParams: never;

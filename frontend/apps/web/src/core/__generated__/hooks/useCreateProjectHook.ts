@@ -3,10 +3,10 @@ import { useMutation } from "@tanstack/react-query";
 import type { CreateProjectMutationRequest, CreateProjectMutationResponse } from "../types/CreateProject";
 import type { UseMutationOptions } from "@tanstack/react-query";
 
- type CreateProjectClient = typeof client<CreateProjectMutationResponse, never, CreateProjectMutationRequest>;
+ type CreateProjectClient = typeof client<CreateProjectMutationResponse, Error, CreateProjectMutationRequest>;
 type CreateProject = {
     data: CreateProjectMutationResponse;
-    error: never;
+    error: Error;
     request: CreateProjectMutationRequest;
     pathParams: never;
     queryParams: never;

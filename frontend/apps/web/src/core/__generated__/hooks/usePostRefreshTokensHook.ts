@@ -3,10 +3,10 @@ import { useMutation } from "@tanstack/react-query";
 import type { PostRefreshTokensMutationRequest, PostRefreshTokensMutationResponse } from "../types/PostRefreshTokens";
 import type { UseMutationOptions } from "@tanstack/react-query";
 
- type PostRefreshTokensClient = typeof client<PostRefreshTokensMutationResponse, never, PostRefreshTokensMutationRequest>;
+ type PostRefreshTokensClient = typeof client<PostRefreshTokensMutationResponse, Error, PostRefreshTokensMutationRequest>;
 type PostRefreshTokens = {
     data: PostRefreshTokensMutationResponse;
-    error: never;
+    error: Error;
     request: PostRefreshTokensMutationRequest;
     pathParams: never;
     queryParams: never;

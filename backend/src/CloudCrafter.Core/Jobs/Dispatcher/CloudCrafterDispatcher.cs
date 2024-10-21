@@ -1,33 +1,26 @@
-﻿using CloudCrafter.Core.Jobs.Dispatcher.Factory;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using CloudCrafter.Core.Jobs.Dispatcher.Factory;
+using CloudCrafter.Core.Jobs.Hangfire;
 using CloudCrafter.Core.Jobs.Servers;
 using CloudCrafter.Core.Jobs.Stacks;
-using CloudCrafter.Domain.Entities;
+using Hangfire.States;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Jobs.Dispatcher;
 
 public class CloudCrafterDispatcher(
     BackgroundJobFactory jobFactory,
-    ILogger<CloudCrafterDispatcher> logger
+    ILogger<CloudCrafterDispatcher> logger,
+    HangfireServerSelector serverSelector
 ) : ICloudCrafterDispatcher
 {
-    public async Task<string> EnqueueConnectivityCheck(Server server)
+    public Task EnqueueConnectivityChecks()
     {
-        logger.LogDebug(
-            "Dispatching connectivity check to job factory for server {ServerName}",
-            server.Name
-        );
+        logger.LogDebug("Dispatching connectivity check to job factory");
 
-        var job = new ConnectivityCheckBackgroundJob(server.Id);
-        return await jobFactory.CreateAndEnqueueJobAsync<ConnectivityCheckBackgroundJob>(job);
-    }
-
-    public async Task EnqueueConnectivityCheck(List<Server> servers)
-    {
-        foreach (var server in servers)
-        {
-            await EnqueueConnectivityCheck(server);
-        }
+        var job = new ConnectivityCheckBackgroundJob();
+        return jobFactory.CreateAndEnqueueJobAsync<ConnectivityCheckBackgroundJob>(job);
     }
 
     public async Task<string> EnqueueStackDeployment(Guid deploymentId)
@@ -38,5 +31,31 @@ public class CloudCrafterDispatcher(
         );
         var job = new DeployStackBackgroundJob(deploymentId);
         return await jobFactory.CreateAndEnqueueJobAsync<DeployStackBackgroundJob>(job);
+    }
+
+    public void DispatchJob(ISimpleJob job, string? hashId = null)
+    {
+        if (string.IsNullOrEmpty(hashId))
+        {
+            jobFactory.DispatchJob(job, new EnqueuedState());
+            return;
+        }
+        var server = serverSelector.GetServerForHash(hashId);
+        var state = new EnqueuedState { Queue = server };
+
+        logger.LogInformation(
+            "Dispatching job of type {Type} to queue {Queue}",
+            job.GetType().Name,
+            server
+        );
+        jobFactory.DispatchJob(job, state);
+    }
+
+    public Task<string> EnqueueJob<TJob>(IJob job, IState state)
+        where TJob : IJob
+    {
+        logger.LogInformation("Dispatching job {Job} to job factory", job.GetType().FullName);
+
+        return jobFactory.CreateAndEnqueueJobAsync<TJob>(job);
     }
 }

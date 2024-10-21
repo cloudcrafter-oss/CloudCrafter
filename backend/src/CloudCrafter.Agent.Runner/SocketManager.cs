@@ -1,10 +1,8 @@
 ﻿using CloudCrafter.Agent.Models.Configs;
 using CloudCrafter.Agent.Models.SignalR;
-using CloudCrafter.Agent.Runner.Hosts;
 using CloudCrafter.Agent.Runner.MediatR.SignalR;
 using CloudCrafter.Agent.Runner.SignalR.Providers;
 using MediatR;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -14,9 +12,9 @@ public class SocketManager
 {
     private readonly AgentConfig _agentConfig;
     private readonly ILogger<SocketManager> _logger;
+    private readonly ISender _sender;
 
     private readonly IHubWrapper _wrapper;
-    private readonly ISender _sender;
 
     public SocketManager(
         ILogger<SocketManager> logger,
@@ -61,6 +59,8 @@ public class SocketManager
                 );
             }
         );
+
+        _logger.LogDebug("Attached message handlers");
     }
 
     public async Task ConnectAsync()

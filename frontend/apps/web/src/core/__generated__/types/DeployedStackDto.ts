@@ -9,5 +9,8 @@ import type { ProjectHealthStatus } from "./ProjectHealthStatus";
      * @type string
     */
     name: string;
+    /**
+     * @type string
+    */
     healthStatus: ProjectHealthStatus;
 };

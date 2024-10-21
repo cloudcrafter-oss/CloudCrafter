@@ -91,7 +91,7 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
         var agentManager = serviceProvider.GetRequiredService<IAgentManager>();
 
         logger.LogDebug("Sending recipe to agent...");
-        await agentManager.SendRecipeToAgent(_deployment.Stack.ServerId, recipe);
+        await agentManager.SendRecipeToAgent(_deployment.Stack.ServerId, _deployment.Id, recipe);
         logger.LogDebug("Recipe sent to agent!");
     }
 }

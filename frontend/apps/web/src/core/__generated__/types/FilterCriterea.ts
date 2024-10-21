@@ -5,6 +5,9 @@ import type { FilterOperatorOption } from "./FilterOperatorOption";
      * @type string
     */
     propertyName: string;
+    /**
+     * @type string
+    */
     operator: FilterOperatorOption;
     /**
      * @type string

@@ -3,10 +3,10 @@ import { useMutation } from "@tanstack/react-query";
 import type { PostValidateGithubRepoMutationRequest, PostValidateGithubRepoMutationResponse } from "../types/PostValidateGithubRepo";
 import type { UseMutationOptions } from "@tanstack/react-query";
 
- type PostValidateGithubRepoClient = typeof client<PostValidateGithubRepoMutationResponse, never, PostValidateGithubRepoMutationRequest>;
+ type PostValidateGithubRepoClient = typeof client<PostValidateGithubRepoMutationResponse, Error, PostValidateGithubRepoMutationRequest>;
 type PostValidateGithubRepo = {
     data: PostValidateGithubRepoMutationResponse;
-    error: never;
+    error: Error;
     request: PostValidateGithubRepoMutationRequest;
     pathParams: never;
     queryParams: never;

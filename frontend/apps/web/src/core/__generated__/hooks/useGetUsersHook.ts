@@ -3,10 +3,10 @@ import { useMutation } from "@tanstack/react-query";
 import type { GetUsersMutationRequest, GetUsersMutationResponse } from "../types/GetUsers";
 import type { UseMutationOptions } from "@tanstack/react-query";
 
- type GetUsersClient = typeof client<GetUsersMutationResponse, never, GetUsersMutationRequest>;
+ type GetUsersClient = typeof client<GetUsersMutationResponse, Error, GetUsersMutationRequest>;
 type GetUsers = {
     data: GetUsersMutationResponse;
-    error: never;
+    error: Error;
     request: GetUsersMutationRequest;
     pathParams: never;
     queryParams: never;

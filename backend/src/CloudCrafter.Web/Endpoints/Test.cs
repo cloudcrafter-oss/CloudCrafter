@@ -32,7 +32,7 @@ public class Test : EndpointGroupBase
 
     public async Task GetSendExampleMessageToAgent(IAgentManager manager, [FromQuery] Guid serverId)
     {
-        await manager.SendPingToAgent(serverId);
+        await manager.SendPingToAgents();
     }
 
     public IResult GetConnectedClients()

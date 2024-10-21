@@ -11,36 +11,12 @@ namespace CloudCrafter.Core.Jobs.Servers;
 
 public class ConnectivityCheckBackgroundJob : IJob
 {
-    private Server? _server;
-
-    public ConnectivityCheckBackgroundJob() { }
-
-    public ConnectivityCheckBackgroundJob(Guid serverId)
-    {
-        ServerId = serverId;
-    }
-
-    public Guid ServerId { get; set; }
-
-    private BackgroundJob? _job { get; set; }
     public BackgroundJobType Type => BackgroundJobType.ServerConnectivityCheck;
     public bool ShouldRunOnApiServer => false;
 
-    public async Task HandleEntity(IApplicationDbContext context, string jobId)
+    public Task HandleEntity(IApplicationDbContext context, string jobId)
     {
-        _server = await context.Servers.FindAsync(ServerId);
-        if (_server == null)
-        {
-            throw new ArgumentNullException(nameof(ServerId), "Server not found");
-        }
-
-        _job = await context.Jobs.Where(x => x.HangfireJobId == jobId).FirstOrDefaultAsync();
-
-        if (_job == null)
-        {
-            throw new ArgumentNullException(nameof(jobId), "Job not found");
-        }
-        await context.SaveChangesAsync();
+        return Task.CompletedTask;
     }
 
     public Task TearDown()
@@ -55,35 +31,20 @@ public class ConnectivityCheckBackgroundJob : IJob
         string jobId
     )
     {
-        if (_job == null || _server == null)
-        {
-            throw new ArgumentNullException("Job or server is null - this should never happen!");
-        }
-
         var service = serviceProvider.GetRequiredService<IServerConnectivityService>();
 
         var logger = loggerFactory.CreateLogger<ConnectivityCheckBackgroundJob>();
-        logger.LogDebug(
-            "Starting connectivity job for server ({ServerId}) with hostname ({Hostname})",
-            _server.Id,
-            _server.IpAddress
-        );
+        logger.LogDebug("Starting connectivity job for all connected servers");
 
         var stopwatch = Stopwatch.StartNew();
 
         try
         {
-            await service.PerformConnectivityCheckAsync(_server.Id);
-            logger.LogInformation("Connectivity to ({ServerName}) is healthy", _server.Name);
+            await service.PerformConnectivityCheckAsync();
         }
         catch (Exception ex)
         {
-            logger.LogCritical(
-                ex,
-                "Something went wrong during the connectivity check for server ({ServerId}) ({ServerName})",
-                _server.Id,
-                _server.Name
-            );
+            logger.LogCritical(ex, "Something went wrong during the connectivity checks");
         }
 
         stopwatch.Stop();

@@ -3,10 +3,10 @@ import { useMutation } from "@tanstack/react-query";
 import type { PostCreateDeploymentMutationResponse, PostCreateDeploymentPathParams } from "../types/PostCreateDeployment";
 import type { UseMutationOptions } from "@tanstack/react-query";
 
- type PostCreateDeploymentClient = typeof client<PostCreateDeploymentMutationResponse, never, never>;
+ type PostCreateDeploymentClient = typeof client<PostCreateDeploymentMutationResponse, Error, never>;
 type PostCreateDeployment = {
     data: PostCreateDeploymentMutationResponse;
-    error: never;
+    error: Error;
     request: never;
     pathParams: PostCreateDeploymentPathParams;
     queryParams: never;

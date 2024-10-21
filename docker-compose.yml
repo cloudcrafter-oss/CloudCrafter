@@ -16,6 +16,22 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
+  stats:
+    image: virtualzone/docker-container-stats
+    container_name: stats
+    networks:
+      - cloudcrafter
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - stats_db:/opt/docker-stats/db
+    environment:
+      - STATS_UPDATE_INTERVAL=10
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.stats.rule=Host(`stats.127.0.0.1.sslip.io`)"
+      - "traefik.http.routers.stats.entrypoints=web"
+      - "traefik.http.services.stats.loadbalancer.server.port=8080"
+
   whoami:
     image: "traefik/whoami"
     container_name: "simple-service"
@@ -76,4 +92,6 @@ volumes:
   pgdata-testing:
     driver: local
   testhostdata:
+    driver: local
+  stats_db:
     driver: local

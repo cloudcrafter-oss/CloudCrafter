@@ -1,5 +1,6 @@
 using System.Reflection;
 using Ardalis.SharedKernel;
+using CloudCrafter.Core.BackgroundServices;
 using CloudCrafter.Core.Common.Behaviours;
 using CloudCrafter.Core.Events;
 using CloudCrafter.Core.Events.Store;
@@ -13,9 +14,11 @@ using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Domain.Utils;
 using CloudCrafter.Core.Jobs.Dispatcher;
 using CloudCrafter.Core.Jobs.Dispatcher.Factory;
+using CloudCrafter.Core.Jobs.Hangfire;
 using CloudCrafter.Core.Jobs.Serializer;
 using CloudCrafter.Core.Jobs.Servers;
 using CloudCrafter.Core.Jobs.Stacks;
+using CloudCrafter.Core.Services.Core;
 using CloudCrafter.Core.Services.Domain.Agent;
 using CloudCrafter.Core.Services.Domain.Applications.Deployments;
 using CloudCrafter.Core.Services.Domain.Environments;
@@ -25,6 +28,7 @@ using CloudCrafter.Core.Services.Domain.Stacks;
 using CloudCrafter.Core.Services.Domain.Users;
 using CloudCrafter.Core.Services.Domain.Utils;
 using CloudCrafter.Core.SignalR;
+using CloudCrafter.Core.SignalR.HubActions;
 using CloudCrafter.Domain;
 using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
@@ -93,7 +97,9 @@ public static class ApplicationServiceExtensions
         services.AddAutoMapper(mapperAssemblies);
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-
+        services.AddSingleton<HangfireServerSelector>();
+        services.AddHostedService<HangfireServerMonitorService>();
+        services.AddHostedService<DummyDataService>();
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
@@ -134,6 +140,8 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<JobSerializer>();
         services.AddSingleton<ConnectedServerManager>();
 
+        services.AddSingleton<WebHubActions>();
+
         services.AddScoped<ConnectivityCheckBackgroundJob>();
         services.AddScoped<DeployStackBackgroundJob>();
 
@@ -160,6 +168,9 @@ public static class ApplicationServiceExtensions
             options.InstanceName = "CloudCrafter-Cache";
         });
 
+        services.AddSingleton<IDistributedLockService>(sp => new DistributedLockService(
+            connectionString
+        ));
         return services;
     }
 }
