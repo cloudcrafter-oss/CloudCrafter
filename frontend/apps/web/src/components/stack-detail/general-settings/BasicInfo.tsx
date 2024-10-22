@@ -45,10 +45,11 @@ export const BasicInfo = ({
 
 	const { mutateAsync } = useDispatchStackDeploymentHook(stackDetails.id)
 	const handleDeploy = async () => {
-		await mutateAsync({} as never)
+		const deploymentCreatedDto = await mutateAsync({} as never)
+		setLogChannelId(deploymentCreatedDto.deploymentId)
 	}
 
-	const [showLogsSheet, setShowLogsSheet] = useState(false)
+	const [logChannelId, setLogChannelId] = useState<string | null>(null)
 
 	return (
 		<div className='space-y-6'>
@@ -57,9 +58,7 @@ export const BasicInfo = ({
 					<CardTitle>Stack Information</CardTitle>
 					<CardDescription>Basic details about your Stack</CardDescription>
 					<div className='absolute top-4 right-4 flex items-center space-x-2'>
-						<Badge onClick={() => setShowLogsSheet(true)} variant='destructive'>
-							Unhealthy
-						</Badge>
+						<Badge variant='destructive'>Unhealthy</Badge>
 
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
@@ -91,14 +90,15 @@ export const BasicInfo = ({
 						</Button>
 					</div>
 				</CardHeader>
-				<Sheet open={showLogsSheet} onOpenChange={setShowLogsSheet}>
+				<Sheet
+					open={logChannelId != null}
+					onOpenChange={() => setLogChannelId(null)}
+				>
 					<SheetContent className='min-w-[800px]'>
 						<SheetHeader>
 							<SheetTitle>Stack Logs</SheetTitle>
 						</SheetHeader>
-						<>
-							<ChannelLogViewer channelId={stackDetails.id} />
-						</>
+						{logChannelId && <ChannelLogViewer channelId={logChannelId} />}
 					</SheetContent>
 				</Sheet>
 				<CardContent className='space-y-4'>
