@@ -3,7 +3,10 @@ import { ViewServerDetail } from '@/src/core/features/admin/servers/view.tsx'
 import { addBreadcrumb, resetBreadcrumbs } from '@/src/utils/breadcrumbs'
 import { notFound } from 'next/navigation'
 
-export default async function Page({ params }: { params: { uuid: string } }) {
+export default async function Page(props: {
+	params: Promise<{ uuid: string }>
+}) {
+	const params = await props.params
 	const server = await getServerById(params.uuid).catch(() => {
 		return null
 	})
