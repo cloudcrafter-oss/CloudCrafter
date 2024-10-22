@@ -135,9 +135,7 @@ export const BasicInfo = ({
 				</CardHeader>
 				<CardContent className='space-y-4'>
 					{/* Add a component for managing env variables */}
-					<Button onClick={() => setShowLogsSheet(true)}>
-						Add Environment Variable
-					</Button>
+					<Button>Add Environment Variable</Button>
 				</CardContent>
 			</Card>
 

@@ -14,39 +14,6 @@ public class Test : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup(this)
-            .MapPost(GetTest)
-            .MapGet(SendExampleDeployment)
-            .MapGet(GetSendExampleMessageToAgent, "agent")
-            .MapGet(GetConnectedClients, "connected-clients"); // Add this line
-    }
-
-    public async Task GetTest(
-        ISender sender,
-        IHubContext<MyHub> hub,
-        [FromBody] TestCommand.Query query
-    )
-    {
-        await hub.Clients.All.SendAsync("ReceiveMessage", new MyHubMessage { Id = Guid.NewGuid() });
-    }
-
-    public async Task GetSendExampleMessageToAgent(IAgentManager manager, [FromQuery] Guid serverId)
-    {
-        await manager.SendPingToAgents();
-    }
-
-    public IResult GetConnectedClients()
-    {
-        var connectedClients = new List<string>();
-        return Results.Ok(connectedClients);
-    }
-
-    public async Task<Guid> SendExampleDeployment(IDeploymentService deploymentService)
-    {
-        var result = await deploymentService.DeployAsync(
-            Guid.Parse("a6512d2d-ee30-4d44-8064-2ae9475e1f16")
-        );
-
-        return result;
+        app.MapGroup(this);
     }
 }

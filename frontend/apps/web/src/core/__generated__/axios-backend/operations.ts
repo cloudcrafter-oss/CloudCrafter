@@ -59,22 +59,6 @@ export const operations = {
         "path": "/api/System/get-fields",
         "method": "get"
     },
-    "GetTest": {
-        "path": "/api/Test",
-        "method": "post"
-    },
-    "SendExampleDeployment": {
-        "path": "/api/Test",
-        "method": "get"
-    },
-    "GetSendExampleMessageToAgent": {
-        "path": "/api/Test/agent",
-        "method": "get"
-    },
-    "GetConnectedClients": {
-        "path": "/api/Test/connected-clients",
-        "method": "get"
-    },
     "GetUsers": {
         "path": "/api/Users",
         "method": "post"

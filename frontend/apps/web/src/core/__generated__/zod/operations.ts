@@ -14,10 +14,6 @@ import { postCreateStackMutationRequestSchema, postCreateStackMutationResponseSc
 import { getStackDetailQueryResponseSchema, getStackDetail404Schema, getStackDetailPathParamsSchema } from "./getStackDetailSchema";
 import { dispatchStackDeploymentMutationResponseSchema, dispatchStackDeploymentPathParamsSchema } from "./dispatchStackDeploymentSchema";
 import { getFilterableFieldsQueryResponseSchema } from "./getFilterableFieldsSchema";
-import { getTestMutationRequestSchema, getTestMutationResponseSchema } from "./getTestSchema";
-import { sendExampleDeploymentQueryResponseSchema } from "./sendExampleDeploymentSchema";
-import { getSendExampleMessageToAgentQueryResponseSchema, getSendExampleMessageToAgentQueryParamsSchema } from "./getSendExampleMessageToAgentSchema";
-import { getConnectedClientsQueryResponseSchema } from "./getConnectedClientsSchema";
 import { getUsersMutationRequestSchema, getUsersMutationResponseSchema } from "./getUsersSchema";
 import { testQueryResponseSchema } from "./testSchema";
 import { postValidateGithubRepoMutationRequestSchema, postValidateGithubRepoMutationResponseSchema } from "./postValidateGithubRepoSchema";
@@ -223,54 +219,6 @@ import { postValidateGithubRepoMutationRequestSchema, postValidateGithubRepoMuta
             default: getFilterableFieldsQueryResponseSchema
         },
         errors: {}
-    }, "GetTest": {
-        request: getTestMutationRequestSchema,
-        parameters: {
-            path: undefined,
-            query: undefined,
-            header: undefined
-        },
-        responses: {
-            200: getTestMutationResponseSchema,
-            default: getTestMutationResponseSchema
-        },
-        errors: {}
-    }, "SendExampleDeployment": {
-        request: undefined,
-        parameters: {
-            path: undefined,
-            query: undefined,
-            header: undefined
-        },
-        responses: {
-            200: sendExampleDeploymentQueryResponseSchema,
-            default: sendExampleDeploymentQueryResponseSchema
-        },
-        errors: {}
-    }, "GetSendExampleMessageToAgent": {
-        request: undefined,
-        parameters: {
-            path: undefined,
-            query: getSendExampleMessageToAgentQueryParamsSchema,
-            header: undefined
-        },
-        responses: {
-            200: getSendExampleMessageToAgentQueryResponseSchema,
-            default: getSendExampleMessageToAgentQueryResponseSchema
-        },
-        errors: {}
-    }, "GetConnectedClients": {
-        request: undefined,
-        parameters: {
-            path: undefined,
-            query: undefined,
-            header: undefined
-        },
-        responses: {
-            200: getConnectedClientsQueryResponseSchema,
-            default: getConnectedClientsQueryResponseSchema
-        },
-        errors: {}
     }, "GetUsers": {
         request: getUsersMutationRequestSchema,
         parameters: {
@@ -337,13 +285,6 @@ export const paths = { "/api/Applications/{applicationId}/deployment": {
         post: operations["DispatchStackDeployment"]
     }, "/api/System/get-fields": {
         get: operations["GetFilterableFields"]
-    }, "/api/Test": {
-        post: operations["GetTest"],
-        get: operations["SendExampleDeployment"]
-    }, "/api/Test/agent": {
-        get: operations["GetSendExampleMessageToAgent"]
-    }, "/api/Test/connected-clients": {
-        get: operations["GetConnectedClients"]
     }, "/api/Users": {
         post: operations["GetUsers"]
     }, "/api/Users/test": {
