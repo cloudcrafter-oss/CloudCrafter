@@ -1,9 +1,11 @@
-﻿using CloudCrafter.Agent.SignalR.Models;
+﻿using AutoMapper;
+using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Core.Jobs.Dispatcher;
 using CloudCrafter.Core.Services.Core;
+using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Entities;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
@@ -15,7 +17,8 @@ public class DeploymentService(
     IStacksService stackService,
     IDeploymentRepository deploymentRepository,
     IDistributedLockService lockService,
-    ILogger<DeploymentService> logger
+    ILogger<DeploymentService> logger,
+    IMapper mapper
 ) : IDeploymentService
 {
     public async Task<Guid> DeployAsync(Guid stackId)
@@ -58,5 +61,12 @@ public class DeploymentService(
                 deploymentId
             );
         }
+    }
+
+    public Task MarkDeployment(Guid deploymentId, DeploymentStatusDto status)
+    {
+        var statusEntity = mapper.Map<DeploymentState>(status);
+
+        return deploymentRepository.MarkDeployment(deploymentId, statusEntity);
     }
 }
