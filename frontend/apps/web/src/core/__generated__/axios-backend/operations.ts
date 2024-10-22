@@ -51,6 +51,10 @@ export const operations = {
         "path": "/api/Stacks/:id",
         "method": "get"
     },
+    "GetDeploymentsForStack": {
+        "path": "/api/Stacks/:id/deployments",
+        "method": "get"
+    },
     "DispatchStackDeployment": {
         "path": "/api/Stacks/:id/deploy",
         "method": "post"
