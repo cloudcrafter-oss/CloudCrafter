@@ -12,5 +12,6 @@ public class SignalRTypesGenerator : GenerationSpec
 
         AddInterface<MyHubMessage>();
         AddInterface<DeploymentOutputArgs>();
+        AddInterface<ChannelOutputLogLine>();
     }
 }

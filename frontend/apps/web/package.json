@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "next dev --port 3001",
 		"build": "next build",
-		"start": "next start",
+		"start": "next start --port 3001",
 		"generate-clients": "kubb generate --config kubb.config.ts",
 		"clean-generated-files": "node src/utils/kubb/post-action.js"
 	},

@@ -105,7 +105,7 @@ export function CloudCrafterSidebar({
 	return (
 		<Sidebar collapsible='icon' {...props}>
 			<SidebarHeader>
-				<CloudCrafterProjectSwitcher teams={data.teams} />
+				<CloudCrafterProjectSwitcher />
 			</SidebarHeader>
 			<SidebarContent>
 				<CloudCrafterNav items={data.navMain} />
