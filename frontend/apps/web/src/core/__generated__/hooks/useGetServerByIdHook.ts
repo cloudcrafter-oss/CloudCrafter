@@ -123,9 +123,9 @@ export function useGetServerByIdHookSuspense<TData = GetServerById["response"], 
     const { query: queryOptions, client: clientOptions = {} } = options ?? {};
     const queryKey = queryOptions?.queryKey ?? getServerByIdSuspenseQueryKey(id);
     const query = useSuspenseQuery({
-        ...getServerByIdSuspenseQueryOptions(id, clientOptions) as unknown as QueryObserverOptions,
+        ...getServerByIdSuspenseQueryOptions(id, clientOptions) as unknown as UseSuspenseQueryOptions,
         queryKey,
-        ...queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">
+        ...queryOptions as unknown as Omit<UseSuspenseQueryOptions, "queryKey">
     }) as UseSuspenseQueryResult<TData, GetServerById["error"]> & {
         queryKey: TQueryKey;
     };

@@ -123,9 +123,9 @@ export function useTestHookSuspense<TData = Test["response"], TQueryKey extends 
     const { query: queryOptions, client: clientOptions = {} } = options ?? {};
     const queryKey = queryOptions?.queryKey ?? testSuspenseQueryKey();
     const query = useSuspenseQuery({
-        ...testSuspenseQueryOptions(clientOptions) as unknown as QueryObserverOptions,
+        ...testSuspenseQueryOptions(clientOptions) as unknown as UseSuspenseQueryOptions,
         queryKey,
-        ...queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">
+        ...queryOptions as unknown as Omit<UseSuspenseQueryOptions, "queryKey">
     }) as UseSuspenseQueryResult<TData, Test["error"]> & {
         queryKey: TQueryKey;
     };
