@@ -44,10 +44,11 @@ import {
 } from 'lucide-react'
 
 interface PageProps {
-	params: ProjectEnvironmentRouteParams
+	params: Promise<ProjectEnvironmentRouteParams>
 }
 
-export default async function ProjectEnvironmentPage({ params }: PageProps) {
+export default async function ProjectEnvironmentPage(props: PageProps) {
+	const params = await props.params
 	// Validate the route params
 	const routeData = validateProjectEnvironmentRouteParams(params)
 

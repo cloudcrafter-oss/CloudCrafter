@@ -15,10 +15,11 @@ import {
 } from '@ui/components/ui/tabs'
 
 interface PageProps {
-	params: StackRouteParams
+	params: Promise<StackRouteParams>
 }
 
-export default async function StackPage({ params }: PageProps) {
+export default async function StackPage(props: PageProps) {
+	const params = await props.params
 	const routeData = validateStackRouteParams(params)
 
 	const stackDetails = await getStackDetail(routeData['stack-uuid'])

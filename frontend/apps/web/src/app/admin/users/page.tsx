@@ -3,6 +3,7 @@ import {
 	UsersList,
 } from '@/src/core/features/admin/users/user-list.tsx'
 
-export default function Page({ searchParams }: UserListProps) {
+export default async function Page(props: UserListProps) {
+	const searchParams = await props.searchParams
 	return <UsersList searchParams={searchParams} />
 }
