@@ -5,6 +5,7 @@ export * from "./createStackCommandCommandSchema";
 export * from "./deleteProjectSchema";
 export * from "./deployedStackDtoSchema";
 export * from "./deploymentCreatedDetailsDtoSchema";
+export * from "./deploymentStatusDtoSchema";
 export * from "./dispatchStackDeploymentSchema";
 export * from "./entityHealthDtoSchema";
 export * from "./entityHealthDtoValueSchema";

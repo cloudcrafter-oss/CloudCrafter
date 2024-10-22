@@ -5,6 +5,7 @@ export * from "./CreateStackCommandCommand";
 export * from "./DeleteProject";
 export * from "./DeployedStackDto";
 export * from "./DeploymentCreatedDetailsDto";
+export * from "./DeploymentStatusDto";
 export * from "./DispatchStackDeployment";
 export * from "./EntityHealthDto";
 export * from "./EntityHealthDtoValue";

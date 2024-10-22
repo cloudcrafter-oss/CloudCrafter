@@ -1,5 +1,6 @@
 import StackConfigPage from '@/src/components/stack-detail/StackConfigPage'
 import {
+	type DeploymentStatusDto,
 	getDeploymentsForStack,
 	getStackDetail,
 } from '@/src/core/__generated__'
@@ -16,6 +17,24 @@ import {
 
 interface PageProps {
 	params: StackRouteParams
+}
+
+const DeploymentStatusBadge = ({ state }: { state: DeploymentStatusDto }) => {
+	return (
+		<span
+			className={`px-2 py-1 rounded-full text-xs font-medium ${
+				state === 'Succeeded'
+					? 'bg-green-100 text-green-800'
+					: state === 'Failed'
+						? 'bg-red-100 text-red-800'
+						: state === 'Running'
+							? 'bg-blue-100 text-blue-800'
+							: 'bg-yellow-100 text-yellow-800'
+			}`}
+		>
+			{state}
+		</span>
+	)
 }
 
 export default async function StackPage({ params }: PageProps) {
@@ -57,7 +76,9 @@ export default async function StackPage({ params }: PageProps) {
 										<li key={deployment.id} className='py-4'>
 											<div className='flex items-center justify-between'>
 												<div>
-													<p className='text-lg font-semibold'>status</p>
+													<p className='text-lg font-semibold'>
+														Manual Deployment
+													</p>
 													<p className='text-sm text-gray-500'>
 														{new Date(deployment.createdAt)
 															.toLocaleString('en-GB', {
@@ -72,17 +93,7 @@ export default async function StackPage({ params }: PageProps) {
 															.replace(',', ' at')}
 													</p>
 												</div>
-												<span
-												// className={`px-2 py-1 rounded-full text-xs font-medium ${
-												// 	true
-												// 		? 'bg-green-100 text-green-800'
-												// 		: true
-												// 			? 'bg-red-100 text-red-800'
-												// 			: 'bg-yellow-100 text-yellow-800'
-												// }`}
-												>
-													statu
-												</span>
+												<DeploymentStatusBadge state={deployment.state} />
 											</div>
 										</li>
 									))}
