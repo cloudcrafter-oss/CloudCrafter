@@ -14,6 +14,7 @@ public class Stacks : EndpointGroupBase
         app.MapGroup(this)
             .MapPost(PostCreateStack)
             .MapGet(GetStackDetail, "{id}")
+            .MapGet(GetDeploymentsForStack, "{id}/deployments")
             .MapPost(DispatchStackDeployment, "{id}/deploy");
     }
 
@@ -39,5 +40,13 @@ public class Stacks : EndpointGroupBase
     )
     {
         return await sender.Send(new DispatchStack.Command(id));
+    }
+
+    public async Task<List<SimpleDeploymentDto>> GetDeploymentsForStack(
+        [FromRoute] Guid id,
+        ISender sender
+    )
+    {
+        return await sender.Send(new GetStackSimpleDeployments.Query(id));
     }
 }

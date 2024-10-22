@@ -93,6 +93,14 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
         return deployment.Id;
     }
 
+    public Task<List<Deployment>> GetDeployments(Guid stackId)
+    {
+        return context
+            .Deployments.Where(x => x.StackId == stackId)
+            .OrderByDescending(x => x.CreatedAt)
+            .ToListAsync();
+    }
+
     private async Task<Stack?> GetStackInternal(Guid id, bool throwExceptionOnNotFound = true)
     {
         var stack = await context

@@ -9,5 +9,8 @@ import type { EntityHealthDto } from "./EntityHealthDto";
      * @type string
     */
     name: string;
+    /**
+     * @type object
+    */
     health: EntityHealthDto;
 };

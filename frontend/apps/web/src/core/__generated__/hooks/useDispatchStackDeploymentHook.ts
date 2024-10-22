@@ -3,10 +3,10 @@ import { useMutation } from "@tanstack/react-query";
 import type { DispatchStackDeploymentMutationResponse, DispatchStackDeploymentPathParams } from "../types/DispatchStackDeployment";
 import type { UseMutationOptions } from "@tanstack/react-query";
 
- type DispatchStackDeploymentClient = typeof client<DispatchStackDeploymentMutationResponse, never, never>;
+ type DispatchStackDeploymentClient = typeof client<DispatchStackDeploymentMutationResponse, Error, never>;
 type DispatchStackDeployment = {
     data: DispatchStackDeploymentMutationResponse;
-    error: never;
+    error: Error;
     request: never;
     pathParams: DispatchStackDeploymentPathParams;
     queryParams: never;

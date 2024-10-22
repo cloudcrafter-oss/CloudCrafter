@@ -1,12 +1,12 @@
 import client from "../../frontend/client.ts";
 import { useQuery, queryOptions, useInfiniteQuery, infiniteQueryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import type { TestQueryResponse } from "../types/Test";
-import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, InfiniteData, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
+import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
 
- type TestClient = typeof client<TestQueryResponse, never, never>;
+ type TestClient = typeof client<TestQueryResponse, Error, never>;
 type Test = {
     data: TestQueryResponse;
-    error: never;
+    error: Error;
     request: never;
     pathParams: never;
     queryParams: never;
@@ -77,7 +77,7 @@ export function testInfiniteQueryOptions(options: Test["client"]["parameters"] =
 /**
  * @link /api/Users/test
  */
-export function useTestHookInfinite<TData = InfiniteData<Test["response"]>, TQueryData = Test["response"], TQueryKey extends QueryKey = TestInfiniteQueryKey>(options: {
+export function useTestHookInfinite<TData = Test["response"], TQueryData = Test["response"], TQueryKey extends QueryKey = TestInfiniteQueryKey>(options: {
     query?: Partial<InfiniteQueryObserverOptions<Test["response"], Test["error"], TData, TQueryData, TQueryKey>>;
     client?: Test["client"]["parameters"];
 } = {}): UseInfiniteQueryResult<TData, Test["error"]> & {
@@ -123,9 +123,9 @@ export function useTestHookSuspense<TData = Test["response"], TQueryKey extends 
     const { query: queryOptions, client: clientOptions = {} } = options ?? {};
     const queryKey = queryOptions?.queryKey ?? testSuspenseQueryKey();
     const query = useSuspenseQuery({
-        ...testSuspenseQueryOptions(clientOptions) as unknown as QueryObserverOptions,
+        ...testSuspenseQueryOptions(clientOptions) as unknown as UseSuspenseQueryOptions,
         queryKey,
-        ...queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">
+        ...queryOptions as unknown as Omit<UseSuspenseQueryOptions, "queryKey">
     }) as UseSuspenseQueryResult<TData, Test["error"]> & {
         queryKey: TQueryKey;
     };

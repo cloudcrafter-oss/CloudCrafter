@@ -1,12 +1,12 @@
 import client from "../../frontend/client.ts";
 import { useQuery, queryOptions, useInfiniteQuery, infiniteQueryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import type { GetServersQueryResponse } from "../types/GetServers";
-import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, InfiniteData, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
+import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
 
- type GetServersClient = typeof client<GetServersQueryResponse, never, never>;
+ type GetServersClient = typeof client<GetServersQueryResponse, Error, never>;
 type GetServers = {
     data: GetServersQueryResponse;
-    error: never;
+    error: Error;
     request: never;
     pathParams: never;
     queryParams: never;
@@ -77,7 +77,7 @@ export function getServersInfiniteQueryOptions(options: GetServers["client"]["pa
 /**
  * @link /api/Servers
  */
-export function useGetServersHookInfinite<TData = InfiniteData<GetServers["response"]>, TQueryData = GetServers["response"], TQueryKey extends QueryKey = GetServersInfiniteQueryKey>(options: {
+export function useGetServersHookInfinite<TData = GetServers["response"], TQueryData = GetServers["response"], TQueryKey extends QueryKey = GetServersInfiniteQueryKey>(options: {
     query?: Partial<InfiniteQueryObserverOptions<GetServers["response"], GetServers["error"], TData, TQueryData, TQueryKey>>;
     client?: GetServers["client"]["parameters"];
 } = {}): UseInfiniteQueryResult<TData, GetServers["error"]> & {
@@ -123,9 +123,9 @@ export function useGetServersHookSuspense<TData = GetServers["response"], TQuery
     const { query: queryOptions, client: clientOptions = {} } = options ?? {};
     const queryKey = queryOptions?.queryKey ?? getServersSuspenseQueryKey();
     const query = useSuspenseQuery({
-        ...getServersSuspenseQueryOptions(clientOptions) as unknown as QueryObserverOptions,
+        ...getServersSuspenseQueryOptions(clientOptions) as unknown as UseSuspenseQueryOptions,
         queryKey,
-        ...queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">
+        ...queryOptions as unknown as Omit<UseSuspenseQueryOptions, "queryKey">
     }) as UseSuspenseQueryResult<TData, GetServers["error"]> & {
         queryKey: TQueryKey;
     };

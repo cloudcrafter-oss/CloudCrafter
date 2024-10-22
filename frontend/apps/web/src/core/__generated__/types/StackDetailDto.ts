@@ -15,6 +15,12 @@ import type { StackServerDto } from "./StackServerDto";
      * @type array
     */
     services: StackServiceDto[];
+    /**
+     * @type object
+    */
     source: StackSourceDto;
+    /**
+     * @type object
+    */
     destination: StackServerDto;
 };

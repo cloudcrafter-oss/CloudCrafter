@@ -1,7 +1,7 @@
 import client from "../../frontend/client.ts";
 import { useQuery, queryOptions, useInfiniteQuery, infiniteQueryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import type { GetProjectQueryResponse, GetProjectPathParams, GetProject404 } from "../types/GetProject";
-import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, InfiniteData, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
+import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
 
  type GetProjectClient = typeof client<GetProjectQueryResponse, GetProject404, never>;
 type GetProject = {
@@ -77,7 +77,7 @@ export function getProjectInfiniteQueryOptions(id: GetProjectPathParams["id"], o
 /**
  * @link /api/Projects/:id
  */
-export function useGetProjectHookInfinite<TData = InfiniteData<GetProject["response"]>, TQueryData = GetProject["response"], TQueryKey extends QueryKey = GetProjectInfiniteQueryKey>(id: GetProjectPathParams["id"], options: {
+export function useGetProjectHookInfinite<TData = GetProject["response"], TQueryData = GetProject["response"], TQueryKey extends QueryKey = GetProjectInfiniteQueryKey>(id: GetProjectPathParams["id"], options: {
     query?: Partial<InfiniteQueryObserverOptions<GetProject["response"], GetProject["error"], TData, TQueryData, TQueryKey>>;
     client?: GetProject["client"]["parameters"];
 } = {}): UseInfiniteQueryResult<TData, GetProject["error"]> & {
@@ -123,9 +123,9 @@ export function useGetProjectHookSuspense<TData = GetProject["response"], TQuery
     const { query: queryOptions, client: clientOptions = {} } = options ?? {};
     const queryKey = queryOptions?.queryKey ?? getProjectSuspenseQueryKey(id);
     const query = useSuspenseQuery({
-        ...getProjectSuspenseQueryOptions(id, clientOptions) as unknown as QueryObserverOptions,
+        ...getProjectSuspenseQueryOptions(id, clientOptions) as unknown as UseSuspenseQueryOptions,
         queryKey,
-        ...queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">
+        ...queryOptions as unknown as Omit<UseSuspenseQueryOptions, "queryKey">
     }) as UseSuspenseQueryResult<TData, GetProject["error"]> & {
         queryKey: TQueryKey;
     };

@@ -3,10 +3,10 @@ import { useMutation } from "@tanstack/react-query";
 import type { PostLoginUserMutationRequest, PostLoginUserMutationResponse } from "../types/PostLoginUser";
 import type { UseMutationOptions } from "@tanstack/react-query";
 
- type PostLoginUserClient = typeof client<PostLoginUserMutationResponse, never, PostLoginUserMutationRequest>;
+ type PostLoginUserClient = typeof client<PostLoginUserMutationResponse, Error, PostLoginUserMutationRequest>;
 type PostLoginUser = {
     data: PostLoginUserMutationResponse;
-    error: never;
+    error: Error;
     request: PostLoginUserMutationRequest;
     pathParams: never;
     queryParams: never;

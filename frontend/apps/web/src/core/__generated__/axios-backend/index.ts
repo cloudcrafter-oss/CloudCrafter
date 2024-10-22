@@ -1,6 +1,7 @@
 export * from "./createProject";
 export * from "./deleteProject";
 export * from "./dispatchStackDeployment";
+export * from "./getDeploymentsForStack";
 export * from "./getFilterableFields";
 export * from "./getProject";
 export * from "./getProjectEnvironmentEnhanced";
@@ -8,7 +9,6 @@ export * from "./getProjects";
 export * from "./getServerById";
 export * from "./getServers";
 export * from "./getStackDetail";
-export * from "./getTest";
 export * from "./getUsers";
 export * from "./postCreateDeployment";
 export * from "./postCreateStack";

@@ -1,6 +1,7 @@
 export * from "./useCreateProjectHook";
 export * from "./useDeleteProjectHook";
 export * from "./useDispatchStackDeploymentHook";
+export * from "./useGetDeploymentsForStackHook";
 export * from "./useGetFilterableFieldsHook";
 export * from "./useGetProjectEnvironmentEnhancedHook";
 export * from "./useGetProjectHook";
@@ -8,7 +9,6 @@ export * from "./useGetProjectsHook";
 export * from "./useGetServerByIdHook";
 export * from "./useGetServersHook";
 export * from "./useGetStackDetailHook";
-export * from "./useGetTestHook";
 export * from "./useGetUsersHook";
 export * from "./usePostCreateDeploymentHook";
 export * from "./usePostCreateStackHook";

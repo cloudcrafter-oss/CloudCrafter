@@ -13,7 +13,7 @@ public class AgentManager(
     ConnectedServerManager connectedServerManager
 ) : IAgentManager
 {
-    public Task SendPingToAgent(Guid serverId)
+    public Task SendPingToAgents()
     {
         var message = new AgentHubPingMessage
         {
@@ -21,14 +21,14 @@ public class AgentManager(
             Timestamp = DateTime.UtcNow,
         };
 
-        return SendMessage(message, serverId);
+        return SendMessage(message);
     }
 
-    public Task SendRecipeToAgent(Guid serverId, DeploymentRecipe recipe)
+    public Task SendRecipeToAgent(Guid serverId, Guid deploymentId, DeploymentRecipe recipe)
     {
         var message = new AgentHubDeployRecipeMessage
         {
-            MessageId = Guid.NewGuid(),
+            MessageId = deploymentId,
             Timestamp = DateTime.UtcNow,
             Recipe = recipe,
         };
@@ -36,9 +36,20 @@ public class AgentManager(
         return SendMessage(message, serverId);
     }
 
-    private async Task SendMessage(AgentBaseMessage message, Guid serverId)
+    private async Task SendMessage(AgentBaseMessage message, Guid? serverId = null)
     {
-        var connectedClientId = await GetConnectedClientIdForServer(serverId);
+        var name = message.GetType().Name;
+        if (!serverId.HasValue)
+        {
+            // Send to all clients
+            logger.LogDebug(
+                "Sending message of type {Type} to all connected clients",
+                message.GetType()
+            );
+            await hub.Clients.All.SendAsync(name, message);
+            return;
+        }
+        var connectedClientId = await GetConnectedClientIdForServer(serverId.Value);
 
         if (connectedClientId is null)
         {
@@ -50,7 +61,6 @@ public class AgentManager(
             return;
         }
 
-        var name = message.GetType().Name;
         logger.LogDebug(
             "Sending message of type {Type} to client {ClientId}",
             message.GetType(),

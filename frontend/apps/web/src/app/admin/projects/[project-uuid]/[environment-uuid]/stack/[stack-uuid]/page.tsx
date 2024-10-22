@@ -1,5 +1,8 @@
 import StackConfigPage from '@/src/components/stack-detail/StackConfigPage'
-import { getStackDetail } from '@/src/core/__generated__'
+import {
+	getDeploymentsForStack,
+	getStackDetail,
+} from '@/src/core/__generated__'
 import {
 	type StackRouteParams,
 	validateStackRouteParams,
@@ -19,6 +22,7 @@ export default async function StackPage({ params }: PageProps) {
 	const routeData = validateStackRouteParams(params)
 
 	const stackDetails = await getStackDetail(routeData['stack-uuid'])
+	const deployments = await getDeploymentsForStack(routeData['stack-uuid'])
 	const tabs = [
 		{
 			name: 'Configuration',
@@ -46,7 +50,44 @@ export default async function StackPage({ params }: PageProps) {
 							<StackConfigPage stackDetails={stackDetails} />
 						</TabsContent>
 						<TabsContent value='deployments' className='space-y-4'>
-							<pre>{JSON.stringify(stackDetails, null, 2)}</pre>
+							<div className='space-y-4'>
+								<h2 className='text-2xl font-bold'>Deployments</h2>
+								<ul className='divide-y divide-gray-200'>
+									{deployments.map((deployment) => (
+										<li key={deployment.id} className='py-4'>
+											<div className='flex items-center justify-between'>
+												<div>
+													<p className='text-lg font-semibold'>status</p>
+													<p className='text-sm text-gray-500'>
+														{new Date(deployment.createdAt)
+															.toLocaleString('en-GB', {
+																day: 'numeric',
+																month: 'numeric',
+																year: 'numeric',
+																hour: '2-digit',
+																minute: '2-digit',
+																second: '2-digit',
+																hour12: false,
+															})
+															.replace(',', ' at')}
+													</p>
+												</div>
+												<span
+												// className={`px-2 py-1 rounded-full text-xs font-medium ${
+												// 	true
+												// 		? 'bg-green-100 text-green-800'
+												// 		: true
+												// 			? 'bg-red-100 text-red-800'
+												// 			: 'bg-yellow-100 text-yellow-800'
+												// }`}
+												>
+													statu
+												</span>
+											</div>
+										</li>
+									))}
+								</ul>
+							</div>
 						</TabsContent>
 					</Tabs>
 				</div>

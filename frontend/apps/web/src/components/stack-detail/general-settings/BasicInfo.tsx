@@ -20,6 +20,12 @@ import {
 } from '@ui/components/ui/dropdown-menu'
 import { Input } from '@ui/components/ui/input'
 import { Label } from '@ui/components/ui/label'
+import {
+	Sheet,
+	SheetContent,
+	SheetHeader,
+	SheetTitle,
+} from '@ui/components/ui/sheet'
 import { Switch } from '@ui/components/ui/switch'
 import { Textarea } from '@ui/components/ui/textarea'
 import {
@@ -30,6 +36,7 @@ import {
 	Trash2,
 } from 'lucide-react'
 import { useState } from 'react'
+import { ChannelLogViewer } from '../../logviewer/ChannelLogViewer'
 
 export const BasicInfo = ({
 	stackDetails,
@@ -38,8 +45,11 @@ export const BasicInfo = ({
 
 	const { mutateAsync } = useDispatchStackDeploymentHook(stackDetails.id)
 	const handleDeploy = async () => {
-		await mutateAsync({} as never)
+		const deploymentCreatedDto = await mutateAsync({} as never)
+		setLogChannelId(deploymentCreatedDto.deploymentId)
 	}
+
+	const [logChannelId, setLogChannelId] = useState<string | null>(null)
 
 	return (
 		<div className='space-y-6'>
@@ -80,6 +90,17 @@ export const BasicInfo = ({
 						</Button>
 					</div>
 				</CardHeader>
+				<Sheet
+					open={logChannelId != null}
+					onOpenChange={() => setLogChannelId(null)}
+				>
+					<SheetContent className='min-w-[800px]'>
+						<SheetHeader>
+							<SheetTitle>Stack Logs</SheetTitle>
+						</SheetHeader>
+						{logChannelId && <ChannelLogViewer channelId={logChannelId} />}
+					</SheetContent>
+				</Sheet>
 				<CardContent className='space-y-4'>
 					<div className='space-y-2'>
 						<Label htmlFor='stack-name'>Stack Name</Label>

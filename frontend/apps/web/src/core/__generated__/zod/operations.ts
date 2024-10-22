@@ -12,9 +12,9 @@ import { getServersQueryResponseSchema } from "./getServersSchema";
 import { getServerByIdQueryResponseSchema, getServerByIdPathParamsSchema } from "./getServerByIdSchema";
 import { postCreateStackMutationRequestSchema, postCreateStackMutationResponseSchema } from "./postCreateStackSchema";
 import { getStackDetailQueryResponseSchema, getStackDetail404Schema, getStackDetailPathParamsSchema } from "./getStackDetailSchema";
+import { getDeploymentsForStackQueryResponseSchema, getDeploymentsForStackPathParamsSchema } from "./getDeploymentsForStackSchema";
 import { dispatchStackDeploymentMutationResponseSchema, dispatchStackDeploymentPathParamsSchema } from "./dispatchStackDeploymentSchema";
 import { getFilterableFieldsQueryResponseSchema } from "./getFilterableFieldsSchema";
-import { getTestMutationRequestSchema, getTestMutationResponseSchema } from "./getTestSchema";
 import { getUsersMutationRequestSchema, getUsersMutationResponseSchema } from "./getUsersSchema";
 import { testQueryResponseSchema } from "./testSchema";
 import { postValidateGithubRepoMutationRequestSchema, postValidateGithubRepoMutationResponseSchema } from "./postValidateGithubRepoSchema";
@@ -196,6 +196,18 @@ import { postValidateGithubRepoMutationRequestSchema, postValidateGithubRepoMuta
         errors: {
             404: getStackDetail404Schema
         }
+    }, "GetDeploymentsForStack": {
+        request: undefined,
+        parameters: {
+            path: getDeploymentsForStackPathParamsSchema,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: getDeploymentsForStackQueryResponseSchema,
+            default: getDeploymentsForStackQueryResponseSchema
+        },
+        errors: {}
     }, "DispatchStackDeployment": {
         request: undefined,
         parameters: {
@@ -218,18 +230,6 @@ import { postValidateGithubRepoMutationRequestSchema, postValidateGithubRepoMuta
         responses: {
             200: getFilterableFieldsQueryResponseSchema,
             default: getFilterableFieldsQueryResponseSchema
-        },
-        errors: {}
-    }, "GetTest": {
-        request: getTestMutationRequestSchema,
-        parameters: {
-            path: undefined,
-            query: undefined,
-            header: undefined
-        },
-        responses: {
-            200: getTestMutationResponseSchema,
-            default: getTestMutationResponseSchema
         },
         errors: {}
     }, "GetUsers": {
@@ -294,12 +294,12 @@ export const paths = { "/api/Applications/{applicationId}/deployment": {
         post: operations["PostCreateStack"]
     }, "/api/Stacks/{id}": {
         get: operations["GetStackDetail"]
+    }, "/api/Stacks/{id}/deployments": {
+        get: operations["GetDeploymentsForStack"]
     }, "/api/Stacks/{id}/deploy": {
         post: operations["DispatchStackDeployment"]
     }, "/api/System/get-fields": {
         get: operations["GetFilterableFields"]
-    }, "/api/Test": {
-        post: operations["GetTest"]
     }, "/api/Users": {
         post: operations["GetUsers"]
     }, "/api/Users/test": {

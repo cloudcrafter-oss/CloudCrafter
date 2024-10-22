@@ -1,12 +1,12 @@
 import client from "../../frontend/client.ts";
 import { useQuery, queryOptions, useInfiniteQuery, infiniteQueryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import type { GetFilterableFieldsQueryResponse } from "../types/GetFilterableFields";
-import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, InfiniteData, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
+import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
 
- type GetFilterableFieldsClient = typeof client<GetFilterableFieldsQueryResponse, never, never>;
+ type GetFilterableFieldsClient = typeof client<GetFilterableFieldsQueryResponse, Error, never>;
 type GetFilterableFields = {
     data: GetFilterableFieldsQueryResponse;
-    error: never;
+    error: Error;
     request: never;
     pathParams: never;
     queryParams: never;
@@ -77,7 +77,7 @@ export function getFilterableFieldsInfiniteQueryOptions(options: GetFilterableFi
 /**
  * @link /api/System/get-fields
  */
-export function useGetFilterableFieldsHookInfinite<TData = InfiniteData<GetFilterableFields["response"]>, TQueryData = GetFilterableFields["response"], TQueryKey extends QueryKey = GetFilterableFieldsInfiniteQueryKey>(options: {
+export function useGetFilterableFieldsHookInfinite<TData = GetFilterableFields["response"], TQueryData = GetFilterableFields["response"], TQueryKey extends QueryKey = GetFilterableFieldsInfiniteQueryKey>(options: {
     query?: Partial<InfiniteQueryObserverOptions<GetFilterableFields["response"], GetFilterableFields["error"], TData, TQueryData, TQueryKey>>;
     client?: GetFilterableFields["client"]["parameters"];
 } = {}): UseInfiniteQueryResult<TData, GetFilterableFields["error"]> & {
@@ -123,9 +123,9 @@ export function useGetFilterableFieldsHookSuspense<TData = GetFilterableFields["
     const { query: queryOptions, client: clientOptions = {} } = options ?? {};
     const queryKey = queryOptions?.queryKey ?? getFilterableFieldsSuspenseQueryKey();
     const query = useSuspenseQuery({
-        ...getFilterableFieldsSuspenseQueryOptions(clientOptions) as unknown as QueryObserverOptions,
+        ...getFilterableFieldsSuspenseQueryOptions(clientOptions) as unknown as UseSuspenseQueryOptions,
         queryKey,
-        ...queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">
+        ...queryOptions as unknown as Omit<UseSuspenseQueryOptions, "queryKey">
     }) as UseSuspenseQueryResult<TData, GetFilterableFields["error"]> & {
         queryKey: TQueryKey;
     };

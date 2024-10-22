@@ -27,6 +27,7 @@ public enum BackgroundJobType
 {
     ServerConnectivityCheck,
     StackDeployment,
+    ChannelLogJob,
 }
 
 public enum BackgroundJobStatus

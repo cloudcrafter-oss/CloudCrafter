@@ -1,12 +1,12 @@
 import client from "../../frontend/client.ts";
 import { useQuery, queryOptions, useInfiniteQuery, infiniteQueryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import type { GetServerByIdQueryResponse, GetServerByIdPathParams } from "../types/GetServerById";
-import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, InfiniteData, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
+import type { QueryObserverOptions, UseQueryResult, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
 
- type GetServerByIdClient = typeof client<GetServerByIdQueryResponse, never, never>;
+ type GetServerByIdClient = typeof client<GetServerByIdQueryResponse, Error, never>;
 type GetServerById = {
     data: GetServerByIdQueryResponse;
-    error: never;
+    error: Error;
     request: never;
     pathParams: GetServerByIdPathParams;
     queryParams: never;
@@ -77,7 +77,7 @@ export function getServerByIdInfiniteQueryOptions(id: GetServerByIdPathParams["i
 /**
  * @link /api/Servers/:id
  */
-export function useGetServerByIdHookInfinite<TData = InfiniteData<GetServerById["response"]>, TQueryData = GetServerById["response"], TQueryKey extends QueryKey = GetServerByIdInfiniteQueryKey>(id: GetServerByIdPathParams["id"], options: {
+export function useGetServerByIdHookInfinite<TData = GetServerById["response"], TQueryData = GetServerById["response"], TQueryKey extends QueryKey = GetServerByIdInfiniteQueryKey>(id: GetServerByIdPathParams["id"], options: {
     query?: Partial<InfiniteQueryObserverOptions<GetServerById["response"], GetServerById["error"], TData, TQueryData, TQueryKey>>;
     client?: GetServerById["client"]["parameters"];
 } = {}): UseInfiniteQueryResult<TData, GetServerById["error"]> & {
@@ -123,9 +123,9 @@ export function useGetServerByIdHookSuspense<TData = GetServerById["response"], 
     const { query: queryOptions, client: clientOptions = {} } = options ?? {};
     const queryKey = queryOptions?.queryKey ?? getServerByIdSuspenseQueryKey(id);
     const query = useSuspenseQuery({
-        ...getServerByIdSuspenseQueryOptions(id, clientOptions) as unknown as QueryObserverOptions,
+        ...getServerByIdSuspenseQueryOptions(id, clientOptions) as unknown as UseSuspenseQueryOptions,
         queryKey,
-        ...queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">
+        ...queryOptions as unknown as Omit<UseSuspenseQueryOptions, "queryKey">
     }) as UseSuspenseQueryResult<TData, GetServerById["error"]> & {
         queryKey: TQueryKey;
     };

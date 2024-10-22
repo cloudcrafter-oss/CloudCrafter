@@ -33,4 +33,9 @@
     <ProjectReference Include="..\CloudCrafter.TestUtilities\CloudCrafter.TestUtilities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Jobs\" />
+    <Folder Include="Services\Core\" />
+  </ItemGroup>
+
 </Project>
