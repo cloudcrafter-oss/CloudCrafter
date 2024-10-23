@@ -7,9 +7,20 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from '@ui/components/ui/sheet'
+import chalk from 'chalk'
+import dayjs from 'dayjs'
 
 const formatLogMessage = (message: LogViewerLine) => {
-	return `${message.date} => ${message.content}`
+	const date = new Date(message.date)
+	const formattedDate = dayjs(date).format('DD-MM-YYYY HH:mm:ss')
+
+	const output = `${formattedDate} => ${message.content}`
+
+	if (message.isError) {
+		return chalk.red(output)
+	}
+
+	return output
 }
 
 export const ChannelLogViewerEnhanced = ({
@@ -42,10 +53,10 @@ export const ChannelLogViewer = ({ channelId }: { channelId: string }) => {
 		date: line.at,
 	}))
 
-	const channelMessages = messages.map((message) => ({
-		content: formatLogMessage(message.output),
-		isError: false,
-		date: message.output.date,
+	const channelMessages: LogViewerLine[] = messages.map((message) => ({
+		content: message.output.output,
+		isError: message.output.isError,
+		date: message.output.date.toString(),
 	}))
 
 	const allLines = [...linesFromApi, ...channelMessages]
@@ -61,9 +72,9 @@ export const ChannelLogViewer = ({ channelId }: { channelId: string }) => {
 		.join('\n')
 
 	return (
-		<>
-			<LazyLog height={200} follow width={700} text={logText} />
-		</>
+		<div>
+			<LazyLog width={700} height={700} text={logText} />
+		</div>
 	)
 }
 
