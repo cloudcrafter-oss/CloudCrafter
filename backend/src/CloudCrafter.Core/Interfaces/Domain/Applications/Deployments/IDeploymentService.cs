@@ -9,4 +9,5 @@ public interface IDeploymentService
 
     Task StoreDeploymentLogAsync(Guid deploymentId, ChannelOutputLogLine log);
     Task MarkDeployment(Guid deploymentId, DeploymentStatusDto status);
+    Task<List<DeploymentLogDto>> GetDeploymentLogs(Guid requestDeploymentId);
 }

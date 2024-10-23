@@ -7,7 +7,6 @@ using CloudCrafter.Core.Jobs.Dispatcher;
 using CloudCrafter.Core.Services.Core;
 using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Entities;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Services.Domain.Applications.Deployments;
@@ -68,5 +67,14 @@ public class DeploymentService(
         var statusEntity = mapper.Map<DeploymentState>(status);
 
         return deploymentRepository.MarkDeployment(deploymentId, statusEntity);
+    }
+
+    public async Task<List<DeploymentLogDto>> GetDeploymentLogs(Guid deploymentId)
+    {
+        var deployment = await deploymentRepository.GetDeploymentAsync(deploymentId);
+
+        var logs = deployment.Logs.OrderBy(x => x.Date).ToList();
+
+        return mapper.Map<List<DeploymentLogDto>>(logs);
     }
 }
