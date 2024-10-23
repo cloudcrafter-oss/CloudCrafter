@@ -1,5 +1,4 @@
 import { useGetDeploymentLogsHook } from '@/src/core/__generated__'
-import type { ChannelOutputLogLine } from '@/src/core/__generated__/signal-types/channel-output-log-line'
 import { useWebHub } from '@/src/hooks/useWebHub'
 import { LazyLog } from '@melloware/react-logviewer'
 import {
@@ -9,8 +8,8 @@ import {
 	SheetTitle,
 } from '@ui/components/ui/sheet'
 
-const formatLogMessage = (message: ChannelOutputLogLine) => {
-	return `${message.date} => ${message.output}`
+const formatLogMessage = (message: LogViewerLine) => {
+	return `${message.date} => ${message.content}`
 }
 
 export const ChannelLogViewerEnhanced = ({
@@ -24,7 +23,7 @@ export const ChannelLogViewerEnhanced = ({
 				<SheetHeader>
 					<SheetTitle>Logs</SheetTitle>
 				</SheetHeader>
-				<ChannelLogViewer channelId={channelId} />
+				{channelId.length > 0 && <ChannelLogViewer channelId={channelId} />}
 			</SheetContent>
 		</Sheet>
 	)
@@ -37,11 +36,28 @@ export const ChannelLogViewer = ({ channelId }: { channelId: string }) => {
 
 	const { data } = useGetDeploymentLogsHook(channelId)
 
-	console.log(data)
+	const linesFromApi: LogViewerLine[] = (data ?? []).map((line) => ({
+		content: line.message,
+		isError: line.isError,
+		date: line.at,
+	}))
+
+	const channelMessages = messages.map((message) => ({
+		content: formatLogMessage(message.output),
+		isError: false,
+		date: message.output.date,
+	}))
+
+	const allLines = [...linesFromApi, ...channelMessages]
+
+	// sort by date
+	allLines.sort(
+		(a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+	)
 
 	// iterate over messages and add new line after each so its one big string
-	const logText = messages
-		.map((message) => formatLogMessage(message.output))
+	const logText = allLines
+		.map((message) => formatLogMessage(message))
 		.join('\n')
 
 	return (
@@ -49,4 +65,10 @@ export const ChannelLogViewer = ({ channelId }: { channelId: string }) => {
 			<LazyLog height={200} follow width={700} text={logText} />
 		</>
 	)
+}
+
+interface LogViewerLine {
+	content: string
+	isError: boolean
+	date: string
 }

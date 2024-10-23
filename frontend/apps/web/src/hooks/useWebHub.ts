@@ -31,7 +31,11 @@ export const useWebHub = ({ channelId }: { channelId: string }) => {
 			.catch((err) => console.error(err))
 
 		return () => {
-			connection.stop()
+			try {
+				connection.stop()
+			} catch (err) {
+				console.error(err)
+			}
 		}
 	}, [session?.accessToken, channelId])
 
