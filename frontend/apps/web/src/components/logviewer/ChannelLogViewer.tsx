@@ -74,9 +74,3 @@ export const ChannelLogViewer = ({ channelId }: { channelId: string }) => {
 		</div>
 	)
 }
-
-interface LogViewerLine {
-	content: string
-	level: ChannelOutputLogLineLevel
-	date: string
-}
