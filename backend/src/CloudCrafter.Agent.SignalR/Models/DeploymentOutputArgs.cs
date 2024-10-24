@@ -1,4 +1,6 @@
-﻿namespace CloudCrafter.Agent.SignalR.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace CloudCrafter.Agent.SignalR.Models;
 
 public class DeploymentOutputArgs
 {
@@ -9,9 +11,46 @@ public class DeploymentOutputArgs
 public class ChannelOutputLogLine
 {
     public required string Output { get; init; }
-    public required bool IsError { get; init; }
     public required DateTime Date { get; init; }
-
-    // TODO: Enrich stderr/stdout
     public required int InternalOrder { get; init; }
+    public required ChannelOutputLogLineLevel Level { get; set; }
+}
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum ChannelOutputLogLineLevel
+{
+    /// <summary>
+    /// Anything and everything you might want to know about
+    /// a running block of code.
+    /// </summary>
+    Verbose,
+
+    /// <summary>
+    /// Internal system events that aren't necessarily
+    /// observable from the outside.
+    /// </summary>
+    Debug,
+
+    /// <summary>
+    /// The lifeblood of operational intelligence - things
+    /// happen.
+    /// </summary>
+    Information,
+
+    /// <summary>
+    /// Service is degraded or endangered.
+    /// </summary>
+    Warning,
+
+    /// <summary>
+    /// Functionality is unavailable, invariants are broken
+    /// or data is lost.
+    /// </summary>
+    Error,
+
+    /// <summary>
+    /// If you have a pager, it goes off when one of these
+    /// occurs.
+    /// </summary>
+    Fatal,
 }

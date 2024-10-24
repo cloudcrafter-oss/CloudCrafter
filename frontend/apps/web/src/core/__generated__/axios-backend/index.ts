@@ -1,6 +1,7 @@
 export * from "./createProject";
 export * from "./deleteProject";
 export * from "./dispatchStackDeployment";
+export * from "./getDeploymentLogs";
 export * from "./getDeploymentsForStack";
 export * from "./getFilterableFields";
 export * from "./getProject";

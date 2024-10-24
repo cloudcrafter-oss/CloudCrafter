@@ -32,6 +32,16 @@ public class ChannelIdEnricher(IServiceProvider serviceProvider) : ILogEventEnri
         }
 
         var logMessage = logEvent.RenderMessage();
+
+        ChannelOutputLogLineLevel level = logEvent.Level switch
+        {
+            LogEventLevel.Debug => ChannelOutputLogLineLevel.Debug,
+            LogEventLevel.Information => ChannelOutputLogLineLevel.Information,
+            LogEventLevel.Warning => ChannelOutputLogLineLevel.Warning,
+            LogEventLevel.Error => ChannelOutputLogLineLevel.Error,
+            LogEventLevel.Fatal => ChannelOutputLogLineLevel.Fatal,
+            _ => ChannelOutputLogLineLevel.Information,
+        };
         hubWrapper.TypedHubConnection.InvokeAsync(hub =>
             hub.DeploymentOutput(
                 new DeploymentOutputArgs
@@ -40,7 +50,7 @@ public class ChannelIdEnricher(IServiceProvider serviceProvider) : ILogEventEnri
                     Output = new ChannelOutputLogLine
                     {
                         Date = logEvent.Timestamp.UtcDateTime,
-                        IsError = logEvent.Level == LogEventLevel.Error,
+                        Level = level,
                         Output = logMessage,
                         InternalOrder = _sequence,
                     },

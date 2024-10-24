@@ -8,6 +8,7 @@ public class SimpleDeploymentDto
     public required DateTime UpdatedAt { get; init; }
 
     public required Guid Id { get; init; }
+    public required DeploymentStatusDto State { get; init; }
 
     private class Mapping : Profile
     {

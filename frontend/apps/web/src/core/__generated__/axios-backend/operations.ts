@@ -55,6 +55,10 @@ export const operations = {
         "path": "/api/Stacks/:id/deployments",
         "method": "get"
     },
+    "GetDeploymentLogs": {
+        "path": "/api/Stacks/deployments/:deploymentId/logs",
+        "method": "get"
+    },
     "DispatchStackDeployment": {
         "path": "/api/Stacks/:id/deploy",
         "method": "post"

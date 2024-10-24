@@ -7,4 +7,5 @@ public interface IDeploymentRepository
     Task<Deployment> GetDeploymentAsync(Guid id);
 
     Task SaveChangesAsync();
+    Task MarkDeployment(Guid deploymentId, DeploymentState statusEntity);
 }

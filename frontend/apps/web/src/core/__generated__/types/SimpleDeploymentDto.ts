@@ -1,4 +1,6 @@
-export type SimpleDeploymentDto = {
+import type { DeploymentStatusDto } from "./DeploymentStatusDto";
+
+ export type SimpleDeploymentDto = {
     /**
      * @type string, date-time
     */
@@ -11,4 +13,8 @@ export type SimpleDeploymentDto = {
      * @type string, uuid
     */
     id: string;
+    /**
+     * @type string
+    */
+    state: DeploymentStatusDto;
 };

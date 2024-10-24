@@ -1,6 +1,7 @@
 export * from "./useCreateProjectHook";
 export * from "./useDeleteProjectHook";
 export * from "./useDispatchStackDeploymentHook";
+export * from "./useGetDeploymentLogsHook";
 export * from "./useGetDeploymentsForStackHook";
 export * from "./useGetFilterableFieldsHook";
 export * from "./useGetProjectEnvironmentEnhancedHook";
