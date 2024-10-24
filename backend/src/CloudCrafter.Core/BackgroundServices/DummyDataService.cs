@@ -3,6 +3,7 @@ using CloudCrafter.Core.SignalR;
 using CloudCrafter.Core.SignalR.HubActions;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
+using Serilog.Events;
 
 namespace CloudCrafter.Core.BackgroundServices;
 
@@ -24,7 +25,7 @@ public class DummyDataService(WebHubActions webHubActions) : BackgroundService
                     InternalOrder = _counter,
                     Date = DateTime.UtcNow,
                     Output = $"This is a test message {_counter}",
-                    IsError = _counter % 2 == 0,
+                    Level = ChannelOutputLogLineLevel.Debug,
                 },
             };
 

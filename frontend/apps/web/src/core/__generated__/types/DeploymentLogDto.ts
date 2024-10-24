@@ -1,12 +1,14 @@
-export type DeploymentLogDto = {
+import type { ChannelOutputLogLineLevel } from "./ChannelOutputLogLineLevel";
+
+ export type DeploymentLogDto = {
     /**
      * @type string
     */
     message: string;
     /**
-     * @type boolean
+     * @type string
     */
-    isError: boolean;
+    level: ChannelOutputLogLineLevel;
     /**
      * @type string, date-time
     */

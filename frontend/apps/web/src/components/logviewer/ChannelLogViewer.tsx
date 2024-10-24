@@ -1,4 +1,8 @@
-import { useGetDeploymentLogsHook } from '@/src/core/__generated__'
+import {
+	type DeploymentLogDto,
+	channelOutputLogLineLevel,
+	useGetDeploymentLogsHook,
+} from '@/src/core/__generated__'
 import { useWebHub } from '@/src/hooks/useWebHub'
 import { LazyLog } from '@melloware/react-logviewer'
 import {
@@ -10,13 +14,18 @@ import {
 import chalk from 'chalk'
 import dayjs from 'dayjs'
 
-const formatLogMessage = (message: LogViewerLine) => {
-	const date = new Date(message.date)
+const formatLogMessage = (message: DeploymentLogDto) => {
+	const date = new Date(message.at)
 	const formattedDate = dayjs(date).format('DD-MM-YYYY HH:mm:ss')
 
-	const output = `${formattedDate} => ${message.content}`
+	const output = `${formattedDate} => ${message.message}`
 
-	if (message.isError) {
+	const redLevels = [
+		channelOutputLogLineLevel.Error,
+		channelOutputLogLineLevel.Fatal,
+	] as const
+
+	if (redLevels.includes(message.level as (typeof redLevels)[number])) {
 		return chalk.red(output)
 	}
 
@@ -47,24 +56,12 @@ export const ChannelLogViewer = ({ channelId }: { channelId: string }) => {
 
 	const { data } = useGetDeploymentLogsHook(channelId)
 
-	const linesFromApi: LogViewerLine[] = (data ?? []).map((line) => ({
-		content: line.message,
-		isError: line.isError,
-		date: line.at,
-	}))
+	const linesFromApi = data ?? []
 
-	const channelMessages: LogViewerLine[] = messages.map((message) => ({
-		content: message.output.output,
-		isError: message.output.isError,
-		date: message.output.date.toString(),
-	}))
-
-	const allLines = [...linesFromApi, ...channelMessages]
+	const allLines = [...linesFromApi, ...messages]
 
 	// sort by date
-	allLines.sort(
-		(a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-	)
+	allLines.sort((a, b) => new Date(a.at).getTime() - new Date(b.at).getTime())
 
 	// iterate over messages and add new line after each so its one big string
 	const logText = allLines
@@ -80,6 +77,6 @@ export const ChannelLogViewer = ({ channelId }: { channelId: string }) => {
 
 interface LogViewerLine {
 	content: string
-	isError: boolean
+	level: ChannelOutputLogLineLevel
 	date: string
 }

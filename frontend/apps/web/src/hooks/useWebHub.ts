@@ -1,12 +1,12 @@
-import type { DeploymentOutputArgs } from '@/src/core/__generated__/signal-types/deployment-output-args'
 import * as signalR from '@microsoft/signalr'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
+import type { DeploymentLogDto } from '../core/__generated__'
 
 export const useWebHub = ({ channelId }: { channelId: string }) => {
 	const { data: session } = useSession()
 
-	const [messages, setMessages] = useState<DeploymentOutputArgs[]>([])
+	const [messages, setMessages] = useState<DeploymentLogDto[]>([])
 
 	useEffect(() => {
 		const connection = new signalR.HubConnectionBuilder()
@@ -19,7 +19,7 @@ export const useWebHub = ({ channelId }: { channelId: string }) => {
 			.build()
 
 		console.log('rendering now')
-		connection.on('DeploymentOutput', (message: DeploymentOutputArgs) => {
+		connection.on('DeploymentOutput', (message: DeploymentLogDto) => {
 			setMessages((prev) => [...prev, message])
 		})
 

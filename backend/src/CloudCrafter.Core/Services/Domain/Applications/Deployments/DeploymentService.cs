@@ -45,7 +45,7 @@ public class DeploymentService(
                 new DeploymentLog
                 {
                     Log = log.Output,
-                    IsError = log.IsError,
+                    Level = log.Level,
                     Date = log.Date,
                     Index = log.InternalOrder,
                 }
