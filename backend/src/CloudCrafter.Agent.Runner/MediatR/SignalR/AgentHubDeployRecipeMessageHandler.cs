@@ -21,6 +21,10 @@ public static class AgentHubDeployRecipeMessageHandler
     {
         public async Task Handle(Command request, CancellationToken cancellationToken)
         {
+            logger.LogDebug("Marking deployment as started");
+            await request.TypedHubConnection.InvokeAsync(hub =>
+                hub.MarkDeploymentStarted(request.Message.DeploymentId)
+            );
             logger.LogDebug("Received deploy recipe message from CloudCrafter server");
             logger.LogDebug("Validating recipe...");
 
@@ -32,10 +36,17 @@ public static class AgentHubDeployRecipeMessageHandler
                 logger.LogInformation("Deploying recipe...");
                 await deploymentService.DeployAsync(request.Message.Recipe);
                 logger.LogInformation("Recipe deployed!");
+
+                await request.TypedHubConnection.InvokeAsync(hub =>
+                    hub.MarkDeploymentFinished(request.Message.DeploymentId)
+                );
             }
             catch (Exception ex)
             {
                 logger.LogCritical(ex, "Handling deploy recipe message failed");
+                await request.TypedHubConnection.InvokeAsync(hub =>
+                    hub.MarkDeploymentFailed(request.Message.DeploymentId)
+                );
             }
         }
     }

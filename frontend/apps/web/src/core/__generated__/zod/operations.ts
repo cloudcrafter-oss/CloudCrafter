@@ -13,6 +13,7 @@ import { getServerByIdQueryResponseSchema, getServerByIdPathParamsSchema } from 
 import { postCreateStackMutationRequestSchema, postCreateStackMutationResponseSchema } from "./postCreateStackSchema";
 import { getStackDetailQueryResponseSchema, getStackDetail404Schema, getStackDetailPathParamsSchema } from "./getStackDetailSchema";
 import { getDeploymentsForStackQueryResponseSchema, getDeploymentsForStackPathParamsSchema } from "./getDeploymentsForStackSchema";
+import { getDeploymentLogsQueryResponseSchema, getDeploymentLogsPathParamsSchema } from "./getDeploymentLogsSchema";
 import { dispatchStackDeploymentMutationResponseSchema, dispatchStackDeploymentPathParamsSchema } from "./dispatchStackDeploymentSchema";
 import { getFilterableFieldsQueryResponseSchema } from "./getFilterableFieldsSchema";
 import { getUsersMutationRequestSchema, getUsersMutationResponseSchema } from "./getUsersSchema";
@@ -208,6 +209,18 @@ import { postValidateGithubRepoMutationRequestSchema, postValidateGithubRepoMuta
             default: getDeploymentsForStackQueryResponseSchema
         },
         errors: {}
+    }, "GetDeploymentLogs": {
+        request: undefined,
+        parameters: {
+            path: getDeploymentLogsPathParamsSchema,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: getDeploymentLogsQueryResponseSchema,
+            default: getDeploymentLogsQueryResponseSchema
+        },
+        errors: {}
     }, "DispatchStackDeployment": {
         request: undefined,
         parameters: {
@@ -296,6 +309,8 @@ export const paths = { "/api/Applications/{applicationId}/deployment": {
         get: operations["GetStackDetail"]
     }, "/api/Stacks/{id}/deployments": {
         get: operations["GetDeploymentsForStack"]
+    }, "/api/Stacks/deployments/{deploymentId}/logs": {
+        get: operations["GetDeploymentLogs"]
     }, "/api/Stacks/{id}/deploy": {
         post: operations["DispatchStackDeployment"]
     }, "/api/System/get-fields": {
