@@ -123,9 +123,9 @@ export function useGetStackDetailHookSuspense<TData = GetStackDetail["response"]
     const { query: queryOptions, client: clientOptions = {} } = options ?? {};
     const queryKey = queryOptions?.queryKey ?? getStackDetailSuspenseQueryKey(id);
     const query = useSuspenseQuery({
-        ...getStackDetailSuspenseQueryOptions(id, clientOptions) as unknown as QueryObserverOptions,
+        ...getStackDetailSuspenseQueryOptions(id, clientOptions) as unknown as UseSuspenseQueryOptions,
         queryKey,
-        ...queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">
+        ...queryOptions as unknown as Omit<UseSuspenseQueryOptions, "queryKey">
     }) as UseSuspenseQueryResult<TData, GetStackDetail["error"]> & {
         queryKey: TQueryKey;
     };

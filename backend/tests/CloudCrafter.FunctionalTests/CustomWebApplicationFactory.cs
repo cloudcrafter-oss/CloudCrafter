@@ -49,24 +49,11 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureAppConfiguration(
-            (context, config) =>
-            {
-                config
-                    .AddJsonFile("appsettings.json")
-                    .AddJsonFile("appsettings.Development.json", true)
-                    .AddInMemoryCollection(
-                        new[]
-                        {
-                            new KeyValuePair<string, string?>(
-                                "ConnectionStrings:RedisConnection",
-                                _redisConnectionString
-                            ),
-                        }
-                    )
-                    .AddEnvironmentVariables();
-            }
+        Environment.SetEnvironmentVariable(
+            "ConnectionStrings:RedisConnection",
+            _redisConnectionString
         );
+
         builder.ConfigureServices(
             (context, services) =>
             {

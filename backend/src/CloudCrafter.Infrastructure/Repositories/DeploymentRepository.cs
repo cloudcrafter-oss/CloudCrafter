@@ -23,4 +23,20 @@ public class DeploymentRepository(IApplicationDbContext context) : IDeploymentRe
     {
         return context.SaveChangesAsync();
     }
+
+    public async Task MarkDeployment(Guid deploymentId, DeploymentState statusEntity)
+    {
+        var deployment = await context
+            .Deployments.Where(x => x.Id == deploymentId)
+            .FirstOrDefaultAsync();
+
+        if (deployment == null)
+        {
+            return;
+        }
+
+        deployment.State = statusEntity;
+        deployment.UpdatedAt = DateTime.UtcNow;
+        await context.SaveChangesAsync();
+    }
 }

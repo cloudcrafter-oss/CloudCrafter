@@ -123,9 +123,9 @@ export function useGetProjectEnvironmentEnhancedHookSuspense<TData = GetProjectE
     const { query: queryOptions, client: clientOptions = {} } = options ?? {};
     const queryKey = queryOptions?.queryKey ?? getProjectEnvironmentEnhancedSuspenseQueryKey(id, environmentId);
     const query = useSuspenseQuery({
-        ...getProjectEnvironmentEnhancedSuspenseQueryOptions(id, environmentId, clientOptions) as unknown as QueryObserverOptions,
+        ...getProjectEnvironmentEnhancedSuspenseQueryOptions(id, environmentId, clientOptions) as unknown as UseSuspenseQueryOptions,
         queryKey,
-        ...queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">
+        ...queryOptions as unknown as Omit<UseSuspenseQueryOptions, "queryKey">
     }) as UseSuspenseQueryResult<TData, GetProjectEnvironmentEnhanced["error"]> & {
         queryKey: TQueryKey;
     };

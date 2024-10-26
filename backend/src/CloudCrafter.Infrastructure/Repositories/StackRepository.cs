@@ -83,6 +83,7 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             Id = Guid.NewGuid(),
             StackId = stackId,
             Logs = new(),
+            State = DeploymentState.Created,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
         };

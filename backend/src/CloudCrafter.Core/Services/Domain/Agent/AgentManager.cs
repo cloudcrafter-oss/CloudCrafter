@@ -31,6 +31,7 @@ public class AgentManager(
             MessageId = deploymentId,
             Timestamp = DateTime.UtcNow,
             Recipe = recipe,
+            DeploymentId = deploymentId,
         };
 
         return SendMessage(message, serverId);

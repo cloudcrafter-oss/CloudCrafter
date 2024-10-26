@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.Agent.Models.SignalR;
 using CloudCrafter.Agent.SignalR.Models;
+using CloudCrafter.Domain.Domain.Deployment;
 using TypeGen.Core.SpecGeneration;
 
 namespace CloudCrafter.Domain.Common.SignalR;
@@ -10,7 +11,6 @@ public class SignalRTypesGenerator : GenerationSpec
     {
         options.GeneratorOptions.TypeScriptFileExtension = "ts";
 
-        AddInterface<MyHubMessage>();
-        AddInterface<DeploymentOutputArgs>();
+        AddInterface<DeploymentLogDto>();
     }
 }

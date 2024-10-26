@@ -130,9 +130,9 @@ export function useGetProjectsHookSuspense<TData = GetProjects["response"], TQue
     const { query: queryOptions, client: clientOptions = {} } = options ?? {};
     const queryKey = queryOptions?.queryKey ?? getProjectsSuspenseQueryKey(params);
     const query = useSuspenseQuery({
-        ...getProjectsSuspenseQueryOptions(params, clientOptions) as unknown as QueryObserverOptions,
+        ...getProjectsSuspenseQueryOptions(params, clientOptions) as unknown as UseSuspenseQueryOptions,
         queryKey,
-        ...queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">
+        ...queryOptions as unknown as Omit<UseSuspenseQueryOptions, "queryKey">
     }) as UseSuspenseQueryResult<TData, GetProjects["error"]> & {
         queryKey: TQueryKey;
     };

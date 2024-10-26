@@ -28,7 +28,6 @@ import {
 	ServerIcon,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import * as React from 'react'
 
 const ActiveProject = () => {
 	const { selectedProject, selectedEnvironment } =
@@ -50,19 +49,10 @@ const ActiveProject = () => {
 	)
 }
 
-export function CloudCrafterProjectSwitcher({
-	teams,
-}: {
-	teams: {
-		name: string
-		logo: React.ElementType
-		plan: string
-	}[]
-}) {
+export function CloudCrafterProjectSwitcher() {
 	const { isMobile } = useSidebar()
 
 	const router = useRouter()
-	const [activeTeam, setActiveTeam] = React.useState(teams[0])
 
 	const { projects } = useProjects()
 
