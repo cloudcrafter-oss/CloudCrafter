@@ -42,6 +42,14 @@ jobs:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/cloudcrafter-backend
         tags: |
           type=semver,pattern={{version}}
+    
+    - name: Extract metadata (tags, labels) for Docker - Worker
+      id: meta-worker
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/cloudcrafter-worker
+        tags: |
+          type=semver,pattern={{version}}
 
     - name: Extract metadata (tags, labels) for Docker - Frontend
       id: meta-frontend
@@ -64,16 +72,25 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: ./backend/
-        file: ./backend/src/CloudCrafter.Backend/Dockerfile
+        file: ./backend/src/CloudCrafter.Web/Dockerfile
         push: true
         tags: ${{ steps.meta-backend.outputs.tags }}
         labels: ${{ steps.meta-backend.outputs.labels }}
+
+    - name: Build and push CloudCrafter Worker Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: ./backend/
+        file: ./backend/src/CloudCrafter.Worker.Console/Dockerfile
+        push: true
+        tags: ${{ steps.meta-worker.outputs.tags }}
+        labels: ${{ steps.meta-worker.outputs.labels }}
 
     - name: Build and push CloudCrafter Frontend Docker image
       uses: docker/build-push-action@v4
       with:
         context: ./frontend/
-        file: ./frontend/Dockerfile
+        file: ./frontend/apps/web/Dockerfile
         push: true
         build-args: |
           CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=http://dummy
