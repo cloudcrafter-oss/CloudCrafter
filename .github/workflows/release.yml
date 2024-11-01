@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_PREFIX: "cloudcrafter-oss/"
+  IMAGE_PREFIX: "cloudcrafter-oss"
 
 jobs:
   build-and-push:
