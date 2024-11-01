@@ -56,7 +56,7 @@ jobs:
           - arch: amd64
             runner: ubuntu-latest
           - arch: arm64
-            runner: ["self-hosted", "ARM64"]
+            runner: ["self-hosted", "arm64"]
     permissions:
       contents: read
       packages: write
