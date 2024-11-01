@@ -3,6 +3,7 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 RUN pnpm add --global turbo@^2
+RUN apk add --no-cache wget curl
  
 FROM base AS builder
 RUN apk update
