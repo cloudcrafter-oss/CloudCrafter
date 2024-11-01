@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run Docker Build
-        run: docker build -t cloudcrafter-frontend --no-cache -f frontend/apps/web/Dockerfile ./frontend/
+        run: docker build --build-arg CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=$CLOUDCRAFTER_AXIOS_BACKEND_BASEURL -t cloudcrafter-frontend --no-cache -f frontend/apps/web/Dockerfile ./frontend/
 
   lint:
     runs-on: ubuntu-latest

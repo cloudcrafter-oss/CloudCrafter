@@ -28,6 +28,8 @@ RUN pnpm install
  
 # Build the project
 COPY --from=builder /app/out/full/ .
+ARG CLOUDCRAFTER_AXIOS_BACKEND_BASEURL
+ENV CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=${CLOUDCRAFTER_AXIOS_BACKEND_BASEURL}
 RUN pnpm turbo run build --filter=cloudcrafter-frontend
  
 FROM base AS runner
