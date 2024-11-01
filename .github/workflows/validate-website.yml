@@ -1,0 +1,44 @@
+name: Validate Website
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'frontend/apps/site/**'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'frontend/apps/site/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build -t cloudcrafter-docs --no-cache -f frontend/apps/site/Dockerfile ./frontend/
+
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    strategy:
+      matrix:
+        node-version: [20]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+          cache-dependency-path: '**/pnpm-workspace.yaml'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run lint
+        run: pnpm run format-and-lint
