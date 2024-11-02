@@ -3,36 +3,22 @@ name: Frontend Build
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'frontend/apps/web/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'frontend/apps/web/**'
     
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       CLOUDCRAFTER_AXIOS_BACKEND_BASEURL: http://dummy
-    defaults:
-      run:
-        working-directory: ./frontend
-    strategy:
-      matrix:
-        node-version: [20]
     steps:
       - uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 8
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
-          cache-dependency-path: '**/pnpm-workspace.yaml'
-      - name: Install dependencies
-        run: pnpm install
-      - name: Run build
-        run: npm run build
+      - name: Run Docker Build
+        run: docker build --build-arg CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=$CLOUDCRAFTER_AXIOS_BACKEND_BASEURL -t cloudcrafter-frontend --no-cache -f frontend/apps/web/Dockerfile ./frontend/
 
   lint:
     runs-on: ubuntu-latest
