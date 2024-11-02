@@ -74,4 +74,11 @@ jobs:
             platforms: linux/amd64,linux/arm64
             tags: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/cloudcrafter-site:latest
 
+  notify:
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Plane
+        run: ${{ secrets.PLANE_NOTIFICATION_COMMAND }}
+
 

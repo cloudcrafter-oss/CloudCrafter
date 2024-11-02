@@ -13,7 +13,7 @@ export const metadata = {
 			'CloudCrafter helps you deploy and manage your Docker stacks easily. Streamline your deployment process with our powerful platform.',
 		images: [
 			{
-				url: '/logo.png',
+				url: `${process.env.NEXT_PUBLIC_BASE_URL}/logo.png`,
 				width: 1200,
 				height: 630,
 				alt: 'CloudCrafter',
