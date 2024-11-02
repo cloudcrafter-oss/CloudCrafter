@@ -9,51 +9,28 @@ env:
   IMAGE_PREFIX: "cloudcrafter-oss"
 
 jobs:
-  prepare-matrix:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-      - id: set-matrix
-        run: |
-          echo "matrix={
-            \"image\": [
-              {
-                \"name\": \"agent\",
-                \"context\": \"./backend/\",
-                \"dockerfile\": \"./backend/src/CloudCrafter.Agent.Console/Dockerfile\",
-                \"build_args\": \"\"
-              },
-              {
-                \"name\": \"backend\",
-                \"context\": \"./backend/\",
-                \"dockerfile\": \"./backend/src/CloudCrafter.Web/Dockerfile\",
-                \"build_args\": \"\"
-              },
-              {
-                \"name\": \"worker\",
-                \"context\": \"./backend/\",
-                \"dockerfile\": \"./backend/src/CloudCrafter.Worker.Console/Dockerfile\",
-                \"build_args\": \"\"
-              },
-              {
-                \"name\": \"frontend\",
-                \"context\": \"./frontend/\",
-                \"dockerfile\": \"./frontend/apps/web/Dockerfile\",
-                \"build_args\": \"CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=http://dummy\"
-              }
-            ],
-            \"platform\": [\"linux/amd64\", \"linux/arm64\"]
-          }" >> $GITHUB_OUTPUT
-
   build-and-push:
-    needs: prepare-matrix
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     strategy:
-      matrix: ${{fromJSON(needs.prepare-matrix.outputs.matrix)}}
+      matrix:
+        platform: [linux/amd64, linux/arm64]
+        include:
+          - name: agent
+            context: ./backend/
+            dockerfile: ./backend/src/CloudCrafter.Agent.Console/Dockerfile
+          - name: backend
+            context: ./backend/
+            dockerfile: ./backend/src/CloudCrafter.Web/Dockerfile
+          - name: worker
+            context: ./backend/
+            dockerfile: ./backend/src/CloudCrafter.Worker.Console/Dockerfile
+          - name: frontend
+            context: ./frontend/
+            dockerfile: ./frontend/apps/web/Dockerfile
+            build_args: CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=http://dummy
       fail-fast: false
 
     steps:
@@ -71,7 +48,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/cloudcrafter-${{ matrix.image.name }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/cloudcrafter-${{ matrix.name }}
           tags: |
             type=semver,pattern={{version}}
 
@@ -84,10 +61,10 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ${{ matrix.image.context }}
-          file: ${{ matrix.image.dockerfile }}
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
           push: true
           platforms: ${{ matrix.platform }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: ${{ matrix.image.build_args }}
+          build-args: ${{ matrix.build_args }}
