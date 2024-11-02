@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Images
 
 on:
   release:
@@ -9,100 +9,85 @@ env:
   IMAGE_PREFIX: "cloudcrafter-oss"
 
 jobs:
+  prepare-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          echo "matrix={
+            \"image\": [
+              {
+                \"name\": \"agent\",
+                \"context\": \"./backend/\",
+                \"dockerfile\": \"./backend/src/CloudCrafter.Agent.Console/Dockerfile\",
+                \"build_args\": \"\"
+              },
+              {
+                \"name\": \"backend\",
+                \"context\": \"./backend/\",
+                \"dockerfile\": \"./backend/src/CloudCrafter.Web/Dockerfile\",
+                \"build_args\": \"\"
+              },
+              {
+                \"name\": \"worker\",
+                \"context\": \"./backend/\",
+                \"dockerfile\": \"./backend/src/CloudCrafter.Worker.Console/Dockerfile\",
+                \"build_args\": \"\"
+              },
+              {
+                \"name\": \"frontend\",
+                \"context\": \"./frontend/\",
+                \"dockerfile\": \"./frontend/apps/web/Dockerfile\",
+                \"build_args\": \"CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=http://dummy\"
+              }
+            ],
+            \"platform\": [\"linux/amd64\", \"linux/arm64\"]
+          }" >> $GITHUB_OUTPUT
+
   build-and-push:
+    needs: prepare-matrix
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
+    strategy:
+      matrix: ${{fromJSON(needs.prepare-matrix.outputs.matrix)}}
+      fail-fast: false
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Log in to the Container registry
-      uses: docker/login-action@v2
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-# Extract 
-    - name: Extract metadata (tags, labels) for Docker - Agent
-      id: meta-agent
-      uses: docker/metadata-action@v4
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/cloudcrafter-agent
-        tags: |
-          type=semver,pattern={{version}}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/cloudcrafter-${{ matrix.image.name }}
+          tags: |
+            type=semver,pattern={{version}}
 
-    - name: Extract metadata (tags, labels) for Docker - Backend
-      id: meta-backend
-      uses: docker/metadata-action@v4
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/cloudcrafter-backend
-        tags: |
-          type=semver,pattern={{version}}
-    
-    - name: Extract metadata (tags, labels) for Docker - Worker
-      id: meta-worker
-      uses: docker/metadata-action@v4
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/cloudcrafter-worker
-        tags: |
-          type=semver,pattern={{version}}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
-    - name: Extract metadata (tags, labels) for Docker - Frontend
-      id: meta-frontend
-      uses: docker/metadata-action@v4
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/cloudcrafter-frontend
-        tags: |
-          type=semver,pattern={{version}}
-# Build
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Build and push CloudCrafter Agent Docker image
-      uses: docker/build-push-action@v4
-      with:
-        context: ./backend/
-        file: ./backend/src/CloudCrafter.Agent.Console/Dockerfile
-        push: true
-        platforms: linux/amd64,linux/arm64
-        tags: ${{ steps.meta-agent.outputs.tags }}
-        labels: ${{ steps.meta-agent.outputs.labels }}
-
-    - name: Build and push CloudCrafter Backend Docker image
-      uses: docker/build-push-action@v4
-      with:
-        context: ./backend/
-        file: ./backend/src/CloudCrafter.Web/Dockerfile
-        push: true
-        platforms: linux/amd64,linux/arm64
-        tags: ${{ steps.meta-backend.outputs.tags }}
-        labels: ${{ steps.meta-backend.outputs.labels }}
-
-    - name: Build and push CloudCrafter Worker Docker image
-      uses: docker/build-push-action@v4
-      with:
-        context: ./backend/
-        file: ./backend/src/CloudCrafter.Worker.Console/Dockerfile
-        push: true
-        platforms: linux/amd64,linux/arm64
-        tags: ${{ steps.meta-worker.outputs.tags }}
-        labels: ${{ steps.meta-worker.outputs.labels }}
-
-    - name: Build and push CloudCrafter Frontend Docker image
-      uses: docker/build-push-action@v4
-      with:
-        context: ./frontend/
-        file: ./frontend/apps/web/Dockerfile
-        push: true
-        platforms: linux/amd64,linux/arm64
-        build-args: |
-          CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=http://dummy
-        tags: ${{ steps.meta-frontend.outputs.tags }}
-        labels: ${{ steps.meta-frontend.outputs.labels }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: ${{ matrix.image.context }}
+          file: ${{ matrix.image.dockerfile }}
+          push: true
+          platforms: ${{ matrix.platform }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: ${{ matrix.image.build_args }}
