@@ -3,8 +3,12 @@ name: Frontend Build
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'frontend/apps/web/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'frontend/apps/web/**'
     
 jobs:
   build:

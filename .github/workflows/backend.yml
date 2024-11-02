@@ -3,8 +3,12 @@ name: Backend Build
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'backend/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'backend/**'
     
 env:
   ASPNETCORE_ENVIRONMENT: Development
