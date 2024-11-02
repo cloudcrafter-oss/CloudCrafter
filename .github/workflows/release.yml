@@ -59,12 +59,19 @@ jobs:
         tags: |
           type=semver,pattern={{version}}
 # Build
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
     - name: Build and push CloudCrafter Agent Docker image
       uses: docker/build-push-action@v4
       with:
         context: ./backend/
         file: ./backend/src/CloudCrafter.Agent.Console/Dockerfile
         push: true
+        platforms: linux/amd64,linux/arm64
         tags: ${{ steps.meta-agent.outputs.tags }}
         labels: ${{ steps.meta-agent.outputs.labels }}
 
@@ -74,6 +81,7 @@ jobs:
         context: ./backend/
         file: ./backend/src/CloudCrafter.Web/Dockerfile
         push: true
+        platforms: linux/amd64,linux/arm64
         tags: ${{ steps.meta-backend.outputs.tags }}
         labels: ${{ steps.meta-backend.outputs.labels }}
 
@@ -83,6 +91,7 @@ jobs:
         context: ./backend/
         file: ./backend/src/CloudCrafter.Worker.Console/Dockerfile
         push: true
+        platforms: linux/amd64,linux/arm64
         tags: ${{ steps.meta-worker.outputs.tags }}
         labels: ${{ steps.meta-worker.outputs.labels }}
 
@@ -92,6 +101,7 @@ jobs:
         context: ./frontend/
         file: ./frontend/apps/web/Dockerfile
         push: true
+        platforms: linux/amd64,linux/arm64
         build-args: |
           CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=http://dummy
         tags: ${{ steps.meta-frontend.outputs.tags }}
