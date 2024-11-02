@@ -17,20 +17,12 @@ jobs:
     strategy:
       matrix:
         platform: [linux/amd64, linux/arm64]
-        include:
-          - name: agent
-            context: ./backend/
-            dockerfile: ./backend/src/CloudCrafter.Agent.Console/Dockerfile
-          - name: backend
-            context: ./backend/
-            dockerfile: ./backend/src/CloudCrafter.Web/Dockerfile
-          - name: worker
-            context: ./backend/
-            dockerfile: ./backend/src/CloudCrafter.Worker.Console/Dockerfile
-          - name: frontend
-            context: ./frontend/
-            dockerfile: ./frontend/apps/web/Dockerfile
-            build_args: CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=http://dummy
+        image: [
+          { name: "agent", context: "./backend/", build_args: "", dockerfile: "./backend/src/CloudCrafter.Agent.Console/Dockerfile" },
+          { name: "backend", context: "./backend/", build_args: "",   dockerfile: "./backend/src/CloudCrafter.Web/Dockerfile" },
+          { name: "worker", context: "./backend/", build_args: "", dockerfile: "./backend/src/CloudCrafter.Worker.Console/Dockerfile" },
+          { name: "frontend", context: "./frontend/", build_args: "CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=http://dummy", dockerfile: "./frontend/apps/web/Dockerfile" }
+        ]
       fail-fast: false
 
     steps:
@@ -48,7 +40,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/cloudcrafter-${{ matrix.name }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/cloudcrafter-${{ matrix.image.name }}
           tags: |
             type=semver,pattern={{version}}
 
@@ -61,10 +53,10 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ${{ matrix.context }}
-          file: ${{ matrix.dockerfile }}
+          context: ${{ matrix.image.context }}
+          file: ${{ matrix.image.dockerfile }}
           push: true
           platforms: ${{ matrix.platform }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: ${{ matrix.build_args }}
+          build-args: ${{ matrix.image.build_args }}
