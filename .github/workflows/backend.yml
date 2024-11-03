@@ -103,11 +103,21 @@ jobs:
   validate-agent:
     needs: [test, build]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [linux/amd64, linux/arm64]
     steps:
     - uses: actions/checkout@v4
-    - name: Build Docker image of agent
-      run: |
-        docker build -t console --no-cache -f backend/src/CloudCrafter.Agent.Console/Dockerfile ./backend/
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Build Docker image Agent
+      uses: docker/build-push-action@v4
+      with:
+        context: ./backend/
+        file: ./backend/src/CloudCrafter.Agent.Console/Dockerfile
+        platforms: ${{ matrix.platform }}
+        push: false
+        tags: console
     - name: Run validate script
       run: |
         chmod +x ./ci/tests/validate_agent.sh
@@ -116,19 +126,40 @@ jobs:
   validate-worker:
     needs: [test, build]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [linux/amd64, linux/arm64]
     steps:
     - uses: actions/checkout@v4
-    - name: Build Docker image of worker
-      run: |
-        docker build -t worker --no-cache -f backend/src/CloudCrafter.Worker.Console/Dockerfile ./backend/
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Build Docker image Worker
+      uses: docker/build-push-action@v4
+      with:
+        context: ./backend/
+        file: ./backend/src/CloudCrafter.Worker.Console/Dockerfile
+        platforms: ${{ matrix.platform }}
+        push: false
+        tags: worker
+
   validate-web:
     needs: [test, build]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [linux/amd64, linux/arm64]
     steps:
     - uses: actions/checkout@v4
-    - name: Build Docker image of web
-      run: |
-        docker build -t web --no-cache -f backend/src/CloudCrafter.Web/Dockerfile ./backend/
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Build Docker image Web
+      uses: docker/build-push-action@v4
+      with:
+        context: ./backend/
+        file: ./backend/src/CloudCrafter.Web/Dockerfile
+        platforms: ${{ matrix.platform }}
+        push: false
+        tags: web
     # - name: Run validate script
     #   run: |
     #     chmod +x ./ci/tests/validate_web.sh
