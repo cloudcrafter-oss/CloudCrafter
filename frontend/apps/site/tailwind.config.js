@@ -19,5 +19,10 @@ export default {
 			},
 		},
 	},
-	presets: [createPreset()],
+	darkMode: 'class',
+	presets: [
+		createPreset({
+			preset: 'catppuccin',
+		}),
+	],
 }

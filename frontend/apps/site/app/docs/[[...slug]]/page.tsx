@@ -1,3 +1,4 @@
+import { MDXMermaid } from '@/components/docs/mdx/MDXMermaid'
 import { source } from '@/lib/source'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import {
@@ -7,6 +8,11 @@ import {
 	DocsTitle,
 } from 'fumadocs-ui/page'
 import { notFound } from 'next/navigation'
+
+const myComponents = {
+	...defaultMdxComponents,
+	Mermaid: MDXMermaid,
+}
 
 export default async function Page(props: {
 	params: Promise<{ slug?: string[] }>
@@ -22,7 +28,7 @@ export default async function Page(props: {
 			<DocsTitle>{page.data.title}</DocsTitle>
 			<DocsDescription>{page.data.description}</DocsDescription>
 			<DocsBody>
-				<MDX components={{ ...defaultMdxComponents }} />
+				<MDX components={{ ...myComponents }} />
 			</DocsBody>
 		</DocsPage>
 	)

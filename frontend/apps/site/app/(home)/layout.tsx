@@ -1,4 +1,4 @@
-import '../styles/tailwind.css'
+import '../../styles/tailwind.css'
 import { RootProvider } from 'fumadocs-ui/provider'
 import { Inter } from 'next/font/google'
 import type { ReactNode } from 'react'
@@ -13,11 +13,11 @@ export default function Layout({ children }: { children: ReactNode }) {
 			<head>
 				<link
 					rel='stylesheet'
-					href='https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400&display=swap'
+					href='https://api.fontshare.com/css?f%5B%5D=switzer@400,500,600,700&amp;display=swap'
 				/>
 			</head>
 
-			<body className='flex flex-col min-h-screen'>
+			<body className='text-gray-950 antialiased flex flex-col min-h-screen'>
 				<RootProvider>{children}</RootProvider>
 			</body>
 		</html>
