@@ -11,6 +11,7 @@
 	"dependencies": {
 		"@headlessui/react": "^2.1.1",
 		"@heroicons/react": "^2.1.4",
+		"@mdx-js/react": "^3.1.0",
 		"@sanity/image-url": "^1.0.2",
 		"@sanity/vision": "^3.52.2",
 		"clsx": "^2.1.1",
@@ -19,10 +20,15 @@
 		"fumadocs-mdx": "10.1.0",
 		"fumadocs-ui": "14.0.0",
 		"lucide-react": "^0.453.0",
+		"mermaid": "^11.4.0",
 		"next": "15.0.0",
+		"next-themes": "^0.3.0",
+		"playwright": "^1.48.2",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
-		"react-use-measure": "^2.1.1"
+		"react-use-measure": "^2.1.1",
+		"remark-gfm": "^4.0.0",
+		"remark-mermaidjs": "^7.0.0"
 	},
 	"devDependencies": {
 		"@types/mdx": "^2.0.13",

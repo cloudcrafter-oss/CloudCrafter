@@ -1,3 +1,4 @@
+import { MDXMermaid } from '@/components/docs/mdx/MDXMermaid'
 import { source } from '@/lib/source'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import {
@@ -10,6 +11,7 @@ import { notFound } from 'next/navigation'
 
 const myComponents = {
 	...defaultMdxComponents,
+	Mermaid: MDXMermaid,
 }
 
 export default async function Page(props: {

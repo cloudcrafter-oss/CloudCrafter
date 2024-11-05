@@ -21,3 +21,45 @@ Basically, CloudCrafter consists of the following parts:
 - **CloudCrafter Agent**: The CloudCrafter Agent is a Docker image that runs on your machine. It will connect via WebSockets to the backend and allows communication between the backend and your server. No more passing around of SSH-keys, just run the Docker image and you're all set!
 - **PostgreSQL**: We use PostgreSQL as our database. The Backend and the Backend Workers are connected to the same database.
 - **Redis**: We use Redis as our cache, and our backing queue for the background workers.
+
+```js title="Title"
+console.log('Hello');
+```
+
+```mermaid
+flowchart TB
+    subgraph Cloud ["Cloud Envsironment"]
+        direction TB
+        
+        FE[Frontend\nNext.js] --> BE
+        
+        subgraph BE_Cluster ["Backend Cluster"]
+            BE[Backend\n.NET API]
+            BW[Backend Workers\n.NET]
+        end
+        
+        DB[(PostgreSQL)]
+        REDIS[(Redis)]
+        
+        BE <--> DB
+        BE <--> REDIS
+        BW <--> DB
+        BW <--> REDIS
+        
+        BE <-.->|WebSocket| AG
+    end
+    
+    subgraph Client ["Client Environment"]
+        AG[CloudCrafter Agent\nDocker Container]
+        SERVER[User Server]
+        AG <--> SERVER
+    end
+    
+    classDef database fill:#f9f,stroke:#333,stroke-width:2px
+    classDef component fill:#bbf,stroke:#333,stroke-width:2px
+    
+    class DB,REDIS database
+    class FE,BE,BW,AG component
+    
+    BE -->|REST API| FE
+```
