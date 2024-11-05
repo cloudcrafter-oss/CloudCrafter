@@ -26,13 +26,13 @@ WORKDIR /app
 # First install the dependencies (as they change less often)
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/full/apps/site/source.config.ts ./apps/site/source.config.ts
+RUN pnpm exec playwright install
 RUN pnpm install
  
 # Build the project
 COPY --from=builder /app/out/full/ .
 
 ENV NEXT_PUBLIC_BASE_URL=https://www.cloudcrafter.app
-RUN pnpm exec playwright install
 RUN pnpm turbo run build --filter=cloudcrafter-docs
  
 FROM base AS runner
