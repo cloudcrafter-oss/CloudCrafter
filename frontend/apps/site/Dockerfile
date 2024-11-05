@@ -51,7 +51,7 @@ COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/full/apps/site/source.config.ts ./apps/site/source.config.ts
 
 RUN pnpm install
-RUN cd apps/site && pnpm exec playwright install
+RUN cd apps/site && pnpm exec playwright install && npx playwright install-deps
 # Build the project
 COPY --from=builder /app/out/full/ .
 
