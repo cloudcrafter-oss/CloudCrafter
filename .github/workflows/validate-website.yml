@@ -48,7 +48,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        platform: [linux/amd64, linux/arm64]
+        platform: [linux/arm64]
     steps:
       - uses: actions/checkout@v4
       - name: Set up QEMU
