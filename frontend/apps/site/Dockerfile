@@ -32,7 +32,7 @@ RUN pnpm install
 COPY --from=builder /app/out/full/ .
 
 ENV NEXT_PUBLIC_BASE_URL=https://www.cloudcrafter.app
-
+RUN pnpm exec playwright install
 RUN pnpm turbo run build --filter=cloudcrafter-docs
  
 FROM base AS runner
