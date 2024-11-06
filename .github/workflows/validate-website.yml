@@ -46,9 +46,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    strategy:
-      matrix:
-        platform: [linux/arm64]
     steps:
       - uses: actions/checkout@v4
       - name: Set up QEMU
@@ -68,7 +65,7 @@ jobs:
             context: ./frontend/
             file: ./frontend/apps/site/Dockerfile
             push:  ${{ github.ref != 'refs/heads/main' }}
-            platforms: ${{ matrix.platform }}
+            platforms: linux/amd64,linux/arm64
             tags: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/cloudcrafter-site:latest
 
   notify:
