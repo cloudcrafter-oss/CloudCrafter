@@ -42,7 +42,7 @@ jobs:
 
   build:
     needs: [lint]
-    runs-on: [self-hosted, arm64]
+    runs-on: arm64
     permissions:
       contents: read
       packages: write
