@@ -42,14 +42,12 @@ jobs:
 
   build:
     needs: [lint]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, arm64]
     permissions:
       contents: read
       packages: write
     steps:
       - uses: actions/checkout@v4
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Log in to the Container registry
@@ -65,7 +63,7 @@ jobs:
             context: ./frontend/
             file: ./frontend/apps/site/Dockerfile
             push:  ${{ github.ref != 'refs/heads/main' }}
-            platforms: linux/arm64
+            platforms: linux/aarch64
             tags: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}/cloudcrafter-site:latest
 
   notify:
