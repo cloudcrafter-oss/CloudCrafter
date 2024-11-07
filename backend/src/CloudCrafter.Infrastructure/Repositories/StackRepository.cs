@@ -84,6 +84,7 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             StackId = stackId,
             Logs = new(),
             State = DeploymentState.Created,
+            RecipeYaml = null,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
         };

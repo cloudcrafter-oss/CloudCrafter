@@ -24,6 +24,7 @@ public class DeploymentMapperTest : BaseMapperTest
             Id = Guid.NewGuid(),
             StackId = Guid.NewGuid(),
             Logs = new List<DeploymentLog>(),
+            RecipeYaml = null,
             State = entity,
             CreatedAt = dateTime,
             UpdatedAt = dateTime,

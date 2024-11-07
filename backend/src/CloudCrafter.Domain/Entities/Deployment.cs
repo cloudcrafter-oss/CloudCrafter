@@ -10,6 +10,7 @@ public class Deployment : BaseAuditableEntity
     public required List<DeploymentLog> Logs { get; init; }
 
     public required DeploymentState State { get; set; }
+    public required string? RecipeYaml { get; set; }
 }
 
 public enum DeploymentState

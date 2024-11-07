@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Core.Common.Interfaces;
+﻿using CloudCrafter.Agent.Models.IO;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Agent;
 using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.RecipeGenerators;
@@ -87,6 +88,22 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
         );
         var recipe = recipeGenerator.Generate();
         logger.LogDebug("Recipe brewed!");
+        logger.LogDebug("Writing recipe to database...");
+
+        var deployment = await context
+            .Deployments.Where(x => x.Id == DeploymentId)
+            .FirstOrDefaultAsync();
+
+        if (deployment == null)
+        {
+            logger.LogCritical("Deployment not found");
+            throw new ArgumentNullException(nameof(DeploymentId), "Deployment not found");
+        }
+
+        var writer = new YamlRecipeWriter(recipe);
+
+        deployment.RecipeYaml = writer.WriteString();
+        await context.SaveChangesAsync();
 
         var agentManager = serviceProvider.GetRequiredService<IAgentManager>();
 

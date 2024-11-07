@@ -40,7 +40,7 @@ public class Stacks : EndpointGroupBase
         ISender sender
     )
     {
-        return await sender.Send(new DispatchStack.Command(id));
+        return await sender.Send(new DispatchStackDeployment.Command(id));
     }
 
     public async Task<List<SimpleDeploymentDto>> GetDeploymentsForStack(
