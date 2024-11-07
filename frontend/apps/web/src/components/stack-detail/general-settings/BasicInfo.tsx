@@ -52,7 +52,7 @@ export const BasicInfo = ({
 					<CardTitle>Stack Information</CardTitle>
 					<CardDescription>Basic details about your Stack</CardDescription>
 					<div className='absolute top-4 right-4 flex items-center space-x-2'>
-						<Badge variant='destructive'>Unhealthy</Badge>
+						<Badge variant='destructive'>{stackDetails.health.value}</Badge>
 
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>

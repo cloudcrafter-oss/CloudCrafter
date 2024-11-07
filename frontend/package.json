@@ -6,7 +6,7 @@
 		"lint": "turbo lint -- --fix",
 		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
 		"ui:add": "pnpm --filter @repo/ui ui:add",
-		"web:generate-clients": "pnpm --filter web generate-clients",
+		"web:generate-clients": "pnpm --filter cloudcrafter-frontend generate-clients",
 		"format-and-lint": "biome check .",
 		"format-and-lint:fix": "biome check . --write"
 	},

@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Domain.Domain.Deployment;
+﻿using CloudCrafter.Agent.SignalR.Models;
+using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Domain.Stack;
 
 namespace CloudCrafter.Core.Interfaces.Domain.Stacks;
@@ -11,4 +12,5 @@ public interface IStacksService
 
     Task<Guid> CreateDeployment(Guid stackId);
     Task<List<SimpleDeploymentDto>> GetDeployments(Guid stackId);
+    Task HandleHealthChecks(Guid serverId, ContainerHealthCheckArgs args);
 }

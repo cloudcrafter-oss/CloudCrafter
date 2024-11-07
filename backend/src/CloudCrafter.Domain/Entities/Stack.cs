@@ -15,6 +15,8 @@ public class Stack : BaseAuditableEntity
 
     public List<Deployment> Deployments { get; set; } = new();
     public List<StackService> Services { get; set; } = new();
+
+    public required EntityHealthStatus HealthStatus { get; init; }
 }
 
 public enum StackBuildPack

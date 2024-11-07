@@ -3,12 +3,12 @@ using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Commands.SignalR;
 using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
+using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Jobs.Channels;
 using CloudCrafter.Core.Jobs.Dispatcher;
 using CloudCrafter.Core.SignalR.HubActions;
 using CloudCrafter.Domain.Domain.Deployment;
 using MediatR;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.SignalR;
@@ -20,6 +20,7 @@ public class AgentHub(
     ISender sender,
     ICloudCrafterDispatcher dispatcher,
     IDeploymentService deploymentService,
+    IStacksService stacksService,
     WebHubActions webHubActions
 ) : CloudCrafterBaseHub(serversService, logger, serverManager), IAgentHub
 {
@@ -52,5 +53,12 @@ public class AgentHub(
     public Task MarkDeploymentFailed(Guid deploymentId)
     {
         return deploymentService.MarkDeployment(deploymentId, DeploymentStatusDto.Failed);
+    }
+
+    public async Task ReportContainerHealth(ContainerHealthCheckArgs args)
+    {
+        var serverId = await GetServerForClient();
+
+        await stacksService.HandleHealthChecks(serverId, args);
     }
 }

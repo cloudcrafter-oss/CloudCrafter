@@ -3,4 +3,5 @@
 public interface ICloudCrafterRecurringJobsDispatcher
 {
     Task AddRecurringConnectivityChecks();
+    Task AddRecurringHealthynessChecks();
 }

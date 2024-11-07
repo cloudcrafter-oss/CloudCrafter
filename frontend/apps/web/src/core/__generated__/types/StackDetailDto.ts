@@ -1,6 +1,7 @@
 import type { StackServiceDto } from "./StackServiceDto";
 import type { StackSourceDto } from "./StackSourceDto";
 import type { StackServerDto } from "./StackServerDto";
+import type { EntityHealthDto } from "./EntityHealthDto";
 
  export type StackDetailDto = {
     /**
@@ -23,4 +24,8 @@ import type { StackServerDto } from "./StackServerDto";
      * @type object
     */
     destination: StackServerDto;
+    /**
+     * @type object
+    */
+    health: EntityHealthDto;
 };

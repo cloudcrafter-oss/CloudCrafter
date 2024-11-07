@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Deployment;
@@ -47,8 +48,59 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
 
     public async Task<List<SimpleDeploymentDto>> GetDeployments(Guid stackId)
     {
-        List<Deployment> deployments = await repository.GetDeployments(stackId);
+        var deployments = await repository.GetDeployments(stackId);
 
         return mapper.Map<List<SimpleDeploymentDto>>(deployments);
+    }
+
+    public async Task HandleHealthChecks(Guid serverId, ContainerHealthCheckArgs args)
+    {
+        foreach (var stackInfo in args.Info)
+        {
+            var stackId = stackInfo.Key;
+
+            var stackEntity = await repository.GetStack(stackId);
+
+            if (stackEntity == null || stackEntity.ServerId != serverId)
+            {
+                continue;
+            }
+
+            var allAreHealthy = stackInfo.Value.StackServices.All(x =>
+                x.Value == ContainerHealthCheckStackInfoHealthStatus.Healthy
+            );
+
+            var allAreUnhealthy = stackInfo.Value.StackServices.All(x =>
+                x.Value == ContainerHealthCheckStackInfoHealthStatus.Unhealthy
+            );
+            stackEntity.HealthStatus.SetStatus(
+                allAreHealthy ? EntityHealthStatusValue.Healthy
+                : allAreUnhealthy ? EntityHealthStatusValue.Unhealthy
+                : EntityHealthStatusValue.Degraded
+            );
+
+            foreach (var stackService in stackInfo.Value.StackServices)
+            {
+                var stackServiceId = stackService.Key;
+
+                // TODO: Move this to Unit of Work
+                var stackServiceEntity = await repository.GetService(stackServiceId);
+
+                if (stackServiceEntity?.Stack.ServerId != serverId)
+                {
+                    continue;
+                }
+
+                stackServiceEntity?.HealthStatus.SetStatus(
+                    stackService.Value == ContainerHealthCheckStackInfoHealthStatus.Healthy
+                        ? EntityHealthStatusValue.Healthy
+                    : stackService.Value == ContainerHealthCheckStackInfoHealthStatus.Unhealthy
+                        ? EntityHealthStatusValue.Unhealthy
+                    : EntityHealthStatusValue.Degraded
+                );
+            }
+        }
+
+        await repository.SaveChangesAsync();
     }
 }
