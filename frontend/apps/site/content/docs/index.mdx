@@ -22,54 +22,54 @@ Basically, CloudCrafter consists of the following parts:
 - **PostgreSQL**: We use PostgreSQL as our database. The Backend and the Backend Workers are connected to the same database.
 - **Redis**: We use Redis as our cache, and our backing queue for the background workers.
 
-```js title="Title"
-console.log('Hello');
-```
 
 ```mermaid
 flowchart TB
-    subgraph Cloud ["Cloud Envsironment"]
-        direction TB
+    subgraph Cloud ["SaaS / Self Hosted Server"]
+        %% direction TB
         
-        FE[Frontend\nNext.js] --> BE
-        
-        subgraph BE_Cluster ["Backend Cluster"]
-            BE[Backend
-.NET API]
-            BW[Backend Workers
-.NET]
+        RP[Traefik Reverse Proxy]
+        RP --> FE
+        RP --> BE
+        subgraph BE_Cluster ["CloudCrafter Service"]
+            FE[Frontend Next.js]
+            FE <-.->|Server to Server call| BE
+            
+            BE[Backend API]
+            BW[Backend Workers]
         end
         
-        DB[(PostgreSQL)]
-        REDIS[(Redis)]
+        subgraph DOCKER_SERVICES ["3rd party"]
+            DB[(PostgreSQL)]
+            REDIS[(Redis)]
+
+        end
         
         BE <--> DB
         BE <--> REDIS
         BW <--> DB
         BW <--> REDIS
         
-        BE <-.->|WebSocket| AG
+
     end
     
-    subgraph Client ["Client Environment"]
-        AG[CloudCrafter Agent\nDocker Container]
-        SERVER[User Server]
-        AG <--> SERVER
+    subgraph Client ["Client VPS"]
+        AG[CloudCrafter Agent]
     end
-    
+
+
+    subgraph PC ["Your PC"]
+        BROWSER[Browser]
+    end
+
+    FE --> RP
+
+    AG <-.->|WebSocket connection| RP
+
+    BROWSER <-.->|Visiting Frontend| RP
     classDef database fill:#f9f,stroke:#333,stroke-width:2px
     classDef component fill:#bbf,stroke:#333,stroke-width:2px
     
     class DB,REDIS database
-    class FE,BE,BW,AG component
-    
-    BE -->|REST API| FE
-```
-
-```mermaid
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
+    class FE,BE,BW,AG,RP component
 ```
