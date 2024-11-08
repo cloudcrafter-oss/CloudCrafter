@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Domain.Common;
+using CloudCrafter.Domain.Entities.Jobs;
 
 namespace CloudCrafter.Domain.Entities;
 
@@ -16,7 +17,7 @@ public class Stack : BaseAuditableEntity
     public List<Deployment> Deployments { get; set; } = new();
     public List<StackService> Services { get; set; } = new();
 
-    public required EntityHealthStatus HealthStatus { get; init; }
+    public required StackHealthEntity HealthStatus { get; init; }
 }
 
 public enum StackBuildPack

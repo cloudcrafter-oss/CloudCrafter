@@ -5,6 +5,7 @@ using CloudCrafter.Domain.Common;
 using CloudCrafter.Domain.Domain.Application.Services;
 using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Domain.Entities.Jobs;
 using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.Infrastructure.Repositories;
@@ -32,7 +33,7 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             },
             // TODO: Allow multiple options
             BuildPack = StackBuildPack.Nixpacks,
-            HealthStatus = new EntityStackServiceHealthStatus
+            HealthStatus = new StackHealthEntity
             {
                 StatusAt = DateTime.UtcNow,
                 Value = EntityHealthStatusValue.Unknown,

@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using CloudCrafter.Domain.Domain.Application.Services;
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Domain.Entities.Jobs;
 using Environment = CloudCrafter.Domain.Entities.Environment;
 
 namespace CloudCrafter.Infrastructure.Data.Fakeds;
@@ -62,6 +63,7 @@ public static class FakerInstances
             .RuleFor(x => x.EnvironmentId, environmentId)
             .RuleFor(x => x.Deployments, f => new List<Deployment>())
             .RuleFor(x => x.Source, f => null)
+            .RuleFor(x => x.HealthStatus, f => new StackHealthEntity())
             .RuleFor(x => x.Services, f => new List<StackService>())
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
