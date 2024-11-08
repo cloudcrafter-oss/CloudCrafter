@@ -144,7 +144,8 @@ networks:
     {
         var service = _editor.AddService("newService");
         service.AddEnvironmentVariable("newKey", "newValue");
-        service.AddVolume("newVolume", "newPath");
+        service.AddVolume("/newVolume", "/newPath");
+        service.SetImage("nginx", "latest");
 
         var dbService = _editor.Service("db");
         dbService.AddEnvironmentVariable("newKey", "newValue");
