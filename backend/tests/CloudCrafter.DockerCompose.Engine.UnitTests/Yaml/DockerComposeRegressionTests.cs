@@ -69,7 +69,7 @@ networks:
 
         var isValid = await editor.IsValid();
 
-        isValid.Should().BeFalse();
+        isValid.IsValid.Should().BeFalse();
     }
 
     [Test]
@@ -79,6 +79,6 @@ networks:
 
         var isValid = await editor.IsValid();
 
-        isValid.Should().BeTrue();
+        isValid.IsValid.Should().BeTrue();
     }
 }

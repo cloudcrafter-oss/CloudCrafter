@@ -5,7 +5,13 @@ namespace CloudCrafter.DockerCompose.Engine.Validator;
 
 public class DockerComposeValidator(string YamlContent)
 {
-    public async Task<bool> IsValid()
+    public class Result
+    {
+        public required bool IsValid { get; init; }
+        public required string? ErrorMessage { get; init; }
+    }
+
+    public async Task<Result> IsValid()
     {
         // Create temporary file
         var tempFile = Path.GetTempFileName() + ".yaml";
@@ -21,11 +27,13 @@ public class DockerComposeValidator(string YamlContent)
             );
             // Create process to run docker compose validate
 
-            return result.ExitCode == 0;
+            var isValid = result.ExitCode == 0;
+
+            return new() { IsValid = isValid, ErrorMessage = result.StdErr };
         }
-        catch
+        catch (Exception ex)
         {
-            return false;
+            return new() { IsValid = false, ErrorMessage = ex.Message };
         }
         finally
         {

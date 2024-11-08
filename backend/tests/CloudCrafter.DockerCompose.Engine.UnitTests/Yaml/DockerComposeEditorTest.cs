@@ -76,7 +76,7 @@ networks:
         var yaml = _editor.GetYaml();
         var isValid = await _editor.IsValid();
 
-        isValid.Should().BeTrue();
+        isValid.IsValid.Should().BeTrue();
 
         await Verify(yaml);
     }
@@ -90,7 +90,7 @@ networks:
 
         var isValid = await _editor.IsValid();
 
-        isValid.Should().BeTrue();
+        isValid.IsValid.Should().BeTrue();
 
         await Verify(yaml);
     }
@@ -104,7 +104,7 @@ networks:
 
         var isValid = await _editor.IsValid();
 
-        isValid.Should().BeTrue();
+        isValid.IsValid.Should().BeTrue();
 
         await Verify(yaml);
     }
@@ -118,7 +118,7 @@ networks:
 
         var isValid = await _editor.IsValid();
 
-        isValid.Should().BeTrue();
+        isValid.IsValid.Should().BeTrue();
 
         await Verify(yaml);
     }
@@ -128,13 +128,14 @@ networks:
     {
         var service = _editor.AddService("newService");
         service.AddEnvironmentVariable("newKey", "newValue");
-        service.AddVolume("newVolume", "newPath");
+        service.AddVolume("/newVolume", "/newPath");
+        service.SetImage("nginx", "latest");
 
         var yaml = _editor.GetYaml();
 
         var isValid = await _editor.IsValid();
 
-        isValid.Should().BeTrue();
+        isValid.IsValid.Should().BeTrue();
 
         await Verify(yaml);
     }
@@ -154,7 +155,7 @@ networks:
 
         var isValid = await _editor.IsValid();
 
-        isValid.Should().BeTrue();
+        isValid.IsValid.Should().BeTrue();
 
         await Verify(yaml);
     }
@@ -169,7 +170,7 @@ networks:
 
         var isValid = await _editor.IsValid();
 
-        isValid.Should().BeTrue();
+        isValid.IsValid.Should().BeTrue();
 
         await Verify(yaml);
     }
@@ -197,7 +198,7 @@ networks:
 
         var isValid = await _editor.IsValid();
 
-        isValid.Should().BeTrue();
+        isValid.IsValid.Should().BeTrue();
 
         await Verify(yaml);
     }

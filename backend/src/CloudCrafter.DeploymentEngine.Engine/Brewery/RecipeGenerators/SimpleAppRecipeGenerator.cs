@@ -25,7 +25,7 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
 
         var isValid = await dockerComposeEditor.IsValid();
 
-        if (!isValid)
+        if (!isValid.IsValid)
         {
             throw new InvalidOperationException("Generated docker-compose.yml is not valid.");
         }

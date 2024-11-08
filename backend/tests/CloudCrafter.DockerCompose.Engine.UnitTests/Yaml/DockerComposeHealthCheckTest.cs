@@ -102,7 +102,7 @@ services:
         );
 
         var isValid = await _editor.IsValid();
-        isValid.Should().BeTrue();
+        isValid.IsValid.Should().BeTrue();
 
         var yaml = _editor.GetYaml();
 
@@ -119,7 +119,7 @@ services:
 
         var isValid = await editor.IsValid();
 
-        isValid.Should().BeTrue();
+        isValid.IsValid.Should().BeTrue();
 
         var yaml = editor.GetYaml();
         await Verify(yaml);
@@ -135,7 +135,7 @@ services:
 
         var isValid = await editor.IsValid();
 
-        isValid.Should().BeTrue();
+        isValid.IsValid.Should().BeTrue();
 
         var yaml = editor.GetYaml();
         await Verify(yaml);

@@ -48,7 +48,7 @@ public class DockerComposeValidatorTests
 
         var isValid = await validator.IsValid();
 
-        isValid.Should().BeTrue();
+        isValid.IsValid.Should().BeTrue();
     }
 
     [Test]
@@ -59,6 +59,6 @@ public class DockerComposeValidatorTests
 
         var isValid = await validator.IsValid();
 
-        isValid.Should().BeFalse();
+        isValid.IsValid.Should().BeFalse();
     }
 }
