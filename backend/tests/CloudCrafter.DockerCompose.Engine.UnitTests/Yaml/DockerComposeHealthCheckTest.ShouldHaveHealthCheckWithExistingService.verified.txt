@@ -1,0 +1,13 @@
+﻿services:
+  web:
+    image: nginx:alpine
+    labels:
+      cloudcrafter.managed: "true"
+      cloudcrafter.stack.id: "71125cfe-caa4-42fe-9ccb-cf987ea38f3a"
+      cloudcrafter.stack.service.id: "3a7c1d45-9f3e-4b1a-8f2c-d4e5f6a7b8c9"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s

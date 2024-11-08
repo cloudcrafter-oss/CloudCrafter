@@ -1,0 +1,5 @@
+﻿services:
+  webserver:
+    image: nginx
+    healthcheck:
+      test: "curl -f http://localhost"

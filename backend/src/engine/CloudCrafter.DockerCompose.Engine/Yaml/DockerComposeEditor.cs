@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 using CloudCrafter.DockerCompose.Engine.Exceptions;
+using CloudCrafter.DockerCompose.Engine.Models;
 using CloudCrafter.DockerCompose.Engine.Validator;
 using Slugify;
 using YamlDotNet.RepresentationModel;
@@ -334,6 +335,42 @@ public class DockerComposeEditor
 
             ports.Add(new YamlScalarNode($"{hostPort}:{containerPort}"));
 
+            return this;
+        }
+
+        public bool HasHealthCheck()
+        {
+            var serviceNode = editor.GetServiceNode(serviceName);
+            return serviceNode!.Children.ContainsKey("healthcheck");
+        }
+
+        public ServiceEditor AddHealthCheck(ServiceHealthCheck healthCheck)
+        {
+            var serviceNode = editor.GetServiceNode(serviceName);
+            var healthcheckNode = new YamlMappingNode();
+
+            healthcheckNode.Add("test", healthCheck.Test);
+            if (healthCheck.IntervalSeconds.HasValue)
+            {
+                healthcheckNode.Add("interval", $"{healthCheck.IntervalSeconds}s");
+            }
+
+            if (healthCheck.TimeoutSeconds.HasValue)
+            {
+                healthcheckNode.Add("timeout", $"{healthCheck.TimeoutSeconds}s");
+            }
+
+            if (healthCheck.Retries.HasValue)
+            {
+                healthcheckNode.Add("retries", healthCheck.Retries.Value.ToString());
+            }
+
+            if (healthCheck.StartPeriodSeconds.HasValue)
+            {
+                healthcheckNode.Add("start_period", $"{healthCheck.StartPeriodSeconds}s");
+            }
+
+            serviceNode.Add("healthcheck", healthcheckNode);
             return this;
         }
     }

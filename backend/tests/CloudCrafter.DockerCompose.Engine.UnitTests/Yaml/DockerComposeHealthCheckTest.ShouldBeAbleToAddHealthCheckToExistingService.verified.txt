@@ -1,0 +1,28 @@
+﻿version: '3.8'
+services:
+  web:
+    image: php:7.4-apache
+    ports:
+    - "80:80"
+    volumes:
+    - ./php-app:/var/www/html
+    networks:
+    - lampnet
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+    - db_data:/var/lib/mysql
+    networks:
+    - lampnet
+    healthcheck:
+      test: curl -f http://localhost/ || exit 1
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 11s
+volumes:
+  db_data: 
+networks:
+  lampnet: 
