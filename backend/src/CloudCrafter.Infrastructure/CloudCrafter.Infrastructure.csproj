@@ -29,4 +29,13 @@
     <Folder Include="Data\Migrations\"/>
     <Folder Include="Data\Queries\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20241108073721_RemovedIsRunning.cs" />
+    <Compile Remove="Data\Migrations\20241108073721_RemovedIsRunning.Designer.cs" />
+    <Compile Remove="Data\Migrations\20241108073415_RenameHealthOnStack.cs" />
+    <Compile Remove="Data\Migrations\20241108073415_RenameHealthOnStack.Designer.cs" />
+    <Compile Remove="Data\Migrations\20241108073241_AddStackServiceHealth.cs" />
+    <Compile Remove="Data\Migrations\20241108073241_AddStackServiceHealth.Designer.cs" />
+  </ItemGroup>
 </Project>

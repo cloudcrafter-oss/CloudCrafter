@@ -32,7 +32,7 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             },
             // TODO: Allow multiple options
             BuildPack = StackBuildPack.Nixpacks,
-            HealthStatus = new EntityHealthStatus
+            HealthStatus = new EntityStackServiceHealthStatus
             {
                 StatusAt = DateTime.UtcNow,
                 Value = EntityHealthStatusValue.Unknown,
@@ -67,7 +67,7 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             Name = name,
             StackServiceTypeId = StackServiceTypeConstants.App,
             StackId = stackId,
-            HealthStatus = new EntityHealthStatus(),
+            HealthStatus = new EntityStackServiceHealthStatus(),
             // TODO: Based on the StackServiceType, we should add HttpConfiguration
             // E.g. databases should not get this.
             HttpConfiguration = null,

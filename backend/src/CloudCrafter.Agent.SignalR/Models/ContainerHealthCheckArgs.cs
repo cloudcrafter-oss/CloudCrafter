@@ -7,10 +7,13 @@ public class ContainerHealthCheckArgs
 
 public class ContainerHealthCheckStackInfo
 {
-    public required Dictionary<
-        Guid,
-        ContainerHealthCheckStackInfoHealthStatus
-    > StackServices { get; init; }
+    public required Dictionary<Guid, ContainerHealthOptions> StackServices { get; init; }
+}
+
+public class ContainerHealthOptions
+{
+    public required ContainerHealthCheckStackInfoHealthStatus Status { get; init; }
+    public required bool IsRunning { get; init; }
 }
 
 public enum ContainerHealthCheckStackInfoHealthStatus

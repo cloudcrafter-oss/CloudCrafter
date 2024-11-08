@@ -67,11 +67,11 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
             }
 
             var allAreHealthy = stackInfo.Value.StackServices.All(x =>
-                x.Value == ContainerHealthCheckStackInfoHealthStatus.Healthy
+                x.Value.Status == ContainerHealthCheckStackInfoHealthStatus.Healthy
             );
 
             var allAreUnhealthy = stackInfo.Value.StackServices.All(x =>
-                x.Value == ContainerHealthCheckStackInfoHealthStatus.Unhealthy
+                x.Value.Status == ContainerHealthCheckStackInfoHealthStatus.Unhealthy
             );
             stackEntity.HealthStatus.SetStatus(
                 allAreHealthy ? EntityHealthStatusValue.Healthy
@@ -91,12 +91,16 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
                     continue;
                 }
 
+                var isRunning = stackService.Value.IsRunning;
+
                 stackServiceEntity?.HealthStatus.SetStatus(
-                    stackService.Value == ContainerHealthCheckStackInfoHealthStatus.Healthy
-                        ? EntityHealthStatusValue.Healthy
-                    : stackService.Value == ContainerHealthCheckStackInfoHealthStatus.Unhealthy
-                        ? EntityHealthStatusValue.Unhealthy
-                    : EntityHealthStatusValue.Degraded
+                    stackService.Value.Status == ContainerHealthCheckStackInfoHealthStatus.Healthy
+                            ? EntityHealthStatusValue.Healthy
+                        : stackService.Value.Status
+                        == ContainerHealthCheckStackInfoHealthStatus.Unhealthy
+                            ? EntityHealthStatusValue.Unhealthy
+                        : EntityHealthStatusValue.Degraded,
+                    isRunning
                 );
             }
         }

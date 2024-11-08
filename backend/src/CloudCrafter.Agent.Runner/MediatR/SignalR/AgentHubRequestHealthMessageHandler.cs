@@ -89,6 +89,8 @@ public static class AgentHubRequestHealthMessageHandler
 
                     var health = ContainerHealthCheckStackInfoHealthStatus.Unknown;
 
+                    var isRunning = containerInfo.State.Running;
+
                     if (containerInfo.State.Health != null)
                     {
                         var healthStatus = containerInfo.State.Health.Status;
@@ -101,7 +103,10 @@ public static class AgentHubRequestHealthMessageHandler
                             : ContainerHealthCheckStackInfoHealthStatus.Degraded;
                     }
 
-                    stackInfo.StackServices.Add(stackServiceGuid, health);
+                    stackInfo.StackServices.Add(
+                        stackServiceGuid,
+                        new ContainerHealthOptions { IsRunning = isRunning, Status = health }
+                    );
 
                     // var status = container.Status;
                     // var state = container.State;
