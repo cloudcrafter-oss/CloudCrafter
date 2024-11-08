@@ -36,13 +36,13 @@ public class SimpleAppRecipeGeneratorTest
         );
 
         // Act
-        var result = generator.Generate();
+        var result = await generator.Generate();
 
-        var writer = new YamlRecipeWriter(result);
+        var writer = new YamlRecipeWriter(result.Recipe);
         var recipe = writer.WriteString();
 
         // Assert
-        await Verify(recipe);
+        await Verify(() => new { Recipe = recipe, DockerCompose = result.DockerComposeYaml });
 
         var reader = new YamlRecipeReader();
         var recipeFromReader = reader.FromString(recipe);
@@ -83,9 +83,9 @@ public class SimpleAppRecipeGeneratorTest
         );
 
         // Act
-        var result = generator.Generate();
+        var result = await generator.Generate();
 
-        var writer = new YamlRecipeWriter(result);
+        var writer = new YamlRecipeWriter(result.Recipe);
         var recipe = writer.WriteString();
 
         // Assert

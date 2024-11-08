@@ -42,6 +42,7 @@ public class SimpleAppDockerComposeGenerator(BaseDockerComposeGenerator.Args arg
 
         AddBasicLabels(labelService, stackService);
         AddProxyLabels(labelService, stackService, service.ServiceName());
+        AddHealthCheck(service, stackService);
 
         service.AddLabels(labelService);
         service.AddNetwork(network);

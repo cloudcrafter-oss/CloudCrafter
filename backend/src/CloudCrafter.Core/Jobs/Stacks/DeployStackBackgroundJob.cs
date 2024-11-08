@@ -86,7 +86,7 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
                 DeploymentId = _deployment!.Id,
             }
         );
-        var recipe = recipeGenerator.Generate();
+        var recipe = await recipeGenerator.Generate();
         logger.LogDebug("Recipe brewed!");
         logger.LogDebug("Writing recipe to database...");
 
@@ -100,7 +100,7 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
             throw new ArgumentNullException(nameof(DeploymentId), "Deployment not found");
         }
 
-        var writer = new YamlRecipeWriter(recipe);
+        var writer = new YamlRecipeWriter(recipe.Recipe);
 
         deployment.RecipeYaml = writer.WriteString();
         await context.SaveChangesAsync();
@@ -108,7 +108,11 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
         var agentManager = serviceProvider.GetRequiredService<IAgentManager>();
 
         logger.LogDebug("Sending recipe to agent...");
-        await agentManager.SendRecipeToAgent(_deployment.Stack.ServerId, _deployment.Id, recipe);
+        await agentManager.SendRecipeToAgent(
+            _deployment.Stack.ServerId,
+            _deployment.Id,
+            recipe.Recipe
+        );
         logger.LogDebug("Recipe sent to agent!");
     }
 }

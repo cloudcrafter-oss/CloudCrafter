@@ -147,11 +147,17 @@ public abstract class BaseRecipeGenerator
 
     public abstract BaseDockerComposeGenerator CreateDockerComposeGenerator();
 
-    public abstract DeploymentRecipe Generate();
+    public abstract Task<GeneratedResult> Generate();
 
     public class Args
     {
         public required Stack Stack { get; init; }
         public required Guid DeploymentId { get; init; }
+    }
+
+    public class GeneratedResult
+    {
+        public required DeploymentRecipe Recipe { get; init; }
+        public required string DockerComposeYaml { get; init; }
     }
 }

@@ -38,10 +38,11 @@ public static class FakerInstances
             .RuleFor(x => x.Environments, new List<Environment>())
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
-    public static Faker<EntityHealthStatus> EntityHealthStatusFaker =>
-        new Faker<EntityHealthStatus>()
+    public static Faker<EntityStackServiceHealthStatus> EntityHealthStatusFaker =>
+        new Faker<EntityStackServiceHealthStatus>()
             .StrictMode(true)
             .RuleFor(x => x.Value, f => f.PickRandom<EntityHealthStatusValue>())
+            .RuleFor(x => x.IsRunning, false)
             .RuleFor(x => x.StatusAt, DateTime.UtcNow);
 
     public static StackServiceType StackServiceAppTypeType =>

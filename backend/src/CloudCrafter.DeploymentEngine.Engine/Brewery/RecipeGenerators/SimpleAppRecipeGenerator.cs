@@ -1,5 +1,4 @@
-﻿using CloudCrafter.Agent.Models.Recipe;
-using CloudCrafter.DeploymentEngine.Engine.Abstraction;
+﻿using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.DockerCompose;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
 using CloudCrafter.DockerCompose.Engine.Yaml;
@@ -20,9 +19,16 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
         );
     }
 
-    public override DeploymentRecipe Generate()
+    public override async Task<GeneratedResult> Generate()
     {
         var dockerComposeEditor = GenerateDockerCompose();
+
+        var isValid = await dockerComposeEditor.IsValid();
+
+        if (!isValid)
+        {
+            throw new InvalidOperationException("Generated docker-compose.yml is not valid.");
+        }
 
         // TODO: Move to some constant (and in the future a configurable option.
         // For now, it's fine.
@@ -34,7 +40,13 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
 
         AddSteps(dockerComposeEditor);
 
-        return Recipe.Build();
+        var recipe = Recipe.Build();
+
+        return new GeneratedResult
+        {
+            Recipe = recipe,
+            DockerComposeYaml = dockerComposeEditor.GetYaml(),
+        };
     }
 
     private void AddSteps(DockerComposeEditor dockerComposeEditor)

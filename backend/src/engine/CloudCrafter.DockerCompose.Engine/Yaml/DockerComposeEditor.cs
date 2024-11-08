@@ -154,7 +154,8 @@ public class DockerComposeEditor
 
     public Task<bool> IsValid()
     {
-        var validator = new DockerComposeValidator(GetYaml());
+        var yaml = GetYaml();
+        var validator = new DockerComposeValidator(yaml);
 
         return validator.IsValid();
     }
