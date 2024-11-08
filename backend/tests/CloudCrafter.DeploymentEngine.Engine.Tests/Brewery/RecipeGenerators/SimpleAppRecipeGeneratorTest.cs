@@ -42,7 +42,7 @@ public class SimpleAppRecipeGeneratorTest
         var recipe = writer.WriteString();
 
         // Assert
-        await Verify(() => new { Recipe = recipe, DockerCompose = result.DockerComposeYaml });
+        await Verify(new { Recipe = recipe, DockerCompose = result.DockerComposeYaml });
 
         var reader = new YamlRecipeReader();
         var recipeFromReader = reader.FromString(recipe);

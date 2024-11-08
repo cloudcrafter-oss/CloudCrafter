@@ -228,7 +228,7 @@ networks:
         service.AddExposedPort(3307, 3307);
         var isValid = await _editor.IsValid();
 
-        isValid.Should().Be(true);
+        isValid.IsValid.Should().BeTrue();
 
         var yaml = _editor.GetYaml();
 
