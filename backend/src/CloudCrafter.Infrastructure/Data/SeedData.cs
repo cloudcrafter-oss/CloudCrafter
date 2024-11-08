@@ -113,7 +113,8 @@ public static class SeedData
             UpdatedAt = DateTime.UtcNow,
             Name = "Local Test Server",
             DockerDataDirectoryMount = "cloudcrafter_testhostdata",
-            Id = Guid.NewGuid(),
+            AgentSecretKey = "vHh7mZ5ntR",
+            Id = Guid.Parse("ffcdd9ee-ff31-4344-a3ab-efdc9b5e44f1"),
         };
 
         dbContext.Servers.Add(localTestServer);
