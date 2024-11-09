@@ -1,5 +1,6 @@
 'use client'
 import {
+	type EntityHealthDtoValue,
 	type StackDetailDto,
 	useDispatchStackDeploymentHook,
 } from '@/src/core/__generated__'
@@ -23,6 +24,12 @@ import { Label } from '@ui/components/ui/label'
 import { Switch } from '@ui/components/ui/switch'
 import { Textarea } from '@ui/components/ui/textarea'
 import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from '@ui/components/ui/tooltip'
+import {
 	FileText,
 	MoreVertical,
 	PencilIcon,
@@ -30,7 +37,39 @@ import {
 	Trash2,
 } from 'lucide-react'
 import { useState } from 'react'
+import ShowDate from '../../ShowDate'
 import { ChannelLogViewerEnhanced } from '../../logviewer/ChannelLogViewer'
+
+const BadgeStatus = ({
+	statusAt,
+	status,
+}: { statusAt: string | null | undefined; status: EntityHealthDtoValue }) => {
+	const classMap = {
+		Healthy: 'bg-green-500',
+		Unhealthy: 'bg-red-500',
+		Unknown: 'bg-gray-500',
+	}
+
+	return (
+		<TooltipProvider>
+			<Tooltip>
+				<TooltipTrigger disabled>
+					<Badge
+						className={`${classMap[status as keyof typeof classMap] ?? classMap.Unknown} hover:${classMap[status as keyof typeof classMap] ?? classMap.Unknown} cursor-pointer`}
+					>
+						<p className='cursor-pointer'>{status}</p>
+					</Badge>
+				</TooltipTrigger>
+				<TooltipContent>
+					<p>
+						Last update at:{' '}
+						{statusAt ? <ShowDate dateString={statusAt} /> : 'Never'}
+					</p>
+				</TooltipContent>
+			</Tooltip>
+		</TooltipProvider>
+	)
+}
 
 export const BasicInfo = ({
 	stackDetails,
@@ -52,7 +91,11 @@ export const BasicInfo = ({
 					<CardTitle>Stack Information</CardTitle>
 					<CardDescription>Basic details about your Stack</CardDescription>
 					<div className='absolute top-4 right-4 flex items-center space-x-2'>
-						<Badge variant='destructive'>{stackDetails.health.value}</Badge>
+						<BadgeStatus
+							statusAt={stackDetails.health.statusAt}
+							status={stackDetails.health.value}
+						/>
+						{/* <Badge variant='destructive'>{stackDetails.health.value}</Badge> */}
 
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
