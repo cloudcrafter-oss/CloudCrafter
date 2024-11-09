@@ -2,8 +2,10 @@
 import {
 	type EntityHealthDtoValue,
 	type StackDetailDto,
+	updateStackMutationRequestSchema,
 	useDispatchStackDeploymentHook,
 } from '@/src/core/__generated__'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Badge } from '@ui/components/ui/badge'
 import { Button } from '@ui/components/ui/button'
 import {
@@ -19,6 +21,14 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@ui/components/ui/dropdown-menu'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '@ui/components/ui/form'
 import { Input } from '@ui/components/ui/input'
 import { Label } from '@ui/components/ui/label'
 import { Switch } from '@ui/components/ui/switch'
@@ -37,6 +47,8 @@ import {
 	Trash2,
 } from 'lucide-react'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import type { z } from 'zod'
 import ShowDate from '../../ShowDate'
 import { ChannelLogViewerEnhanced } from '../../logviewer/ChannelLogViewer'
 
@@ -83,6 +95,22 @@ export const BasicInfo = ({
 	}
 
 	const [logChannelId, setLogChannelId] = useState<string | null>(null)
+
+	const form = useForm<z.infer<typeof updateStackMutationRequestSchema>>({
+		resolver: zodResolver(updateStackMutationRequestSchema),
+		defaultValues: {
+			stackId: stackDetails.id,
+			name: stackDetails.name,
+		},
+	})
+
+	const formValues = form.watch()
+
+	const onSubmitBasicInfo = (
+		values: z.infer<typeof updateStackMutationRequestSchema>,
+	) => {
+		console.log(values)
+	}
 
 	return (
 		<div className='space-y-6'>
@@ -132,37 +160,73 @@ export const BasicInfo = ({
 					show={logChannelId != null}
 					onHide={() => setLogChannelId(null)}
 				/>
-				{/* onOpenChange={() => setLogChannelId(null)}
-				>
-					<SheetContent className='min-w-[800px]'>
-						<SheetHeader>
-							<SheetTitle>Stack Logs</SheetTitle>
-						</SheetHeader>
-						{logChannelId && <ChannelLogViewer channelId={logChannelId} />}
-					</SheetContent>
-				</Sheet> */}
 				<CardContent className='space-y-4'>
-					<div className='space-y-2'>
-						<Label htmlFor='stack-name'>Stack Name</Label>
-						{isEditing ? (
-							<Input id='stack-name' placeholder={stackDetails.name} />
-						) : (
-							<div className='p-2 bg-muted rounded-md'>{stackDetails.name}</div>
-						)}
-					</div>
-					<div className='space-y-2'>
-						<Label htmlFor='stack-description'>Description</Label>
-						{isEditing ? (
-							<Textarea
-								id='stack-description'
-								placeholder='Describe your stack...'
+					<Form {...form}>
+						<form
+							onSubmit={form.handleSubmit(onSubmitBasicInfo)}
+							className='space-y-4'
+						>
+							<FormField
+								control={form.control}
+								name='name'
+								render={({ field }) => (
+									<FormItem className='space-y-2'>
+										<FormLabel htmlFor='stack-name'>Stack Name</FormLabel>
+										{isEditing ? (
+											<FormControl>
+												<Input
+													id='stack-name'
+													placeholder={stackDetails.name}
+													{...field}
+												/>
+											</FormControl>
+										) : (
+											<div className='p-2 bg-muted rounded-md'>
+												{stackDetails.name}
+											</div>
+										)}
+										<FormMessage />
+									</FormItem>
+								)}
 							/>
-						) : (
-							<div className='p-2 bg-muted rounded-md'>
-								Stack description goes here...
-							</div>
-						)}
-					</div>
+
+							<FormField
+								control={form.control}
+								name='description'
+								render={({ field }) => (
+									<FormItem className='space-y-2'>
+										<FormLabel htmlFor='stack-description'>
+											Description
+										</FormLabel>
+										{isEditing ? (
+											<FormControl>
+												<Textarea
+													id='stack-description'
+													placeholder='Describe your stack...'
+													{...field}
+												/>
+											</FormControl>
+										) : (
+											<div className='p-2 bg-muted rounded-md'>
+												{stackDetails.description || 'No description provided'}
+											</div>
+										)}
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<pre className='p-4 bg-muted rounded-md overflow-auto'>
+								{JSON.stringify(formValues, null, 2)}
+							</pre>
+
+							{isEditing && (
+								<div className='flex justify-end space-x-2'>
+									<Button type='submit'>Save Changes</Button>
+								</div>
+							)}
+						</form>
+					</Form>
 				</CardContent>
 			</Card>
 

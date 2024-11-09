@@ -11,6 +11,7 @@ import { getServersQueryResponseSchema } from "./getServersSchema";
 import { getServerByIdQueryResponseSchema, getServerByIdPathParamsSchema } from "./getServerByIdSchema";
 import { postCreateStackMutationRequestSchema, postCreateStackMutationResponseSchema } from "./postCreateStackSchema";
 import { getStackDetailQueryResponseSchema, getStackDetail404Schema, getStackDetailPathParamsSchema } from "./getStackDetailSchema";
+import { updateStackMutationRequestSchema, updateStackMutationResponseSchema, updateStack404Schema, updateStackPathParamsSchema } from "./updateStackSchema";
 import { getDeploymentsForStackQueryResponseSchema, getDeploymentsForStackPathParamsSchema } from "./getDeploymentsForStackSchema";
 import { getDeploymentLogsQueryResponseSchema, getDeploymentLogsPathParamsSchema } from "./getDeploymentLogsSchema";
 import { dispatchStackDeploymentMutationResponseSchema, dispatchStackDeploymentPathParamsSchema } from "./dispatchStackDeploymentSchema";
@@ -185,6 +186,21 @@ import { postRefreshTokensMutationRequestSchema, postRefreshTokensMutationRespon
         errors: {
             404: getStackDetail404Schema
         }
+    }, "UpdateStack": {
+        request: updateStackMutationRequestSchema,
+        parameters: {
+            path: updateStackPathParamsSchema,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: updateStackMutationResponseSchema,
+            404: updateStack404Schema,
+            default: updateStackMutationResponseSchema
+        },
+        errors: {
+            404: updateStack404Schema
+        }
     }, "GetDeploymentsForStack": {
         request: undefined,
         parameters: {
@@ -304,7 +320,8 @@ export const paths = { "/api/Applications/{applicationId}/deployment": {
     }, "/api/Stacks": {
         post: operations["PostCreateStack"]
     }, "/api/Stacks/{id}": {
-        get: operations["GetStackDetail"]
+        get: operations["GetStackDetail"],
+        put: operations["UpdateStack"]
     }, "/api/Stacks/{id}/deployments": {
         get: operations["GetDeploymentsForStack"]
     }, "/api/Stacks/deployments/{deploymentId}/logs": {

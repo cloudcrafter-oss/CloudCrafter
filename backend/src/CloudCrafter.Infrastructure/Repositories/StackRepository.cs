@@ -25,6 +25,7 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             Name = args.Name,
             EnvironmentId = args.EnvironmentId,
             ServerId = args.ServerId,
+            Description = null,
             // TODO: Handle source different
             Source = new ApplicationSource
             {

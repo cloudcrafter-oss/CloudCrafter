@@ -52,6 +52,8 @@ export * from "./Test";
 export * from "./TokenDto";
 export * from "./UpdateProject";
 export * from "./UpdateProjectArgs";
+export * from "./UpdateStack";
+export * from "./UpdateStackCommandCommand";
 export * from "./UserDto";
 export * from "./UserDtoPaginatedList";
 export * from "./UserDtoPaginatedRequest";

@@ -52,6 +52,8 @@ export * from "./testSchema";
 export * from "./tokenDtoSchema";
 export * from "./updateProjectArgsSchema";
 export * from "./updateProjectSchema";
+export * from "./updateStackCommandCommandSchema";
+export * from "./updateStackSchema";
 export * from "./userDtoPaginatedListSchema";
 export * from "./userDtoPaginatedRequestSchema";
 export * from "./userDtoSchema";

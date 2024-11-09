@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CloudCrafter.Agent.SignalR.Models;
+using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Core.Events.DomainEvents;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Repositories;
@@ -16,7 +17,7 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
     {
         var createdStack = await repository.CreateStack(args);
 
-        return new StackCreatedDto { Id = Guid.NewGuid() };
+        return new StackCreatedDto { Id = createdStack.Id };
     }
 
     public async Task<SimpleStackDetailsDto?> GetSimpleStackDetails(Guid id)
@@ -112,5 +113,31 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
         }
 
         await repository.SaveChangesAsync();
+    }
+
+    public async Task<StackDetailDto?> UpdateStack(UpdateStackCommand.Command request)
+    {
+        var stack = await repository.GetStack(request.StackId);
+
+        if (stack == null)
+        {
+            return null;
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Name))
+        {
+            stack.Name = request.Name;
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Description))
+        {
+            stack.Description = request.Description;
+        }
+
+        stack.AddDomainEvent(DomainEventDispatchTiming.AfterSaving, new StackUpdatedEvent(stack));
+
+        await repository.SaveChangesAsync();
+
+        return mapper.Map<StackDetailDto>(stack);
     }
 }

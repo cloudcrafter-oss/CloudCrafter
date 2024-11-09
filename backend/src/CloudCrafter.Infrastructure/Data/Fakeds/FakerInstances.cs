@@ -58,6 +58,7 @@ public static class FakerInstances
             .RuleFor(x => x.ServerId, server.Id)
             .RuleFor(x => x.BuildPack, f => StackBuildPack.Nixpacks)
             .RuleFor(x => x.CreatedBy, (Guid?)null)
+            .RuleFor(x => x.Description, f => null)
             .RuleFor(x => x.LastModifiedBy, (Guid?)null)
             .RuleFor(x => x.Server, server)
             .RuleFor(x => x.Environment, f => null)

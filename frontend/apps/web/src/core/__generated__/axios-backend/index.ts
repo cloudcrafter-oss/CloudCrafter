@@ -18,3 +18,4 @@ export * from "./postLoginUser";
 export * from "./postValidateGithubRepo";
 export * from "./test";
 export * from "./updateProject";
+export * from "./updateStack";
