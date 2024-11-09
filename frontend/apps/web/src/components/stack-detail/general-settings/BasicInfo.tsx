@@ -4,6 +4,7 @@ import {
 	type StackDetailDto,
 	updateStackMutationRequestSchema,
 	useDispatchStackDeploymentHook,
+	useUpdateStackHook,
 } from '@/src/core/__generated__'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Badge } from '@ui/components/ui/badge'
@@ -101,15 +102,18 @@ export const BasicInfo = ({
 		defaultValues: {
 			stackId: stackDetails.id,
 			name: stackDetails.name,
+			description: stackDetails.description,
 		},
 	})
 
 	const formValues = form.watch()
 
-	const onSubmitBasicInfo = (
+	const updateDetailMutation = useUpdateStackHook(stackDetails.id)
+
+	const onSubmitBasicInfo = async (
 		values: z.infer<typeof updateStackMutationRequestSchema>,
 	) => {
-		console.log(values)
+		await updateDetailMutation.mutateAsync(values)
 	}
 
 	return (
@@ -175,9 +179,9 @@ export const BasicInfo = ({
 										{isEditing ? (
 											<FormControl>
 												<Input
-													id='stack-name'
-													placeholder={stackDetails.name}
+													// placeholder={stackDetails.name || ''}
 													{...field}
+													value={field.value ?? ''}
 												/>
 											</FormControl>
 										) : (
@@ -204,6 +208,7 @@ export const BasicInfo = ({
 													id='stack-description'
 													placeholder='Describe your stack...'
 													{...field}
+													value={field.value ?? ''}
 												/>
 											</FormControl>
 										) : (
