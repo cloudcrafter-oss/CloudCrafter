@@ -1,4 +1,4 @@
-import { format, parseISO } from 'date-fns'
+import { formatDate } from '@/src/utils/date/date-utils'
 import type React from 'react'
 
 interface ShowDateProps {
@@ -9,15 +9,14 @@ interface ShowDateProps {
 
 const ShowDate: React.FC<ShowDateProps> = ({
 	dateString,
-	formatString = 'MMMM d, yyyy HH:mm:ss',
+	formatString,
 	customNullText = 'Never',
 }) => {
 	if (!dateString) {
 		return <span>{customNullText}</span>
 	}
 
-	const date = parseISO(dateString)
-	const formattedDate = format(date, formatString)
+	const formattedDate = formatDate(dateString, formatString)
 
 	return <span>{formattedDate}</span>
 }

@@ -18,7 +18,6 @@ export const useWebHub = ({ channelId }: { channelId: string }) => {
 			.withAutomaticReconnect()
 			.build()
 
-		console.log('rendering now')
 		connection.on('DeploymentOutput', (message: DeploymentLogDto) => {
 			setMessages((prev) => [...prev, message])
 		})

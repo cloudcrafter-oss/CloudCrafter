@@ -146,6 +146,7 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<ConnectedServerManager>();
 
         services.AddSingleton<WebHubActions>();
+        services.AddSingleton<StackHubActions>();
 
         services.AddScoped<ConnectivityCheckBackgroundJob>();
         services.AddScoped<DeployStackBackgroundJob>();

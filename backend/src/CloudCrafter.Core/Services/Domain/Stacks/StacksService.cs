@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using CloudCrafter.Agent.SignalR.Models;
+using CloudCrafter.Core.Events.DomainEvents;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Repositories;
+using CloudCrafter.Domain.Common;
 using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Entities;
@@ -79,6 +81,10 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
                 : EntityHealthStatusValue.Degraded
             );
 
+            stackEntity.AddDomainEvent(
+                DomainEventDispatchTiming.AfterSaving,
+                new StackHealthUpdatedEvent(stackEntity)
+            );
             foreach (var stackService in stackInfo.Value.StackServices)
             {
                 var stackServiceId = stackService.Key;
