@@ -90,7 +90,7 @@ const StackConfigPage: React.FC<{ stackDetails: StackDetailDto }> = ({
 	const [activeSection, setActiveSection] = useState(sections[0].id)
 	const [activeSubTab, setActiveSubTab] = useState(sections[0].subTabs[0].id)
 
-	const { lastUpdate } = useStackHub({ stackId: stackDetails.id })
+	const { stack } = useStackHub({ initialStack: stackDetails })
 
 	useEffect(() => {
 		// Parse the hash on component mount and when it changes
@@ -179,7 +179,7 @@ const StackConfigPage: React.FC<{ stackDetails: StackDetailDto }> = ({
 							activeSubTab === subTab.id && (
 								<div key={`${section.id}-${subTab.id}`}>
 									{subTab.component && (
-										<subTab.component stackDetails={stackDetails} />
+										<subTab.component stackDetails={stack} />
 									)}
 								</div>
 							),

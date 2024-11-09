@@ -2,13 +2,15 @@ import * as signalR from '@microsoft/signalr'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import type { EntityHealthDto } from '../core/__generated__'
+import type { EntityHealthDto, StackDetailDto } from '../core/__generated__'
 import { formatDate } from '../utils/date/date-utils'
 
-export const useStackHub = ({ stackId }: { stackId: string }) => {
+export const useStackHub = ({
+	initialStack,
+}: { initialStack: StackDetailDto }) => {
 	const { data: session } = useSession()
 
-	const [lastUpdate, setLastUpdate] = useState<EntityHealthDto | null>(null)
+	const [stack, setStack] = useState(initialStack)
 
 	useEffect(() => {
 		const connection = new signalR.HubConnectionBuilder()
@@ -33,13 +35,13 @@ export const useStackHub = ({ stackId }: { stackId: string }) => {
 				toast.info(`Stack status is unknown at ${update.statusAt}`)
 			}
 
-			setLastUpdate(update)
+			setStack({ ...stack, health: update })
 		})
 
 		connection
 			.start()
 			.then(() => {
-				connection.invoke('JoinChannel', stackId)
+				connection.invoke('JoinChannel', stack.id)
 			})
 			.catch((err) => console.error(err))
 
@@ -50,9 +52,9 @@ export const useStackHub = ({ stackId }: { stackId: string }) => {
 				console.error(err)
 			}
 		}
-	}, [session?.accessToken, stackId])
+	}, [session?.accessToken, stack])
 
 	return {
-		lastUpdate,
+		stack,
 	}
 }

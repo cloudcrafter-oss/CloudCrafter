@@ -9,6 +9,7 @@ public class StackHubActions(IHubContext<StackHub> stackHub, IMapper mapper)
 {
     public Task SendStackHealthUpdate(Stack stack)
     {
+        var hasConnectedClients = stackHub.Clients.Group(stack.Id.ToString());
         var mappedDto = mapper.Map<EntityHealthDto>(stack.HealthStatus);
 
         return stackHub

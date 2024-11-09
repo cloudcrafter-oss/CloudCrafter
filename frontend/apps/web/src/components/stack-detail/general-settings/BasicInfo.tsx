@@ -55,7 +55,7 @@ const BadgeStatus = ({
 			<Tooltip>
 				<TooltipTrigger disabled>
 					<Badge
-						className={`${classMap[status as keyof typeof classMap] ?? classMap.Unknown} hover:${classMap[status as keyof typeof classMap] ?? classMap.Unknown} cursor-pointer`}
+						className={`${classMap[status as keyof typeof classMap] ?? classMap.Unknown} hover:${classMap[status as keyof typeof classMap] ?? classMap.Unknown} cursor-pointer animate-pulse`}
 					>
 						<p className='cursor-pointer'>{status}</p>
 					</Badge>
