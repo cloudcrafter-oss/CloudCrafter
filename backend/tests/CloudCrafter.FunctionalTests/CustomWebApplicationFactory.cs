@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -20,16 +19,19 @@ using static Testing;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
+    private readonly Action<IServiceCollection>? _configureServices;
     private readonly DbConnection _postgreSqlConnection;
     private readonly string _redisConnectionString;
 
     public CustomWebApplicationFactory(
         DbConnection postgreSqlConnection,
-        string redisConnectionString
+        string redisConnectionString,
+        Action<IServiceCollection>? configureServices = null
     )
     {
         _postgreSqlConnection = postgreSqlConnection;
         _redisConnectionString = redisConnectionString;
+        _configureServices = configureServices;
     }
 
     /// <summary>
@@ -98,6 +100,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                     .RemoveAll<IUser>()
                     .AddTransient(provider => Mock.Of<IUser>(s => s.Id == GetUserId()));
 
+                _configureServices?.Invoke(services);
                 services.EnsureDbCreated<AppDbContext>();
             }
         );

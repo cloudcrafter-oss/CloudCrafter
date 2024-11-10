@@ -51,6 +51,10 @@ export const operations = {
         "path": "/api/Stacks/:id",
         "method": "get"
     },
+    "UpdateStack": {
+        "path": "/api/Stacks/:id",
+        "method": "put"
+    },
     "GetDeploymentsForStack": {
         "path": "/api/Stacks/:id/deployments",
         "method": "get"

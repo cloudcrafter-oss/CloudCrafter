@@ -1,6 +1,10 @@
 ﻿using AutoMapper;
+using CloudCrafter.Agent.SignalR.Models;
+using CloudCrafter.Core.Commands.Stacks;
+using CloudCrafter.Core.Events.DomainEvents;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Repositories;
+using CloudCrafter.Domain.Common;
 using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Entities;
@@ -13,7 +17,7 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
     {
         var createdStack = await repository.CreateStack(args);
 
-        return new StackCreatedDto { Id = Guid.NewGuid() };
+        return new StackCreatedDto { Id = createdStack.Id };
     }
 
     public async Task<SimpleStackDetailsDto?> GetSimpleStackDetails(Guid id)
@@ -47,8 +51,93 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
 
     public async Task<List<SimpleDeploymentDto>> GetDeployments(Guid stackId)
     {
-        List<Deployment> deployments = await repository.GetDeployments(stackId);
+        var deployments = await repository.GetDeployments(stackId);
 
         return mapper.Map<List<SimpleDeploymentDto>>(deployments);
+    }
+
+    public async Task HandleHealthChecks(Guid serverId, ContainerHealthCheckArgs args)
+    {
+        foreach (var stackInfo in args.Info)
+        {
+            var stackId = stackInfo.Key;
+
+            var stackEntity = await repository.GetStack(stackId);
+
+            if (stackEntity == null || stackEntity.ServerId != serverId)
+            {
+                continue;
+            }
+
+            var allAreHealthy = stackInfo.Value.StackServices.All(x =>
+                x.Value.Status == ContainerHealthCheckStackInfoHealthStatus.Healthy
+            );
+
+            var allAreUnhealthy = stackInfo.Value.StackServices.All(x =>
+                x.Value.Status == ContainerHealthCheckStackInfoHealthStatus.Unhealthy
+            );
+            stackEntity.HealthStatus.SetStatus(
+                allAreHealthy ? EntityHealthStatusValue.Healthy
+                : allAreUnhealthy ? EntityHealthStatusValue.Unhealthy
+                : EntityHealthStatusValue.Degraded
+            );
+
+            stackEntity.AddDomainEvent(
+                DomainEventDispatchTiming.AfterSaving,
+                new StackHealthUpdatedEvent(stackEntity)
+            );
+            foreach (var stackService in stackInfo.Value.StackServices)
+            {
+                var stackServiceId = stackService.Key;
+
+                // TODO: Move this to Unit of Work
+                var stackServiceEntity = await repository.GetService(stackServiceId);
+
+                if (stackServiceEntity?.Stack.ServerId != serverId)
+                {
+                    continue;
+                }
+
+                var isRunning = stackService.Value.IsRunning;
+
+                stackServiceEntity?.HealthStatus.SetStatus(
+                    stackService.Value.Status == ContainerHealthCheckStackInfoHealthStatus.Healthy
+                            ? EntityHealthStatusValue.Healthy
+                        : stackService.Value.Status
+                        == ContainerHealthCheckStackInfoHealthStatus.Unhealthy
+                            ? EntityHealthStatusValue.Unhealthy
+                        : EntityHealthStatusValue.Degraded,
+                    isRunning
+                );
+            }
+        }
+
+        await repository.SaveChangesAsync();
+    }
+
+    public async Task<StackDetailDto?> UpdateStack(UpdateStackCommand.Command request)
+    {
+        var stack = await repository.GetStack(request.StackId);
+
+        if (stack == null)
+        {
+            return null;
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Name))
+        {
+            stack.Name = request.Name;
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Description))
+        {
+            stack.Description = request.Description;
+        }
+
+        stack.AddDomainEvent(DomainEventDispatchTiming.AfterSaving, new StackUpdatedEvent(stack));
+
+        await repository.SaveChangesAsync();
+
+        return mapper.Map<StackDetailDto>(stack);
     }
 }

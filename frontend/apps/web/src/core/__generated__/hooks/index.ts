@@ -19,3 +19,4 @@ export * from "./usePostRefreshTokensHook";
 export * from "./usePostValidateGithubRepoHook";
 export * from "./useTestHook";
 export * from "./useUpdateProjectHook";
+export * from "./useUpdateStackHook";

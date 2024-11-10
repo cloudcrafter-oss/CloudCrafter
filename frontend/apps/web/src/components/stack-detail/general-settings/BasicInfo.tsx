@@ -1,8 +1,12 @@
 'use client'
 import {
+	type EntityHealthDtoValue,
 	type StackDetailDto,
+	updateStackMutationRequestSchema,
 	useDispatchStackDeploymentHook,
+	useUpdateStackHook,
 } from '@/src/core/__generated__'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Badge } from '@ui/components/ui/badge'
 import { Button } from '@ui/components/ui/button'
 import {
@@ -18,10 +22,24 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@ui/components/ui/dropdown-menu'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '@ui/components/ui/form'
 import { Input } from '@ui/components/ui/input'
 import { Label } from '@ui/components/ui/label'
 import { Switch } from '@ui/components/ui/switch'
 import { Textarea } from '@ui/components/ui/textarea'
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from '@ui/components/ui/tooltip'
 import {
 	FileText,
 	MoreVertical,
@@ -30,7 +48,41 @@ import {
 	Trash2,
 } from 'lucide-react'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import type { z } from 'zod'
+import ShowDate from '../../ShowDate'
 import { ChannelLogViewerEnhanced } from '../../logviewer/ChannelLogViewer'
+
+const BadgeStatus = ({
+	statusAt,
+	status,
+}: { statusAt: string | null | undefined; status: EntityHealthDtoValue }) => {
+	const classMap = {
+		Healthy: 'bg-green-500',
+		Unhealthy: 'bg-red-500',
+		Unknown: 'bg-gray-500',
+	}
+
+	return (
+		<TooltipProvider>
+			<Tooltip>
+				<TooltipTrigger disabled>
+					<Badge
+						className={`${classMap[status as keyof typeof classMap] ?? classMap.Unknown} hover:${classMap[status as keyof typeof classMap] ?? classMap.Unknown} cursor-pointer animate-pulse`}
+					>
+						<p className='cursor-pointer'>{status}</p>
+					</Badge>
+				</TooltipTrigger>
+				<TooltipContent>
+					<p>
+						Last update at:{' '}
+						{statusAt ? <ShowDate dateString={statusAt} /> : 'Never'}
+					</p>
+				</TooltipContent>
+			</Tooltip>
+		</TooltipProvider>
+	)
+}
 
 export const BasicInfo = ({
 	stackDetails,
@@ -45,6 +97,25 @@ export const BasicInfo = ({
 
 	const [logChannelId, setLogChannelId] = useState<string | null>(null)
 
+	const form = useForm<z.infer<typeof updateStackMutationRequestSchema>>({
+		resolver: zodResolver(updateStackMutationRequestSchema),
+		defaultValues: {
+			stackId: stackDetails.id,
+			name: stackDetails.name,
+			description: stackDetails.description,
+		},
+	})
+
+	const formValues = form.watch()
+
+	const updateDetailMutation = useUpdateStackHook(stackDetails.id)
+
+	const onSubmitBasicInfo = async (
+		values: z.infer<typeof updateStackMutationRequestSchema>,
+	) => {
+		await updateDetailMutation.mutateAsync(values)
+	}
+
 	return (
 		<div className='space-y-6'>
 			<Card>
@@ -52,7 +123,11 @@ export const BasicInfo = ({
 					<CardTitle>Stack Information</CardTitle>
 					<CardDescription>Basic details about your Stack</CardDescription>
 					<div className='absolute top-4 right-4 flex items-center space-x-2'>
-						<Badge variant='destructive'>Unhealthy</Badge>
+						<BadgeStatus
+							statusAt={stackDetails.health.statusAt}
+							status={stackDetails.health.value}
+						/>
+						{/* <Badge variant='destructive'>{stackDetails.health.value}</Badge> */}
 
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
@@ -89,37 +164,74 @@ export const BasicInfo = ({
 					show={logChannelId != null}
 					onHide={() => setLogChannelId(null)}
 				/>
-				{/* onOpenChange={() => setLogChannelId(null)}
-				>
-					<SheetContent className='min-w-[800px]'>
-						<SheetHeader>
-							<SheetTitle>Stack Logs</SheetTitle>
-						</SheetHeader>
-						{logChannelId && <ChannelLogViewer channelId={logChannelId} />}
-					</SheetContent>
-				</Sheet> */}
 				<CardContent className='space-y-4'>
-					<div className='space-y-2'>
-						<Label htmlFor='stack-name'>Stack Name</Label>
-						{isEditing ? (
-							<Input id='stack-name' placeholder={stackDetails.name} />
-						) : (
-							<div className='p-2 bg-muted rounded-md'>{stackDetails.name}</div>
-						)}
-					</div>
-					<div className='space-y-2'>
-						<Label htmlFor='stack-description'>Description</Label>
-						{isEditing ? (
-							<Textarea
-								id='stack-description'
-								placeholder='Describe your stack...'
+					<Form {...form}>
+						<form
+							onSubmit={form.handleSubmit(onSubmitBasicInfo)}
+							className='space-y-4'
+						>
+							<FormField
+								control={form.control}
+								name='name'
+								render={({ field }) => (
+									<FormItem className='space-y-2'>
+										<FormLabel htmlFor='stack-name'>Stack Name</FormLabel>
+										{isEditing ? (
+											<FormControl>
+												<Input
+													// placeholder={stackDetails.name || ''}
+													{...field}
+													value={field.value ?? ''}
+												/>
+											</FormControl>
+										) : (
+											<div className='p-2 bg-muted rounded-md'>
+												{stackDetails.name}
+											</div>
+										)}
+										<FormMessage />
+									</FormItem>
+								)}
 							/>
-						) : (
-							<div className='p-2 bg-muted rounded-md'>
-								Stack description goes here...
-							</div>
-						)}
-					</div>
+
+							<FormField
+								control={form.control}
+								name='description'
+								render={({ field }) => (
+									<FormItem className='space-y-2'>
+										<FormLabel htmlFor='stack-description'>
+											Description
+										</FormLabel>
+										{isEditing ? (
+											<FormControl>
+												<Textarea
+													id='stack-description'
+													placeholder='Describe your stack...'
+													{...field}
+													value={field.value ?? ''}
+												/>
+											</FormControl>
+										) : (
+											<div className='p-2 bg-muted rounded-md'>
+												{stackDetails.description || 'No description provided'}
+											</div>
+										)}
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<pre className='p-4 bg-muted rounded-md overflow-auto'>
+								{JSON.stringify(formValues, null, 2)}
+							</pre>
+
+							{isEditing && (
+								<div className='flex justify-end space-x-2'>
+									<Button type='submit'>Save Changes</Button>
+								</div>
+							)}
+						</form>
+					</Form>
 				</CardContent>
 			</Card>
 

@@ -1,10 +1,11 @@
 ﻿using CloudCrafter.Domain.Common;
+using CloudCrafter.Domain.Entities.Jobs;
 
 namespace CloudCrafter.Domain.Entities;
 
 public class Stack : BaseAuditableEntity
 {
-    public required string Name { get; init; }
+    public required string Name { get; set; }
     public Environment? Environment { get; set; }
     public required Guid EnvironmentId { get; set; }
     public Server? Server { get; set; }
@@ -15,6 +16,9 @@ public class Stack : BaseAuditableEntity
 
     public List<Deployment> Deployments { get; set; } = new();
     public List<StackService> Services { get; set; } = new();
+
+    public required StackHealthEntity HealthStatus { get; init; }
+    public required string? Description { get; set; }
 }
 
 public enum StackBuildPack

@@ -14,5 +14,5 @@ public class StackService : BaseAuditableEntity
 
     public required string Name { get; init; }
 
-    public required EntityHealthStatus HealthStatus { get; init; }
+    public required EntityStackServiceHealthStatus HealthStatus { get; init; }
 }

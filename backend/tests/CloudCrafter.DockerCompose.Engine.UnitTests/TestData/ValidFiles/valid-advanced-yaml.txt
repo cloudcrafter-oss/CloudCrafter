@@ -11,8 +11,6 @@ services:
     container_name: web_container
     environment:
       - NODE_ENV=production
-    env_file:
-      - ./web/.env
     ports:
       - "80:80"
       - "443:443"

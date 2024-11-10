@@ -16,7 +16,8 @@ public class Stacks : EndpointGroupBase
             .MapGet(GetStackDetail, "{id}")
             .MapGet(GetDeploymentsForStack, "{id}/deployments")
             .MapGet(GetDeploymentLogs, "deployments/{deploymentId}/logs")
-            .MapPost(DispatchStackDeployment, "{id}/deploy");
+            .MapPost(DispatchStackDeployment, "{id}/deploy")
+            .MapPut(UpdateStack, "{id}");
     }
 
     public async Task<StackCreatedDto> PostCreateStack(
@@ -40,7 +41,7 @@ public class Stacks : EndpointGroupBase
         ISender sender
     )
     {
-        return await sender.Send(new DispatchStack.Command(id));
+        return await sender.Send(new DispatchStackDeployment.Command(id));
     }
 
     public async Task<List<SimpleDeploymentDto>> GetDeploymentsForStack(
@@ -57,5 +58,18 @@ public class Stacks : EndpointGroupBase
     )
     {
         return await sender.Send(new GetStackDeploymentLogs.Query(deploymentId));
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StackDetailDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IResult> UpdateStack(
+        [FromRoute] Guid id,
+        [FromBody] UpdateStackCommand.Command command,
+        ISender sender
+    )
+    {
+        command = command with { StackId = id };
+        var result = await sender.Send(command);
+        return result is not null ? Results.Ok(result) : Results.NotFound();
     }
 }

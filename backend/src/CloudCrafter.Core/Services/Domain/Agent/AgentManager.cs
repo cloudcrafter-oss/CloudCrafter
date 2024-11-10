@@ -24,6 +24,13 @@ public class AgentManager(
         return SendMessage(message);
     }
 
+    public Task RequestHealthChecks()
+    {
+        var message = new AgentHubRequestHealthMessage { MessageId = Guid.NewGuid() };
+
+        return SendMessage(message);
+    }
+
     public Task SendRecipeToAgent(Guid serverId, Guid deploymentId, DeploymentRecipe recipe)
     {
         var message = new AgentHubDeployRecipeMessage
@@ -50,6 +57,7 @@ public class AgentManager(
             await hub.Clients.All.SendAsync(name, message);
             return;
         }
+
         var connectedClientId = await GetConnectedClientIdForServer(serverId.Value);
 
         if (connectedClientId is null)

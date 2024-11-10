@@ -60,6 +60,19 @@ public class SocketManager
             }
         );
 
+        _wrapper.On<AgentHubRequestHealthMessage>(
+            "AgentHubRequestHealthMessage",
+            async message =>
+            {
+                await _sender.Send(
+                    new AgentHubRequestHealthMessageHandler.Query(
+                        message,
+                        _wrapper.TypedHubConnection
+                    )
+                );
+            }
+        );
+
         _logger.LogDebug("Attached message handlers");
     }
 

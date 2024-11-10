@@ -5,6 +5,7 @@ using CloudCrafter.Domain.Common;
 using CloudCrafter.Domain.Domain.Application.Services;
 using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Domain.Entities.Jobs;
 using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.Infrastructure.Repositories;
@@ -24,6 +25,7 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             Name = args.Name,
             EnvironmentId = args.EnvironmentId,
             ServerId = args.ServerId,
+            Description = null,
             // TODO: Handle source different
             Source = new ApplicationSource
             {
@@ -32,6 +34,11 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             },
             // TODO: Allow multiple options
             BuildPack = StackBuildPack.Nixpacks,
+            HealthStatus = new StackHealthEntity
+            {
+                StatusAt = DateTime.UtcNow,
+                Value = EntityHealthStatusValue.Unknown,
+            },
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
         };
@@ -62,11 +69,11 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             Name = name,
             StackServiceTypeId = StackServiceTypeConstants.App,
             StackId = stackId,
-            HealthStatus = new(),
+            HealthStatus = new EntityStackServiceHealthStatus(),
             // TODO: Based on the StackServiceType, we should add HttpConfiguration
             // E.g. databases should not get this.
             HttpConfiguration = null,
-            HealthcheckConfiguration = new(),
+            HealthcheckConfiguration = new EntityHealthcheckConfiguration(),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
         };
@@ -78,12 +85,13 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
 
     public async Task<Guid> CreateDeployment(Guid stackId)
     {
-        var deployment = new Deployment()
+        var deployment = new Deployment
         {
             Id = Guid.NewGuid(),
             StackId = stackId,
-            Logs = new(),
+            Logs = new List<DeploymentLog>(),
             State = DeploymentState.Created,
+            RecipeYaml = null,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
         };
@@ -94,12 +102,25 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
         return deployment.Id;
     }
 
+    public Task<StackService?> GetService(Guid stackServiceId)
+    {
+        return context
+            .StackServices.Where(x => x.Id == stackServiceId)
+            .Include(x => x.Stack)
+            .FirstOrDefaultAsync();
+    }
+
     public Task<List<Deployment>> GetDeployments(Guid stackId)
     {
         return context
             .Deployments.Where(x => x.StackId == stackId)
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();
+    }
+
+    public Task SaveChangesAsync()
+    {
+        return context.SaveChangesAsync();
     }
 
     private async Task<Stack?> GetStackInternal(Guid id, bool throwExceptionOnNotFound = true)

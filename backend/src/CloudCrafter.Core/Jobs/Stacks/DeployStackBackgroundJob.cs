@@ -1,4 +1,6 @@
-﻿using CloudCrafter.Core.Common.Interfaces;
+﻿using CloudCrafter.Agent.Models.IO;
+using CloudCrafter.Agent.SignalR.Models;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Agent;
 using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.RecipeGenerators;
@@ -38,9 +40,9 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
         _deployment = await context
             .Deployments.Where(x => x.Id == DeploymentId)
             .Include(x => x.Stack)
-            .ThenInclude(x => x.Services)
+            .ThenInclude(x => x!.Services)
             .Include(x => x.Stack)
-            .ThenInclude(stack => stack.Server)
+            .ThenInclude(stack => stack!.Server)
             .FirstOrDefaultAsync();
 
         if (_deployment == null || _deployment.Stack == null || _deployment.Stack.Server == null)
@@ -78,20 +80,79 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
         );
 
         logger.LogDebug("Brewing recipe...");
-        var recipeGenerator = new SimpleAppRecipeGenerator(
-            new BaseRecipeGenerator.Args
+
+        try
+        {
+            var recipeGenerator = new SimpleAppRecipeGenerator(
+                new BaseRecipeGenerator.Args
+                {
+                    Stack = _deployment!.Stack!,
+                    DeploymentId = _deployment!.Id,
+                }
+            );
+            var recipe = await recipeGenerator.Generate();
+            logger.LogDebug("Recipe brewed!");
+            logger.LogDebug("Writing recipe to database...");
+
+            var deployment = await context
+                .Deployments.Where(x => x.Id == DeploymentId)
+                .FirstOrDefaultAsync();
+
+            if (deployment == null)
             {
-                Stack = _deployment!.Stack,
-                DeploymentId = _deployment!.Id,
+                logger.LogCritical("Deployment not found");
+                throw new ArgumentNullException(nameof(DeploymentId), "Deployment not found");
+            }
+
+            var writer = new YamlRecipeWriter(recipe.Recipe);
+
+            deployment.RecipeYaml = writer.WriteString();
+            await context.SaveChangesAsync();
+
+            var agentManager = serviceProvider.GetRequiredService<IAgentManager>();
+
+            logger.LogDebug("Sending recipe to agent...");
+            await agentManager.SendRecipeToAgent(
+                _deployment.Stack!.ServerId,
+                _deployment.Id,
+                recipe.Recipe
+            );
+            logger.LogDebug("Recipe sent to agent!");
+        }
+        catch (Exception ex)
+        {
+            logger.LogCritical(ex, "Failed to deploy stack");
+            await MarkAsFailed(context, serviceProvider, ex.Message);
+            throw;
+        }
+    }
+
+    private async Task MarkAsFailed(
+        IApplicationDbContext context,
+        IServiceProvider sp,
+        string message
+    )
+    {
+        var deployment = await context
+            .Deployments.Where(x => x.Id == DeploymentId)
+            .FirstOrDefaultAsync();
+
+        if (deployment == null)
+        {
+            return;
+        }
+
+        deployment.State = DeploymentState.Failed;
+        deployment.Logs.Add(
+            new DeploymentLog
+            {
+                Date = DateTime.UtcNow,
+                Level = ChannelOutputLogLineLevel.Fatal,
+                Log = message,
+                Index = int.MaxValue,
             }
         );
-        var recipe = recipeGenerator.Generate();
-        logger.LogDebug("Recipe brewed!");
 
-        var agentManager = serviceProvider.GetRequiredService<IAgentManager>();
-
-        logger.LogDebug("Sending recipe to agent...");
-        await agentManager.SendRecipeToAgent(_deployment.Stack.ServerId, _deployment.Id, recipe);
-        logger.LogDebug("Recipe sent to agent!");
+        await context.SaveChangesAsync();
     }
 }

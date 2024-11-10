@@ -1,7 +1,6 @@
 import { postCreateDeploymentMutationResponseSchema, postCreateDeploymentPathParamsSchema } from "./postCreateDeploymentSchema";
 import { postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema } from "./postLoginUserSchema";
 import { postCreateUserMutationRequestSchema, postCreateUserMutationResponseSchema } from "./postCreateUserSchema";
-import { postRefreshTokensMutationRequestSchema, postRefreshTokensMutationResponseSchema } from "./postRefreshTokensSchema";
 import { getProjectsQueryResponseSchema, getProjectsQueryParamsSchema } from "./getProjectsSchema";
 import { createProjectMutationRequestSchema, createProjectMutationResponseSchema } from "./createProjectSchema";
 import { getProjectQueryResponseSchema, getProject404Schema, getProjectPathParamsSchema } from "./getProjectSchema";
@@ -12,6 +11,7 @@ import { getServersQueryResponseSchema } from "./getServersSchema";
 import { getServerByIdQueryResponseSchema, getServerByIdPathParamsSchema } from "./getServerByIdSchema";
 import { postCreateStackMutationRequestSchema, postCreateStackMutationResponseSchema } from "./postCreateStackSchema";
 import { getStackDetailQueryResponseSchema, getStackDetail404Schema, getStackDetailPathParamsSchema } from "./getStackDetailSchema";
+import { updateStackMutationRequestSchema, updateStackMutationResponseSchema, updateStack404Schema, updateStackPathParamsSchema } from "./updateStackSchema";
 import { getDeploymentsForStackQueryResponseSchema, getDeploymentsForStackPathParamsSchema } from "./getDeploymentsForStackSchema";
 import { getDeploymentLogsQueryResponseSchema, getDeploymentLogsPathParamsSchema } from "./getDeploymentLogsSchema";
 import { dispatchStackDeploymentMutationResponseSchema, dispatchStackDeploymentPathParamsSchema } from "./dispatchStackDeploymentSchema";
@@ -19,6 +19,7 @@ import { getFilterableFieldsQueryResponseSchema } from "./getFilterableFieldsSch
 import { getUsersMutationRequestSchema, getUsersMutationResponseSchema } from "./getUsersSchema";
 import { testQueryResponseSchema } from "./testSchema";
 import { postValidateGithubRepoMutationRequestSchema, postValidateGithubRepoMutationResponseSchema } from "./postValidateGithubRepoSchema";
+import { postRefreshTokensMutationRequestSchema, postRefreshTokensMutationResponseSchema } from "./postRefreshTokensSchema";
 
  export const operations = { "PostCreateDeployment": {
         request: undefined,
@@ -54,18 +55,6 @@ import { postValidateGithubRepoMutationRequestSchema, postValidateGithubRepoMuta
         responses: {
             200: postCreateUserMutationResponseSchema,
             default: postCreateUserMutationResponseSchema
-        },
-        errors: {}
-    }, "PostRefreshTokens": {
-        request: postRefreshTokensMutationRequestSchema,
-        parameters: {
-            path: undefined,
-            query: undefined,
-            header: undefined
-        },
-        responses: {
-            200: postRefreshTokensMutationResponseSchema,
-            default: postRefreshTokensMutationResponseSchema
         },
         errors: {}
     }, "GetProjects": {
@@ -197,6 +186,21 @@ import { postValidateGithubRepoMutationRequestSchema, postValidateGithubRepoMuta
         errors: {
             404: getStackDetail404Schema
         }
+    }, "UpdateStack": {
+        request: updateStackMutationRequestSchema,
+        parameters: {
+            path: updateStackPathParamsSchema,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: updateStackMutationResponseSchema,
+            404: updateStack404Schema,
+            default: updateStackMutationResponseSchema
+        },
+        errors: {
+            404: updateStack404Schema
+        }
     }, "GetDeploymentsForStack": {
         request: undefined,
         parameters: {
@@ -281,6 +285,18 @@ import { postValidateGithubRepoMutationRequestSchema, postValidateGithubRepoMuta
             default: postValidateGithubRepoMutationResponseSchema
         },
         errors: {}
+    }, "PostRefreshTokens": {
+        request: postRefreshTokensMutationRequestSchema,
+        parameters: {
+            path: undefined,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            200: postRefreshTokensMutationResponseSchema,
+            default: postRefreshTokensMutationResponseSchema
+        },
+        errors: {}
     } } as const;
 export const paths = { "/api/Applications/{applicationId}/deployment": {
         post: operations["PostCreateDeployment"]
@@ -288,8 +304,6 @@ export const paths = { "/api/Applications/{applicationId}/deployment": {
         post: operations["PostLoginUser"]
     }, "/api/Auth/create": {
         post: operations["PostCreateUser"]
-    }, "/api/Auth/refresh": {
-        post: operations["PostRefreshTokens"]
     }, "/api/Projects": {
         get: operations["GetProjects"],
         post: operations["CreateProject"]
@@ -306,7 +320,8 @@ export const paths = { "/api/Applications/{applicationId}/deployment": {
     }, "/api/Stacks": {
         post: operations["PostCreateStack"]
     }, "/api/Stacks/{id}": {
-        get: operations["GetStackDetail"]
+        get: operations["GetStackDetail"],
+        put: operations["UpdateStack"]
     }, "/api/Stacks/{id}/deployments": {
         get: operations["GetDeploymentsForStack"]
     }, "/api/Stacks/deployments/{deploymentId}/logs": {
@@ -321,4 +336,6 @@ export const paths = { "/api/Applications/{applicationId}/deployment": {
         get: operations["Test"]
     }, "/api/Utils/validate-git-repository": {
         post: operations["PostValidateGithubRepo"]
+    }, "/api/Auth/refresh": {
+        post: operations["PostRefreshTokens"]
     } } as const;

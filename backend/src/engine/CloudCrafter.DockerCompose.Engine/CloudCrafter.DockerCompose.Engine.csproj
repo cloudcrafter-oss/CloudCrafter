@@ -42,6 +42,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\CloudCrafter.DockerCompose.Shared\CloudCrafter.DockerCompose.Shared.csproj"/>
+    <ProjectReference Include="..\..\CloudCrafter.Shared.Utils\CloudCrafter.Shared.Utils.csproj" />
   </ItemGroup>
 
 </Project>

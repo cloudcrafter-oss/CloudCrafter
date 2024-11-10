@@ -19,7 +19,7 @@ public class StackServiceDtoMapperTest : BaseMapperTest
             StackId = Guid.NewGuid(),
             StackServiceTypeId = stackTypeId,
             Type = new StackServiceType { Id = stackTypeId, Type = "App" },
-            HealthStatus = new EntityHealthStatus
+            HealthStatus = new()
             {
                 Value = EntityHealthStatusValue.Unsupported,
                 StatusAt = dateYesterday,

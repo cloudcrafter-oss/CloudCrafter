@@ -94,7 +94,7 @@ public class EmptyDockerComposeEditorTest
 
         var isValid = await editor.IsValid();
 
-        isValid.Should().BeTrue();
+        isValid.IsValid.Should().BeTrue();
 
         var yaml = editor.GetYaml();
 

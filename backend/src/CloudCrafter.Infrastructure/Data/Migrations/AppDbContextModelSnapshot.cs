@@ -99,6 +99,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Property<Guid?>("LastModifiedBy")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("RecipeYaml")
+                        .HasColumnType("text");
+
                     b.Property<Guid>("StackId")
                         .HasColumnType("uuid");
 
@@ -275,6 +278,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
 
                     b.Property<Guid>("EnvironmentId")
                         .HasColumnType("uuid");
@@ -660,8 +666,8 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                             b1.Property<int>("Index")
                                 .HasColumnType("integer");
 
-                            b1.Property<bool>("IsError")
-                                .HasColumnType("boolean");
+                            b1.Property<int>("Level")
+                                .HasColumnType("integer");
 
                             b1.Property<string>("Log")
                                 .IsRequired()
@@ -799,7 +805,29 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                             b1.Navigation("Git");
                         });
 
+                    b.OwnsOne("CloudCrafter.Domain.Entities.Jobs.StackHealthEntity", "HealthStatus", b1 =>
+                        {
+                            b1.Property<Guid>("StackId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<DateTime?>("StatusAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<int>("Value")
+                                .HasColumnType("integer");
+
+                            b1.HasKey("StackId");
+
+                            b1.ToTable("Stacks");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StackId");
+                        });
+
                     b.Navigation("Environment");
+
+                    b.Navigation("HealthStatus")
+                        .IsRequired();
 
                     b.Navigation("Server");
 
@@ -819,25 +847,6 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         .HasForeignKey("StackServiceTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.OwnsOne("CloudCrafter.Domain.Entities.EntityHealthStatus", "HealthStatus", b1 =>
-                        {
-                            b1.Property<Guid>("StackServiceId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<DateTime?>("StatusAt")
-                                .HasColumnType("timestamp with time zone");
-
-                            b1.Property<int>("Value")
-                                .HasColumnType("integer");
-
-                            b1.HasKey("StackServiceId");
-
-                            b1.ToTable("StackServices");
-
-                            b1.WithOwner()
-                                .HasForeignKey("StackServiceId");
-                        });
 
                     b.OwnsOne("CloudCrafter.Domain.Entities.EntityHealthcheckConfiguration", "HealthcheckConfiguration", b1 =>
                         {
@@ -886,6 +895,28 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
                             b1.Property<string>("DomainName")
                                 .HasColumnType("text");
+
+                            b1.HasKey("StackServiceId");
+
+                            b1.ToTable("StackServices");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StackServiceId");
+                        });
+
+                    b.OwnsOne("CloudCrafter.Domain.Entities.EntityStackServiceHealthStatus", "HealthStatus", b1 =>
+                        {
+                            b1.Property<Guid>("StackServiceId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<bool>("IsRunning")
+                                .HasColumnType("boolean");
+
+                            b1.Property<DateTime?>("StatusAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<int>("Value")
+                                .HasColumnType("integer");
 
                             b1.HasKey("StackServiceId");
 

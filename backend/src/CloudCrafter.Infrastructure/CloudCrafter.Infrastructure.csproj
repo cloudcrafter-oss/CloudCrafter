@@ -3,10 +3,10 @@
 
   <ItemGroup>
     <PackageReference Include="Ardalis.SharedKernel"/>
-    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="AutoMapper"/>
     <PackageReference Include="Ardalis.Specification.EntityFrameworkCore"/>
     <PackageReference Include="MailKit"/>
-    <PackageReference Include="Bogus" />
+    <PackageReference Include="Bogus"/>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"/>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.Extensions.Identity.Stores"/>
@@ -16,17 +16,28 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
     <PackageReference Include="Microsoft.Extensions.Configuration"/>
     <PackageReference Include="Microsoft.Extensions.Logging"/>
-    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Serilog.AspNetCore"/>
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions"/>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CloudCrafter.Core\CloudCrafter.Core.csproj"/>
-    <ProjectReference Include="..\Packages\EntityFrameworkCore.EncryptColumn\EntityFrameworkCore.EncryptColumn.csproj" />
+    <ProjectReference Include="..\Packages\EntityFrameworkCore.EncryptColumn\EntityFrameworkCore.EncryptColumn.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Data\Migrations\"/>
-    <Folder Include="Data\Queries\" />
+    <Folder Include="Data\Queries\"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20241108073721_RemovedIsRunning.cs"/>
+    <Compile Remove="Data\Migrations\20241108073721_RemovedIsRunning.Designer.cs"/>
+    <Compile Remove="Data\Migrations\20241108073415_RenameHealthOnStack.cs"/>
+    <Compile Remove="Data\Migrations\20241108073415_RenameHealthOnStack.Designer.cs"/>
+    <Compile Remove="Data\Migrations\20241108073241_AddStackServiceHealth.cs"/>
+    <Compile Remove="Data\Migrations\20241108073241_AddStackServiceHealth.Designer.cs"/>
+    <Compile Remove="Data\Migrations\20241108161715_AddHealthState.cs"/>
+    <Compile Remove="Data\Migrations\20241108161715_AddHealthState.Designer.cs"/>
   </ItemGroup>
 </Project>

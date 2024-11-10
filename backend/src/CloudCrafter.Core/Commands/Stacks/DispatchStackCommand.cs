@@ -6,7 +6,7 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Stacks;
 
-public static class DispatchStack
+public static class DispatchStackDeployment
 {
     [Authorize]
     public record Command(Guid StackId)

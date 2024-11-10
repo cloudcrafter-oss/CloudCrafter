@@ -20,7 +20,8 @@ services:
     environment:
       newKey: newValue
     volumes:
-    - newVolume:newPath
+    - /newVolume:/newPath
+    image: nginx:latest
 volumes:
   db_data: 
 networks:

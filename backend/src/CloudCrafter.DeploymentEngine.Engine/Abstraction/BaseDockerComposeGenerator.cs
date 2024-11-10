@@ -1,4 +1,5 @@
-﻿using CloudCrafter.DockerCompose.Engine.Yaml;
+﻿using CloudCrafter.DockerCompose.Engine.Models;
+using CloudCrafter.DockerCompose.Engine.Yaml;
 using CloudCrafter.DockerCompose.Shared.Labels;
 using CloudCrafter.Domain.Entities;
 
@@ -26,6 +27,32 @@ public abstract class BaseDockerComposeGenerator
         labelService.AddLabel(LabelFactory.GenerateStackLabel(service.StackId));
         labelService.AddLabel(LabelFactory.GenerateStackServiceLabel(service.Id));
         labelService.AddLabel(LabelFactory.GenerateDeploymentLabel(Options.DeploymentId));
+    }
+
+    protected void AddHealthCheck(
+        DockerComposeEditor.ServiceEditor serviceEditor,
+        StackService stackService
+    )
+    {
+        var config = stackService.HealthcheckConfiguration;
+        var stackServiceHealthcheckValid = config.ConfigurationValid();
+
+        if (!stackServiceHealthcheckValid)
+        {
+            return;
+        }
+
+        serviceEditor.AddHealthCheck(
+            new ServiceHealthCheck
+            {
+                Test =
+                    $"curl -f http://{stackService.HealthcheckConfiguration.HttpHost}:{stackService.HealthcheckConfiguration.HttpPort}{stackService.HealthcheckConfiguration.HttpPath}",
+                IntervalSeconds = 3,
+                Retries = config.MaxRetries,
+                StartPeriodSeconds = 3,
+                TimeoutSeconds = 4,
+            }
+        );
     }
 
     protected void AddProxyLabels(

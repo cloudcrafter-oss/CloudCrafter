@@ -1,5 +1,11 @@
 ﻿services:
   my-custom-service-123:
+    healthcheck:
+      test: curl -f http://127.0.0.1:3000/
+      interval: 3s
+      timeout: 4s
+      retries: 3
+      start_period: 3s
     labels:
       cloudcrafter.managed: true
       cloudcrafter.stack.id: 35223e08-9c9f-4322-972e-51c610c202e3

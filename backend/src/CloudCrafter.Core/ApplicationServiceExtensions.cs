@@ -47,10 +47,20 @@ public static class ApplicationServiceExtensions
     public static IApplicationBuilder ConfigureRecurringJobs(this IApplicationBuilder app)
     {
 #if !IN_TESTS
+        var isInTests = Environment.GetEnvironmentVariable("IN_TESTS");
+        if (isInTests == "true")
+        {
+            return app;
+        }
         RecurringJob.AddOrUpdate<ICloudCrafterRecurringJobsDispatcher>(
             "5m-recurring-connectivity-checks",
             service => service.AddRecurringConnectivityChecks(),
             "*/5 * * * *"
+        );
+        RecurringJob.AddOrUpdate<ICloudCrafterRecurringJobsDispatcher>(
+            "1m-recurring-healthyness-checks",
+            service => service.AddRecurringHealthynessChecks(),
+            "*/1 * * * *"
         );
 #endif
         return app;
@@ -141,6 +151,7 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<ConnectedServerManager>();
 
         services.AddSingleton<WebHubActions>();
+        services.AddSingleton<StackHubActions>();
 
         services.AddScoped<ConnectivityCheckBackgroundJob>();
         services.AddScoped<DeployStackBackgroundJob>();

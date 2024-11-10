@@ -10,5 +10,8 @@ public interface IStackRepository
     Task AddAppServiceToStack(Guid stackId, string name);
 
     Task<Guid> CreateDeployment(Guid stackId);
+    Task<StackService?> GetService(Guid stackServiceId);
     Task<List<Deployment>> GetDeployments(Guid stackId);
+
+    Task SaveChangesAsync();
 }
