@@ -47,7 +47,8 @@ public static class ApplicationServiceExtensions
     public static IApplicationBuilder ConfigureRecurringJobs(this IApplicationBuilder app)
     {
 #if !IN_TESTS
-        if (Environment.GetEnvironmentVariable("IN_TESTS") == "true")
+        var isInTests = Environment.GetEnvironmentVariable("IN_TESTS");
+        if (isInTests == "true")
         {
             return app;
         }
