@@ -49,6 +49,7 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import type { z } from 'zod'
 import ShowDate from '../../ShowDate'
 import { ChannelLogViewerEnhanced } from '../../logviewer/ChannelLogViewer'
@@ -114,6 +115,9 @@ export const BasicInfo = ({
 		values: z.infer<typeof updateStackMutationRequestSchema>,
 	) => {
 		await updateDetailMutation.mutateAsync(values)
+
+		setIsEditing(false)
+		toast.success('Stack has been updated!')
 	}
 
 	return (

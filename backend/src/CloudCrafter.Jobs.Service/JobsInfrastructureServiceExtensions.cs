@@ -3,6 +3,7 @@ using Hangfire.Console;
 using Hangfire.Redis.StackExchange;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 
 namespace CloudCrafter.Jobs.Service;
 
@@ -15,10 +16,20 @@ public static class JobsInfrastructureServiceExtensions
         JobServiceType type
     )
     {
+        var connectionString = config.GetConnectionString("RedisConnection");
+        if (connectionString == null)
+        {
+            throw new ArgumentNullException(
+                "RedisConnection",
+                "Redis connection string is required"
+            );
+        }
+        var redis = ConnectionMultiplexer.Connect(connectionString!);
+        services.AddSingleton<IConnectionMultiplexer>(redis);
+
         services.AddHangfire(
             (sp, hangfireConfig) =>
             {
-                var connectionString = config.GetConnectionString("RedisConnection");
                 hangfireConfig.UseRedisStorage(
                     connectionString,
                     new RedisStorageOptions

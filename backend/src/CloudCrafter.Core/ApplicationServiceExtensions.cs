@@ -29,6 +29,7 @@ using CloudCrafter.Core.Services.Domain.Users;
 using CloudCrafter.Core.Services.Domain.Utils;
 using CloudCrafter.Core.SignalR;
 using CloudCrafter.Core.SignalR.HubActions;
+using CloudCrafter.Core.SignalR.Tracking;
 using CloudCrafter.Domain;
 using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
@@ -125,6 +126,7 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>();
 
+        services.AddSingleton<PresenceTracker>();
         services.AddScoped<ICommandExecutor, CommandExecutor>();
         services
             .AddScoped<IUsersService, UsersService>()
