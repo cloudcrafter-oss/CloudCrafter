@@ -13,9 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Moq;
 using Serilog;
 
-namespace CloudCrafter.FunctionalTests;
-
-using static Testing;
+namespace CloudCrafter.FunctionalTestWithMocks;
 
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
@@ -95,10 +93,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                     return ctx;
                 });
                 services.AddScoped<ApplicationDbContextInitialiser>();
-
-                services
-                    .RemoveAll<IUser>()
-                    .AddTransient(provider => Mock.Of<IUser>(s => s.Id == GetUserId()));
 
                 _configureServices?.Invoke(services);
                 services.EnsureDbCreated<AppDbContext>();

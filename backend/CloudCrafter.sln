@@ -107,6 +107,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudCrafter.Tests.E2E.Depl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudCrafter.Agent.SignalR", "src\CloudCrafter.Agent.SignalR\CloudCrafter.Agent.SignalR.csproj", "{291B2C21-A5FB-4117-AC48-CC102CABE811}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudCrafter.FunctionalTestWithMocks", "tests\CloudCrafter.FunctionalTestWithMocks\CloudCrafter.FunctionalTestWithMocks.csproj", "{144751C3-30BE-469F-BEDC-99B9A4C98028}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -477,6 +479,18 @@ Global
 		{291B2C21-A5FB-4117-AC48-CC102CABE811}.Release|x64.Build.0 = Release|Any CPU
 		{291B2C21-A5FB-4117-AC48-CC102CABE811}.Release|x86.ActiveCfg = Release|Any CPU
 		{291B2C21-A5FB-4117-AC48-CC102CABE811}.Release|x86.Build.0 = Release|Any CPU
+		{144751C3-30BE-469F-BEDC-99B9A4C98028}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{144751C3-30BE-469F-BEDC-99B9A4C98028}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{144751C3-30BE-469F-BEDC-99B9A4C98028}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{144751C3-30BE-469F-BEDC-99B9A4C98028}.Debug|x64.Build.0 = Debug|Any CPU
+		{144751C3-30BE-469F-BEDC-99B9A4C98028}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{144751C3-30BE-469F-BEDC-99B9A4C98028}.Debug|x86.Build.0 = Debug|Any CPU
+		{144751C3-30BE-469F-BEDC-99B9A4C98028}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{144751C3-30BE-469F-BEDC-99B9A4C98028}.Release|Any CPU.Build.0 = Release|Any CPU
+		{144751C3-30BE-469F-BEDC-99B9A4C98028}.Release|x64.ActiveCfg = Release|Any CPU
+		{144751C3-30BE-469F-BEDC-99B9A4C98028}.Release|x64.Build.0 = Release|Any CPU
+		{144751C3-30BE-469F-BEDC-99B9A4C98028}.Release|x86.ActiveCfg = Release|Any CPU
+		{144751C3-30BE-469F-BEDC-99B9A4C98028}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -527,6 +541,7 @@ Global
 		{AFDE4FA6-CC04-4493-A34B-119C3E63DF51} = {B31B4797-1D9F-4288-808C-BE9A31A98C7D}
 		{FB3BF189-E0B8-44CD-80AF-3EE1D236DAE5} = {AFDE4FA6-CC04-4493-A34B-119C3E63DF51}
 		{291B2C21-A5FB-4117-AC48-CC102CABE811} = {6FB19A56-83BA-46EA-B5C2-CD62A61E2E7E}
+		{144751C3-30BE-469F-BEDC-99B9A4C98028} = {02BBDA6A-5C13-47D2-81BB-BE28BC751189}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0F19343-8185-4A9F-9165-0EA8544BC925}
