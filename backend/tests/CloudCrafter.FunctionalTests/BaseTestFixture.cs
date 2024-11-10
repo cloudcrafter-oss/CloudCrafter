@@ -1,10 +1,5 @@
-using Bogus;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Containers;
-using Hangfire;
-using Hangfire.States;
 using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests;

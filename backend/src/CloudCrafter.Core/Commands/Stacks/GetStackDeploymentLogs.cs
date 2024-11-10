@@ -7,7 +7,6 @@ namespace CloudCrafter.Core.Commands.Stacks;
 
 public static class GetStackDeploymentLogs
 {
-    // TODO: Implement ACL checks somewhere
     [Authorize]
     public record Query(Guid DeploymentId) : IRequest<List<DeploymentLogDto>>;
 

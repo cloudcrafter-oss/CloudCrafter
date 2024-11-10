@@ -5,7 +5,7 @@ namespace CloudCrafter.Domain.Entities;
 
 public class Deployment : BaseAuditableEntity
 {
-    public Stack Stack { get; set; } = null!;
+    public Stack? Stack { get; set; } = null!;
     public required Guid StackId { get; init; }
     public required List<DeploymentLog> Logs { get; init; }
 

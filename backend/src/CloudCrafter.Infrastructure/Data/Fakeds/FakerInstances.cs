@@ -48,6 +48,22 @@ public static class FakerInstances
     public static StackServiceType StackServiceAppTypeType =>
         new() { Id = StackServiceTypeConstants.App, Type = nameof(StackServiceTypeConstants.App) };
 
+    public static Faker<Deployment> DeploymentFaker(Stack Stack)
+    {
+        return new Faker<Deployment>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, Guid.NewGuid)
+            .RuleFor(x => x.Stack, f => null)
+            .RuleFor(x => x.Logs, f => new List<DeploymentLog>())
+            .RuleFor(x => x.State, DeploymentState.Created)
+            .RuleFor(x => x.RecipeYaml, f => null)
+            .RuleFor(x => x.CreatedBy, f => null)
+            .RuleFor(x => x.LastModifiedBy, f => null)
+            .RuleFor(x => x.StackId, Stack.Id)
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    }
+
     public static Faker<Stack> StackFaker(Guid environmentId)
     {
         var server = ServerFaker.Generate();

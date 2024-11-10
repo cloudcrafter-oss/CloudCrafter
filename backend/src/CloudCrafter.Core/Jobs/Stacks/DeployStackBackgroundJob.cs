@@ -40,9 +40,9 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
         _deployment = await context
             .Deployments.Where(x => x.Id == DeploymentId)
             .Include(x => x.Stack)
-            .ThenInclude(x => x.Services)
+            .ThenInclude(x => x!.Services)
             .Include(x => x.Stack)
-            .ThenInclude(stack => stack.Server)
+            .ThenInclude(stack => stack!.Server)
             .FirstOrDefaultAsync();
 
         if (_deployment == null || _deployment.Stack == null || _deployment.Stack.Server == null)
@@ -86,7 +86,7 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
             var recipeGenerator = new SimpleAppRecipeGenerator(
                 new BaseRecipeGenerator.Args
                 {
-                    Stack = _deployment!.Stack,
+                    Stack = _deployment!.Stack!,
                     DeploymentId = _deployment!.Id,
                 }
             );
@@ -113,7 +113,7 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
 
             logger.LogDebug("Sending recipe to agent...");
             await agentManager.SendRecipeToAgent(
-                _deployment.Stack.ServerId,
+                _deployment.Stack!.ServerId,
                 _deployment.Id,
                 recipe.Recipe
             );
