@@ -47,6 +47,10 @@ public static class ApplicationServiceExtensions
     public static IApplicationBuilder ConfigureRecurringJobs(this IApplicationBuilder app)
     {
 #if !IN_TESTS
+        if (Environment.GetEnvironmentVariable("IN_TESTS") == "true")
+        {
+            return app;
+        }
         RecurringJob.AddOrUpdate<ICloudCrafterRecurringJobsDispatcher>(
             "5m-recurring-connectivity-checks",
             service => service.AddRecurringConnectivityChecks(),
