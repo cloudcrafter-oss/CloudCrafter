@@ -5,6 +5,8 @@ namespace CloudCrafter.Core.SignalR;
 
 public class StackHub(PresenceTracker presenceTracker) : Hub, IPresenceTrackingHub
 {
+    public string HubName => nameof(StackHub);
+
     public async Task JoinChannel(string guid)
     {
         // TODO: Validate if bearer has access to stack in the future
@@ -14,13 +16,9 @@ public class StackHub(PresenceTracker presenceTracker) : Hub, IPresenceTrackingH
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        var userId = Context.UserIdentifier ?? Context.ConnectionId;
-
         // Clean up all group memberships first
         await presenceTracker.CleanupGroupsForConnection<StackHub>(Context.ConnectionId);
 
         await base.OnDisconnectedAsync(exception);
     }
-
-    public string HubName => nameof(StackHub);
 }
