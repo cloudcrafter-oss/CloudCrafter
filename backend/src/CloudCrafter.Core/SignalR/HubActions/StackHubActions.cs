@@ -1,19 +1,30 @@
 using AutoMapper;
+using CloudCrafter.Core.SignalR.Tracking;
 using CloudCrafter.Domain.Domain.Health;
 using CloudCrafter.Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
 
 namespace CloudCrafter.Core.SignalR.HubActions;
 
-public class StackHubActions(IHubContext<StackHub> stackHub, IMapper mapper)
+public class StackHubActions(
+    IHubContext<StackHub> stackHub,
+    PresenceTracker presenceTracker,
+    IMapper mapper
+)
 {
-    public Task SendStackHealthUpdate(Stack stack)
+    public async Task SendStackHealthUpdate(Stack stack)
     {
-        var hasConnectedClients = stackHub.Clients.Group(stack.Id.ToString());
+        var connectedClients = await presenceTracker.ConnectedClientsForGroup<StackHub>(
+            stack.Id.ToString()
+        );
+
+        if (connectedClients == 0)
+        {
+            return;
+        }
+
         var mappedDto = mapper.Map<EntityHealthDto>(stack.HealthStatus);
 
-        return stackHub
-            .Clients.Group(stack.Id.ToString())
-            .SendAsync("StackHealthUpdate", mappedDto);
+        await stackHub.Clients.Group(stack.Id.ToString()).SendAsync("StackHealthUpdate", mappedDto);
     }
 }

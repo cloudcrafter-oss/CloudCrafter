@@ -8,17 +8,25 @@ public class PresenceTracker(IConnectionMultiplexer redis)
     private const string PRESENCE_KEY_PREFIX = "presence";
     private const string GROUP_KEY_PREFIX = "group";
 
-    private string GetPresenceSetKey(string hubName) =>
-        $"{PRESENCE_KEY_PREFIX}:{hubName}:connectedClients";
+    private string GetPresenceSetKey(string hubName)
+    {
+        return $"{PRESENCE_KEY_PREFIX}:{hubName}:connectedClients";
+    }
 
-    private string GetPresenceHashKey(string hubName) =>
-        $"{PRESENCE_KEY_PREFIX}:{hubName}:clientDetails";
+    private string GetPresenceHashKey(string hubName)
+    {
+        return $"{PRESENCE_KEY_PREFIX}:{hubName}:clientDetails";
+    }
 
-    private string GetGroupMembersKey(string hubName, string groupId) =>
-        $"{GROUP_KEY_PREFIX}:{hubName}:group:{groupId}:members";
+    private string GetGroupMembersKey(string hubName, string groupId)
+    {
+        return $"{GROUP_KEY_PREFIX}:{hubName}:group:{groupId}:members";
+    }
 
-    private string GetClientGroupsKey(string hubName, string connectionId) =>
-        $"{GROUP_KEY_PREFIX}:{hubName}:client:{connectionId}:groups";
+    private string GetClientGroupsKey(string hubName, string connectionId)
+    {
+        return $"{GROUP_KEY_PREFIX}:{hubName}:client:{connectionId}:groups";
+    }
 
     public async Task ClientJoinedGroup<THub>(string connectionId, string groupId)
         where THub : IPresenceTrackingHub
@@ -36,9 +44,9 @@ public class PresenceTracker(IConnectionMultiplexer redis)
         var userKey = $"{connectionId}";
         var userData = new HashEntry[]
         {
-            new HashEntry("connectionId", connectionId),
-            new HashEntry("lastSeen", DateTime.UtcNow.ToString("O")),
-            new HashEntry("currentGroup", groupId),
+            new("connectionId", connectionId),
+            new("lastSeen", DateTime.UtcNow.ToString("O")),
+            new("currentGroup", groupId),
         };
 
         await db.HashSetAsync(
@@ -71,7 +79,15 @@ public class PresenceTracker(IConnectionMultiplexer redis)
         return groupMembers.Select(g => g.ToString());
     }
 
-    public async Task<IEnumerable<string>> ClientsForGroupId<THub>(string groupId)
+    public async Task<int> ConnectedClientsForGroup<THub>(string groupId)
+        where THub : IPresenceTrackingHub
+    {
+        var result = await ClientsForGroupId<THub>(groupId);
+
+        return result.Count();
+    }
+
+    private async Task<IEnumerable<string>> ClientsForGroupId<THub>(string groupId)
         where THub : IPresenceTrackingHub
     {
         var hubName = typeof(THub).Name;

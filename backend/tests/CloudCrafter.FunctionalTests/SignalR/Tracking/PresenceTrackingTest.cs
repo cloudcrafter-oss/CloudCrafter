@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core.SignalR.Tracking;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using StackExchange.Redis;
@@ -58,16 +59,24 @@ public class PresenceTrackingTest : BaseTestFixture
         // Act & Assert - Join groups
         await _tracker.ClientJoinedGroup<TestHub>(connectionId, groupId1);
         await _tracker.ClientJoinedGroup<TestHub>(connectionId, groupId2);
+        await _tracker.ClientJoinedGroup<TestHub>(connectionId, groupId3);
         await _tracker.ClientJoinedGroup<TestHub>(anotherConnectionId, groupId3);
 
         // Verify groups for connection
         var groups = await _tracker.GroupsForConnection<TestHub>(connectionId);
-        CollectionAssert.AreEquivalent(new[] { groupId1, groupId2 }, groups);
+        CollectionAssert.AreEquivalent(new[] { groupId1, groupId2, groupId3 }, groups);
+
+        var count = await _tracker.ConnectedClientsForGroup<TestHub>(groupId1);
+        count.Should().Be(1);
+        count = await _tracker.ConnectedClientsForGroup<TestHub>(groupId2);
+        count.Should().Be(1);
+        count = await _tracker.ConnectedClientsForGroup<TestHub>(groupId3);
+        count.Should().Be(2);
 
         // Leave one group
         await _tracker.ClientLeftGroup<TestHub>(connectionId, groupId1);
         groups = await _tracker.GroupsForConnection<TestHub>(connectionId);
-        CollectionAssert.AreEquivalent(new[] { groupId2 }, groups);
+        CollectionAssert.AreEquivalent(new[] { groupId2, groupId3 }, groups);
 
         // Cleanup all groups
         await _tracker.CleanupGroupsForConnection<TestHub>(connectionId);
