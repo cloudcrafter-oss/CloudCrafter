@@ -126,7 +126,7 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>();
 
-        services.AddSingleton<PresenceTracker>();
+        services.AddTransient<PresenceTracker>();
         services.AddScoped<ICommandExecutor, CommandExecutor>();
         services
             .AddScoped<IUsersService, UsersService>()
@@ -152,8 +152,8 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<JobSerializer>();
         services.AddSingleton<ConnectedServerManager>();
 
-        services.AddSingleton<WebHubActions>();
-        services.AddSingleton<StackHubActions>();
+        services.AddTransient<WebHubActions>();
+        services.AddTransient<StackHubActions>();
 
         services.AddScoped<ConnectivityCheckBackgroundJob>();
         services.AddScoped<DeployStackBackgroundJob>();

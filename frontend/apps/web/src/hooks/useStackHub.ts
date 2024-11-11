@@ -38,6 +38,10 @@ export const useStackHub = ({
 			setStack({ ...stack, health: update })
 		})
 
+		connection.on('StackUpdated', (update: StackDetailDto) => {
+			setStack(update)
+		})
+
 		connection
 			.start()
 			.then(() => {
