@@ -95,6 +95,7 @@ public static class FakerInstances
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow)
             .RuleFor(x => x.StackId, stack.Id)
+            .RuleFor(x => x.Description, f => null)
             .RuleFor(x => x.HealthcheckConfiguration, f => new EntityHealthcheckConfiguration())
             .RuleFor(x => x.StackServiceTypeId, StackServiceTypeConstants.App)
             .RuleFor(x => x.Stack, stack)
