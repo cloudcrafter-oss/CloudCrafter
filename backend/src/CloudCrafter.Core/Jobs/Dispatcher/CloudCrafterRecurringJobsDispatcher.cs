@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core.Commands.Servers;
+using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Core.Interfaces.Domain.Agent;
 using MediatR;
 
@@ -15,5 +16,10 @@ public class CloudCrafterRecurringJobsDispatcher(ISender sender, IAgentManager a
     public Task AddRecurringHealthynessChecks()
     {
         return agentManager.RequestHealthChecks();
+    }
+
+    public Task AddMarkStacksAsUnknownWhenTimespanExceeded()
+    {
+        return sender.Send(new MarkStacksAsUnknownHealthAfterTimespan.Command());
     }
 }

@@ -36,7 +36,6 @@ export * from "./postRefreshUserTokensQuerySchema";
 export * from "./postValidateGithubRepoSchema";
 export * from "./projectDtoSchema";
 export * from "./projectEnvironmentEnhancedDtoSchema";
-export * from "./projectHealthStatusSchema";
 export * from "./serverDetailDtoSchema";
 export * from "./serverDtoSchema";
 export * from "./simpleDeploymentDtoSchema";

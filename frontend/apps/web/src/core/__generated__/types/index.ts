@@ -36,7 +36,6 @@ export * from "./PostRefreshUserTokensQuery";
 export * from "./PostValidateGithubRepo";
 export * from "./ProjectDto";
 export * from "./ProjectEnvironmentEnhancedDto";
-export * from "./ProjectHealthStatus";
 export * from "./ServerDetailDto";
 export * from "./ServerDto";
 export * from "./SimpleDeploymentDto";

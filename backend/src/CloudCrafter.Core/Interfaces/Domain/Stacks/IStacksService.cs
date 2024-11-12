@@ -15,4 +15,6 @@ public interface IStacksService
     Task<List<SimpleDeploymentDto>> GetDeployments(Guid stackId);
     Task HandleHealthChecks(Guid serverId, ContainerHealthCheckArgs args);
     Task<StackDetailDto?> UpdateStack(UpdateStackCommand.Command request);
+
+    Task MarkStacksUnknownAfterTimespan(TimeSpan maxHealthCheckAge);
 }

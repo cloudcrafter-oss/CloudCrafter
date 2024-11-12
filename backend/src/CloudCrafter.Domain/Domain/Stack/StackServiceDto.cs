@@ -8,6 +8,7 @@ public class StackServiceDto
 {
     public required Guid Id { get; init; }
     public required string Name { get; init; }
+    public required string? Description { get; init; }
     public required EntityHealthDto Health { get; init; }
 
     private class Mapping : Profile

@@ -1,13 +1,11 @@
 'use client'
 import {
-	type EntityHealthDtoValue,
 	type StackDetailDto,
 	updateStackMutationRequestSchema,
 	useDispatchStackDeploymentHook,
 	useUpdateStackHook,
 } from '@/src/core/__generated__'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Badge } from '@ui/components/ui/badge'
 import { Button } from '@ui/components/ui/button'
 import {
 	Card,
@@ -35,12 +33,6 @@ import { Label } from '@ui/components/ui/label'
 import { Switch } from '@ui/components/ui/switch'
 import { Textarea } from '@ui/components/ui/textarea'
 import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from '@ui/components/ui/tooltip'
-import {
 	FileText,
 	MoreVertical,
 	PencilIcon,
@@ -51,39 +43,8 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import ShowDate from '../../ShowDate'
+import { EntityHealthBadge } from '../../badges/EntityHealthBadge'
 import { ChannelLogViewerEnhanced } from '../../logviewer/ChannelLogViewer'
-
-const BadgeStatus = ({
-	statusAt,
-	status,
-}: { statusAt: string | null | undefined; status: EntityHealthDtoValue }) => {
-	const classMap = {
-		Healthy: 'bg-green-500',
-		Unhealthy: 'bg-red-500',
-		Unknown: 'bg-gray-500',
-	}
-
-	return (
-		<TooltipProvider>
-			<Tooltip>
-				<TooltipTrigger disabled>
-					<Badge
-						className={`${classMap[status as keyof typeof classMap] ?? classMap.Unknown} hover:${classMap[status as keyof typeof classMap] ?? classMap.Unknown} cursor-pointer animate-pulse`}
-					>
-						<p className='cursor-pointer'>{status}</p>
-					</Badge>
-				</TooltipTrigger>
-				<TooltipContent>
-					<p>
-						Last update at:{' '}
-						{statusAt ? <ShowDate dateString={statusAt} /> : 'Never'}
-					</p>
-				</TooltipContent>
-			</Tooltip>
-		</TooltipProvider>
-	)
-}
 
 export const BasicInfo = ({
 	stackDetails,
@@ -127,7 +88,8 @@ export const BasicInfo = ({
 					<CardTitle>Stack Information</CardTitle>
 					<CardDescription>Basic details about your Stack</CardDescription>
 					<div className='absolute top-4 right-4 flex items-center space-x-2'>
-						<BadgeStatus
+						<EntityHealthBadge
+							blink
 							statusAt={stackDetails.health.statusAt}
 							status={stackDetails.health.value}
 						/>

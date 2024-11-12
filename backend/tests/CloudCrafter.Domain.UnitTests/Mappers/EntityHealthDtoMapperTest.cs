@@ -12,6 +12,7 @@ public class EntityHealthDtoMapperTest : BaseMapperTest
     [TestCase(EntityHealthStatusValue.Degraded, EntityHealthDtoValue.Degraded)]
     [TestCase(EntityHealthStatusValue.Unhealthy, EntityHealthDtoValue.Unhealthy)]
     [TestCase(EntityHealthStatusValue.Healthy, EntityHealthDtoValue.Healthy)]
+    [TestCase(EntityHealthStatusValue.HealthCheckOverdue, EntityHealthDtoValue.HeathCheckOverdue)]
     public void ShouldMapEntityHealthStatus(
         EntityHealthStatusValue entity,
         EntityHealthDtoValue dto

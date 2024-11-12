@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using AutoMapper;
+using CloudCrafter.Domain.Domain.Health;
 
 namespace CloudCrafter.Domain.Domain.Project;
 
@@ -18,7 +19,7 @@ public class DeployedStackDto
 {
     public required Guid StackId { get; init; }
     public required string Name { get; init; }
-    public required ProjectHealthStatus HealthStatus { get; init; }
+    public required EntityHealthDto Health { get; init; }
 
     private class Mapping : Profile
     {
@@ -26,19 +27,7 @@ public class DeployedStackDto
         {
             CreateMap<Entities.Stack, DeployedStackDto>()
                 .ForMember(x => x.StackId, x => x.MapFrom(opt => opt.Id))
-                .ForMember(
-                    x => x.HealthStatus,
-                    opt => opt.MapFrom(dest => ProjectHealthStatus.Unknown)
-                );
+                .ForMember(x => x.Health, opt => opt.MapFrom(src => src.HealthStatus));
         }
     }
-}
-
-[JsonConverter(typeof(JsonStringEnumConverter))]
-public enum ProjectHealthStatus
-{
-    Healthy,
-    Degraded,
-    Unhealthy,
-    Unknown,
 }

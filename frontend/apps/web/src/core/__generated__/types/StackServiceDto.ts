@@ -10,6 +10,10 @@ import type { EntityHealthDto } from "./EntityHealthDto";
     */
     name: string;
     /**
+     * @type string
+    */
+    description?: string | null;
+    /**
      * @type object
     */
     health: EntityHealthDto;

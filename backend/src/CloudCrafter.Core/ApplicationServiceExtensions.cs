@@ -58,11 +58,18 @@ public static class ApplicationServiceExtensions
             service => service.AddRecurringConnectivityChecks(),
             "*/5 * * * *"
         );
+
+        RecurringJob.AddOrUpdate<ICloudCrafterRecurringJobsDispatcher>(
+            "5m-recurring-stacks-health-checks-missing",
+            service => service.AddMarkStacksAsUnknownWhenTimespanExceeded(),
+            "*/5 * * * *"
+        );
         RecurringJob.AddOrUpdate<ICloudCrafterRecurringJobsDispatcher>(
             "1m-recurring-healthyness-checks",
             service => service.AddRecurringHealthynessChecks(),
             "*/1 * * * *"
         );
+
 #endif
         return app;
     }
