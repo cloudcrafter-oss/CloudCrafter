@@ -1,4 +1,6 @@
-export type UpdateStackCommandCommand = {
+import type { UpdateStackCommandGitSettings } from "./UpdateStackCommandGitSettings";
+
+ export type UpdateStackCommandCommand = {
     /**
      * @type string, uuid
     */
@@ -11,4 +13,8 @@ export type UpdateStackCommandCommand = {
      * @type string
     */
     description?: string | null;
+    /**
+     * @type object
+    */
+    gitSettings: UpdateStackCommandGitSettings;
 };

@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Core.Interfaces.Domain.Utils;
+﻿using CloudCrafter.Core.Common.Security;
+using CloudCrafter.Core.Interfaces.Domain.Utils;
 using CloudCrafter.Domain.Domain.Utils;
 using MediatR;
 
@@ -6,6 +7,8 @@ namespace CloudCrafter.Core.Commands.Utils;
 
 public static class CheckValidGitRepoCommand
 {
+    // [Authorize]
+    // TODO: Add Authorize
     public record Command(string Repository) : IRequest<GitRepositoryCheckResultDto>;
 
     private class Handler(IGitService service)

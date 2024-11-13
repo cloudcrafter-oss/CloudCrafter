@@ -319,6 +319,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
                     b.Property<Guid?>("LastModifiedBy")
                         .HasColumnType("uuid");
 

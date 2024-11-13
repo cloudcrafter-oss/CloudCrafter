@@ -17,6 +17,7 @@ public class StackServiceDtoMapperTest : BaseMapperTest
             Id = Guid.NewGuid(),
             Name = "Service",
             StackId = Guid.NewGuid(),
+            Description = "Dummy service",
             StackServiceTypeId = stackTypeId,
             Type = new StackServiceType { Id = stackTypeId, Type = "App" },
             HealthStatus = new()

@@ -38,13 +38,13 @@ public class CustomExceptionHandler : IExceptionHandler
     {
         var exception = (ValidationException)ex;
 
-        httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+        httpContext.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
 
         await httpContext.Response.WriteAsJsonAsync(
             new ValidationProblemDetails(exception.Errors)
             {
-                Status = StatusCodes.Status400BadRequest,
-                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                Status = StatusCodes.Status422UnprocessableEntity,
+                Type = "https://httpwg.org/specs/rfc9110.html#status.422",
             }
         );
     }

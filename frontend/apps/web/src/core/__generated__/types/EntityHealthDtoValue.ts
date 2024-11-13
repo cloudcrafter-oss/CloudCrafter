@@ -3,6 +3,7 @@ export const entityHealthDtoValue = {
     "Unsupported": "Unsupported",
     "Degraded": "Degraded",
     "Unhealthy": "Unhealthy",
-    "Healthy": "Healthy"
+    "Healthy": "Healthy",
+    "HeathCheckOverdue": "HeathCheckOverdue"
 } as const;
 export type EntityHealthDtoValue = (typeof entityHealthDtoValue)[keyof typeof entityHealthDtoValue];

@@ -6,11 +6,11 @@ export const ProjectHealthStatus = ({
 	project,
 }: { project: ProjectEnvironmentEnhancedDto }) => {
 	const unhealthyStacks = project.deployedStacks.filter(
-		(stack) => stack.healthStatus !== 'Healthy',
+		(stack) => stack.health.value !== 'Healthy',
 	)
 
 	const allHealthy = project.deployedStacks.every(
-		(stack) => stack.healthStatus === 'Healthy',
+		(stack) => stack.health.value === 'Healthy',
 	)
 
 	const activityColor = allHealthy ? 'text-green-500' : 'text-yellow-500'
@@ -37,7 +37,9 @@ export const ProjectHealthStatus = ({
 				</div>
 				{unhealthyStacks.length > 0 && (
 					<p className='text-sm text-gray-500 dark:text-gray-400'>
-						{unhealthyStacks.length} Stacks require attention
+						{unhealthyStacks.length}{' '}
+						{unhealthyStacks.length === 1 ? 'Stack requires' : 'Stacks require'}{' '}
+						attention
 					</p>
 				)}
 			</CardContent>

@@ -9,4 +9,5 @@ export enum EntityHealthDtoValue {
     Degraded = 2,
     Unhealthy = 3,
     Healthy = 4,
+    HeathCheckOverdue = 5,
 }

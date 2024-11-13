@@ -26,4 +26,5 @@ public enum EntityHealthDtoValue
     Degraded,
     Unhealthy,
     Healthy,
+    HeathCheckOverdue,
 }

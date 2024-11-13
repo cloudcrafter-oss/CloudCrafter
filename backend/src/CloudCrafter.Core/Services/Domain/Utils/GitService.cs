@@ -7,13 +7,84 @@ namespace CloudCrafter.Core.Services.Domain.Utils;
 
 public class GitService(ILogger<GitService> logger, ICommandExecutor executor) : IGitService
 {
-    public async Task<GitRepositoryCheckResultDto> ValidateRepository(string repository)
+    public async Task<GitRepositoryCheckResultDto> ValidateRepository(
+        string repository,
+        string? path = null,
+        string? branch = null
+    )
     {
         var isValid = await IsValidGitRepository(repository);
 
-        var result = new GitRepositoryCheckResultDto { IsValid = isValid };
+        if (string.IsNullOrEmpty(path) && string.IsNullOrEmpty(branch))
+        {
+            return new GitRepositoryCheckResultDto { IsValid = isValid };
+        }
 
-        return result;
+        var pathExists = await CheckoutAndCheckIfPathExists(repository, path, branch);
+
+        return new GitRepositoryCheckResultDto { IsValid = isValid && pathExists };
+    }
+
+    private async Task<bool> CheckoutAndCheckIfPathExists(
+        string repository,
+        string? path,
+        string? branch
+    )
+    {
+        var tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+        var exists = false;
+
+        try
+        {
+            // Clone repository with depth 1 to get just latest commit
+            var cloneArgs = new List<string> { "clone", "--depth", "1" };
+            if (!string.IsNullOrEmpty(branch))
+            {
+                cloneArgs.AddRange(["-b", branch]);
+            }
+
+            cloneArgs.AddRange([repository, tempDir]);
+
+            var cloneResult = await executor.ExecuteAsync("git", cloneArgs);
+            if (cloneResult.ExitCode != 0)
+            {
+                return false;
+            }
+
+            // Check if specified path exists in cloned repo
+            if (!string.IsNullOrEmpty(path))
+            {
+                var fullPath = Path.Combine(tempDir, path.TrimStart('/'));
+                var dirExists = Directory.Exists(fullPath);
+
+                return dirExists;
+            }
+
+            // if we came here, it does exists.
+            return true;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error checking repository directory");
+            exists = false;
+        }
+        finally
+        {
+            // Clean up temp directory
+            if (Directory.Exists(tempDir))
+            {
+                try
+                {
+                    Directory.Delete(tempDir, true);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogWarning(ex, "Failed to clean up temporary directory");
+                }
+            }
+        }
+
+        return exists;
     }
 
     private async Task<bool> IsValidGitRepository(string url)

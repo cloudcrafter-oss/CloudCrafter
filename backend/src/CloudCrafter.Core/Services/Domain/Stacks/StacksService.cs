@@ -7,7 +7,9 @@ using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Common;
 using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Domain.Stack;
+using CloudCrafter.Domain.Domain.Stack.Filter;
 using CloudCrafter.Domain.Entities;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CloudCrafter.Core.Services.Domain.Stacks;
 
@@ -134,10 +136,55 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
             stack.Description = request.Description;
         }
 
+        if (stack.Source?.Git != null)
+        {
+            // Update git related settings
+
+            if (!string.IsNullOrWhiteSpace(request.GitSettings?.GitRepository))
+            {
+                stack.Source.Git.Repository = request.GitSettings.GitRepository;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.GitSettings?.GitBranch))
+            {
+                stack.Source.Git.Branch = request.GitSettings.GitBranch;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.GitSettings?.GitPath))
+            {
+                stack.Source.Git.Path = request.GitSettings.GitPath;
+            }
+        }
+
         stack.AddDomainEvent(DomainEventDispatchTiming.AfterSaving, new StackUpdatedEvent(stack));
 
         await repository.SaveChangesAsync();
 
         return mapper.Map<StackDetailDto>(stack);
+    }
+
+    public async Task MarkStacksUnknownAfterTimespan(TimeSpan maxHealthCheckAge)
+    {
+        var stacks = await repository.FilterStacks(
+            new StackFilter { HealthCheckAgeOlderThan = maxHealthCheckAge }
+        );
+
+        foreach (var stack in stacks)
+        {
+            stack.HealthStatus.SetStatus(EntityHealthStatusValue.HealthCheckOverdue);
+
+            foreach (var service in stack.Services)
+            {
+                if (
+                    !service.HealthStatus.StatusAt.HasValue
+                    || service.HealthStatus.StatusAt.Value < DateTime.UtcNow - maxHealthCheckAge
+                )
+                {
+                    service.HealthStatus.SetStatus(EntityHealthStatusValue.HealthCheckOverdue);
+                }
+            }
+        }
+
+        await repository.SaveChangesAsync();
     }
 }
