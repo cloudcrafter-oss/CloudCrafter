@@ -52,6 +52,7 @@ export * from "./tokenDtoSchema";
 export * from "./updateProjectArgsSchema";
 export * from "./updateProjectSchema";
 export * from "./updateStackCommandCommandSchema";
+export * from "./updateStackCommandGitSettingsSchema";
 export * from "./updateStackSchema";
 export * from "./userDtoPaginatedListSchema";
 export * from "./userDtoPaginatedRequestSchema";

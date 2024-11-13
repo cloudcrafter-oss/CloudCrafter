@@ -36,6 +36,7 @@ public static class UpdateStackCommand
                     request.GitSettings.GitPath,
                     request.GitSettings.GitBranch
                 );
+
                 if (!isValidGitRepo.IsValid)
                 {
                     throw new ValidationException("GitRepository", "Invalid Git repository");

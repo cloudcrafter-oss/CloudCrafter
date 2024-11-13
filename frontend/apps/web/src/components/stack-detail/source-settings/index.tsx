@@ -36,7 +36,11 @@ export const SourceSettings = ({
 		resolver: zodResolver(updateStackMutationRequestSchema),
 		defaultValues: {
 			stackId: stackDetails.id,
-			gitRepository: stackDetails.source.gitRepository,
+			gitSettings: {
+				gitRepository: stackDetails.source.gitRepository,
+				gitBranch: stackDetails.source.gitBranch,
+				gitPath: stackDetails.source.gitPath,
+			},
 		},
 	})
 
@@ -53,6 +57,12 @@ export const SourceSettings = ({
 	const formValues = form.watch()
 
 	const formDisabled = updateDetailMutation.isPending
+
+	const textFields = [
+		'gitSettings.gitRepository',
+		'gitSettings.gitPath',
+		'gitSettings.gitBranch',
+	]
 	return (
 		<div className='space-y-6'>
 			<Card>
@@ -77,30 +87,40 @@ export const SourceSettings = ({
 							onSubmit={form.handleSubmit(onSubmitSourceInfo)}
 							className='space-y-4'
 						>
-							<FormField
-								control={form.control}
-								name='gitRepository'
-								render={({ field }) => (
-									<FormItem className='space-y-2'>
-										<FormLabel htmlFor='stack-name'>Git Repository</FormLabel>
-										{isEditing ? (
-											<FormControl>
-												<Input
-													disabled={formDisabled}
-													// placeholder={stackDetails.name || ''}
-													{...field}
-													value={field.value ?? ''}
-												/>
-											</FormControl>
-										) : (
-											<div className='p-2 bg-muted rounded-md'>
-												{field.value}
-											</div>
-										)}
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+							{textFields.map((field) => (
+								<FormField
+									key={field}
+									control={form.control}
+									name={
+										field as
+											| 'gitSettings.gitRepository'
+											| 'gitSettings.gitPath'
+											| 'gitSettings.gitBranch'
+									}
+									render={({ field }) => (
+										<FormItem className='space-y-2'>
+											<FormLabel htmlFor='stack-name'>
+												{field.name.split('.')[1]}
+											</FormLabel>
+											{isEditing ? (
+												<FormControl>
+													<Input
+														disabled={formDisabled}
+														// placeholder={stackDetails.name || ''}
+														{...field}
+														value={field.value ?? ''}
+													/>
+												</FormControl>
+											) : (
+												<div className='p-2 bg-muted rounded-md'>
+													{field.value}
+												</div>
+											)}
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							))}
 
 							<pre className='p-4 bg-muted rounded-md overflow-auto'>
 								{JSON.stringify(formValues, null, 2)}

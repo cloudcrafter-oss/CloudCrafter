@@ -9,6 +9,7 @@ using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Domain.Stack.Filter;
 using CloudCrafter.Domain.Entities;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CloudCrafter.Core.Services.Domain.Stacks;
 
@@ -135,12 +136,24 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
             stack.Description = request.Description;
         }
 
-        if (
-            !string.IsNullOrWhiteSpace(request.GitSettings?.GitRepository)
-            && stack.Source?.Git != null
-        )
+        if (stack.Source?.Git != null)
         {
-            stack.Source.Git.Repository = request.GitSettings.GitRepository;
+            // Update git related settings
+
+            if (!string.IsNullOrWhiteSpace(request.GitSettings?.GitRepository))
+            {
+                stack.Source.Git.Repository = request.GitSettings.GitRepository;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.GitSettings?.GitBranch))
+            {
+                stack.Source.Git.Branch = request.GitSettings.GitBranch;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.GitSettings?.GitPath))
+            {
+                stack.Source.Git.Path = request.GitSettings.GitPath;
+            }
         }
 
         stack.AddDomainEvent(DomainEventDispatchTiming.AfterSaving, new StackUpdatedEvent(stack));

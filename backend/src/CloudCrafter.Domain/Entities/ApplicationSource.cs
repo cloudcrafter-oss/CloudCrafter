@@ -15,9 +15,9 @@ public class ApplicationSourceGit
     /// <summary>
     ///     Path in the Git repository where the stack is located.
     /// </summary>
-    public string? Path { get; init; }
+    public string? Path { get; set; }
 
-    public string? Branch { get; init; }
+    public string? Branch { get; set; }
 }
 
 public enum ApplicationSourceType

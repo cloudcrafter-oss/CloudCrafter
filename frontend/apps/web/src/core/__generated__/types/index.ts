@@ -53,6 +53,7 @@ export * from "./UpdateProject";
 export * from "./UpdateProjectArgs";
 export * from "./UpdateStack";
 export * from "./UpdateStackCommandCommand";
+export * from "./UpdateStackCommandGitSettings";
 export * from "./UserDto";
 export * from "./UserDtoPaginatedList";
 export * from "./UserDtoPaginatedRequest";
