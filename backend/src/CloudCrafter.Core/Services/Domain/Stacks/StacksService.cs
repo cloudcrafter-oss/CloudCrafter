@@ -135,9 +135,12 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
             stack.Description = request.Description;
         }
 
-        if (!string.IsNullOrWhiteSpace(request.GitRepository) && stack.Source?.Git != null)
+        if (
+            !string.IsNullOrWhiteSpace(request.GitSettings?.GitRepository)
+            && stack.Source?.Git != null
+        )
         {
-            stack.Source.Git.Repository = request.GitRepository;
+            stack.Source.Git.Repository = request.GitSettings.GitRepository;
         }
 
         stack.AddDomainEvent(DomainEventDispatchTiming.AfterSaving, new StackUpdatedEvent(stack));

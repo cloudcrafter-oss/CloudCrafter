@@ -15,9 +15,11 @@ public static class UpdateStackCommand
         Guid StackId,
         string? Name = null,
         string? Description = null,
-        string? GitRepository = null
+        GitSettings? GitSettings = null
     // Add other updatable properties here
     ) : IRequest<StackDetailDto?>, IRequireStackAccess;
+
+    public record GitSettings(string? GitRepository, string? GitPath, string? GitBranch);
 
     public record Handler(IStacksService StackService, IGitService GitService)
         : IRequestHandler<Command, StackDetailDto?>
@@ -27,9 +29,13 @@ public static class UpdateStackCommand
             CancellationToken cancellationToken
         )
         {
-            if (!string.IsNullOrEmpty(request.GitRepository))
+            if (!string.IsNullOrEmpty(request.GitSettings?.GitRepository))
             {
-                var isValidGitRepo = await GitService.ValidateRepository(request.GitRepository);
+                var isValidGitRepo = await GitService.ValidateRepository(
+                    request.GitSettings.GitRepository,
+                    request.GitSettings.GitPath,
+                    request.GitSettings.GitBranch
+                );
                 if (!isValidGitRepo.IsValid)
                 {
                     throw new ValidationException("GitRepository", "Invalid Git repository");
