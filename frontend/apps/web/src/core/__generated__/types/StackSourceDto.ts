@@ -5,4 +5,8 @@ import type { StackSourceDtoType } from "./StackSourceDtoType";
      * @type string
     */
     type: StackSourceDtoType;
+    /**
+     * @type string
+    */
+    gitRepository?: string | null;
 };

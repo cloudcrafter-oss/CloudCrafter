@@ -11,4 +11,8 @@ export type UpdateStackCommandCommand = {
      * @type string
     */
     description?: string | null;
+    /**
+     * @type string
+    */
+    gitRepository?: string | null;
 };

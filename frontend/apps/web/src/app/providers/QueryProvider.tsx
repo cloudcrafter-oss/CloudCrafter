@@ -6,6 +6,7 @@ import {
 	isServer,
 } from '@tanstack/react-query'
 import type React from 'react'
+import { MutationErrorProvider } from './MutationErrorProvider'
 
 function makeQueryClient() {
 	return new QueryClient({
@@ -38,6 +39,8 @@ export const QueryProvider = ({ children }: { children: React.ReactNode }) => {
 	const queryClient = getQueryClient()
 
 	return (
-		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+		<QueryClientProvider client={queryClient}>
+			<MutationErrorProvider>{children}</MutationErrorProvider>
+		</QueryClientProvider>
 	)
 }

@@ -8,6 +8,8 @@ public class StackSourceDto
 {
     public required StackSourceDtoType Type { get; init; }
 
+    public string? GitRepository { get; init; }
+
     private class Mapping : Profile
     {
         public Mapping()

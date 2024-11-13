@@ -1,4 +1,11 @@
-import type { StackDetailDto } from '@/src/core/__generated__'
+'use client'
+import {
+	type StackDetailDto,
+	updateStackMutationRequestSchema,
+	useUpdateStackHook,
+} from '@/src/core/__generated__'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@ui/components/ui/button'
 import {
 	Card,
 	CardContent,
@@ -6,11 +13,46 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@ui/components/ui/card.tsx'
-import { Label } from '@ui/components/ui/label.tsx'
-
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '@ui/components/ui/form'
+import { Input } from '@ui/components/ui/input'
+import { Loader2, PencilIcon } from 'lucide-react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import type { z } from 'zod'
 export const SourceSettings = ({
 	stackDetails,
 }: { stackDetails: StackDetailDto }) => {
+	const [isEditing, setIsEditing] = useState(false)
+
+	const form = useForm<z.infer<typeof updateStackMutationRequestSchema>>({
+		resolver: zodResolver(updateStackMutationRequestSchema),
+		defaultValues: {
+			stackId: stackDetails.id,
+			gitRepository: stackDetails.source.gitRepository,
+		},
+	})
+
+	const updateDetailMutation = useUpdateStackHook(stackDetails.id)
+
+	const onSubmitSourceInfo = async (
+		values: z.infer<typeof updateStackMutationRequestSchema>,
+	) => {
+		await updateDetailMutation.mutateAsync(values)
+		setIsEditing(false)
+		toast.success('Source settings have been updated!')
+	}
+
+	const formValues = form.watch()
+
+	const formDisabled = updateDetailMutation.isPending
 	return (
 		<div className='space-y-6'>
 			<Card>
@@ -19,16 +61,70 @@ export const SourceSettings = ({
 					<CardDescription>
 						Basic details about the source of this Stack
 					</CardDescription>
+					<div className='absolute top-4 right-4 flex items-center space-x-2'>
+						<Button
+							variant='ghost'
+							size='icon'
+							onClick={() => setIsEditing(!isEditing)}
+						>
+							<PencilIcon className='h-4 w-4' />
+						</Button>
+					</div>
 				</CardHeader>
 				<CardContent className='space-y-4'>
-					<div className='space-y-2'>
-						<Label htmlFor='stack-name'>Stack Connection Type</Label>
+					<Form {...form}>
+						<form
+							onSubmit={form.handleSubmit(onSubmitSourceInfo)}
+							className='space-y-4'
+						>
+							<FormField
+								control={form.control}
+								name='gitRepository'
+								render={({ field }) => (
+									<FormItem className='space-y-2'>
+										<FormLabel htmlFor='stack-name'>Git Repository</FormLabel>
+										{isEditing ? (
+											<FormControl>
+												<Input
+													disabled={formDisabled}
+													// placeholder={stackDetails.name || ''}
+													{...field}
+													value={field.value ?? ''}
+												/>
+											</FormControl>
+										) : (
+											<div className='p-2 bg-muted rounded-md'>
+												{field.value}
+											</div>
+										)}
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
 
-						<div className='p-2 bg-muted rounded-md'>{stackDetails.name}</div>
-					</div>
-					<div className='space-y-2'>
-						<Label htmlFor='stack-description'>Description</Label>
-					</div>
+							<pre className='p-4 bg-muted rounded-md overflow-auto'>
+								{JSON.stringify(formValues, null, 2)}
+							</pre>
+
+							{isEditing && (
+								<div className='flex justify-end space-x-2'>
+									<Button
+										type='submit'
+										disabled={updateDetailMutation.isPending}
+									>
+										{updateDetailMutation.isPending ? (
+											<div className='flex items-center gap-2'>
+												<Loader2 className='h-4 w-4 animate-spin' />
+												Saving...
+											</div>
+										) : (
+											'Save Changes'
+										)}
+									</Button>
+								</div>
+							)}
+						</form>
+					</Form>
 				</CardContent>
 			</Card>
 		</div>
