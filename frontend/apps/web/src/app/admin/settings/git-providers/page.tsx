@@ -1,35 +1,41 @@
+'use client'
+import {
+	type GitProvider,
+	GitProviderCard,
+} from '@/src/components/settings/git/GitProviderCard'
+import { BitbucketPopup } from '@/src/components/settings/git/providers/bitbucket/AddBitbucketPopup'
+import { GithubPopup } from '@/src/components/settings/git/providers/github/AddGithubPopup'
+import { GitlabPopup } from '@/src/components/settings/git/providers/gitlab/AddGitlabPopup'
 import { SiBitbucket, SiGithub, SiGitlab } from '@icons-pack/react-simple-icons'
 import { Button } from '@ui/components/ui/button'
-import { Card } from '@ui/components/ui/card'
 import { Plus } from 'lucide-react'
-import type React from 'react'
-
-interface GitProvider {
-	id: string
-	name: 'GitHub' | 'GitLab' | 'Bitbucket'
-	connected: boolean
-	icon: React.ReactNode
-}
 
 export default function GitProvidersPage() {
+	// Example providers configuration
 	const providers: GitProvider[] = [
 		{
 			id: 'github',
 			name: 'GitHub',
 			connected: false,
 			icon: <SiGithub />,
+			hasPopup: true,
+			PopupComponent: GithubPopup,
 		},
 		{
 			id: 'gitlab',
 			name: 'GitLab',
 			connected: false,
 			icon: <SiGitlab />,
+			hasPopup: true,
+			PopupComponent: GitlabPopup,
 		},
 		{
 			id: 'bitbucket',
 			name: 'Bitbucket',
 			connected: false,
 			icon: <SiBitbucket />,
+			hasPopup: true,
+			PopupComponent: BitbucketPopup,
 		},
 	]
 
@@ -45,25 +51,7 @@ export default function GitProvidersPage() {
 
 			<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
 				{providers.map((provider) => (
-					<Card key={provider.id} className='p-6'>
-						<div className='flex items-center space-x-4'>
-							<div className='w-12 h-12 relative flex items-center justify-center'>
-								{provider.icon}
-							</div>
-							<div>
-								<h3 className='font-semibold'>{provider.name}</h3>
-								<p className='text-sm text-gray-500'>
-									{provider.connected ? 'Connected' : 'Not connected'}
-								</p>
-							</div>
-						</div>
-						<Button
-							variant={provider.connected ? 'destructive' : 'secondary'}
-							className='w-full mt-4'
-						>
-							{provider.connected ? 'Disconnect' : 'Connect'}
-						</Button>
-					</Card>
+					<GitProviderCard key={provider.id} provider={provider} />
 				))}
 			</div>
 		</div>
