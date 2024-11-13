@@ -59,9 +59,15 @@ export const SourceSettings = ({
 	const formDisabled = updateDetailMutation.isPending
 
 	const textFields = [
-		'gitSettings.gitRepository',
-		'gitSettings.gitPath',
-		'gitSettings.gitBranch',
+		{
+			name: 'gitSettings.gitRepository',
+			label: 'Git Repository',
+		},
+		{
+			name: 'gitSettings.gitPath',
+			label: 'Git Path',
+		},
+		{ name: 'gitSettings.gitBranch', label: 'Git Branch' },
 	]
 	return (
 		<div className='space-y-6'>
@@ -87,12 +93,12 @@ export const SourceSettings = ({
 							onSubmit={form.handleSubmit(onSubmitSourceInfo)}
 							className='space-y-4'
 						>
-							{textFields.map((field) => (
+							{textFields.map((textField) => (
 								<FormField
-									key={field}
+									key={textField.name}
 									control={form.control}
 									name={
-										field as
+										textField.name as
 											| 'gitSettings.gitRepository'
 											| 'gitSettings.gitPath'
 											| 'gitSettings.gitBranch'
@@ -100,7 +106,7 @@ export const SourceSettings = ({
 									render={({ field }) => (
 										<FormItem className='space-y-2'>
 											<FormLabel htmlFor='stack-name'>
-												{field.name.split('.')[1]}
+												{textField.label}
 											</FormLabel>
 											{isEditing ? (
 												<FormControl>
