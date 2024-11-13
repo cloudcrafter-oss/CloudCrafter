@@ -114,6 +114,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.6.0
         version: 3.9.1(react-hook-form@7.53.1(react@18.3.1))
+      '@icons-pack/react-simple-icons':
+        specifier: ^10.1.0
+        version: 10.1.0(react@18.3.1)
       '@kubb/cli':
         specifier: ^2.28.3
         version: 2.28.3(typescript@5.6.3)
@@ -1047,6 +1050,11 @@ packages:
 
   '@iconify/utils@2.1.33':
     resolution: {integrity: sha512-jP9h6v/g0BIZx0p7XGJJVtkVnydtbgTgt9mVNcGDYwaa7UhdHdI9dvoq+gKj9sijMSJKxUPEG2JyjsgXjxL7Kw==}
+
+  '@icons-pack/react-simple-icons@10.1.0':
+    resolution: {integrity: sha512-sZ2oDkYaVAci7GuNL8okERJn4Ej0INbeCwtIDVuwWfO5zILW7j5frvKQbozTB+fLtZqEwAP9KkNp7oR8WeHaIg==}
+    peerDependencies:
+      react: ^16.13 || ^17 || ^18
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution: {integrity: sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ==}
@@ -7044,6 +7052,10 @@ snapshots:
       mlly: 1.7.2
     transitivePeerDependencies:
       - supports-color
+
+  '@icons-pack/react-simple-icons@10.1.0(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
 
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:
