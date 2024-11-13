@@ -7,7 +7,8 @@ namespace CloudCrafter.Core.Commands.Utils;
 
 public static class CheckValidGitRepoCommand
 {
-    [Authorize]
+    // [Authorize]
+    // TODO: Add Authorize
     public record Command(string Repository) : IRequest<GitRepositoryCheckResultDto>;
 
     private class Handler(IGitService service)
