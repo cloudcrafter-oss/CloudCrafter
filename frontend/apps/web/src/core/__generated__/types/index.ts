@@ -1,5 +1,6 @@
 export * from "./ChannelOutputLogLineLevel";
 export * from "./CheckValidGitRepoCommandCommand";
+export * from "./CreateGithubProviderCommandCommand";
 export * from "./CreateProject";
 export * from "./CreateProjectCommandCommand";
 export * from "./CreateStackCommandCommand";
@@ -26,6 +27,7 @@ export * from "./GetStackDetail";
 export * from "./GetUsers";
 export * from "./GitRepositoryCheckResultDto";
 export * from "./PostCreateDeployment";
+export * from "./PostCreateGithubApp";
 export * from "./PostCreateStack";
 export * from "./PostCreateUser";
 export * from "./PostCreateUserQuery";

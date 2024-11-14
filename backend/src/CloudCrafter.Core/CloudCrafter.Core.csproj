@@ -19,6 +19,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Common"/>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis"/>
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis"/>
+    <PackageReference Include="Octokit"/>
   </ItemGroup>
 
   <ItemGroup>

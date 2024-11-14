@@ -1,5 +1,6 @@
 export * from "./channelOutputLogLineLevelSchema";
 export * from "./checkValidGitRepoCommandCommandSchema";
+export * from "./createGithubProviderCommandCommandSchema";
 export * from "./createProjectCommandCommandSchema";
 export * from "./createProjectSchema";
 export * from "./createStackCommandCommandSchema";
@@ -26,6 +27,7 @@ export * from "./getStackDetailSchema";
 export * from "./getUsersSchema";
 export * from "./gitRepositoryCheckResultDtoSchema";
 export * from "./postCreateDeploymentSchema";
+export * from "./postCreateGithubAppSchema";
 export * from "./postCreateStackSchema";
 export * from "./postCreateUserQuerySchema";
 export * from "./postCreateUserSchema";

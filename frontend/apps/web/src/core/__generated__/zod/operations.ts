@@ -7,6 +7,7 @@ import { getProjectQueryResponseSchema, getProject404Schema, getProjectPathParam
 import { updateProjectMutationRequestSchema, updateProjectMutationResponseSchema, updateProjectPathParamsSchema } from "./updateProjectSchema";
 import { deleteProjectMutationResponseSchema, deleteProjectPathParamsSchema } from "./deleteProjectSchema";
 import { getProjectEnvironmentEnhancedQueryResponseSchema, getProjectEnvironmentEnhanced404Schema, getProjectEnvironmentEnhancedPathParamsSchema } from "./getProjectEnvironmentEnhancedSchema";
+import { postCreateGithubAppMutationRequestSchema, postCreateGithubAppMutationResponseSchema, postCreateGithubApp400Schema } from "./postCreateGithubAppSchema";
 import { getServersQueryResponseSchema } from "./getServersSchema";
 import { getServerByIdQueryResponseSchema, getServerByIdPathParamsSchema } from "./getServerByIdSchema";
 import { postCreateStackMutationRequestSchema, postCreateStackMutationResponseSchema } from "./postCreateStackSchema";
@@ -134,6 +135,21 @@ import { postRefreshTokensMutationRequestSchema, postRefreshTokensMutationRespon
         },
         errors: {
             404: getProjectEnvironmentEnhanced404Schema
+        }
+    }, "PostCreateGithubApp": {
+        request: postCreateGithubAppMutationRequestSchema,
+        parameters: {
+            path: undefined,
+            query: undefined,
+            header: undefined
+        },
+        responses: {
+            201: postCreateGithubAppMutationResponseSchema,
+            400: postCreateGithubApp400Schema,
+            default: postCreateGithubAppMutationResponseSchema
+        },
+        errors: {
+            400: postCreateGithubApp400Schema
         }
     }, "GetServers": {
         request: undefined,
@@ -313,6 +329,8 @@ export const paths = { "/api/Applications/{applicationId}/deployment": {
         delete: operations["DeleteProject"]
     }, "/api/Projects/{id}/{environmentId}": {
         get: operations["GetProjectEnvironmentEnhanced"]
+    }, "/api/Providers/github": {
+        post: operations["PostCreateGithubApp"]
     }, "/api/Servers": {
         get: operations["GetServers"]
     }, "/api/Servers/{id}": {

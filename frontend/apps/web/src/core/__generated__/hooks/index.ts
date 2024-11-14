@@ -12,6 +12,7 @@ export * from "./useGetServersHook";
 export * from "./useGetStackDetailHook";
 export * from "./useGetUsersHook";
 export * from "./usePostCreateDeploymentHook";
+export * from "./usePostCreateGithubAppHook";
 export * from "./usePostCreateStackHook";
 export * from "./usePostCreateUserHook";
 export * from "./usePostLoginUserHook";

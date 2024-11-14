@@ -8,6 +8,7 @@ using CloudCrafter.Core.Interfaces.Domain.Agent;
 using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
 using CloudCrafter.Core.Interfaces.Domain.Environments;
 using CloudCrafter.Core.Interfaces.Domain.Projects;
+using CloudCrafter.Core.Interfaces.Domain.Providers;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Domain.Users;
@@ -19,10 +20,12 @@ using CloudCrafter.Core.Jobs.Serializer;
 using CloudCrafter.Core.Jobs.Servers;
 using CloudCrafter.Core.Jobs.Stacks;
 using CloudCrafter.Core.Services.Core;
+using CloudCrafter.Core.Services.Core.Providers;
 using CloudCrafter.Core.Services.Domain.Agent;
 using CloudCrafter.Core.Services.Domain.Applications.Deployments;
 using CloudCrafter.Core.Services.Domain.Environments;
 using CloudCrafter.Core.Services.Domain.Projects;
+using CloudCrafter.Core.Services.Domain.Providers;
 using CloudCrafter.Core.Services.Domain.Servers;
 using CloudCrafter.Core.Services.Domain.Stacks;
 using CloudCrafter.Core.Services.Domain.Users;
@@ -53,6 +56,7 @@ public static class ApplicationServiceExtensions
         {
             return app;
         }
+
         RecurringJob.AddOrUpdate<ICloudCrafterRecurringJobsDispatcher>(
             "5m-recurring-connectivity-checks",
             service => service.AddRecurringConnectivityChecks(),
@@ -141,6 +145,7 @@ public static class ApplicationServiceExtensions
             .AddScoped<IUserAccessService, UserAccessService>()
             .AddScoped<IServerConnectivityService, ServerConnectivityService>()
             .AddScoped<IProjectsService, ProjectsService>()
+            .AddScoped<IProvidersService, ProvidersService>()
             .AddScoped<IStacksService, StacksService>()
             .AddScoped<IStackServicesService, StackServicesService>()
             .AddScoped<IAgentManager, AgentManager>()
@@ -191,6 +196,8 @@ public static class ApplicationServiceExtensions
         services.AddSingleton<IDistributedLockService>(sp => new DistributedLockService(
             connectionString
         ));
+
+        services.AddSingleton<IGithubClientProvider, GithubClientProvider>();
         return services;
     }
 }

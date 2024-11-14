@@ -12,6 +12,7 @@ export * from "./getServers";
 export * from "./getStackDetail";
 export * from "./getUsers";
 export * from "./postCreateDeployment";
+export * from "./postCreateGithubApp";
 export * from "./postCreateStack";
 export * from "./postCreateUser";
 export * from "./postLoginUser";
