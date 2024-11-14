@@ -6,7 +6,6 @@ export async function GET(request: NextRequest) {
 	const searchParams = request.nextUrl.searchParams
 	const code = searchParams.get('code')
 	const state = searchParams.get('state')
-	const authId = searchParams.get('authId')
 
 	if (!code || !state) {
 		return new Response('Missing required parameters', { status: 400 })
