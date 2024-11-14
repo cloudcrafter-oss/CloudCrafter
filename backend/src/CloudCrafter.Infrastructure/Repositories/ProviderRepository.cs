@@ -1,6 +1,7 @@
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Octokit;
 
 namespace CloudCrafter.Infrastructure.Repositories;
@@ -27,5 +28,10 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
         await context.SaveChangesAsync();
 
         return provider;
+    }
+
+    public Task<List<GithubProvider>> GetGithubProviders()
+    {
+        return context.GithubProviders.ToListAsync();
     }
 }

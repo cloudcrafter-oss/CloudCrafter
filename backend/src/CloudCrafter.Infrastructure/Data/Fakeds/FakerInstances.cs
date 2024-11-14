@@ -38,6 +38,14 @@ public static class FakerInstances
             .RuleFor(x => x.Environments, new List<Environment>())
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
+    public static Faker<GithubProvider> GithubProviderFaker =>
+        new Faker<GithubProvider>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, Guid.NewGuid)
+            .RuleFor(x => x.Name, f => f.Person.FullName)
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+
     public static Faker<EntityStackServiceHealthStatus> EntityHealthStatusFaker =>
         new Faker<EntityStackServiceHealthStatus>()
             .StrictMode(true)

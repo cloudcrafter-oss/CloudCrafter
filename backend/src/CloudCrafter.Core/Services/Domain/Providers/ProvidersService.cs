@@ -1,6 +1,9 @@
+using AutoMapper;
 using CloudCrafter.Core.Interfaces.Domain.Providers;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Core.Services.Core.Providers;
+using CloudCrafter.Domain.Domain.Providers;
+using CloudCrafter.Domain.Domain.Providers.Github;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Services.Domain.Providers;
@@ -8,7 +11,8 @@ namespace CloudCrafter.Core.Services.Domain.Providers;
 public class ProvidersService(
     IGithubClientProvider clientProvider,
     IProviderRepository repository,
-    ILogger<ProvidersService> logger
+    ILogger<ProvidersService> logger,
+    IMapper mapper
 ) : IProvidersService
 {
     public async Task<bool> CreateGithubProvider(string code)
@@ -34,5 +38,15 @@ public class ProvidersService(
         }
 
         return false;
+    }
+
+    public async Task<ProviderOverviewDto> GetProviders()
+    {
+        var github = await repository.GetGithubProviders();
+
+        return new ProviderOverviewDto
+        {
+            Github = mapper.Map<List<SimpleGithubProviderDto>>(github),
+        };
     }
 }
