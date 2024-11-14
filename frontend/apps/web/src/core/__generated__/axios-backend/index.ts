@@ -7,6 +7,7 @@ export * from "./getFilterableFields";
 export * from "./getProject";
 export * from "./getProjectEnvironmentEnhanced";
 export * from "./getProjects";
+export * from "./getProviders";
 export * from "./getServerById";
 export * from "./getServers";
 export * from "./getStackDetail";

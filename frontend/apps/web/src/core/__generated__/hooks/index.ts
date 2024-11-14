@@ -7,6 +7,7 @@ export * from "./useGetFilterableFieldsHook";
 export * from "./useGetProjectEnvironmentEnhancedHook";
 export * from "./useGetProjectHook";
 export * from "./useGetProjectsHook";
+export * from "./useGetProvidersHook";
 export * from "./useGetServerByIdHook";
 export * from "./useGetServersHook";
 export * from "./useGetStackDetailHook";

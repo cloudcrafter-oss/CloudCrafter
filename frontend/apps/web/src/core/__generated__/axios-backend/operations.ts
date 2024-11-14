@@ -35,6 +35,10 @@ export const operations = {
         "path": "/api/Projects/:id/:environmentId",
         "method": "get"
     },
+    "GetProviders": {
+        "path": "/api/Providers",
+        "method": "get"
+    },
     "PostCreateGithubApp": {
         "path": "/api/Providers/github",
         "method": "post"
