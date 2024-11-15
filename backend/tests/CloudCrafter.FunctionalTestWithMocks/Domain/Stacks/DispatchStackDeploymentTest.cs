@@ -29,9 +29,7 @@ public class DispatchStackDeploymentTest : BaseReplaceTest
 
                 services
                     .RemoveAll<IUser>()
-                    .AddTransient(provider =>
-                        Mock.Of<IUser>(s => s.Id == _userId.GetValueOrDefault())
-                    );
+                    .AddTransient(provider => Mock.Of<IUser>(s => s.Id == _userId));
                 services.AddScoped<ICloudCrafterDispatcher>(_ => _mockDispatcher.Object);
             }
         );

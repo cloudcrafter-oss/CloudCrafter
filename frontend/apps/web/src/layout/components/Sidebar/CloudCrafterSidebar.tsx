@@ -24,6 +24,7 @@ import {
 	Moon,
 	PieChart,
 	Server,
+	Settings,
 	Sun,
 	UsersRound,
 } from 'lucide-react'
@@ -88,6 +89,17 @@ const data = {
 			title: 'Servers',
 			url: '/admin/servers',
 			icon: Server,
+		},
+		{
+			title: 'Settings',
+			url: '/admin/settings',
+			icon: Settings,
+			items: [
+				{
+					title: 'Git Providers',
+					url: '/admin/settings/git-providers',
+				},
+			],
 		},
 	],
 	projects: [

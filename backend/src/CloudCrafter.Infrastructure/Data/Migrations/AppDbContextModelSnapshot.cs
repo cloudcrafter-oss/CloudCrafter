@@ -144,6 +144,48 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.ToTable("Environments");
                 });
 
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.GithubProvider", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AppClientId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AppClientSecret")
+                        .HasColumnType("text");
+
+                    b.Property<long?>("AppId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("AppName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AppPrivateKey")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AppWebhookSecret")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool?>("IsValid")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GithubProviders");
+                });
+
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Jobs.ServerConnectivityCheckJob", b =>
                 {
                     b.Property<Guid>("Id")

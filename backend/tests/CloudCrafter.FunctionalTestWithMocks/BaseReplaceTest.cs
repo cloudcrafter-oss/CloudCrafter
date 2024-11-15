@@ -1,4 +1,5 @@
 using System.Data.Common;
+using System.Linq.Expressions;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.FunctionalTests.Database;
 using CloudCrafter.Infrastructure.Data;
@@ -6,6 +7,7 @@ using CloudCrafter.Infrastructure.Data.Fakeds;
 using CloudCrafter.Infrastructure.Logging;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Serilog;
@@ -110,6 +112,38 @@ public abstract class BaseReplaceTest
         context.Add(entity);
 
         await context.SaveChangesAsync();
+    }
+
+    public async Task<int> CountAsync<TEntity>()
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        return await context.Set<TEntity>().CountAsync();
+    }
+
+    public async Task<List<TEntity>> QueryAsync<TEntity>(Expression<Func<TEntity, bool>> predicate)
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        return await context.Set<TEntity>().Where(predicate).ToListAsync();
+    }
+
+    public async Task<TEntity?> QueryFirstOrDefaultAsync<TEntity>(
+        Expression<Func<TEntity, bool>> predicate
+    )
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        return await context.Set<TEntity>().FirstOrDefaultAsync(predicate);
     }
 
     public async Task<Stack> CreateSampleStack()

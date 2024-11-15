@@ -80,6 +80,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				return !!auth
 			}
 
+			if (pathname.startsWith('/api')) {
+				return !!auth
+			}
+
 			return true
 		},
 	},

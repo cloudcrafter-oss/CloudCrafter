@@ -102,6 +102,7 @@ public static class InfrastructureServiceExtensions
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IServerRepository, ServerRepository>()
             .AddScoped<IEnvironmentRepository, EnvironmentRepository>()
+            .AddScoped<IProviderRepository, ProviderRepository>()
             .AddScoped<IProjectRepository, ProjectRepository>()
             .AddScoped<IDeploymentRepository, DeploymentRepository>()
             .AddScoped<IStackRepository, StackRepository>()

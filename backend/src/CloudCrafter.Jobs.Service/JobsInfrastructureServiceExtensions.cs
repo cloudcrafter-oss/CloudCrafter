@@ -42,8 +42,13 @@ public static class JobsInfrastructureServiceExtensions
                 hangfireConfig.UseFilter(new LogEverythingAttribute());
 
                 hangfireConfig.UseSerilogLogProvider();
-                hangfireConfig.UseConsole();
-
+                try
+                {
+                    hangfireConfig.UseConsole();
+                }
+                catch (InvalidOperationException ex)
+                    when (ex.Message.Contains("Console is already initialized")) // Fix for tests
+                { }
                 // Add queue configuration
             }
         );
