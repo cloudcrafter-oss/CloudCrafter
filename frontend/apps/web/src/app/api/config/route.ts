@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server'
 
-import { backendEnv } from "@/src/core/env/cloudcrafter-env";
+import { backendEnv } from '@/src/core/env/cloudcrafter-env'
 
 export async function GET() {
 	return NextResponse.json({

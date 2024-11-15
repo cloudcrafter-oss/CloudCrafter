@@ -21,5 +21,5 @@ export const backendEnv = backendEnvSchema.parse(
 			? {
 					CLOUDCRAFTER_AXIOS_BACKEND_BASEURL: localConfig.backendUrl,
 				}
-			: {}
+			: {},
 )
