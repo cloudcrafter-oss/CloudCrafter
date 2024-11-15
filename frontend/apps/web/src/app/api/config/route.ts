@@ -5,3 +5,5 @@ export async function GET() {
 		backendUrl: process.env.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL,
 	})
 }
+
+export const dynamic = 'force-dynamic'
