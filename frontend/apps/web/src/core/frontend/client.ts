@@ -1,6 +1,7 @@
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import axios from 'axios'
 import { getSession } from 'next-auth/react'
+import { backendEnv } from '../env/cloudcrafter-env'
 
 /**
  * Subset of AxiosRequestConfig
@@ -31,7 +32,7 @@ export type ResponseConfig<TData = unknown> = {
 }
 
 export const axiosInstance = axios.create({
-	baseURL: 'http://web.127.0.0.1.sslip.io/',
+	baseURL: backendEnv.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL,
 })
 
 axiosInstance.interceptors.request.use(async (request) => {
@@ -41,6 +42,7 @@ axiosInstance.interceptors.request.use(async (request) => {
 		request.headers.Authorization = `Bearer ${session.accessToken}`
 	}
 
+    
 	return request
 })
 

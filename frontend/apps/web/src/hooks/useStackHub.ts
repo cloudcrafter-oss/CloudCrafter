@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import type { EntityHealthDto, StackDetailDto } from '../core/__generated__'
 import { formatDate } from '../utils/date/date-utils'
+import { backendEnv } from '../core/env/cloudcrafter-env'
 
 export const useStackHub = ({
 	initialStack,
@@ -13,8 +14,9 @@ export const useStackHub = ({
 	const [stack, setStack] = useState(initialStack)
 
 	useEffect(() => {
+		const host = backendEnv.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL
 		const connection = new signalR.HubConnectionBuilder()
-			.withUrl('http://web.127.0.0.1.sslip.io/hub/stack', {
+			.withUrl(`${host}/hub/stack`, {
 				accessTokenFactory: () => {
 					return session?.accessToken || ''
 				},
