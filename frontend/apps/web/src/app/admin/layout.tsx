@@ -20,7 +20,6 @@ import type React from 'react'
 export default function NextAdminLayout({
 	children,
 }: { children: React.ReactNode }) {
-	console.log(children)
 	return (
 		<ThemeProvider defaultTheme={'dark'} storageKey={'cloudCraft-theme'}>
 			<TooltipProvider>

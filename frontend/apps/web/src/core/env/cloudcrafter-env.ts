@@ -6,13 +6,20 @@ const backendEnvSchema = z.object({
 
 const isServer = typeof window === 'undefined'
 
+let localConfig: { backendUrl?: string } | null = null
+if (!isServer && window.localStorage) {
+	const config = localStorage.getItem('cloudcrafter-config')
+	if (config) {
+		localConfig = JSON.parse(config)
+	}
+}
+
 export const backendEnv = backendEnvSchema.parse(
 	isServer
 		? process.env
-		: process.env.NEXT_PUBLIC_CLOUDCRAFTER_AXIOS_BACKEND_BASEURL
+		: localConfig?.backendUrl
 			? {
-					CLOUDCRAFTER_AXIOS_BACKEND_BASEURL:
-						process.env.NEXT_PUBLIC_CLOUDCRAFTER_AXIOS_BACKEND_BASEURL,
+					CLOUDCRAFTER_AXIOS_BACKEND_BASEURL: localConfig.backendUrl,
 				}
 			: {},
 )

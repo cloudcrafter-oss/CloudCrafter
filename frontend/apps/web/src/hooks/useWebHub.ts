@@ -2,6 +2,7 @@ import * as signalR from '@microsoft/signalr'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import type { DeploymentLogDto } from '../core/__generated__'
+import { backendEnv } from '../core/env/cloudcrafter-env'
 
 export const useWebHub = ({ channelId }: { channelId: string }) => {
 	const { data: session } = useSession()
@@ -9,8 +10,9 @@ export const useWebHub = ({ channelId }: { channelId: string }) => {
 	const [messages, setMessages] = useState<DeploymentLogDto[]>([])
 
 	useEffect(() => {
+		const host = backendEnv.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL
 		const connection = new signalR.HubConnectionBuilder()
-			.withUrl('http://web.127.0.0.1.sslip.io/hub/web', {
+			.withUrl(`${host}/hub/web`, {
 				accessTokenFactory: () => {
 					return session?.accessToken || ''
 				},
