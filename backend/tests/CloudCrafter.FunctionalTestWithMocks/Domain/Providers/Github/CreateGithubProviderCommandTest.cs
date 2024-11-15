@@ -32,9 +32,7 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
 
                 services
                     .RemoveAll<IUser>()
-                    .AddTransient(provider =>
-                        Mock.Of<IUser>(s => s.Id == _userId.GetValueOrDefault())
-                    );
+                    .AddTransient(provider => Mock.Of<IUser>(s => s.Id == _userId));
                 services.AddScoped<IGithubClientProvider>(_ => _mockProvider.Object);
             }
         );
