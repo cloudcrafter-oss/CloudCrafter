@@ -16,6 +16,7 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
             Id = Guid.NewGuid(),
             Name = data.Name,
             AppId = data.Id,
+            IsValid = null,
             AppClientId = data.ClientId,
             AppClientSecret = data.ClientSecret,
             AppWebhookSecret = data.WebhookSecret,
@@ -32,6 +33,6 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
 
     public Task<List<GithubProvider>> GetGithubProviders()
     {
-        return context.GithubProviders.ToListAsync();
+        return context.GithubProviders.OrderByDescending(x => x.CreatedAt).ToListAsync();
     }
 }

@@ -8,4 +8,5 @@ public class GithubProvider : GitProvider
     public required string? AppClientSecret { get; set; }
     public required string? AppWebhookSecret { get; set; }
     public required string? AppPrivateKey { get; set; }
+    public required bool? IsValid { get; set; }
 }

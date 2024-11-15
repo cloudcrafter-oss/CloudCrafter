@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Core.Commands.Servers;
+﻿using CloudCrafter.Core.Commands.Providers;
+using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Core.Interfaces.Domain.Agent;
 using MediatR;
@@ -21,5 +22,10 @@ public class CloudCrafterRecurringJobsDispatcher(ISender sender, IAgentManager a
     public Task AddMarkStacksAsUnknownWhenTimespanExceeded()
     {
         return sender.Send(new MarkStacksAsUnknownHealthAfterTimespan.Command());
+    }
+
+    public Task AddGitProviderStatusChecks()
+    {
+        return sender.Send(new ValidateProvidersCommand.Command());
     }
 }

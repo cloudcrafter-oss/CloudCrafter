@@ -89,5 +89,6 @@
     <PackageVersion Include="Slugify.Core" Version="4.0.1"/>
     <!-- Git Providers -->
     <PackageVersion Include="Octokit" Version="13.0.1"/>
+    <PackageVersion Include="GitHubJwt" Version="0.0.6"/>
   </ItemGroup>
 </Project>

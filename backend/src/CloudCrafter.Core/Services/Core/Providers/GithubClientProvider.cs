@@ -10,4 +10,14 @@ public class GithubClientProvider : IGithubClientProvider
 
         return client;
     }
+
+    public IGitHubClient GetClientForToken(string jwtToken)
+    {
+        var client = new GitHubClient(new ProductHeaderValue("CloudCrafter"))
+        {
+            Credentials = new Credentials(jwtToken, AuthenticationType.Bearer),
+        };
+
+        return client;
+    }
 }

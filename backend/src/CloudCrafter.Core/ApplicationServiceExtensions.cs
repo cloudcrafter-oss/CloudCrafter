@@ -74,6 +74,12 @@ public static class ApplicationServiceExtensions
             "*/1 * * * *"
         );
 
+        RecurringJob.AddOrUpdate<ICloudCrafterRecurringJobsDispatcher>(
+            "5m-check-git-provider-status",
+            service => service.AddGitProviderStatusChecks(),
+            "*/5 * * * *"
+        );
+
 #endif
         return app;
     }
@@ -146,6 +152,7 @@ public static class ApplicationServiceExtensions
             .AddScoped<IServerConnectivityService, ServerConnectivityService>()
             .AddScoped<IProjectsService, ProjectsService>()
             .AddScoped<IProvidersService, ProvidersService>()
+            .AddScoped<IProviderValidationService, ProviderValidationService>()
             .AddScoped<IStacksService, StacksService>()
             .AddScoped<IStackServicesService, StackServicesService>()
             .AddScoped<IAgentManager, AgentManager>()
