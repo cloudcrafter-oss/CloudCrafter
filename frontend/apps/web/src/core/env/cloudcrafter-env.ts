@@ -6,6 +6,10 @@ const backendEnvSchema = z.object({
 
 const isServer = typeof window === 'undefined'
 
+if(isServer) {
+    console.log(process.env.NEXT_PUBLIC_CLOUDCRAFTER_AXIOS_BACKEND_BASEURL)
+}
+
 export const backendEnv = backendEnvSchema.parse(
 	isServer
 		? process.env
