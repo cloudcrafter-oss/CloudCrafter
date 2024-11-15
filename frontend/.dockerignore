@@ -20,3 +20,28 @@ LICENSE
 /scripts
 
 .turbo
+
+# Ignore development files
+.next
+node_modules
+.env*
+
+# Ignore version control files
+.git
+.gitignore
+
+# Ignore build output
+build
+dist
+coverage
+
+# Ignore editor files
+.vscode
+.idea
+
+# Ignore macOS files
+.DS_Store
+
+# Ignore log files
+*.log
+out/

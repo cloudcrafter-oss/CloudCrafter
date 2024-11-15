@@ -3,8 +3,8 @@ import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import type { EntityHealthDto, StackDetailDto } from '../core/__generated__'
-import { formatDate } from '../utils/date/date-utils'
 import { backendEnv } from '../core/env/cloudcrafter-env'
+import { formatDate } from '../utils/date/date-utils'
 
 export const useStackHub = ({
 	initialStack,

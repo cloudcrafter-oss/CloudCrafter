@@ -42,7 +42,6 @@ axiosInstance.interceptors.request.use(async (request) => {
 		request.headers.Authorization = `Bearer ${session.accessToken}`
 	}
 
-    
 	return request
 })
 
