@@ -44,6 +44,7 @@ public static class FakerInstances
             .RuleFor(x => x.Id, Guid.NewGuid)
             .RuleFor(x => x.Name, f => f.Person.FullName)
             .RuleFor(x => x.AppName, f => f.Person.FullName)
+            .RuleFor(x => x.IsValid, f => null)
             .RuleFor(x => x.AppId, f => f.Random.Long())
             .RuleFor(x => x.AppClientId, f => f.Random.Guid().ToString())
             .RuleFor(x => x.AppClientSecret, f => f.Random.Guid().ToString())
