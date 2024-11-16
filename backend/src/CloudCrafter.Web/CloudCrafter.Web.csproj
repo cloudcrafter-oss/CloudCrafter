@@ -25,6 +25,7 @@
   <ItemGroup>
     <!-- Fix for transitive dependencies -->
     <PackageReference Include="System.Text.RegularExpressions"/> <!-- Caused by Hangfire.Console -->
+    <PackageReference Include="Namotion.Reflection"/> <!-- Missing for generating SignalR types -->
   </ItemGroup>
 
   <ItemGroup>
