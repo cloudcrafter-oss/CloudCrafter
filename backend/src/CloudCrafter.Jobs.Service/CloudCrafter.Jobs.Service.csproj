@@ -10,9 +10,15 @@
     <PackageReference Include="Microsoft.Extensions.Configuration"/>
     <PackageReference Include="Microsoft.Extensions.Logging"/>
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions"/>
-
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Fixes for transitive dependencies -->
+    <PackageReference Include="System.Net.Http" />
+    <PackageReference Include="System.Text.RegularExpressions" /> <!-- Caused by Hangfire.Console -->
+  </ItemGroup>
+  
+  
 
   <ItemGroup>
     <ProjectReference Include="..\CloudCrafter.Domain\CloudCrafter.Domain.csproj"/>

@@ -22,6 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Fix for transitive dependencies -->
+    <PackageReference Include="System.Text.RegularExpressions" /> <!-- Caused by Hangfire.Console -->
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="appsettings.Development.json" Condition="Exists('appsettings.Development.json')">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

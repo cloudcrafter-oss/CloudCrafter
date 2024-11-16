@@ -33,6 +33,7 @@
   <ItemGroup>
     <!-- Fixes for transitive dependencies -->
     <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="System.Drawing.Common" />
   </ItemGroup>
   
   

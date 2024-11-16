@@ -10,17 +10,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ardalis.ListStartupServices"/>
     <PackageReference Include="Ardalis.Result"/>
     <PackageReference Include="Ardalis.Result.AspNetCore"/>
     <PackageReference Include="MediatR"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design"/>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" PrivateAssets="All"/>
     <PackageReference Include="Serilog.AspNetCore"/>
     <PackageReference Include="Swashbuckle.AspNetCore"/>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <!-- Fix for transitive dependencies -->
+    <PackageReference Include="System.Text.RegularExpressions" /> <!-- Caused by Hangfire.Console -->
   </ItemGroup>
 
   <ItemGroup>
