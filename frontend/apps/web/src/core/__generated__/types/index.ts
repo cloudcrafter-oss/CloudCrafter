@@ -47,7 +47,7 @@ export type { ServerDetailDto } from "./ServerDetailDto.ts";
 export type { ServerDto } from "./ServerDto.ts";
 export type { SimpleDeploymentDto } from "./SimpleDeploymentDto.ts";
 export type { SimpleGithubProviderDto } from "./SimpleGithubProviderDto.ts";
-export type { SortDirection2 } from "./SortDirection2.ts";
+export type { SortDirection } from "./SortDirection.ts";
 export type { SortModel } from "./SortModel.ts";
 export type { StackCreatedDto } from "./StackCreatedDto.ts";
 export type { StackDetailDto } from "./StackDetailDto.ts";

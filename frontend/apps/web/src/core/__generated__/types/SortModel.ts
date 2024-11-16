@@ -1,4 +1,4 @@
-import type { SortDirection2 } from "./SortDirection2.ts";
+import type { SortDirection } from "./SortDirection.ts";
 
  export type SortModel = {
     /**
@@ -8,5 +8,5 @@ import type { SortDirection2 } from "./SortDirection2.ts";
     /**
      * @type integer
     */
-    direction: SortDirection2;
+    direction: SortDirection;
 };

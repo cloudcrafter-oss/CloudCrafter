@@ -18,5 +18,5 @@ import type { GitSettings } from "./GitSettings.ts";
     /**
      * @type object | undefined
     */
-    gitSettings?: GitSettings | null;
+    gitSettings?: GitSettings;
 };

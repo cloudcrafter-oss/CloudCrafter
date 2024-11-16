@@ -47,7 +47,7 @@ export { serverDetailDtoSchema } from "./serverDetailDtoSchema.ts";
 export { serverDtoSchema } from "./serverDtoSchema.ts";
 export { simpleDeploymentDtoSchema } from "./simpleDeploymentDtoSchema.ts";
 export { simpleGithubProviderDtoSchema } from "./simpleGithubProviderDtoSchema.ts";
-export { sortDirection2Schema } from "./sortDirection2Schema.ts";
+export { sortDirectionSchema } from "./sortDirectionSchema.ts";
 export { sortModelSchema } from "./sortModelSchema.ts";
 export { stackCreatedDtoSchema } from "./stackCreatedDtoSchema.ts";
 export { stackDetailDtoSchema } from "./stackDetailDtoSchema.ts";

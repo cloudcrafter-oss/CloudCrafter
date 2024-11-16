@@ -1,4 +1,4 @@
-import { sortDirection2Schema } from "./sortDirection2Schema.ts";
+import { sortDirectionSchema } from "./sortDirectionSchema.ts";
 import { z } from "zod";
 
- export const sortModelSchema = z.object({ "field": z.string(), "direction": z.lazy(() => sortDirection2Schema) });
+ export const sortModelSchema = z.object({ "field": z.string(), "direction": z.lazy(() => sortDirectionSchema) });
