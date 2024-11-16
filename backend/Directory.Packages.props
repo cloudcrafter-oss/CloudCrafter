@@ -49,8 +49,9 @@
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0"/>
     <PackageVersion Include="Bogus" Version="35.5.1"/>
     <PackageVersion Include="AutoMapper" Version="13.0.1"/>
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0"/>
+    <!--    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.4.0"/>-->
+    <PackageVersion Include="Scalar.AspNetCore" Version="1.2.37"/>
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
     <PackageVersion Include="BouncyCastle.Cryptography" Version="2.4.0"/>
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.0"/>
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0"/>
@@ -85,11 +86,11 @@
     <!-- Git Providers -->
     <PackageVersion Include="Octokit" Version="13.0.1"/>
     <PackageVersion Include="GitHubJwt" Version="0.0.6"/>
-    
+
     <!-- Via other packages -->
-    <PackageVersion Include="Azure.Identity" Version="1.13.1" />
-    <PackageVersion Include="System.Net.Http" Version="4.3.4" />
-    <PackageVersion Include="System.Drawing.Common" Version="9.0.0" />
-    <PackageVersion Include="System.Text.RegularExpressions" Version="4.3.1" />
+    <PackageVersion Include="Azure.Identity" Version="1.13.1"/>
+    <PackageVersion Include="System.Net.Http" Version="4.3.4"/>
+    <PackageVersion Include="System.Drawing.Common" Version="9.0.0"/>
+    <PackageVersion Include="System.Text.RegularExpressions" Version="4.3.1"/>
   </ItemGroup>
 </Project>
