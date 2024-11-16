@@ -1,0 +1,1 @@
+export type SortDirection2 = number;

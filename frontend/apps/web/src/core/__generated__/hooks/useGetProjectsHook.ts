@@ -1,3 +1,4 @@
+// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
 import client from "../../frontend/client.ts";
 import type { RequestConfig } from "../../frontend/client.ts";
 import type { GetProjectsQueryResponse, GetProjectsQueryParams } from "../types/GetProjects.ts";

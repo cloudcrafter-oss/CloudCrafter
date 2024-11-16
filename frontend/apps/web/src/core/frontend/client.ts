@@ -8,7 +8,7 @@ import { backendEnv } from '../env/cloudcrafter-env'
  */
 export type RequestConfig<TData = unknown> = {
 	url?: string
-	method: 'get' | 'put' | 'patch' | 'post' | 'delete'
+	method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE'
 	params?: unknown
 	data?: TData
 	responseType?:

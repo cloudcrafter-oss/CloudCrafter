@@ -1,1 +1,1 @@
-{"required":["field","direction"],"type":"object","properties":{"field":{"type":"string"},"direction":{"type":"integer","default":1,"x-readme-ref-name":"SortDirection"}},"x-readme-ref-name":"SortModel"}
+{"required":["field","direction"],"type":"object","properties":{"field":{"type":"string"},"direction":{"type":"integer","default":1,"x-readme-ref-name":"SortDirection2"}},"x-readme-ref-name":"SortModel"}

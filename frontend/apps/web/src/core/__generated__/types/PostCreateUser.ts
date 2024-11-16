@@ -1,10 +1,10 @@
 import type { PostCreateUserQuery } from "./PostCreateUserQuery.ts";
-import type { TokenDto } from "./TokenDto.ts";
+import type { TokenDto2 } from "./TokenDto2.ts";
 
  /**
  * @description OK
 */
-export type PostCreateUser200 = TokenDto;
+export type PostCreateUser200 = TokenDto2;
 
  export type PostCreateUserMutationRequest = PostCreateUserQuery;
 

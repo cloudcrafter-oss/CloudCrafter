@@ -1,9 +1,9 @@
 import { defineConfig } from '@kubb/core'
 import { pluginOas } from '@kubb/plugin-oas'
-import { pluginClient } from '@kubb/swagger-client'
-import { pluginTanstackQuery } from '@kubb/swagger-tanstack-query'
-import { pluginTs } from '@kubb/swagger-ts'
-import { pluginZod } from '@kubb/swagger-zod'
+import { pluginClient } from '@kubb/plugin-client'
+import { pluginReactQuery } from '@kubb/plugin-react-query'
+import { pluginTs } from '@kubb/plugin-ts'
+import { pluginZod } from '@kubb/plugin-zod'
 
 export default defineConfig({
 	root: '.',
@@ -14,21 +14,22 @@ export default defineConfig({
 		path: './src/core/__generated__',
 		clean: true,
 	},
-	hooks: {
-		done: [
-			'node src/utils/kubb/post-action.js',
-			'node src/utils/kubb/get-signal-types.js',
-		],
-	},
+	// hooks: {
+	// 	done: [
+	// 		'node src/utils/kubb/post-action.js',
+	// 		'node src/utils/kubb/get-signal-types.js',
+	// 	],
+	// },
 	plugins: [
-		pluginOas({ output: false }),
+        pluginOas(),
 		pluginZod({
 			output: {
 				path: './zod',
 			},
-			mapper: {
-				productName: 'z.string().uuid()',
-			},
+            
+			// mapper: {
+			// 	productName: 'z.string().uuid()',
+			// },
 		}),
 		pluginClient({
 			output: {
@@ -40,7 +41,8 @@ export default defineConfig({
 					pattern: 'cloudCrafterAuthTest',
 				},
 			],
-			client: { importPath: '../../backend/client.ts' },
+            importPath: '../../backend/client.ts'
+			// client: { importPath: '../../backend/client.ts' },
 		}),
 		pluginClient({
 			output: {
@@ -52,10 +54,10 @@ export default defineConfig({
 					pattern: 'cloudCrafterAuthTest',
 				},
 			],
-			client: { importPath: '../../backend/non-auth-client.ts' },
+			// client: { importPath: '../../backend/non-auth-client.ts' },
 		}),
 		pluginTs(),
-		pluginTanstackQuery({
+		pluginReactQuery({
 			transformers: {
 				name: (name, type) => {
 					if (type === 'file' || type === 'function') {
@@ -69,8 +71,8 @@ export default defineConfig({
 			},
 			output: {
 				path: './hooks',
+                banner: '// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters'
 			},
-			framework: 'react',
 			infinite: {},
 		}),
 	],

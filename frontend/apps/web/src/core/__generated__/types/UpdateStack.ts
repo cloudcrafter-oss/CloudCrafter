@@ -1,5 +1,5 @@
 import type { StackDetailDto } from "./StackDetailDto.ts";
-import type { UpdateStackCommandCommand } from "./UpdateStackCommandCommand.ts";
+import type { UpdateStackCommandCommand2 } from "./UpdateStackCommandCommand2.ts";
 
  export type UpdateStackPathParams = {
     /**
@@ -18,7 +18,7 @@ export type UpdateStack200 = StackDetailDto;
 */
 export type UpdateStack404 = any;
 
- export type UpdateStackMutationRequest = UpdateStackCommandCommand;
+ export type UpdateStackMutationRequest = UpdateStackCommandCommand2;
 
  export type UpdateStackMutationResponse = UpdateStack200;
 
