@@ -1,1 +1,1 @@
-{"title":"CreateGithubProviderCommandCommand","required":["code"],"type":"object","properties":{"code":{"type":"string"}},"x-readme-ref-name":"CreateGithubProviderCommandCommand"}
+{"required":["code"],"type":"object","properties":{"code":{"type":"string"}},"x-readme-ref-name":"CreateGithubProviderCommandCommand"}

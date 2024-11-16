@@ -1,10 +1,10 @@
 import type { PostRefreshUserTokensQuery } from "./PostRefreshUserTokensQuery.ts";
-import type { TokenDto2 } from "./TokenDto2.ts";
+import type { TokenDto } from "./TokenDto.ts";
 
  /**
  * @description OK
 */
-export type PostRefreshTokens200 = TokenDto2;
+export type PostRefreshTokens200 = TokenDto;
 
  export type PostRefreshTokensMutationRequest = PostRefreshUserTokensQuery;
 

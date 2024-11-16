@@ -1,4 +1,4 @@
-export type TokenDto2 = {
+export type TokenDto = {
     /**
      * @type string
     */

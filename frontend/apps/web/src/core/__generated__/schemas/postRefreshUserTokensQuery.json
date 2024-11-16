@@ -1,1 +1,1 @@
-{"title":"PostRefreshUserTokensQuery","required":["refreshToken"],"type":"object","properties":{"refreshToken":{"type":"string"}},"x-readme-ref-name":"PostRefreshUserTokensQuery"}
+{"required":["refreshToken"],"type":"object","properties":{"refreshToken":{"type":"string"}},"x-readme-ref-name":"PostRefreshUserTokensQuery"}

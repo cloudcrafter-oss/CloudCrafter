@@ -1,11 +1,11 @@
 import { postCreateUserQuerySchema } from "./postCreateUserQuerySchema.ts";
-import { tokenDto2Schema } from "./tokenDto2Schema.ts";
+import { tokenDtoSchema } from "./tokenDtoSchema.ts";
 import { z } from "zod";
 
  /**
  * @description OK
  */
-export const postCreateUser200Schema = z.lazy(() => tokenDto2Schema);
+export const postCreateUser200Schema = z.lazy(() => tokenDtoSchema);
 
  export const postCreateUserMutationRequestSchema = z.lazy(() => postCreateUserQuerySchema);
 

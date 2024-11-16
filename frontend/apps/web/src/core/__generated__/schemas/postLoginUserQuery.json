@@ -1,1 +1,1 @@
-{"title":"PostLoginUserQuery","required":["email","password"],"type":"object","properties":{"email":{"type":"string"},"password":{"type":"string"}},"x-readme-ref-name":"PostLoginUserQuery"}
+{"required":["email","password"],"type":"object","properties":{"email":{"type":"string"},"password":{"type":"string"}},"x-readme-ref-name":"PostLoginUserQuery"}
