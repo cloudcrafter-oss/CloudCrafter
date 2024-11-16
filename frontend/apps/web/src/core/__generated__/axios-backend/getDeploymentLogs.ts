@@ -1,11 +1,11 @@
 import client from "../../backend/client.ts";
-import type { ResponseConfig } from "../../backend/client.ts";
-import type { GetDeploymentLogsQueryResponse, GetDeploymentLogsPathParams } from "../types/GetDeploymentLogs";
+import type { RequestConfig } from "../../backend/client.ts";
+import type { GetDeploymentLogsQueryResponse, GetDeploymentLogsPathParams } from "../types/GetDeploymentLogs.ts";
 
  /**
  * @link /api/Stacks/deployments/:deploymentId/logs
  */
-export async function getDeploymentLogs(deploymentId: GetDeploymentLogsPathParams["deploymentId"], options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<GetDeploymentLogsQueryResponse>["data"]> {
-    const res = await client<GetDeploymentLogsQueryResponse>({ method: "get", url: `/api/Stacks/deployments/${deploymentId}/logs`, ...options });
+export async function getDeploymentLogs(deploymentId: GetDeploymentLogsPathParams["deploymentId"], config: Partial<RequestConfig> = {}) {
+    const res = await client<GetDeploymentLogsQueryResponse, Error, unknown>({ method: "GET", url: `/api/Stacks/deployments/${deploymentId}/logs`, ...config });
     return res.data;
 }

@@ -1,6 +1,6 @@
+import { createProjectCommandCommandSchema } from "./createProjectCommandCommandSchema.ts";
+import { projectDtoSchema } from "./projectDtoSchema.ts";
 import { z } from "zod";
-import { projectDtoSchema } from "./projectDtoSchema";
-import { createProjectCommandCommandSchema } from "./createProjectCommandCommandSchema";
 
  /**
  * @description OK
@@ -8,7 +8,5 @@ import { createProjectCommandCommandSchema } from "./createProjectCommandCommand
 export const createProject200Schema = z.lazy(() => projectDtoSchema);
 
  export const createProjectMutationRequestSchema = z.lazy(() => createProjectCommandCommandSchema);
-/**
- * @description OK
- */
-export const createProjectMutationResponseSchema = z.lazy(() => projectDtoSchema);
+
+ export const createProjectMutationResponseSchema = z.lazy(() => createProject200Schema);

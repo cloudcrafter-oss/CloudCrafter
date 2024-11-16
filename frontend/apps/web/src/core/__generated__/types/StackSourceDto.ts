@@ -1,9 +1,6 @@
-import type { StackSourceDtoType } from "./StackSourceDtoType";
+import type { StackSourceDtoType } from "./StackSourceDtoType.ts";
 
  export type StackSourceDto = {
-    /**
-     * @type string
-    */
     type: StackSourceDtoType;
     /**
      * @type string
@@ -17,4 +14,4 @@ import type { StackSourceDtoType } from "./StackSourceDtoType";
      * @type string
     */
     gitBranch?: string | null;
-};
+} | null;

@@ -1,4 +1,4 @@
-import type { ProjectDto } from "./ProjectDto";
+import type { ProjectDto } from "./ProjectDto.ts";
 
  export type GetProjectsQueryParams = {
     /**
@@ -7,15 +7,16 @@ import type { ProjectDto } from "./ProjectDto";
     */
     includeEnvironments?: boolean;
 };
-/**
+
+ /**
  * @description OK
 */
 export type GetProjects200 = ProjectDto[];
-/**
- * @description OK
-*/
-export type GetProjectsQueryResponse = ProjectDto[];
-export type GetProjectsQuery = {
-    Response: GetProjectsQueryResponse;
+
+ export type GetProjectsQueryResponse = GetProjects200;
+
+ export type GetProjectsQuery = {
+    Response: GetProjects200;
     QueryParams: GetProjectsQueryParams;
+    Errors: any;
 };

@@ -51,9 +51,9 @@ export const BasicInfo = ({
 }: { stackDetails: StackDetailDto }) => {
 	const [isEditing, setIsEditing] = useState(false)
 
-	const { mutateAsync } = useDispatchStackDeploymentHook(stackDetails.id)
+	const { mutateAsync } = useDispatchStackDeploymentHook()
 	const handleDeploy = async () => {
-		const deploymentCreatedDto = await mutateAsync({} as never)
+		const deploymentCreatedDto = await mutateAsync({ id: stackDetails.id })
 		setLogChannelId(deploymentCreatedDto.deploymentId)
 	}
 
@@ -70,12 +70,15 @@ export const BasicInfo = ({
 
 	const formValues = form.watch()
 
-	const updateDetailMutation = useUpdateStackHook(stackDetails.id)
+	const updateDetailMutation = useUpdateStackHook()
 
 	const onSubmitBasicInfo = async (
 		values: z.infer<typeof updateStackMutationRequestSchema>,
 	) => {
-		await updateDetailMutation.mutateAsync(values)
+		await updateDetailMutation.mutateAsync({
+			id: stackDetails.id,
+			data: values,
+		})
 
 		setIsEditing(false)
 		toast.success('Stack has been updated!')

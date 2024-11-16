@@ -1,40 +1,40 @@
+// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
 import client from "../../frontend/client.ts";
-import { useMutation } from "@tanstack/react-query";
-import type { CreateProjectMutationRequest, CreateProjectMutationResponse } from "../types/CreateProject";
+import type { RequestConfig } from "../../frontend/client.ts";
+import type { CreateProjectMutationRequest, CreateProjectMutationResponse } from "../types/CreateProject.ts";
 import type { UseMutationOptions } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
- type CreateProjectClient = typeof client<CreateProjectMutationResponse, Error, CreateProjectMutationRequest>;
-type CreateProject = {
-    data: CreateProjectMutationResponse;
-    error: Error;
-    request: CreateProjectMutationRequest;
-    pathParams: never;
-    queryParams: never;
-    headerParams: never;
-    response: CreateProjectMutationResponse;
-    client: {
-        parameters: Partial<Parameters<CreateProjectClient>[0]>;
-        return: Awaited<ReturnType<CreateProjectClient>>;
-    };
-};
-/**
+ export const createProjectMutationKey = () => [{ "url": "/api/Projects" }] as const;
+
+ export type CreateProjectMutationKey = ReturnType<typeof createProjectMutationKey>;
+
+ /**
+ * @link /api/Projects
+ */
+async function createProjectHook(data: CreateProjectMutationRequest, config: Partial<RequestConfig<CreateProjectMutationRequest>> = {}) {
+    const res = await client<CreateProjectMutationResponse, Error, CreateProjectMutationRequest>({ method: "POST", url: `/api/Projects`, data, ...config });
+    return res.data;
+}
+
+ /**
  * @link /api/Projects
  */
 export function useCreateProjectHook(options: {
-    mutation?: UseMutationOptions<CreateProject["response"], CreateProject["error"], CreateProject["request"]>;
-    client?: CreateProject["client"]["parameters"];
+    mutation?: UseMutationOptions<CreateProjectMutationResponse, Error, {
+        data: CreateProjectMutationRequest;
+    }>;
+    client?: Partial<RequestConfig<CreateProjectMutationRequest>>;
 } = {}) {
-    const { mutation: mutationOptions, client: clientOptions = {} } = options ?? {};
-    return useMutation({
-        mutationFn: async (data) => {
-            const res = await client<CreateProject["data"], CreateProject["error"], CreateProject["request"]>({
-                method: "post",
-                url: `/api/Projects`,
-                data,
-                ...clientOptions
-            });
-            return res.data;
+    const { mutation: mutationOptions, client: config = {} } = options ?? {};
+    const mutationKey = mutationOptions?.mutationKey ?? createProjectMutationKey();
+    return useMutation<CreateProjectMutationResponse, Error, {
+        data: CreateProjectMutationRequest;
+    }>({
+        mutationFn: async ({ data }) => {
+            return createProjectHook(data, config);
         },
+        mutationKey,
         ...mutationOptions
     });
 }

@@ -1,11 +1,11 @@
 import client from "../../backend/client.ts";
-import type { ResponseConfig } from "../../backend/client.ts";
-import type { GetFilterableFieldsQueryResponse } from "../types/GetFilterableFields";
+import type { RequestConfig } from "../../backend/client.ts";
+import type { GetFilterableFieldsQueryResponse } from "../types/GetFilterableFields.ts";
 
  /**
  * @link /api/System/get-fields
  */
-export async function getFilterableFields(options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<GetFilterableFieldsQueryResponse>["data"]> {
-    const res = await client<GetFilterableFieldsQueryResponse>({ method: "get", url: `/api/System/get-fields`, ...options });
+export async function getFilterableFields(config: Partial<RequestConfig> = {}) {
+    const res = await client<GetFilterableFieldsQueryResponse, Error, unknown>({ method: "GET", url: `/api/System/get-fields`, ...config });
     return res.data;
 }

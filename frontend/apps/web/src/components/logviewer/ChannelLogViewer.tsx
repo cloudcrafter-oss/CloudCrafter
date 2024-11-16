@@ -1,6 +1,6 @@
 import {
 	type DeploymentLogDto,
-	channelOutputLogLineLevel,
+	channelOutputLogLineLevelEnum,
 	useGetDeploymentLogsHook,
 } from '@/src/core/__generated__'
 import { useWebHub } from '@/src/hooks/useWebHub'
@@ -21,8 +21,8 @@ const formatLogMessage = (message: DeploymentLogDto) => {
 	const output = `${formattedDate} => ${message.message}`
 
 	const redLevels = [
-		channelOutputLogLineLevel.Error,
-		channelOutputLogLineLevel.Fatal,
+		channelOutputLogLineLevelEnum.Error,
+		channelOutputLogLineLevelEnum.Fatal,
 	] as const
 
 	if (redLevels.includes(message.level as (typeof redLevels)[number])) {

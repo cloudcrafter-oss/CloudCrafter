@@ -1,16 +1,17 @@
-import type { StackCreatedDto } from "./StackCreatedDto";
-import type { CreateStackCommandCommand } from "./CreateStackCommandCommand";
+import type { CreateStackCommandCommand } from "./CreateStackCommandCommand.ts";
+import type { StackCreatedDto } from "./StackCreatedDto.ts";
 
  /**
  * @description OK
 */
 export type PostCreateStack200 = StackCreatedDto;
-export type PostCreateStackMutationRequest = CreateStackCommandCommand;
-/**
- * @description OK
-*/
-export type PostCreateStackMutationResponse = StackCreatedDto;
-export type PostCreateStackMutation = {
-    Response: PostCreateStackMutationResponse;
+
+ export type PostCreateStackMutationRequest = CreateStackCommandCommand;
+
+ export type PostCreateStackMutationResponse = PostCreateStack200;
+
+ export type PostCreateStackMutation = {
+    Response: PostCreateStack200;
     Request: PostCreateStackMutationRequest;
+    Errors: any;
 };

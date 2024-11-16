@@ -10,6 +10,7 @@ using CloudCrafter.Web.Infrastructure;
 using Hangfire;
 using Hangfire.Dashboard;
 using Microsoft.Extensions.Options;
+using Scalar.AspNetCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +26,7 @@ builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddDomainEvents(typeof(IDomainEvent).Assembly);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices(builder.Configuration);
-builder.Services.AddSwaggerServices();
+builder.Services.AddOpenApiServices();
 builder.Services.AddJobInfrastructure(builder.Configuration, true, JobServiceType.Web);
 
 var app = builder.Build();
@@ -50,8 +51,8 @@ app.UseStaticFiles();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 else
 {

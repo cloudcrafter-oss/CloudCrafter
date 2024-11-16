@@ -1,40 +1,40 @@
+// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
 import client from "../../frontend/client.ts";
-import { useMutation } from "@tanstack/react-query";
-import type { PostCreateUserMutationRequest, PostCreateUserMutationResponse } from "../types/PostCreateUser";
+import type { RequestConfig } from "../../frontend/client.ts";
+import type { PostCreateUserMutationRequest, PostCreateUserMutationResponse } from "../types/PostCreateUser.ts";
 import type { UseMutationOptions } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
- type PostCreateUserClient = typeof client<PostCreateUserMutationResponse, Error, PostCreateUserMutationRequest>;
-type PostCreateUser = {
-    data: PostCreateUserMutationResponse;
-    error: Error;
-    request: PostCreateUserMutationRequest;
-    pathParams: never;
-    queryParams: never;
-    headerParams: never;
-    response: PostCreateUserMutationResponse;
-    client: {
-        parameters: Partial<Parameters<PostCreateUserClient>[0]>;
-        return: Awaited<ReturnType<PostCreateUserClient>>;
-    };
-};
-/**
+ export const postCreateUserMutationKey = () => [{ "url": "/api/Auth/create" }] as const;
+
+ export type PostCreateUserMutationKey = ReturnType<typeof postCreateUserMutationKey>;
+
+ /**
+ * @link /api/Auth/create
+ */
+async function postCreateUserHook(data: PostCreateUserMutationRequest, config: Partial<RequestConfig<PostCreateUserMutationRequest>> = {}) {
+    const res = await client<PostCreateUserMutationResponse, Error, PostCreateUserMutationRequest>({ method: "POST", url: `/api/Auth/create`, data, ...config });
+    return res.data;
+}
+
+ /**
  * @link /api/Auth/create
  */
 export function usePostCreateUserHook(options: {
-    mutation?: UseMutationOptions<PostCreateUser["response"], PostCreateUser["error"], PostCreateUser["request"]>;
-    client?: PostCreateUser["client"]["parameters"];
+    mutation?: UseMutationOptions<PostCreateUserMutationResponse, Error, {
+        data: PostCreateUserMutationRequest;
+    }>;
+    client?: Partial<RequestConfig<PostCreateUserMutationRequest>>;
 } = {}) {
-    const { mutation: mutationOptions, client: clientOptions = {} } = options ?? {};
-    return useMutation({
-        mutationFn: async (data) => {
-            const res = await client<PostCreateUser["data"], PostCreateUser["error"], PostCreateUser["request"]>({
-                method: "post",
-                url: `/api/Auth/create`,
-                data,
-                ...clientOptions
-            });
-            return res.data;
+    const { mutation: mutationOptions, client: config = {} } = options ?? {};
+    const mutationKey = mutationOptions?.mutationKey ?? postCreateUserMutationKey();
+    return useMutation<PostCreateUserMutationResponse, Error, {
+        data: PostCreateUserMutationRequest;
+    }>({
+        mutationFn: async ({ data }) => {
+            return postCreateUserHook(data, config);
         },
+        mutationKey,
         ...mutationOptions
     });
 }

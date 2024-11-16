@@ -14,5 +14,5 @@ export type TokenDto = {
     /**
      * @type integer, int32
     */
-    readonly expiresIn: number;
+    expiresIn: number;
 };

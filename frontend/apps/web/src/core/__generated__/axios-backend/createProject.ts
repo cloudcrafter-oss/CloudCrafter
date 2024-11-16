@@ -1,11 +1,11 @@
 import client from "../../backend/client.ts";
-import type { ResponseConfig } from "../../backend/client.ts";
-import type { CreateProjectMutationRequest, CreateProjectMutationResponse } from "../types/CreateProject";
+import type { RequestConfig } from "../../backend/client.ts";
+import type { CreateProjectMutationRequest, CreateProjectMutationResponse } from "../types/CreateProject.ts";
 
  /**
  * @link /api/Projects
  */
-export async function createProject(data: CreateProjectMutationRequest, options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<CreateProjectMutationResponse>["data"]> {
-    const res = await client<CreateProjectMutationResponse, CreateProjectMutationRequest>({ method: "post", url: `/api/Projects`, data, ...options });
+export async function createProject(data: CreateProjectMutationRequest, config: Partial<RequestConfig<CreateProjectMutationRequest>> = {}) {
+    const res = await client<CreateProjectMutationResponse, Error, CreateProjectMutationRequest>({ method: "POST", url: `/api/Projects`, data, ...config });
     return res.data;
 }

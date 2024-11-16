@@ -1,4 +1,4 @@
-import type { DeploymentCreatedDetailsDto } from "./DeploymentCreatedDetailsDto";
+import type { DeploymentCreatedDetailsDto } from "./DeploymentCreatedDetailsDto.ts";
 
  export type DispatchStackDeploymentPathParams = {
     /**
@@ -6,15 +6,16 @@ import type { DeploymentCreatedDetailsDto } from "./DeploymentCreatedDetailsDto"
     */
     id: string;
 };
-/**
+
+ /**
  * @description OK
 */
 export type DispatchStackDeployment200 = DeploymentCreatedDetailsDto;
-/**
- * @description OK
-*/
-export type DispatchStackDeploymentMutationResponse = DeploymentCreatedDetailsDto;
-export type DispatchStackDeploymentMutation = {
-    Response: DispatchStackDeploymentMutationResponse;
+
+ export type DispatchStackDeploymentMutationResponse = DispatchStackDeployment200;
+
+ export type DispatchStackDeploymentMutation = {
+    Response: DispatchStackDeployment200;
     PathParams: DispatchStackDeploymentPathParams;
+    Errors: any;
 };

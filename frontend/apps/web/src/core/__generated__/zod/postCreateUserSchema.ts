@@ -1,6 +1,6 @@
+import { postCreateUserQuerySchema } from "./postCreateUserQuerySchema.ts";
+import { tokenDtoSchema } from "./tokenDtoSchema.ts";
 import { z } from "zod";
-import { tokenDtoSchema } from "./tokenDtoSchema";
-import { postCreateUserQuerySchema } from "./postCreateUserQuerySchema";
 
  /**
  * @description OK
@@ -8,7 +8,5 @@ import { postCreateUserQuerySchema } from "./postCreateUserQuerySchema";
 export const postCreateUser200Schema = z.lazy(() => tokenDtoSchema);
 
  export const postCreateUserMutationRequestSchema = z.lazy(() => postCreateUserQuerySchema);
-/**
- * @description OK
- */
-export const postCreateUserMutationResponseSchema = z.lazy(() => tokenDtoSchema);
+
+ export const postCreateUserMutationResponseSchema = z.lazy(() => postCreateUser200Schema);

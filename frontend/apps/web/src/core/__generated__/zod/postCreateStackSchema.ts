@@ -1,6 +1,6 @@
+import { createStackCommandCommandSchema } from "./createStackCommandCommandSchema.ts";
+import { stackCreatedDtoSchema } from "./stackCreatedDtoSchema.ts";
 import { z } from "zod";
-import { stackCreatedDtoSchema } from "./stackCreatedDtoSchema";
-import { createStackCommandCommandSchema } from "./createStackCommandCommandSchema";
 
  /**
  * @description OK
@@ -8,7 +8,5 @@ import { createStackCommandCommandSchema } from "./createStackCommandCommandSche
 export const postCreateStack200Schema = z.lazy(() => stackCreatedDtoSchema);
 
  export const postCreateStackMutationRequestSchema = z.lazy(() => createStackCommandCommandSchema);
-/**
- * @description OK
- */
-export const postCreateStackMutationResponseSchema = z.lazy(() => stackCreatedDtoSchema);
+
+ export const postCreateStackMutationResponseSchema = z.lazy(() => postCreateStack200Schema);

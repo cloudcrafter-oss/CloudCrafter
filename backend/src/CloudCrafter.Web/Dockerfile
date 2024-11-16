@@ -1,4 +1,4 @@
-﻿FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS base
+﻿FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS base
 
 
 ARG TARGETPLATFORM
@@ -42,7 +42,7 @@ RUN if [[ ${TARGETPLATFORM} == 'linux/arm64' ]]; then \
 WORKDIR /app
 EXPOSE 8080
 
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/CloudCrafter.Web/CloudCrafter.Web.csproj", "src/CloudCrafter.Web/"]

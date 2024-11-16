@@ -1,4 +1,4 @@
-export const entityHealthDtoValue = {
+export const entityHealthDtoValueEnum = {
     "Unknown": "Unknown",
     "Unsupported": "Unsupported",
     "Degraded": "Degraded",
@@ -6,4 +6,7 @@ export const entityHealthDtoValue = {
     "Healthy": "Healthy",
     "HeathCheckOverdue": "HeathCheckOverdue"
 } as const;
-export type EntityHealthDtoValue = (typeof entityHealthDtoValue)[keyof typeof entityHealthDtoValue];
+
+ export type EntityHealthDtoValueEnum = (typeof entityHealthDtoValueEnum)[keyof typeof entityHealthDtoValueEnum];
+
+ export type EntityHealthDtoValue = EntityHealthDtoValueEnum;

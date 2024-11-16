@@ -9,6 +9,6 @@ public static class IdentityResultExtensions
     {
         return result.Succeeded
             ? Result.Success()
-            : Result.Error(result.Errors.Select(e => e.Description).ToArray());
+            : Result.Error(new ErrorList(result.Errors.Select(e => e.Description)));
     }
 }

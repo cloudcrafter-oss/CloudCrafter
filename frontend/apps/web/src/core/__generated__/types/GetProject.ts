@@ -1,4 +1,4 @@
-import type { ProjectDto } from "./ProjectDto";
+import type { ProjectDto } from "./ProjectDto.ts";
 
  export type GetProjectPathParams = {
     /**
@@ -6,20 +6,21 @@ import type { ProjectDto } from "./ProjectDto";
     */
     id: string;
 };
-/**
+
+ /**
  * @description OK
 */
 export type GetProject200 = ProjectDto;
-/**
+
+ /**
  * @description Not Found
 */
 export type GetProject404 = any;
-/**
- * @description OK
-*/
-export type GetProjectQueryResponse = ProjectDto;
-export type GetProjectQuery = {
-    Response: GetProjectQueryResponse;
+
+ export type GetProjectQueryResponse = GetProject200;
+
+ export type GetProjectQuery = {
+    Response: GetProject200;
     PathParams: GetProjectPathParams;
     Errors: GetProject404;
 };

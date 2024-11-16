@@ -1,7 +1,10 @@
-export const deploymentStatusDto = {
+export const deploymentStatusDtoEnum = {
     "Created": "Created",
     "Running": "Running",
     "Failed": "Failed",
     "Succeeded": "Succeeded"
 } as const;
-export type DeploymentStatusDto = (typeof deploymentStatusDto)[keyof typeof deploymentStatusDto];
+
+ export type DeploymentStatusDtoEnum = (typeof deploymentStatusDtoEnum)[keyof typeof deploymentStatusDtoEnum];
+
+ export type DeploymentStatusDto = DeploymentStatusDtoEnum;

@@ -1,16 +1,17 @@
-import type { TokenDto } from "./TokenDto";
-import type { PostRefreshUserTokensQuery } from "./PostRefreshUserTokensQuery";
+import type { PostRefreshUserTokensQuery } from "./PostRefreshUserTokensQuery.ts";
+import type { TokenDto } from "./TokenDto.ts";
 
  /**
  * @description OK
 */
 export type PostRefreshTokens200 = TokenDto;
-export type PostRefreshTokensMutationRequest = PostRefreshUserTokensQuery;
-/**
- * @description OK
-*/
-export type PostRefreshTokensMutationResponse = TokenDto;
-export type PostRefreshTokensMutation = {
-    Response: PostRefreshTokensMutationResponse;
+
+ export type PostRefreshTokensMutationRequest = PostRefreshUserTokensQuery;
+
+ export type PostRefreshTokensMutationResponse = PostRefreshTokens200;
+
+ export type PostRefreshTokensMutation = {
+    Response: PostRefreshTokens200;
     Request: PostRefreshTokensMutationRequest;
+    Errors: any;
 };

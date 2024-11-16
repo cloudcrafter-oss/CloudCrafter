@@ -1,9 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Sdk Name="Microsoft.Build.CentralPackageVersions" Version="2.1.3"/>
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
@@ -34,11 +32,16 @@
     <PackageReference Include="Bogus"/>
     <PackageReference Include="Moq"/>
   </ItemGroup>
+  
+  <ItemGroup>
+    <!-- Fixes for transitive dependencies -->
+    <PackageReference Include="Azure.Identity" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\CloudCrafter.Infrastructure\CloudCrafter.Infrastructure.csproj"/>
     <ProjectReference Include="..\..\src\CloudCrafter.Web\CloudCrafter.Web.csproj"/>
-    <ProjectReference Include="..\CloudCrafter.FunctionalTests\CloudCrafter.FunctionalTests.csproj" />
+    <ProjectReference Include="..\CloudCrafter.FunctionalTests\CloudCrafter.FunctionalTests.csproj"/>
     <ProjectReference Include="..\CloudCrafter.TestUtilities\CloudCrafter.TestUtilities.csproj"/>
   </ItemGroup>
 

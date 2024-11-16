@@ -1,39 +1,40 @@
+// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
 import client from "../../frontend/client.ts";
-import { useMutation } from "@tanstack/react-query";
-import type { DeleteProjectMutationResponse, DeleteProjectPathParams } from "../types/DeleteProject";
+import type { RequestConfig } from "../../frontend/client.ts";
+import type { DeleteProjectMutationResponse, DeleteProjectPathParams } from "../types/DeleteProject.ts";
 import type { UseMutationOptions } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
- type DeleteProjectClient = typeof client<DeleteProjectMutationResponse, Error, never>;
-type DeleteProject = {
-    data: DeleteProjectMutationResponse;
-    error: Error;
-    request: never;
-    pathParams: DeleteProjectPathParams;
-    queryParams: never;
-    headerParams: never;
-    response: DeleteProjectMutationResponse;
-    client: {
-        parameters: Partial<Parameters<DeleteProjectClient>[0]>;
-        return: Awaited<ReturnType<DeleteProjectClient>>;
-    };
-};
-/**
+ export const deleteProjectMutationKey = () => [{ "url": "/api/Projects/{id}" }] as const;
+
+ export type DeleteProjectMutationKey = ReturnType<typeof deleteProjectMutationKey>;
+
+ /**
  * @link /api/Projects/:id
  */
-export function useDeleteProjectHook(id: DeleteProjectPathParams["id"], options: {
-    mutation?: UseMutationOptions<DeleteProject["response"], DeleteProject["error"], DeleteProject["request"]>;
-    client?: DeleteProject["client"]["parameters"];
+async function deleteProjectHook(id: DeleteProjectPathParams["id"], config: Partial<RequestConfig> = {}) {
+    const res = await client<DeleteProjectMutationResponse, Error, unknown>({ method: "DELETE", url: `/api/Projects/${id}`, ...config });
+    return res.data;
+}
+
+ /**
+ * @link /api/Projects/:id
+ */
+export function useDeleteProjectHook(options: {
+    mutation?: UseMutationOptions<DeleteProjectMutationResponse, Error, {
+        id: DeleteProjectPathParams["id"];
+    }>;
+    client?: Partial<RequestConfig>;
 } = {}) {
-    const { mutation: mutationOptions, client: clientOptions = {} } = options ?? {};
-    return useMutation({
-        mutationFn: async () => {
-            const res = await client<DeleteProject["data"], DeleteProject["error"], DeleteProject["request"]>({
-                method: "delete",
-                url: `/api/Projects/${id}`,
-                ...clientOptions
-            });
-            return res.data;
+    const { mutation: mutationOptions, client: config = {} } = options ?? {};
+    const mutationKey = mutationOptions?.mutationKey ?? deleteProjectMutationKey();
+    return useMutation<DeleteProjectMutationResponse, Error, {
+        id: DeleteProjectPathParams["id"];
+    }>({
+        mutationFn: async ({ id }) => {
+            return deleteProjectHook(id, config);
         },
+        mutationKey,
         ...mutationOptions
     });
 }

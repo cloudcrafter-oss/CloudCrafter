@@ -1,4 +1,4 @@
-import type { DeploymentLogDto } from "./DeploymentLogDto";
+import type { DeploymentLogDto } from "./DeploymentLogDto.ts";
 
  export type GetDeploymentLogsPathParams = {
     /**
@@ -6,15 +6,16 @@ import type { DeploymentLogDto } from "./DeploymentLogDto";
     */
     deploymentId: string;
 };
-/**
+
+ /**
  * @description OK
 */
 export type GetDeploymentLogs200 = DeploymentLogDto[];
-/**
- * @description OK
-*/
-export type GetDeploymentLogsQueryResponse = DeploymentLogDto[];
-export type GetDeploymentLogsQuery = {
-    Response: GetDeploymentLogsQueryResponse;
+
+ export type GetDeploymentLogsQueryResponse = GetDeploymentLogs200;
+
+ export type GetDeploymentLogsQuery = {
+    Response: GetDeploymentLogs200;
     PathParams: GetDeploymentLogsPathParams;
+    Errors: any;
 };

@@ -1,40 +1,40 @@
+// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
 import client from "../../frontend/client.ts";
-import { useMutation } from "@tanstack/react-query";
-import type { PostLoginUserMutationRequest, PostLoginUserMutationResponse } from "../types/PostLoginUser";
+import type { RequestConfig } from "../../frontend/client.ts";
+import type { PostLoginUserMutationRequest, PostLoginUserMutationResponse } from "../types/PostLoginUser.ts";
 import type { UseMutationOptions } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
- type PostLoginUserClient = typeof client<PostLoginUserMutationResponse, Error, PostLoginUserMutationRequest>;
-type PostLoginUser = {
-    data: PostLoginUserMutationResponse;
-    error: Error;
-    request: PostLoginUserMutationRequest;
-    pathParams: never;
-    queryParams: never;
-    headerParams: never;
-    response: PostLoginUserMutationResponse;
-    client: {
-        parameters: Partial<Parameters<PostLoginUserClient>[0]>;
-        return: Awaited<ReturnType<PostLoginUserClient>>;
-    };
-};
-/**
+ export const postLoginUserMutationKey = () => [{ "url": "/api/Auth/login" }] as const;
+
+ export type PostLoginUserMutationKey = ReturnType<typeof postLoginUserMutationKey>;
+
+ /**
+ * @link /api/Auth/login
+ */
+async function postLoginUserHook(data: PostLoginUserMutationRequest, config: Partial<RequestConfig<PostLoginUserMutationRequest>> = {}) {
+    const res = await client<PostLoginUserMutationResponse, Error, PostLoginUserMutationRequest>({ method: "POST", url: `/api/Auth/login`, data, ...config });
+    return res.data;
+}
+
+ /**
  * @link /api/Auth/login
  */
 export function usePostLoginUserHook(options: {
-    mutation?: UseMutationOptions<PostLoginUser["response"], PostLoginUser["error"], PostLoginUser["request"]>;
-    client?: PostLoginUser["client"]["parameters"];
+    mutation?: UseMutationOptions<PostLoginUserMutationResponse, Error, {
+        data: PostLoginUserMutationRequest;
+    }>;
+    client?: Partial<RequestConfig<PostLoginUserMutationRequest>>;
 } = {}) {
-    const { mutation: mutationOptions, client: clientOptions = {} } = options ?? {};
-    return useMutation({
-        mutationFn: async (data) => {
-            const res = await client<PostLoginUser["data"], PostLoginUser["error"], PostLoginUser["request"]>({
-                method: "post",
-                url: `/api/Auth/login`,
-                data,
-                ...clientOptions
-            });
-            return res.data;
+    const { mutation: mutationOptions, client: config = {} } = options ?? {};
+    const mutationKey = mutationOptions?.mutationKey ?? postLoginUserMutationKey();
+    return useMutation<PostLoginUserMutationResponse, Error, {
+        data: PostLoginUserMutationRequest;
+    }>({
+        mutationFn: async ({ data }) => {
+            return postLoginUserHook(data, config);
         },
+        mutationKey,
         ...mutationOptions
     });
 }

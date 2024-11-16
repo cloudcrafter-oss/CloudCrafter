@@ -2,10 +2,10 @@
  * @description OK
 */
 export type Test200 = string[];
-/**
- * @description OK
-*/
-export type TestQueryResponse = string[];
-export type TestQuery = {
-    Response: TestQueryResponse;
+
+ export type TestQueryResponse = Test200;
+
+ export type TestQuery = {
+    Response: Test200;
+    Errors: any;
 };

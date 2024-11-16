@@ -1,11 +1,11 @@
 import client from "../../backend/client.ts";
-import type { ResponseConfig } from "../../backend/client.ts";
-import type { GetStackDetailQueryResponse, GetStackDetailPathParams } from "../types/GetStackDetail";
+import type { RequestConfig } from "../../backend/client.ts";
+import type { GetStackDetailQueryResponse, GetStackDetailPathParams, GetStackDetail404 } from "../types/GetStackDetail.ts";
 
  /**
  * @link /api/Stacks/:id
  */
-export async function getStackDetail(id: GetStackDetailPathParams["id"], options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<GetStackDetailQueryResponse>["data"]> {
-    const res = await client<GetStackDetailQueryResponse>({ method: "get", url: `/api/Stacks/${id}`, ...options });
+export async function getStackDetail(id: GetStackDetailPathParams["id"], config: Partial<RequestConfig> = {}) {
+    const res = await client<GetStackDetailQueryResponse, GetStackDetail404, unknown>({ method: "GET", url: `/api/Stacks/${id}`, ...config });
     return res.data;
 }

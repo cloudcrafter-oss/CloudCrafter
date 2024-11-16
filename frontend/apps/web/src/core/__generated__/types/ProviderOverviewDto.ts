@@ -1,4 +1,4 @@
-import type { SimpleGithubProviderDto } from "./SimpleGithubProviderDto";
+import type { SimpleGithubProviderDto } from "./SimpleGithubProviderDto.ts";
 
  export type ProviderOverviewDto = {
     /**

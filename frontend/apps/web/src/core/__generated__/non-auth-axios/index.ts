@@ -1,1 +1,1 @@
-export * from "./postRefreshTokens";
+export { postRefreshTokens } from "./postRefreshTokens.ts";

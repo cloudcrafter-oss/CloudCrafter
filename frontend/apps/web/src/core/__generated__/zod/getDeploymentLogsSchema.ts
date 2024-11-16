@@ -1,13 +1,11 @@
+import { deploymentLogDtoSchema } from "./deploymentLogDtoSchema.ts";
 import { z } from "zod";
-import { deploymentLogDtoSchema } from "./deploymentLogDtoSchema";
 
+ export const getDeploymentLogsPathParamsSchema = z.object({ "deploymentId": z.string().uuid() });
 
-export const getDeploymentLogsPathParamsSchema = z.object({ "deploymentId": z.string().uuid() });
-/**
+ /**
  * @description OK
  */
 export const getDeploymentLogs200Schema = z.array(z.lazy(() => deploymentLogDtoSchema));
-/**
- * @description OK
- */
-export const getDeploymentLogsQueryResponseSchema = z.array(z.lazy(() => deploymentLogDtoSchema));
+
+ export const getDeploymentLogsQueryResponseSchema = z.lazy(() => getDeploymentLogs200Schema);

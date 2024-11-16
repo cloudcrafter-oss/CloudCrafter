@@ -1,40 +1,40 @@
+// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
 import client from "../../frontend/client.ts";
-import { useMutation } from "@tanstack/react-query";
-import type { PostCreateStackMutationRequest, PostCreateStackMutationResponse } from "../types/PostCreateStack";
+import type { RequestConfig } from "../../frontend/client.ts";
+import type { PostCreateStackMutationRequest, PostCreateStackMutationResponse } from "../types/PostCreateStack.ts";
 import type { UseMutationOptions } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
- type PostCreateStackClient = typeof client<PostCreateStackMutationResponse, Error, PostCreateStackMutationRequest>;
-type PostCreateStack = {
-    data: PostCreateStackMutationResponse;
-    error: Error;
-    request: PostCreateStackMutationRequest;
-    pathParams: never;
-    queryParams: never;
-    headerParams: never;
-    response: PostCreateStackMutationResponse;
-    client: {
-        parameters: Partial<Parameters<PostCreateStackClient>[0]>;
-        return: Awaited<ReturnType<PostCreateStackClient>>;
-    };
-};
-/**
+ export const postCreateStackMutationKey = () => [{ "url": "/api/Stacks" }] as const;
+
+ export type PostCreateStackMutationKey = ReturnType<typeof postCreateStackMutationKey>;
+
+ /**
+ * @link /api/Stacks
+ */
+async function postCreateStackHook(data: PostCreateStackMutationRequest, config: Partial<RequestConfig<PostCreateStackMutationRequest>> = {}) {
+    const res = await client<PostCreateStackMutationResponse, Error, PostCreateStackMutationRequest>({ method: "POST", url: `/api/Stacks`, data, ...config });
+    return res.data;
+}
+
+ /**
  * @link /api/Stacks
  */
 export function usePostCreateStackHook(options: {
-    mutation?: UseMutationOptions<PostCreateStack["response"], PostCreateStack["error"], PostCreateStack["request"]>;
-    client?: PostCreateStack["client"]["parameters"];
+    mutation?: UseMutationOptions<PostCreateStackMutationResponse, Error, {
+        data: PostCreateStackMutationRequest;
+    }>;
+    client?: Partial<RequestConfig<PostCreateStackMutationRequest>>;
 } = {}) {
-    const { mutation: mutationOptions, client: clientOptions = {} } = options ?? {};
-    return useMutation({
-        mutationFn: async (data) => {
-            const res = await client<PostCreateStack["data"], PostCreateStack["error"], PostCreateStack["request"]>({
-                method: "post",
-                url: `/api/Stacks`,
-                data,
-                ...clientOptions
-            });
-            return res.data;
+    const { mutation: mutationOptions, client: config = {} } = options ?? {};
+    const mutationKey = mutationOptions?.mutationKey ?? postCreateStackMutationKey();
+    return useMutation<PostCreateStackMutationResponse, Error, {
+        data: PostCreateStackMutationRequest;
+    }>({
+        mutationFn: async ({ data }) => {
+            return postCreateStackHook(data, config);
         },
+        mutationKey,
         ...mutationOptions
     });
 }

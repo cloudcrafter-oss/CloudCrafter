@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using CloudCrafter.Core.Common.Interfaces.Access;
 using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Exceptions;
@@ -19,7 +20,13 @@ public static class UpdateStackCommand
     // Add other updatable properties here
     ) : IRequest<StackDetailDto?>, IRequireStackAccess;
 
-    public record GitSettings(string? GitRepository, string? GitPath, string? GitBranch);
+    [DefaultValue(null)]
+    public class GitSettings
+    {
+        public string? GitRepository { get; set; }
+        public string? GitPath { get; set; }
+        public string? GitBranch { get; set; }
+    }
 
     public record Handler(IStacksService StackService, IGitService GitService)
         : IRequestHandler<Command, StackDetailDto?>

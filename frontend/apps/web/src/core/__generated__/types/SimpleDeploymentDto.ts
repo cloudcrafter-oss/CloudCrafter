@@ -1,4 +1,4 @@
-import type { DeploymentStatusDto } from "./DeploymentStatusDto";
+import type { DeploymentStatusDto } from "./DeploymentStatusDto.ts";
 
  export type SimpleDeploymentDto = {
     /**
@@ -13,8 +13,5 @@ import type { DeploymentStatusDto } from "./DeploymentStatusDto";
      * @type string, uuid
     */
     id: string;
-    /**
-     * @type string
-    */
     state: DeploymentStatusDto;
 };

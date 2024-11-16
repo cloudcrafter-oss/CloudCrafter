@@ -37,19 +37,22 @@ export const SourceSettings = ({
 		defaultValues: {
 			stackId: stackDetails.id,
 			gitSettings: {
-				gitRepository: stackDetails.source.gitRepository,
-				gitBranch: stackDetails.source.gitBranch,
-				gitPath: stackDetails.source.gitPath,
+				gitRepository: stackDetails.source?.gitRepository ?? '',
+				gitBranch: stackDetails.source?.gitBranch ?? '',
+				gitPath: stackDetails.source?.gitPath ?? '',
 			},
 		},
 	})
 
-	const updateDetailMutation = useUpdateStackHook(stackDetails.id)
+	const updateDetailMutation = useUpdateStackHook()
 
 	const onSubmitSourceInfo = async (
 		values: z.infer<typeof updateStackMutationRequestSchema>,
 	) => {
-		await updateDetailMutation.mutateAsync(values)
+		await updateDetailMutation.mutateAsync({
+			id: stackDetails.id,
+			data: values,
+		})
 		setIsEditing(false)
 		toast.success('Source settings have been updated!')
 	}

@@ -1,13 +1,10 @@
-import type { FilterOperatorOption } from "./FilterOperatorOption";
+import type { FilterOperatorOption } from "./FilterOperatorOption.ts";
 
  export type FilterCriterea = {
     /**
      * @type string
     */
     propertyName: string;
-    /**
-     * @type string
-    */
     operator: FilterOperatorOption;
     /**
      * @type string

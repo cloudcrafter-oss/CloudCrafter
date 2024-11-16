@@ -1,5 +1,5 @@
-import type { StackDetailDto } from "./StackDetailDto";
-import type { UpdateStackCommandCommand } from "./UpdateStackCommandCommand";
+import type { StackDetailDto } from "./StackDetailDto.ts";
+import type { UpdateStackCommandCommand } from "./UpdateStackCommandCommand.ts";
 
  export type UpdateStackPathParams = {
     /**
@@ -7,21 +7,23 @@ import type { UpdateStackCommandCommand } from "./UpdateStackCommandCommand";
     */
     id: string;
 };
-/**
+
+ /**
  * @description OK
 */
 export type UpdateStack200 = StackDetailDto;
-/**
+
+ /**
  * @description Not Found
 */
 export type UpdateStack404 = any;
-export type UpdateStackMutationRequest = UpdateStackCommandCommand;
-/**
- * @description OK
-*/
-export type UpdateStackMutationResponse = StackDetailDto;
-export type UpdateStackMutation = {
-    Response: UpdateStackMutationResponse;
+
+ export type UpdateStackMutationRequest = UpdateStackCommandCommand;
+
+ export type UpdateStackMutationResponse = UpdateStack200;
+
+ export type UpdateStackMutation = {
+    Response: UpdateStack200;
     Request: UpdateStackMutationRequest;
     PathParams: UpdateStackPathParams;
     Errors: UpdateStack404;

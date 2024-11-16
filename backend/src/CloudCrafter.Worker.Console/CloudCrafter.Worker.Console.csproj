@@ -2,9 +2,6 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
     <RootNamespace>CloudCrafter.Worker.Console</RootNamespace>
   </PropertyGroup>
 
@@ -22,6 +19,11 @@
     <ProjectReference Include="..\CloudCrafter.Core\CloudCrafter.Core.csproj"/>
     <ProjectReference Include="..\CloudCrafter.Infrastructure\CloudCrafter.Infrastructure.csproj"/>
     <ProjectReference Include="..\CloudCrafter.Jobs.Service\CloudCrafter.Jobs.Service.csproj"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Fix for transitive dependencies -->
+    <PackageReference Include="System.Text.RegularExpressions" /> <!-- Caused by Hangfire.Console -->
   </ItemGroup>
 
   <ItemGroup>

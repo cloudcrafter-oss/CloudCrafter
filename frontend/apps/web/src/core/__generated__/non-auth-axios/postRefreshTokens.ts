@@ -1,11 +1,11 @@
-import client from "../../backend/non-auth-client.ts";
-import type { ResponseConfig } from "../../backend/non-auth-client.ts";
-import type { PostRefreshTokensMutationRequest, PostRefreshTokensMutationResponse } from "../types/PostRefreshTokens";
+import client from "@kubb/plugin-client/client";
+import type { PostRefreshTokensMutationRequest, PostRefreshTokensMutationResponse } from "../types/PostRefreshTokens.ts";
+import type { RequestConfig } from "@kubb/plugin-client/client";
 
  /**
  * @link /api/Auth/refresh
  */
-export async function postRefreshTokens(data: PostRefreshTokensMutationRequest, options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<PostRefreshTokensMutationResponse>["data"]> {
-    const res = await client<PostRefreshTokensMutationResponse, PostRefreshTokensMutationRequest>({ method: "post", url: `/api/Auth/refresh`, data, ...options });
+export async function postRefreshTokens(data: PostRefreshTokensMutationRequest, config: Partial<RequestConfig<PostRefreshTokensMutationRequest>> = {}) {
+    const res = await client<PostRefreshTokensMutationResponse, Error, PostRefreshTokensMutationRequest>({ method: "POST", url: `/api/Auth/refresh`, data, ...config });
     return res.data;
 }

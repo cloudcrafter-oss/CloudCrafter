@@ -1,11 +1,11 @@
 import client from "../../backend/client.ts";
-import type { ResponseConfig } from "../../backend/client.ts";
-import type { GetServerByIdQueryResponse, GetServerByIdPathParams } from "../types/GetServerById";
+import type { RequestConfig } from "../../backend/client.ts";
+import type { GetServerByIdQueryResponse, GetServerByIdPathParams } from "../types/GetServerById.ts";
 
  /**
  * @link /api/Servers/:id
  */
-export async function getServerById(id: GetServerByIdPathParams["id"], options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<GetServerByIdQueryResponse>["data"]> {
-    const res = await client<GetServerByIdQueryResponse>({ method: "get", url: `/api/Servers/${id}`, ...options });
+export async function getServerById(id: GetServerByIdPathParams["id"], config: Partial<RequestConfig> = {}) {
+    const res = await client<GetServerByIdQueryResponse, Error, unknown>({ method: "GET", url: `/api/Servers/${id}`, ...config });
     return res.data;
 }

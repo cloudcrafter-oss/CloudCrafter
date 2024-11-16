@@ -1,11 +1,11 @@
 import client from "../../backend/client.ts";
-import type { ResponseConfig } from "../../backend/client.ts";
-import type { UpdateProjectMutationRequest, UpdateProjectMutationResponse, UpdateProjectPathParams } from "../types/UpdateProject";
+import type { RequestConfig } from "../../backend/client.ts";
+import type { UpdateProjectMutationRequest, UpdateProjectMutationResponse, UpdateProjectPathParams } from "../types/UpdateProject.ts";
 
  /**
  * @link /api/Projects/:id
  */
-export async function updateProject(id: UpdateProjectPathParams["id"], data?: UpdateProjectMutationRequest, options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<UpdateProjectMutationResponse>["data"]> {
-    const res = await client<UpdateProjectMutationResponse, UpdateProjectMutationRequest>({ method: "post", url: `/api/Projects/${id}`, data, ...options });
+export async function updateProject(id: UpdateProjectPathParams["id"], data?: UpdateProjectMutationRequest, config: Partial<RequestConfig<UpdateProjectMutationRequest>> = {}) {
+    const res = await client<UpdateProjectMutationResponse, Error, UpdateProjectMutationRequest>({ method: "POST", url: `/api/Projects/${id}`, data, ...config });
     return res.data;
 }

@@ -1,6 +1,6 @@
+import { checkValidGitRepoCommandCommandSchema } from "./checkValidGitRepoCommandCommandSchema.ts";
+import { gitRepositoryCheckResultDtoSchema } from "./gitRepositoryCheckResultDtoSchema.ts";
 import { z } from "zod";
-import { gitRepositoryCheckResultDtoSchema } from "./gitRepositoryCheckResultDtoSchema";
-import { checkValidGitRepoCommandCommandSchema } from "./checkValidGitRepoCommandCommandSchema";
 
  /**
  * @description OK
@@ -8,7 +8,5 @@ import { checkValidGitRepoCommandCommandSchema } from "./checkValidGitRepoComman
 export const postValidateGithubRepo200Schema = z.lazy(() => gitRepositoryCheckResultDtoSchema);
 
  export const postValidateGithubRepoMutationRequestSchema = z.lazy(() => checkValidGitRepoCommandCommandSchema);
-/**
- * @description OK
- */
-export const postValidateGithubRepoMutationResponseSchema = z.lazy(() => gitRepositoryCheckResultDtoSchema);
+
+ export const postValidateGithubRepoMutationResponseSchema = z.lazy(() => postValidateGithubRepo200Schema);

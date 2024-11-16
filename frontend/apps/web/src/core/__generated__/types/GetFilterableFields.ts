@@ -4,12 +4,10 @@
 export type GetFilterableFields200 = {
     [key: string]: string[];
 };
-/**
- * @description OK
-*/
-export type GetFilterableFieldsQueryResponse = {
-    [key: string]: string[];
-};
-export type GetFilterableFieldsQuery = {
-    Response: GetFilterableFieldsQueryResponse;
+
+ export type GetFilterableFieldsQueryResponse = GetFilterableFields200;
+
+ export type GetFilterableFieldsQuery = {
+    Response: GetFilterableFields200;
+    Errors: any;
 };

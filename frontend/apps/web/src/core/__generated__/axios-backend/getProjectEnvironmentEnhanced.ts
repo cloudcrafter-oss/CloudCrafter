@@ -1,11 +1,11 @@
 import client from "../../backend/client.ts";
-import type { ResponseConfig } from "../../backend/client.ts";
-import type { GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhancedPathParams } from "../types/GetProjectEnvironmentEnhanced";
+import type { RequestConfig } from "../../backend/client.ts";
+import type { GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhancedPathParams, GetProjectEnvironmentEnhanced404 } from "../types/GetProjectEnvironmentEnhanced.ts";
 
  /**
  * @link /api/Projects/:id/:environmentId
  */
-export async function getProjectEnvironmentEnhanced(id: GetProjectEnvironmentEnhancedPathParams["id"], environmentId: GetProjectEnvironmentEnhancedPathParams["environmentId"], options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<GetProjectEnvironmentEnhancedQueryResponse>["data"]> {
-    const res = await client<GetProjectEnvironmentEnhancedQueryResponse>({ method: "get", url: `/api/Projects/${id}/${environmentId}`, ...options });
+export async function getProjectEnvironmentEnhanced(id: GetProjectEnvironmentEnhancedPathParams["id"], environmentId: GetProjectEnvironmentEnhancedPathParams["environmentId"], config: Partial<RequestConfig> = {}) {
+    const res = await client<GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhanced404, unknown>({ method: "GET", url: `/api/Projects/${id}/${environmentId}`, ...config });
     return res.data;
 }

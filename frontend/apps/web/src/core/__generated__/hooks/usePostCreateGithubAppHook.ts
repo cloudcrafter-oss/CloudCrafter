@@ -1,40 +1,40 @@
+// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
 import client from "../../frontend/client.ts";
-import { useMutation } from "@tanstack/react-query";
-import type { PostCreateGithubAppMutationRequest, PostCreateGithubAppMutationResponse, PostCreateGithubApp400 } from "../types/PostCreateGithubApp";
+import type { RequestConfig } from "../../frontend/client.ts";
+import type { PostCreateGithubAppMutationRequest, PostCreateGithubAppMutationResponse, PostCreateGithubApp400 } from "../types/PostCreateGithubApp.ts";
 import type { UseMutationOptions } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
- type PostCreateGithubAppClient = typeof client<PostCreateGithubAppMutationResponse, PostCreateGithubApp400, PostCreateGithubAppMutationRequest>;
-type PostCreateGithubApp = {
-    data: PostCreateGithubAppMutationResponse;
-    error: PostCreateGithubApp400;
-    request: PostCreateGithubAppMutationRequest;
-    pathParams: never;
-    queryParams: never;
-    headerParams: never;
-    response: PostCreateGithubAppMutationResponse;
-    client: {
-        parameters: Partial<Parameters<PostCreateGithubAppClient>[0]>;
-        return: Awaited<ReturnType<PostCreateGithubAppClient>>;
-    };
-};
-/**
+ export const postCreateGithubAppMutationKey = () => [{ "url": "/api/Providers/github" }] as const;
+
+ export type PostCreateGithubAppMutationKey = ReturnType<typeof postCreateGithubAppMutationKey>;
+
+ /**
+ * @link /api/Providers/github
+ */
+async function postCreateGithubAppHook(data: PostCreateGithubAppMutationRequest, config: Partial<RequestConfig<PostCreateGithubAppMutationRequest>> = {}) {
+    const res = await client<PostCreateGithubAppMutationResponse, PostCreateGithubApp400, PostCreateGithubAppMutationRequest>({ method: "POST", url: `/api/Providers/github`, data, ...config });
+    return res.data;
+}
+
+ /**
  * @link /api/Providers/github
  */
 export function usePostCreateGithubAppHook(options: {
-    mutation?: UseMutationOptions<PostCreateGithubApp["response"], PostCreateGithubApp["error"], PostCreateGithubApp["request"]>;
-    client?: PostCreateGithubApp["client"]["parameters"];
+    mutation?: UseMutationOptions<PostCreateGithubAppMutationResponse, PostCreateGithubApp400, {
+        data: PostCreateGithubAppMutationRequest;
+    }>;
+    client?: Partial<RequestConfig<PostCreateGithubAppMutationRequest>>;
 } = {}) {
-    const { mutation: mutationOptions, client: clientOptions = {} } = options ?? {};
-    return useMutation({
-        mutationFn: async (data) => {
-            const res = await client<PostCreateGithubApp["data"], PostCreateGithubApp["error"], PostCreateGithubApp["request"]>({
-                method: "post",
-                url: `/api/Providers/github`,
-                data,
-                ...clientOptions
-            });
-            return res.data;
+    const { mutation: mutationOptions, client: config = {} } = options ?? {};
+    const mutationKey = mutationOptions?.mutationKey ?? postCreateGithubAppMutationKey();
+    return useMutation<PostCreateGithubAppMutationResponse, PostCreateGithubApp400, {
+        data: PostCreateGithubAppMutationRequest;
+    }>({
+        mutationFn: async ({ data }) => {
+            return postCreateGithubAppHook(data, config);
         },
+        mutationKey,
         ...mutationOptions
     });
 }

@@ -1,0 +1,114 @@
+services:
+  traefik:
+    image: "traefik:v3.1"
+    container_name: traefik
+    networks:
+      - cloudcrafter-beta
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  postgres:
+    image: postgres:16-alpine
+    networks:
+      - cloudcrafter-beta
+    environment:
+      POSTGRES_USER: cloudcrafter
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: cloudcrafter-beta
+    volumes:
+      - pgdata-beta:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  redis:
+    image: redis:alpine
+    networks:
+      - cloudcrafter-beta
+    ports:
+      - '6379:6379'
+
+  backend:
+    image: ghcr.io/cloudcrafter-oss/cloudcrafter-backend:beta
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - cloudcrafter-beta
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`backend-7f000001.nip.io`)"
+      - "traefik.http.services.backend.loadbalancer.server.port=8080"
+      - "traefik.http.routers.backend.entrypoints=web"
+    environment:
+      - ConnectionStrings__PostgresConnection=Host=postgres;Username=cloudcrafter;Password=password;Database=cloudcrafter-beta
+      - ConnectionStrings__RedisConnection=redis
+      - CloudCrafter__AppKey=QCE4ndQUfPUOBE1cSzH3txf21YwR9yZQ
+      - JwtSettings__SecretKey=This is a very very very very very very very secret key
+      - JwtSettings__Issuer=CloudCrafter Web
+      - JwtSettings__Audience=CloudCrafter Web
+      - JwtSettings__AccessTokenValidInSeconds=600
+      - JwtSettings__RefreshTokenValidInSeconds=900
+      - CorsSettings__AllowedOrigins__1=http://frontend-7f000001.nip.io
+  
+  frontend:
+    image: ghcr.io/cloudcrafter-oss/cloudcrafter-frontend:beta
+    #image: cloudcrafter-frontend
+    networks:
+      - cloudcrafter-beta
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`frontend-7f000001.nip.io`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+      - "traefik.http.routers.frontend.entrypoints=web"
+    environment:
+      - AUTH_AUTH0_ID=${AUTH_AUTH0_ID}
+      - AUTH_AUTH0_SECRET=${AUTH_AUTH0_SECRET}
+      - AUTH_AUTH0_ISSUER=${AUTH_AUTH0_ISSUER}
+      - AUTH_AUTH0_CLIENT_ID=${AUTH_AUTH0_CLIENT_ID}
+      - AUTH_AUTH0_CLIENT_SECRET=${AUTH_AUTH0_CLIENT_SECRET}
+      - CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=http://backend:8080
+      - NEXTAUTH_URL=http://frontend-7f000001.nip.io
+      - AUTH_TRUST_HOST=true
+      - AUTH_SECRET=5m45McIXXUkk5EJYjEJbRQMJXFx8HRoYfc3jRFQOMN7i
+      - CLOUDCRAFTER_PUBLIC_BACKEND_URL=http://backend-7f000001.nip.io
+      - NEXT_PUBLIC_CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=http://backend-7f000001.nip.io
+
+
+  worker:
+    image: ghcr.io/cloudcrafter-oss/cloudcrafter-worker:beta
+    networks:
+      - cloudcrafter-beta
+    depends_on:
+      - backend
+    environment:
+      - ConnectionStrings__PostgresConnection=Host=postgres;Username=cloudcrafter;Password=password;Database=cloudcrafter-beta
+      - ConnectionStrings__RedisConnection=redis
+      - CloudCrafter__AppKey=QCE4ndQUfPUOBE1cSzH3txf21YwR9yZQ
+
+  # agent:
+  #   image: ghcr.io/cloudcrafter-oss/cloudcrafter-agent:beta
+  #   networks:
+  #     - cloudcrafter-beta
+  #   environment:
+  #     - CLOUDCRAFTER_Agent__ServerId=ffcdd9ee-ff31-4344-a3ab-efdc9b5e44f1
+  #     - CLOUDCRAFTER_Agent__AgentKey=vHh7mZ5ntR
+  #     - CLOUDCRAFTER_Agent__CloudCrafterHost=http://backend:8080
+
+
+networks:
+  cloudcrafter-beta:
+    name: cloudcrafter-beta
+    driver: bridge
+    external: true
+volumes:
+  pgdata-beta:
+    driver: local

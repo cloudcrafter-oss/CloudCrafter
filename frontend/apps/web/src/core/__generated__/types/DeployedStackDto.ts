@@ -1,4 +1,4 @@
-import type { EntityHealthDto } from "./EntityHealthDto";
+import type { EntityHealthDto } from "./EntityHealthDto.ts";
 
  export type DeployedStackDto = {
     /**

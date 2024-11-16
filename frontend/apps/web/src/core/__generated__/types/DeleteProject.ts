@@ -4,12 +4,16 @@ export type DeleteProjectPathParams = {
     */
     id: string;
 };
-/**
+
+ /**
  * @description OK
 */
 export type DeleteProject200 = any;
-export type DeleteProjectMutationResponse = any;
-export type DeleteProjectMutation = {
-    Response: DeleteProjectMutationResponse;
+
+ export type DeleteProjectMutationResponse = DeleteProject200;
+
+ export type DeleteProjectMutation = {
+    Response: DeleteProject200;
     PathParams: DeleteProjectPathParams;
+    Errors: any;
 };

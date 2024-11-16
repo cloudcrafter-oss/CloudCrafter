@@ -1,13 +1,13 @@
-import type { ProviderOverviewDto } from "./ProviderOverviewDto";
+import type { ProviderOverviewDto } from "./ProviderOverviewDto.ts";
 
  /**
  * @description OK
 */
 export type GetProviders200 = ProviderOverviewDto;
-/**
- * @description OK
-*/
-export type GetProvidersQueryResponse = ProviderOverviewDto;
-export type GetProvidersQuery = {
-    Response: GetProvidersQueryResponse;
+
+ export type GetProvidersQueryResponse = GetProviders200;
+
+ export type GetProvidersQuery = {
+    Response: GetProviders200;
+    Errors: any;
 };

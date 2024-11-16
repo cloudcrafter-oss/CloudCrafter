@@ -14,7 +14,7 @@ services:
       - ./docker/test-host:/test-host
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.web.rule=Host(`web.127.0.0.1.sslip.io`)"
+      - "traefik.http.routers.web.rule=Host(`backend-7f000001.nip.io`)"
       - "traefik.http.services.web.loadbalancer.server.port=8080"
       - "traefik.http.routers.web.entrypoints=web"
     environment:

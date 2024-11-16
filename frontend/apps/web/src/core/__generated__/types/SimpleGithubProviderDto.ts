@@ -10,7 +10,7 @@ export type SimpleGithubProviderDto = {
     /**
      * @type boolean
     */
-    isConnected?: boolean | null;
+    isConnected: boolean | null;
     /**
      * @type string, date-time
     */

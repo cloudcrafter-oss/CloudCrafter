@@ -1,11 +1,11 @@
 import client from "../../backend/client.ts";
-import type { ResponseConfig } from "../../backend/client.ts";
-import type { PostCreateDeploymentMutationResponse, PostCreateDeploymentPathParams } from "../types/PostCreateDeployment";
+import type { RequestConfig } from "../../backend/client.ts";
+import type { PostCreateDeploymentMutationResponse, PostCreateDeploymentPathParams } from "../types/PostCreateDeployment.ts";
 
  /**
  * @link /api/Applications/:applicationId/deployment
  */
-export async function postCreateDeployment(applicationId: PostCreateDeploymentPathParams["applicationId"], options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<PostCreateDeploymentMutationResponse>["data"]> {
-    const res = await client<PostCreateDeploymentMutationResponse>({ method: "post", url: `/api/Applications/${applicationId}/deployment`, ...options });
+export async function postCreateDeployment(applicationId: PostCreateDeploymentPathParams["applicationId"], config: Partial<RequestConfig> = {}) {
+    const res = await client<PostCreateDeploymentMutationResponse, Error, unknown>({ method: "POST", url: `/api/Applications/${applicationId}/deployment`, ...config });
     return res.data;
 }

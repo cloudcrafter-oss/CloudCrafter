@@ -1,4 +1,4 @@
-import type { EntityHealthDto } from "./EntityHealthDto";
+import type { EntityHealthDto } from "./EntityHealthDto.ts";
 
  export type StackServiceDto = {
     /**
@@ -12,7 +12,7 @@ import type { EntityHealthDto } from "./EntityHealthDto";
     /**
      * @type string
     */
-    description?: string | null;
+    description: string | null;
     /**
      * @type object
     */

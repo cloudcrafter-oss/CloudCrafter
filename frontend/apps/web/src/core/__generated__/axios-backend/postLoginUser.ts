@@ -1,11 +1,11 @@
 import client from "../../backend/client.ts";
-import type { ResponseConfig } from "../../backend/client.ts";
-import type { PostLoginUserMutationRequest, PostLoginUserMutationResponse } from "../types/PostLoginUser";
+import type { RequestConfig } from "../../backend/client.ts";
+import type { PostLoginUserMutationRequest, PostLoginUserMutationResponse } from "../types/PostLoginUser.ts";
 
  /**
  * @link /api/Auth/login
  */
-export async function postLoginUser(data: PostLoginUserMutationRequest, options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<PostLoginUserMutationResponse>["data"]> {
-    const res = await client<PostLoginUserMutationResponse, PostLoginUserMutationRequest>({ method: "post", url: `/api/Auth/login`, data, ...options });
+export async function postLoginUser(data: PostLoginUserMutationRequest, config: Partial<RequestConfig<PostLoginUserMutationRequest>> = {}) {
+    const res = await client<PostLoginUserMutationResponse, Error, PostLoginUserMutationRequest>({ method: "POST", url: `/api/Auth/login`, data, ...config });
     return res.data;
 }

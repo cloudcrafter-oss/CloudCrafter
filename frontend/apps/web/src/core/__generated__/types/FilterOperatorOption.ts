@@ -1,4 +1,4 @@
-export const filterOperatorOption = {
+export const filterOperatorOptionEnum = {
     "Equal": "Equal",
     "NotEqual": "NotEqual",
     "GreaterThan": "GreaterThan",
@@ -7,4 +7,7 @@ export const filterOperatorOption = {
     "LessThanOrEqual": "LessThanOrEqual",
     "Contains": "Contains"
 } as const;
-export type FilterOperatorOption = (typeof filterOperatorOption)[keyof typeof filterOperatorOption];
+
+ export type FilterOperatorOptionEnum = (typeof filterOperatorOptionEnum)[keyof typeof filterOperatorOptionEnum];
+
+ export type FilterOperatorOption = FilterOperatorOptionEnum;

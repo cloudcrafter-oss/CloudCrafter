@@ -1,4 +1,4 @@
-export const channelOutputLogLineLevel = {
+export const channelOutputLogLineLevelEnum = {
     "Verbose": "Verbose",
     "Debug": "Debug",
     "Information": "Information",
@@ -6,4 +6,7 @@ export const channelOutputLogLineLevel = {
     "Error": "Error",
     "Fatal": "Fatal"
 } as const;
-export type ChannelOutputLogLineLevel = (typeof channelOutputLogLineLevel)[keyof typeof channelOutputLogLineLevel];
+
+ export type ChannelOutputLogLineLevelEnum = (typeof channelOutputLogLineLevelEnum)[keyof typeof channelOutputLogLineLevelEnum];
+
+ export type ChannelOutputLogLineLevel = ChannelOutputLogLineLevelEnum;

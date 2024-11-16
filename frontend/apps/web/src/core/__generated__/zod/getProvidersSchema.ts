@@ -1,11 +1,9 @@
+import { providerOverviewDtoSchema } from "./providerOverviewDtoSchema.ts";
 import { z } from "zod";
-import { providerOverviewDtoSchema } from "./providerOverviewDtoSchema";
 
  /**
  * @description OK
  */
 export const getProviders200Schema = z.lazy(() => providerOverviewDtoSchema);
-/**
- * @description OK
- */
-export const getProvidersQueryResponseSchema = z.lazy(() => providerOverviewDtoSchema);
+
+ export const getProvidersQueryResponseSchema = z.lazy(() => getProviders200Schema);

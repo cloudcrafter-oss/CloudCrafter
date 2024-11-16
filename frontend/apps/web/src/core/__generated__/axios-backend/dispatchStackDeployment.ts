@@ -1,11 +1,11 @@
 import client from "../../backend/client.ts";
-import type { ResponseConfig } from "../../backend/client.ts";
-import type { DispatchStackDeploymentMutationResponse, DispatchStackDeploymentPathParams } from "../types/DispatchStackDeployment";
+import type { RequestConfig } from "../../backend/client.ts";
+import type { DispatchStackDeploymentMutationResponse, DispatchStackDeploymentPathParams } from "../types/DispatchStackDeployment.ts";
 
  /**
  * @link /api/Stacks/:id/deploy
  */
-export async function dispatchStackDeployment(id: DispatchStackDeploymentPathParams["id"], options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<DispatchStackDeploymentMutationResponse>["data"]> {
-    const res = await client<DispatchStackDeploymentMutationResponse>({ method: "post", url: `/api/Stacks/${id}/deploy`, ...options });
+export async function dispatchStackDeployment(id: DispatchStackDeploymentPathParams["id"], config: Partial<RequestConfig> = {}) {
+    const res = await client<DispatchStackDeploymentMutationResponse, Error, unknown>({ method: "POST", url: `/api/Stacks/${id}/deploy`, ...config });
     return res.data;
 }

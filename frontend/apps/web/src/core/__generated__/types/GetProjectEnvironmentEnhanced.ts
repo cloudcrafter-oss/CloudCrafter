@@ -1,4 +1,4 @@
-import type { ProjectEnvironmentEnhancedDto } from "./ProjectEnvironmentEnhancedDto";
+import type { ProjectEnvironmentEnhancedDto } from "./ProjectEnvironmentEnhancedDto.ts";
 
  export type GetProjectEnvironmentEnhancedPathParams = {
     /**
@@ -10,20 +10,21 @@ import type { ProjectEnvironmentEnhancedDto } from "./ProjectEnvironmentEnhanced
     */
     environmentId: string;
 };
-/**
+
+ /**
  * @description OK
 */
 export type GetProjectEnvironmentEnhanced200 = ProjectEnvironmentEnhancedDto;
-/**
+
+ /**
  * @description Not Found
 */
 export type GetProjectEnvironmentEnhanced404 = any;
-/**
- * @description OK
-*/
-export type GetProjectEnvironmentEnhancedQueryResponse = ProjectEnvironmentEnhancedDto;
-export type GetProjectEnvironmentEnhancedQuery = {
-    Response: GetProjectEnvironmentEnhancedQueryResponse;
+
+ export type GetProjectEnvironmentEnhancedQueryResponse = GetProjectEnvironmentEnhanced200;
+
+ export type GetProjectEnvironmentEnhancedQuery = {
+    Response: GetProjectEnvironmentEnhanced200;
     PathParams: GetProjectEnvironmentEnhancedPathParams;
     Errors: GetProjectEnvironmentEnhanced404;
 };

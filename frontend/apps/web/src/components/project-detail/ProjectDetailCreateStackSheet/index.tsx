@@ -62,7 +62,7 @@ export const ProjectDetailCreateStackSheet = ({
 	async function validateRepository(url: string) {
 		const errorMessage = 'The provided Git repository is not valid'
 		try {
-			const result = await mutateAsync({ repository: url })
+			const result = await mutateAsync({ data: { repository: url } })
 			if (!result.isValid) {
 				form.setError('gitRepository', {
 					type: 'manual',
@@ -90,7 +90,7 @@ export const ProjectDetailCreateStackSheet = ({
 		}
 		// Handle form submission
 		try {
-			const createdStackFromApi = await createStack(values)
+			const createdStackFromApi = await createStack({ data: values })
 			console.log(createdStackFromApi)
 			setCreatedStack(createdStackFromApi)
 		} finally {

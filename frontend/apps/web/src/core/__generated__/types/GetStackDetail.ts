@@ -1,4 +1,4 @@
-import type { StackDetailDto } from "./StackDetailDto";
+import type { StackDetailDto } from "./StackDetailDto.ts";
 
  export type GetStackDetailPathParams = {
     /**
@@ -6,20 +6,21 @@ import type { StackDetailDto } from "./StackDetailDto";
     */
     id: string;
 };
-/**
+
+ /**
  * @description OK
 */
 export type GetStackDetail200 = StackDetailDto;
-/**
+
+ /**
  * @description Not Found
 */
 export type GetStackDetail404 = any;
-/**
- * @description OK
-*/
-export type GetStackDetailQueryResponse = StackDetailDto;
-export type GetStackDetailQuery = {
-    Response: GetStackDetailQueryResponse;
+
+ export type GetStackDetailQueryResponse = GetStackDetail200;
+
+ export type GetStackDetailQuery = {
+    Response: GetStackDetail200;
     PathParams: GetStackDetailPathParams;
     Errors: GetStackDetail404;
 };

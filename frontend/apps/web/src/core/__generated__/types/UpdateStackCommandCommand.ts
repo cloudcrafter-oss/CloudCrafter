@@ -1,4 +1,4 @@
-import type { UpdateStackCommandGitSettings } from "./UpdateStackCommandGitSettings";
+import type { GitSettings } from "./GitSettings.ts";
 
  export type UpdateStackCommandCommand = {
     /**
@@ -6,15 +6,17 @@ import type { UpdateStackCommandGitSettings } from "./UpdateStackCommandGitSetti
     */
     stackId: string;
     /**
+     * @default null
      * @type string
     */
     name?: string | null;
     /**
+     * @default null
      * @type string
     */
     description?: string | null;
     /**
-     * @type object
+     * @type object | undefined
     */
-    gitSettings: UpdateStackCommandGitSettings;
+    gitSettings?: GitSettings;
 };

@@ -1,11 +1,11 @@
 import client from "../../backend/client.ts";
-import type { ResponseConfig } from "../../backend/client.ts";
-import type { GetProjectQueryResponse, GetProjectPathParams } from "../types/GetProject";
+import type { RequestConfig } from "../../backend/client.ts";
+import type { GetProjectQueryResponse, GetProjectPathParams, GetProject404 } from "../types/GetProject.ts";
 
  /**
  * @link /api/Projects/:id
  */
-export async function getProject(id: GetProjectPathParams["id"], options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<GetProjectQueryResponse>["data"]> {
-    const res = await client<GetProjectQueryResponse>({ method: "get", url: `/api/Projects/${id}`, ...options });
+export async function getProject(id: GetProjectPathParams["id"], config: Partial<RequestConfig> = {}) {
+    const res = await client<GetProjectQueryResponse, GetProject404, unknown>({ method: "GET", url: `/api/Projects/${id}`, ...config });
     return res.data;
 }
