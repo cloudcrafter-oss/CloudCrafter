@@ -1,0 +1,1 @@
+{"required":["isValid"],"type":"object","properties":{"isValid":{"type":"boolean"}},"x-readme-ref-name":"GitRepositoryCheckResultDto"}

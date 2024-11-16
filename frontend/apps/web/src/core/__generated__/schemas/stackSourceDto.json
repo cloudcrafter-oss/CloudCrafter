@@ -1,0 +1,1 @@
+{"required":["type"],"type":"object","properties":{"type":{"enum":["Git","GitSsh"],"x-readme-ref-name":"StackSourceDtoType"},"gitRepository":{"type":"string","nullable":true},"gitPath":{"type":"string","nullable":true},"gitBranch":{"type":"string","nullable":true}},"nullable":true,"x-readme-ref-name":"StackSourceDto"}

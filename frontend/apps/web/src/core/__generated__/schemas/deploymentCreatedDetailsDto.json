@@ -1,0 +1,1 @@
+{"required":["deploymentId"],"type":"object","properties":{"deploymentId":{"type":"string","format":"uuid"}},"x-readme-ref-name":"DeploymentCreatedDetailsDto"}

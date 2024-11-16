@@ -1,0 +1,1 @@
+{"title":"CreateStackCommandCommand","required":["name","gitRepository","environmentId","serverId"],"type":"object","properties":{"name":{"minLength":3,"type":"string"},"gitRepository":{"minLength":1,"type":"string"},"environmentId":{"type":"string","format":"uuid"},"serverId":{"type":"string","format":"uuid"}},"x-readme-ref-name":"CreateStackCommandCommand"}

@@ -1,0 +1,1 @@
+{"required":["id","name","ipAddress"],"type":"object","properties":{"id":{"type":"string","format":"uuid"},"name":{"type":"string"},"ipAddress":{"type":"string"}},"x-readme-ref-name":"ServerDetailDto"}
