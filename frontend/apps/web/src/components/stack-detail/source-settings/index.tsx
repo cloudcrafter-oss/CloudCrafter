@@ -37,9 +37,9 @@ export const SourceSettings = ({
 		defaultValues: {
 			stackId: stackDetails.id,
 			gitSettings: {
-				gitRepository: stackDetails.source.gitRepository,
-				gitBranch: stackDetails.source.gitBranch,
-				gitPath: stackDetails.source.gitPath,
+				gitRepository: stackDetails.source?.gitRepository ?? '',
+				gitBranch: stackDetails.source?.gitBranch ?? '',
+				gitPath: stackDetails.source?.gitPath ?? '',
 			},
 		},
 	})
