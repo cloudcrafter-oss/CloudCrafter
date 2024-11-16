@@ -1,10 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <RootNamespace>CloudCrafter.DeploymentEngine.Engine.Tests</RootNamespace>
@@ -25,7 +21,7 @@
     <ProjectReference Include="..\..\src\CloudCrafter.Agent.Runner\CloudCrafter.Agent.Runner.csproj"/>
     <ProjectReference Include="..\..\src\CloudCrafter.DeploymentEngine.Engine\CloudCrafter.DeploymentEngine.Engine.csproj"/>
     <ProjectReference Include="..\..\src\CloudCrafter.Infrastructure\CloudCrafter.Infrastructure.csproj"/>
-    <ProjectReference Include="..\CloudCrafter.TestUtilities\CloudCrafter.TestUtilities.csproj" />
+    <ProjectReference Include="..\CloudCrafter.TestUtilities\CloudCrafter.TestUtilities.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
