@@ -16,6 +16,11 @@
     <PackageReference Include="FluentAssertions"/>
     <PackageReference Include="Verify.NUnit"/>
   </ItemGroup>
+  
+  <ItemGroup>
+    <!-- Fixes for transitive dependencies -->
+    <PackageReference Include="Azure.Identity" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\CloudCrafter.Agent.Runner\CloudCrafter.Agent.Runner.csproj"/>

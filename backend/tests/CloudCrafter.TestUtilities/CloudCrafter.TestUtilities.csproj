@@ -29,6 +29,13 @@
     <PackageReference Include="Bogus"/>
     <PackageReference Include="Moq"/>
   </ItemGroup>
+
+  <ItemGroup>
+    <!-- Fixes for transitive dependencies -->
+    <PackageReference Include="Azure.Identity" />
+  </ItemGroup>
+  
+  
   <ItemGroup>
     <ProjectReference Include="..\..\src\CloudCrafter.Domain\CloudCrafter.Domain.csproj"/>
     <ProjectReference Include="..\..\src\CloudCrafter.Infrastructure\CloudCrafter.Infrastructure.csproj"/>

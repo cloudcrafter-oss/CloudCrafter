@@ -28,6 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Fixes for transitive dependencies -->
+    <PackageReference Include="Azure.Identity" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\CloudCrafter.Infrastructure\CloudCrafter.Infrastructure.csproj"/>
     <ProjectReference Include="..\..\src\CloudCrafter.Web\CloudCrafter.Web.csproj"/>
     <ProjectReference Include="..\CloudCrafter.TestUtilities\CloudCrafter.TestUtilities.csproj"/>
