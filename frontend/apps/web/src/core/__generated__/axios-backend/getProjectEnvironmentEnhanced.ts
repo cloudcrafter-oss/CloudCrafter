@@ -6,6 +6,6 @@ import type { GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentE
  * @link /api/Projects/:id/:environmentId
  */
 export async function getProjectEnvironmentEnhanced(id: GetProjectEnvironmentEnhancedPathParams["id"], environmentId: GetProjectEnvironmentEnhancedPathParams["environmentId"], options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<GetProjectEnvironmentEnhancedQueryResponse>["data"]> {
-    const res = await client<GetProjectEnvironmentEnhancedQueryResponse>({ method: "get", url: `/api/Projects/${id}/${environmentId}`, ...options });
+    const res = await client<GetProjectEnvironmentEnhancedQueryResponse>({ method: "get", url: `/api/Projects/${id}/${environmentId}`, baseURL: "http://[::]:8080", ...options });
     return res.data;
 }

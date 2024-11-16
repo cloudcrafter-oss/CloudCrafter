@@ -6,6 +6,6 @@ import type { TestQueryResponse } from "../types/Test";
  * @link /api/Users/test
  */
 export async function test(options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<TestQueryResponse>["data"]> {
-    const res = await client<TestQueryResponse>({ method: "get", url: `/api/Users/test`, ...options });
+    const res = await client<TestQueryResponse>({ method: "get", url: `/api/Users/test`, baseURL: "http://[::]:8080", ...options });
     return res.data;
 }

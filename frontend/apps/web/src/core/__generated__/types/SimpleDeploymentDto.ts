@@ -13,8 +13,5 @@ import type { DeploymentStatusDto } from "./DeploymentStatusDto";
      * @type string, uuid
     */
     id: string;
-    /**
-     * @type string
-    */
     state: DeploymentStatusDto;
 };

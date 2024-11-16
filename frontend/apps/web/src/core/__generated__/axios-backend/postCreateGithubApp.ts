@@ -6,6 +6,6 @@ import type { PostCreateGithubAppMutationRequest, PostCreateGithubAppMutationRes
  * @link /api/Providers/github
  */
 export async function postCreateGithubApp(data: PostCreateGithubAppMutationRequest, options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<PostCreateGithubAppMutationResponse>["data"]> {
-    const res = await client<PostCreateGithubAppMutationResponse, PostCreateGithubAppMutationRequest>({ method: "post", url: `/api/Providers/github`, data, ...options });
+    const res = await client<PostCreateGithubAppMutationResponse, PostCreateGithubAppMutationRequest>({ method: "post", url: `/api/Providers/github`, baseURL: "http://[::]:8080", data, ...options });
     return res.data;
 }

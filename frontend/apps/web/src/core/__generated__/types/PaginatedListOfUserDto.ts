@@ -1,6 +1,6 @@
 import type { UserDto } from "./UserDto";
 
- export type UserDtoPaginatedList = {
+ export type PaginatedListOfUserDto = {
     /**
      * @type integer, int32
     */

@@ -1,15 +1,15 @@
-import type { UserDtoPaginatedList } from "./UserDtoPaginatedList";
-import type { UserDtoPaginatedRequest } from "./UserDtoPaginatedRequest";
+import type { PaginatedListOfUserDto } from "./PaginatedListOfUserDto";
+import type { PaginatedRequestOfUserDto } from "./PaginatedRequestOfUserDto";
 
  /**
  * @description OK
 */
-export type GetUsers200 = UserDtoPaginatedList;
-export type GetUsersMutationRequest = UserDtoPaginatedRequest;
+export type GetUsers200 = PaginatedListOfUserDto;
+export type GetUsersMutationRequest = PaginatedRequestOfUserDto;
 /**
  * @description OK
 */
-export type GetUsersMutationResponse = UserDtoPaginatedList;
+export type GetUsersMutationResponse = PaginatedListOfUserDto;
 export type GetUsersMutation = {
     Response: GetUsersMutationResponse;
     Request: GetUsersMutationRequest;

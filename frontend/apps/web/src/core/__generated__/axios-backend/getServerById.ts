@@ -6,6 +6,6 @@ import type { GetServerByIdQueryResponse, GetServerByIdPathParams } from "../typ
  * @link /api/Servers/:id
  */
 export async function getServerById(id: GetServerByIdPathParams["id"], options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<GetServerByIdQueryResponse>["data"]> {
-    const res = await client<GetServerByIdQueryResponse>({ method: "get", url: `/api/Servers/${id}`, ...options });
+    const res = await client<GetServerByIdQueryResponse>({ method: "get", url: `/api/Servers/${id}`, baseURL: "http://[::]:8080", ...options });
     return res.data;
 }

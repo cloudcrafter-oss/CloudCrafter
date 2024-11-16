@@ -6,6 +6,6 @@ import type { UpdateStackMutationRequest, UpdateStackMutationResponse, UpdateSta
  * @link /api/Stacks/:id
  */
 export async function updateStack(id: UpdateStackPathParams["id"], data: UpdateStackMutationRequest, options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<UpdateStackMutationResponse>["data"]> {
-    const res = await client<UpdateStackMutationResponse, UpdateStackMutationRequest>({ method: "put", url: `/api/Stacks/${id}`, data, ...options });
+    const res = await client<UpdateStackMutationResponse, UpdateStackMutationRequest>({ method: "put", url: `/api/Stacks/${id}`, baseURL: "http://[::]:8080", data, ...options });
     return res.data;
 }

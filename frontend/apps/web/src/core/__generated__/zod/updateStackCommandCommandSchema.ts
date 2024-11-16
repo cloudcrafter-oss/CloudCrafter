@@ -1,5 +1,5 @@
-import { updateStackCommandGitSettingsSchema } from "./updateStackCommandGitSettingsSchema";
+import { gitSettingsSchema } from "./gitSettingsSchema";
 import { z } from "zod";
 
 
-export const updateStackCommandCommandSchema = z.object({ "stackId": z.string().uuid(), "name": z.string().nullable().nullish(), "description": z.string().nullable().nullish(), "gitSettings": z.lazy(() => updateStackCommandGitSettingsSchema) });
+export const updateStackCommandCommandSchema = z.object({ "stackId": z.string().uuid(), "name": z.string().default().nullable().nullish(), "description": z.string().default().nullable().nullish(), "gitSettings": z.lazy(() => gitSettingsSchema).optional().nullable() });

@@ -12,7 +12,7 @@ import type { EntityHealthDto } from "./EntityHealthDto";
     /**
      * @type string
     */
-    description?: string | null;
+    description: string | null;
     /**
      * @type object
     */

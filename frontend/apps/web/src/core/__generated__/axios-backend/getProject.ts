@@ -6,6 +6,6 @@ import type { GetProjectQueryResponse, GetProjectPathParams } from "../types/Get
  * @link /api/Projects/:id
  */
 export async function getProject(id: GetProjectPathParams["id"], options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<GetProjectQueryResponse>["data"]> {
-    const res = await client<GetProjectQueryResponse>({ method: "get", url: `/api/Projects/${id}`, ...options });
+    const res = await client<GetProjectQueryResponse>({ method: "get", url: `/api/Projects/${id}`, baseURL: "http://[::]:8080", ...options });
     return res.data;
 }

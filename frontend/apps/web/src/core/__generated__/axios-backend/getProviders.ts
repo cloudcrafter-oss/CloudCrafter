@@ -6,6 +6,6 @@ import type { GetProvidersQueryResponse } from "../types/GetProviders";
  * @link /api/Providers
  */
 export async function getProviders(options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<GetProvidersQueryResponse>["data"]> {
-    const res = await client<GetProvidersQueryResponse>({ method: "get", url: `/api/Providers`, ...options });
+    const res = await client<GetProvidersQueryResponse>({ method: "get", url: `/api/Providers`, baseURL: "http://[::]:8080", ...options });
     return res.data;
 }

@@ -1,15 +1,7 @@
 import type { FilterCriterea } from "./FilterCriterea";
 import type { SortModel } from "./SortModel";
 
- export type UserDtoPaginatedRequest = {
-    /**
-     * @type integer, int32
-    */
-    page: number;
-    /**
-     * @type integer, int32
-    */
-    pageSize: number;
+ export type PaginatedRequestOfUserDto = {
     /**
      * @type array
     */
@@ -18,4 +10,12 @@ import type { SortModel } from "./SortModel";
      * @type array
     */
     sortBy?: SortModel[] | null;
+    /**
+     * @type integer, int32
+    */
+    page: number;
+    /**
+     * @type integer, int32
+    */
+    pageSize: number;
 };

@@ -6,6 +6,6 @@ import type { DispatchStackDeploymentMutationResponse, DispatchStackDeploymentPa
  * @link /api/Stacks/:id/deploy
  */
 export async function dispatchStackDeployment(id: DispatchStackDeploymentPathParams["id"], options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<DispatchStackDeploymentMutationResponse>["data"]> {
-    const res = await client<DispatchStackDeploymentMutationResponse>({ method: "post", url: `/api/Stacks/${id}/deploy`, ...options });
+    const res = await client<DispatchStackDeploymentMutationResponse>({ method: "post", url: `/api/Stacks/${id}/deploy`, baseURL: "http://[::]:8080", ...options });
     return res.data;
 }

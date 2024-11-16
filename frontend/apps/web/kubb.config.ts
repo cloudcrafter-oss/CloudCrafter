@@ -8,7 +8,7 @@ import { pluginZod } from '@kubb/swagger-zod'
 export default defineConfig({
 	root: '.',
 	input: {
-		path: 'http://web.127.0.0.1.sslip.io/swagger/v1/swagger.json',
+		path: 'http://backend-7f000001.nip.io/openapi/v1.json',
 	},
 	output: {
 		path: './src/core/__generated__',

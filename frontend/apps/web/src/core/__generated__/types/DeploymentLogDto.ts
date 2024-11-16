@@ -5,9 +5,6 @@ import type { ChannelOutputLogLineLevel } from "./ChannelOutputLogLineLevel";
      * @type string
     */
     message: string;
-    /**
-     * @type string
-    */
     level: ChannelOutputLogLineLevel;
     /**
      * @type string, date-time

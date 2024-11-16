@@ -12,7 +12,7 @@ import type { EnvironmentDto } from "./EnvironmentDto";
     /**
      * @type string
     */
-    description?: string | null;
+    description: string | null;
     /**
      * @type string, date-time
     */

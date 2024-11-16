@@ -12,7 +12,7 @@ import type { DeployedStackDto } from "./DeployedStackDto";
     /**
      * @type string, date-time
     */
-    lastDeploymentAt?: string | null;
+    lastDeploymentAt: string | null;
     /**
      * @type string
     */

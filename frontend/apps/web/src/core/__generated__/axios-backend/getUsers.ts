@@ -6,6 +6,6 @@ import type { GetUsersMutationRequest, GetUsersMutationResponse } from "../types
  * @link /api/Users
  */
 export async function getUsers(data: GetUsersMutationRequest, options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<GetUsersMutationResponse>["data"]> {
-    const res = await client<GetUsersMutationResponse, GetUsersMutationRequest>({ method: "post", url: `/api/Users`, data, ...options });
+    const res = await client<GetUsersMutationResponse, GetUsersMutationRequest>({ method: "post", url: `/api/Users`, baseURL: "http://[::]:8080", data, ...options });
     return res.data;
 }

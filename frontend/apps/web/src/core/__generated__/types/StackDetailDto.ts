@@ -15,7 +15,7 @@ import type { EntityHealthDto } from "./EntityHealthDto";
     /**
      * @type string
     */
-    description?: string | null;
+    description: string | null;
     /**
      * @type array
     */
@@ -23,7 +23,7 @@ import type { EntityHealthDto } from "./EntityHealthDto";
     /**
      * @type object
     */
-    source: StackSourceDto;
+    source: StackSourceDto | null;
     /**
      * @type object
     */

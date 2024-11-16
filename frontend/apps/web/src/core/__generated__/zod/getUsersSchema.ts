@@ -1,14 +1,14 @@
 import { z } from "zod";
-import { userDtoPaginatedListSchema } from "./userDtoPaginatedListSchema";
-import { userDtoPaginatedRequestSchema } from "./userDtoPaginatedRequestSchema";
+import { paginatedListOfUserDtoSchema } from "./paginatedListOfUserDtoSchema";
+import { paginatedRequestOfUserDtoSchema } from "./paginatedRequestOfUserDtoSchema";
 
  /**
  * @description OK
  */
-export const getUsers200Schema = z.lazy(() => userDtoPaginatedListSchema);
+export const getUsers200Schema = z.lazy(() => paginatedListOfUserDtoSchema);
 
- export const getUsersMutationRequestSchema = z.lazy(() => userDtoPaginatedRequestSchema);
+ export const getUsersMutationRequestSchema = z.lazy(() => paginatedRequestOfUserDtoSchema);
 /**
  * @description OK
  */
-export const getUsersMutationResponseSchema = z.lazy(() => userDtoPaginatedListSchema);
+export const getUsersMutationResponseSchema = z.lazy(() => paginatedListOfUserDtoSchema);
