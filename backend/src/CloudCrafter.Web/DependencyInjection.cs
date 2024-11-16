@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization.Metadata;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces;
 using CloudCrafter.Infrastructure;
@@ -7,6 +8,7 @@ using CloudCrafter.Web.Infrastructure;
 using CloudCrafter.Web.Infrastructure.OpenApi;
 using CloudCrafter.Web.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OpenApi;
 
 namespace CloudCrafter.Web;
 
@@ -70,24 +72,46 @@ public static class DependencyInjection
     {
         collection.AddOpenApi(options =>
         {
-            options.AddSchemaTransformer<RequireNotNullableSchemaFilter>()
-                .AddSchemaTransformer<CommandSchemaNameTransformer>();
+            options.AddSchemaTransformer<RequireNotNullableSchemaFilter>();
+            //  .AddSchemaTransformer<CommandSchemaNameTransformer>();
 
             // options.CreateSchemaReferenceId = info =>
             // {
             //
             //     return info.getschemareferenceid
             // };
-            
-            options.AddDocumentTransformer((doc, context, ct) =>
+
+            options.CreateSchemaReferenceId = (JsonTypeInfo info) =>
             {
-                doc.Info.Title = "CloudCrafter API";
-                doc.Info.Version = "v1";
-                
-                // Removed for Kubb generation to prevent baseURL being added to clients
-                doc.Servers = [];
-                return Task.CompletedTask;
-            }); 
+                var schema = OpenApiOptions.CreateDefaultSchemaReferenceId(info);
+
+                if (schema == "Query" || schema == "Command")
+                {
+                    var type = info.Type;
+
+                    var fullName = type.FullName;
+
+                    if (!string.IsNullOrWhiteSpace(fullName))
+                    {
+                        var parts = fullName.Split('.');
+                        var lastPart = parts[^1];
+                        var commandParts = lastPart.Split(['+']);
+                        return string.Join("", commandParts);
+                    }
+                }
+                return schema;
+            };
+            options.AddDocumentTransformer(
+                (doc, context, ct) =>
+                {
+                    doc.Info.Title = "CloudCrafter API";
+                    doc.Info.Version = "v1";
+
+                    // Removed for Kubb generation to prevent baseURL being added to clients
+                    doc.Servers = [];
+                    return Task.CompletedTask;
+                }
+            );
         });
         return collection;
     }
