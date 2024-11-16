@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <!-- Fixes for transitive dependencies -->
-    <PackageReference Include="System.Net.Http" />
+    <PackageReference Include="System.Net.Http"/>
   </ItemGroup>
 
 

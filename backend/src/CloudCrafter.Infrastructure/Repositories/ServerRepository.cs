@@ -4,6 +4,7 @@ using AutoMapper.QueryableExtensions;
 using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Repositories;
+using CloudCrafter.Core.Utils;
 using CloudCrafter.Domain.Domain.Server;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -72,6 +73,28 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
         server.PingHealthData.OsInfo = data.HostInfo.OsInfo;
 
         await context.SaveChangesAsync();
+    }
+
+    public async Task<Server> CreateServer(string requestName)
+    {
+        var server = new Server
+        {
+            Id = Guid.NewGuid(),
+            Name = requestName,
+            AgentSecretKey = StringUtils.GenerateSecret(64),
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            DockerDataDirectoryMount = "",
+            IpAddress = "",
+            PingHealthData = new ServerPingData(),
+            SshPort = 22,
+        };
+
+        context.Servers.Add(server);
+
+        await context.SaveChangesAsync();
+
+        return server;
     }
 
     private IQueryable<Server> GetBaseQuery()
