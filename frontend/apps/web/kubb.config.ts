@@ -1,6 +1,6 @@
 import { defineConfig } from '@kubb/core'
-import { pluginOas } from '@kubb/plugin-oas'
 import { pluginClient } from '@kubb/plugin-client'
+import { pluginOas } from '@kubb/plugin-oas'
 import { pluginReactQuery } from '@kubb/plugin-react-query'
 import { pluginTs } from '@kubb/plugin-ts'
 import { pluginZod } from '@kubb/plugin-zod'
@@ -21,12 +21,12 @@ export default defineConfig({
 	// 	],
 	// },
 	plugins: [
-        pluginOas(),
+		pluginOas(),
 		pluginZod({
 			output: {
 				path: './zod',
 			},
-            
+
 			// mapper: {
 			// 	productName: 'z.string().uuid()',
 			// },
@@ -41,7 +41,7 @@ export default defineConfig({
 					pattern: 'cloudCrafterAuthTest',
 				},
 			],
-            importPath: '../../backend/client.ts'
+			importPath: '../../backend/client.ts',
 			// client: { importPath: '../../backend/client.ts' },
 		}),
 		pluginClient({
@@ -71,7 +71,8 @@ export default defineConfig({
 			},
 			output: {
 				path: './hooks',
-                banner: '// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters'
+				banner:
+					'// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters',
 			},
 			infinite: {},
 		}),

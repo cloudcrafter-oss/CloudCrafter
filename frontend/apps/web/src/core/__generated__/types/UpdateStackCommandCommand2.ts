@@ -1,6 +1,6 @@
 import type { GitSettings } from "./GitSettings.ts";
 
- export type UpdateStackCommandCommand = {
+ export type UpdateStackCommandCommand2 = {
     /**
      * @type string, uuid
     */
