@@ -6,6 +6,6 @@ import type { PostLoginUserMutationRequest, PostLoginUserMutationResponse } from
  * @link /api/Auth/login
  */
 export async function postLoginUser(data: PostLoginUserMutationRequest, options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<PostLoginUserMutationResponse>["data"]> {
-    const res = await client<PostLoginUserMutationResponse, PostLoginUserMutationRequest>({ method: "post", url: `/api/Auth/login`, baseURL: "http://[::]:8080", data, ...options });
+    const res = await client<PostLoginUserMutationResponse, PostLoginUserMutationRequest>({ method: "post", url: `/api/Auth/login`, data, ...options });
     return res.data;
 }

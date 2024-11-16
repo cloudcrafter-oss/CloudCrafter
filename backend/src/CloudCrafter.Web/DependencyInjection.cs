@@ -71,13 +71,23 @@ public static class DependencyInjection
         collection.AddOpenApi(options =>
         {
             options.AddSchemaTransformer<RequireNotNullableSchemaFilter>()
-             .AddSchemaTransformer<CommandSchemaNameTransformer>();
-            
+                .AddSchemaTransformer<CommandSchemaNameTransformer>();
+
             // options.CreateSchemaReferenceId = info =>
             // {
             //
             //     return info.getschemareferenceid
             // };
+            
+            options.AddDocumentTransformer((doc, context, ct) =>
+            {
+                doc.Info.Title = "CloudCrafter API";
+                doc.Info.Version = "v1";
+                
+                // Removed for Kubb generation to prevent baseURL being added to clients
+                doc.Servers = [];
+                return Task.CompletedTask;
+            }); 
         });
         return collection;
     }

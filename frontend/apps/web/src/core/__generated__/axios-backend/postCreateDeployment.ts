@@ -6,6 +6,6 @@ import type { PostCreateDeploymentMutationResponse, PostCreateDeploymentPathPara
  * @link /api/Applications/:applicationId/deployment
  */
 export async function postCreateDeployment(applicationId: PostCreateDeploymentPathParams["applicationId"], options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<PostCreateDeploymentMutationResponse>["data"]> {
-    const res = await client<PostCreateDeploymentMutationResponse>({ method: "post", url: `/api/Applications/${applicationId}/deployment`, baseURL: "http://[::]:8080", ...options });
+    const res = await client<PostCreateDeploymentMutationResponse>({ method: "post", url: `/api/Applications/${applicationId}/deployment`, ...options });
     return res.data;
 }

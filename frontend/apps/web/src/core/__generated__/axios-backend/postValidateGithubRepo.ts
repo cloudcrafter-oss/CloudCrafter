@@ -6,6 +6,6 @@ import type { PostValidateGithubRepoMutationRequest, PostValidateGithubRepoMutat
  * @link /api/Utils/validate-git-repository
  */
 export async function postValidateGithubRepo(data: PostValidateGithubRepoMutationRequest, options: Partial<Parameters<typeof client>[0]> = {}): Promise<ResponseConfig<PostValidateGithubRepoMutationResponse>["data"]> {
-    const res = await client<PostValidateGithubRepoMutationResponse, PostValidateGithubRepoMutationRequest>({ method: "post", url: `/api/Utils/validate-git-repository`, baseURL: "http://[::]:8080", data, ...options });
+    const res = await client<PostValidateGithubRepoMutationResponse, PostValidateGithubRepoMutationRequest>({ method: "post", url: `/api/Utils/validate-git-repository`, data, ...options });
     return res.data;
 }
