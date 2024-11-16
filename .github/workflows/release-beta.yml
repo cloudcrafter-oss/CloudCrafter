@@ -63,9 +63,9 @@ jobs:
     strategy:
       matrix:
         image: [
-          # { name: "agent", context: "./backend/", build_args: "", dockerfile: "./backend/src/CloudCrafter.Agent.Console/Dockerfile" },
-          # { name: "backend", context: "./backend/", build_args: "",   dockerfile: "./backend/src/CloudCrafter.Web/Dockerfile" },
-          # { name: "worker", context: "./backend/", build_args: "", dockerfile: "./backend/src/CloudCrafter.Worker.Console/Dockerfile" },
+          { name: "agent", context: "./backend/", build_args: "", dockerfile: "./backend/src/CloudCrafter.Agent.Console/Dockerfile" },
+          { name: "backend", context: "./backend/", build_args: "",   dockerfile: "./backend/src/CloudCrafter.Web/Dockerfile" },
+          { name: "worker", context: "./backend/", build_args: "", dockerfile: "./backend/src/CloudCrafter.Worker.Console/Dockerfile" },
           { name: "frontend", context: "./frontend/", build_args: "CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=http://dummy", dockerfile: "./frontend/apps/web/Dockerfile" }
         ]
       fail-fast: false
@@ -111,9 +111,9 @@ jobs:
     strategy:
       matrix:
         image: [
-          # { name: "agent", context: "./backend/", build_args: "", dockerfile: "./backend/src/CloudCrafter.Agent.Console/Dockerfile" },
-          # { name: "backend", context: "./backend/", build_args: "",   dockerfile: "./backend/src/CloudCrafter.Web/Dockerfile" },
-          # { name: "worker", context: "./backend/", build_args: "", dockerfile: "./backend/src/CloudCrafter.Worker.Console/Dockerfile" },
+          { name: "agent", context: "./backend/", build_args: "", dockerfile: "./backend/src/CloudCrafter.Agent.Console/Dockerfile" },
+          { name: "backend", context: "./backend/", build_args: "",   dockerfile: "./backend/src/CloudCrafter.Web/Dockerfile" },
+          { name: "worker", context: "./backend/", build_args: "", dockerfile: "./backend/src/CloudCrafter.Worker.Console/Dockerfile" },
           { name: "frontend", context: "./frontend/", build_args: "CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=http://dummy", dockerfile: "./frontend/apps/web/Dockerfile" }
         ]
       fail-fast: false
