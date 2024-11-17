@@ -30,7 +30,7 @@ services:
       - JwtSettings__Audience=CloudCrafter Web
       - JwtSettings__AccessTokenValidInSeconds=600
       - JwtSettings__RefreshTokenValidInSeconds=900
-      - CorsSettings__AllowedOrigins__1=http://frontend.beta.cloudcrafter.app
+      - CorsSettings__AllowedOrigins__1=https://frontend.beta.cloudcrafter.app
   
   frontend:
     image: ghcr.io/cloudcrafter-oss/cloudcrafter-frontend:beta
