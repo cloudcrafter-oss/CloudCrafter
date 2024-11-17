@@ -11,4 +11,8 @@ export type ServerDetailDto = {
      * @type string
     */
     ipAddress: string;
+    /**
+     * @type string
+    */
+    agentKey?: string | null;
 };

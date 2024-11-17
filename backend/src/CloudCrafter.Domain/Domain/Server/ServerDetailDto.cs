@@ -8,11 +8,14 @@ public class ServerDetailDto
     public required string Name { get; set; }
     public required string IpAddress { get; set; }
 
+    public string? AgentKey { get; set; }
+
     private class Mapping : Profile
     {
         public Mapping()
         {
-            CreateMap<Entities.Server, ServerDetailDto>();
+            CreateMap<Entities.Server, ServerDetailDto>()
+                .ForMember(x => x.AgentKey, opt => opt.MapFrom(src => src.AgentSecretKey));
         }
     }
 }
