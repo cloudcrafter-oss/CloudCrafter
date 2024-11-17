@@ -99,6 +99,6 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
 
     private IQueryable<Server> GetBaseQuery()
     {
-        return context.Servers.OrderBy(x => x.Name);
+        return context.Servers.OrderBy(x => x.CreatedAt);
     }
 }
