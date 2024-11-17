@@ -44,11 +44,11 @@ services:
       - AUTH_AUTH0_SECRET=${AUTH_AUTH0_SECRET}
       - AUTH_AUTH0_ISSUER=${AUTH_AUTH0_ISSUER}
       - CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=http://backend:8080
-      - NEXTAUTH_URL=http://frontend.beta.cloudcrafter.app
+      - NEXTAUTH_URL=https://frontend.beta.cloudcrafter.app
       - AUTH_TRUST_HOST=true
       - AUTH_SECRET=5m45McIXXUkk5EJYjEJbRQMJXFx8HRoYfc3jRFQOMN7i
-      - CLOUDCRAFTER_PUBLIC_BACKEND_URL=http://backend.beta.cloudcrafter.app
-      - NEXT_PUBLIC_CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=http://backend.beta.cloudcrafter.app
+      - CLOUDCRAFTER_PUBLIC_BACKEND_URL=https://backend.beta.cloudcrafter.app
+      - NEXT_PUBLIC_CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=https://backend.beta.cloudcrafter.app
 
 
   worker:
