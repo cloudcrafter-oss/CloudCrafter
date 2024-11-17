@@ -46,7 +46,7 @@ services:
       - AUTH_AUTH0_CLIENT_ID=${AUTH_AUTH0_CLIENT_ID}
       - AUTH_AUTH0_CLIENT_SECRET=${AUTH_AUTH0_CLIENT_SECRET}
       - CLOUDCRAFTER_AXIOS_BACKEND_BASEURL=http://backend:8080
-      - NEXTAUTH_URL=http://frontend.beta.cloudcracter.app
+      - NEXTAUTH_URL=http://frontend.beta.cloudcrafter.app
       - AUTH_TRUST_HOST=true
       - AUTH_SECRET=5m45McIXXUkk5EJYjEJbRQMJXFx8HRoYfc3jRFQOMN7i
       - CLOUDCRAFTER_PUBLIC_BACKEND_URL=http://backend.beta.cloudcrafter.app
