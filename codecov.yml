@@ -8,3 +8,7 @@ coverage:
          default:
            target: 0%
    
+
+
+ignore:
+  - "backend/tests"
