@@ -14,6 +14,7 @@ import {
 	SidebarMenuSubItem,
 } from '@ui/components/ui/sidebar'
 import { ChevronRight, type LucideIcon } from 'lucide-react'
+import Link from 'next/link'
 
 export function CloudCrafterNav({
 	items,
@@ -53,9 +54,9 @@ export function CloudCrafterNav({
 									{item.items?.map((subItem) => (
 										<SidebarMenuSubItem key={subItem.title}>
 											<SidebarMenuSubButton asChild>
-												<a href={subItem.url}>
+												<Link href={subItem.url}>
 													<span>{subItem.title}</span>
-												</a>
+												</Link>
 											</SidebarMenuSubButton>
 										</SidebarMenuSubItem>
 									))}

@@ -22,6 +22,7 @@ public class Server : IHasTimestamps
     /// </summary>
     public string DockerDataDirectoryMount { get; set; } = string.Empty;
 
+    // TODO: Remove this property
     public required int SshPort { get; set; } = 22;
 
     public ServerPingData PingHealthData { get; set; } = new();

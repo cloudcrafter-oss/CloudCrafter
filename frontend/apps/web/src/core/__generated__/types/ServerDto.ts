@@ -1,4 +1,6 @@
-export type ServerDto = {
+import type { ServerPingDto } from "./ServerPingDto.ts";
+
+ export type ServerDto = {
     /**
      * @type string, uuid
     */
@@ -11,4 +13,8 @@ export type ServerDto = {
      * @type string
     */
     ipAddress: string;
+    /**
+     * @type object
+    */
+    pingData: ServerPingDto;
 };

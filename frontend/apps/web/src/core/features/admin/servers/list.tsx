@@ -1,14 +1,49 @@
-import type { GetServersQueryResponse } from '@/src/core/__generated__'
-import { Button } from '@ui/components/ui/button.tsx'
-import { Card } from '@ui/components/ui/card.tsx'
+'use client'
+import {
+	createServerCommandCommandSchema,
+	getServersQueryKey,
+	useCreateServerHook,
+	useGetServersHook,
+} from '@/src/core/__generated__'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@ui/components/ui/button'
+import { Input } from '@ui/components/ui/input'
+import {
+	Sheet,
+	SheetContent,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from '@ui/components/ui/sheet'
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '@ui/components/ui/table'
 import {
 	CircleIcon,
 	GaugeIcon,
 	HardDriveIcon,
 	MemoryStickIcon,
-	ServerIcon,
 } from 'lucide-react'
+import { PlusIcon } from 'lucide-react'
 import Link from 'next/link'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+
+import { useQueryClient } from '@tanstack/react-query'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '@ui/components/ui/form'
+import type { z } from 'zod'
 
 const StateMap = {
 	Offline: (
@@ -31,9 +66,36 @@ const StateMap = {
 	),
 }
 
-export const ServersList = ({
-	servers,
-}: { servers: GetServersQueryResponse }) => {
+const formSchema = createServerCommandCommandSchema
+
+export const ServersList = () => {
+	const [open, setOpen] = useState(false)
+
+	const queryClient = useQueryClient()
+
+	const { data: servers } = useGetServersHook()
+
+	const form = useForm<z.infer<typeof createServerCommandCommandSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			name: '',
+		},
+	})
+
+	const mutation = useCreateServerHook({
+		mutation: {
+			onSuccess: () => {
+				form.reset()
+				setOpen(false)
+				queryClient.invalidateQueries({ queryKey: getServersQueryKey() })
+			},
+		},
+	})
+
+	const onSubmit = (data: z.infer<typeof formSchema>) => {
+		mutation.mutate({ data })
+	}
+
 	const randomFromStateMap = () => {
 		const keys = Object.keys(StateMap)
 		// @ts-expect-error Todo: fix this
@@ -41,48 +103,91 @@ export const ServersList = ({
 	}
 
 	return (
-		<main className='flex flex-col gap-8 p-4 md:p-10 bg-muted/40 flex-1'>
-			<div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl w-full mx-auto'>
-				{servers.map((server) => (
-					<Card key={server.id} className='p-6 grid gap-6'>
-						<div className='flex items-center gap-4'>
-							<div className='bg-primary rounded-md p-3 flex items-center justify-center'>
-								<ServerIcon className='w-6 h-6 text-primary-foreground' />
-							</div>
-							<div className='grid gap-1'>
-								<h3 className='text-xl font-semibold'>{server.name}</h3>
-								{randomFromStateMap()}
-							</div>
-						</div>
-						<div className='grid gap-4'>
-							<div className='flex items-center justify-between'>
-								<span className='text-muted-foreground'>CPU</span>
-								<div className='flex items-center gap-2'>
-									<span className='font-semibold'>72%</span>
-									<GaugeIcon className='w-5 h-5 text-muted-foreground' />
-								</div>
-							</div>
-							<div className='flex items-center justify-between'>
-								<span className='text-muted-foreground'>Memory</span>
-								<div className='flex items-center gap-2'>
-									<span className='font-semibold'>8.2 GB / 16 GB</span>
-									<MemoryStickIcon className='w-5 h-5 text-muted-foreground' />
-								</div>
-							</div>
-							<div className='flex items-center justify-between'>
-								<span className='text-muted-foreground'>Disk</span>
-								<div className='flex items-center gap-2'>
-									<span className='font-semibold'>512 GB / 1 TB</span>
-									<HardDriveIcon className='w-5 h-5 text-muted-foreground' />
-								</div>
-							</div>
-						</div>
-						<Button variant='outline' className='justify-self-start'>
-							<Link href={`/admin/servers/${server.id}`}>View Details</Link>
+		<div className='p-4 md:p-10 space-y-4'>
+			<div className='flex justify-between items-center'>
+				<h2 className='text-lg font-semibold'>Servers</h2>
+				<Sheet open={open} onOpenChange={setOpen}>
+					<SheetTrigger asChild>
+						<Button>
+							<PlusIcon className='w-4 h-4 mr-2' />
+							Add Server
 						</Button>
-					</Card>
-				))}
+					</SheetTrigger>
+					<SheetContent>
+						<SheetHeader>
+							<SheetTitle>Add New Server</SheetTitle>
+						</SheetHeader>
+						<Form {...form}>
+							<form
+								onSubmit={form.handleSubmit(onSubmit)}
+								className='space-y-4 mt-4'
+							>
+								<FormField
+									control={form.control}
+									name='name'
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Server Name</FormLabel>
+											<FormControl>
+												<Input placeholder='Enter server name' {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button type='submit'>Create Server</Button>
+							</form>
+						</Form>
+					</SheetContent>
+				</Sheet>
 			</div>
-		</main>
+
+			<Table>
+				<TableHeader>
+					<TableRow>
+						<TableHead>Name</TableHead>
+						<TableHead>Status</TableHead>
+						<TableHead>CPU</TableHead>
+						<TableHead>Memory</TableHead>
+						<TableHead>Disk</TableHead>
+						<TableHead>Actions</TableHead>
+					</TableRow>
+				</TableHeader>
+				<TableBody>
+					{servers?.map((server) => (
+						<TableRow key={server.id}>
+							<TableCell className='font-medium'>{server.name}</TableCell>
+							<TableCell>{randomFromStateMap()}</TableCell>
+							<TableCell>
+								<div className='flex items-center gap-2'>
+									<span>72%</span>
+									<GaugeIcon className='w-4 h-4 text-muted-foreground' />
+								</div>
+							</TableCell>
+							<TableCell>
+								<div className='flex items-center gap-2'>
+									<span>8.2 GB / 16 GB</span>
+									<MemoryStickIcon className='w-4 h-4 text-muted-foreground' />
+								</div>
+							</TableCell>
+							<TableCell>
+								<div className='flex items-center gap-2'>
+									<span>512 GB / 1 TB</span>
+									<HardDriveIcon className='w-4 h-4 text-muted-foreground' />
+								</div>
+							</TableCell>
+							<TableCell>
+								<Link
+									href={`/admin/servers/${server.id}`}
+									className='text-primary hover:underline'
+								>
+									View Details
+								</Link>
+							</TableCell>
+						</TableRow>
+					))}
+				</TableBody>
+			</Table>
+		</div>
 	)
 }

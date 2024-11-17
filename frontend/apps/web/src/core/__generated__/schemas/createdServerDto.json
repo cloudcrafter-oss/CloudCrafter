@@ -1,0 +1,1 @@
+{"required":["id"],"type":"object","properties":{"id":{"type":"string","format":"uuid"}},"x-readme-ref-name":"CreatedServerDto"}
