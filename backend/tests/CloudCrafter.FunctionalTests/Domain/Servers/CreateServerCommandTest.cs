@@ -41,13 +41,11 @@ public class CreateServerCommandTest : BaseTestFixture
     [Test]
     public async Task ShouldBeAbleToCreateServer()
     {
-        Command = new CreateServerCommand.Command("My new server");
-
         await RunAsAdministratorAsync();
 
         (await CountAsync<Server>()).Should().Be(0);
 
-        var result = await SendAsync(Command);
+        var result = await SendAsync(new CreateServerCommand.Command("My new server"));
 
         result.Should().NotBeNull();
 
@@ -58,6 +56,6 @@ public class CreateServerCommandTest : BaseTestFixture
         var server = await FindAsync<Server>(result.Id);
 
         server.Should().NotBeNull();
-        server!.Name.Should().Be(Command.Name);
+        server!.Name.Should().Be("My new server");
     }
 }

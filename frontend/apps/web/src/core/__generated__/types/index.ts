@@ -48,6 +48,7 @@ export type { ProjectEnvironmentEnhancedDto } from "./ProjectEnvironmentEnhanced
 export type { ProviderOverviewDto } from "./ProviderOverviewDto.ts";
 export type { ServerDetailDto } from "./ServerDetailDto.ts";
 export type { ServerDto } from "./ServerDto.ts";
+export type { ServerPingDto } from "./ServerPingDto.ts";
 export type { SimpleDeploymentDto } from "./SimpleDeploymentDto.ts";
 export type { SimpleGithubProviderDto } from "./SimpleGithubProviderDto.ts";
 export type { SortDirection } from "./SortDirection.ts";

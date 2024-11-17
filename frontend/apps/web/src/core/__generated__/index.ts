@@ -95,6 +95,7 @@ export type { ProjectEnvironmentEnhancedDto } from "./types/ProjectEnvironmentEn
 export type { ProviderOverviewDto } from "./types/ProviderOverviewDto.ts";
 export type { ServerDetailDto } from "./types/ServerDetailDto.ts";
 export type { ServerDto } from "./types/ServerDto.ts";
+export type { ServerPingDto } from "./types/ServerPingDto.ts";
 export type { SimpleDeploymentDto } from "./types/SimpleDeploymentDto.ts";
 export type { SimpleGithubProviderDto } from "./types/SimpleGithubProviderDto.ts";
 export type { SortDirection } from "./types/SortDirection.ts";
@@ -239,6 +240,7 @@ export { projectEnvironmentEnhancedDtoSchema } from "./zod/projectEnvironmentEnh
 export { providerOverviewDtoSchema } from "./zod/providerOverviewDtoSchema.ts";
 export { serverDetailDtoSchema } from "./zod/serverDetailDtoSchema.ts";
 export { serverDtoSchema } from "./zod/serverDtoSchema.ts";
+export { serverPingDtoSchema } from "./zod/serverPingDtoSchema.ts";
 export { simpleDeploymentDtoSchema } from "./zod/simpleDeploymentDtoSchema.ts";
 export { simpleGithubProviderDtoSchema } from "./zod/simpleGithubProviderDtoSchema.ts";
 export { sortDirectionSchema } from "./zod/sortDirectionSchema.ts";
