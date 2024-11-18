@@ -1,4 +1,6 @@
 ﻿using CloudCrafter.Core.Commands.Servers;
+using CloudCrafter.Core.Commands.Stacks;
+using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Domain.Server;
 using CloudCrafter.Web.Infrastructure;
 using MediatR;
@@ -10,7 +12,11 @@ public class Servers : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup(this).MapGet(GetServers).MapPost(CreateServer).MapGet(GetServerById, "{id}");
+        app.MapGroup(this)
+            .MapGet(GetServers)
+            .MapPost(CreateServer)
+            .MapGet(GetServerById, "{id}")
+            .MapGet(GetDeploymentsForServer, "{id}/deployments");
     }
 
     public async Task<List<ServerDto>> GetServers(ISender sender)
@@ -34,5 +40,13 @@ public class Servers : EndpointGroupBase
     public Task<CreatedServerDto> CreateServer(ISender sender, CreateServerCommand.Command command)
     {
         return sender.Send(command);
+    }
+
+    public async Task<List<SimpleDeploymentDto>> GetDeploymentsForServer(
+        [FromRoute] Guid id,
+        ISender sender
+    )
+    {
+        return await sender.Send(new GetServerSimpleDeployments.Query(id));
     }
 }

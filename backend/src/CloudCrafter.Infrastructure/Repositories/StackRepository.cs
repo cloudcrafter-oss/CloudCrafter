@@ -1,5 +1,7 @@
-﻿using CloudCrafter.Core.Common.Interfaces;
+﻿using Ardalis.SharedKernel;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Events.DomainEvents;
+using CloudCrafter.Core.Interfaces.Domain.Stacks.Filters;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Common;
 using CloudCrafter.Domain.Domain.Application.Services;
@@ -87,10 +89,18 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
 
     public async Task<Guid> CreateDeployment(Guid stackId)
     {
+        var stack = await GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw new ArgumentNullException("Stack not found");
+        }
+
         var deployment = new Deployment
         {
             Id = Guid.NewGuid(),
             StackId = stackId,
+            ServerId = stack.ServerId,
             Logs = new List<DeploymentLog>(),
             State = DeploymentState.Created,
             RecipeYaml = null,
@@ -112,12 +122,29 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             .FirstOrDefaultAsync();
     }
 
-    public Task<List<Deployment>> GetDeployments(Guid stackId)
+    public Task<List<Deployment>> GetDeployments(DeploymentsFilter filter)
     {
-        return context
-            .Deployments.Where(x => x.StackId == stackId)
-            .OrderByDescending(x => x.CreatedAt)
-            .ToListAsync();
+        IQueryable<Deployment> deployments = context.Deployments.Include(x => x.Stack);
+
+        if (filter.StackId.HasValue)
+        {
+            deployments = (
+                from zz in deployments
+                where zz.StackId == filter.StackId.Value
+                select zz
+            );
+        }
+
+        if (filter.ServerId.HasValue)
+        {
+            deployments = (
+                from zz in deployments
+                where zz.Stack != null && zz.Stack.ServerId == filter.ServerId
+                select zz
+            );
+        }
+
+        return deployments.OrderByDescending(x => x.CreatedAt).ToListAsync();
     }
 
     public async Task<List<Stack>> FilterStacks(StackFilter filter)

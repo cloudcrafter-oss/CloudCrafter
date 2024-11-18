@@ -112,7 +112,7 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
 
             logger.LogDebug("Sending recipe to agent...");
             await agentManager.SendRecipeToAgent(
-                _deployment.Stack!.ServerId,
+                _deployment.ServerId,
                 _deployment.Id,
                 recipe.Recipe
             );

@@ -3,6 +3,7 @@ using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Core.Events.DomainEvents;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
+using CloudCrafter.Core.Interfaces.Domain.Stacks.Filters;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Common;
 using CloudCrafter.Domain.Domain.Deployment;
@@ -51,9 +52,9 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
         return repository.CreateDeployment(stackId);
     }
 
-    public async Task<List<SimpleDeploymentDto>> GetDeployments(Guid stackId)
+    public async Task<List<SimpleDeploymentDto>> GetDeployments(DeploymentsFilter filter)
     {
-        var deployments = await repository.GetDeployments(stackId);
+        var deployments = await repository.GetDeployments(filter);
 
         return mapper.Map<List<SimpleDeploymentDto>>(deployments);
     }

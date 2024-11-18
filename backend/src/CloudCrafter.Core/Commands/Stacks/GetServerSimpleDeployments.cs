@@ -7,12 +7,12 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Stacks;
 
-public static class GetStackSimpleDeployments
+public static class GetServerSimpleDeployments
 {
     [Authorize]
-    public record Query(Guid StackId) : IRequest<List<SimpleDeploymentDto>>, IRequireStackAccess;
+    public record Query(Guid ServerId) : IRequest<List<SimpleDeploymentDto>>, IRequireServerAccess;
 
-    public class Handler(IStacksService stacksService)
+    private class Handler(IStacksService stacksService)
         : IRequestHandler<Query, List<SimpleDeploymentDto>>
     {
         public async Task<List<SimpleDeploymentDto>> Handle(
@@ -21,7 +21,7 @@ public static class GetStackSimpleDeployments
         )
         {
             return await stacksService.GetDeployments(
-                new DeploymentsFilter { StackId = request.StackId }
+                new DeploymentsFilter { ServerId = request.ServerId }
             );
         }
     }
