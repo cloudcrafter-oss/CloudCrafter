@@ -54,27 +54,13 @@ public class BackgroundJobFactory(
             context.Jobs.Add(backgroundJob);
             await context.SaveChangesAsync();
 
-            // var hangfireJobId =
-            // client.Enqueue<CloudCrafterJob>(job => job.ExecuteJobAsync(backgroundJob.Id, backgroundJob.Type, null));
-
-            var hangfireJobId = job.ShouldRunOnApiServer
-                ? client.Create<CloudCrafterJob>(
-                    clientJob =>
-                        clientJob.ExecuteJobOnHubServer(backgroundJob.Id, backgroundJob.Type, null),
-                    new CreatedState()
-                )
-                : client.Create<CloudCrafterJob>(
-                    clientJob =>
-                        clientJob.ExecuteBackgroundJobAsync(
-                            backgroundJob.Id,
-                            backgroundJob.Type,
-                            null
-                        ),
-                    new CreatedState()
-                );
+            var hangfireJobId = client.Create<CloudCrafterJob>(
+                clientJob =>
+                    clientJob.ExecuteBackgroundJobAsync(backgroundJob.Id, backgroundJob.Type, null),
+                new CreatedState()
+            );
             backgroundJob.HangfireJobId = hangfireJobId;
 
-            // hangfireJobIdclient.
             await context.SaveChangesAsync();
 
             await transaction.CommitAsync();

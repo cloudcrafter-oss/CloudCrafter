@@ -12,7 +12,6 @@ namespace CloudCrafter.Core.Jobs.Servers;
 public class ConnectivityCheckBackgroundJob : IJob
 {
     public BackgroundJobType Type => BackgroundJobType.ServerConnectivityCheck;
-    public bool ShouldRunOnApiServer => false;
 
     public Task HandleEntity(IApplicationDbContext context, string jobId)
     {

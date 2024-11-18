@@ -26,7 +26,6 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
     public Guid DeploymentId { get; set; }
 
     public BackgroundJobType Type => BackgroundJobType.StackDeployment;
-    public bool ShouldRunOnApiServer => false;
 
     public async Task HandleEntity(IApplicationDbContext context, string jobId)
     {

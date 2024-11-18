@@ -6,6 +6,7 @@ using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Core.Utils;
 using CloudCrafter.Domain.Domain.Server;
+using CloudCrafter.Domain.Domain.Server.Filter;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -73,6 +74,7 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
             .MemoryUsagePercentage;
         server.PingHealthData.TotalMemoryBytes = data.HostInfo.SystemInfo.TotalMemoryBytes;
         server.PingHealthData.OsInfo = data.HostInfo.OsInfo;
+        server.PingHealthData.SetStatus(ServerStatusValue.Connected);
 
         await context.SaveChangesAsync();
     }
@@ -97,6 +99,30 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
         await context.SaveChangesAsync();
 
         return server;
+    }
+
+    public async Task<List<Server>> FilterServers(ServerFilter filter)
+    {
+        IQueryable<Server> servers = GetBaseQuery();
+
+        if (filter.HealthCheckAgeOlderThan.HasValue)
+        {
+            servers = (
+                from zz in servers
+                where
+                    !zz.PingHealthData.LastPingAt.HasValue
+                    || zz.PingHealthData.LastPingAt.Value
+                        < DateTime.UtcNow - filter.HealthCheckAgeOlderThan.Value
+                select zz
+            );
+        }
+
+        return await servers.ToListAsync();
+    }
+
+    public Task SaveChangesAsync()
+    {
+        return context.SaveChangesAsync();
     }
 
     private IQueryable<Server> GetBaseQuery()

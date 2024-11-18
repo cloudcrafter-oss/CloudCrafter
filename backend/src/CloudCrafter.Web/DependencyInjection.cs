@@ -83,29 +83,29 @@ public static class DependencyInjection
             //     return info.getschemareferenceid
             // };
 
-            options.AddSchemaTransformer(
-                (schema, context, ct) =>
-                {
-                    if (schema.Type == "object" && schema.Properties != null)
-                    {
-                        var allPropertiesNullable = schema.Properties.Values.All(prop =>
-                            prop.Nullable == true
-                        );
-
-                        if (allPropertiesNullable)
-                        {
-                            // Prevent the "GitSettings" case
-                            // This was when all properties were nullable
-                            // But the object itself default value was "null".
-                            // Zod had some issues with this for frontend generation
-                            schema.Default = null;
-                            schema.Nullable = false;
-                        }
-                    }
-
-                    return Task.CompletedTask;
-                }
-            );
+            // options.AddSchemaTransformer(
+            //     (schema, context, ct) =>
+            //     {
+            //         if (schema.Type == "object" && schema.Properties != null)
+            //         {
+            //             var allPropertiesNullable = schema.Properties.Values.All(prop =>
+            //                 prop.Nullable == true
+            //             );
+            //
+            //             if (allPropertiesNullable)
+            //             {
+            //                 // Prevent the "GitSettings" case
+            //                 // This was when all properties were nullable
+            //                 // But the object itself default value was "null".
+            //                 // Zod had some issues with this for frontend generation
+            //                 schema.Default = null;
+            //                 schema.Nullable = false;
+            //             }
+            //         }
+            //
+            //         return Task.CompletedTask;
+            //     }
+            // );
 
             options.CreateSchemaReferenceId = (JsonTypeInfo info) =>
             {

@@ -49,6 +49,7 @@ export { providerOverviewDtoSchema } from "./providerOverviewDtoSchema.ts";
 export { serverDetailDtoSchema } from "./serverDetailDtoSchema.ts";
 export { serverDtoSchema } from "./serverDtoSchema.ts";
 export { serverPingDtoSchema } from "./serverPingDtoSchema.ts";
+export { serverStatusDtoValueSchema } from "./serverStatusDtoValueSchema.ts";
 export { simpleDeploymentDtoSchema } from "./simpleDeploymentDtoSchema.ts";
 export { simpleGithubProviderDtoSchema } from "./simpleGithubProviderDtoSchema.ts";
 export { sortDirectionSchema } from "./sortDirectionSchema.ts";

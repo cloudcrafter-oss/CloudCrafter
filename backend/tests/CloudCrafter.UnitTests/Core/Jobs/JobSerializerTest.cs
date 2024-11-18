@@ -150,7 +150,6 @@ public class DummyTestJob : IJob
     public string Name { get; set; } = null!;
 
     public BackgroundJobType Type => BackgroundJobType.StackDeployment;
-    public bool ShouldRunOnApiServer => false;
 
     public Task HandleEntity(IApplicationDbContext context, string jobId)
     {
