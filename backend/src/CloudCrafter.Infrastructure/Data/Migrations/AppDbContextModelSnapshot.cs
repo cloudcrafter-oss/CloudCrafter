@@ -17,7 +17,7 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "9.0.0-rc.2.24474.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -101,6 +101,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
                     b.Property<string>("RecipeYaml")
                         .HasColumnType("text");
+
+                    b.Property<Guid>("ServerId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("StackId")
                         .HasColumnType("uuid");
@@ -655,7 +658,7 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                             b1.Property<Guid>("BackgroundJobId")
                                 .HasColumnType("uuid");
 
-                            b1.Property<int>("Id")
+                            b1.Property<int>("__synthesizedOrdinal")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("integer");
 
@@ -673,7 +676,7 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                             b1.Property<DateTime>("Timestamp")
                                 .HasColumnType("timestamp with time zone");
 
-                            b1.HasKey("BackgroundJobId", "Id");
+                            b1.HasKey("BackgroundJobId", "__synthesizedOrdinal");
 
                             b1.ToTable("Jobs");
 
@@ -701,7 +704,7 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                             b1.Property<Guid>("DeploymentId")
                                 .HasColumnType("uuid");
 
-                            b1.Property<int>("Id")
+                            b1.Property<int>("__synthesizedOrdinal")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("integer");
 
@@ -718,7 +721,7 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                                 .IsRequired()
                                 .HasColumnType("text");
 
-                            b1.HasKey("DeploymentId", "Id");
+                            b1.HasKey("DeploymentId", "__synthesizedOrdinal");
 
                             b1.ToTable("Deployments");
 
@@ -776,6 +779,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
                             b1.Property<string>("OsInfo")
                                 .HasColumnType("text");
+
+                            b1.Property<int>("Status")
+                                .HasColumnType("integer");
 
                             b1.Property<int?>("TotalCpuCount")
                                 .HasColumnType("integer");

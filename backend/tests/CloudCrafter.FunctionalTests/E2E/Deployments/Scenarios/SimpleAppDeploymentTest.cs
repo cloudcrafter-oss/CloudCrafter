@@ -54,6 +54,7 @@ public class SimpleAppDeploymentTest : BaseTestFixture
         {
             Id = Guid.NewGuid(),
             StackId = Stack.Id,
+            ServerId = Stack.ServerId,
             State = DeploymentState.Created,
             RecipeYaml = null,
             CreatedAt = DateTime.UtcNow,

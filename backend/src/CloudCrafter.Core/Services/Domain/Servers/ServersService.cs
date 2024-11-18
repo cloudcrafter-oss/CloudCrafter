@@ -3,6 +3,8 @@ using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Server;
+using CloudCrafter.Domain.Domain.Server.Filter;
+using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.Core.Services.Domain.Servers;
 
@@ -27,5 +29,19 @@ public class ServersService(IServerRepository repository, IMapper mapper) : ISer
     {
         var server = await repository.CreateServer(request.Name);
         return mapper.Map<CreatedServerDto>(server);
+    }
+
+    public async Task MarkServersStateAsUnknownAfterTimespan(TimeSpan fromMinutes)
+    {
+        var servers = await repository.FilterServers(
+            new ServerFilter { HealthCheckAgeOlderThan = fromMinutes }
+        );
+
+        foreach (var server in servers)
+        {
+            server.PingHealthData.SetStatus(ServerStatusValue.Unknown);
+        }
+
+        await repository.SaveChangesAsync();
     }
 }

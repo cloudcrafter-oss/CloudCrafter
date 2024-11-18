@@ -11,4 +11,4 @@ export type GitSettings = {
      * @type string
     */
     gitBranch?: string | null;
-};
+} | null;

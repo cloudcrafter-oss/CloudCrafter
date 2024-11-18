@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Domain.Domain.Server;
+using CloudCrafter.Domain.Domain.Server.Filter;
 using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.Core.Interfaces.Repositories;
@@ -12,4 +13,7 @@ public interface IServerRepository
     Task<bool> HasAgent(Guid serverId, string serverKey);
     Task StoreServerInfo(Guid serverId, HealthCheckCommandArgs data);
     Task<Server> CreateServer(string requestName);
+    Task<List<Server>> FilterServers(ServerFilter filter);
+
+    Task SaveChangesAsync();
 }

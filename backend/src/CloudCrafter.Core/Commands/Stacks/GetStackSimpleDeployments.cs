@@ -1,6 +1,7 @@
 ﻿using CloudCrafter.Core.Common.Interfaces.Access;
 using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
+using CloudCrafter.Core.Interfaces.Domain.Stacks.Filters;
 using CloudCrafter.Domain.Domain.Deployment;
 using MediatR;
 
@@ -19,7 +20,9 @@ public static class GetStackSimpleDeployments
             CancellationToken cancellationToken
         )
         {
-            return await stacksService.GetDeployments(request.StackId);
+            return await stacksService.GetDeployments(
+                new DeploymentsFilter { StackId = request.StackId }
+            );
         }
     }
 }

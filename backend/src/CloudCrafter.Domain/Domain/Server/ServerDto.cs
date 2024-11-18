@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Text.Json.Serialization;
+using AutoMapper;
 using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.Domain.Domain.Server;
@@ -32,6 +33,7 @@ public class ServerPingDto
     public int? TotalCpuCount { get; set; }
     public double? MemoryUsagePercentage { get; set; }
     public long? TotalMemoryBytes { get; set; }
+    public ServerStatusDtoValue Status { get; set; }
 
     private class Mapping : Profile
     {
@@ -41,4 +43,12 @@ public class ServerPingDto
                 .ForMember(x => x.LastPingReceivedAt, opt => opt.MapFrom(src => src.LastPingAt));
         }
     }
+}
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum ServerStatusDtoValue
+{
+    Unknown,
+    Connected,
+    Disconnected,
 }

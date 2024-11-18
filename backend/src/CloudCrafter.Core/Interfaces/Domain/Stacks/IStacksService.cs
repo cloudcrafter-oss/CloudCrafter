@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Commands.Stacks;
+using CloudCrafter.Core.Interfaces.Domain.Stacks.Filters;
 using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Domain.Stack;
 
@@ -12,7 +13,7 @@ public interface IStacksService
     Task<StackDetailDto?> GetStackDetail(Guid id);
 
     Task<Guid> CreateDeployment(Guid stackId);
-    Task<List<SimpleDeploymentDto>> GetDeployments(Guid stackId);
+    Task<List<SimpleDeploymentDto>> GetDeployments(DeploymentsFilter filter);
     Task HandleHealthChecks(Guid serverId, ContainerHealthCheckArgs args);
     Task<StackDetailDto?> UpdateStack(UpdateStackCommand.Command request);
 

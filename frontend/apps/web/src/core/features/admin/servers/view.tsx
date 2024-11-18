@@ -1,5 +1,7 @@
 'use client'
+import { DeploymentStatusBadge } from '@/src/components/stack-detail/deployments/deployment-list'
 import type { ServerDetailDto } from '@/src/core/__generated__'
+import { useGetDeploymentsForServerHook } from '@/src/core/__generated__/hooks/useGetDeploymentsForServerHook'
 import { Button } from '@ui/components/ui/button.tsx'
 import {
 	Card,
@@ -11,17 +13,14 @@ import {
 } from '@ui/components/ui/card.tsx'
 import { Input } from '@ui/components/ui/input.tsx'
 import { Label } from '@ui/components/ui/label.tsx'
-import {
-	CopyIcon,
-	DatabaseIcon,
-	PackageIcon,
-	RefreshCwIcon,
-	ServerIcon,
-} from 'lucide-react'
+import { formatDistanceToNow } from 'date-fns'
+import { CopyIcon, PackageIcon, RefreshCwIcon } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
 
 export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
+	const { data: deployments } = useGetDeploymentsForServerHook(server.id)
+
 	return (
 		<div className='container mx-auto px-4 py-12 md:px-6 lg:px-8 grid md:grid-cols-2 gap-6'>
 			<div>
@@ -104,39 +103,30 @@ export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
 					</CardHeader>
 					<CardContent>
 						<div className='grid gap-4'>
-							<div className='grid grid-cols-[40px_1fr] items-center gap-4'>
-								<div className='flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground'>
-									<PackageIcon className='h-5 w-5' />
-								</div>
-								<div>
-									<div className='font-medium'>Acme Web App</div>
-									<div className='text-sm text-muted-foreground'>
-										Deployed 2 hours ago
+							{deployments?.map((deployment) => (
+								<div
+									key={deployment.id}
+									className='grid grid-cols-[40px_1fr] items-center gap-4'
+								>
+									<div className='flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground'>
+										<PackageIcon className='h-5 w-5' />
+									</div>
+									<div>
+										<div className='font-medium'>{deployment.stackName}</div>
+										<div className='text-sm text-muted-foreground'>
+											<span
+												title={new Date(deployment.createdAt).toLocaleString()}
+											>
+												Deployed{' '}
+												{formatDistanceToNow(new Date(deployment.createdAt), {
+													addSuffix: true,
+												})}
+											</span>
+										</div>
+										<DeploymentStatusBadge state={deployment.state} />
 									</div>
 								</div>
-							</div>
-							<div className='grid grid-cols-[40px_1fr] items-center gap-4'>
-								<div className='flex h-10 w-10 items-center justify-center rounded-full bg-accent text-accent-foreground'>
-									<DatabaseIcon className='h-5 w-5' />
-								</div>
-								<div>
-									<div className='font-medium'>Acme Database</div>
-									<div className='text-sm text-muted-foreground'>
-										Deployed 4 hours ago
-									</div>
-								</div>
-							</div>
-							<div className='grid grid-cols-[40px_1fr] items-center gap-4'>
-								<div className='flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground'>
-									<ServerIcon className='h-5 w-5' />
-								</div>
-								<div>
-									<div className='font-medium'>Acme API</div>
-									<div className='text-sm text-muted-foreground'>
-										Deployed 6 hours ago
-									</div>
-								</div>
-							</div>
+							))}
 						</div>
 					</CardContent>
 					<CardFooter>

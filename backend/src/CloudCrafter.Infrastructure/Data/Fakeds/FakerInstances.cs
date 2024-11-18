@@ -72,6 +72,7 @@ public static class FakerInstances
             .RuleFor(x => x.Logs, f => new List<DeploymentLog>())
             .RuleFor(x => x.State, DeploymentState.Created)
             .RuleFor(x => x.RecipeYaml, f => null)
+            .RuleFor(x => x.ServerId, f => Stack.ServerId)
             .RuleFor(x => x.CreatedBy, f => null)
             .RuleFor(x => x.LastModifiedBy, f => null)
             .RuleFor(x => x.StackId, Stack.Id)

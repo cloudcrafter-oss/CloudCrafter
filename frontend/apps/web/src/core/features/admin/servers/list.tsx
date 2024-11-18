@@ -23,17 +23,13 @@ import {
 	TableHeader,
 	TableRow,
 } from '@ui/components/ui/table'
-import {
-	CircleIcon,
-	GaugeIcon,
-	HardDriveIcon,
-	MemoryStickIcon,
-} from 'lucide-react'
+import { CircleIcon } from 'lucide-react'
 import { PlusIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import type { serverStatusDtoValueSchema } from '@/src/core/__generated__/zod/serverStatusDtoValueSchema'
 import { useQueryClient } from '@tanstack/react-query'
 import {
 	Form,
@@ -43,25 +39,29 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@ui/components/ui/form'
+import { formatDistanceToNow } from 'date-fns'
 import type { z } from 'zod'
 
-const StateMap = {
-	Offline: (
-		<div className='flex items-center gap-2 text-sm text-muted-foreground'>
-			<CircleIcon className='w-2 h-2 fill-red-500' />
-			<span>Offline</span>
-		</div>
-	),
-	Maintenance: (
-		<div className='flex items-center gap-2 text-sm text-muted-foreground'>
-			<CircleIcon className='w-2 h-2 fill-yellow-500' />
-			<span>Maintenance</span>
-		</div>
-	),
-	Online: (
+const StateMap: Record<
+	z.infer<typeof serverStatusDtoValueSchema>,
+	JSX.Element
+> = {
+	Connected: (
 		<div className='flex items-center gap-2 text-sm text-muted-foreground'>
 			<CircleIcon className='w-2 h-2 fill-green-500' />
-			<span>Online</span>
+			<span>Connected</span>
+		</div>
+	),
+	Disconnected: (
+		<div className='flex items-center gap-2 text-sm text-muted-foreground'>
+			<CircleIcon className='w-2 h-2 fill-red-500' />
+			<span>Disconnected</span>
+		</div>
+	),
+	Unknown: (
+		<div className='flex items-center gap-2 text-sm text-muted-foreground'>
+			<CircleIcon className='w-2 h-2 fill-yellow-500' />
+			<span>Unknown</span>
 		</div>
 	),
 }
@@ -94,12 +94,6 @@ export const ServersList = () => {
 
 	const onSubmit = (data: z.infer<typeof formSchema>) => {
 		mutation.mutate({ data })
-	}
-
-	const randomFromStateMap = () => {
-		const keys = Object.keys(StateMap)
-		// @ts-expect-error Todo: fix this
-		return StateMap[keys[Math.floor(Math.random() * keys.length)]]
 	}
 
 	return (
@@ -147,9 +141,8 @@ export const ServersList = () => {
 					<TableRow>
 						<TableHead>Name</TableHead>
 						<TableHead>Status</TableHead>
-						<TableHead>CPU</TableHead>
-						<TableHead>Memory</TableHead>
-						<TableHead>Disk</TableHead>
+						<TableHead>Last Checkin</TableHead>
+						<TableHead>OS</TableHead>
 						<TableHead>Actions</TableHead>
 					</TableRow>
 				</TableHeader>
@@ -157,23 +150,28 @@ export const ServersList = () => {
 					{servers?.map((server) => (
 						<TableRow key={server.id}>
 							<TableCell className='font-medium'>{server.name}</TableCell>
-							<TableCell>{randomFromStateMap()}</TableCell>
+							<TableCell>{StateMap[server.pingData.status]}</TableCell>
 							<TableCell>
-								<div className='flex items-center gap-2'>
-									<span>72%</span>
-									<GaugeIcon className='w-4 h-4 text-muted-foreground' />
-								</div>
+								<span
+									title={
+										server.pingData.lastPingReceivedAt
+											? new Date(
+													server.pingData.lastPingReceivedAt,
+												).toLocaleString()
+											: ''
+									}
+								>
+									{server.pingData.lastPingReceivedAt
+										? formatDistanceToNow(
+												new Date(server.pingData.lastPingReceivedAt),
+												{ addSuffix: true },
+											)
+										: 'Never'}
+								</span>
 							</TableCell>
 							<TableCell>
 								<div className='flex items-center gap-2'>
-									<span>8.2 GB / 16 GB</span>
-									<MemoryStickIcon className='w-4 h-4 text-muted-foreground' />
-								</div>
-							</TableCell>
-							<TableCell>
-								<div className='flex items-center gap-2'>
-									<span>512 GB / 1 TB</span>
-									<HardDriveIcon className='w-4 h-4 text-muted-foreground' />
+									<span>{server.pingData.osInfo}</span>
 								</div>
 							</TableCell>
 							<TableCell>

@@ -52,7 +52,9 @@ export const DeploymentList = ({
 	)
 }
 
-const DeploymentStatusBadge = ({ state }: { state: DeploymentStatusDto }) => {
+export const DeploymentStatusBadge = ({
+	state,
+}: { state: DeploymentStatusDto }) => {
 	return (
 		<span
 			className={`px-2 py-1 rounded-full text-xs font-medium ${

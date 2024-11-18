@@ -1,4 +1,6 @@
-export type ServerPingDto = {
+import type { ServerStatusDtoValue } from "./ServerStatusDtoValue.ts";
+
+ export type ServerPingDto = {
     /**
      * @type string, date-time
     */
@@ -27,4 +29,5 @@ export type ServerPingDto = {
      * @type integer, int64
     */
     totalMemoryBytes?: number | null;
+    status: ServerStatusDtoValue;
 };
