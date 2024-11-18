@@ -3,6 +3,7 @@ export { createServer } from "./createServer.ts";
 export { deleteProject } from "./deleteProject.ts";
 export { dispatchStackDeployment } from "./dispatchStackDeployment.ts";
 export { getDeploymentLogs } from "./getDeploymentLogs.ts";
+export { getDeploymentsForServer } from "./getDeploymentsForServer.ts";
 export { getDeploymentsForStack } from "./getDeploymentsForStack.ts";
 export { getFilterableFields } from "./getFilterableFields.ts";
 export { getProject } from "./getProject.ts";

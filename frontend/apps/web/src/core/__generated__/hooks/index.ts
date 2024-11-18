@@ -5,6 +5,9 @@ export type { DispatchStackDeploymentMutationKey } from "./useDispatchStackDeplo
 export type { GetDeploymentLogsQueryKey } from "./useGetDeploymentLogsHook.ts";
 export type { GetDeploymentLogsInfiniteQueryKey } from "./useGetDeploymentLogsInfiniteHook.ts";
 export type { GetDeploymentLogsSuspenseQueryKey } from "./useGetDeploymentLogsSuspenseHook.ts";
+export type { GetDeploymentsForServerQueryKey } from "./useGetDeploymentsForServerHook.ts";
+export type { GetDeploymentsForServerInfiniteQueryKey } from "./useGetDeploymentsForServerInfiniteHook.ts";
+export type { GetDeploymentsForServerSuspenseQueryKey } from "./useGetDeploymentsForServerSuspenseHook.ts";
 export type { GetDeploymentsForStackQueryKey } from "./useGetDeploymentsForStackHook.ts";
 export type { GetDeploymentsForStackInfiniteQueryKey } from "./useGetDeploymentsForStackInfiniteHook.ts";
 export type { GetDeploymentsForStackSuspenseQueryKey } from "./useGetDeploymentsForStackSuspenseHook.ts";
@@ -52,6 +55,9 @@ export { dispatchStackDeploymentMutationKey, useDispatchStackDeploymentHook } fr
 export { getDeploymentLogsQueryKey, getDeploymentLogsQueryOptionsHook, useGetDeploymentLogsHook } from "./useGetDeploymentLogsHook.ts";
 export { getDeploymentLogsInfiniteQueryKey, getDeploymentLogsInfiniteQueryOptionsHook, useGetDeploymentLogsInfiniteHook } from "./useGetDeploymentLogsInfiniteHook.ts";
 export { getDeploymentLogsSuspenseQueryKey, getDeploymentLogsSuspenseQueryOptionsHook, useGetDeploymentLogsSuspenseHook } from "./useGetDeploymentLogsSuspenseHook.ts";
+export { getDeploymentsForServerQueryKey, getDeploymentsForServerQueryOptionsHook, useGetDeploymentsForServerHook } from "./useGetDeploymentsForServerHook.ts";
+export { getDeploymentsForServerInfiniteQueryKey, getDeploymentsForServerInfiniteQueryOptionsHook, useGetDeploymentsForServerInfiniteHook } from "./useGetDeploymentsForServerInfiniteHook.ts";
+export { getDeploymentsForServerSuspenseQueryKey, getDeploymentsForServerSuspenseQueryOptionsHook, useGetDeploymentsForServerSuspenseHook } from "./useGetDeploymentsForServerSuspenseHook.ts";
 export { getDeploymentsForStackQueryKey, getDeploymentsForStackQueryOptionsHook, useGetDeploymentsForStackHook } from "./useGetDeploymentsForStackHook.ts";
 export { getDeploymentsForStackInfiniteQueryKey, getDeploymentsForStackInfiniteQueryOptionsHook, useGetDeploymentsForStackInfiniteHook } from "./useGetDeploymentsForStackInfiniteHook.ts";
 export { getDeploymentsForStackSuspenseQueryKey, getDeploymentsForStackSuspenseQueryOptionsHook, useGetDeploymentsForStackSuspenseHook } from "./useGetDeploymentsForStackSuspenseHook.ts";

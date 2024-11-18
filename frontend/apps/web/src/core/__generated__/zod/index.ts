@@ -19,6 +19,7 @@ export { environmentDtoSchema } from "./environmentDtoSchema.ts";
 export { filterCritereaSchema } from "./filterCritereaSchema.ts";
 export { filterOperatorOptionSchema } from "./filterOperatorOptionSchema.ts";
 export { getDeploymentLogsPathParamsSchema, getDeploymentLogs200Schema, getDeploymentLogsQueryResponseSchema } from "./getDeploymentLogsSchema.ts";
+export { getDeploymentsForServerPathParamsSchema, getDeploymentsForServer200Schema, getDeploymentsForServerQueryResponseSchema } from "./getDeploymentsForServerSchema.ts";
 export { getDeploymentsForStackPathParamsSchema, getDeploymentsForStack200Schema, getDeploymentsForStackQueryResponseSchema } from "./getDeploymentsForStackSchema.ts";
 export { getFilterableFields200Schema, getFilterableFieldsQueryResponseSchema } from "./getFilterableFieldsSchema.ts";
 export { getProjectEnvironmentEnhancedPathParamsSchema, getProjectEnvironmentEnhanced200Schema, getProjectEnvironmentEnhanced404Schema, getProjectEnvironmentEnhancedQueryResponseSchema } from "./getProjectEnvironmentEnhancedSchema.ts";

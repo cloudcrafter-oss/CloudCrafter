@@ -19,6 +19,7 @@ export type { EnvironmentDto } from "./EnvironmentDto.ts";
 export type { FilterCriterea } from "./FilterCriterea.ts";
 export type { FilterOperatorOptionEnum, FilterOperatorOption } from "./FilterOperatorOption.ts";
 export type { GetDeploymentLogsPathParams, GetDeploymentLogs200, GetDeploymentLogsQueryResponse, GetDeploymentLogsQuery } from "./GetDeploymentLogs.ts";
+export type { GetDeploymentsForServerPathParams, GetDeploymentsForServer200, GetDeploymentsForServerQueryResponse, GetDeploymentsForServerQuery } from "./GetDeploymentsForServer.ts";
 export type { GetDeploymentsForStackPathParams, GetDeploymentsForStack200, GetDeploymentsForStackQueryResponse, GetDeploymentsForStackQuery } from "./GetDeploymentsForStack.ts";
 export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilterableFieldsQuery } from "./GetFilterableFields.ts";
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from "./GetProject.ts";
