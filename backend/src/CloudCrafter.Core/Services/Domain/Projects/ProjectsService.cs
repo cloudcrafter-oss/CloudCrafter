@@ -56,16 +56,12 @@ public class ProjectsService(
             return null;
         }
 
-        // TODO: Fix dummy code
-
         var randomBool = new Random().Next(0, 2) == 1;
         DateTime? lastDeploymentDate = null;
         if (randomBool)
         {
             lastDeploymentDate = DateTime.UtcNow.AddDays(-1);
         }
-
-        var randomNumberOfDeployedApplications = new Random().Next(1, 11);
 
         var deployedStacks = mapper.Map<List<DeployedStackDto>>(environment.Stacks);
 
@@ -75,7 +71,7 @@ public class ProjectsService(
             DeployedStacks = deployedStacks,
             EnvironmentCreatedAt = environment.CreatedAt,
             ProjectName = environment.Project.Name,
-            DeployedStackCount = randomNumberOfDeployedApplications,
+            DeployedStackCount = deployedStacks.Count,
             LastDeploymentAt = lastDeploymentDate,
         };
 

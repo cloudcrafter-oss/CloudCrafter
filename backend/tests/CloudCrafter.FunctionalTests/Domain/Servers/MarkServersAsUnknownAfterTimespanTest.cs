@@ -1,5 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Providers;
-using CloudCrafter.Core.Interfaces.Domain.Servers;
+﻿using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
@@ -29,11 +28,37 @@ public class MarkServersAsUnknownAfterTimespanTest : BaseTestFixture
         await AddAsync(server);
 
         // Act
-        await SendAsync(new ValidateProvidersCommand.Command());
+        await SendAsync(new MarkServersAsUnknownAfterTimespan.Command());
 
         // Assert
         var serverAfter = FetchEntity<Server>(f => f.Id == server!.Id)!;
 
         serverAfter.PingHealthData.Status.Should().Be(ServerStatusValue.Unknown);
+    }
+
+    [Test]
+    public async Task ShouldNotSetServersToUnknownStateAfterTimespan()
+    {
+        // Arrange
+        var server = FakerInstances
+            .ServerFaker.RuleFor(
+                x => x.PingHealthData,
+                f => new ServerPingData
+                {
+                    LastPingAt = DateTime.UtcNow.AddMinutes(-2),
+                    Status = ServerStatusValue.Connected,
+                }
+            )
+            .Generate();
+
+        await AddAsync(server);
+
+        // Act
+        await SendAsync(new MarkServersAsUnknownAfterTimespan.Command());
+
+        // Assert
+        var serverAfter = FetchEntity<Server>(f => f.Id == server!.Id)!;
+
+        serverAfter.PingHealthData.Status.Should().Be(ServerStatusValue.Connected);
     }
 }
