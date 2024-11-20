@@ -29,7 +29,6 @@ export type { GetProviders200, GetProvidersQueryResponse, GetProvidersQuery } fr
 export type { GetServerByIdPathParams, GetServerById200, GetServerByIdQueryResponse, GetServerByIdQuery } from "./GetServerById.ts";
 export type { GetServers200, GetServersQueryResponse, GetServersQuery } from "./GetServers.ts";
 export type { GetStackDetailPathParams, GetStackDetail200, GetStackDetail404, GetStackDetailQueryResponse, GetStackDetailQuery } from "./GetStackDetail.ts";
-export type { GetTesterQueryParams, GetTester200, GetTesterQueryResponse, GetTesterQuery } from "./GetTester.ts";
 export type { GetUsers200, GetUsersMutationRequest, GetUsersMutationResponse, GetUsersMutation } from "./GetUsers.ts";
 export type { GitRepositoryCheckResultDto } from "./GitRepositoryCheckResultDto.ts";
 export type { GitSettings } from "./GitSettings.ts";

@@ -35,9 +35,6 @@ export type { GetServersSuspenseQueryKey } from "./hooks/useGetServersSuspenseHo
 export type { GetStackDetailQueryKey } from "./hooks/useGetStackDetailHook.ts";
 export type { GetStackDetailInfiniteQueryKey } from "./hooks/useGetStackDetailInfiniteHook.ts";
 export type { GetStackDetailSuspenseQueryKey } from "./hooks/useGetStackDetailSuspenseHook.ts";
-export type { GetTesterQueryKey } from "./hooks/useGetTesterHook.ts";
-export type { GetTesterInfiniteQueryKey } from "./hooks/useGetTesterInfiniteHook.ts";
-export type { GetTesterSuspenseQueryKey } from "./hooks/useGetTesterSuspenseHook.ts";
 export type { GetUsersMutationKey } from "./hooks/useGetUsersHook.ts";
 export type { PostCreateDeploymentMutationKey } from "./hooks/usePostCreateDeploymentHook.ts";
 export type { PostCreateGithubAppMutationKey } from "./hooks/usePostCreateGithubAppHook.ts";
@@ -82,7 +79,6 @@ export type { GetProviders200, GetProvidersQueryResponse, GetProvidersQuery } fr
 export type { GetServerByIdPathParams, GetServerById200, GetServerByIdQueryResponse, GetServerByIdQuery } from "./types/GetServerById.ts";
 export type { GetServers200, GetServersQueryResponse, GetServersQuery } from "./types/GetServers.ts";
 export type { GetStackDetailPathParams, GetStackDetail200, GetStackDetail404, GetStackDetailQueryResponse, GetStackDetailQuery } from "./types/GetStackDetail.ts";
-export type { GetTesterQueryParams, GetTester200, GetTesterQueryResponse, GetTesterQuery } from "./types/GetTester.ts";
 export type { GetUsers200, GetUsersMutationRequest, GetUsersMutationResponse, GetUsersMutation } from "./types/GetUsers.ts";
 export type { GitRepositoryCheckResultDto } from "./types/GitRepositoryCheckResultDto.ts";
 export type { GitSettings } from "./types/GitSettings.ts";
@@ -136,7 +132,6 @@ export { getProviders } from "./axios-backend/getProviders.ts";
 export { getServerById } from "./axios-backend/getServerById.ts";
 export { getServers } from "./axios-backend/getServers.ts";
 export { getStackDetail } from "./axios-backend/getStackDetail.ts";
-export { getTester } from "./axios-backend/getTester.ts";
 export { getUsers } from "./axios-backend/getUsers.ts";
 export { postCreateDeployment } from "./axios-backend/postCreateDeployment.ts";
 export { postCreateGithubApp } from "./axios-backend/postCreateGithubApp.ts";
@@ -184,9 +179,6 @@ export { getServersSuspenseQueryKey, getServersSuspenseQueryOptionsHook, useGetS
 export { getStackDetailQueryKey, getStackDetailQueryOptionsHook, useGetStackDetailHook } from "./hooks/useGetStackDetailHook.ts";
 export { getStackDetailInfiniteQueryKey, getStackDetailInfiniteQueryOptionsHook, useGetStackDetailInfiniteHook } from "./hooks/useGetStackDetailInfiniteHook.ts";
 export { getStackDetailSuspenseQueryKey, getStackDetailSuspenseQueryOptionsHook, useGetStackDetailSuspenseHook } from "./hooks/useGetStackDetailSuspenseHook.ts";
-export { getTesterQueryKey, getTesterQueryOptionsHook, useGetTesterHook } from "./hooks/useGetTesterHook.ts";
-export { getTesterInfiniteQueryKey, getTesterInfiniteQueryOptionsHook, useGetTesterInfiniteHook } from "./hooks/useGetTesterInfiniteHook.ts";
-export { getTesterSuspenseQueryKey, getTesterSuspenseQueryOptionsHook, useGetTesterSuspenseHook } from "./hooks/useGetTesterSuspenseHook.ts";
 export { getUsersMutationKey, useGetUsersHook } from "./hooks/useGetUsersHook.ts";
 export { postCreateDeploymentMutationKey, usePostCreateDeploymentHook } from "./hooks/usePostCreateDeploymentHook.ts";
 export { postCreateGithubAppMutationKey, usePostCreateGithubAppHook } from "./hooks/usePostCreateGithubAppHook.ts";
@@ -238,7 +230,6 @@ export { getProviders200Schema, getProvidersQueryResponseSchema } from "./zod/ge
 export { getServerByIdPathParamsSchema, getServerById200Schema, getServerByIdQueryResponseSchema } from "./zod/getServerByIdSchema.ts";
 export { getServers200Schema, getServersQueryResponseSchema } from "./zod/getServersSchema.ts";
 export { getStackDetailPathParamsSchema, getStackDetail200Schema, getStackDetail404Schema, getStackDetailQueryResponseSchema } from "./zod/getStackDetailSchema.ts";
-export { getTesterQueryParamsSchema, getTester200Schema, getTesterQueryResponseSchema } from "./zod/getTesterSchema.ts";
 export { getUsers200Schema, getUsersMutationRequestSchema, getUsersMutationResponseSchema } from "./zod/getUsersSchema.ts";
 export { gitRepositoryCheckResultDtoSchema } from "./zod/gitRepositoryCheckResultDtoSchema.ts";
 export { gitSettingsSchema } from "./zod/gitSettingsSchema.ts";

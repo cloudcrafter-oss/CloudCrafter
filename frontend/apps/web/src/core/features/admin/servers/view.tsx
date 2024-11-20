@@ -117,7 +117,12 @@ export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
 										<PackageIcon className='h-5 w-5' />
 									</div>
 									<div>
-										<div className='font-medium'>{deployment.stackName}</div>
+										<Link
+											href={`/admin/projects/${deployment.projectId}/${deployment.environmentId}/stack/${deployment.stackId}`}
+											className='font-medium'
+										>
+											{deployment.stackName}
+										</Link>
 										<div className='text-sm text-muted-foreground'>
 											<span
 												title={new Date(deployment.createdAt).toLocaleString()}

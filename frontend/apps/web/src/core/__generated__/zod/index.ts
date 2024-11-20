@@ -29,7 +29,6 @@ export { getProviders200Schema, getProvidersQueryResponseSchema } from "./getPro
 export { getServerByIdPathParamsSchema, getServerById200Schema, getServerByIdQueryResponseSchema } from "./getServerByIdSchema.ts";
 export { getServers200Schema, getServersQueryResponseSchema } from "./getServersSchema.ts";
 export { getStackDetailPathParamsSchema, getStackDetail200Schema, getStackDetail404Schema, getStackDetailQueryResponseSchema } from "./getStackDetailSchema.ts";
-export { getTesterQueryParamsSchema, getTester200Schema, getTesterQueryResponseSchema } from "./getTesterSchema.ts";
 export { getUsers200Schema, getUsersMutationRequestSchema, getUsersMutationResponseSchema } from "./getUsersSchema.ts";
 export { gitRepositoryCheckResultDtoSchema } from "./gitRepositoryCheckResultDtoSchema.ts";
 export { gitSettingsSchema } from "./gitSettingsSchema.ts";
