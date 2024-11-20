@@ -1,4 +1,6 @@
 ﻿using CloudCrafter.Core.Commands.Stacks;
+using CloudCrafter.Domain.Common.Pagination;
+using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using CloudCrafter.TestUtilities.DomainHelpers;
 using FluentAssertions;
@@ -14,7 +16,7 @@ public class GetServerSimpleDeploymentsTest : BaseTestFixture
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
         Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await SendAsync(new GetServerSimpleDeployments.Query(Guid.NewGuid()))
+            async () => await SendAsync(new GetServerSimpleDeployments.Query(Guid.NewGuid(), new()))
         );
     }
 
@@ -26,7 +28,7 @@ public class GetServerSimpleDeploymentsTest : BaseTestFixture
 
         var serverId = Guid.NewGuid();
         var ex = Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await SendAsync(new GetServerSimpleDeployments.Query(serverId))
+            async () => await SendAsync(new GetServerSimpleDeployments.Query(serverId, new PaginatedRequest<SimpleDeploymentDto>()))
         );
 
         ex.Message.Should().Be($"User does not have access to server {serverId}");
@@ -39,8 +41,8 @@ public class GetServerSimpleDeploymentsTest : BaseTestFixture
 
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
-        var result = await SendAsync(new GetServerSimpleDeployments.Query(server.Id));
+        var result = await SendAsync(new GetServerSimpleDeployments.Query(server.Id, new PaginatedRequest<SimpleDeploymentDto>()));
 
-        result.Count.Should().Be(0);
+        result.Result.Count.Should().Be(0);
     }
 }

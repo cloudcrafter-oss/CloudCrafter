@@ -13,6 +13,7 @@ export { getProviders } from "./getProviders.ts";
 export { getServerById } from "./getServerById.ts";
 export { getServers } from "./getServers.ts";
 export { getStackDetail } from "./getStackDetail.ts";
+export { getTester } from "./getTester.ts";
 export { getUsers } from "./getUsers.ts";
 export { postCreateDeployment } from "./postCreateDeployment.ts";
 export { postCreateGithubApp } from "./postCreateGithubApp.ts";

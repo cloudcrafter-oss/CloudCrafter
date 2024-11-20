@@ -1,4 +1,4 @@
-import type { SimpleDeploymentDto } from "./SimpleDeploymentDto.ts";
+import type { PaginatedListOfSimpleDeploymentDto } from "./PaginatedListOfSimpleDeploymentDto.ts";
 
  export type GetDeploymentsForServerPathParams = {
     /**
@@ -7,15 +7,27 @@ import type { SimpleDeploymentDto } from "./SimpleDeploymentDto.ts";
     id: string;
 };
 
+ export type GetDeploymentsForServerQueryParams = {
+    /**
+     * @type integer | undefined, int32
+    */
+    Page?: number;
+    /**
+     * @type integer | undefined, int32
+    */
+    PageSize?: number;
+};
+
  /**
  * @description OK
 */
-export type GetDeploymentsForServer200 = SimpleDeploymentDto[];
+export type GetDeploymentsForServer200 = PaginatedListOfSimpleDeploymentDto;
 
  export type GetDeploymentsForServerQueryResponse = GetDeploymentsForServer200;
 
  export type GetDeploymentsForServerQuery = {
     Response: GetDeploymentsForServer200;
     PathParams: GetDeploymentsForServerPathParams;
+    QueryParams: GetDeploymentsForServerQueryParams;
     Errors: any;
 };

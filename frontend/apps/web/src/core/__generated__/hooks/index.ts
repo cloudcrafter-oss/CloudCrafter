@@ -35,6 +35,9 @@ export type { GetServersSuspenseQueryKey } from "./useGetServersSuspenseHook.ts"
 export type { GetStackDetailQueryKey } from "./useGetStackDetailHook.ts";
 export type { GetStackDetailInfiniteQueryKey } from "./useGetStackDetailInfiniteHook.ts";
 export type { GetStackDetailSuspenseQueryKey } from "./useGetStackDetailSuspenseHook.ts";
+export type { GetTesterQueryKey } from "./useGetTesterHook.ts";
+export type { GetTesterInfiniteQueryKey } from "./useGetTesterInfiniteHook.ts";
+export type { GetTesterSuspenseQueryKey } from "./useGetTesterSuspenseHook.ts";
 export type { GetUsersMutationKey } from "./useGetUsersHook.ts";
 export type { PostCreateDeploymentMutationKey } from "./usePostCreateDeploymentHook.ts";
 export type { PostCreateGithubAppMutationKey } from "./usePostCreateGithubAppHook.ts";
@@ -85,6 +88,9 @@ export { getServersSuspenseQueryKey, getServersSuspenseQueryOptionsHook, useGetS
 export { getStackDetailQueryKey, getStackDetailQueryOptionsHook, useGetStackDetailHook } from "./useGetStackDetailHook.ts";
 export { getStackDetailInfiniteQueryKey, getStackDetailInfiniteQueryOptionsHook, useGetStackDetailInfiniteHook } from "./useGetStackDetailInfiniteHook.ts";
 export { getStackDetailSuspenseQueryKey, getStackDetailSuspenseQueryOptionsHook, useGetStackDetailSuspenseHook } from "./useGetStackDetailSuspenseHook.ts";
+export { getTesterQueryKey, getTesterQueryOptionsHook, useGetTesterHook } from "./useGetTesterHook.ts";
+export { getTesterInfiniteQueryKey, getTesterInfiniteQueryOptionsHook, useGetTesterInfiniteHook } from "./useGetTesterInfiniteHook.ts";
+export { getTesterSuspenseQueryKey, getTesterSuspenseQueryOptionsHook, useGetTesterSuspenseHook } from "./useGetTesterSuspenseHook.ts";
 export { getUsersMutationKey, useGetUsersHook } from "./useGetUsersHook.ts";
 export { postCreateDeploymentMutationKey, usePostCreateDeploymentHook } from "./usePostCreateDeploymentHook.ts";
 export { postCreateGithubAppMutationKey, usePostCreateGithubAppHook } from "./usePostCreateGithubAppHook.ts";

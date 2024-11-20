@@ -1,29 +1,30 @@
 ﻿using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Core.Commands.Stacks;
+using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Domain.Server;
-using CloudCrafter.Web.Infrastructure;
+using CloudCrafter.Domain.Requests.Filtering;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CloudCrafter.Web.Endpoints;
+namespace CloudCrafter.Web.Controllers;
 
-public class Servers : EndpointGroupBase
+public class ServersController : CloudCrafterController
 {
-    public override void Map(WebApplication app)
-    {
-        app.MapGroup(this)
-            .MapGet(GetServers)
-            .MapPost(CreateServer)
-            .MapGet(GetServerById, "{id}")
-            .MapGet(GetDeploymentsForServer, "{id}/deployments");
-    }
-
+    [HttpGet]
     public async Task<List<ServerDto>> GetServers(ISender sender)
     {
         return await sender.Send(new GetServerList.Query());
     }
+    
+    [HttpPost]
+    public Task<CreatedServerDto> CreateServer(ISender sender, CreateServerCommand.Command command)
+    {
+        return sender.Send(command);
+    }
 
+    
+    [HttpGet("{id}")]
     [ProducesResponseType<ServerDetailDto>(StatusCodes.Status200OK)]
     public async Task<IResult> GetServerById(ISender sender, Guid id)
     {
@@ -36,17 +37,15 @@ public class Servers : EndpointGroupBase
 
         return Results.Ok(result);
     }
-
-    public Task<CreatedServerDto> CreateServer(ISender sender, CreateServerCommand.Command command)
-    {
-        return sender.Send(command);
-    }
-
-    public async Task<List<SimpleDeploymentDto>> GetDeploymentsForServer(
+    
+    [HttpGet("{id}/deployments")]
+    public async Task<PaginatedList<SimpleDeploymentDto>> GetDeploymentsForServer(
         [FromRoute] Guid id,
+        [FromQuery] BasePaginationRequest paginationRequest,
         ISender sender
     )
     {
-        return await sender.Send(new GetServerSimpleDeployments.Query(id));
+        return await sender.Send(new GetServerSimpleDeployments.Query(id, paginationRequest));
     }
+    
 }

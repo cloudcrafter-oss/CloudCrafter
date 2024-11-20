@@ -4,6 +4,7 @@ using AutoMapper.QueryableExtensions;
 using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Domain.Common.Filtering;
 using CloudCrafter.Domain.Common.Pagination;
+using CloudCrafter.Domain.Requests.Filtering;
 using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.Infrastructure.Common.Helpers;
@@ -20,6 +21,27 @@ public static class QueryableExtensions
     {
         query = query.ApplyFiltering<TDto, TEntity>(request.Filters);
 
+        var totalCount = await query.CountAsync();
+
+        // TODO: Sorting
+
+        var items = await query
+            .Skip((request.Page - 1) * request.PageSize)
+            .Take(request.PageSize)
+            .ProjectTo<TDto>(mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        return new PaginatedList<TDto>(items, totalCount, request.Page, request.PageSize);
+    }
+    
+    public static async Task<PaginatedList<TDto>> ToPaginatedListAsync<TEntity, TDto>(
+        this IQueryable<TEntity> query,
+        BasePaginationRequest request,
+        IMapper mapper
+    )
+        where TDto : class
+        where TEntity : class
+    {
         var totalCount = await query.CountAsync();
 
         // TODO: Sorting

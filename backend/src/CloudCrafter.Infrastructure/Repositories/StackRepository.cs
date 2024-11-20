@@ -1,19 +1,23 @@
-﻿using Ardalis.SharedKernel;
+﻿using AutoMapper;
 using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Core.Events.DomainEvents;
 using CloudCrafter.Core.Interfaces.Domain.Stacks.Filters;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Common;
 using CloudCrafter.Domain.Domain.Application.Services;
+using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Domain.Stack.Filter;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Domain.Entities.Jobs;
+using CloudCrafter.Domain.Requests.Filtering;
+using CloudCrafter.Infrastructure.Common.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.Infrastructure.Repositories;
 
-public class StackRepository(IApplicationDbContext context) : IStackRepository
+public class StackRepository(IApplicationDbContext context, IMapper mapper) : IStackRepository
 {
     public async Task<Stack> CreateStack(CreateStackArgsDto args)
     {
@@ -32,18 +36,13 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             // TODO: Handle source different
             Source = new ApplicationSource
             {
-                Type = ApplicationSourceType.Git,
-                Git = new ApplicationSourceGit { Repository = args.GitRepository },
+                Type = ApplicationSourceType.Git, Git = new ApplicationSourceGit { Repository = args.GitRepository }
             },
             // TODO: Allow multiple options
             BuildPack = StackBuildPack.Nixpacks,
-            HealthStatus = new StackHealthEntity
-            {
-                StatusAt = null,
-                Value = EntityHealthStatusValue.Unknown,
-            },
+            HealthStatus = new StackHealthEntity { StatusAt = null, Value = EntityHealthStatusValue.Unknown },
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
 
         context.Stacks.Add(stack);
@@ -79,7 +78,7 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             HttpConfiguration = null,
             HealthcheckConfiguration = new EntityHealthcheckConfiguration(),
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
 
         context.StackServices.Add(stackService);
@@ -105,7 +104,7 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
             State = DeploymentState.Created,
             RecipeYaml = null,
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
 
         context.Deployments.Add(deployment);
@@ -124,28 +123,19 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
 
     public Task<List<Deployment>> GetDeployments(DeploymentsFilter filter)
     {
-        IQueryable<Deployment> deployments = context.Deployments.Include(x => x.Stack);
-
-        if (filter.StackId.HasValue)
-        {
-            deployments = (
-                from zz in deployments
-                where zz.StackId == filter.StackId.Value
-                select zz
-            );
-        }
-
-        if (filter.ServerId.HasValue)
-        {
-            deployments = (
-                from zz in deployments
-                where zz.Stack != null && zz.Stack.ServerId == filter.ServerId
-                select zz
-            );
-        }
-
-        return deployments.OrderByDescending(x => x.CreatedAt).ToListAsync();
+        return GetDeploymentQuery(filter).ToListAsync();
     }
+
+    public async Task<PaginatedList<SimpleDeploymentDto>> GetDeploymentsPaginated(DeploymentsFilter filter,
+        BasePaginationRequest paginatedRequest)
+    {
+        var deployments = GetDeploymentQuery(filter);
+
+        var result = await deployments.ToPaginatedListAsync<Deployment, SimpleDeploymentDto>(paginatedRequest, mapper);
+
+        return result;
+    }
+
 
     public async Task<List<Stack>> FilterStacks(StackFilter filter)
     {
@@ -153,24 +143,20 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
 
         if (filter.HealthCheckAgeOlderThan.HasValue)
         {
-            stacks = (
-                from zz in stacks
+            stacks = from zz in stacks
                 where
                     !zz.HealthStatus.StatusAt.HasValue
                     || zz.HealthStatus.StatusAt.Value
-                        < DateTime.UtcNow - filter.HealthCheckAgeOlderThan.Value
-                select zz
-            );
+                    < DateTime.UtcNow - filter.HealthCheckAgeOlderThan.Value
+                select zz;
 
-            stacks = (
-                from zz in stacks
+            stacks = from zz in stacks
                 from service in zz.Services
                 where
                     !service.HealthStatus.StatusAt.HasValue
                     || service.HealthStatus.StatusAt.Value
-                        < DateTime.UtcNow - filter.HealthCheckAgeOlderThan.Value
-                select zz
-            );
+                    < DateTime.UtcNow - filter.HealthCheckAgeOlderThan.Value
+                select zz;
         }
 
         return await stacks.ToListAsync();
@@ -180,6 +166,28 @@ public class StackRepository(IApplicationDbContext context) : IStackRepository
     {
         return context.SaveChangesAsync();
     }
+
+    private IQueryable<Deployment> GetDeploymentQuery(DeploymentsFilter filter)
+    {
+        IQueryable<Deployment> deployments = context.Deployments.Include(x => x.Stack);
+
+        if (filter.StackId.HasValue)
+        {
+            deployments = from zz in deployments
+                where zz.StackId == filter.StackId.Value
+                select zz;
+        }
+
+        if (filter.ServerId.HasValue)
+        {
+            deployments = from zz in deployments
+                where zz.Stack != null && zz.Stack.ServerId == filter.ServerId
+                select zz;
+        }
+
+        return deployments.OrderByDescending(x => x.CreatedAt);
+    }
+
 
     private async Task<Stack?> GetStackInternal(Guid id, bool throwExceptionOnNotFound = true)
     {

@@ -28,7 +28,7 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices(builder.Configuration);
 builder.Services.AddOpenApiServices();
 builder.Services.AddJobInfrastructure(builder.Configuration, true, JobServiceType.Web);
-
+builder.Services.AddControllers();
 var app = builder.Build();
 
 var validator = app.Services.GetRequiredService<IStartupValidator>();
@@ -60,7 +60,6 @@ else
 }
 
 app.MapControllerRoute("default", "{controller}/{action=Index}/{id?}");
-
 app.MapRazorPages();
 
 app.MapFallbackToFile("index.html");
