@@ -16,14 +16,13 @@ public class ServersController : CloudCrafterController
     {
         return await sender.Send(new GetServerList.Query());
     }
-    
+
     [HttpPost]
     public Task<CreatedServerDto> CreateServer(ISender sender, CreateServerCommand.Command command)
     {
         return sender.Send(command);
     }
 
-    
     [HttpGet("{id}")]
     [ProducesResponseType<ServerDetailDto>(StatusCodes.Status200OK)]
     public async Task<IResult> GetServerById(ISender sender, Guid id)
@@ -37,7 +36,15 @@ public class ServersController : CloudCrafterController
 
         return Results.Ok(result);
     }
-    
+
+    [HttpDelete("{id}")]
+    public async Task<IResult> DeleteServerById(ISender sender, Guid id)
+    {
+        await sender.Send(new DeleteServerCommand.Command(id));
+
+        return Results.Ok();
+    }
+
     [HttpGet("{id}/deployments")]
     public async Task<PaginatedList<SimpleDeploymentDto>> GetDeploymentsForServer(
         [FromRoute] Guid id,
@@ -47,5 +54,4 @@ public class ServersController : CloudCrafterController
     {
         return await sender.Send(new GetServerSimpleDeployments.Query(id, paginationRequest));
     }
-    
 }

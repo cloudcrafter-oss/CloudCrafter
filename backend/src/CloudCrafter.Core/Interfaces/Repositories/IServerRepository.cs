@@ -16,4 +16,5 @@ public interface IServerRepository
     Task<List<Server>> FilterServers(ServerFilter filter);
 
     Task SaveChangesAsync();
+    Task DeleteServer(Guid id);
 }

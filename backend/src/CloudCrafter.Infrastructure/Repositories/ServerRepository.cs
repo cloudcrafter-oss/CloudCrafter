@@ -107,14 +107,13 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
 
         if (filter.HealthCheckAgeOlderThan.HasValue)
         {
-            servers = (
+            servers =
                 from zz in servers
                 where
                     !zz.PingHealthData.LastPingAt.HasValue
                     || zz.PingHealthData.LastPingAt.Value
                         < DateTime.UtcNow - filter.HealthCheckAgeOlderThan.Value
-                select zz
-            );
+                select zz;
         }
 
         return await servers.ToListAsync();
@@ -123,6 +122,20 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
     public Task SaveChangesAsync()
     {
         return context.SaveChangesAsync();
+    }
+
+    public async Task DeleteServer(Guid id)
+    {
+        var server = await GetBaseQuery().Where(x => x.Id == id).FirstOrDefaultAsync();
+
+        if (server == null)
+        {
+            return;
+        }
+
+        context.Servers.Remove(server);
+
+        await context.SaveChangesAsync();
     }
 
     private IQueryable<Server> GetBaseQuery()
