@@ -1,6 +1,7 @@
 export type { CreateProjectMutationKey } from "./useCreateProjectHook.ts";
 export type { CreateServerMutationKey } from "./useCreateServerHook.ts";
 export type { DeleteProjectMutationKey } from "./useDeleteProjectHook.ts";
+export type { DeleteServerByIdMutationKey } from "./useDeleteServerByIdHook.ts";
 export type { DispatchStackDeploymentMutationKey } from "./useDispatchStackDeploymentHook.ts";
 export type { GetDeploymentLogsQueryKey } from "./useGetDeploymentLogsHook.ts";
 export type { GetDeploymentLogsInfiniteQueryKey } from "./useGetDeploymentLogsInfiniteHook.ts";
@@ -51,6 +52,7 @@ export type { UpdateStackMutationKey } from "./useUpdateStackHook.ts";
 export { createProjectMutationKey, useCreateProjectHook } from "./useCreateProjectHook.ts";
 export { createServerMutationKey, useCreateServerHook } from "./useCreateServerHook.ts";
 export { deleteProjectMutationKey, useDeleteProjectHook } from "./useDeleteProjectHook.ts";
+export { deleteServerByIdMutationKey, useDeleteServerByIdHook } from "./useDeleteServerByIdHook.ts";
 export { dispatchStackDeploymentMutationKey, useDispatchStackDeploymentHook } from "./useDispatchStackDeploymentHook.ts";
 export { getDeploymentLogsQueryKey, getDeploymentLogsQueryOptionsHook, useGetDeploymentLogsHook } from "./useGetDeploymentLogsHook.ts";
 export { getDeploymentLogsInfiniteQueryKey, getDeploymentLogsInfiniteQueryOptionsHook, useGetDeploymentLogsInfiniteHook } from "./useGetDeploymentLogsInfiniteHook.ts";

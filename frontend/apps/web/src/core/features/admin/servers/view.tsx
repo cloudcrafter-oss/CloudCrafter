@@ -2,8 +2,22 @@
 import { DeploymentStatusBadge } from '@/src/components/stack-detail/deployments/deployment-list'
 import {
 	type ServerDetailDto,
+	getServersQueryKey,
+	useDeleteServerByIdHook,
 	useGetDeploymentsForServerHook,
 } from '@/src/core/__generated__'
+import { useQueryClient } from '@tanstack/react-query'
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from '@ui/components/ui/alert-dialog'
 import { Button } from '@ui/components/ui/button.tsx'
 import {
 	Card,
@@ -16,8 +30,9 @@ import {
 import { Input } from '@ui/components/ui/input.tsx'
 import { Label } from '@ui/components/ui/label.tsx'
 import { formatDistanceToNow } from 'date-fns'
-import { CopyIcon, PackageIcon, RefreshCwIcon } from 'lucide-react'
+import { CopyIcon, PackageIcon, RefreshCwIcon, TrashIcon } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
 export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
@@ -25,6 +40,24 @@ export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
 		Page: 1,
 		PageSize: 10,
 	})
+
+	const router = useRouter()
+
+	const queryClient = useQueryClient()
+
+	const deleteServer = useDeleteServerByIdHook({
+		mutation: {
+			onSuccess: () => {
+				toast.success('Server deleted successfully')
+				queryClient.invalidateQueries({ queryKey: getServersQueryKey() })
+				router.push('/admin/servers')
+			},
+		},
+	})
+
+	const handleDeleteServer = () => {
+		deleteServer.mutate({ id: server.id })
+	}
 
 	return (
 		<div className='container mx-auto px-4 py-12 md:px-6 lg:px-8 grid md:grid-cols-2 gap-6'>
@@ -95,6 +128,32 @@ export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
 					</CardContent>
 					<CardFooter>
 						<Button>Save Changes</Button>
+						<AlertDialog>
+							<AlertDialogTrigger asChild>
+								<Button variant='destructive' className='ml-auto'>
+									<TrashIcon className='h-4 w-4 mr-2' />
+									Delete Server
+								</Button>
+							</AlertDialogTrigger>
+							<AlertDialogContent>
+								<AlertDialogHeader>
+									<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+									<AlertDialogDescription>
+										This action cannot be undone. This will permanently delete
+										this server.
+									</AlertDialogDescription>
+								</AlertDialogHeader>
+								<AlertDialogFooter>
+									<AlertDialogCancel>Cancel</AlertDialogCancel>
+									<AlertDialogAction
+										onClick={handleDeleteServer}
+										className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
+									>
+										Delete Server
+									</AlertDialogAction>
+								</AlertDialogFooter>
+							</AlertDialogContent>
+						</AlertDialog>
 					</CardFooter>
 				</Card>
 			</div>
