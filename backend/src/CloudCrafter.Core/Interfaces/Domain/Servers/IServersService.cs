@@ -11,4 +11,5 @@ public interface IServersService
     Task<bool> IsValidAgent(Guid serverId, string serverKey);
     Task<CreatedServerDto> CreateServer(CreateServerCommand.Command request);
     Task MarkServersStateAsUnknownAfterTimespan(TimeSpan fromMinutes);
+    Task DeleteServer(Guid id);
 }

@@ -11,7 +11,11 @@ public class SimpleDeploymentDto
     public required DeploymentStatusDto State { get; init; }
 
     public required Guid StackId { get; init; }
+
     public required string StackName { get; init; }
+
+    public required Guid ProjectId { get; init; }
+    public required Guid EnvironmentId { get; init; }
 
     public string Description => "Manual Deployment";
 
@@ -20,7 +24,15 @@ public class SimpleDeploymentDto
         public Mapping()
         {
             CreateMap<Entities.Deployment, SimpleDeploymentDto>()
-                .ForMember(x => x.StackName, opt => opt.MapFrom(src => src.Stack!.Name));
+                .ForMember(x => x.StackName, opt => opt.MapFrom(src => src.Stack!.Name))
+                .ForMember(
+                    x => x.ProjectId,
+                    opt => opt.MapFrom(src => src.Stack!.Environment!.ProjectId)
+                )
+                .ForMember(
+                    x => x.EnvironmentId,
+                    opt => opt.MapFrom(src => src.Stack!.EnvironmentId)
+                );
         }
     }
 }

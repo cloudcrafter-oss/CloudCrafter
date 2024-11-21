@@ -1,6 +1,7 @@
 export { createProject } from "./createProject.ts";
 export { createServer } from "./createServer.ts";
 export { deleteProject } from "./deleteProject.ts";
+export { deleteServerById } from "./deleteServerById.ts";
 export { dispatchStackDeployment } from "./dispatchStackDeployment.ts";
 export { getDeploymentLogs } from "./getDeploymentLogs.ts";
 export { getDeploymentsForServer } from "./getDeploymentsForServer.ts";

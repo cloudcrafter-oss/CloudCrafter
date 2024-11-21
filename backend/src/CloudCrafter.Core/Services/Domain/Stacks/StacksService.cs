@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Commands.Stacks;
+using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Core.Events.DomainEvents;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Domain.Stacks.Filters;
@@ -10,7 +11,7 @@ using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Domain.Stack.Filter;
 using CloudCrafter.Domain.Entities;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using CloudCrafter.Domain.Requests.Filtering;
 
 namespace CloudCrafter.Core.Services.Domain.Stacks;
 
@@ -59,6 +60,12 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
         return mapper.Map<List<SimpleDeploymentDto>>(deployments);
     }
 
+    public Task<PaginatedList<SimpleDeploymentDto>> GetDeploymentsPaginated(DeploymentsFilter filter,
+        BasePaginationRequest paginatedRequest)
+    {
+        return repository.GetDeploymentsPaginated(filter, paginatedRequest);
+    }
+
     public async Task HandleHealthChecks(Guid serverId, ContainerHealthCheckArgs args)
     {
         foreach (var stackInfo in args.Info)
@@ -105,11 +112,11 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
 
                 stackServiceEntity?.HealthStatus.SetStatus(
                     stackService.Value.Status == ContainerHealthCheckStackInfoHealthStatus.Healthy
-                            ? EntityHealthStatusValue.Healthy
+                        ? EntityHealthStatusValue.Healthy
                         : stackService.Value.Status
-                        == ContainerHealthCheckStackInfoHealthStatus.Unhealthy
+                          == ContainerHealthCheckStackInfoHealthStatus.Unhealthy
                             ? EntityHealthStatusValue.Unhealthy
-                        : EntityHealthStatusValue.Degraded,
+                            : EntityHealthStatusValue.Degraded,
                     isRunning
                 );
             }

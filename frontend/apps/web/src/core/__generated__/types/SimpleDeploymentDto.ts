@@ -23,6 +23,14 @@ import type { DeploymentStatusDto } from "./DeploymentStatusDto.ts";
     */
     stackName: string;
     /**
+     * @type string, uuid
+    */
+    projectId: string;
+    /**
+     * @type string, uuid
+    */
+    environmentId: string;
+    /**
      * @type string
     */
     description?: string | null;

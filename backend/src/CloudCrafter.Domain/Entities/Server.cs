@@ -29,4 +29,6 @@ public class Server : IHasTimestamps
 
     public required DateTime CreatedAt { get; init; }
     public required DateTime UpdatedAt { get; set; }
+
+    public ICollection<Stack> Stacks { get; set; } = [];
 }
