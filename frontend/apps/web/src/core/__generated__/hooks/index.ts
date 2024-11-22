@@ -43,6 +43,7 @@ export type { PostCreateStackMutationKey } from "./usePostCreateStackHook.ts";
 export type { PostCreateUserMutationKey } from "./usePostCreateUserHook.ts";
 export type { PostLoginUserMutationKey } from "./usePostLoginUserHook.ts";
 export type { PostRefreshTokensMutationKey } from "./usePostRefreshTokensHook.ts";
+export type { PostRotateAgentKeyMutationKey } from "./usePostRotateAgentKeyHook.ts";
 export type { PostValidateGithubRepoMutationKey } from "./usePostValidateGithubRepoHook.ts";
 export type { TestQueryKey } from "./useTestHook.ts";
 export type { TestInfiniteQueryKey } from "./useTestInfiniteHook.ts";
@@ -94,6 +95,7 @@ export { postCreateStackMutationKey, usePostCreateStackHook } from "./usePostCre
 export { postCreateUserMutationKey, usePostCreateUserHook } from "./usePostCreateUserHook.ts";
 export { postLoginUserMutationKey, usePostLoginUserHook } from "./usePostLoginUserHook.ts";
 export { postRefreshTokensMutationKey, usePostRefreshTokensHook } from "./usePostRefreshTokensHook.ts";
+export { postRotateAgentKeyMutationKey, usePostRotateAgentKeyHook } from "./usePostRotateAgentKeyHook.ts";
 export { postValidateGithubRepoMutationKey, usePostValidateGithubRepoHook } from "./usePostValidateGithubRepoHook.ts";
 export { testQueryKey, testQueryOptionsHook, useTestHook } from "./useTestHook.ts";
 export { testInfiniteQueryKey, testInfiniteQueryOptionsHook, useTestInfiniteHook } from "./useTestInfiniteHook.ts";

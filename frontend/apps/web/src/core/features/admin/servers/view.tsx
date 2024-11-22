@@ -5,6 +5,7 @@ import {
 	getServersQueryKey,
 	useDeleteServerByIdHook,
 	useGetDeploymentsForServerHook,
+	usePostRotateAgentKeyHook,
 } from '@/src/core/__generated__'
 import { useQueryClient } from '@tanstack/react-query'
 import {
@@ -55,8 +56,21 @@ export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
 		},
 	})
 
+	const rotateAgentKey = usePostRotateAgentKeyHook({
+		mutation: {
+			onSuccess: () => {
+				toast.success('Agent key rotated successfully')
+				router.refresh()
+			},
+		},
+	})
+
 	const handleDeleteServer = () => {
 		deleteServer.mutate({ id: server.id })
+	}
+
+	const handleRotateAgentKey = () => {
+		rotateAgentKey.mutate({ id: server.id })
 	}
 
 	return (
@@ -114,15 +128,30 @@ export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
 								>
 									<CopyIcon className='h-4 w-4' />
 								</Button>
-								<Button
-									variant='outline'
-									size='icon'
-									onClick={() => {
-										// TODO: Add refresh functionality
-									}}
-								>
-									<RefreshCwIcon className='h-4 w-4' />
-								</Button>
+								<AlertDialog>
+									<AlertDialogTrigger asChild>
+										<Button variant='outline' size='icon'>
+											<RefreshCwIcon className='h-4 w-4' />
+										</Button>
+									</AlertDialogTrigger>
+									<AlertDialogContent>
+										<AlertDialogHeader>
+											<AlertDialogTitle>Rotate Agent Key?</AlertDialogTitle>
+											<AlertDialogDescription>
+												This will generate a new agent key. The old key will no
+												longer work. Any connected agents will need to be
+												updated with the new key. These will be disconnected
+												automatically.
+											</AlertDialogDescription>
+										</AlertDialogHeader>
+										<AlertDialogFooter>
+											<AlertDialogCancel>Cancel</AlertDialogCancel>
+											<AlertDialogAction onClick={handleRotateAgentKey}>
+												Rotate Key
+											</AlertDialogAction>
+										</AlertDialogFooter>
+									</AlertDialogContent>
+								</AlertDialog>
 							</div>
 						</div>
 					</CardContent>

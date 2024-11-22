@@ -12,4 +12,5 @@ public interface IServersService
     Task<CreatedServerDto> CreateServer(CreateServerCommand.Command request);
     Task MarkServersStateAsUnknownAfterTimespan(TimeSpan fromMinutes);
     Task DeleteServer(Guid id);
+    Task RotateServerKey(Guid id);
 }

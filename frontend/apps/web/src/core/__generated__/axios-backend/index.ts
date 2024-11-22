@@ -20,6 +20,7 @@ export { postCreateGithubApp } from "./postCreateGithubApp.ts";
 export { postCreateStack } from "./postCreateStack.ts";
 export { postCreateUser } from "./postCreateUser.ts";
 export { postLoginUser } from "./postLoginUser.ts";
+export { postRotateAgentKey } from "./postRotateAgentKey.ts";
 export { postValidateGithubRepo } from "./postValidateGithubRepo.ts";
 export { test } from "./test.ts";
 export { updateProject } from "./updateProject.ts";

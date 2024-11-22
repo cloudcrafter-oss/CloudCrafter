@@ -45,6 +45,7 @@ export { postLoginUserQuerySchema } from "./postLoginUserQuerySchema.ts";
 export { postLoginUser200Schema, postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema } from "./postLoginUserSchema.ts";
 export { postRefreshTokens200Schema, postRefreshTokensMutationRequestSchema, postRefreshTokensMutationResponseSchema } from "./postRefreshTokensSchema.ts";
 export { postRefreshUserTokensQuerySchema } from "./postRefreshUserTokensQuerySchema.ts";
+export { postRotateAgentKeyPathParamsSchema, postRotateAgentKey200Schema, postRotateAgentKeyMutationResponseSchema } from "./postRotateAgentKeySchema.ts";
 export { postValidateGithubRepo200Schema, postValidateGithubRepoMutationRequestSchema, postValidateGithubRepoMutationResponseSchema } from "./postValidateGithubRepoSchema.ts";
 export { projectDtoSchema } from "./projectDtoSchema.ts";
 export { projectEnvironmentEnhancedDtoSchema } from "./projectEnvironmentEnhancedDtoSchema.ts";

@@ -45,6 +45,7 @@ export type { PostLoginUser200, PostLoginUserMutationRequest, PostLoginUserMutat
 export type { PostLoginUserQuery } from "./PostLoginUserQuery.ts";
 export type { PostRefreshTokens200, PostRefreshTokensMutationRequest, PostRefreshTokensMutationResponse, PostRefreshTokensMutation } from "./PostRefreshTokens.ts";
 export type { PostRefreshUserTokensQuery } from "./PostRefreshUserTokensQuery.ts";
+export type { PostRotateAgentKeyPathParams, PostRotateAgentKey200, PostRotateAgentKeyMutationResponse, PostRotateAgentKeyMutation } from "./PostRotateAgentKey.ts";
 export type { PostValidateGithubRepo200, PostValidateGithubRepoMutationRequest, PostValidateGithubRepoMutationResponse, PostValidateGithubRepoMutation } from "./PostValidateGithubRepo.ts";
 export type { ProjectDto } from "./ProjectDto.ts";
 export type { ProjectEnvironmentEnhancedDto } from "./ProjectEnvironmentEnhancedDto.ts";

@@ -1,11 +1,11 @@
-﻿using CloudCrafter.Domain.Interfaces;
+﻿using CloudCrafter.Domain.Common;
+using CloudCrafter.Domain.Interfaces;
 using EntityFrameworkCore.EncryptColumn.Attributes;
 
 namespace CloudCrafter.Domain.Entities;
 
-public class Server : IHasTimestamps
+public class Server : BaseAuditableEntity
 {
-    public required Guid Id { get; init; }
     public required string Name { get; set; }
     public required string IpAddress { get; set; }
 
@@ -27,8 +27,10 @@ public class Server : IHasTimestamps
 
     public ServerPingData PingHealthData { get; set; } = new();
 
-    public required DateTime CreatedAt { get; init; }
-    public required DateTime UpdatedAt { get; set; }
-
     public ICollection<Stack> Stacks { get; set; } = [];
+
+    public void UpdateServerAgentKey(string key)
+    {
+        this.AgentSecretKey = key;
+    }
 }

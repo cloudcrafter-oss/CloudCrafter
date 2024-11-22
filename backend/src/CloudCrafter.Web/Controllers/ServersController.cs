@@ -45,6 +45,14 @@ public class ServersController : CloudCrafterController
         return Results.Ok();
     }
 
+    [HttpPost("{id}/rotate-key")]
+    public async Task<IResult> PostRotateAgentKey(ISender sender, Guid id)
+    {
+        await sender.Send(new RotateServerKeyCommand.Command(id));
+
+        return Results.Ok();
+    }
+
     [HttpGet("{id}/deployments")]
     public async Task<PaginatedList<SimpleDeploymentDto>> GetDeploymentsForServer(
         [FromRoute] Guid id,
