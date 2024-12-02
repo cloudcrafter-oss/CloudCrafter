@@ -45,6 +45,11 @@ public class CloudCrafterHubLifetimeManager<THub> : RedisHubLifetimeManager<THub
         return base.OnDisconnectedAsync(connection);
     }
 
+    public List<string> GetConnectionIds()
+    {
+        return _connections.Keys.ToList();
+    }
+
     public void DisconnectConnection(string connectionId)
     {
         if (_connections.TryGetValue(connectionId, out var connection))
