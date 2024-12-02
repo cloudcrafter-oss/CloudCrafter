@@ -32,11 +32,13 @@ public class HubWrapper : IHubWrapper
             configValue.ServerId,
             configValue.AgentKey
         );
+
         TypedHubConnection = new TypedHubConnection<IAgentHub>(_connection);
 
         // Log.Logger = AgentLoggerConfiguration
         //     .CreateConfiguration()
         //     .CreateLogger();
+        AttachEvents();
     }
 
     public TypedHubConnection<IAgentHub> TypedHubConnection { get; }

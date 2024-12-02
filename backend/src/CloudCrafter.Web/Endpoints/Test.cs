@@ -14,6 +14,18 @@ public class Test : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup(this);
+        app.MapGroup(this).MapGet(Disconnect, "/disconnect/{id}");
+    }
+
+    public Task Disconnect(IServiceProvider sp, [FromRoute] string id)
+    {
+        var hubLifetimeManager = sp.GetRequiredService<HubLifetimeManager<AgentHub>>();
+
+        if (hubLifetimeManager is CloudCrafterHubLifetimeManager<AgentHub> manager)
+        {
+            manager.DisconnectConnection(id);
+        }
+
+        return Task.CompletedTask;
     }
 }

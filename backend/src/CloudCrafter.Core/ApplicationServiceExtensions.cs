@@ -40,6 +40,8 @@ using FluentValidation;
 using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
@@ -186,7 +188,7 @@ public static class ApplicationServiceExtensions
 
         services
             .AddSignalR()
-            .AddStackExchangeRedis(
+            .AddStackExchangeRedisCloudCrafter(
                 connectionString,
                 opt =>
                 {
@@ -206,5 +208,38 @@ public static class ApplicationServiceExtensions
 
         services.AddSingleton<IGithubClientProvider, GithubClientProvider>();
         return services;
+    }
+}
+
+public static class Extensions
+{
+    public static ISignalRServerBuilder AddStackExchangeRedisCloudCrafter(
+        this ISignalRServerBuilder signalrBuilder,
+        string redisConnectionString,
+        Action<RedisOptions> configure
+    )
+    {
+        return AddStackExchangeRedisCloudCrafter(
+            signalrBuilder,
+            o =>
+            {
+                o.Configuration = ConfigurationOptions.Parse(redisConnectionString);
+                configure(o);
+            }
+        );
+    }
+
+    public static ISignalRServerBuilder AddStackExchangeRedisCloudCrafter(
+        this ISignalRServerBuilder signalrBuilder,
+        Action<RedisOptions> configure
+    )
+    {
+        signalrBuilder.Services.Configure(configure);
+        signalrBuilder.Services.AddSingleton(
+            typeof(HubLifetimeManager<>),
+            typeof(CloudCrafterHubLifetimeManager<>)
+        );
+
+        return signalrBuilder;
     }
 }
