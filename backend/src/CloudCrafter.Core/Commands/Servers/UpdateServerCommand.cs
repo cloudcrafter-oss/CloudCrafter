@@ -9,7 +9,7 @@ namespace CloudCrafter.Core.Commands.Servers;
 public static class UpdateServerCommand
 {
     [Authorize]
-    public record Command(Guid ServerId, UpdateServerDto UpdateDto)
+    public record Command(Guid ServerId, UpdateServerDto UpdateDetails)
         : IRequireServerAccess,
             IRequest;
 
@@ -17,7 +17,7 @@ public static class UpdateServerCommand
     {
         public Task Handle(Command request, CancellationToken cancellationToken)
         {
-            return serversService.UpdateServer(request.ServerId, request.UpdateDto);
+            return serversService.UpdateServer(request.ServerId, request.UpdateDetails);
         }
     }
 }
