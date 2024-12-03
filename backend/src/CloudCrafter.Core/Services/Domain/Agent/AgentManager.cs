@@ -44,6 +44,11 @@ public class AgentManager(
         return SendMessage(message, serverId);
     }
 
+    public Task DisconnectAgent(Guid serverId)
+    {
+        return connectedServerManager.DisconnectAgent(serverId);
+    }
+
     private async Task SendMessage(AgentBaseMessage message, Guid? serverId = null)
     {
         var name = message.GetType().Name;

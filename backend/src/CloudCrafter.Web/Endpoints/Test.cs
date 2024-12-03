@@ -29,15 +29,8 @@ public class Test : EndpointGroupBase
         return new List<string>();
     }
 
-    public Task Disconnect(IServiceProvider sp, [FromRoute] string id)
+    public Task Disconnect(ConnectedServerManager manager, [FromRoute] Guid id)
     {
-        var hubLifetimeManager = sp.GetRequiredService<HubLifetimeManager<AgentHub>>();
-
-        if (hubLifetimeManager is CloudCrafterHubLifetimeManager<AgentHub> manager)
-        {
-            manager.DisconnectConnection(id);
-        }
-
-        return Task.CompletedTask;
+        return manager.DisconnectAgent(id);
     }
 }

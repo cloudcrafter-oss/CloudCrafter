@@ -202,6 +202,12 @@ public static class ApplicationServiceExtensions
             options.InstanceName = "CloudCrafter-Cache";
         });
 
+        services.AddSingleton<ISubscriber>(cfg =>
+        {
+            var multiplexer = ConnectionMultiplexer.Connect(connectionString);
+            return multiplexer.GetSubscriber();
+        });
+
         services.AddSingleton<IDistributedLockService>(sp => new DistributedLockService(
             connectionString
         ));
