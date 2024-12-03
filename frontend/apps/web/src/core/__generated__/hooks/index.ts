@@ -49,7 +49,9 @@ export type { TestQueryKey } from "./useTestHook.ts";
 export type { TestInfiniteQueryKey } from "./useTestInfiniteHook.ts";
 export type { TestSuspenseQueryKey } from "./useTestSuspenseHook.ts";
 export type { UpdateProjectMutationKey } from "./useUpdateProjectHook.ts";
+export type { UpdateServerMutationKey } from "./useUpdateServerHook.ts";
 export type { UpdateStackMutationKey } from "./useUpdateStackHook.ts";
+export type { UpdateStackServiceMutationKey } from "./useUpdateStackServiceHook.ts";
 export { createProjectMutationKey, useCreateProjectHook } from "./useCreateProjectHook.ts";
 export { createServerMutationKey, useCreateServerHook } from "./useCreateServerHook.ts";
 export { deleteProjectMutationKey, useDeleteProjectHook } from "./useDeleteProjectHook.ts";
@@ -101,4 +103,6 @@ export { testQueryKey, testQueryOptionsHook, useTestHook } from "./useTestHook.t
 export { testInfiniteQueryKey, testInfiniteQueryOptionsHook, useTestInfiniteHook } from "./useTestInfiniteHook.ts";
 export { testSuspenseQueryKey, testSuspenseQueryOptionsHook, useTestSuspenseHook } from "./useTestSuspenseHook.ts";
 export { updateProjectMutationKey, useUpdateProjectHook } from "./useUpdateProjectHook.ts";
+export { updateServerMutationKey, useUpdateServerHook } from "./useUpdateServerHook.ts";
 export { updateStackMutationKey, useUpdateStackHook } from "./useUpdateStackHook.ts";
+export { updateStackServiceMutationKey, useUpdateStackServiceHook } from "./useUpdateStackServiceHook.ts";

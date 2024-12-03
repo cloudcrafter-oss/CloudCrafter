@@ -18,7 +18,8 @@ public class Stacks : EndpointGroupBase
             .MapGet(GetDeploymentsForStack, "{id}/deployments")
             .MapGet(GetDeploymentLogs, "deployments/{deploymentId}/logs")
             .MapPost(DispatchStackDeployment, "{id}/deploy")
-            .MapPut(UpdateStack, "{id}");
+            .MapPut(UpdateStack, "{id}")
+            .MapPatch(UpdateStackService, "{stackId}/services/{stackServiceId}");
     }
 
     public async Task<StackCreatedDto> PostCreateStack(

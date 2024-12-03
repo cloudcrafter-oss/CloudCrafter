@@ -24,4 +24,6 @@ export { postRotateAgentKey } from "./postRotateAgentKey.ts";
 export { postValidateGithubRepo } from "./postValidateGithubRepo.ts";
 export { test } from "./test.ts";
 export { updateProject } from "./updateProject.ts";
+export { updateServer } from "./updateServer.ts";
 export { updateStack } from "./updateStack.ts";
+export { updateStackService } from "./updateStackService.ts";
