@@ -1,4 +1,24 @@
-import type { ServerDetailDto } from '@/src/core/__generated__'
+'use client'
+import { DeploymentStatusBadge } from '@/src/components/stack-detail/deployments/deployment-list'
+import {
+	type ServerDetailDto,
+	getServersQueryKey,
+	useDeleteServerByIdHook,
+	useGetDeploymentsForServerHook,
+	usePostRotateAgentKeyHook,
+} from '@/src/core/__generated__'
+import { useQueryClient } from '@tanstack/react-query'
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from '@ui/components/ui/alert-dialog'
 import { Button } from '@ui/components/ui/button.tsx'
 import {
 	Card,
@@ -10,19 +30,49 @@ import {
 } from '@ui/components/ui/card.tsx'
 import { Input } from '@ui/components/ui/input.tsx'
 import { Label } from '@ui/components/ui/label.tsx'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@ui/components/ui/select.tsx'
-import { Textarea } from '@ui/components/ui/textarea.tsx'
-import { DatabaseIcon, PackageIcon, ServerIcon } from 'lucide-react'
+import { formatDistanceToNow } from 'date-fns'
+import { CopyIcon, PackageIcon, RefreshCwIcon, TrashIcon } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
-	console.log({ server })
+	const { data: deployments } = useGetDeploymentsForServerHook(server.id, {
+		Page: 1,
+		PageSize: 10,
+	})
+
+	const router = useRouter()
+
+	const queryClient = useQueryClient()
+
+	const deleteServer = useDeleteServerByIdHook({
+		mutation: {
+			onSuccess: () => {
+				toast.success('Server deleted successfully')
+				queryClient.invalidateQueries({ queryKey: getServersQueryKey() })
+				router.push('/admin/servers')
+			},
+		},
+	})
+
+	const rotateAgentKey = usePostRotateAgentKeyHook({
+		mutation: {
+			onSuccess: () => {
+				toast.success('Agent key rotated successfully')
+				router.refresh()
+			},
+		},
+	})
+
+	const handleDeleteServer = () => {
+		deleteServer.mutate({ id: server.id })
+	}
+
+	const handleRotateAgentKey = () => {
+		rotateAgentKey.mutate({ id: server.id })
+	}
+
 	return (
 		<div className='container mx-auto px-4 py-12 md:px-6 lg:px-8 grid md:grid-cols-2 gap-6'>
 			<div>
@@ -35,52 +85,104 @@ export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
 					</CardHeader>
 					<CardContent className='grid gap-4'>
 						<div className='grid gap-2'>
-							<Label htmlFor='hostname'>Hostname</Label>
-							<Input id='hostname' defaultValue='my-server.example.com' />
+							<Label htmlFor='hostname'>Name</Label>
+							<Input id='hostname' defaultValue={server.name} />
 						</div>
 						<div className='grid gap-2'>
-							<Label htmlFor='username'>Username</Label>
-							<Input
-								id='username'
-								type='password'
-								defaultValue='myusername'
-								autoComplete='username'
-							/>
+							<Label htmlFor='hostname'>ID</Label>
+							<div className='flex gap-2'>
+								<Input
+									readOnly
+									id='hostname'
+									defaultValue={server.id}
+									className='flex-1'
+								/>
+								<Button
+									variant='outline'
+									size='icon'
+									onClick={() => {
+										navigator.clipboard.writeText(server.id)
+										toast.success('Copied Agent ID to clipboard')
+									}}
+								>
+									<CopyIcon className='h-4 w-4' />
+								</Button>
+							</div>
 						</div>
 						<div className='grid gap-2'>
-							<Label htmlFor='ssh-key'>SSH Key</Label>
-							<Textarea
-								id='ssh-key'
-								defaultValue='ssh-rsa AAAAB3NzaC1yc2EAA...'
-								autoComplete='off'
-								className='min-h-[100px]'
-							/>
-						</div>
-						<div className='grid gap-2'>
-							<Label htmlFor='docker-version'>Docker Version</Label>
-							<Select defaultValue='20.10.14'>
-								<SelectTrigger>
-									<SelectValue placeholder='Select Docker version' />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value='20.10.14'>20.10.14</SelectItem>
-									<SelectItem value='20.10.13'>20.10.13</SelectItem>
-									<SelectItem value='20.10.12'>20.10.12</SelectItem>
-									<SelectItem value='20.10.11'>20.10.11</SelectItem>
-									<SelectItem value='20.10.10'>20.10.10</SelectItem>
-								</SelectContent>
-							</Select>
-						</div>
-						<div className='grid gap-2'>
-							<Label htmlFor='docker-registry'>Docker Registry</Label>
-							<Input
-								id='docker-registry'
-								defaultValue='https://registry.example.com'
-							/>
+							<Label htmlFor='ssh-key'>Agent Secret</Label>
+							<div className='flex gap-2'>
+								<Input
+									id='ssh-key'
+									defaultValue={server.agentKey ?? ''}
+									readOnly
+									className='flex-1'
+								/>
+								<Button
+									variant='outline'
+									size='icon'
+									onClick={() => {
+										navigator.clipboard.writeText(server.agentKey ?? '')
+										toast.success('Copied Agent Secret to clipboard')
+									}}
+								>
+									<CopyIcon className='h-4 w-4' />
+								</Button>
+								<AlertDialog>
+									<AlertDialogTrigger asChild>
+										<Button variant='outline' size='icon'>
+											<RefreshCwIcon className='h-4 w-4' />
+										</Button>
+									</AlertDialogTrigger>
+									<AlertDialogContent>
+										<AlertDialogHeader>
+											<AlertDialogTitle>Rotate Agent Key?</AlertDialogTitle>
+											<AlertDialogDescription>
+												This will generate a new agent key. The old key will no
+												longer work. Any connected agents will need to be
+												updated with the new key. These will be disconnected
+												automatically.
+											</AlertDialogDescription>
+										</AlertDialogHeader>
+										<AlertDialogFooter>
+											<AlertDialogCancel>Cancel</AlertDialogCancel>
+											<AlertDialogAction onClick={handleRotateAgentKey}>
+												Rotate Key
+											</AlertDialogAction>
+										</AlertDialogFooter>
+									</AlertDialogContent>
+								</AlertDialog>
+							</div>
 						</div>
 					</CardContent>
 					<CardFooter>
 						<Button>Save Changes</Button>
+						<AlertDialog>
+							<AlertDialogTrigger asChild>
+								<Button variant='destructive' className='ml-auto'>
+									<TrashIcon className='h-4 w-4 mr-2' />
+									Delete Server
+								</Button>
+							</AlertDialogTrigger>
+							<AlertDialogContent>
+								<AlertDialogHeader>
+									<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+									<AlertDialogDescription>
+										This action cannot be undone. This will permanently delete
+										this server.
+									</AlertDialogDescription>
+								</AlertDialogHeader>
+								<AlertDialogFooter>
+									<AlertDialogCancel>Cancel</AlertDialogCancel>
+									<AlertDialogAction
+										onClick={handleDeleteServer}
+										className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
+									>
+										Delete Server
+									</AlertDialogAction>
+								</AlertDialogFooter>
+							</AlertDialogContent>
+						</AlertDialog>
 					</CardFooter>
 				</Card>
 			</div>
@@ -94,39 +196,35 @@ export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
 					</CardHeader>
 					<CardContent>
 						<div className='grid gap-4'>
-							<div className='grid grid-cols-[40px_1fr] items-center gap-4'>
-								<div className='flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground'>
-									<PackageIcon className='h-5 w-5' />
-								</div>
-								<div>
-									<div className='font-medium'>Acme Web App</div>
-									<div className='text-sm text-muted-foreground'>
-										Deployed 2 hours ago
+							{deployments?.result.map((deployment) => (
+								<div
+									key={deployment.id}
+									className='grid grid-cols-[40px_1fr] items-center gap-4'
+								>
+									<div className='flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground'>
+										<PackageIcon className='h-5 w-5' />
+									</div>
+									<div>
+										<Link
+											href={`/admin/projects/${deployment.projectId}/${deployment.environmentId}/stack/${deployment.stackId}`}
+											className='font-medium'
+										>
+											{deployment.stackName}
+										</Link>
+										<div className='text-sm text-muted-foreground'>
+											<span
+												title={new Date(deployment.createdAt).toLocaleString()}
+											>
+												Deployed{' '}
+												{formatDistanceToNow(new Date(deployment.createdAt), {
+													addSuffix: true,
+												})}
+											</span>
+										</div>
+										<DeploymentStatusBadge state={deployment.state} />
 									</div>
 								</div>
-							</div>
-							<div className='grid grid-cols-[40px_1fr] items-center gap-4'>
-								<div className='flex h-10 w-10 items-center justify-center rounded-full bg-accent text-accent-foreground'>
-									<DatabaseIcon className='h-5 w-5' />
-								</div>
-								<div>
-									<div className='font-medium'>Acme Database</div>
-									<div className='text-sm text-muted-foreground'>
-										Deployed 4 hours ago
-									</div>
-								</div>
-							</div>
-							<div className='grid grid-cols-[40px_1fr] items-center gap-4'>
-								<div className='flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground'>
-									<ServerIcon className='h-5 w-5' />
-								</div>
-								<div>
-									<div className='font-medium'>Acme API</div>
-									<div className='text-sm text-muted-foreground'>
-										Deployed 6 hours ago
-									</div>
-								</div>
-							</div>
+							))}
 						</div>
 					</CardContent>
 					<CardFooter>

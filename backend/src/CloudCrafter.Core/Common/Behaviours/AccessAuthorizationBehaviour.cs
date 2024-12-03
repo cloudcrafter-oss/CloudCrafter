@@ -9,7 +9,7 @@ public class ServerAccessAuthorizationBehavior<TRequest, TResponse>(
     IUser user,
     IUserAccessService accessService
 ) : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
+    where TRequest : IBaseRequest
 {
     public async Task<TResponse> Handle(
         TRequest request,

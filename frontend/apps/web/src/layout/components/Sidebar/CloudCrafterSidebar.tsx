@@ -85,11 +85,23 @@ const data = {
 			title: 'Projects',
 			url: '/admin/projects',
 			icon: FolderKey,
+			items: [
+				{
+					title: 'Overview',
+					url: '/admin/projects',
+				},
+			],
 		},
 		{
 			title: 'Servers',
 			url: '/admin/servers',
 			icon: Server,
+			items: [
+				{
+					title: 'Overview',
+					url: '/admin/servers',
+				},
+			],
 		},
 		{
 			title: 'Settings',

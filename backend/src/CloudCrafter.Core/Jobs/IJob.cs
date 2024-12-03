@@ -7,7 +7,6 @@ namespace CloudCrafter.Core.Jobs;
 public interface IJob
 {
     BackgroundJobType Type { get; }
-    bool ShouldRunOnApiServer { get; }
     Task HandleEntity(IApplicationDbContext context, string jobId);
     Task TearDown();
 

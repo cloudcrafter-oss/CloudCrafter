@@ -17,7 +17,7 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "9.0.0-rc.2.24474.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -101,6 +101,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
                     b.Property<string>("RecipeYaml")
                         .HasColumnType("text");
+
+                    b.Property<Guid>("ServerId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("StackId")
                         .HasColumnType("uuid");
@@ -283,6 +286,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("DockerDataDirectoryMount")
                         .IsRequired()
                         .HasColumnType("text");
@@ -290,6 +296,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Property<string>("IpAddress")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -655,7 +664,7 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                             b1.Property<Guid>("BackgroundJobId")
                                 .HasColumnType("uuid");
 
-                            b1.Property<int>("Id")
+                            b1.Property<int>("__synthesizedOrdinal")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("integer");
 
@@ -673,7 +682,7 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                             b1.Property<DateTime>("Timestamp")
                                 .HasColumnType("timestamp with time zone");
 
-                            b1.HasKey("BackgroundJobId", "Id");
+                            b1.HasKey("BackgroundJobId", "__synthesizedOrdinal");
 
                             b1.ToTable("Jobs");
 
@@ -701,7 +710,7 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                             b1.Property<Guid>("DeploymentId")
                                 .HasColumnType("uuid");
 
-                            b1.Property<int>("Id")
+                            b1.Property<int>("__synthesizedOrdinal")
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("integer");
 
@@ -718,7 +727,7 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                                 .IsRequired()
                                 .HasColumnType("text");
 
-                            b1.HasKey("DeploymentId", "Id");
+                            b1.HasKey("DeploymentId", "__synthesizedOrdinal");
 
                             b1.ToTable("Deployments");
 
@@ -777,6 +786,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                             b1.Property<string>("OsInfo")
                                 .HasColumnType("text");
 
+                            b1.Property<int>("Status")
+                                .HasColumnType("integer");
+
                             b1.Property<int?>("TotalCpuCount")
                                 .HasColumnType("integer");
 
@@ -804,9 +816,9 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("CloudCrafter.Domain.Entities.Server", "Server")
-                        .WithMany()
+                        .WithMany("Stacks")
                         .HasForeignKey("ServerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.OwnsOne("CloudCrafter.Domain.Entities.ApplicationSource", "Source", b1 =>
@@ -1052,6 +1064,11 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Project", b =>
                 {
                     b.Navigation("Environments");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.Server", b =>
+                {
+                    b.Navigation("Stacks");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Stack", b =>

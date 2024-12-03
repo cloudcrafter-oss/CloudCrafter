@@ -1,7 +1,10 @@
 export { createProject } from "./createProject.ts";
+export { createServer } from "./createServer.ts";
 export { deleteProject } from "./deleteProject.ts";
+export { deleteServerById } from "./deleteServerById.ts";
 export { dispatchStackDeployment } from "./dispatchStackDeployment.ts";
 export { getDeploymentLogs } from "./getDeploymentLogs.ts";
+export { getDeploymentsForServer } from "./getDeploymentsForServer.ts";
 export { getDeploymentsForStack } from "./getDeploymentsForStack.ts";
 export { getFilterableFields } from "./getFilterableFields.ts";
 export { getProject } from "./getProject.ts";
@@ -17,6 +20,7 @@ export { postCreateGithubApp } from "./postCreateGithubApp.ts";
 export { postCreateStack } from "./postCreateStack.ts";
 export { postCreateUser } from "./postCreateUser.ts";
 export { postLoginUser } from "./postLoginUser.ts";
+export { postRotateAgentKey } from "./postRotateAgentKey.ts";
 export { postValidateGithubRepo } from "./postValidateGithubRepo.ts";
 export { test } from "./test.ts";
 export { updateProject } from "./updateProject.ts";

@@ -26,7 +26,6 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
     public Guid DeploymentId { get; set; }
 
     public BackgroundJobType Type => BackgroundJobType.StackDeployment;
-    public bool ShouldRunOnApiServer => false;
 
     public async Task HandleEntity(IApplicationDbContext context, string jobId)
     {
@@ -113,7 +112,7 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
 
             logger.LogDebug("Sending recipe to agent...");
             await agentManager.SendRecipeToAgent(
-                _deployment.Stack!.ServerId,
+                _deployment.ServerId,
                 _deployment.Id,
                 recipe.Recipe
             );

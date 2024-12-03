@@ -40,6 +40,8 @@ using FluentValidation;
 using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
@@ -58,14 +60,14 @@ public static class ApplicationServiceExtensions
         }
 
         RecurringJob.AddOrUpdate<ICloudCrafterRecurringJobsDispatcher>(
-            "5m-recurring-connectivity-checks",
+            "1m-recurring-connectivity-checks",
             service => service.AddRecurringConnectivityChecks(),
-            "*/5 * * * *"
+            "*/1 * * * *"
         );
 
         RecurringJob.AddOrUpdate<ICloudCrafterRecurringJobsDispatcher>(
-            "5m-recurring-stacks-health-checks-missing",
-            service => service.AddMarkStacksAsUnknownWhenTimespanExceeded(),
+            "5m-recurring-health-checks-missing",
+            service => service.MarkEntitiesAsUnknownWhenTimespanExceeded(),
             "*/5 * * * *"
         );
         RecurringJob.AddOrUpdate<ICloudCrafterRecurringJobsDispatcher>(
@@ -186,7 +188,7 @@ public static class ApplicationServiceExtensions
 
         services
             .AddSignalR()
-            .AddStackExchangeRedis(
+            .AddStackExchangeRedisCloudCrafter(
                 connectionString,
                 opt =>
                 {
@@ -200,11 +202,50 @@ public static class ApplicationServiceExtensions
             options.InstanceName = "CloudCrafter-Cache";
         });
 
+        services.AddSingleton<ISubscriber>(cfg =>
+        {
+            var multiplexer = ConnectionMultiplexer.Connect(connectionString);
+            return multiplexer.GetSubscriber();
+        });
+
         services.AddSingleton<IDistributedLockService>(sp => new DistributedLockService(
             connectionString
         ));
 
         services.AddSingleton<IGithubClientProvider, GithubClientProvider>();
         return services;
+    }
+}
+
+public static class Extensions
+{
+    public static ISignalRServerBuilder AddStackExchangeRedisCloudCrafter(
+        this ISignalRServerBuilder signalrBuilder,
+        string redisConnectionString,
+        Action<RedisOptions> configure
+    )
+    {
+        return AddStackExchangeRedisCloudCrafter(
+            signalrBuilder,
+            o =>
+            {
+                o.Configuration = ConfigurationOptions.Parse(redisConnectionString);
+                configure(o);
+            }
+        );
+    }
+
+    public static ISignalRServerBuilder AddStackExchangeRedisCloudCrafter(
+        this ISignalRServerBuilder signalrBuilder,
+        Action<RedisOptions> configure
+    )
+    {
+        signalrBuilder.Services.Configure(configure);
+        signalrBuilder.Services.AddSingleton(
+            typeof(HubLifetimeManager<>),
+            typeof(CloudCrafterHubLifetimeManager<>)
+        );
+
+        return signalrBuilder;
     }
 }

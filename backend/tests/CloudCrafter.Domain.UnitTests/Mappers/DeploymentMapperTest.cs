@@ -23,6 +23,7 @@ public class DeploymentMapperTest : BaseMapperTest
         {
             Id = Guid.NewGuid(),
             StackId = Guid.NewGuid(),
+            ServerId = Guid.NewGuid(),
             Logs = new List<DeploymentLog>(),
             RecipeYaml = null,
             State = entity,

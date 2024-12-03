@@ -1,88 +1,191 @@
-import type { GetServersQueryResponse } from '@/src/core/__generated__'
-import { Button } from '@ui/components/ui/button.tsx'
-import { Card } from '@ui/components/ui/card.tsx'
+'use client'
 import {
-	CircleIcon,
-	GaugeIcon,
-	HardDriveIcon,
-	MemoryStickIcon,
-	ServerIcon,
-} from 'lucide-react'
+	createServerCommandCommandSchema,
+	getServersQueryKey,
+	useCreateServerHook,
+	useGetServersHook,
+} from '@/src/core/__generated__'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from '@ui/components/ui/button'
+import { Input } from '@ui/components/ui/input'
+import {
+	Sheet,
+	SheetContent,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from '@ui/components/ui/sheet'
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from '@ui/components/ui/table'
+import { CircleIcon } from 'lucide-react'
+import { PlusIcon } from 'lucide-react'
 import Link from 'next/link'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
-const StateMap = {
-	Offline: (
-		<div className='flex items-center gap-2 text-sm text-muted-foreground'>
-			<CircleIcon className='w-2 h-2 fill-red-500' />
-			<span>Offline</span>
-		</div>
-	),
-	Maintenance: (
-		<div className='flex items-center gap-2 text-sm text-muted-foreground'>
-			<CircleIcon className='w-2 h-2 fill-yellow-500' />
-			<span>Maintenance</span>
-		</div>
-	),
-	Online: (
+import type { serverStatusDtoValueSchema } from '@/src/core/__generated__/zod/serverStatusDtoValueSchema'
+import { useQueryClient } from '@tanstack/react-query'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '@ui/components/ui/form'
+import { formatDistanceToNow } from 'date-fns'
+import type { z } from 'zod'
+
+const StateMap: Record<
+	z.infer<typeof serverStatusDtoValueSchema>,
+	JSX.Element
+> = {
+	Connected: (
 		<div className='flex items-center gap-2 text-sm text-muted-foreground'>
 			<CircleIcon className='w-2 h-2 fill-green-500' />
-			<span>Online</span>
+			<span>Connected</span>
+		</div>
+	),
+	Disconnected: (
+		<div className='flex items-center gap-2 text-sm text-muted-foreground'>
+			<CircleIcon className='w-2 h-2 fill-red-500' />
+			<span>Disconnected</span>
+		</div>
+	),
+	Unknown: (
+		<div className='flex items-center gap-2 text-sm text-muted-foreground'>
+			<CircleIcon className='w-2 h-2 fill-yellow-500' />
+			<span>Unknown</span>
 		</div>
 	),
 }
 
-export const ServersList = ({
-	servers,
-}: { servers: GetServersQueryResponse }) => {
-	const randomFromStateMap = () => {
-		const keys = Object.keys(StateMap)
-		// @ts-expect-error Todo: fix this
-		return StateMap[keys[Math.floor(Math.random() * keys.length)]]
+const formSchema = createServerCommandCommandSchema
+
+export const ServersList = () => {
+	const [open, setOpen] = useState(false)
+
+	const queryClient = useQueryClient()
+
+	const { data: servers } = useGetServersHook()
+
+	const form = useForm<z.infer<typeof createServerCommandCommandSchema>>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			name: '',
+		},
+	})
+
+	const mutation = useCreateServerHook({
+		mutation: {
+			onSuccess: () => {
+				form.reset()
+				setOpen(false)
+				queryClient.invalidateQueries({ queryKey: getServersQueryKey() })
+			},
+		},
+	})
+
+	const onSubmit = (data: z.infer<typeof formSchema>) => {
+		mutation.mutate({ data })
 	}
 
 	return (
-		<main className='flex flex-col gap-8 p-4 md:p-10 bg-muted/40 flex-1'>
-			<div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl w-full mx-auto'>
-				{servers.map((server) => (
-					<Card key={server.id} className='p-6 grid gap-6'>
-						<div className='flex items-center gap-4'>
-							<div className='bg-primary rounded-md p-3 flex items-center justify-center'>
-								<ServerIcon className='w-6 h-6 text-primary-foreground' />
-							</div>
-							<div className='grid gap-1'>
-								<h3 className='text-xl font-semibold'>{server.name}</h3>
-								{randomFromStateMap()}
-							</div>
-						</div>
-						<div className='grid gap-4'>
-							<div className='flex items-center justify-between'>
-								<span className='text-muted-foreground'>CPU</span>
-								<div className='flex items-center gap-2'>
-									<span className='font-semibold'>72%</span>
-									<GaugeIcon className='w-5 h-5 text-muted-foreground' />
-								</div>
-							</div>
-							<div className='flex items-center justify-between'>
-								<span className='text-muted-foreground'>Memory</span>
-								<div className='flex items-center gap-2'>
-									<span className='font-semibold'>8.2 GB / 16 GB</span>
-									<MemoryStickIcon className='w-5 h-5 text-muted-foreground' />
-								</div>
-							</div>
-							<div className='flex items-center justify-between'>
-								<span className='text-muted-foreground'>Disk</span>
-								<div className='flex items-center gap-2'>
-									<span className='font-semibold'>512 GB / 1 TB</span>
-									<HardDriveIcon className='w-5 h-5 text-muted-foreground' />
-								</div>
-							</div>
-						</div>
-						<Button variant='outline' className='justify-self-start'>
-							<Link href={`/admin/servers/${server.id}`}>View Details</Link>
+		<div className='p-4 md:p-10 space-y-4'>
+			<div className='flex justify-between items-center'>
+				<h2 className='text-lg font-semibold'>Servers</h2>
+				<Sheet open={open} onOpenChange={setOpen}>
+					<SheetTrigger asChild>
+						<Button>
+							<PlusIcon className='w-4 h-4 mr-2' />
+							Add Server
 						</Button>
-					</Card>
-				))}
+					</SheetTrigger>
+					<SheetContent>
+						<SheetHeader>
+							<SheetTitle>Add New Server</SheetTitle>
+						</SheetHeader>
+						<Form {...form}>
+							<form
+								onSubmit={form.handleSubmit(onSubmit)}
+								className='space-y-4 mt-4'
+							>
+								<FormField
+									control={form.control}
+									name='name'
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Server Name</FormLabel>
+											<FormControl>
+												<Input placeholder='Enter server name' {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<Button type='submit'>Create Server</Button>
+							</form>
+						</Form>
+					</SheetContent>
+				</Sheet>
 			</div>
-		</main>
+
+			<Table>
+				<TableHeader>
+					<TableRow>
+						<TableHead>Name</TableHead>
+						<TableHead>Status</TableHead>
+						<TableHead>Last Checkin</TableHead>
+						<TableHead>OS</TableHead>
+						<TableHead>Actions</TableHead>
+					</TableRow>
+				</TableHeader>
+				<TableBody>
+					{servers?.map((server) => (
+						<TableRow key={server.id}>
+							<TableCell className='font-medium'>{server.name}</TableCell>
+							<TableCell>{StateMap[server.pingData.status]}</TableCell>
+							<TableCell>
+								<span
+									title={
+										server.pingData.lastPingReceivedAt
+											? new Date(
+													server.pingData.lastPingReceivedAt,
+												).toLocaleString()
+											: ''
+									}
+								>
+									{server.pingData.lastPingReceivedAt
+										? formatDistanceToNow(
+												new Date(server.pingData.lastPingReceivedAt),
+												{ addSuffix: true },
+											)
+										: 'Never'}
+								</span>
+							</TableCell>
+							<TableCell>
+								<div className='flex items-center gap-2'>
+									<span>{server.pingData.osInfo}</span>
+								</div>
+							</TableCell>
+							<TableCell>
+								<Link
+									href={`/admin/servers/${server.id}`}
+									className='text-primary hover:underline'
+								>
+									View Details
+								</Link>
+							</TableCell>
+						</TableRow>
+					))}
+				</TableBody>
+			</Table>
+		</div>
 	)
 }

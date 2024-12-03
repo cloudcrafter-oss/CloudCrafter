@@ -9,6 +9,7 @@ using CloudCrafter.Web.Infrastructure;
 using CloudCrafter.Web.Infrastructure.OpenApi;
 using CloudCrafter.Web.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.OpenApi;
 using Polly;
 
@@ -75,37 +76,15 @@ public static class DependencyInjection
         collection.AddOpenApi(options =>
         {
             options.AddSchemaTransformer<RequireNotNullableSchemaFilter>();
-            //  .AddSchemaTransformer<CommandSchemaNameTransformer>();
 
-            // options.CreateSchemaReferenceId = info =>
-            // {
-            //
-            //     return info.getschemareferenceid
-            // };
-
-            options.AddSchemaTransformer(
-                (schema, context, ct) =>
+            options.AddOperationTransformer((operation, context, arg3) =>
+            {
+                if (string.IsNullOrEmpty(operation.OperationId) && context.Description.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
                 {
-                    if (schema.Type == "object" && schema.Properties != null)
-                    {
-                        var allPropertiesNullable = schema.Properties.Values.All(prop =>
-                            prop.Nullable == true
-                        );
-
-                        if (allPropertiesNullable)
-                        {
-                            // Prevent the "GitSettings" case
-                            // This was when all properties were nullable
-                            // But the object itself default value was "null".
-                            // Zod had some issues with this for frontend generation
-                            schema.Default = null;
-                            schema.Nullable = false;
-                        }
-                    }
-
-                    return Task.CompletedTask;
+                    operation.OperationId = controllerActionDescriptor.ActionName;
                 }
-            );
+                return Task.CompletedTask;
+            });
 
             options.CreateSchemaReferenceId = (JsonTypeInfo info) =>
             {
@@ -131,21 +110,7 @@ public static class DependencyInjection
 
                 return string.Join("", commandParts);
             };
-
-            // options.AddDocumentTransformer((doc, context, ct) =>
-            // {
-            //     var gitSettings = typeof(UpdateStackCommand.GitSettings);
-            //     if (context. == null)
-            //     {
-            //         var type = context.JsonTypeInfo.Type;
-            //
-            //         if (type == gitSettings)
-            //         {
-            //
-            //         }
-            //     }
-            //     return Task.CompletedTask;
-            // });
+            
             options.AddDocumentTransformer(
                 (doc, context, ct) =>
                 {
@@ -185,6 +150,7 @@ public static class DependencyInjection
         );
 
         services.AddEndpointsApiExplorer();
+        
 
         return services;
     }

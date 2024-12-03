@@ -10,4 +10,18 @@ public class ServerPingData
     public int? TotalCpuCount { get; set; }
     public double? MemoryUsagePercentage { get; set; }
     public long? TotalMemoryBytes { get; set; }
+
+    public ServerStatusValue Status { get; set; } = ServerStatusValue.Unknown;
+
+    public void SetStatus(ServerStatusValue status)
+    {
+        Status = status;
+    }
+}
+
+public enum ServerStatusValue
+{
+    Unknown,
+    Connected,
+    Disconnected,
 }

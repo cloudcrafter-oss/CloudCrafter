@@ -29,6 +29,7 @@ public abstract class BaseTestFixture
         var stack = FakerInstances
             .StackFaker(environment.Id)
             .RuleFor(x => x.ServerId, server.Id)
+            .RuleFor(x => x.Server, f => null)
             .Generate();
         await AddAsync(stack);
 

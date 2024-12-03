@@ -6,17 +6,15 @@ import type { GitSettings } from "./GitSettings.ts";
     */
     stackId: string;
     /**
-     * @default null
      * @type string
     */
     name?: string | null;
     /**
-     * @default null
      * @type string
     */
     description?: string | null;
     /**
      * @type object | undefined
     */
-    gitSettings?: GitSettings;
+    gitSettings?: GitSettings | null;
 };

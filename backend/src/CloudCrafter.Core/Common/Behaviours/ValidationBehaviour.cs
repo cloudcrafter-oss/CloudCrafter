@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using ValidationException = CloudCrafter.Core.Exceptions.ValidationException;
 
 namespace CloudCrafter.Core.Common.Behaviours;
 
@@ -27,8 +28,11 @@ public class ValidationBehaviour<TRequest, TResponse>(IEnumerable<IValidator<TRe
                 .ToList();
 
             if (failures.Any())
+            {
                 throw new ValidationException(failures);
+            }
         }
+
         return await next();
     }
 }

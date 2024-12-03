@@ -13,7 +13,7 @@
          "name": "Run Biome on frontend projects",
          "command": "pnpm",
          "group": "pre-commit",
-         "args": ["run", "format-and-lint:fix"],
+         "args": ["run", "format-and-lint:hook"],
          "cwd": "./frontend"
       }
    ]

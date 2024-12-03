@@ -24,5 +24,13 @@ public class ValidationException : Exception
         Errors = new Dictionary<string, string[]> { { key, new[] { message } } };
     }
 
+    public ValidationException(ValidationError error)
+        : this()
+    {
+        Errors = new Dictionary<string, string[]> { { error.Key, new[] { error.Message } } };
+    }
+
     public IDictionary<string, string[]> Errors { get; }
 }
+
+public record ValidationError(string Key, string Message);

@@ -7,4 +7,5 @@ public interface IAgentManager
     Task SendPingToAgents();
     Task RequestHealthChecks();
     Task SendRecipeToAgent(Guid serverId, Guid deploymentId, DeploymentRecipe recipe);
+    Task DisconnectAgent(Guid serverId);
 }
