@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core.Commands.Stacks;
+using CloudCrafter.Core.Commands.Stacks.Service;
 using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Web.Infrastructure;
@@ -70,6 +71,19 @@ public class Stacks : EndpointGroupBase
     {
         command = command with { StackId = id };
         var result = await sender.Send(command);
+        return result is not null ? Results.Ok(result) : Results.NotFound();
+    }
+
+    public async Task<IResult> UpdateStackService(
+        [FromRoute] Guid stackId,
+        [FromRoute] Guid stackServiceId,
+        [FromBody] UpdateStackServiceCommand.Command command,
+        ISender sender
+    )
+    {
+        command = command with { StackId = stackId, StackServiceId = stackServiceId };
+        var result = await sender.Send(command);
+
         return result is not null ? Results.Ok(result) : Results.NotFound();
     }
 }
