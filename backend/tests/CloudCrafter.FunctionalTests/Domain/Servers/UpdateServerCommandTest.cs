@@ -43,14 +43,14 @@ public class UpdateServerCommandTest : BaseTestFixture
             server.Id,
             new UpdateServerDto { Name = "New Name" }
         );
-        server.Name.Should().NotBe(command.UpdateDto.Name);
+        server.Name.Should().NotBe(command.UpdateDetails.Name);
 
         await SendAsync(command);
 
         var updatedServer = await FindAsync<Server>(server.Id);
 
         updatedServer.Should().NotBeNull();
-        updatedServer!.Name.Should().Be(command.UpdateDto.Name);
+        updatedServer!.Name.Should().Be(command.UpdateDetails.Name);
     }
 
     [Test]
@@ -62,7 +62,7 @@ public class UpdateServerCommandTest : BaseTestFixture
         await AddAsync(server);
 
         var command = new UpdateServerCommand.Command(server.Id, new UpdateServerDto());
-        server.Name.Should().NotBe(command.UpdateDto.Name);
+        server.Name.Should().NotBe(command.UpdateDetails.Name);
 
         await SendAsync(command);
 
