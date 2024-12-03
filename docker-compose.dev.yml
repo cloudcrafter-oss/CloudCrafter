@@ -44,7 +44,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - CLOUDCRAFTER_Agent__ServerId=ffcdd9ee-ff31-4344-a3ab-efdc9b5e44f1
-      - CLOUDCRAFTER_Agent__AgentKey=5Rdptq6fVas04nZg65UWZdZKFiSsPFO7mv4rcudumkyF4A5vEuLBzGeJAfqX4bcP
+      - CLOUDCRAFTER_Agent__AgentKey=${CLOUDCRAFTER_AGENT_KEY}
       - CLOUDCRAFTER_Agent__CloudCrafterHost=http://web:8080
 
   job-runner-base:

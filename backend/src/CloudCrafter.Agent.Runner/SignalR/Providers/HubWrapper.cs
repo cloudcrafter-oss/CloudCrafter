@@ -1,6 +1,7 @@
-﻿using CloudCrafter.Agent.Models.Configs;
+using CloudCrafter.Agent.Models.Configs;
 using CloudCrafter.Agent.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -18,11 +19,13 @@ public class HubWrapper : IHubWrapper
 {
     private readonly HubConnection _connection;
     private readonly ILogger<HubWrapper> _logger;
+    private readonly IHostApplicationLifetime _applicationLifetime;
 
     public HubWrapper(
         IHubConnectionProvider provider,
         ILogger<HubWrapper> logger,
-        IOptions<AgentConfig> config
+        IOptions<AgentConfig> config,
+        IHostApplicationLifetime applicationLifetime
     )
     {
         var configValue = config.Value;
@@ -34,6 +37,7 @@ public class HubWrapper : IHubWrapper
         );
 
         TypedHubConnection = new TypedHubConnection<IAgentHub>(_connection);
+        _applicationLifetime = applicationLifetime;
 
         // Log.Logger = AgentLoggerConfiguration
         //     .CreateConfiguration()
@@ -68,6 +72,7 @@ public class HubWrapper : IHubWrapper
                 _logger.LogCritical("Connection closed by the CloudCrafter server");
             }
 
+            _applicationLifetime.StopApplication();
             return Task.CompletedTask;
         };
     }
