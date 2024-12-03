@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Servers;
+using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Domain.Domain.Deployment;
@@ -61,5 +61,16 @@ public class ServersController : CloudCrafterController
     )
     {
         return await sender.Send(new GetServerSimpleDeployments.Query(id, paginationRequest));
+    }
+
+    [HttpPatch("{id}")]
+    public async Task<IResult> UpdateServer(
+        [FromRoute] Guid id,
+        [FromBody] UpdateServerDto updateDto,
+        ISender sender
+    )
+    {
+        await sender.Send(new UpdateServerCommand.Command(id, updateDto));
+        return Results.Ok();
     }
 }

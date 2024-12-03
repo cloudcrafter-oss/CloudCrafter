@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Servers;
+using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Domain.Domain.Server;
 
 namespace CloudCrafter.Core.Interfaces.Domain.Servers;
@@ -13,4 +13,6 @@ public interface IServersService
     Task MarkServersStateAsUnknownAfterTimespan(TimeSpan fromMinutes);
     Task DeleteServer(Guid id);
     Task RotateServerKey(Guid id);
+    Task SaveChangesAsync();
+    Task UpdateServer(Guid id, UpdateServerDto updateDto);
 }

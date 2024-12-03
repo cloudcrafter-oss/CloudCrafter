@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Core.Events.DomainEvents;
 using CloudCrafter.Core.Events.DomainEvents.Server;
@@ -24,6 +24,11 @@ public class ServersService(IServerRepository repository, IMapper mapper) : ISer
     public Task<ServerDetailDto?> GetServer(Guid id)
     {
         return repository.GetServer(id);
+    }
+
+    public Task SaveChangesAsync()
+    {
+        return repository.SaveChangesAsync();
     }
 
     public Task<bool> IsValidAgent(Guid serverId, string serverKey)
@@ -72,6 +77,18 @@ public class ServersService(IServerRepository repository, IMapper mapper) : ISer
             DomainEventDispatchTiming.AfterSaving,
             new ServerAgentKeyUpdatedEvent(server)
         );
+        await repository.SaveChangesAsync();
+    }
+
+    public async Task UpdateServer(Guid id, UpdateServerDto updateDto)
+    {
+        var server = await repository.GetServerEntityOrFail(id);
+
+        if (updateDto.Name is not null)
+        {
+            server.Name = updateDto.Name;
+        }
+
         await repository.SaveChangesAsync();
     }
 }
