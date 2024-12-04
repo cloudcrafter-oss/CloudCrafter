@@ -60,6 +60,7 @@ export type { StackCreatedDto } from "./StackCreatedDto.ts";
 export type { StackDetailDto } from "./StackDetailDto.ts";
 export type { StackServerDto } from "./StackServerDto.ts";
 export type { StackServiceDto } from "./StackServiceDto.ts";
+export type { StackServiceHttpConfigurationDto } from "./StackServiceHttpConfigurationDto.ts";
 export type { StackSourceDto } from "./StackSourceDto.ts";
 export type { StackSourceDtoTypeEnum, StackSourceDtoType } from "./StackSourceDtoType.ts";
 export type { Test200, TestQueryResponse, TestQuery } from "./Test.ts";

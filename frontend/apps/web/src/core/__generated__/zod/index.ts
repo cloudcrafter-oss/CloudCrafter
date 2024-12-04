@@ -60,6 +60,7 @@ export { stackCreatedDtoSchema } from "./stackCreatedDtoSchema.ts";
 export { stackDetailDtoSchema } from "./stackDetailDtoSchema.ts";
 export { stackServerDtoSchema } from "./stackServerDtoSchema.ts";
 export { stackServiceDtoSchema } from "./stackServiceDtoSchema.ts";
+export { stackServiceHttpConfigurationDtoSchema } from "./stackServiceHttpConfigurationDtoSchema.ts";
 export { stackSourceDtoSchema } from "./stackSourceDtoSchema.ts";
 export { stackSourceDtoTypeSchema } from "./stackSourceDtoTypeSchema.ts";
 export { test200Schema, testQueryResponseSchema } from "./testSchema.ts";

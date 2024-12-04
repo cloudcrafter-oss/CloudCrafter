@@ -11,4 +11,8 @@ export type UpdateStackServiceCommandCommand = {
      * @type string
     */
     name?: string | null;
+    /**
+     * @type string
+    */
+    domainName?: string | null;
 };

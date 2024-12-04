@@ -37,6 +37,7 @@ export const ServiceDetail = ({
 			stackId: stackId,
 			stackServiceId: service.id,
 			name: service.name,
+			domainName: service.httpConfiguration?.domainName,
 		},
 	})
 
@@ -92,6 +93,24 @@ export const ServiceDetail = ({
 												{...field}
 												value={field.value ?? ''}
 												placeholder='Enter service name'
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name='domainName'
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Domain Name</FormLabel>
+										<FormControl>
+											<Input
+												{...field}
+												value={field.value ?? ''}
+												placeholder='Enter domain name'
 											/>
 										</FormControl>
 										<FormMessage />
