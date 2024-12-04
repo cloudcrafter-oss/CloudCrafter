@@ -1,9 +1,10 @@
-﻿using CloudCrafter.Core.Commands.Stacks;
-using CloudCrafter.Core.Commands.Stacks.Service;
+﻿using CloudCrafter.Core.Commands.Stacks.Service;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Stacks.Services;
@@ -37,6 +38,7 @@ public class UpdateStackServiceCommandTest : BaseTestFixture
     }
 
     [TestCase("Name", "New Test Name")]
+    [TestCase("DomainName", "https://my-domain.com")]
     public async Task ShouldUpdateStackServiceProperty(string propertyName, string newValue)
     {
         await RunAsAdministratorAsync();
@@ -51,23 +53,29 @@ public class UpdateStackServiceCommandTest : BaseTestFixture
         // Create command dynamically based on property name
         var command = propertyName switch
         {
-            "Name" => new UpdateStackServiceCommand.Command(
+            "Name" => new UpdateStackServiceCommand.Command(stack.Id, stackService.Id, newValue),
+            "DomainName" => new UpdateStackServiceCommand.Command(
                 stack.Id,
                 stackService.Id,
-                Name: newValue
+                DomainName: newValue
             ),
             _ => throw new ArgumentException($"Unsupported property: {propertyName}"),
         };
 
         await SendAsync(command);
 
-        var updatedStackServiceFromDb = await FindAsync<StackService>(stackService.Id);
+        var dbContext = GetService<AppDbContext>();
+
+        var updatedStackServiceFromDb = await dbContext
+            .StackServices.Include(x => x.HttpConfiguration)
+            .FirstOrDefaultAsync(x => x.Id == stackService.Id);
         updatedStackServiceFromDb.Should().NotBeNull();
 
         // Verify property value dynamically
         var actualValue = propertyName switch
         {
             "Name" => updatedStackServiceFromDb!.Name,
+            "DomainName" => updatedStackServiceFromDb!.HttpConfiguration?.DomainName,
             _ => throw new ArgumentException($"Unsupported property: {propertyName}"),
         };
 
@@ -78,6 +86,11 @@ public class UpdateStackServiceCommandTest : BaseTestFixture
         "Name",
         "a",
         "The length of 'Name' must be at least 2 characters. You entered 1 characters."
+    )]
+    [TestCase(
+        "DomainName",
+        "a",
+        "The length of 'Domain Name' must be at least 2 characters. You entered 1 characters."
     )]
     public async Task ShouldThrowValidationError(
         string propertyName,
@@ -97,10 +110,11 @@ public class UpdateStackServiceCommandTest : BaseTestFixture
         // Create command dynamically based on property name
         var command = propertyName switch
         {
-            "Name" => new UpdateStackServiceCommand.Command(
+            "Name" => new UpdateStackServiceCommand.Command(stack.Id, stackService.Id, newValue),
+            "DomainName" => new UpdateStackServiceCommand.Command(
                 stack.Id,
                 stackService.Id,
-                Name: newValue
+                DomainName: newValue
             ),
             _ => throw new ArgumentException($"Unsupported property: {propertyName}"),
         };

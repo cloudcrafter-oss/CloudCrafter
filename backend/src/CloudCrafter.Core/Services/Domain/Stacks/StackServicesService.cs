@@ -31,6 +31,18 @@ public class StackServicesService(IStackRepository stackRepository, IMapper mapp
             stackService.Name = request.Name;
         }
 
+        if (request.DomainName != null)
+        {
+            // Note the check - it can be an empty string!
+            stackService.HttpConfiguration ??= new()
+            {
+                DomainName = request.Name,
+                ContainerHttpPort = null,
+            };
+
+            stackService.HttpConfiguration.DomainName = request.DomainName;
+        }
+
         await stackRepository.SaveChangesAsync();
 
         return mapper.Map<StackServiceDto>(stackService);

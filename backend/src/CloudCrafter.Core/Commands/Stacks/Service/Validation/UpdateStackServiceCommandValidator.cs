@@ -8,5 +8,10 @@ public class UpdateStackServiceCommandValidator
     public UpdateStackServiceCommandValidator()
     {
         RuleFor(x => x.Name).NotEmpty().MinimumLength(2).When(x => !string.IsNullOrEmpty(x.Name));
+
+        RuleFor(x => x.DomainName)
+            .NotEmpty()
+            .MinimumLength(2)
+            .When(x => !string.IsNullOrEmpty(x.DomainName));
     }
 }
