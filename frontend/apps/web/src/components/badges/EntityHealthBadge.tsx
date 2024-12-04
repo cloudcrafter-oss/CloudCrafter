@@ -1,4 +1,4 @@
-import type { EntityHealthDtoValue } from '@/src/core/__generated__'
+import type { EntityHealthDtoValue } from '@cloudcrafter/api/src/__generated__/types/EntityHealthDtoValue'
 import { Badge } from '@ui/components/ui/badge'
 import { TooltipContent } from '@ui/components/ui/tooltip'
 import { Tooltip, TooltipTrigger } from '@ui/components/ui/tooltip'

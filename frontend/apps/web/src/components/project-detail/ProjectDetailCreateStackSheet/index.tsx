@@ -1,11 +1,11 @@
 'use client'
 import {
-	type StackCreatedDto,
 	createStackCommandCommandSchema,
 	useGetServersHook,
 	usePostCreateStackHook,
 	usePostValidateGithubRepoHook,
-} from '@/src/core/__generated__'
+} from '@cloudcrafter/api'
+import type { StackCreatedDto } from '@cloudcrafter/api/src/__generated__/types/StackCreatedDto'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/components/ui/button'
 import {

@@ -1,10 +1,4 @@
 'use client'
-import {
-	createServerCommandCommandSchema,
-	getServersQueryKey,
-	useCreateServerHook,
-	useGetServersHook,
-} from '@/src/core/__generated__'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/components/ui/button'
 import { Input } from '@ui/components/ui/input'
@@ -29,7 +23,12 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import type { serverStatusDtoValueSchema } from '@/src/core/__generated__/zod/serverStatusDtoValueSchema'
+import {
+	createServerCommandCommandSchema,
+	getServersQueryKey,
+	useCreateServerHook,
+	useGetServersHook,
+} from '@cloudcrafter/api'
 import { useQueryClient } from '@tanstack/react-query'
 import {
 	Form,

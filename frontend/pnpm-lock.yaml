@@ -262,6 +262,9 @@ importers:
       '@kubb/plugin-zod':
         specifier: ^3.0.9
         version: 3.0.9(@kubb/react@3.0.6)
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
 
   packages/config-typescript: {}
 

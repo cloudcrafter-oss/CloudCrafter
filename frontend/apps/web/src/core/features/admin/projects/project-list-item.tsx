@@ -3,8 +3,8 @@ import {
 	fetchProjectDetail,
 	updateProjectAction,
 } from '@/src/app/_actions/project.ts'
-import type { ProjectDto } from '@/src/core/__generated__'
-import { updateProjectArgsSchema } from '@/src/core/__generated__/zod/updateProjectArgsSchema.ts'
+import { updateProjectArgsSchema } from '@cloudcrafter/api'
+import type { ProjectDto } from '@cloudcrafter/api/src/__generated__/types/ProjectDto'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/components/ui/button.tsx'
 import {

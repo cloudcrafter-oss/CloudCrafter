@@ -6,8 +6,8 @@ import {
 import { BitbucketPopup } from '@/src/components/settings/git/providers/bitbucket/AddBitbucketPopup'
 import { GithubPopup } from '@/src/components/settings/git/providers/github/AddGithubPopup'
 import { GitlabPopup } from '@/src/components/settings/git/providers/gitlab/AddGitlabPopup'
-import type { ProviderOverviewDto } from '@/src/core/__generated__'
 import { formatDate } from '@/src/utils/date/date-utils'
+import type { ProviderOverviewDto } from '@cloudcrafter/api/src/__generated__/types/ProviderOverviewDto'
 import { SiBitbucket, SiGithub, SiGitlab } from '@icons-pack/react-simple-icons'
 import { Button } from '@ui/components/ui/button'
 import {

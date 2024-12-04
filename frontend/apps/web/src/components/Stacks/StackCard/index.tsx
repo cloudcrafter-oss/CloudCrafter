@@ -1,4 +1,4 @@
-import type { DeployedStackDto } from '@/src/core/__generated__'
+import type { DeployedStackDto } from '@cloudcrafter/api/src/__generated__/types/DeployedStackDto'
 import { Button } from '@ui/components/ui/button'
 import { Card, CardContent } from '@ui/components/ui/card'
 import { ExternalLink } from 'lucide-react'

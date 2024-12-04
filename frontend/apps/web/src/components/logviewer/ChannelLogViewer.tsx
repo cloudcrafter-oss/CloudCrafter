@@ -1,9 +1,7 @@
-import {
-	type DeploymentLogDto,
-	channelOutputLogLineLevelEnum,
-	useGetDeploymentLogsHook,
-} from '@/src/core/__generated__'
 import { useWebHub } from '@/src/hooks/useWebHub'
+import { useGetDeploymentLogsHook } from '@cloudcrafter/api/src/__generated__/hooks/useGetDeploymentLogsHook'
+import { channelOutputLogLineLevelEnum } from '@cloudcrafter/api/src/__generated__/types/ChannelOutputLogLineLevel'
+import type { DeploymentLogDto } from '@cloudcrafter/api/src/__generated__/types/DeploymentLogDto'
 import { LazyLog } from '@melloware/react-logviewer'
 import {
 	Sheet,

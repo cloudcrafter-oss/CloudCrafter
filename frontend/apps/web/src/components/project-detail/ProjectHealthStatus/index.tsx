@@ -1,4 +1,4 @@
-import type { ProjectEnvironmentEnhancedDto } from '@/src/core/__generated__'
+import type { ProjectEnvironmentEnhancedDto } from '@cloudcrafter/api/src/__generated__/types/ProjectEnvironmentEnhancedDto'
 import { CardContent, CardHeader, CardTitle } from '@ui/components/ui/card'
 import { ActivityIcon, AlertCircle, CheckCircle } from 'lucide-react'
 

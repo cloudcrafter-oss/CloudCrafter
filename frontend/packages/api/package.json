@@ -2,6 +2,8 @@
 	"name": "@cloudcrafter/api",
 	"version": "0.0.0",
 	"private": true,
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
 	"scripts": {
 		"generate-clients": "kubb generate --config kubb.config.ts"
 	},
@@ -12,6 +14,7 @@
 		"@kubb/plugin-oas": "^3.0.9",
 		"@kubb/plugin-react-query": "^3.0.9",
 		"@kubb/plugin-ts": "^3.0.9",
-		"@kubb/plugin-zod": "^3.0.9"
+		"@kubb/plugin-zod": "^3.0.9",
+		"zod": "^3.23.8"
 	}
 }

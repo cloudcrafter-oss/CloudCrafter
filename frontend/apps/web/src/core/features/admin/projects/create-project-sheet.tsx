@@ -1,5 +1,4 @@
 import { createProjectAction } from '@/src/app/_actions.ts'
-import { createProjectCommandCommandSchema } from '@/src/core/__generated__/zod/createProjectCommandCommandSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/components/ui/button.tsx'
 import {
@@ -19,6 +18,7 @@ import {
 import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
 
+import { createProjectCommandCommandSchema } from '@cloudcrafter/api'
 import { toast } from 'sonner'
 
 type FormValues = z.infer<typeof createProjectCommandCommandSchema>

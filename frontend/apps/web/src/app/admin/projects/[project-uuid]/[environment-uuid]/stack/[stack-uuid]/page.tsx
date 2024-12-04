@@ -1,13 +1,10 @@
 import StackConfigPage from '@/src/components/stack-detail/StackConfigPage'
 import { DeploymentList } from '@/src/components/stack-detail/deployments/deployment-list'
 import {
-	getDeploymentsForStack,
-	getStackDetail,
-} from '@/src/core/__generated__'
-import {
 	type StackRouteParams,
 	validateStackRouteParams,
 } from '@/src/utils/routes/schemas'
+import { getDeploymentsForStack, getStackDetail } from '@cloudcrafter/api'
 import {
 	Tabs,
 	TabsContent,

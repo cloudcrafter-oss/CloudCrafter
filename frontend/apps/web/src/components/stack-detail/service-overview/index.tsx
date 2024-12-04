@@ -1,4 +1,4 @@
-import type { StackDetailDto } from '@/src/core/__generated__'
+import type { StackDetailDto } from '@cloudcrafter/api/src/__generated__/types/StackDetailDto'
 import { useState } from 'react'
 import { ServiceDetail } from './service-detail'
 

@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth'
 import 'next-auth/jwt'
-import { postCreateUser, postRefreshTokens } from '@/src/core/__generated__'
 import { debugToken } from '@/src/utils/auth/jwt-utils.ts'
+import { postCreateUser, postRefreshTokens } from '@cloudcrafter/api'
 import type { JWT } from 'next-auth/jwt'
 import type { Provider } from 'next-auth/providers'
 import Auth0 from 'next-auth/providers/auth0'
