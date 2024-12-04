@@ -9,6 +9,7 @@
 		"paths": {
 			"@ui/*": ["../../packages/ui/src/*"],
 			"@/*": ["./*"],
+			"@cloudcrafter/api/*": ["../../packages/api/src/*"],
 			"auth": ["./auth"]
 		},
 		/* Bundler mode */
