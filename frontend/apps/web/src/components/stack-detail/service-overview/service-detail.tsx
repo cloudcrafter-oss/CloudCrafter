@@ -118,23 +118,6 @@ export const ServiceDetail = ({
 								)}
 							/>
 
-							<div>
-								<Label htmlFor={`${service.name}-domain`}>Domain Name</Label>
-								<Input
-									id={`${service.name}-domain`}
-									placeholder='Enter domain name'
-								/>
-							</div>
-
-							<div>
-								<Label htmlFor={`${service.name}-port`}>Container Port</Label>
-								<Input
-									id={`${service.name}-port`}
-									type='number'
-									placeholder='Enter container port'
-								/>
-							</div>
-
 							<div className='flex justify-end'>
 								<Button type='submit'>Save Changes</Button>
 							</div>

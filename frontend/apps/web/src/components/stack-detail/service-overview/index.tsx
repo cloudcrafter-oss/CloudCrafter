@@ -6,17 +6,11 @@ export const ServiceOverview = ({
 	stackDetails,
 }: { stackDetails: StackDetailDto }) => {
 	const services = stackDetails?.services ?? []
-	const [editingName, setEditingName] = useState('')
 
 	const [expandedService, setExpandedService] = useState<string | null>(null)
 
 	const toggleService = (serviceName: string) => {
 		setExpandedService(expandedService === serviceName ? null : serviceName)
-	}
-
-	const handleSave = (originalName: string) => {
-		// Here you would typically call an API to update the service name
-		console.log('Saving new name:', editingName, 'for service:', originalName)
 	}
 
 	if (!services.length) {
