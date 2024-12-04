@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using CloudCrafter.Core.Common.Interfaces.Access;
 using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
