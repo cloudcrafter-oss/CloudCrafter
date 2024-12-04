@@ -4,6 +4,7 @@ import { actionClient } from '@/src/utils/actions/safe-action.ts'
 import {
 	deleteProject,
 	getProject,
+	getProjectPathParamsSchema,
 	getProjects,
 	updateProject,
 	updateProjectArgsSchema,
