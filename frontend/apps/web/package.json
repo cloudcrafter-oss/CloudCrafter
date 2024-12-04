@@ -6,21 +6,12 @@
 	"scripts": {
 		"dev": "next dev --port 3001",
 		"build": "next build",
-		"start": "next start --port 3001",
-		"generate-clients": "kubb generate --config kubb.config.ts",
-		"clean-generated-files": "node src/utils/kubb/post-action.js"
+		"start": "next start --port 3001"
 	},
 	"dependencies": {
 		"@auth/unstorage-adapter": "^2.4.1",
 		"@hookform/resolvers": "^3.6.0",
 		"@icons-pack/react-simple-icons": "^10.1.0",
-		"@kubb/cli": "^3.0.9",
-		"@kubb/core": "^3.0.9",
-		"@kubb/plugin-client": "^3.0.9",
-		"@kubb/plugin-oas": "^3.0.9",
-		"@kubb/plugin-react-query": "^3.0.9",
-		"@kubb/plugin-ts": "^3.0.9",
-		"@kubb/plugin-zod": "^3.0.9",
 		"@lifespikes/next-datatable": "^1.7.5",
 		"@melloware/react-logviewer": "^5.2.3",
 		"@microsoft/signalr": "^8.0.7",
@@ -49,7 +40,8 @@
 		"swr": "^2.2.5",
 		"unstorage": "^1.10.2",
 		"zod": "^3.23.8",
-		"zustand": "^4.5.5"
+		"zustand": "^4.5.5",
+		"@cloudcrafter/api": "workspace:*"
 	},
 	"devDependencies": {
 		"@repo/typescript-config": "workspace:*",

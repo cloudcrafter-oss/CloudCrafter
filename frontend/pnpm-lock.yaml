@@ -111,33 +111,15 @@ importers:
       '@auth/unstorage-adapter':
         specifier: ^2.4.1
         version: 2.7.2(unstorage@1.12.0)
+      '@cloudcrafter/api':
+        specifier: workspace:*
+        version: link:../../packages/api
       '@hookform/resolvers':
         specifier: ^3.6.0
         version: 3.9.1(react-hook-form@7.53.1(react@18.3.1))
       '@icons-pack/react-simple-icons':
         specifier: ^10.1.0
         version: 10.1.0(react@18.3.1)
-      '@kubb/cli':
-        specifier: ^3.0.9
-        version: 3.0.9(typescript@5.6.3)
-      '@kubb/core':
-        specifier: ^3.0.9
-        version: 3.0.9
-      '@kubb/plugin-client':
-        specifier: ^3.0.9
-        version: 3.0.9(@kubb/react@3.0.6)(axios@1.7.7)
-      '@kubb/plugin-oas':
-        specifier: ^3.0.9
-        version: 3.0.9(@kubb/react@3.0.6)
-      '@kubb/plugin-react-query':
-        specifier: ^3.0.9
-        version: 3.0.9(@kubb/react@3.0.6)
-      '@kubb/plugin-ts':
-        specifier: ^3.0.9
-        version: 3.0.9(@kubb/react@3.0.6)
-      '@kubb/plugin-zod':
-        specifier: ^3.0.9
-        version: 3.0.9(@kubb/react@3.0.6)
       '@lifespikes/next-datatable':
         specifier: ^1.7.5
         version: 1.8.0(@lifespikes/ui@1.8.0(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(tailwindcss@3.4.14(ts-node@10.9.2(@types/node@20.17.3)(typescript@5.6.3))))
@@ -256,6 +238,30 @@ importers:
       typescript:
         specifier: ^5.4.5
         version: 5.6.3
+
+  packages/api:
+    dependencies:
+      '@kubb/cli':
+        specifier: ^3.0.9
+        version: 3.0.9(typescript@5.6.3)
+      '@kubb/core':
+        specifier: ^3.0.9
+        version: 3.0.9
+      '@kubb/plugin-client':
+        specifier: ^3.0.9
+        version: 3.0.9(@kubb/react@3.0.6)(axios@1.7.7)
+      '@kubb/plugin-oas':
+        specifier: ^3.0.9
+        version: 3.0.9(@kubb/react@3.0.6)
+      '@kubb/plugin-react-query':
+        specifier: ^3.0.9
+        version: 3.0.9(@kubb/react@3.0.6)
+      '@kubb/plugin-ts':
+        specifier: ^3.0.9
+        version: 3.0.9(@kubb/react@3.0.6)
+      '@kubb/plugin-zod':
+        specifier: ^3.0.9
+        version: 3.0.9(@kubb/react@3.0.6)
 
   packages/config-typescript: {}
 

@@ -11,25 +11,15 @@ export default defineConfig({
 		path: 'http://backend-7f000001.nip.io/openapi/v1.json',
 	},
 	output: {
-		path: './src/core/__generated__',
+		path: './src/__generated__',
 		clean: true,
 	},
-	// hooks: {
-	// 	done: [
-	// 		'node src/utils/kubb/post-action.js',
-	// 		'node src/utils/kubb/get-signal-types.js',
-	// 	],
-	// },
 	plugins: [
 		pluginOas(),
 		pluginZod({
 			output: {
 				path: './zod',
 			},
-
-			// mapper: {
-			// 	productName: 'z.string().uuid()',
-			// },
 		}),
 		pluginClient({
 			output: {
@@ -42,7 +32,6 @@ export default defineConfig({
 				},
 			],
 			importPath: '../../backend/client.ts',
-			// client: { importPath: '../../backend/client.ts' },
 		}),
 		pluginClient({
 			output: {
@@ -54,7 +43,6 @@ export default defineConfig({
 					pattern: 'cloudCrafterAuthTest',
 				},
 			],
-			// client: { importPath: '../../backend/non-auth-client.ts' },
 		}),
 		pluginTs(),
 		pluginReactQuery({
