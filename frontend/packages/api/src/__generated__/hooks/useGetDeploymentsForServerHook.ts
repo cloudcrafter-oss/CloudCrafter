@@ -1,3 +1,4 @@
+// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
 import client from "../../frontend/client";
 import type { RequestConfig } from "../../frontend/client";
 import type { GetDeploymentsForServerQueryResponse, GetDeploymentsForServerPathParams, GetDeploymentsForServerQueryParams } from "../types/GetDeploymentsForServer";
@@ -9,7 +10,7 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
  export type GetDeploymentsForServerQueryKey = ReturnType<typeof getDeploymentsForServerQueryKey>;
 
  /**
- * @link /api/Servers/:id/deployments
+ * {@link /api/Servers/:id/deployments}
  */
 async function getDeploymentsForServerHook(id: GetDeploymentsForServerPathParams["id"], params?: GetDeploymentsForServerQueryParams, config: Partial<RequestConfig> = {}) {
     const res = await client<GetDeploymentsForServerQueryResponse, Error, unknown>({ method: "GET", url: `/api/Servers/${id}/deployments`, params, ...config });
@@ -29,7 +30,7 @@ async function getDeploymentsForServerHook(id: GetDeploymentsForServerPathParams
 }
 
  /**
- * @link /api/Servers/:id/deployments
+ * {@link /api/Servers/:id/deployments}
  */
 export function useGetDeploymentsForServerHook<TData = GetDeploymentsForServerQueryResponse, TQueryData = GetDeploymentsForServerQueryResponse, TQueryKey extends QueryKey = GetDeploymentsForServerQueryKey>(id: GetDeploymentsForServerPathParams["id"], params?: GetDeploymentsForServerQueryParams, options: {
     query?: Partial<QueryObserverOptions<GetDeploymentsForServerQueryResponse, Error, TData, TQueryData, TQueryKey>>;

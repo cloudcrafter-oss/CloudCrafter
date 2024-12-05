@@ -10,7 +10,7 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
  export type GetServersQueryKey = ReturnType<typeof getServersQueryKey>;
 
  /**
- * @link /api/Servers
+ * {@link /api/Servers}
  */
 async function getServersHook(config: Partial<RequestConfig> = {}) {
     const res = await client<GetServersQueryResponse, Error, unknown>({ method: "GET", url: `/api/Servers`, ...config });
@@ -29,7 +29,7 @@ async function getServersHook(config: Partial<RequestConfig> = {}) {
 }
 
  /**
- * @link /api/Servers
+ * {@link /api/Servers}
  */
 export function useGetServersHook<TData = GetServersQueryResponse, TQueryData = GetServersQueryResponse, TQueryKey extends QueryKey = GetServersQueryKey>(options: {
     query?: Partial<QueryObserverOptions<GetServersQueryResponse, Error, TData, TQueryData, TQueryKey>>;

@@ -10,7 +10,7 @@ import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
  export type GetDeploymentsForServerInfiniteQueryKey = ReturnType<typeof getDeploymentsForServerInfiniteQueryKey>;
 
  /**
- * @link /api/Servers/:id/deployments
+ * {@link /api/Servers/:id/deployments}
  */
 async function getDeploymentsForServerHook(id: GetDeploymentsForServerPathParams["id"], params?: GetDeploymentsForServerQueryParams, config: Partial<RequestConfig> = {}) {
     const res = await client<GetDeploymentsForServerQueryResponse, Error, unknown>({ method: "GET", url: `/api/Servers/${id}/deployments`, params, ...config });
@@ -36,7 +36,7 @@ async function getDeploymentsForServerHook(id: GetDeploymentsForServerPathParams
 }
 
  /**
- * @link /api/Servers/:id/deployments
+ * {@link /api/Servers/:id/deployments}
  */
 export function useGetDeploymentsForServerInfiniteHook<TData = InfiniteData<GetDeploymentsForServerQueryResponse>, TQueryData = GetDeploymentsForServerQueryResponse, TQueryKey extends QueryKey = GetDeploymentsForServerInfiniteQueryKey>(id: GetDeploymentsForServerPathParams["id"], params?: GetDeploymentsForServerQueryParams, options: {
     query?: Partial<InfiniteQueryObserverOptions<GetDeploymentsForServerQueryResponse, Error, TData, TQueryData, TQueryKey>>;

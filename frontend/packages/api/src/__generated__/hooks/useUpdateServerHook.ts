@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type UpdateServerMutationKey = ReturnType<typeof updateServerMutationKey>;
 
  /**
- * @link /api/Servers/:id
+ * {@link /api/Servers/:id}
  */
 async function updateServerHook(id: UpdateServerPathParams["id"], data?: UpdateServerMutationRequest, config: Partial<RequestConfig<UpdateServerMutationRequest>> = {}) {
     const res = await client<UpdateServerMutationResponse, Error, UpdateServerMutationRequest>({ method: "PATCH", url: `/api/Servers/${id}`, data, headers: { "Content-Type": "application/*+json", ...config.headers }, ...config });
@@ -18,7 +18,7 @@ async function updateServerHook(id: UpdateServerPathParams["id"], data?: UpdateS
 }
 
  /**
- * @link /api/Servers/:id
+ * {@link /api/Servers/:id}
  */
 export function useUpdateServerHook(options: {
     mutation?: UseMutationOptions<UpdateServerMutationResponse, Error, {

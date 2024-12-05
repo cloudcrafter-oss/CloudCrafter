@@ -10,7 +10,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
  export type GetFilterableFieldsSuspenseQueryKey = ReturnType<typeof getFilterableFieldsSuspenseQueryKey>;
 
  /**
- * @link /api/System/get-fields
+ * {@link /api/System/get-fields}
  */
 async function getFilterableFieldsHook(config: Partial<RequestConfig> = {}) {
     const res = await client<GetFilterableFieldsQueryResponse, Error, unknown>({ method: "GET", url: `/api/System/get-fields`, ...config });
@@ -29,7 +29,7 @@ async function getFilterableFieldsHook(config: Partial<RequestConfig> = {}) {
 }
 
  /**
- * @link /api/System/get-fields
+ * {@link /api/System/get-fields}
  */
 export function useGetFilterableFieldsSuspenseHook<TData = GetFilterableFieldsQueryResponse, TQueryData = GetFilterableFieldsQueryResponse, TQueryKey extends QueryKey = GetFilterableFieldsSuspenseQueryKey>(options: {
     query?: Partial<UseSuspenseQueryOptions<GetFilterableFieldsQueryResponse, Error, TData, TQueryKey>>;

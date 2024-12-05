@@ -10,7 +10,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
  export type GetProvidersSuspenseQueryKey = ReturnType<typeof getProvidersSuspenseQueryKey>;
 
  /**
- * @link /api/Providers
+ * {@link /api/Providers}
  */
 async function getProvidersHook(config: Partial<RequestConfig> = {}) {
     const res = await client<GetProvidersQueryResponse, Error, unknown>({ method: "GET", url: `/api/Providers`, ...config });
@@ -29,7 +29,7 @@ async function getProvidersHook(config: Partial<RequestConfig> = {}) {
 }
 
  /**
- * @link /api/Providers
+ * {@link /api/Providers}
  */
 export function useGetProvidersSuspenseHook<TData = GetProvidersQueryResponse, TQueryData = GetProvidersQueryResponse, TQueryKey extends QueryKey = GetProvidersSuspenseQueryKey>(options: {
     query?: Partial<UseSuspenseQueryOptions<GetProvidersQueryResponse, Error, TData, TQueryKey>>;

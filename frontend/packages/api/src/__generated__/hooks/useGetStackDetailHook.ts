@@ -10,7 +10,7 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
  export type GetStackDetailQueryKey = ReturnType<typeof getStackDetailQueryKey>;
 
  /**
- * @link /api/Stacks/:id
+ * {@link /api/Stacks/:id}
  */
 async function getStackDetailHook(id: GetStackDetailPathParams["id"], config: Partial<RequestConfig> = {}) {
     const res = await client<GetStackDetailQueryResponse, GetStackDetail404, unknown>({ method: "GET", url: `/api/Stacks/${id}`, ...config });
@@ -30,7 +30,7 @@ async function getStackDetailHook(id: GetStackDetailPathParams["id"], config: Pa
 }
 
  /**
- * @link /api/Stacks/:id
+ * {@link /api/Stacks/:id}
  */
 export function useGetStackDetailHook<TData = GetStackDetailQueryResponse, TQueryData = GetStackDetailQueryResponse, TQueryKey extends QueryKey = GetStackDetailQueryKey>(id: GetStackDetailPathParams["id"], options: {
     query?: Partial<QueryObserverOptions<GetStackDetailQueryResponse, GetStackDetail404, TData, TQueryData, TQueryKey>>;

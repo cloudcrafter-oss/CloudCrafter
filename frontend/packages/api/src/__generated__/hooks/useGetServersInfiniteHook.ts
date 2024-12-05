@@ -10,7 +10,7 @@ import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
  export type GetServersInfiniteQueryKey = ReturnType<typeof getServersInfiniteQueryKey>;
 
  /**
- * @link /api/Servers
+ * {@link /api/Servers}
  */
 async function getServersHook(config: Partial<RequestConfig> = {}) {
     const res = await client<GetServersQueryResponse, Error, unknown>({ method: "GET", url: `/api/Servers`, ...config });
@@ -32,7 +32,7 @@ async function getServersHook(config: Partial<RequestConfig> = {}) {
 }
 
  /**
- * @link /api/Servers
+ * {@link /api/Servers}
  */
 export function useGetServersInfiniteHook<TData = InfiniteData<GetServersQueryResponse>, TQueryData = GetServersQueryResponse, TQueryKey extends QueryKey = GetServersInfiniteQueryKey>(options: {
     query?: Partial<InfiniteQueryObserverOptions<GetServersQueryResponse, Error, TData, TQueryData, TQueryKey>>;

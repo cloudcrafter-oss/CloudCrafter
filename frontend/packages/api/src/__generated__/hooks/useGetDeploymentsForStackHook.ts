@@ -10,7 +10,7 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
  export type GetDeploymentsForStackQueryKey = ReturnType<typeof getDeploymentsForStackQueryKey>;
 
  /**
- * @link /api/Stacks/:id/deployments
+ * {@link /api/Stacks/:id/deployments}
  */
 async function getDeploymentsForStackHook(id: GetDeploymentsForStackPathParams["id"], config: Partial<RequestConfig> = {}) {
     const res = await client<GetDeploymentsForStackQueryResponse, Error, unknown>({ method: "GET", url: `/api/Stacks/${id}/deployments`, ...config });
@@ -30,7 +30,7 @@ async function getDeploymentsForStackHook(id: GetDeploymentsForStackPathParams["
 }
 
  /**
- * @link /api/Stacks/:id/deployments
+ * {@link /api/Stacks/:id/deployments}
  */
 export function useGetDeploymentsForStackHook<TData = GetDeploymentsForStackQueryResponse, TQueryData = GetDeploymentsForStackQueryResponse, TQueryKey extends QueryKey = GetDeploymentsForStackQueryKey>(id: GetDeploymentsForStackPathParams["id"], options: {
     query?: Partial<QueryObserverOptions<GetDeploymentsForStackQueryResponse, Error, TData, TQueryData, TQueryKey>>;

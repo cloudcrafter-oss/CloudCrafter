@@ -10,7 +10,7 @@ import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
  export type GetStackDetailInfiniteQueryKey = ReturnType<typeof getStackDetailInfiniteQueryKey>;
 
  /**
- * @link /api/Stacks/:id
+ * {@link /api/Stacks/:id}
  */
 async function getStackDetailHook(id: GetStackDetailPathParams["id"], config: Partial<RequestConfig> = {}) {
     const res = await client<GetStackDetailQueryResponse, GetStackDetail404, unknown>({ method: "GET", url: `/api/Stacks/${id}`, ...config });
@@ -33,7 +33,7 @@ async function getStackDetailHook(id: GetStackDetailPathParams["id"], config: Pa
 }
 
  /**
- * @link /api/Stacks/:id
+ * {@link /api/Stacks/:id}
  */
 export function useGetStackDetailInfiniteHook<TData = InfiniteData<GetStackDetailQueryResponse>, TQueryData = GetStackDetailQueryResponse, TQueryKey extends QueryKey = GetStackDetailInfiniteQueryKey>(id: GetStackDetailPathParams["id"], options: {
     query?: Partial<InfiniteQueryObserverOptions<GetStackDetailQueryResponse, GetStackDetail404, TData, TQueryData, TQueryKey>>;

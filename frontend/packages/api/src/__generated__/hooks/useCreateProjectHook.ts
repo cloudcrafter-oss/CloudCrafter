@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type CreateProjectMutationKey = ReturnType<typeof createProjectMutationKey>;
 
  /**
- * @link /api/Projects
+ * {@link /api/Projects}
  */
 async function createProjectHook(data: CreateProjectMutationRequest, config: Partial<RequestConfig<CreateProjectMutationRequest>> = {}) {
     const res = await client<CreateProjectMutationResponse, Error, CreateProjectMutationRequest>({ method: "POST", url: `/api/Projects`, data, ...config });
@@ -18,7 +18,7 @@ async function createProjectHook(data: CreateProjectMutationRequest, config: Par
 }
 
  /**
- * @link /api/Projects
+ * {@link /api/Projects}
  */
 export function useCreateProjectHook(options: {
     mutation?: UseMutationOptions<CreateProjectMutationResponse, Error, {

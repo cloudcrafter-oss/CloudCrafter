@@ -10,7 +10,7 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
  export type GetProvidersQueryKey = ReturnType<typeof getProvidersQueryKey>;
 
  /**
- * @link /api/Providers
+ * {@link /api/Providers}
  */
 async function getProvidersHook(config: Partial<RequestConfig> = {}) {
     const res = await client<GetProvidersQueryResponse, Error, unknown>({ method: "GET", url: `/api/Providers`, ...config });
@@ -29,7 +29,7 @@ async function getProvidersHook(config: Partial<RequestConfig> = {}) {
 }
 
  /**
- * @link /api/Providers
+ * {@link /api/Providers}
  */
 export function useGetProvidersHook<TData = GetProvidersQueryResponse, TQueryData = GetProvidersQueryResponse, TQueryKey extends QueryKey = GetProvidersQueryKey>(options: {
     query?: Partial<QueryObserverOptions<GetProvidersQueryResponse, Error, TData, TQueryData, TQueryKey>>;

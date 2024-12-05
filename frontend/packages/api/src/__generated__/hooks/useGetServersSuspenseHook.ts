@@ -10,7 +10,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
  export type GetServersSuspenseQueryKey = ReturnType<typeof getServersSuspenseQueryKey>;
 
  /**
- * @link /api/Servers
+ * {@link /api/Servers}
  */
 async function getServersHook(config: Partial<RequestConfig> = {}) {
     const res = await client<GetServersQueryResponse, Error, unknown>({ method: "GET", url: `/api/Servers`, ...config });
@@ -29,7 +29,7 @@ async function getServersHook(config: Partial<RequestConfig> = {}) {
 }
 
  /**
- * @link /api/Servers
+ * {@link /api/Servers}
  */
 export function useGetServersSuspenseHook<TData = GetServersQueryResponse, TQueryData = GetServersQueryResponse, TQueryKey extends QueryKey = GetServersSuspenseQueryKey>(options: {
     query?: Partial<UseSuspenseQueryOptions<GetServersQueryResponse, Error, TData, TQueryKey>>;

@@ -10,7 +10,7 @@ import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
  export type GetProjectInfiniteQueryKey = ReturnType<typeof getProjectInfiniteQueryKey>;
 
  /**
- * @link /api/Projects/:id
+ * {@link /api/Projects/:id}
  */
 async function getProjectHook(id: GetProjectPathParams["id"], config: Partial<RequestConfig> = {}) {
     const res = await client<GetProjectQueryResponse, GetProject404, unknown>({ method: "GET", url: `/api/Projects/${id}`, ...config });
@@ -33,7 +33,7 @@ async function getProjectHook(id: GetProjectPathParams["id"], config: Partial<Re
 }
 
  /**
- * @link /api/Projects/:id
+ * {@link /api/Projects/:id}
  */
 export function useGetProjectInfiniteHook<TData = InfiniteData<GetProjectQueryResponse>, TQueryData = GetProjectQueryResponse, TQueryKey extends QueryKey = GetProjectInfiniteQueryKey>(id: GetProjectPathParams["id"], options: {
     query?: Partial<InfiniteQueryObserverOptions<GetProjectQueryResponse, GetProject404, TData, TQueryData, TQueryKey>>;

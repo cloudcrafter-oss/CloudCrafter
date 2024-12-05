@@ -10,7 +10,7 @@ import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
  export type GetDeploymentLogsInfiniteQueryKey = ReturnType<typeof getDeploymentLogsInfiniteQueryKey>;
 
  /**
- * @link /api/Stacks/deployments/:deploymentId/logs
+ * {@link /api/Stacks/deployments/:deploymentId/logs}
  */
 async function getDeploymentLogsHook(deploymentId: GetDeploymentLogsPathParams["deploymentId"], config: Partial<RequestConfig> = {}) {
     const res = await client<GetDeploymentLogsQueryResponse, Error, unknown>({ method: "GET", url: `/api/Stacks/deployments/${deploymentId}/logs`, ...config });
@@ -33,7 +33,7 @@ async function getDeploymentLogsHook(deploymentId: GetDeploymentLogsPathParams["
 }
 
  /**
- * @link /api/Stacks/deployments/:deploymentId/logs
+ * {@link /api/Stacks/deployments/:deploymentId/logs}
  */
 export function useGetDeploymentLogsInfiniteHook<TData = InfiniteData<GetDeploymentLogsQueryResponse>, TQueryData = GetDeploymentLogsQueryResponse, TQueryKey extends QueryKey = GetDeploymentLogsInfiniteQueryKey>(deploymentId: GetDeploymentLogsPathParams["deploymentId"], options: {
     query?: Partial<InfiniteQueryObserverOptions<GetDeploymentLogsQueryResponse, Error, TData, TQueryData, TQueryKey>>;

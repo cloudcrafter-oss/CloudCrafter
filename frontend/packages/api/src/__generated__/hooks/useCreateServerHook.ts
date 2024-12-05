@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type CreateServerMutationKey = ReturnType<typeof createServerMutationKey>;
 
  /**
- * @link /api/Servers
+ * {@link /api/Servers}
  */
 async function createServerHook(data: CreateServerMutationRequest, config: Partial<RequestConfig<CreateServerMutationRequest>> = {}) {
     const res = await client<CreateServerMutationResponse, Error, CreateServerMutationRequest>({ method: "POST", url: `/api/Servers`, data, headers: { "Content-Type": "application/*+json", ...config.headers }, ...config });
@@ -18,7 +18,7 @@ async function createServerHook(data: CreateServerMutationRequest, config: Parti
 }
 
  /**
- * @link /api/Servers
+ * {@link /api/Servers}
  */
 export function useCreateServerHook(options: {
     mutation?: UseMutationOptions<CreateServerMutationResponse, Error, {

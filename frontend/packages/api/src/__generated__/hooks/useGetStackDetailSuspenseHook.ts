@@ -10,7 +10,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
  export type GetStackDetailSuspenseQueryKey = ReturnType<typeof getStackDetailSuspenseQueryKey>;
 
  /**
- * @link /api/Stacks/:id
+ * {@link /api/Stacks/:id}
  */
 async function getStackDetailHook(id: GetStackDetailPathParams["id"], config: Partial<RequestConfig> = {}) {
     const res = await client<GetStackDetailQueryResponse, GetStackDetail404, unknown>({ method: "GET", url: `/api/Stacks/${id}`, ...config });
@@ -30,7 +30,7 @@ async function getStackDetailHook(id: GetStackDetailPathParams["id"], config: Pa
 }
 
  /**
- * @link /api/Stacks/:id
+ * {@link /api/Stacks/:id}
  */
 export function useGetStackDetailSuspenseHook<TData = GetStackDetailQueryResponse, TQueryData = GetStackDetailQueryResponse, TQueryKey extends QueryKey = GetStackDetailSuspenseQueryKey>(id: GetStackDetailPathParams["id"], options: {
     query?: Partial<UseSuspenseQueryOptions<GetStackDetailQueryResponse, GetStackDetail404, TData, TQueryKey>>;

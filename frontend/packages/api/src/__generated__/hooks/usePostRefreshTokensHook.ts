@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type PostRefreshTokensMutationKey = ReturnType<typeof postRefreshTokensMutationKey>;
 
  /**
- * @link /api/Auth/refresh
+ * {@link /api/Auth/refresh}
  */
 async function postRefreshTokensHook(data: PostRefreshTokensMutationRequest, config: Partial<RequestConfig<PostRefreshTokensMutationRequest>> = {}) {
     const res = await client<PostRefreshTokensMutationResponse, Error, PostRefreshTokensMutationRequest>({ method: "POST", url: `/api/Auth/refresh`, data, ...config });
@@ -18,7 +18,7 @@ async function postRefreshTokensHook(data: PostRefreshTokensMutationRequest, con
 }
 
  /**
- * @link /api/Auth/refresh
+ * {@link /api/Auth/refresh}
  */
 export function usePostRefreshTokensHook(options: {
     mutation?: UseMutationOptions<PostRefreshTokensMutationResponse, Error, {

@@ -10,7 +10,7 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
  export type GetFilterableFieldsQueryKey = ReturnType<typeof getFilterableFieldsQueryKey>;
 
  /**
- * @link /api/System/get-fields
+ * {@link /api/System/get-fields}
  */
 async function getFilterableFieldsHook(config: Partial<RequestConfig> = {}) {
     const res = await client<GetFilterableFieldsQueryResponse, Error, unknown>({ method: "GET", url: `/api/System/get-fields`, ...config });
@@ -29,7 +29,7 @@ async function getFilterableFieldsHook(config: Partial<RequestConfig> = {}) {
 }
 
  /**
- * @link /api/System/get-fields
+ * {@link /api/System/get-fields}
  */
 export function useGetFilterableFieldsHook<TData = GetFilterableFieldsQueryResponse, TQueryData = GetFilterableFieldsQueryResponse, TQueryKey extends QueryKey = GetFilterableFieldsQueryKey>(options: {
     query?: Partial<QueryObserverOptions<GetFilterableFieldsQueryResponse, Error, TData, TQueryData, TQueryKey>>;

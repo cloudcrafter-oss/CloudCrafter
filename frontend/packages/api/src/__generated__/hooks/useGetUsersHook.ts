@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type GetUsersMutationKey = ReturnType<typeof getUsersMutationKey>;
 
  /**
- * @link /api/Users
+ * {@link /api/Users}
  */
 async function getUsersHook(data: GetUsersMutationRequest, config: Partial<RequestConfig<GetUsersMutationRequest>> = {}) {
     const res = await client<GetUsersMutationResponse, Error, GetUsersMutationRequest>({ method: "POST", url: `/api/Users`, data, ...config });
@@ -18,7 +18,7 @@ async function getUsersHook(data: GetUsersMutationRequest, config: Partial<Reque
 }
 
  /**
- * @link /api/Users
+ * {@link /api/Users}
  */
 export function useGetUsersHook(options: {
     mutation?: UseMutationOptions<GetUsersMutationResponse, Error, {

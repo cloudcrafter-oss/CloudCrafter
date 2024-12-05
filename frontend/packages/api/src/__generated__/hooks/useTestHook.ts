@@ -10,7 +10,7 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
  export type TestQueryKey = ReturnType<typeof testQueryKey>;
 
  /**
- * @link /api/Users/test
+ * {@link /api/Users/test}
  */
 async function testHook(config: Partial<RequestConfig> = {}) {
     const res = await client<TestQueryResponse, Error, unknown>({ method: "GET", url: `/api/Users/test`, ...config });
@@ -29,7 +29,7 @@ async function testHook(config: Partial<RequestConfig> = {}) {
 }
 
  /**
- * @link /api/Users/test
+ * {@link /api/Users/test}
  */
 export function useTestHook<TData = TestQueryResponse, TQueryData = TestQueryResponse, TQueryKey extends QueryKey = TestQueryKey>(options: {
     query?: Partial<QueryObserverOptions<TestQueryResponse, Error, TData, TQueryData, TQueryKey>>;

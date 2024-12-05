@@ -10,7 +10,7 @@ import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
  export type GetProvidersInfiniteQueryKey = ReturnType<typeof getProvidersInfiniteQueryKey>;
 
  /**
- * @link /api/Providers
+ * {@link /api/Providers}
  */
 async function getProvidersHook(config: Partial<RequestConfig> = {}) {
     const res = await client<GetProvidersQueryResponse, Error, unknown>({ method: "GET", url: `/api/Providers`, ...config });
@@ -32,7 +32,7 @@ async function getProvidersHook(config: Partial<RequestConfig> = {}) {
 }
 
  /**
- * @link /api/Providers
+ * {@link /api/Providers}
  */
 export function useGetProvidersInfiniteHook<TData = InfiniteData<GetProvidersQueryResponse>, TQueryData = GetProvidersQueryResponse, TQueryKey extends QueryKey = GetProvidersInfiniteQueryKey>(options: {
     query?: Partial<InfiniteQueryObserverOptions<GetProvidersQueryResponse, Error, TData, TQueryData, TQueryKey>>;

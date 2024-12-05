@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type UpdateProjectMutationKey = ReturnType<typeof updateProjectMutationKey>;
 
  /**
- * @link /api/Projects/:id
+ * {@link /api/Projects/:id}
  */
 async function updateProjectHook(id: UpdateProjectPathParams["id"], data?: UpdateProjectMutationRequest, config: Partial<RequestConfig<UpdateProjectMutationRequest>> = {}) {
     const res = await client<UpdateProjectMutationResponse, Error, UpdateProjectMutationRequest>({ method: "POST", url: `/api/Projects/${id}`, data, ...config });
@@ -18,7 +18,7 @@ async function updateProjectHook(id: UpdateProjectPathParams["id"], data?: Updat
 }
 
  /**
- * @link /api/Projects/:id
+ * {@link /api/Projects/:id}
  */
 export function useUpdateProjectHook(options: {
     mutation?: UseMutationOptions<UpdateProjectMutationResponse, Error, {

@@ -10,7 +10,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
  export type GetProjectEnvironmentEnhancedSuspenseQueryKey = ReturnType<typeof getProjectEnvironmentEnhancedSuspenseQueryKey>;
 
  /**
- * @link /api/Projects/:id/:environmentId
+ * {@link /api/Projects/:id/:environmentId}
  */
 async function getProjectEnvironmentEnhancedHook(id: GetProjectEnvironmentEnhancedPathParams["id"], environmentId: GetProjectEnvironmentEnhancedPathParams["environmentId"], config: Partial<RequestConfig> = {}) {
     const res = await client<GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhanced404, unknown>({ method: "GET", url: `/api/Projects/${id}/${environmentId}`, ...config });
@@ -30,7 +30,7 @@ async function getProjectEnvironmentEnhancedHook(id: GetProjectEnvironmentEnhanc
 }
 
  /**
- * @link /api/Projects/:id/:environmentId
+ * {@link /api/Projects/:id/:environmentId}
  */
 export function useGetProjectEnvironmentEnhancedSuspenseHook<TData = GetProjectEnvironmentEnhancedQueryResponse, TQueryData = GetProjectEnvironmentEnhancedQueryResponse, TQueryKey extends QueryKey = GetProjectEnvironmentEnhancedSuspenseQueryKey>(id: GetProjectEnvironmentEnhancedPathParams["id"], environmentId: GetProjectEnvironmentEnhancedPathParams["environmentId"], options: {
     query?: Partial<UseSuspenseQueryOptions<GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhanced404, TData, TQueryKey>>;

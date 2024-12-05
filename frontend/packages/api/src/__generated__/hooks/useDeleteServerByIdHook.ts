@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type DeleteServerByIdMutationKey = ReturnType<typeof deleteServerByIdMutationKey>;
 
  /**
- * @link /api/Servers/:id
+ * {@link /api/Servers/:id}
  */
 async function deleteServerByIdHook(id: DeleteServerByIdPathParams["id"], config: Partial<RequestConfig> = {}) {
     const res = await client<DeleteServerByIdMutationResponse, Error, unknown>({ method: "DELETE", url: `/api/Servers/${id}`, ...config });
@@ -18,7 +18,7 @@ async function deleteServerByIdHook(id: DeleteServerByIdPathParams["id"], config
 }
 
  /**
- * @link /api/Servers/:id
+ * {@link /api/Servers/:id}
  */
 export function useDeleteServerByIdHook(options: {
     mutation?: UseMutationOptions<DeleteServerByIdMutationResponse, Error, {

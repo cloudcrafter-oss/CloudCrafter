@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type UpdateStackServiceMutationKey = ReturnType<typeof updateStackServiceMutationKey>;
 
  /**
- * @link /api/Stacks/:stackId/services/:stackServiceId
+ * {@link /api/Stacks/:stackId/services/:stackServiceId}
  */
 async function updateStackServiceHook(stackId: UpdateStackServicePathParams["stackId"], stackServiceId: UpdateStackServicePathParams["stackServiceId"], data: UpdateStackServiceMutationRequest, config: Partial<RequestConfig<UpdateStackServiceMutationRequest>> = {}) {
     const res = await client<UpdateStackServiceMutationResponse, Error, UpdateStackServiceMutationRequest>({ method: "PATCH", url: `/api/Stacks/${stackId}/services/${stackServiceId}`, data, ...config });
@@ -18,7 +18,7 @@ async function updateStackServiceHook(stackId: UpdateStackServicePathParams["sta
 }
 
  /**
- * @link /api/Stacks/:stackId/services/:stackServiceId
+ * {@link /api/Stacks/:stackId/services/:stackServiceId}
  */
 export function useUpdateStackServiceHook(options: {
     mutation?: UseMutationOptions<UpdateStackServiceMutationResponse, Error, {

@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type PostRotateAgentKeyMutationKey = ReturnType<typeof postRotateAgentKeyMutationKey>;
 
  /**
- * @link /api/Servers/:id/rotate-key
+ * {@link /api/Servers/:id/rotate-key}
  */
 async function postRotateAgentKeyHook(id: PostRotateAgentKeyPathParams["id"], config: Partial<RequestConfig> = {}) {
     const res = await client<PostRotateAgentKeyMutationResponse, Error, unknown>({ method: "POST", url: `/api/Servers/${id}/rotate-key`, ...config });
@@ -18,7 +18,7 @@ async function postRotateAgentKeyHook(id: PostRotateAgentKeyPathParams["id"], co
 }
 
  /**
- * @link /api/Servers/:id/rotate-key
+ * {@link /api/Servers/:id/rotate-key}
  */
 export function usePostRotateAgentKeyHook(options: {
     mutation?: UseMutationOptions<PostRotateAgentKeyMutationResponse, Error, {

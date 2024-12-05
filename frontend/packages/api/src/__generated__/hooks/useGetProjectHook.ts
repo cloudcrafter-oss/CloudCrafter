@@ -10,7 +10,7 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
  export type GetProjectQueryKey = ReturnType<typeof getProjectQueryKey>;
 
  /**
- * @link /api/Projects/:id
+ * {@link /api/Projects/:id}
  */
 async function getProjectHook(id: GetProjectPathParams["id"], config: Partial<RequestConfig> = {}) {
     const res = await client<GetProjectQueryResponse, GetProject404, unknown>({ method: "GET", url: `/api/Projects/${id}`, ...config });
@@ -30,7 +30,7 @@ async function getProjectHook(id: GetProjectPathParams["id"], config: Partial<Re
 }
 
  /**
- * @link /api/Projects/:id
+ * {@link /api/Projects/:id}
  */
 export function useGetProjectHook<TData = GetProjectQueryResponse, TQueryData = GetProjectQueryResponse, TQueryKey extends QueryKey = GetProjectQueryKey>(id: GetProjectPathParams["id"], options: {
     query?: Partial<QueryObserverOptions<GetProjectQueryResponse, GetProject404, TData, TQueryData, TQueryKey>>;

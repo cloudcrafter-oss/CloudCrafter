@@ -10,7 +10,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
  export type GetProjectSuspenseQueryKey = ReturnType<typeof getProjectSuspenseQueryKey>;
 
  /**
- * @link /api/Projects/:id
+ * {@link /api/Projects/:id}
  */
 async function getProjectHook(id: GetProjectPathParams["id"], config: Partial<RequestConfig> = {}) {
     const res = await client<GetProjectQueryResponse, GetProject404, unknown>({ method: "GET", url: `/api/Projects/${id}`, ...config });
@@ -30,7 +30,7 @@ async function getProjectHook(id: GetProjectPathParams["id"], config: Partial<Re
 }
 
  /**
- * @link /api/Projects/:id
+ * {@link /api/Projects/:id}
  */
 export function useGetProjectSuspenseHook<TData = GetProjectQueryResponse, TQueryData = GetProjectQueryResponse, TQueryKey extends QueryKey = GetProjectSuspenseQueryKey>(id: GetProjectPathParams["id"], options: {
     query?: Partial<UseSuspenseQueryOptions<GetProjectQueryResponse, GetProject404, TData, TQueryKey>>;

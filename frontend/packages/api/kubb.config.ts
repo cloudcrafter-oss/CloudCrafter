@@ -13,6 +13,9 @@ export default defineConfig({
 	output: {
 		path: './src/__generated__',
 		clean: true,
+		extension: {
+			'.ts': '',
+		},
 	},
 	plugins: [
 		pluginOas(),

@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type DeleteProjectMutationKey = ReturnType<typeof deleteProjectMutationKey>;
 
  /**
- * @link /api/Projects/:id
+ * {@link /api/Projects/:id}
  */
 async function deleteProjectHook(id: DeleteProjectPathParams["id"], config: Partial<RequestConfig> = {}) {
     const res = await client<DeleteProjectMutationResponse, Error, unknown>({ method: "DELETE", url: `/api/Projects/${id}`, ...config });
@@ -18,7 +18,7 @@ async function deleteProjectHook(id: DeleteProjectPathParams["id"], config: Part
 }
 
  /**
- * @link /api/Projects/:id
+ * {@link /api/Projects/:id}
  */
 export function useDeleteProjectHook(options: {
     mutation?: UseMutationOptions<DeleteProjectMutationResponse, Error, {

@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type PostValidateGithubRepoMutationKey = ReturnType<typeof postValidateGithubRepoMutationKey>;
 
  /**
- * @link /api/Utils/validate-git-repository
+ * {@link /api/Utils/validate-git-repository}
  */
 async function postValidateGithubRepoHook(data: PostValidateGithubRepoMutationRequest, config: Partial<RequestConfig<PostValidateGithubRepoMutationRequest>> = {}) {
     const res = await client<PostValidateGithubRepoMutationResponse, Error, PostValidateGithubRepoMutationRequest>({ method: "POST", url: `/api/Utils/validate-git-repository`, data, ...config });
@@ -18,7 +18,7 @@ async function postValidateGithubRepoHook(data: PostValidateGithubRepoMutationRe
 }
 
  /**
- * @link /api/Utils/validate-git-repository
+ * {@link /api/Utils/validate-git-repository}
  */
 export function usePostValidateGithubRepoHook(options: {
     mutation?: UseMutationOptions<PostValidateGithubRepoMutationResponse, Error, {

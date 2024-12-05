@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type UpdateStackMutationKey = ReturnType<typeof updateStackMutationKey>;
 
  /**
- * @link /api/Stacks/:id
+ * {@link /api/Stacks/:id}
  */
 async function updateStackHook(id: UpdateStackPathParams["id"], data: UpdateStackMutationRequest, config: Partial<RequestConfig<UpdateStackMutationRequest>> = {}) {
     const res = await client<UpdateStackMutationResponse, UpdateStack404, UpdateStackMutationRequest>({ method: "PUT", url: `/api/Stacks/${id}`, data, ...config });
@@ -18,7 +18,7 @@ async function updateStackHook(id: UpdateStackPathParams["id"], data: UpdateStac
 }
 
  /**
- * @link /api/Stacks/:id
+ * {@link /api/Stacks/:id}
  */
 export function useUpdateStackHook(options: {
     mutation?: UseMutationOptions<UpdateStackMutationResponse, UpdateStack404, {

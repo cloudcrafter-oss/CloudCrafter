@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type DispatchStackDeploymentMutationKey = ReturnType<typeof dispatchStackDeploymentMutationKey>;
 
  /**
- * @link /api/Stacks/:id/deploy
+ * {@link /api/Stacks/:id/deploy}
  */
 async function dispatchStackDeploymentHook(id: DispatchStackDeploymentPathParams["id"], config: Partial<RequestConfig> = {}) {
     const res = await client<DispatchStackDeploymentMutationResponse, Error, unknown>({ method: "POST", url: `/api/Stacks/${id}/deploy`, ...config });
@@ -18,7 +18,7 @@ async function dispatchStackDeploymentHook(id: DispatchStackDeploymentPathParams
 }
 
  /**
- * @link /api/Stacks/:id/deploy
+ * {@link /api/Stacks/:id/deploy}
  */
 export function useDispatchStackDeploymentHook(options: {
     mutation?: UseMutationOptions<DispatchStackDeploymentMutationResponse, Error, {

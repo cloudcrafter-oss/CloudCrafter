@@ -10,7 +10,7 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
  export type GetDeploymentLogsQueryKey = ReturnType<typeof getDeploymentLogsQueryKey>;
 
  /**
- * @link /api/Stacks/deployments/:deploymentId/logs
+ * {@link /api/Stacks/deployments/:deploymentId/logs}
  */
 async function getDeploymentLogsHook(deploymentId: GetDeploymentLogsPathParams["deploymentId"], config: Partial<RequestConfig> = {}) {
     const res = await client<GetDeploymentLogsQueryResponse, Error, unknown>({ method: "GET", url: `/api/Stacks/deployments/${deploymentId}/logs`, ...config });
@@ -30,7 +30,7 @@ async function getDeploymentLogsHook(deploymentId: GetDeploymentLogsPathParams["
 }
 
  /**
- * @link /api/Stacks/deployments/:deploymentId/logs
+ * {@link /api/Stacks/deployments/:deploymentId/logs}
  */
 export function useGetDeploymentLogsHook<TData = GetDeploymentLogsQueryResponse, TQueryData = GetDeploymentLogsQueryResponse, TQueryKey extends QueryKey = GetDeploymentLogsQueryKey>(deploymentId: GetDeploymentLogsPathParams["deploymentId"], options: {
     query?: Partial<QueryObserverOptions<GetDeploymentLogsQueryResponse, Error, TData, TQueryData, TQueryKey>>;

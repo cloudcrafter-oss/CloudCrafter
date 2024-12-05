@@ -10,7 +10,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
  export type GetDeploymentLogsSuspenseQueryKey = ReturnType<typeof getDeploymentLogsSuspenseQueryKey>;
 
  /**
- * @link /api/Stacks/deployments/:deploymentId/logs
+ * {@link /api/Stacks/deployments/:deploymentId/logs}
  */
 async function getDeploymentLogsHook(deploymentId: GetDeploymentLogsPathParams["deploymentId"], config: Partial<RequestConfig> = {}) {
     const res = await client<GetDeploymentLogsQueryResponse, Error, unknown>({ method: "GET", url: `/api/Stacks/deployments/${deploymentId}/logs`, ...config });
@@ -30,7 +30,7 @@ async function getDeploymentLogsHook(deploymentId: GetDeploymentLogsPathParams["
 }
 
  /**
- * @link /api/Stacks/deployments/:deploymentId/logs
+ * {@link /api/Stacks/deployments/:deploymentId/logs}
  */
 export function useGetDeploymentLogsSuspenseHook<TData = GetDeploymentLogsQueryResponse, TQueryData = GetDeploymentLogsQueryResponse, TQueryKey extends QueryKey = GetDeploymentLogsSuspenseQueryKey>(deploymentId: GetDeploymentLogsPathParams["deploymentId"], options: {
     query?: Partial<UseSuspenseQueryOptions<GetDeploymentLogsQueryResponse, Error, TData, TQueryKey>>;

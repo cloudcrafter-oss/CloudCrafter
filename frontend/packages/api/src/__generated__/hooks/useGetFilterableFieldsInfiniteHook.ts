@@ -10,7 +10,7 @@ import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
  export type GetFilterableFieldsInfiniteQueryKey = ReturnType<typeof getFilterableFieldsInfiniteQueryKey>;
 
  /**
- * @link /api/System/get-fields
+ * {@link /api/System/get-fields}
  */
 async function getFilterableFieldsHook(config: Partial<RequestConfig> = {}) {
     const res = await client<GetFilterableFieldsQueryResponse, Error, unknown>({ method: "GET", url: `/api/System/get-fields`, ...config });
@@ -32,7 +32,7 @@ async function getFilterableFieldsHook(config: Partial<RequestConfig> = {}) {
 }
 
  /**
- * @link /api/System/get-fields
+ * {@link /api/System/get-fields}
  */
 export function useGetFilterableFieldsInfiniteHook<TData = InfiniteData<GetFilterableFieldsQueryResponse>, TQueryData = GetFilterableFieldsQueryResponse, TQueryKey extends QueryKey = GetFilterableFieldsInfiniteQueryKey>(options: {
     query?: Partial<InfiniteQueryObserverOptions<GetFilterableFieldsQueryResponse, Error, TData, TQueryData, TQueryKey>>;

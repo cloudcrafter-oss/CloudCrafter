@@ -10,7 +10,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
  export type GetServerByIdSuspenseQueryKey = ReturnType<typeof getServerByIdSuspenseQueryKey>;
 
  /**
- * @link /api/Servers/:id
+ * {@link /api/Servers/:id}
  */
 async function getServerByIdHook(id: GetServerByIdPathParams["id"], config: Partial<RequestConfig> = {}) {
     const res = await client<GetServerByIdQueryResponse, Error, unknown>({ method: "GET", url: `/api/Servers/${id}`, ...config });
@@ -30,7 +30,7 @@ async function getServerByIdHook(id: GetServerByIdPathParams["id"], config: Part
 }
 
  /**
- * @link /api/Servers/:id
+ * {@link /api/Servers/:id}
  */
 export function useGetServerByIdSuspenseHook<TData = GetServerByIdQueryResponse, TQueryData = GetServerByIdQueryResponse, TQueryKey extends QueryKey = GetServerByIdSuspenseQueryKey>(id: GetServerByIdPathParams["id"], options: {
     query?: Partial<UseSuspenseQueryOptions<GetServerByIdQueryResponse, Error, TData, TQueryKey>>;

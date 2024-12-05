@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type PostCreateUserMutationKey = ReturnType<typeof postCreateUserMutationKey>;
 
  /**
- * @link /api/Auth/create
+ * {@link /api/Auth/create}
  */
 async function postCreateUserHook(data: PostCreateUserMutationRequest, config: Partial<RequestConfig<PostCreateUserMutationRequest>> = {}) {
     const res = await client<PostCreateUserMutationResponse, Error, PostCreateUserMutationRequest>({ method: "POST", url: `/api/Auth/create`, data, ...config });
@@ -18,7 +18,7 @@ async function postCreateUserHook(data: PostCreateUserMutationRequest, config: P
 }
 
  /**
- * @link /api/Auth/create
+ * {@link /api/Auth/create}
  */
 export function usePostCreateUserHook(options: {
     mutation?: UseMutationOptions<PostCreateUserMutationResponse, Error, {

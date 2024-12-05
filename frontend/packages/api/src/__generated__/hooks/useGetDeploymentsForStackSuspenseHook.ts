@@ -10,7 +10,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
  export type GetDeploymentsForStackSuspenseQueryKey = ReturnType<typeof getDeploymentsForStackSuspenseQueryKey>;
 
  /**
- * @link /api/Stacks/:id/deployments
+ * {@link /api/Stacks/:id/deployments}
  */
 async function getDeploymentsForStackHook(id: GetDeploymentsForStackPathParams["id"], config: Partial<RequestConfig> = {}) {
     const res = await client<GetDeploymentsForStackQueryResponse, Error, unknown>({ method: "GET", url: `/api/Stacks/${id}/deployments`, ...config });
@@ -30,7 +30,7 @@ async function getDeploymentsForStackHook(id: GetDeploymentsForStackPathParams["
 }
 
  /**
- * @link /api/Stacks/:id/deployments
+ * {@link /api/Stacks/:id/deployments}
  */
 export function useGetDeploymentsForStackSuspenseHook<TData = GetDeploymentsForStackQueryResponse, TQueryData = GetDeploymentsForStackQueryResponse, TQueryKey extends QueryKey = GetDeploymentsForStackSuspenseQueryKey>(id: GetDeploymentsForStackPathParams["id"], options: {
     query?: Partial<UseSuspenseQueryOptions<GetDeploymentsForStackQueryResponse, Error, TData, TQueryKey>>;

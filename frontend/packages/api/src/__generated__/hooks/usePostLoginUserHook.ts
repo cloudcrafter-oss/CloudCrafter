@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type PostLoginUserMutationKey = ReturnType<typeof postLoginUserMutationKey>;
 
  /**
- * @link /api/Auth/login
+ * {@link /api/Auth/login}
  */
 async function postLoginUserHook(data: PostLoginUserMutationRequest, config: Partial<RequestConfig<PostLoginUserMutationRequest>> = {}) {
     const res = await client<PostLoginUserMutationResponse, Error, PostLoginUserMutationRequest>({ method: "POST", url: `/api/Auth/login`, data, ...config });
@@ -18,7 +18,7 @@ async function postLoginUserHook(data: PostLoginUserMutationRequest, config: Par
 }
 
  /**
- * @link /api/Auth/login
+ * {@link /api/Auth/login}
  */
 export function usePostLoginUserHook(options: {
     mutation?: UseMutationOptions<PostLoginUserMutationResponse, Error, {

@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type PostCreateStackMutationKey = ReturnType<typeof postCreateStackMutationKey>;
 
  /**
- * @link /api/Stacks
+ * {@link /api/Stacks}
  */
 async function postCreateStackHook(data: PostCreateStackMutationRequest, config: Partial<RequestConfig<PostCreateStackMutationRequest>> = {}) {
     const res = await client<PostCreateStackMutationResponse, Error, PostCreateStackMutationRequest>({ method: "POST", url: `/api/Stacks`, data, ...config });
@@ -18,7 +18,7 @@ async function postCreateStackHook(data: PostCreateStackMutationRequest, config:
 }
 
  /**
- * @link /api/Stacks
+ * {@link /api/Stacks}
  */
 export function usePostCreateStackHook(options: {
     mutation?: UseMutationOptions<PostCreateStackMutationResponse, Error, {

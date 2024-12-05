@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
  export type PostCreateDeploymentMutationKey = ReturnType<typeof postCreateDeploymentMutationKey>;
 
  /**
- * @link /api/Applications/:applicationId/deployment
+ * {@link /api/Applications/:applicationId/deployment}
  */
 async function postCreateDeploymentHook(applicationId: PostCreateDeploymentPathParams["applicationId"], config: Partial<RequestConfig> = {}) {
     const res = await client<PostCreateDeploymentMutationResponse, Error, unknown>({ method: "POST", url: `/api/Applications/${applicationId}/deployment`, ...config });
@@ -18,7 +18,7 @@ async function postCreateDeploymentHook(applicationId: PostCreateDeploymentPathP
 }
 
  /**
- * @link /api/Applications/:applicationId/deployment
+ * {@link /api/Applications/:applicationId/deployment}
  */
 export function usePostCreateDeploymentHook(options: {
     mutation?: UseMutationOptions<PostCreateDeploymentMutationResponse, Error, {
