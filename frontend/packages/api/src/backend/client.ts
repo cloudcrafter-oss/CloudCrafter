@@ -1,5 +1,5 @@
-import { auth } from '@/src/auth.ts'
-import { backendEnv } from '@/src/core/env/cloudcrafter-env.ts'
+import { auth } from '@/src/auth'
+import { backendEnv } from '@/src/core/env/cloudcrafter-env'
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import axios from 'axios'
 

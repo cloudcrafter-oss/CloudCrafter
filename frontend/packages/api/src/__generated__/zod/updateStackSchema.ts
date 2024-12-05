@@ -1,5 +1,5 @@
-import { stackDetailDtoSchema } from "./stackDetailDtoSchema.ts";
-import { updateStackCommandCommandSchema } from "./updateStackCommandCommandSchema.ts";
+import { stackDetailDtoSchema } from "./stackDetailDtoSchema";
+import { updateStackCommandCommandSchema } from "./updateStackCommandCommandSchema";
 import { z } from "zod";
 
  export const updateStackPathParamsSchema = z.object({ "id": z.string().uuid() });

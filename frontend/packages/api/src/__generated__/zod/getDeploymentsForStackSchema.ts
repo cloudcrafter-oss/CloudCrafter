@@ -1,4 +1,4 @@
-import { simpleDeploymentDtoSchema } from "./simpleDeploymentDtoSchema.ts";
+import { simpleDeploymentDtoSchema } from "./simpleDeploymentDtoSchema";
 import { z } from "zod";
 
  export const getDeploymentsForStackPathParamsSchema = z.object({ "id": z.string().uuid() });

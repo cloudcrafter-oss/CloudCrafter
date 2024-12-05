@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhancedPathParams, GetProjectEnvironmentEnhanced404 } from "../types/GetProjectEnvironmentEnhanced.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhancedPathParams, GetProjectEnvironmentEnhanced404 } from "../types/GetProjectEnvironmentEnhanced";
 
  /**
  * @link /api/Projects/:id/:environmentId

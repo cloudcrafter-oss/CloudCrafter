@@ -1,5 +1,5 @@
-import { paginatedListOfUserDtoSchema } from "./paginatedListOfUserDtoSchema.ts";
-import { paginatedRequestOfUserDtoSchema } from "./paginatedRequestOfUserDtoSchema.ts";
+import { paginatedListOfUserDtoSchema } from "./paginatedListOfUserDtoSchema";
+import { paginatedRequestOfUserDtoSchema } from "./paginatedRequestOfUserDtoSchema";
 import { z } from "zod";
 
  /**

@@ -1,4 +1,4 @@
-import type { UserDto } from "./UserDto.ts";
+import type { UserDto } from "./UserDto";
 
  export type PaginatedListOfUserDto = {
     /**

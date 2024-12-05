@@ -1,12 +1,12 @@
 import { UserAvatar } from '@/src/layout/components/UserAvatar'
-import { Button } from '@ui/components/ui/button.tsx'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from '@ui/components/ui/dropdown-menu'
+} from '@cloudcrafter/ui/components/dropdown-menu'
 import { LogOut } from 'lucide-react'
 import type { User } from 'next-auth'
 import { signOut } from 'next-auth/react'

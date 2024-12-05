@@ -1,17 +1,17 @@
 import {
 	SignIn,
 	SignOut,
-} from '@/src/app/authjs/components/auth-components.tsx'
-import { auth } from '@/src/auth.ts'
+} from '@/src/app/authjs/components/auth-components'
+import { auth } from '@/src/auth'
 import { Avatar, AvatarImage } from '@radix-ui/react-avatar'
-import { Button } from '@ui/components/ui/button.tsx'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
-} from '@ui/components/ui/dropdown-menu.tsx'
+} from '@cloudcrafter/ui/components/dropdown-menu'
 
 export default async function UserButton() {
 	const session = await auth()

@@ -11,11 +11,12 @@ import {
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
-} from '@ui/components/ui/alert-dialog'
-import { cn } from '@ui/lib/utils'
+} from '@cloudcrafter/ui/components/alert-dialog'
+
 import { AxiosError } from 'axios'
 import { AlertCircle } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 
 export const MutationErrorProvider = ({
 	children,

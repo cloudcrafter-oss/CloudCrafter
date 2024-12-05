@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { PostRotateAgentKeyMutationResponse, PostRotateAgentKeyPathParams } from "../types/PostRotateAgentKey.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { PostRotateAgentKeyMutationResponse, PostRotateAgentKeyPathParams } from "../types/PostRotateAgentKey";
 
  /**
  * @link /api/Servers/:id/rotate-key

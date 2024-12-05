@@ -1,4 +1,4 @@
-import { Skeleton } from '@ui/components/ui/skeleton.tsx'
+import { Skeleton } from '@cloudcrafter/ui/components/skeleton'
 import {
 	Table,
 	TableBody,
@@ -6,8 +6,8 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from '@ui/components/ui/table.tsx'
-import { cn } from '@ui/lib/utils.ts'
+} from '@cloudcrafter/ui/components/table'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 import type React from 'react'
 
 interface DataTableSkeletonProps extends React.HTMLAttributes<HTMLDivElement> {

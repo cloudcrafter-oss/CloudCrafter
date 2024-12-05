@@ -1,5 +1,5 @@
-import { checkValidGitRepoCommandCommandSchema } from "./checkValidGitRepoCommandCommandSchema.ts";
-import { gitRepositoryCheckResultDtoSchema } from "./gitRepositoryCheckResultDtoSchema.ts";
+import { checkValidGitRepoCommandCommandSchema } from "./checkValidGitRepoCommandCommandSchema";
+import { gitRepositoryCheckResultDtoSchema } from "./gitRepositoryCheckResultDtoSchema";
 import { z } from "zod";
 
  /**

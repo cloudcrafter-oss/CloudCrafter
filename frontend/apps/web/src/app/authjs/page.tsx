@@ -1,5 +1,5 @@
-import CustomLink from '@/src/app/authjs/components/custom-link.tsx'
-import { auth } from '@/src/auth.ts'
+import CustomLink from '@/src/app/authjs/components/custom-link'
+import { auth } from '@/src/auth'
 
 export default async function Index() {
 	const session = await auth()

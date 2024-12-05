@@ -1,4 +1,4 @@
-import type { EntityHealthDtoValue } from "./EntityHealthDtoValue.ts";
+import type { EntityHealthDtoValue } from "./EntityHealthDtoValue";
 
  export type EntityHealthDto = {
     /**

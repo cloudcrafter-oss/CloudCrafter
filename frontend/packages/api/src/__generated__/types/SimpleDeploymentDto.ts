@@ -1,4 +1,4 @@
-import type { DeploymentStatusDto } from "./DeploymentStatusDto.ts";
+import type { DeploymentStatusDto } from "./DeploymentStatusDto";
 
  export type SimpleDeploymentDto = {
     /**

@@ -1,16 +1,16 @@
 'use server'
 
-import { actionClient } from '@/src/utils/actions/safe-action.ts'
+import { actionClient } from '@/src/utils/actions/safe-action'
 import {
 	deleteProject,
 	getProject,
 	getProjects,
 	updateProject,
-} from '@cloudcrafter/api/__generated__/axios-backend'
+} from '@cloudcrafter/api'
 import {
 	getProjectPathParamsSchema,
 	updateProjectArgsSchema,
-} from '@cloudcrafter/api/__generated__/zod'
+} from '@cloudcrafter/api'
 import { z } from 'zod'
 
 export const fetchProjectDetail = actionClient

@@ -1,27 +1,27 @@
-import { Alert, AlertDescription, AlertTitle } from '@ui/components/ui/alert'
-import { Button } from '@ui/components/ui/button'
+import { Alert, AlertDescription, AlertTitle } from '@cloudcrafter/ui/components/alert'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from '@ui/components/ui/card'
+} from '@cloudcrafter/ui/components/card'
 import {
 	Dialog,
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
-} from '@ui/components/ui/dialog'
-import { Input } from '@ui/components/ui/input'
-import { Label } from '@ui/components/ui/label'
-import { Switch } from '@ui/components/ui/switch'
+} from '@cloudcrafter/ui/components/dialog'
+import { Input } from '@cloudcrafter/ui/components/input'
+import { Label } from '@cloudcrafter/ui/components/label'
+import { Switch } from '@cloudcrafter/ui/components/switch'
 import {
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
-} from '@ui/components/ui/tabs'
+} from '@cloudcrafter/ui/components/tabs'
 import { format } from 'date-fns'
 import { ArrowRight, Github } from 'lucide-react'
 import { useState } from 'react'

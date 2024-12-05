@@ -1,5 +1,5 @@
-import type { PostRefreshUserTokensQuery } from "./PostRefreshUserTokensQuery.ts";
-import type { TokenDto } from "./TokenDto.ts";
+import type { PostRefreshUserTokensQuery } from "./PostRefreshUserTokensQuery";
+import type { TokenDto } from "./TokenDto";
 
  /**
  * @description OK

@@ -12,8 +12,8 @@ import {
 	CommandItem,
 	CommandList,
 	CommandSeparator,
-} from '@ui/components/ui/command.tsx'
-import { cn } from '@ui/lib/utils.ts'
+} from '@cloudcrafter/ui/components/command'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 
 interface DataTableAdvancedFacetedFilterProps<TData, TValue> {
 	column?: Column<TData, TValue>

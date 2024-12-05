@@ -1,5 +1,5 @@
 import { CloudCrafterSidebar } from '@/src/layout/components/Sidebar/CloudCrafterSidebar'
-import { ThemeProvider } from '@/src/layout/components/theme-provider.tsx'
+import { ThemeProvider } from '@/src/layout/components/theme-provider'
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -7,14 +7,14 @@ import {
 	BreadcrumbList,
 	BreadcrumbPage,
 	BreadcrumbSeparator,
-} from '@ui/components/ui/breadcrumb.tsx'
-import { Separator } from '@ui/components/ui/separator.tsx'
+} from '@cloudcrafter/ui/components/breadcrumb'
+import { Separator } from '@cloudcrafter/ui/components/separator'
 import {
 	SidebarInset,
 	SidebarProvider,
 	SidebarTrigger,
-} from '@ui/components/ui/sidebar.tsx'
-import { TooltipProvider } from '@ui/components/ui/tooltip.tsx'
+} from '@cloudcrafter/ui/components/sidebar'
+import { TooltipProvider } from '@cloudcrafter/ui/components/tooltip'
 import type React from 'react'
 
 export default function NextAdminLayout({

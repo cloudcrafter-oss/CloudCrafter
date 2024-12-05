@@ -1,4 +1,4 @@
-import type { EnvironmentDto } from "./EnvironmentDto.ts";
+import type { EnvironmentDto } from "./EnvironmentDto";
 
  export type ProjectDto = {
     /**

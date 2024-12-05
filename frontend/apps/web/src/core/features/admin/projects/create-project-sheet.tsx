@@ -1,6 +1,6 @@
-import { createProjectAction } from '@/src/app/_actions.ts'
+import { createProjectAction } from '@/src/app/_actions'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@ui/components/ui/button.tsx'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Form,
 	FormControl,
@@ -8,17 +8,17 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@ui/components/ui/form.tsx'
-import { Input } from '@ui/components/ui/input.tsx'
+} from '@cloudcrafter/ui/components/form'
+import { Input } from '@cloudcrafter/ui/components/input'
 import {
 	SheetDescription,
 	SheetHeader,
 	SheetTitle,
-} from '@ui/components/ui/sheet.tsx'
+} from '@cloudcrafter/ui/components/sheet'
 import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
 
-import { createProjectCommandCommandSchema } from '@cloudcrafter/api/__generated__/zod'
+import { createProjectCommandCommandSchema } from '@cloudcrafter/api'
 import { toast } from 'sonner'
 
 type FormValues = z.infer<typeof createProjectCommandCommandSchema>

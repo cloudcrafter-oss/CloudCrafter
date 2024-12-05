@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@ui/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@cloudcrafter/ui/components/avatar'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -7,13 +7,13 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from '@ui/components/ui/dropdown-menu'
+} from '@cloudcrafter/ui/components/dropdown-menu'
 import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
 	useSidebar,
-} from '@ui/components/ui/sidebar'
+} from '@cloudcrafter/ui/components/sidebar'
 import {
 	BadgeCheck,
 	Bell,

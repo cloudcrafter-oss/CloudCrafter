@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { CreateProjectMutationRequest, CreateProjectMutationResponse } from "../types/CreateProject.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { CreateProjectMutationRequest, CreateProjectMutationResponse } from "../types/CreateProject";
 
  /**
  * @link /api/Projects

@@ -2,8 +2,8 @@ import {
 	Avatar,
 	AvatarFallback,
 	AvatarImage,
-} from '@ui/components/ui/avatar.tsx'
-import { Button } from '@ui/components/ui/button.tsx'
+} from '@cloudcrafter/ui/components/avatar'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -13,7 +13,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuShortcut,
 	DropdownMenuTrigger,
-} from '@ui/components/ui/dropdown-menu.tsx'
+} from '@cloudcrafter/ui/components/dropdown-menu'
 
 export function UserNav() {
 	return (

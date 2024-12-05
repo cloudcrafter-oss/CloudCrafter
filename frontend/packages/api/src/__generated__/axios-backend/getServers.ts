@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { GetServersQueryResponse } from "../types/GetServers.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { GetServersQueryResponse } from "../types/GetServers";
 
  /**
  * @link /api/Servers

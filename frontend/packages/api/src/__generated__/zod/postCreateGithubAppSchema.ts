@@ -1,4 +1,4 @@
-import { createGithubProviderCommandCommandSchema } from "./createGithubProviderCommandCommandSchema.ts";
+import { createGithubProviderCommandCommandSchema } from "./createGithubProviderCommandCommandSchema";
 import { z } from "zod";
 
  /**

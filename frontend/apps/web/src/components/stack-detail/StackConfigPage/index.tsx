@@ -2,8 +2,8 @@
 
 import { SourceSettings } from '@/src/components/stack-detail/source-settings'
 import { useStackHub } from '@/src/hooks/useStackHub'
-import type { StackDetailDto } from '@cloudcrafter/api/src/__generated__/types/StackDetailDto'
-import { cn } from '@ui/lib/utils'
+import type { StackDetailDto } from '@cloudcrafter/api'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { DummyInfoTab } from '../DummyInfoTab'

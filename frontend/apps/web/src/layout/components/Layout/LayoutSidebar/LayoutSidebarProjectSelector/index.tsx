@@ -1,6 +1,6 @@
 'use client'
-import { fetchProjectsWithEnvironments } from '@/src/app/_actions/project.ts'
-import { Button } from '@ui/components/ui/button.tsx'
+import { fetchProjectsWithEnvironments } from '@/src/app/_actions/project'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Command,
 	CommandEmpty,
@@ -8,13 +8,13 @@ import {
 	CommandInput,
 	CommandItem,
 	CommandList,
-} from '@ui/components/ui/command.tsx'
+} from '@cloudcrafter/ui/components/command'
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from '@ui/components/ui/popover.tsx'
-import { cn } from '@ui/lib/utils.ts'
+} from '@cloudcrafter/ui/components/popover'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 import { Check, ChevronRight, ChevronsUpDown } from 'lucide-react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'

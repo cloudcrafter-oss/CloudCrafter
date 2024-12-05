@@ -1,4 +1,4 @@
-import type { GitSettings } from "./GitSettings.ts";
+import type { GitSettings } from "./GitSettings";
 
  export type UpdateStackCommandCommand = {
     /**

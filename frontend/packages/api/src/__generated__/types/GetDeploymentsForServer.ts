@@ -1,4 +1,4 @@
-import type { PaginatedListOfSimpleDeploymentDto } from "./PaginatedListOfSimpleDeploymentDto.ts";
+import type { PaginatedListOfSimpleDeploymentDto } from "./PaginatedListOfSimpleDeploymentDto";
 
  export type GetDeploymentsForServerPathParams = {
     /**

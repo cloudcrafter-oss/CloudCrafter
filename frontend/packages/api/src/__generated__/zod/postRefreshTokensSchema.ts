@@ -1,5 +1,5 @@
-import { postRefreshUserTokensQuerySchema } from "./postRefreshUserTokensQuerySchema.ts";
-import { tokenDtoSchema } from "./tokenDtoSchema.ts";
+import { postRefreshUserTokensQuerySchema } from "./postRefreshUserTokensQuerySchema";
+import { tokenDtoSchema } from "./tokenDtoSchema";
 import { z } from "zod";
 
  /**

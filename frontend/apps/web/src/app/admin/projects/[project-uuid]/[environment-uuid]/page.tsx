@@ -7,29 +7,29 @@ import {
 	type ProjectEnvironmentRouteParams,
 	validateProjectEnvironmentRouteParams,
 } from '@/src/utils/routes/schemas'
-import { getProjectEnvironmentEnhanced } from '@cloudcrafter/api/__generated__/axios-backend'
+import { getProjectEnvironmentEnhanced } from '@cloudcrafter/api'
 
-import { Button } from '@ui/components/ui/button.tsx'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from '@ui/components/ui/card.tsx'
+} from '@cloudcrafter/ui/components/card'
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@ui/components/ui/select.tsx'
+} from '@cloudcrafter/ui/components/select'
 import {
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
-} from '@ui/components/ui/tabs.tsx'
+} from '@cloudcrafter/ui/components/tabs'
 import {
 	Activity,
 	Box,

@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { GetDeploymentLogsQueryResponse, GetDeploymentLogsPathParams } from "../types/GetDeploymentLogs.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { GetDeploymentLogsQueryResponse, GetDeploymentLogsPathParams } from "../types/GetDeploymentLogs";
 
  /**
  * @link /api/Stacks/deployments/:deploymentId/logs

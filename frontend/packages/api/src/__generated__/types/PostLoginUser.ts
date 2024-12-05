@@ -1,5 +1,5 @@
-import type { PostLoginUserQuery } from "./PostLoginUserQuery.ts";
-import type { TokenDto } from "./TokenDto.ts";
+import type { PostLoginUserQuery } from "./PostLoginUserQuery";
+import type { TokenDto } from "./TokenDto";
 
  /**
  * @description OK

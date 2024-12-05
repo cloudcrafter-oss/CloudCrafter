@@ -3,7 +3,7 @@ import {
 	Avatar,
 	AvatarFallback,
 	AvatarImage,
-} from '@ui/components/ui/avatar.tsx'
+} from '@cloudcrafter/ui/components/avatar'
 import { User as UserIcon } from 'lucide-react'
 import type { User } from 'next-auth'
 

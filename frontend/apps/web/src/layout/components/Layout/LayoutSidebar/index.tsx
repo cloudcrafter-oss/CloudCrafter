@@ -1,9 +1,9 @@
 'use client'
-import { fetchProjectsWithEnvironments } from '@/src/app/_actions/project.ts'
-import { useSelectedProductEnvironmentUuids } from '@/src/hooks/useSelectedProductEnvironmentUuids.ts'
+import { fetchProjectsWithEnvironments } from '@/src/app/_actions/project'
+import { useSelectedProductEnvironmentUuids } from '@/src/hooks/useSelectedProductEnvironmentUuids'
 import { LayoutSidebarNav } from '@/src/layout/components/Layout/LayoutSidebar/LayoutSidebarNav'
 import type { NavItem } from '@/src/layout/components/Layout/LayoutSidebar/types'
-import { useSidebar } from '@/src/layout/components/Layout/LayoutSidebar/useSidebar.tsx'
+import { useSidebar } from '@/src/layout/components/Layout/LayoutSidebar/useSidebar'
 import { IconChevronsLeft } from '@tabler/icons-react'
 import {
 	Select,
@@ -11,8 +11,8 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@ui/components/ui/select'
-import { cn } from '@ui/lib/utils.ts'
+} from '@cloudcrafter/ui/components/select'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 import {
 	FolderKey,
 	LayoutDashboard,

@@ -1,4 +1,4 @@
-import CustomLink from '@/src/app/authjs/components/custom-link.tsx'
+import CustomLink from '@/src/app/authjs/components/custom-link'
 
 export default function Page() {
 	return (

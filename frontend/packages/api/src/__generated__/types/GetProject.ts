@@ -1,4 +1,4 @@
-import type { ProjectDto } from "./ProjectDto.ts";
+import type { ProjectDto } from "./ProjectDto";
 
  export type GetProjectPathParams = {
     /**

@@ -1,5 +1,5 @@
-import type { ProjectDto } from "./ProjectDto.ts";
-import type { UpdateProjectArgs } from "./UpdateProjectArgs.ts";
+import type { ProjectDto } from "./ProjectDto";
+import type { UpdateProjectArgs } from "./UpdateProjectArgs";
 
  export type UpdateProjectPathParams = {
     /**

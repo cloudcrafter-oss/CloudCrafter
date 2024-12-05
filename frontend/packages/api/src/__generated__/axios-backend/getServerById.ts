@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { GetServerByIdQueryResponse, GetServerByIdPathParams } from "../types/GetServerById.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { GetServerByIdQueryResponse, GetServerByIdPathParams } from "../types/GetServerById";
 
  /**
  * @link /api/Servers/:id

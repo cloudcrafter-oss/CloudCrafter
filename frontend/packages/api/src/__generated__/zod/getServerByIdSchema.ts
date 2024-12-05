@@ -1,4 +1,4 @@
-import { serverDetailDtoSchema } from "./serverDetailDtoSchema.ts";
+import { serverDetailDtoSchema } from "./serverDetailDtoSchema";
 import { z } from "zod";
 
  export const getServerByIdPathParamsSchema = z.object({ "id": z.string().uuid() });

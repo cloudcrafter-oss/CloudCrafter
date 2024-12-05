@@ -2,11 +2,11 @@ import {
 	deleteProjectAction,
 	fetchProjectDetail,
 	updateProjectAction,
-} from '@/src/app/_actions/project.ts'
-import { updateProjectArgsSchema } from '@cloudcrafter/api/__generated__/zod'
-import type { ProjectDto } from '@cloudcrafter/api/src/__generated__/types/ProjectDto'
+} from '@/src/app/_actions/project'
+import { updateProjectArgsSchema } from '@cloudcrafter/api'
+import type { ProjectDto } from '@cloudcrafter/api'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@ui/components/ui/button.tsx'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Form,
 	FormControl,
@@ -14,13 +14,13 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@ui/components/ui/form'
-import { Input } from '@ui/components/ui/input.tsx'
+} from '@cloudcrafter/ui/components/form'
+import { Input } from '@cloudcrafter/ui/components/input'
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from '@ui/components/ui/popover.tsx'
+} from '@cloudcrafter/ui/components/popover'
 import {
 	Sheet,
 	SheetClose,
@@ -29,8 +29,8 @@ import {
 	SheetFooter,
 	SheetHeader,
 	SheetTitle,
-} from '@ui/components/ui/sheet.tsx'
-import { Spinner } from '@ui/components/ui/spinner.tsx'
+} from '@cloudcrafter/ui/components/sheet'
+import { Spinner } from '@cloudcrafter/ui/components/spinner'
 import { SettingsIcon } from 'lucide-react'
 import { useAction } from 'next-safe-action/hooks'
 import { useState } from 'react'

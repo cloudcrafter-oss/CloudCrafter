@@ -3,24 +3,24 @@
 import {
 	useDispatchStackDeploymentHook,
 	useUpdateStackHook,
-} from '@cloudcrafter/api/__generated__/hooks'
-import type { StackDetailDto } from '@cloudcrafter/api/__generated__/types/StackDetailDto'
-import { updateStackMutationRequestSchema } from '@cloudcrafter/api/__generated__/zod'
+} from '@cloudcrafter/api'
+import type { StackDetailDto } from '@cloudcrafter/api'
+import { updateStackMutationRequestSchema } from '@cloudcrafter/api'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@ui/components/ui/button'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from '@ui/components/ui/card'
+} from '@cloudcrafter/ui/components/card'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from '@ui/components/ui/dropdown-menu'
+} from '@cloudcrafter/ui/components/dropdown-menu'
 import {
 	Form,
 	FormControl,
@@ -28,11 +28,11 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@ui/components/ui/form'
-import { Input } from '@ui/components/ui/input'
-import { Label } from '@ui/components/ui/label'
-import { Switch } from '@ui/components/ui/switch'
-import { Textarea } from '@ui/components/ui/textarea'
+} from '@cloudcrafter/ui/components/form'
+import { Input } from '@cloudcrafter/ui/components/input'
+import { Label } from '@cloudcrafter/ui/components/label'
+import { Switch } from '@cloudcrafter/ui/components/switch'
+import { Textarea } from '@cloudcrafter/ui/components/textarea'
 import {
 	FileText,
 	MoreVertical,

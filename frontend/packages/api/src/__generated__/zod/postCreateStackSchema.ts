@@ -1,5 +1,5 @@
-import { createStackCommandCommandSchema } from "./createStackCommandCommandSchema.ts";
-import { stackCreatedDtoSchema } from "./stackCreatedDtoSchema.ts";
+import { createStackCommandCommandSchema } from "./createStackCommandCommandSchema";
+import { stackCreatedDtoSchema } from "./stackCreatedDtoSchema";
 import { z } from "zod";
 
  /**

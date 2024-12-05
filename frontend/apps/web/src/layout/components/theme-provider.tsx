@@ -1,5 +1,5 @@
 'use client'
-import { Toaster } from '@ui/components/ui/sonner.tsx'
+import { Toaster } from '@cloudcrafter/ui/components/sonner'
 import type React from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
 

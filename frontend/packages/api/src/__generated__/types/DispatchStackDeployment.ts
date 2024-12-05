@@ -1,4 +1,4 @@
-import type { DeploymentCreatedDetailsDto } from "./DeploymentCreatedDetailsDto.ts";
+import type { DeploymentCreatedDetailsDto } from "./DeploymentCreatedDetailsDto";
 
  export type DispatchStackDeploymentPathParams = {
     /**

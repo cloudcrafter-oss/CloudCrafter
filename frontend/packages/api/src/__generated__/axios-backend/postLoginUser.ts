@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { PostLoginUserMutationRequest, PostLoginUserMutationResponse } from "../types/PostLoginUser.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { PostLoginUserMutationRequest, PostLoginUserMutationResponse } from "../types/PostLoginUser";
 
  /**
  * @link /api/Auth/login

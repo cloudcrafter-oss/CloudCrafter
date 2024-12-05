@@ -1,5 +1,5 @@
-import type { CreatedServerDto } from "./CreatedServerDto.ts";
-import type { CreateServerCommandCommand } from "./CreateServerCommandCommand.ts";
+import type { CreatedServerDto } from "./CreatedServerDto";
+import type { CreateServerCommandCommand } from "./CreateServerCommandCommand";
 
  /**
  * @description OK

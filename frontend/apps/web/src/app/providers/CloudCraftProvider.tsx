@@ -1,5 +1,5 @@
-import { QueryProvider } from '@/src/app/providers/QueryProvider.tsx'
-import { auth } from '@/src/auth.ts'
+import { QueryProvider } from '@/src/app/providers/QueryProvider'
+import { auth } from '@/src/auth'
 import { SessionProvider } from 'next-auth/react'
 import type React from 'react'
 

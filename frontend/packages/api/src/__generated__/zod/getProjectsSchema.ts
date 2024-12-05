@@ -1,4 +1,4 @@
-import { projectDtoSchema } from "./projectDtoSchema.ts";
+import { projectDtoSchema } from "./projectDtoSchema";
 import { z } from "zod";
 
  export const getProjectsQueryParamsSchema = z.object({ "includeEnvironments": z.boolean().default(false) }).optional();

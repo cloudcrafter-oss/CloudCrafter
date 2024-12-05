@@ -1,4 +1,4 @@
-import type { ChannelOutputLogLineLevel } from "./ChannelOutputLogLineLevel.ts";
+import type { ChannelOutputLogLineLevel } from "./ChannelOutputLogLineLevel";
 
  export type DeploymentLogDto = {
     /**

@@ -1,4 +1,4 @@
-import { deploymentLogDtoSchema } from "./deploymentLogDtoSchema.ts";
+import { deploymentLogDtoSchema } from "./deploymentLogDtoSchema";
 import { z } from "zod";
 
  export const getDeploymentLogsPathParamsSchema = z.object({ "deploymentId": z.string().uuid() });

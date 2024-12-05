@@ -1,4 +1,4 @@
-import type { ServerStatusDtoValue } from "./ServerStatusDtoValue.ts";
+import type { ServerStatusDtoValue } from "./ServerStatusDtoValue";
 
  export type ServerPingDto = {
     /**

@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { GetUsersMutationRequest, GetUsersMutationResponse } from "../types/GetUsers.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { GetUsersMutationRequest, GetUsersMutationResponse } from "../types/GetUsers";
 
  /**
  * @link /api/Users

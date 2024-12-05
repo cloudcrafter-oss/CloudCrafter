@@ -3,10 +3,10 @@
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 
-import CustomLink from '@/src/app/authjs/components/custom-link.tsx'
-import SessionData from '@/src/app/authjs/components/session-data.tsx'
-import { Button } from '@ui/components/ui/button.tsx'
-import { Input } from '@ui/components/ui/input.tsx'
+import CustomLink from '@/src/app/authjs/components/custom-link'
+import SessionData from '@/src/app/authjs/components/session-data'
+import { Button } from '@cloudcrafter/ui/components/button'
+import { Input } from '@cloudcrafter/ui/components/input'
 
 const UpdateForm = () => {
 	const { data: session, update } = useSession()

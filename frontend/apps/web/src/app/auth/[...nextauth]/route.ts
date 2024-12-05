@@ -1,3 +1,3 @@
-import { handlers } from '../../../auth.ts'
+import { handlers } from '../../../auth'
 
 export const { GET, POST } = handlers

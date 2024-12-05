@@ -1,6 +1,6 @@
 'use client'
-import { Button } from '@ui/components/ui/button'
-import { Card } from '@ui/components/ui/card'
+import { Button } from '@cloudcrafter/ui/components/button'
+import { Card } from '@cloudcrafter/ui/components/card'
 import type React from 'react'
 import { useState } from 'react'
 

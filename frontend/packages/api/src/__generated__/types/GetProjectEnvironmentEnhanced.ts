@@ -1,4 +1,4 @@
-import type { ProjectEnvironmentEnhancedDto } from "./ProjectEnvironmentEnhancedDto.ts";
+import type { ProjectEnvironmentEnhancedDto } from "./ProjectEnvironmentEnhancedDto";
 
  export type GetProjectEnvironmentEnhancedPathParams = {
     /**
