@@ -26,6 +26,7 @@ import { useForm } from 'react-hook-form'
 import {
 	createServerCommandCommandSchema,
 	getServersQueryKey,
+	type serverStatusDtoValueSchema,
 	useCreateServerHook,
 	useGetServersHook,
 } from '@cloudcrafter/api'
