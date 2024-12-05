@@ -1,7 +1,5 @@
-import {
-	updateStackServiceCommandCommandSchema,
-	useUpdateStackServiceHook,
-} from '@cloudcrafter/api'
+import { useUpdateStackServiceHook } from '@cloudcrafter/api/__generated__/hooks'
+import { updateStackServiceCommandCommandSchema } from '@cloudcrafter/api/__generated__/zod'
 import type { StackServiceDto } from '@cloudcrafter/api/src/__generated__/types/StackServiceDto'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/components/ui/button'

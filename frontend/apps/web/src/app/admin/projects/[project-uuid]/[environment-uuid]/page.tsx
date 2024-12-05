@@ -7,7 +7,7 @@ import {
 	type ProjectEnvironmentRouteParams,
 	validateProjectEnvironmentRouteParams,
 } from '@/src/utils/routes/schemas'
-import { getProjectEnvironmentEnhanced } from '@cloudcrafter/api'
+import { getProjectEnvironmentEnhanced } from '@cloudcrafter/api/__generated__/axios-backend'
 
 import { Button } from '@ui/components/ui/button.tsx'
 import {

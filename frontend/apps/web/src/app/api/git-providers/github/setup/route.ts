@@ -1,5 +1,5 @@
 import { auth } from '@/src/auth'
-import { postCreateGithubApp } from '@cloudcrafter/api'
+import { postCreateGithubApp } from '@cloudcrafter/api/__generated__/axios-backend'
 import type { NextRequest } from 'next/server'
 
 export async function GET(request: NextRequest) {

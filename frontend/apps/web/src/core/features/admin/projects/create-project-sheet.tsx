@@ -18,7 +18,7 @@ import {
 import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
 
-import { createProjectCommandCommandSchema } from '@cloudcrafter/api'
+import { createProjectCommandCommandSchema } from '@cloudcrafter/api/__generated__/zod'
 import { toast } from 'sonner'
 
 type FormValues = z.infer<typeof createProjectCommandCommandSchema>

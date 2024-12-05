@@ -1,11 +1,10 @@
 'use client'
 import { DeploymentStatusBadge } from '@/src/components/stack-detail/deployments/deployment-list'
-import {
-	getServersQueryKey,
-	useDeleteServerByIdHook,
-	useGetDeploymentsForServerHook,
-	usePostRotateAgentKeyHook,
-} from '@cloudcrafter/api'
+import { useDeleteServerByIdHook } from '@cloudcrafter/api/__generated__/hooks/useDeleteServerByIdHook'
+import { useGetDeploymentsForServerHook } from '@cloudcrafter/api/__generated__/hooks/useGetDeploymentsForServerHook'
+import { getServersQueryKey } from '@cloudcrafter/api/__generated__/hooks/useGetServersHook'
+import { usePostRotateAgentKeyHook } from '@cloudcrafter/api/__generated__/hooks/usePostRotateAgentKeyHook'
+
 import type { ServerDetailDto } from '@cloudcrafter/api/src/__generated__/types/ServerDetailDto'
 
 import { useQueryClient } from '@tanstack/react-query'

@@ -6,7 +6,7 @@ import { useDataTable } from '@/src/components/datatable/hooks/use-data-table.ts
 import type { DataTableFilterField } from '@/src/components/datatable/types'
 import { getColumns } from '@/src/core/features/admin/users/columns.tsx'
 import { useTasksTable } from '@/src/core/features/admin/users/provider.tsx'
-import type { getUsers } from '@cloudcrafter/api'
+import type { getUsers } from '@cloudcrafter/api/__generated__/axios-backend/getUsers'
 import type { UserDto } from '@cloudcrafter/api/src/__generated__/types/UserDto'
 import * as React from 'react'
 

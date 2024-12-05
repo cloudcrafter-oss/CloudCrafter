@@ -4,7 +4,10 @@ import {
 	type StackRouteParams,
 	validateStackRouteParams,
 } from '@/src/utils/routes/schemas'
-import { getDeploymentsForStack, getStackDetail } from '@cloudcrafter/api'
+import {
+	getDeploymentsForStack,
+	getStackDetail,
+} from '@cloudcrafter/api/__generated__/axios-backend'
 import {
 	Tabs,
 	TabsContent,

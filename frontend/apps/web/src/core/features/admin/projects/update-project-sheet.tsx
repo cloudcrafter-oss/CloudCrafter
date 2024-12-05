@@ -1,6 +1,6 @@
 'use server'
 
-import { getServerById } from '@cloudcrafter/api'
+import { getServerById } from '@cloudcrafter/api/index'
 
 export async function UpdateProjectSheet({ projectId }: { projectId: string }) {
 	const project = await getServerById(projectId)

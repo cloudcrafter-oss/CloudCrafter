@@ -5,7 +5,7 @@ import React from 'react'
 import { DataTableSkeleton } from '@/src/components/datatable/components/data-table/data-table-skeleton.tsx'
 import { searchParamsSchema } from '@/src/components/datatable/validation'
 import { UsersTable } from '@/src/core/features/admin/users/table.tsx'
-import { getUsers } from '@cloudcrafter/api'
+import { getUsers } from '@cloudcrafter/api/__generated__/axios-backend/getUsers'
 
 export interface UserListProps {
 	searchParams: SearchParams

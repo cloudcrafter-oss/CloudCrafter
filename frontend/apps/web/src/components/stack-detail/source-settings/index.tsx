@@ -1,8 +1,7 @@
 'use client'
-import {
-	updateStackMutationRequestSchema,
-	useUpdateStackHook,
-} from '@cloudcrafter/api'
+
+import { useUpdateStackHook } from '@cloudcrafter/api/__generated__/hooks'
+import { updateStackMutationRequestSchema } from '@cloudcrafter/api/__generated__/zod'
 import type { StackDetailDto } from '@cloudcrafter/api/src/__generated__/types/StackDetailDto'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@ui/components/ui/button'

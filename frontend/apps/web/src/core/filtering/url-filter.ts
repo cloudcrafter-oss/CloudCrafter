@@ -1,4 +1,5 @@
 import { filterCritereaArraySchema } from '@/src/core/filtering/schema.ts'
+import type { filterOperatorOptionSchema } from '@cloudcrafter/api/index'
 
 import type { z } from 'zod'
 

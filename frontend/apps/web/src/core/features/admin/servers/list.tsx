@@ -24,12 +24,14 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import {
-	createServerCommandCommandSchema,
 	getServersQueryKey,
-	type serverStatusDtoValueSchema,
 	useCreateServerHook,
 	useGetServersHook,
-} from '@cloudcrafter/api'
+} from '@cloudcrafter/api/__generated__/hooks'
+import {
+	createServerCommandCommandSchema,
+	type serverStatusDtoValueSchema,
+} from '@cloudcrafter/api/__generated__/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import {
 	Form,
