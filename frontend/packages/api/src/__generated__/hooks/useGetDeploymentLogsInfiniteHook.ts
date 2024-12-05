@@ -1,7 +1,7 @@
 // @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
-import client from "../../frontend/client.ts";
-import type { RequestConfig } from "../../frontend/client.ts";
-import type { GetDeploymentLogsQueryResponse, GetDeploymentLogsPathParams } from "../types/GetDeploymentLogs.ts";
+import client from "../../frontend/client";
+import type { RequestConfig } from "../../frontend/client";
+import type { GetDeploymentLogsQueryResponse, GetDeploymentLogsPathParams } from "../types/GetDeploymentLogs";
 import type { InfiniteData, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult } from "@tanstack/react-query";
 import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
 

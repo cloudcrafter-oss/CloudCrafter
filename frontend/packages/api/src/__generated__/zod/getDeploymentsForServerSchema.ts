@@ -1,4 +1,4 @@
-import { paginatedListOfSimpleDeploymentDtoSchema } from "./paginatedListOfSimpleDeploymentDtoSchema.ts";
+import { paginatedListOfSimpleDeploymentDtoSchema } from "./paginatedListOfSimpleDeploymentDtoSchema";
 import { z } from "zod";
 
  export const getDeploymentsForServerPathParamsSchema = z.object({ "id": z.string().uuid() });

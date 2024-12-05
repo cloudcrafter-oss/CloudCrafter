@@ -12,13 +12,13 @@ import {
 	DropdownMenuSubContent,
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
-} from '@ui/components/ui/dropdown-menu'
+} from '@cloudcrafter/ui/components/dropdown-menu'
 import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
 	useSidebar,
-} from '@ui/components/ui/sidebar'
+} from '@cloudcrafter/ui/components/sidebar'
 import {
 	Check,
 	ChevronsUpDown,

@@ -1,5 +1,5 @@
-import { createProjectCommandCommandSchema } from "./createProjectCommandCommandSchema.ts";
-import { projectDtoSchema } from "./projectDtoSchema.ts";
+import { createProjectCommandCommandSchema } from "./createProjectCommandCommandSchema";
+import { projectDtoSchema } from "./projectDtoSchema";
 import { z } from "zod";
 
  /**

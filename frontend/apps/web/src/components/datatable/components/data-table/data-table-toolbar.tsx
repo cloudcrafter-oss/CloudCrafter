@@ -1,13 +1,13 @@
 'use client'
 
-import { DataTableFacetedFilter } from '@/src/components/datatable/components/data-table/data-table-faceted-filter.tsx'
-import { DataTableViewOptions } from '@/src/components/datatable/components/data-table/data-table-view-options.tsx'
+import { DataTableFacetedFilter } from '@/src/components/datatable/components/data-table/data-table-faceted-filter'
+import { DataTableViewOptions } from '@/src/components/datatable/components/data-table/data-table-view-options'
 import type { DataTableFilterField } from '@/src/components/datatable/types'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import type { Table } from '@tanstack/react-table'
-import { Button } from '@ui/components/ui/button.tsx'
-import { Input } from '@ui/components/ui/input.tsx'
-import { cn } from '@ui/lib/utils.ts'
+import { Button } from '@cloudcrafter/ui/components/button'
+import { Input } from '@cloudcrafter/ui/components/input'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 import * as React from 'react'
 
 interface DataTableToolbarProps<TData>

@@ -7,13 +7,13 @@ import {
 import {
 	getDeploymentsForStack,
 	getStackDetail,
-} from '@cloudcrafter/api/__generated__/axios-backend'
+} from '@cloudcrafter/api'
 import {
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
-} from '@ui/components/ui/tabs'
+} from '@cloudcrafter/ui/components/tabs'
 
 interface PageProps {
 	params: StackRouteParams

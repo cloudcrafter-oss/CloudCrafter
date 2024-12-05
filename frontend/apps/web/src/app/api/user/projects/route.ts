@@ -1,4 +1,4 @@
-import { getProjects } from '@cloudcrafter/api/__generated__/axios-backend'
+import { getProjects } from '@cloudcrafter/api'
 import { NextResponse } from 'next/server'
 
 export async function GET() {

@@ -2,8 +2,8 @@
 import { LayoutSidebarMobile } from '@/src/layout/components/Layout/LayoutSidebar/LayoutSidebarMobile'
 import { ThemeToggle } from '@/src/layout/components/ThemeToggle'
 import { UserNav } from '@/src/layout/components/UserNav'
-import { Button } from '@ui/components/ui/button.tsx'
-import { cn } from '@ui/lib/utils.ts'
+import { Button } from '@cloudcrafter/ui/components/button'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 

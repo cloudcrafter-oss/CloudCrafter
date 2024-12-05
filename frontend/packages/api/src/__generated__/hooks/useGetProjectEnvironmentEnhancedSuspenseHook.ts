@@ -1,7 +1,7 @@
 // @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
-import client from "../../frontend/client.ts";
-import type { RequestConfig } from "../../frontend/client.ts";
-import type { GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhancedPathParams, GetProjectEnvironmentEnhanced404 } from "../types/GetProjectEnvironmentEnhanced.ts";
+import client from "../../frontend/client";
+import type { RequestConfig } from "../../frontend/client";
+import type { GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhancedPathParams, GetProjectEnvironmentEnhanced404 } from "../types/GetProjectEnvironmentEnhanced";
 import type { QueryKey, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 

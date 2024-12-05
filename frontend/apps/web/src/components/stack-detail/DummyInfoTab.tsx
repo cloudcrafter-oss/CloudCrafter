@@ -1,4 +1,4 @@
-import type { StackDetailDto } from '@cloudcrafter/api/src/__generated__/types/StackDetailDto'
+import type { StackDetailDto } from '@cloudcrafter/api'
 
 export const DummyInfoTab = ({
 	stackDetails,

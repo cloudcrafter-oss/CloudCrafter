@@ -1,4 +1,4 @@
-import { cn } from '@ui/lib/utils.ts'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 import * as React from 'react'
 
 export interface InputProps

@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { CreateServerMutationRequest, CreateServerMutationResponse } from "../types/CreateServer.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { CreateServerMutationRequest, CreateServerMutationResponse } from "../types/CreateServer";
 
  /**
  * @link /api/Servers

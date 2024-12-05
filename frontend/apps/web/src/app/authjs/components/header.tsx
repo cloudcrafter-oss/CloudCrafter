@@ -1,5 +1,5 @@
-import { MainNav } from '@/src/app/authjs/components/main-nav.tsx'
-import UserButton from '@/src/app/authjs/components/user-button.tsx'
+import { MainNav } from '@/src/app/authjs/components/main-nav'
+import UserButton from '@/src/app/authjs/components/user-button'
 
 export default function Header() {
 	return (

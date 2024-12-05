@@ -5,14 +5,14 @@ import type { Table } from '@tanstack/react-table'
 import { useSearchParams } from 'next/navigation'
 import * as React from 'react'
 
-import { DataTableFilterCombobox } from '@/src/components/datatable/components/data-table/advanced/data-table-filter-combobox.tsx'
-import { DataTableViewOptions } from '@/src/components/datatable/components/data-table/data-table-view-options.tsx'
+import { DataTableFilterCombobox } from '@/src/components/datatable/components/data-table/advanced/data-table-filter-combobox'
+import { DataTableViewOptions } from '@/src/components/datatable/components/data-table/data-table-view-options'
 import type {
 	DataTableFilterField,
 	DataTableFilterOption,
 } from '@/src/components/datatable/types'
-import { Button } from '@ui/components/ui/button.tsx'
-import { cn } from '@ui/lib/utils.ts'
+import { Button } from '@cloudcrafter/ui/components/button'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 import { DataTableFilterItem } from './data-table-filter-item'
 import { DataTableMultiFilter } from './data-table-multi-filter'
 

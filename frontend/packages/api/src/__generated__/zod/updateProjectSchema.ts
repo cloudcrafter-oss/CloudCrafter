@@ -1,5 +1,5 @@
-import { projectDtoSchema } from "./projectDtoSchema.ts";
-import { updateProjectArgsSchema } from "./updateProjectArgsSchema.ts";
+import { projectDtoSchema } from "./projectDtoSchema";
+import { updateProjectArgsSchema } from "./updateProjectArgsSchema";
 import { z } from "zod";
 
  export const updateProjectPathParamsSchema = z.object({ "id": z.string().uuid() });

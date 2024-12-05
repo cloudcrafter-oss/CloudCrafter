@@ -1,4 +1,4 @@
-import { cn } from '@ui/lib/utils'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 import { Loader2 } from 'lucide-react'
 
 const Spinner = ({ className }: { className?: string }) => {

@@ -1,4 +1,4 @@
-import type { ServerPingDto } from "./ServerPingDto.ts";
+import type { ServerPingDto } from "./ServerPingDto";
 
  export type ServerDto = {
     /**

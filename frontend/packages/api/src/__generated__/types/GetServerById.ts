@@ -1,4 +1,4 @@
-import type { ServerDetailDto } from "./ServerDetailDto.ts";
+import type { ServerDetailDto } from "./ServerDetailDto";
 
  export type GetServerByIdPathParams = {
     /**

@@ -1,11 +1,11 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import * as React from 'react'
 
-import { DataTableFacetedFilter } from '@/src/components/datatable/components/data-table/data-table-faceted-filter.tsx'
+import { DataTableFacetedFilter } from '@/src/components/datatable/components/data-table/data-table-faceted-filter'
 import {
 	type DataTableConfig,
 	dataTableConfig,
-} from '@/src/components/datatable/config/data-table.ts'
+} from '@/src/components/datatable/config/data-table'
 import type { DataTableFilterOption } from '@/src/components/datatable/types'
 import {
 	CopyIcon,
@@ -14,19 +14,19 @@ import {
 	TrashIcon,
 } from '@radix-ui/react-icons'
 import type { Table } from '@tanstack/react-table'
-import { Button } from '@ui/components/ui/button.tsx'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from '@ui/components/ui/dropdown-menu.tsx'
-import { Input } from '@ui/components/ui/input.tsx'
+} from '@cloudcrafter/ui/components/dropdown-menu'
+import { Input } from '@cloudcrafter/ui/components/input'
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from '@ui/components/ui/popover.tsx'
+} from '@cloudcrafter/ui/components/popover'
 import {
 	Select,
 	SelectContent,
@@ -34,9 +34,9 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@ui/components/ui/select.tsx'
-import { Separator } from '@ui/components/ui/separator.tsx'
-import { useDebounce } from '@ui/hooks/use-debounce.ts'
+} from '@cloudcrafter/ui/components/select'
+import { Separator } from '@cloudcrafter/ui/components/separator'
+import { useDebounce } from '@cloudcrafter/ui/hooks/use-debounce'
 
 interface DataTableMultiFilterProps<TData> {
 	table: Table<TData>

@@ -2,7 +2,7 @@ import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
-} from '@ui/components/ui/collapsible'
+} from '@cloudcrafter/ui/components/collapsible'
 import {
 	SidebarGroup,
 	SidebarGroupLabel,
@@ -12,7 +12,7 @@ import {
 	SidebarMenuSub,
 	SidebarMenuSubButton,
 	SidebarMenuSubItem,
-} from '@ui/components/ui/sidebar'
+} from '@cloudcrafter/ui/components/sidebar'
 import { ChevronRight, type LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 

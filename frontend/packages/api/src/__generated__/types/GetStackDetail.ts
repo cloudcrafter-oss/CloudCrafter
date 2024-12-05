@@ -1,4 +1,4 @@
-import type { StackDetailDto } from "./StackDetailDto.ts";
+import type { StackDetailDto } from "./StackDetailDto";
 
  export type GetStackDetailPathParams = {
     /**

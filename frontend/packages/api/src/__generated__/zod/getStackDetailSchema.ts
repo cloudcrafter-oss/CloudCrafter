@@ -1,4 +1,4 @@
-import { stackDetailDtoSchema } from "./stackDetailDtoSchema.ts";
+import { stackDetailDtoSchema } from "./stackDetailDtoSchema";
 import { z } from "zod";
 
  export const getStackDetailPathParamsSchema = z.object({ "id": z.string().uuid() });

@@ -1,13 +1,13 @@
 'use client'
 
-import { DataTableAdvancedToolbar } from '@/src/components/datatable/components/data-table/advanced/data-table-advanced-toolbar.tsx'
-import { DataTable } from '@/src/components/datatable/components/data-table/data-table.tsx'
-import { useDataTable } from '@/src/components/datatable/hooks/use-data-table.ts'
+import { DataTableAdvancedToolbar } from '@/src/components/datatable/components/data-table/advanced/data-table-advanced-toolbar'
+import { DataTable } from '@/src/components/datatable/components/data-table/data-table'
+import { useDataTable } from '@/src/components/datatable/hooks/use-data-table'
 import type { DataTableFilterField } from '@/src/components/datatable/types'
-import { getColumns } from '@/src/core/features/admin/users/columns.tsx'
-import { useTasksTable } from '@/src/core/features/admin/users/provider.tsx'
-import type { getUsers } from '@cloudcrafter/api/__generated__/axios-backend/getUsers'
-import type { UserDto } from '@cloudcrafter/api/src/__generated__/types/UserDto'
+import { getColumns } from '@/src/core/features/admin/users/columns'
+import { useTasksTable } from '@/src/core/features/admin/users/provider'
+import type { getUsers } from '@cloudcrafter/api'
+import type { UserDto } from '@cloudcrafter/api'
 import * as React from 'react'
 
 interface TasksTableProps {

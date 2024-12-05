@@ -1,4 +1,4 @@
-import type { SimpleDeploymentDto } from "./SimpleDeploymentDto.ts";
+import type { SimpleDeploymentDto } from "./SimpleDeploymentDto";
 
  export type GetDeploymentsForStackPathParams = {
     /**

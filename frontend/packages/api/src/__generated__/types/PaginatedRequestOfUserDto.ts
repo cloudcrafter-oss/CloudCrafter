@@ -1,4 +1,4 @@
-import type { FilterCriterea } from "./FilterCriterea.ts";
+import type { FilterCriterea } from "./FilterCriterea";
 
  export type PaginatedRequestOfUserDto = {
     /**

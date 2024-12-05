@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { UpdateServerMutationRequest, UpdateServerMutationResponse, UpdateServerPathParams } from "../types/UpdateServer.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { UpdateServerMutationRequest, UpdateServerMutationResponse, UpdateServerPathParams } from "../types/UpdateServer";
 
  /**
  * @link /api/Servers/:id

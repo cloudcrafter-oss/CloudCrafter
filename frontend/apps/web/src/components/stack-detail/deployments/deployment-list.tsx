@@ -1,6 +1,6 @@
 'use client'
-import type { DeploymentStatusDto } from '@cloudcrafter/api/src/__generated__/types/DeploymentStatusDto'
-import type { SimpleDeploymentDto } from '@cloudcrafter/api/src/__generated__/types/SimpleDeploymentDto'
+import type { DeploymentStatusDto } from '@cloudcrafter/api'
+import type { SimpleDeploymentDto } from '@cloudcrafter/api'
 import { useState } from 'react'
 import { ChannelLogViewerEnhanced } from '../../logviewer/ChannelLogViewer'
 

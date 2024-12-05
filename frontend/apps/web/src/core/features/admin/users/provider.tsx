@@ -5,16 +5,16 @@ import * as React from 'react'
 import {
 	type DataTableConfig,
 	dataTableConfig,
-} from '@/src/components/datatable/config/data-table.ts'
+} from '@/src/components/datatable/config/data-table'
 import {
 	ToggleGroup,
 	ToggleGroupItem,
-} from '@ui/components/ui/toggle-group.tsx'
+} from '@cloudcrafter/ui/components/toggle-group'
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from '@ui/components/ui/tooltip.tsx'
+} from '@cloudcrafter/ui/components/tooltip'
 
 type FeatureFlagValue = DataTableConfig['featureFlags'][number]['value']
 

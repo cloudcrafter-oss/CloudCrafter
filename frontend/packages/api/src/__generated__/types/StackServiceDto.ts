@@ -1,5 +1,5 @@
-import type { EntityHealthDto } from "./EntityHealthDto.ts";
-import type { StackServiceHttpConfigurationDto } from "./StackServiceHttpConfigurationDto.ts";
+import type { EntityHealthDto } from "./EntityHealthDto";
+import type { StackServiceHttpConfigurationDto } from "./StackServiceHttpConfigurationDto";
 
  export type StackServiceDto = {
     /**

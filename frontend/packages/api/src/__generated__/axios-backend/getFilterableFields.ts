@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { GetFilterableFieldsQueryResponse } from "../types/GetFilterableFields.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { GetFilterableFieldsQueryResponse } from "../types/GetFilterableFields";
 
  /**
  * @link /api/System/get-fields

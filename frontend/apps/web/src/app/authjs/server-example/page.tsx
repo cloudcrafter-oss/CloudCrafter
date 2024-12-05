@@ -1,6 +1,6 @@
-import CustomLink from '@/src/app/authjs/components/custom-link.tsx'
-import SessionData from '@/src/app/authjs/components/session-data.tsx'
-import { auth } from '@/src/auth.ts'
+import CustomLink from '@/src/app/authjs/components/custom-link'
+import SessionData from '@/src/app/authjs/components/session-data'
+import { auth } from '@/src/auth'
 
 export default async function Page() {
 	const session = await auth()

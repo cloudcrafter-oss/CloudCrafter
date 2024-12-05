@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { DeleteServerByIdMutationResponse, DeleteServerByIdPathParams } from "../types/DeleteServerById.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { DeleteServerByIdMutationResponse, DeleteServerByIdPathParams } from "../types/DeleteServerById";
 
  /**
  * @link /api/Servers/:id

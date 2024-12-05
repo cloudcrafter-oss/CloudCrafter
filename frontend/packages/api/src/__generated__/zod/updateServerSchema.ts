@@ -1,4 +1,4 @@
-import { updateServerDtoSchema } from "./updateServerDtoSchema.ts";
+import { updateServerDtoSchema } from "./updateServerDtoSchema";
 import { z } from "zod";
 
  export const updateServerPathParamsSchema = z.object({ "id": z.string().uuid() });

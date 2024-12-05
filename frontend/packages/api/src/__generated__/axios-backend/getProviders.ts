@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { GetProvidersQueryResponse } from "../types/GetProviders.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { GetProvidersQueryResponse } from "../types/GetProviders";
 
  /**
  * @link /api/Providers

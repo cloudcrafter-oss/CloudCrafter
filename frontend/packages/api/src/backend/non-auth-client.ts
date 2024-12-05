@@ -1,4 +1,4 @@
-import { backendEnv } from '@/src/core/env/cloudcrafter-env.ts'
+import { backendEnv } from '@/src/core/env/cloudcrafter-env'
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import axios from 'axios'
 

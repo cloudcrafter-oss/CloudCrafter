@@ -1,7 +1,7 @@
 'use client'
-import CustomLink from '@/src/app/authjs/components/custom-link.tsx'
+import CustomLink from '@/src/app/authjs/components/custom-link'
 
-import { Button } from '@ui/components/ui/button.tsx'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	NavigationMenu,
 	NavigationMenuContent,
@@ -10,8 +10,8 @@ import {
 	NavigationMenuList,
 	NavigationMenuTrigger,
 	navigationMenuTriggerStyle,
-} from '@ui/components/ui/navigation-menu.tsx'
-import { cn } from '@ui/lib/utils.ts'
+} from '@cloudcrafter/ui/components/navigation-menu'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 import React from 'react'
 
 export function MainNav() {

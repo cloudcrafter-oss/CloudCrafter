@@ -1,4 +1,4 @@
-import { serverDtoSchema } from "./serverDtoSchema.ts";
+import { serverDtoSchema } from "./serverDtoSchema";
 import { z } from "zod";
 
  /**

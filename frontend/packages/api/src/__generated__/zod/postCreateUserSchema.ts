@@ -1,5 +1,5 @@
-import { postCreateUserQuerySchema } from "./postCreateUserQuerySchema.ts";
-import { tokenDtoSchema } from "./tokenDtoSchema.ts";
+import { postCreateUserQuerySchema } from "./postCreateUserQuerySchema";
+import { tokenDtoSchema } from "./tokenDtoSchema";
 import { z } from "zod";
 
  /**

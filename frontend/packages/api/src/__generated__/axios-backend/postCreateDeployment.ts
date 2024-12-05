@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { PostCreateDeploymentMutationResponse, PostCreateDeploymentPathParams } from "../types/PostCreateDeployment.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { PostCreateDeploymentMutationResponse, PostCreateDeploymentPathParams } from "../types/PostCreateDeployment";
 
  /**
  * @link /api/Applications/:applicationId/deployment

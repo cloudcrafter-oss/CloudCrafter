@@ -1,13 +1,9 @@
 {
-	"extends": "@repo/typescript-config/react-library.json",
-	"compilerOptions": {
-		"baseUrl": ".",
-		"paths": {
-			"@cloudcrafter/api/*": ["./src/*"]
-		},
-		"allowImportingTsExtensions": true,
-		"noEmit": true
-	},
-	"include": ["src"],
-	"exclude": ["node_modules", "dist"]
+  "extends": "@cloudcrafter/typescript-config/react-library.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "noEmit": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

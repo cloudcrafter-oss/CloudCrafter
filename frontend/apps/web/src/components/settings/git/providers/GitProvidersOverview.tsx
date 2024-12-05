@@ -7,15 +7,15 @@ import { BitbucketPopup } from '@/src/components/settings/git/providers/bitbucke
 import { GithubPopup } from '@/src/components/settings/git/providers/github/AddGithubPopup'
 import { GitlabPopup } from '@/src/components/settings/git/providers/gitlab/AddGitlabPopup'
 import { formatDate } from '@/src/utils/date/date-utils'
-import type { ProviderOverviewDto } from '@cloudcrafter/api/src/__generated__/types/ProviderOverviewDto'
+import type { ProviderOverviewDto } from '@cloudcrafter/api'
 import { SiBitbucket, SiGithub, SiGitlab } from '@icons-pack/react-simple-icons'
-import { Button } from '@ui/components/ui/button'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Dialog,
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
-} from '@ui/components/ui/dialog'
+} from '@cloudcrafter/ui/components/dialog'
 import { Plus } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'

@@ -1,4 +1,4 @@
-import type { UpdateServerDto } from "./UpdateServerDto.ts";
+import type { UpdateServerDto } from "./UpdateServerDto";
 
  export type UpdateServerPathParams = {
     /**

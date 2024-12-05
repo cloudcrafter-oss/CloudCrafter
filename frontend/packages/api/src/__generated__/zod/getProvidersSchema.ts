@@ -1,4 +1,4 @@
-import { providerOverviewDtoSchema } from "./providerOverviewDtoSchema.ts";
+import { providerOverviewDtoSchema } from "./providerOverviewDtoSchema";
 import { z } from "zod";
 
  /**

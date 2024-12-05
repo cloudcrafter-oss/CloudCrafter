@@ -1,4 +1,4 @@
-import { Input } from '@ui/components/ui/input.tsx'
+import { Input } from '@cloudcrafter/ui/components/input'
 
 export const Search = () => {
 	return (

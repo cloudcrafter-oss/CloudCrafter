@@ -1,4 +1,4 @@
-import '@repo/ui/main.css'
+import '@cloudcrafter/ui/main.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { CloudCraftProvider } from './providers/CloudCraftProvider'

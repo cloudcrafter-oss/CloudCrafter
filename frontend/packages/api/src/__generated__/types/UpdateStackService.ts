@@ -1,4 +1,4 @@
-import type { UpdateStackServiceCommandCommand } from "./UpdateStackServiceCommandCommand.ts";
+import type { UpdateStackServiceCommandCommand } from "./UpdateStackServiceCommandCommand";
 
  export type UpdateStackServicePathParams = {
     /**

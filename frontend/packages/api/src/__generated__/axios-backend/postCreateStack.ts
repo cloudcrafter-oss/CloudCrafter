@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { PostCreateStackMutationRequest, PostCreateStackMutationResponse } from "../types/PostCreateStack.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { PostCreateStackMutationRequest, PostCreateStackMutationResponse } from "../types/PostCreateStack";
 
  /**
  * @link /api/Stacks

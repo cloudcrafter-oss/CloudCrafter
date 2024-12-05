@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { UpdateStackServiceMutationRequest, UpdateStackServiceMutationResponse, UpdateStackServicePathParams } from "../types/UpdateStackService.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { UpdateStackServiceMutationRequest, UpdateStackServiceMutationResponse, UpdateStackServicePathParams } from "../types/UpdateStackService";
 
  /**
  * @link /api/Stacks/:stackId/services/:stackServiceId

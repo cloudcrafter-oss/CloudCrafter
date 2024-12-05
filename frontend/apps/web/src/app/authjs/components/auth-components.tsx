@@ -1,5 +1,5 @@
 import { signIn, signOut } from '@/src/auth'
-import { Button } from '@ui/components/ui/button.tsx'
+import { Button } from '@cloudcrafter/ui/components/button'
 
 export function SignIn({
 	provider,

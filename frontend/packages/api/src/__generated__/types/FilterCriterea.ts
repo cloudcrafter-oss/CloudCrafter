@@ -1,4 +1,4 @@
-import type { FilterOperatorOption } from "./FilterOperatorOption.ts";
+import type { FilterOperatorOption } from "./FilterOperatorOption";
 
  export type FilterCriterea = {
     /**

@@ -1,5 +1,5 @@
-import type { StackDetailDto } from "./StackDetailDto.ts";
-import type { UpdateStackCommandCommand } from "./UpdateStackCommandCommand.ts";
+import type { StackDetailDto } from "./StackDetailDto";
+import type { UpdateStackCommandCommand } from "./UpdateStackCommandCommand";
 
  export type UpdateStackPathParams = {
     /**

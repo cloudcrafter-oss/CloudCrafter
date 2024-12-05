@@ -1,8 +1,8 @@
-import { useUpdateStackServiceHook } from '@cloudcrafter/api/__generated__/hooks'
-import { updateStackServiceCommandCommandSchema } from '@cloudcrafter/api/__generated__/zod'
-import type { StackServiceDto } from '@cloudcrafter/api/src/__generated__/types/StackServiceDto'
+import { useUpdateStackServiceHook } from '@cloudcrafter/api'
+import { updateStackServiceCommandCommandSchema } from '@cloudcrafter/api'
+import type { StackServiceDto } from '@cloudcrafter/api'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@ui/components/ui/button'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Form,
 	FormControl,
@@ -10,9 +10,9 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@ui/components/ui/form'
-import { Input } from '@ui/components/ui/input'
-import { Label } from '@ui/components/ui/label'
+} from '@cloudcrafter/ui/components/form'
+import { Input } from '@cloudcrafter/ui/components/input'
+import { Label } from '@cloudcrafter/ui/components/label'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'

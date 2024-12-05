@@ -1,5 +1,5 @@
 import client from "@kubb/plugin-client/client";
-import type { PostRefreshTokensMutationRequest, PostRefreshTokensMutationResponse } from "../types/PostRefreshTokens.ts";
+import type { PostRefreshTokensMutationRequest, PostRefreshTokensMutationResponse } from "../types/PostRefreshTokens";
 import type { RequestConfig } from "@kubb/plugin-client/client";
 
  /**

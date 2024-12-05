@@ -1,5 +1,5 @@
-import { postLoginUserQuerySchema } from "./postLoginUserQuerySchema.ts";
-import { tokenDtoSchema } from "./tokenDtoSchema.ts";
+import { postLoginUserQuerySchema } from "./postLoginUserQuerySchema";
+import { tokenDtoSchema } from "./tokenDtoSchema";
 import { z } from "zod";
 
  /**

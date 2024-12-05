@@ -1,7 +1,7 @@
 // @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
-import client from "../../frontend/client.ts";
-import type { RequestConfig } from "../../frontend/client.ts";
-import type { UpdateServerMutationRequest, UpdateServerMutationResponse, UpdateServerPathParams } from "../types/UpdateServer.ts";
+import client from "../../frontend/client";
+import type { RequestConfig } from "../../frontend/client";
+import type { UpdateServerMutationRequest, UpdateServerMutationResponse, UpdateServerPathParams } from "../types/UpdateServer";
 import type { UseMutationOptions } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 

@@ -1,6 +1,6 @@
-import client from "../../backend/client.ts";
-import type { RequestConfig } from "../../backend/client.ts";
-import type { DeleteProjectMutationResponse, DeleteProjectPathParams } from "../types/DeleteProject.ts";
+import client from "../../backend/client";
+import type { RequestConfig } from "../../backend/client";
+import type { DeleteProjectMutationResponse, DeleteProjectPathParams } from "../types/DeleteProject";
 
  /**
  * @link /api/Projects/:id

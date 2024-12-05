@@ -1,5 +1,5 @@
 'use client'
-import useIsCollapsed from '@/src/layout/hooks/use-is-collapsed.tsx'
+import useIsCollapsed from '@/src/layout/hooks/use-is-collapsed'
 import Sidebar from './sidebar'
 
 export default function AppShell({ children }: { children: React.ReactNode }) {

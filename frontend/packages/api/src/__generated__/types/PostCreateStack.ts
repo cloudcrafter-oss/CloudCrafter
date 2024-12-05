@@ -1,5 +1,5 @@
-import type { CreateStackCommandCommand } from "./CreateStackCommandCommand.ts";
-import type { StackCreatedDto } from "./StackCreatedDto.ts";
+import type { CreateStackCommandCommand } from "./CreateStackCommandCommand";
+import type { StackCreatedDto } from "./StackCreatedDto";
 
  /**
  * @description OK

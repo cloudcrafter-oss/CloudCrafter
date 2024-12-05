@@ -1,5 +1,5 @@
-import { createdServerDtoSchema } from "./createdServerDtoSchema.ts";
-import { createServerCommandCommandSchema } from "./createServerCommandCommandSchema.ts";
+import { createdServerDtoSchema } from "./createdServerDtoSchema";
+import { createServerCommandCommandSchema } from "./createServerCommandCommandSchema";
 import { z } from "zod";
 
  /**

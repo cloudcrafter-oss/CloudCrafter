@@ -1,5 +1,5 @@
-import type { CreateProjectCommandCommand } from "./CreateProjectCommandCommand.ts";
-import type { ProjectDto } from "./ProjectDto.ts";
+import type { CreateProjectCommandCommand } from "./CreateProjectCommandCommand";
+import type { ProjectDto } from "./ProjectDto";
 
  /**
  * @description OK

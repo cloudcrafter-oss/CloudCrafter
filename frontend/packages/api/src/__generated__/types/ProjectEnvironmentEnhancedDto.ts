@@ -1,4 +1,4 @@
-import type { DeployedStackDto } from "./DeployedStackDto.ts";
+import type { DeployedStackDto } from "./DeployedStackDto";
 
  export type ProjectEnvironmentEnhancedDto = {
     /**

@@ -1,4 +1,4 @@
-import type { CreateGithubProviderCommandCommand } from "./CreateGithubProviderCommandCommand.ts";
+import type { CreateGithubProviderCommandCommand } from "./CreateGithubProviderCommandCommand";
 
  /**
  * @description Created

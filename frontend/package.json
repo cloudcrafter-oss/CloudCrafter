@@ -5,7 +5,7 @@
 		"dev": "turbo dev",
 		"lint": "turbo lint -- --fix",
 		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
-		"ui:add": "pnpm --filter @repo/ui ui:add",
+		"ui:add": "pnpm --filter @cloudcrafter/ui ui:add",
 		"generate-clients": "pnpm --filter @cloudcrafter/api generate-clients",
 		"format-and-lint": "biome check .",
 		"format-and-lint:fix": "biome check . --write",

@@ -1,5 +1,5 @@
-import type { PaginatedListOfUserDto } from "./PaginatedListOfUserDto.ts";
-import type { PaginatedRequestOfUserDto } from "./PaginatedRequestOfUserDto.ts";
+import type { PaginatedListOfUserDto } from "./PaginatedListOfUserDto";
+import type { PaginatedRequestOfUserDto } from "./PaginatedRequestOfUserDto";
 
  /**
  * @description OK

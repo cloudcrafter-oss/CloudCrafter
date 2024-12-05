@@ -1,5 +1,5 @@
-import type { CheckValidGitRepoCommandCommand } from "./CheckValidGitRepoCommandCommand.ts";
-import type { GitRepositoryCheckResultDto } from "./GitRepositoryCheckResultDto.ts";
+import type { CheckValidGitRepoCommandCommand } from "./CheckValidGitRepoCommandCommand";
+import type { GitRepositoryCheckResultDto } from "./GitRepositoryCheckResultDto";
 
  /**
  * @description OK

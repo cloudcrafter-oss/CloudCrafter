@@ -1,4 +1,4 @@
-import type { ProviderOverviewDto } from "./ProviderOverviewDto.ts";
+import type { ProviderOverviewDto } from "./ProviderOverviewDto";
 
  /**
  * @description OK

@@ -1,4 +1,4 @@
-import { cn } from '@ui/lib/utils.ts'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 import { ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import type React from 'react'

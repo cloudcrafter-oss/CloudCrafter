@@ -1,18 +1,18 @@
 'use client'
-import { Button } from '@ui/components/ui/button'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from '@ui/components/ui/dropdown-menu'
+} from '@cloudcrafter/ui/components/dropdown-menu'
 import {
 	Sidebar,
 	SidebarContent,
 	SidebarFooter,
 	SidebarHeader,
 	SidebarRail,
-} from '@ui/components/ui/sidebar'
+} from '@cloudcrafter/ui/components/sidebar'
 import {
 	AudioWaveform,
 	Command,

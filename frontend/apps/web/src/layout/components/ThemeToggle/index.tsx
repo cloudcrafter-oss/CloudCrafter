@@ -1,5 +1,5 @@
-import { useTheme } from '@/src/layout/components/theme-provider.tsx'
-import { Button } from '@ui/components/ui/button.tsx'
+import { useTheme } from '@/src/layout/components/theme-provider'
+import { Button } from '@cloudcrafter/ui/components/button'
 import { Moon, Sun } from 'lucide-react'
 
 export const ThemeToggle = () => {

@@ -1,4 +1,4 @@
-import type { DeploymentLogDto } from "./DeploymentLogDto.ts";
+import type { DeploymentLogDto } from "./DeploymentLogDto";
 
  export type GetDeploymentLogsPathParams = {
     /**

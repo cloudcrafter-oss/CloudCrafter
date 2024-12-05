@@ -1,5 +1,5 @@
-import ClientExample from '@/src/app/authjs/components/client-example.tsx'
-import { getCloudCraftSession } from '@/src/core/auth/getCloudCraftSession.ts'
+import ClientExample from '@/src/app/authjs/components/client-example'
+import { getCloudCraftSession } from '@/src/core/auth/getCloudCraftSession'
 import { SessionProvider } from 'next-auth/react'
 
 export default async function ClientPage() {

@@ -1,11 +1,11 @@
-import { TasksTableProvider } from '@/src/core/features/admin/users/provider.tsx'
+import { TasksTableProvider } from '@/src/core/features/admin/users/provider'
 import type { SearchParams } from 'nuqs/parsers'
 import React from 'react'
 
-import { DataTableSkeleton } from '@/src/components/datatable/components/data-table/data-table-skeleton.tsx'
+import { DataTableSkeleton } from '@/src/components/datatable/components/data-table/data-table-skeleton'
 import { searchParamsSchema } from '@/src/components/datatable/validation'
-import { UsersTable } from '@/src/core/features/admin/users/table.tsx'
-import { getUsers } from '@cloudcrafter/api/__generated__/axios-backend/getUsers'
+import { UsersTable } from '@/src/core/features/admin/users/table'
+import { getUsers } from '@cloudcrafter/api'
 
 export interface UserListProps {
 	searchParams: SearchParams

@@ -1,4 +1,4 @@
-import type { ServerDto } from "./ServerDto.ts";
+import type { ServerDto } from "./ServerDto";
 
  /**
  * @description OK

@@ -1,4 +1,4 @@
-import { projectEnvironmentEnhancedDtoSchema } from "./projectEnvironmentEnhancedDtoSchema.ts";
+import { projectEnvironmentEnhancedDtoSchema } from "./projectEnvironmentEnhancedDtoSchema";
 import { z } from "zod";
 
  export const getProjectEnvironmentEnhancedPathParamsSchema = z.object({ "id": z.string().uuid(), "environmentId": z.string().uuid() });

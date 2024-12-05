@@ -1,5 +1,5 @@
-import type { EntityHealthDto } from '@cloudcrafter/api/__generated__/types/EntityHealthDto'
-import type { StackDetailDto } from '@cloudcrafter/api/__generated__/types/StackDetailDto'
+import type { EntityHealthDto } from '@cloudcrafter/api'
+import type { StackDetailDto } from '@cloudcrafter/api'
 import * as signalR from '@microsoft/signalr'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'

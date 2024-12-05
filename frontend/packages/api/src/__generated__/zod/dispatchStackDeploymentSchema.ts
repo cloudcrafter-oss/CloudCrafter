@@ -1,4 +1,4 @@
-import { deploymentCreatedDetailsDtoSchema } from "./deploymentCreatedDetailsDtoSchema.ts";
+import { deploymentCreatedDetailsDtoSchema } from "./deploymentCreatedDetailsDtoSchema";
 import { z } from "zod";
 
  export const dispatchStackDeploymentPathParamsSchema = z.object({ "id": z.string().uuid() });
