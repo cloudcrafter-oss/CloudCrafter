@@ -6,7 +6,6 @@ import {
 } from '@cloudcrafter/api'
 import type { StackDetailDto } from '@cloudcrafter/api'
 import { updateStackMutationRequestSchema } from '@cloudcrafter/api'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Card,
@@ -33,6 +32,7 @@ import { Input } from '@cloudcrafter/ui/components/input'
 import { Label } from '@cloudcrafter/ui/components/label'
 import { Switch } from '@cloudcrafter/ui/components/switch'
 import { Textarea } from '@cloudcrafter/ui/components/textarea'
+import { zodResolver } from '@hookform/resolvers/zod'
 import {
 	FileText,
 	MoreVertical,

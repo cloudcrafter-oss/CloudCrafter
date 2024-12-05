@@ -3,7 +3,6 @@
 import { useUpdateStackHook } from '@cloudcrafter/api'
 import { updateStackMutationRequestSchema } from '@cloudcrafter/api'
 import type { StackDetailDto } from '@cloudcrafter/api'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Card,
@@ -21,6 +20,7 @@ import {
 	FormMessage,
 } from '@cloudcrafter/ui/components/form'
 import { Input } from '@cloudcrafter/ui/components/input'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2, PencilIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'

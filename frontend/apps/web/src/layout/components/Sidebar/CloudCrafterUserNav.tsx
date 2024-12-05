@@ -1,4 +1,8 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@cloudcrafter/ui/components/avatar'
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage,
+} from '@cloudcrafter/ui/components/avatar'
 import {
 	DropdownMenu,
 	DropdownMenuContent,

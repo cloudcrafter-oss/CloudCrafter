@@ -6,7 +6,11 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@cloudcrafter/ui/components/card'
-import { Tabs, TabsContent, TabsTrigger } from '@cloudcrafter/ui/components/tabs'
+import {
+	Tabs,
+	TabsContent,
+	TabsTrigger,
+} from '@cloudcrafter/ui/components/tabs'
 import { TabsList } from '@cloudcrafter/ui/components/tabs'
 
 export default function Page() {

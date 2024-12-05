@@ -2,7 +2,6 @@
 
 import type { NavItem } from '@/src/layout/components/Layout/LayoutSidebar/types'
 import { useSidebar } from '@/src/layout/components/Layout/LayoutSidebar/useSidebar'
-import { ChevronDownIcon } from '@radix-ui/react-icons'
 import {
 	Accordion,
 	AccordionContent,
@@ -11,6 +10,7 @@ import {
 } from '@cloudcrafter/ui/components/accordion'
 import { buttonVariants } from '@cloudcrafter/ui/components/button'
 import { cn } from '@cloudcrafter/ui/lib/utils'
+import { ChevronDownIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'

@@ -2,9 +2,13 @@
 import { CreateProjectSheet } from '@/src/core/features/admin/projects/create-project-sheet'
 import { ProjectListItem } from '@/src/core/features/admin/projects/project-list-item'
 import type { ProjectDto } from '@cloudcrafter/api'
-import { PlusIcon } from '@radix-ui/react-icons'
 import { Button } from '@cloudcrafter/ui/components/button'
-import { Sheet, SheetContent, SheetTrigger } from '@cloudcrafter/ui/components/sheet'
+import {
+	Sheet,
+	SheetContent,
+	SheetTrigger,
+} from '@cloudcrafter/ui/components/sheet'
+import { PlusIcon } from '@radix-ui/react-icons'
 import { RefreshCwIcon, RepeatIcon, SettingsIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'

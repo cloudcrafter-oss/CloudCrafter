@@ -4,7 +4,6 @@ import { useSelectedProductEnvironmentUuids } from '@/src/hooks/useSelectedProdu
 import { LayoutSidebarNav } from '@/src/layout/components/Layout/LayoutSidebar/LayoutSidebarNav'
 import type { NavItem } from '@/src/layout/components/Layout/LayoutSidebar/types'
 import { useSidebar } from '@/src/layout/components/Layout/LayoutSidebar/useSidebar'
-import { IconChevronsLeft } from '@tabler/icons-react'
 import {
 	Select,
 	SelectContent,
@@ -13,6 +12,7 @@ import {
 	SelectValue,
 } from '@cloudcrafter/ui/components/select'
 import { cn } from '@cloudcrafter/ui/lib/utils'
+import { IconChevronsLeft } from '@tabler/icons-react'
 import {
 	FolderKey,
 	LayoutDashboard,

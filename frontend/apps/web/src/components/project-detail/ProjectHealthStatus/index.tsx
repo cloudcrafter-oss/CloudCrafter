@@ -1,5 +1,9 @@
 import type { ProjectEnvironmentEnhancedDto } from '@cloudcrafter/api'
-import { CardContent, CardHeader, CardTitle } from '@cloudcrafter/ui/components/card'
+import {
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from '@cloudcrafter/ui/components/card'
 import { ActivityIcon, AlertCircle, CheckCircle } from 'lucide-react'
 
 export const ProjectHealthStatus = ({

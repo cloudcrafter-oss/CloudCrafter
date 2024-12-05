@@ -7,13 +7,6 @@ import {
 	dataTableConfig,
 } from '@/src/components/datatable/config/data-table'
 import type { DataTableFilterOption } from '@/src/components/datatable/types'
-import {
-	CopyIcon,
-	DotsHorizontalIcon,
-	TextAlignCenterIcon,
-	TrashIcon,
-} from '@radix-ui/react-icons'
-import type { Table } from '@tanstack/react-table'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	DropdownMenu,
@@ -37,6 +30,13 @@ import {
 } from '@cloudcrafter/ui/components/select'
 import { Separator } from '@cloudcrafter/ui/components/separator'
 import { useDebounce } from '@cloudcrafter/ui/hooks/use-debounce'
+import {
+	CopyIcon,
+	DotsHorizontalIcon,
+	TextAlignCenterIcon,
+	TrashIcon,
+} from '@radix-ui/react-icons'
+import type { Table } from '@tanstack/react-table'
 
 interface DataTableMultiFilterProps<TData> {
 	table: Table<TData>

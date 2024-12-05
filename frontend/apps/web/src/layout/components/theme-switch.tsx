@@ -1,7 +1,7 @@
 'use client'
 import { useTheme } from '@/src/layout/components/theme-provider'
-import { IconMoon, IconSun } from '@tabler/icons-react'
 import { Button } from '@cloudcrafter/ui/components/button'
+import { IconMoon, IconSun } from '@tabler/icons-react'
 import { useEffect } from 'react'
 
 export default function ThemeSwitch() {

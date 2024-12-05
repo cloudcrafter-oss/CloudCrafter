@@ -1,9 +1,5 @@
-import {
-	SignIn,
-	SignOut,
-} from '@/src/app/authjs/components/auth-components'
+import { SignIn, SignOut } from '@/src/app/authjs/components/auth-components'
 import { auth } from '@/src/auth'
-import { Avatar, AvatarImage } from '@radix-ui/react-avatar'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	DropdownMenu,
@@ -12,6 +8,7 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
 } from '@cloudcrafter/ui/components/dropdown-menu'
+import { Avatar, AvatarImage } from '@radix-ui/react-avatar'
 
 export default async function UserButton() {
 	const session = await auth()

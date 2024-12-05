@@ -1,5 +1,4 @@
 import { DataTablePagination } from '@/src/components/datatable/components/data-table/data-table-pagination'
-import { type Table as TanstackTable, flexRender } from '@tanstack/react-table'
 import {
 	Table,
 	TableBody,
@@ -9,6 +8,7 @@ import {
 	TableRow,
 } from '@cloudcrafter/ui/components/table'
 import { cn } from '@cloudcrafter/ui/lib/utils'
+import { type Table as TanstackTable, flexRender } from '@tanstack/react-table'
 import type * as React from 'react'
 
 interface DataTableProps<TData> extends React.HTMLAttributes<HTMLDivElement> {

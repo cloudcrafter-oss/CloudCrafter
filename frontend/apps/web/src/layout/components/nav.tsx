@@ -1,6 +1,5 @@
 import type { SideLink } from '@/src/core/menu/sidelinks'
 import useCheckActiveNav from '@/src/layout/hooks/use-check-active-nav'
-import { IconChevronDown } from '@tabler/icons-react'
 import { Button, buttonVariants } from '@cloudcrafter/ui/components/button'
 import {
 	Collapsible,
@@ -22,6 +21,7 @@ import {
 	TooltipTrigger,
 } from '@cloudcrafter/ui/components/tooltip'
 import { cn } from '@cloudcrafter/ui/lib/utils'
+import { IconChevronDown } from '@tabler/icons-react'
 import Link from 'next/link'
 import type React from 'react'
 

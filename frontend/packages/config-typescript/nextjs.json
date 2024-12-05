@@ -10,6 +10,6 @@
 		"jsx": "preserve",
 		"noEmit": true,
 		"declaration": false,
-		"declarationMap": false,
+		"declarationMap": false
 	}
 }

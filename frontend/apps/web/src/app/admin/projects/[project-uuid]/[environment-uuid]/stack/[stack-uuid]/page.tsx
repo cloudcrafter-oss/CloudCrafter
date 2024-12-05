@@ -4,10 +4,7 @@ import {
 	type StackRouteParams,
 	validateStackRouteParams,
 } from '@/src/utils/routes/schemas'
-import {
-	getDeploymentsForStack,
-	getStackDetail,
-} from '@cloudcrafter/api'
+import { getDeploymentsForStack, getStackDetail } from '@cloudcrafter/api'
 import {
 	Tabs,
 	TabsContent,

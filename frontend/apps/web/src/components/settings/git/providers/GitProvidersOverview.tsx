@@ -8,7 +8,6 @@ import { GithubPopup } from '@/src/components/settings/git/providers/github/AddG
 import { GitlabPopup } from '@/src/components/settings/git/providers/gitlab/AddGitlabPopup'
 import { formatDate } from '@/src/utils/date/date-utils'
 import type { ProviderOverviewDto } from '@cloudcrafter/api'
-import { SiBitbucket, SiGithub, SiGitlab } from '@icons-pack/react-simple-icons'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Dialog,
@@ -16,6 +15,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@cloudcrafter/ui/components/dialog'
+import { SiBitbucket, SiGithub, SiGitlab } from '@icons-pack/react-simple-icons'
 import { Plus } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'

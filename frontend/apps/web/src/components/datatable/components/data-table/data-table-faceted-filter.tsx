@@ -1,6 +1,4 @@
 import type { Option } from '@/src/components/datatable/types'
-import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons'
-import type { Column } from '@tanstack/react-table'
 import { Badge } from '@cloudcrafter/ui/components/badge'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
@@ -19,6 +17,8 @@ import {
 } from '@cloudcrafter/ui/components/popover'
 import { Separator } from '@cloudcrafter/ui/components/separator'
 import { cn } from '@cloudcrafter/ui/lib/utils'
+import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons'
+import type { Column } from '@tanstack/react-table'
 
 interface DataTableFacetedFilterProps<TData, TValue> {
 	column?: Column<TData, TValue>

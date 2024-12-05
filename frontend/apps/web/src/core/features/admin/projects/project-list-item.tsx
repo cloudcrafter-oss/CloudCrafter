@@ -5,7 +5,6 @@ import {
 } from '@/src/app/_actions/project'
 import { updateProjectArgsSchema } from '@cloudcrafter/api'
 import type { ProjectDto } from '@cloudcrafter/api'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Form,
@@ -31,6 +30,7 @@ import {
 	SheetTitle,
 } from '@cloudcrafter/ui/components/sheet'
 import { Spinner } from '@cloudcrafter/ui/components/spinner'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { SettingsIcon } from 'lucide-react'
 import { useAction } from 'next-safe-action/hooks'
 import { useState } from 'react'

@@ -2,8 +2,6 @@ import type {
 	DataTableFilterOption,
 	Option,
 } from '@/src/components/datatable/types'
-import { CheckIcon } from '@radix-ui/react-icons'
-import type { Column } from '@tanstack/react-table'
 import {
 	Command,
 	CommandEmpty,
@@ -14,6 +12,8 @@ import {
 	CommandSeparator,
 } from '@cloudcrafter/ui/components/command'
 import { cn } from '@cloudcrafter/ui/lib/utils'
+import { CheckIcon } from '@radix-ui/react-icons'
+import type { Column } from '@tanstack/react-table'
 
 interface DataTableAdvancedFacetedFilterProps<TData, TValue> {
 	column?: Column<TData, TValue>
