@@ -1,5 +1,5 @@
 import { TasksTableProvider } from '@/src/core/features/admin/users/provider'
-import type { SearchParams } from 'nuqs/parsers'
+import type { SearchParams } from 'nuqs'
 import React from 'react'
 
 import { DataTableSkeleton } from '@/src/components/datatable/components/data-table/data-table-skeleton'

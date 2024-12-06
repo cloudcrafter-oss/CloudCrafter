@@ -13,11 +13,12 @@ import {
 } from '@cloudcrafter/ui/components/tabs'
 
 interface PageProps {
-	params: StackRouteParams
+	params: Promise<StackRouteParams>
 }
 
 export default async function StackPage({ params }: PageProps) {
-	const routeData = validateStackRouteParams(params)
+	const resolvedParams = await params
+	const routeData = validateStackRouteParams(resolvedParams)
 
 	const stackDetails = await getStackDetail(routeData['stack-uuid'])
 	const deployments = await getDeploymentsForStack(routeData['stack-uuid'])

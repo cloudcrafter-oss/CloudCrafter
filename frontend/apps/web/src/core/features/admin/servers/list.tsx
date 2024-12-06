@@ -46,7 +46,7 @@ import type { z } from 'zod'
 
 const StateMap: Record<
 	z.infer<typeof serverStatusDtoValueSchema>,
-	JSX.Element
+	React.ReactNode
 > = {
 	Connected: (
 		<div className='flex items-center gap-2 text-sm text-muted-foreground'>

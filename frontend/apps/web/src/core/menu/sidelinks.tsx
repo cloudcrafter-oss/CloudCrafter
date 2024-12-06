@@ -12,7 +12,7 @@ export interface NavLink {
 	title: string
 	label?: string
 	href: string
-	icon: JSX.Element
+	icon: React.ReactNode
 }
 
 export interface SideLink extends NavLink {
