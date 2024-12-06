@@ -3,6 +3,7 @@
 	"version": "0.0.0",
 	"private": true,
 	"exports": {
+		"./frontend-axios": "./src/frontend/client.ts",
 		".": "./src/index.ts"
 	},
 	"scripts": {

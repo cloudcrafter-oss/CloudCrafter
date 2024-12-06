@@ -1,6 +1,6 @@
 'use client'
 
-import { axiosInstance as frontendAxiosInstance } from '@cloudcrafter/api'
+import { axiosInstance as frontendAxiosInstance } from '@cloudcrafter/api/frontend-axios'
 import { getSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
