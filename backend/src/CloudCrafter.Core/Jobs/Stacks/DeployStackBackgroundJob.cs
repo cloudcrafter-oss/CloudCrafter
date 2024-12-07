@@ -4,6 +4,7 @@ using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Agent;
 using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.RecipeGenerators;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Strategy.Factory;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -82,12 +83,13 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
 
         try
         {
-            var recipeGenerator = new SimpleAppRecipeGenerator(
-                new BaseRecipeGenerator.Args
-                {
-                    Stack = _deployment!.Stack!,
-                    DeploymentId = _deployment!.Id,
-                }
+            var factory = new DeploymentStrategyFactory();
+
+            var strategy = factory.CreateStrategy(_deployment!.Stack!);
+
+            var recipeGenerator = await strategy.GenerateRecipeAsync(
+                _deployment!.Stack!,
+                _deployment!
             );
             var recipe = await recipeGenerator.Generate();
             logger.LogDebug("Recipe brewed!");
