@@ -1,4 +1,4 @@
-import { auth } from '@/src/auth.ts'
+import { auth } from '@/src/auth'
 
 export const getCurrentCloudCrafterUser = async () => {
 	const session = await auth()

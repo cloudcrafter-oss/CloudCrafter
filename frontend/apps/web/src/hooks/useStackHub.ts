@@ -1,8 +1,9 @@
+import type { EntityHealthDto } from '@cloudcrafter/api'
+import type { StackDetailDto } from '@cloudcrafter/api'
 import * as signalR from '@microsoft/signalr'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import type { EntityHealthDto, StackDetailDto } from '../core/__generated__'
 import { backendEnv } from '../core/env/cloudcrafter-env'
 import { formatDate } from '../utils/date/date-utils'
 

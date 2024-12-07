@@ -1,0 +1,1 @@
+{"required":["domainName"],"type":"object","properties":{"domainName":{"type":"string","nullable":true}},"nullable":true,"x-readme-ref-name":"StackServiceHttpConfigurationDto"}

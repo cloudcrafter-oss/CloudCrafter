@@ -1,14 +1,16 @@
 'use server'
 
+import { actionClient } from '@/src/utils/actions/safe-action'
 import {
 	deleteProject,
 	getProject,
-	getProjectPathParamsSchema,
 	getProjects,
 	updateProject,
+} from '@cloudcrafter/api'
+import {
+	getProjectPathParamsSchema,
 	updateProjectArgsSchema,
-} from '@/src/core/__generated__'
-import { actionClient } from '@/src/utils/actions/safe-action.ts'
+} from '@cloudcrafter/api'
 import { z } from 'zod'
 
 export const fetchProjectDetail = actionClient

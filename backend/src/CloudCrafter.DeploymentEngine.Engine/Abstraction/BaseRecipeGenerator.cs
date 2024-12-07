@@ -2,6 +2,7 @@
 using CloudCrafter.DeploymentEngine.Engine.Brewery;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
 using CloudCrafter.DockerCompose.Engine.Yaml;
+using CloudCrafter.DockerCompose.Shared.Labels;
 using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Abstraction;
@@ -120,6 +121,30 @@ public abstract class BaseRecipeGenerator
                 StoreServiceNames = true,
             }
         );
+
+        Recipe.AddBuildStep(generator);
+    }
+
+    protected void AddStopPreviousContainers(Guid stackId, Guid currentDeploymentId)
+    {
+        var managedLabel = LabelFactory.GenerateManagedLabel();
+        var deploymentLabel = LabelFactory.GenerateDeploymentLabel(currentDeploymentId);
+        var stackIdLabel = LabelFactory.GenerateStackLabel(stackId);
+
+        var (labelKey, labelValue) = deploymentLabel.ToDockerComposeLabel();
+        var deploymentLabelNotEqual = $"{labelKey}!={labelValue}";
+        var options = new StopContainersBuildStepGenerator.Args
+        {
+            LabelFilters =
+            [
+                managedLabel.ToLabelString(),
+                stackIdLabel.ToLabelString(),
+                deploymentLabelNotEqual,
+            ],
+            OnlyCloudCrafterContainers = true,
+        };
+
+        var generator = new StopContainersBuildStepGenerator(options);
 
         Recipe.AddBuildStep(generator);
     }

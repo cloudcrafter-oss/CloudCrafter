@@ -1,0 +1,9 @@
+{
+	"extends": "@cloudcrafter/typescript-config/react-library.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"noEmit": true
+	},
+	"include": ["src"],
+	"exclude": ["node_modules", "dist"]
+}

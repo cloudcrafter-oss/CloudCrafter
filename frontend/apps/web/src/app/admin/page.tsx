@@ -1,13 +1,17 @@
-import { Button } from '@ui/components/ui/button'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from '@ui/components/ui/card.tsx'
-import { Tabs, TabsContent, TabsTrigger } from '@ui/components/ui/tabs'
-import { TabsList } from '@ui/components/ui/tabs.tsx'
+} from '@cloudcrafter/ui/components/card'
+import {
+	Tabs,
+	TabsContent,
+	TabsTrigger,
+} from '@cloudcrafter/ui/components/tabs'
+import { TabsList } from '@cloudcrafter/ui/components/tabs'
 
 export default function Page() {
 	return (

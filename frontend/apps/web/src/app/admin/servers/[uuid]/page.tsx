@@ -1,10 +1,15 @@
-import { getServerById } from '@/src/core/__generated__'
-import { ViewServerDetail } from '@/src/core/features/admin/servers/view.tsx'
+import { ViewServerDetail } from '@/src/core/features/admin/servers/view'
 import { addBreadcrumb, resetBreadcrumbs } from '@/src/utils/breadcrumbs'
+import { getServerById } from '@cloudcrafter/api'
 import { notFound } from 'next/navigation'
 
-export default async function Page({ params }: { params: { uuid: string } }) {
-	const server = await getServerById(params.uuid).catch(() => {
+interface PageProps {
+	params: Promise<{ uuid: string }>
+}
+
+export default async function Page({ params }: PageProps) {
+	const resolvedParams = await params
+	const server = await getServerById(resolvedParams.uuid).catch(() => {
 		return null
 	})
 
@@ -15,7 +20,7 @@ export default async function Page({ params }: { params: { uuid: string } }) {
 	resetBreadcrumbs()
 	addBreadcrumb('Admin', '/admin')
 	addBreadcrumb('Servers', '/admin/servers')
-	addBreadcrumb(server.name, `/admin/servers/${params.uuid}`)
+	addBreadcrumb(server.name, `/admin/servers/${resolvedParams.uuid}`)
 
 	return <ViewServerDetail server={server} />
 }

@@ -1,13 +1,10 @@
 'use client'
 import { DeploymentStatusBadge } from '@/src/components/stack-detail/deployments/deployment-list'
-import {
-	type ServerDetailDto,
-	getServersQueryKey,
-	useDeleteServerByIdHook,
-	useGetDeploymentsForServerHook,
-	usePostRotateAgentKeyHook,
-} from '@/src/core/__generated__'
-import { useQueryClient } from '@tanstack/react-query'
+import { useDeleteServerByIdHook } from '@cloudcrafter/api'
+import { useGetDeploymentsForServerHook } from '@cloudcrafter/api'
+import { getServersQueryKey } from '@cloudcrafter/api'
+import { usePostRotateAgentKeyHook } from '@cloudcrafter/api'
+import type { ServerDetailDto } from '@cloudcrafter/api'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -18,8 +15,8 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 	AlertDialogTrigger,
-} from '@ui/components/ui/alert-dialog'
-import { Button } from '@ui/components/ui/button.tsx'
+} from '@cloudcrafter/ui/components/alert-dialog'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Card,
 	CardContent,
@@ -27,9 +24,10 @@ import {
 	CardFooter,
 	CardHeader,
 	CardTitle,
-} from '@ui/components/ui/card.tsx'
-import { Input } from '@ui/components/ui/input.tsx'
-import { Label } from '@ui/components/ui/label.tsx'
+} from '@cloudcrafter/ui/components/card'
+import { Input } from '@cloudcrafter/ui/components/input'
+import { Label } from '@cloudcrafter/ui/components/label'
+import { useQueryClient } from '@tanstack/react-query'
 import { formatDistanceToNow } from 'date-fns'
 import { CopyIcon, PackageIcon, RefreshCwIcon, TrashIcon } from 'lucide-react'
 import Link from 'next/link'

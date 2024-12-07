@@ -1,10 +1,14 @@
 'use client'
-import type { ProjectDto } from '@/src/core/__generated__'
-import { CreateProjectSheet } from '@/src/core/features/admin/projects/create-project-sheet.tsx'
-import { ProjectListItem } from '@/src/core/features/admin/projects/project-list-item.tsx'
+import { CreateProjectSheet } from '@/src/core/features/admin/projects/create-project-sheet'
+import { ProjectListItem } from '@/src/core/features/admin/projects/project-list-item'
+import type { ProjectDto } from '@cloudcrafter/api'
+import { Button } from '@cloudcrafter/ui/components/button'
+import {
+	Sheet,
+	SheetContent,
+	SheetTrigger,
+} from '@cloudcrafter/ui/components/sheet'
 import { PlusIcon } from '@radix-ui/react-icons'
-import { Button } from '@ui/components/ui/button.tsx'
-import { Sheet, SheetContent, SheetTrigger } from '@ui/components/ui/sheet'
 import { RefreshCwIcon, RepeatIcon, SettingsIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'

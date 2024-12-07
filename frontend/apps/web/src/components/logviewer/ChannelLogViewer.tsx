@@ -1,16 +1,14 @@
-import {
-	type DeploymentLogDto,
-	channelOutputLogLineLevelEnum,
-	useGetDeploymentLogsHook,
-} from '@/src/core/__generated__'
 import { useWebHub } from '@/src/hooks/useWebHub'
-import { LazyLog } from '@melloware/react-logviewer'
+import { useGetDeploymentLogsHook } from '@cloudcrafter/api'
+import { channelOutputLogLineLevelEnum } from '@cloudcrafter/api'
+import type { DeploymentLogDto } from '@cloudcrafter/api'
 import {
 	Sheet,
 	SheetContent,
 	SheetHeader,
 	SheetTitle,
-} from '@ui/components/ui/sheet'
+} from '@cloudcrafter/ui/components/sheet'
+import { LazyLog } from '@melloware/react-logviewer'
 import chalk from 'chalk'
 import dayjs from 'dayjs'
 

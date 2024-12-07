@@ -1,7 +1,8 @@
 import * as signalR from '@microsoft/signalr'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
-import type { DeploymentLogDto } from '../core/__generated__'
+
+import type { DeploymentLogDto } from '@cloudcrafter/api'
 import { backendEnv } from '../core/env/cloudcrafter-env'
 
 export const useWebHub = ({ channelId }: { channelId: string }) => {

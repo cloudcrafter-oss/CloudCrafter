@@ -1,7 +1,11 @@
 'use client'
 import { NavItems } from '@/src/layout/components/Layout/LayoutSidebar'
 import { LayoutSidebarNav } from '@/src/layout/components/Layout/LayoutSidebar/LayoutSidebarNav'
-import { Sheet, SheetContent, SheetTrigger } from '@ui/components/ui/sheet.tsx'
+import {
+	Sheet,
+	SheetContent,
+	SheetTrigger,
+} from '@cloudcrafter/ui/components/sheet'
 import { MenuIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 

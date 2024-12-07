@@ -2,18 +2,22 @@ import {
 	Avatar,
 	AvatarFallback,
 	AvatarImage,
-} from '@ui/components/ui/avatar.tsx'
-import { Button } from '@ui/components/ui/button.tsx'
-import { Card, CardContent } from '@ui/components/ui/card.tsx'
-import { ScrollArea } from '@ui/components/ui/scroll-area'
+} from '@cloudcrafter/ui/components/avatar'
+import { Button } from '@cloudcrafter/ui/components/button'
+import { Card, CardContent } from '@cloudcrafter/ui/components/card'
+import { ScrollArea } from '@cloudcrafter/ui/components/scroll-area'
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@ui/components/ui/select.tsx'
-import { Sheet, SheetContent, SheetTrigger } from '@ui/components/ui/sheet.tsx'
+} from '@cloudcrafter/ui/components/select'
+import {
+	Sheet,
+	SheetContent,
+	SheetTrigger,
+} from '@cloudcrafter/ui/components/sheet'
 import {
 	BarChart2,
 	FileText,

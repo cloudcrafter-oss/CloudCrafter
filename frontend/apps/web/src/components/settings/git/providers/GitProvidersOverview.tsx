@@ -6,16 +6,16 @@ import {
 import { BitbucketPopup } from '@/src/components/settings/git/providers/bitbucket/AddBitbucketPopup'
 import { GithubPopup } from '@/src/components/settings/git/providers/github/AddGithubPopup'
 import { GitlabPopup } from '@/src/components/settings/git/providers/gitlab/AddGitlabPopup'
-import type { ProviderOverviewDto } from '@/src/core/__generated__'
 import { formatDate } from '@/src/utils/date/date-utils'
-import { SiBitbucket, SiGithub, SiGitlab } from '@icons-pack/react-simple-icons'
-import { Button } from '@ui/components/ui/button'
+import type { ProviderOverviewDto } from '@cloudcrafter/api'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Dialog,
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
-} from '@ui/components/ui/dialog'
+} from '@cloudcrafter/ui/components/dialog'
+import { SiBitbucket, SiGithub, SiGitlab } from '@icons-pack/react-simple-icons'
 import { Plus } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'

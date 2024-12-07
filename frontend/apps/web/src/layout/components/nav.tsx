@@ -1,12 +1,11 @@
-import type { SideLink } from '@/src/core/menu/sidelinks.tsx'
-import useCheckActiveNav from '@/src/layout/hooks/use-check-active-nav.tsx'
-import { IconChevronDown } from '@tabler/icons-react'
-import { Button, buttonVariants } from '@ui/components/ui/button.tsx'
+import type { SideLink } from '@/src/core/menu/sidelinks'
+import useCheckActiveNav from '@/src/layout/hooks/use-check-active-nav'
+import { Button, buttonVariants } from '@cloudcrafter/ui/components/button'
 import {
 	Collapsible,
 	CollapsibleContent,
 	CollapsibleTrigger,
-} from '@ui/components/ui/collapsible.tsx'
+} from '@cloudcrafter/ui/components/collapsible'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -14,14 +13,15 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from '@ui/components/ui/dropdown-menu.tsx'
+} from '@cloudcrafter/ui/components/dropdown-menu'
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
-} from '@ui/components/ui/tooltip.tsx'
-import { cn } from '@ui/lib/utils.ts'
+} from '@cloudcrafter/ui/components/tooltip'
+import { cn } from '@cloudcrafter/ui/lib/utils'
+import { IconChevronDown } from '@tabler/icons-react'
 import Link from 'next/link'
 import type React from 'react'
 

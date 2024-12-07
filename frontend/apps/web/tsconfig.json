@@ -1,48 +1,22 @@
 {
+	"extends": "@cloudcrafter/typescript-config/nextjs.json",
 	"compilerOptions": {
-		"target": "ES2020",
-		"useDefineForClassFields": true,
-		"lib": ["ES2020", "DOM", "DOM.Iterable"],
-		"module": "ESNext",
-		"skipLibCheck": true,
-		"baseUrl": ".",
-		"paths": {
-			"@ui/*": ["../../packages/ui/src/*"],
-			"@/*": ["./*"],
-			"auth": ["./auth"]
-		},
-		/* Bundler mode */
-		"moduleResolution": "node",
-		"allowImportingTsExtensions": true,
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"noEmit": true,
-		"jsx": "preserve",
-		/* Linting */
-		"strict": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noFallthroughCasesInSwitch": true,
-		"allowJs": true,
-		"incremental": true,
-		"esModuleInterop": true,
 		"plugins": [
 			{
 				"name": "next"
 			}
-		]
+		],
+		"paths": {
+			"@/*": ["./*"],
+			"auth": ["./auth"]
+		}
 	},
 	"include": [
-		"process.d.ts",
 		"next-env.d.ts",
+		"next.config.js",
 		"**/*.ts",
 		"**/*.tsx",
 		".next/types/**/*.ts"
 	],
-	"references": [
-		{
-			"path": "./tsconfig.node.json"
-		}
-	],
-	"exclude": ["node_modules", "src/core/__generated__"]
+	"exclude": ["node_modules"]
 }

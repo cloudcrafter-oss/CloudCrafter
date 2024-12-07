@@ -1,4 +1,4 @@
-import { getProjects } from '@/src/core/__generated__'
+import { getProjects } from '@cloudcrafter/api'
 import { NextResponse } from 'next/server'
 
 export async function GET() {

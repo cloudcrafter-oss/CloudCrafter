@@ -5,8 +5,8 @@ import {
 	ToastProvider,
 	ToastTitle,
 	ToastViewport,
-} from '@ui/components/ui/toast'
-import { useToast } from '@ui/components/ui/use-toast'
+} from '@cloudcrafter/ui/components/toast'
+import { useToast } from '@cloudcrafter/ui/components/use-toast'
 
 export function Toaster() {
 	const { toasts } = useToast()

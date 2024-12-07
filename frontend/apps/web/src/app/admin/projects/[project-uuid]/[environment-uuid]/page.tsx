@@ -3,33 +3,33 @@ import ShowDate from '@/src/components/ShowDate'
 import { StackCard } from '@/src/components/Stacks/StackCard'
 import { ProjectDetailCreateStackSheet } from '@/src/components/project-detail/ProjectDetailCreateStackSheet'
 import { ProjectHealthStatus } from '@/src/components/project-detail/ProjectHealthStatus'
-import { getProjectEnvironmentEnhanced } from '@/src/core/__generated__'
 import {
 	type ProjectEnvironmentRouteParams,
 	validateProjectEnvironmentRouteParams,
 } from '@/src/utils/routes/schemas'
+import { getProjectEnvironmentEnhanced } from '@cloudcrafter/api'
 
-import { Button } from '@ui/components/ui/button.tsx'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from '@ui/components/ui/card.tsx'
+} from '@cloudcrafter/ui/components/card'
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@ui/components/ui/select.tsx'
+} from '@cloudcrafter/ui/components/select'
 import {
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
-} from '@ui/components/ui/tabs.tsx'
+} from '@cloudcrafter/ui/components/tabs'
 import {
 	Activity,
 	Box,
@@ -44,12 +44,13 @@ import {
 } from 'lucide-react'
 
 interface PageProps {
-	params: ProjectEnvironmentRouteParams
+	params: Promise<ProjectEnvironmentRouteParams>
 }
 
 export default async function ProjectEnvironmentPage({ params }: PageProps) {
+	const resolvedParams = await params
 	// Validate the route params
-	const routeData = validateProjectEnvironmentRouteParams(params)
+	const routeData = validateProjectEnvironmentRouteParams(resolvedParams)
 
 	const projectDetails = await getProjectEnvironmentEnhanced(
 		routeData['project-uuid'],

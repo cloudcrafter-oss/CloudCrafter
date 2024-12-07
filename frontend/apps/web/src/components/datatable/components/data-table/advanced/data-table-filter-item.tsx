@@ -3,15 +3,15 @@ import type { Table } from '@tanstack/react-table'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import * as React from 'react'
 
-import { dataTableConfig } from '@/src/components/datatable/config/data-table.ts'
+import { dataTableConfig } from '@/src/components/datatable/config/data-table'
 import type { DataTableFilterOption } from '@/src/components/datatable/types'
-import { Button } from '@ui/components/ui/button.tsx'
-import { Input } from '@ui/components/ui/input.tsx'
+import { Button } from '@cloudcrafter/ui/components/button'
+import { Input } from '@cloudcrafter/ui/components/input'
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from '@ui/components/ui/popover.tsx'
+} from '@cloudcrafter/ui/components/popover'
 import {
 	Select,
 	SelectContent,
@@ -19,9 +19,9 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@ui/components/ui/select.tsx'
-import { useDebounce } from '@ui/hooks/use-debounce.ts'
-import { cn } from '@ui/lib/utils.ts'
+} from '@cloudcrafter/ui/components/select'
+import { useDebounce } from '@cloudcrafter/ui/hooks/use-debounce'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 import { DataTableAdvancedFacetedFilter } from './data-table-advanced-faceted-filter'
 
 interface DataTableFilterItemProps<TData> {

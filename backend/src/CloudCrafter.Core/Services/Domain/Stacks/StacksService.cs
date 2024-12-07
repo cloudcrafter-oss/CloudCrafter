@@ -60,8 +60,10 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
         return mapper.Map<List<SimpleDeploymentDto>>(deployments);
     }
 
-    public Task<PaginatedList<SimpleDeploymentDto>> GetDeploymentsPaginated(DeploymentsFilter filter,
-        BasePaginationRequest paginatedRequest)
+    public Task<PaginatedList<SimpleDeploymentDto>> GetDeploymentsPaginated(
+        DeploymentsFilter filter,
+        BasePaginationRequest paginatedRequest
+    )
     {
         return repository.GetDeploymentsPaginated(filter, paginatedRequest);
     }
@@ -103,7 +105,7 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
                 // TODO: Move this to Unit of Work
                 var stackServiceEntity = await repository.GetService(stackServiceId);
 
-                if (stackServiceEntity?.Stack.ServerId != serverId)
+                if (stackServiceEntity?.Stack?.ServerId != serverId)
                 {
                     continue;
                 }
@@ -112,11 +114,11 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
 
                 stackServiceEntity?.HealthStatus.SetStatus(
                     stackService.Value.Status == ContainerHealthCheckStackInfoHealthStatus.Healthy
-                        ? EntityHealthStatusValue.Healthy
+                            ? EntityHealthStatusValue.Healthy
                         : stackService.Value.Status
-                          == ContainerHealthCheckStackInfoHealthStatus.Unhealthy
+                        == ContainerHealthCheckStackInfoHealthStatus.Unhealthy
                             ? EntityHealthStatusValue.Unhealthy
-                            : EntityHealthStatusValue.Degraded,
+                        : EntityHealthStatusValue.Degraded,
                     isRunning
                 );
             }

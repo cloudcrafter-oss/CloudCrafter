@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@ui/components/ui/button.tsx'
+import { Button } from '@cloudcrafter/ui/components/button'
 
 export const DebugHeader = () => {
 	// const pathname = usePathname()

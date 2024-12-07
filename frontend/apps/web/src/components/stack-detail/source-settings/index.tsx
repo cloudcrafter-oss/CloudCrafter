@@ -1,18 +1,16 @@
 'use client'
-import {
-	type StackDetailDto,
-	updateStackMutationRequestSchema,
-	useUpdateStackHook,
-} from '@/src/core/__generated__'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@ui/components/ui/button'
+
+import { useUpdateStackHook } from '@cloudcrafter/api'
+import { updateStackMutationRequestSchema } from '@cloudcrafter/api'
+import type { StackDetailDto } from '@cloudcrafter/api'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from '@ui/components/ui/card.tsx'
+} from '@cloudcrafter/ui/components/card'
 import {
 	Form,
 	FormControl,
@@ -20,8 +18,9 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@ui/components/ui/form'
-import { Input } from '@ui/components/ui/input'
+} from '@cloudcrafter/ui/components/form'
+import { Input } from '@cloudcrafter/ui/components/input'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2, PencilIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'

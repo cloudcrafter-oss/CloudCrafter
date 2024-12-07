@@ -1,0 +1,28 @@
+{
+	"name": "@cloudcrafter/api",
+	"version": "0.0.0",
+	"private": true,
+	"exports": {
+		"./frontend-axios": "./src/frontend/client.ts",
+		".": "./src/index.ts"
+	},
+	"scripts": {
+		"generate-clients": "kubb generate --config kubb.config.ts"
+	},
+	"devDependencies": {
+		"@cloudcrafter/typescript-config": "workspace:*"
+	},
+	"dependencies": {
+		"@kubb/cli": "^3.0.12",
+		"@kubb/core": "^3.0.12",
+		"@kubb/plugin-client": "^3.0.12",
+		"@kubb/plugin-oas": "^3.0.12",
+		"@kubb/plugin-react-query": "^3.0.12",
+		"@kubb/plugin-ts": "^3.0.12",
+		"@kubb/plugin-zod": "^3.0.12",
+		"axios": "^1.7.2",
+		"next-auth": "5.0.0-beta.25",
+		"zod": "^3.23.8",
+		"@tanstack/react-query": "^5.49.0"
+	}
+}

@@ -1,4 +1,4 @@
-import { Badge } from '@ui/components/ui/badge'
+import { Badge } from '@cloudcrafter/ui/components/badge'
 
 export const EnvironmentBadge = ({
 	environmentName,

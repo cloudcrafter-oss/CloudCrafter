@@ -1,13 +1,13 @@
 'use client'
+
 import {
-	type StackCreatedDto,
-	createStackCommandCommandSchema,
 	useGetServersHook,
 	usePostCreateStackHook,
 	usePostValidateGithubRepoHook,
-} from '@/src/core/__generated__'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@ui/components/ui/button'
+} from '@cloudcrafter/api'
+import type { StackCreatedDto } from '@cloudcrafter/api'
+import { createStackCommandCommandSchema } from '@cloudcrafter/api'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Form,
 	FormControl,
@@ -16,14 +16,14 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@ui/components/ui/form'
-import { Input } from '@ui/components/ui/input'
+} from '@cloudcrafter/ui/components/form'
+import { Input } from '@cloudcrafter/ui/components/input'
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
-} from '@ui/components/ui/select'
+} from '@cloudcrafter/ui/components/select'
 import {
 	Sheet,
 	SheetContent,
@@ -31,7 +31,8 @@ import {
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
-} from '@ui/components/ui/sheet'
+} from '@cloudcrafter/ui/components/sheet'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckCircle, Loader2, Plus, XCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'

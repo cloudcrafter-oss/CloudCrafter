@@ -1,3 +1,11 @@
+import { Button } from '@cloudcrafter/ui/components/button'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@cloudcrafter/ui/components/select'
 import {
 	ChevronLeftIcon,
 	ChevronRightIcon,
@@ -5,14 +13,6 @@ import {
 	DoubleArrowRightIcon,
 } from '@radix-ui/react-icons'
 import type { Table } from '@tanstack/react-table'
-import { Button } from '@ui/components/ui/button.tsx'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@ui/components/ui/select.tsx'
 
 interface DataTablePaginationProps<TData> {
 	table: Table<TData>

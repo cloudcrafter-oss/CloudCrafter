@@ -1,4 +1,4 @@
-export { auth as middleware } from '@/src/auth.ts'
+export { auth as middleware } from '@/src/auth'
 
 // Or like this if you need to do something here.
 // export default auth((req) => {

@@ -1,16 +1,16 @@
 'use client'
 
 import type { NavItem } from '@/src/layout/components/Layout/LayoutSidebar/types'
-import { useSidebar } from '@/src/layout/components/Layout/LayoutSidebar/useSidebar.tsx'
-import { ChevronDownIcon } from '@radix-ui/react-icons'
+import { useSidebar } from '@/src/layout/components/Layout/LayoutSidebar/useSidebar'
 import {
 	Accordion,
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
-} from '@ui/components/ui/accordion.tsx'
-import { buttonVariants } from '@ui/components/ui/button.tsx'
-import { cn } from '@ui/lib/utils.ts'
+} from '@cloudcrafter/ui/components/accordion'
+import { buttonVariants } from '@cloudcrafter/ui/components/button'
+import { cn } from '@cloudcrafter/ui/lib/utils'
+import { ChevronDownIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
