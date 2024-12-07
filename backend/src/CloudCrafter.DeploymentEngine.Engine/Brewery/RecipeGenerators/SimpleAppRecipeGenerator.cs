@@ -90,6 +90,9 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
         AddWriteDockerComposeFileStep(dockerComposeFileName);
         AddStartDockerComposeStep(dockerComposeFileName);
 
+        // TODO: Check for allowing rolling restart
+        AddStopPreviousContainers(Options.Stack.Id, Options.DeploymentId);
+
         var healthCheckConfiguration = firstService.HealthcheckConfiguration;
         var hasValidHealthConfiguration = healthCheckConfiguration.ConfigurationValid();
 
