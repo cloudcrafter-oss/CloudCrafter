@@ -17,6 +17,7 @@ import {
 } from '@cloudcrafter/ui/components/dialog'
 import { SiBitbucket, SiGithub, SiGitlab } from '@icons-pack/react-simple-icons'
 import { Plus } from 'lucide-react'
+import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -24,13 +25,28 @@ export const GitProvidersOverview = ({
 	list,
 }: { list: ProviderOverviewDto }) => {
 	const searchParams = useSearchParams()
-	const [showSuccessPopup, setShowSuccessPopup] = useState(false)
+	const [messagePopupContents, setMessagePopupContents] = useState<
+		string | null
+	>(null)
 
 	useEffect(() => {
-		if (searchParams.get('message') === 'success') {
-			setShowSuccessPopup(true)
+		if (searchParams.get('message') === 'github_added') {
+			setMessagePopupContents(
+				'Git provider connected successfully. In order to use this provider, you need to install it onto your acount. Press the "Install" button to install the provider.',
+			)
+		}
+		if (searchParams.get('message') === 'github_installed') {
+			setMessagePopupContents('Github provider installed successfully!')
 		}
 	}, [searchParams])
+
+	useEffect(() => {
+		if (messagePopupContents === null) {
+			const url = new URL(window.location.href)
+			url.searchParams.delete('message')
+			window.history.replaceState({}, '', url)
+		}
+	}, [messagePopupContents])
 
 	// Example providers configuration
 	const providers: GitProvider[] = [
@@ -62,12 +78,15 @@ export const GitProvidersOverview = ({
 
 	return (
 		<>
-			<Dialog open={showSuccessPopup} onOpenChange={setShowSuccessPopup}>
+			<Dialog
+				open={messagePopupContents !== null}
+				onOpenChange={(open) => setMessagePopupContents(null)}
+			>
 				<DialogContent>
 					<DialogHeader>
 						<DialogTitle>Success!</DialogTitle>
 					</DialogHeader>
-					<p>Git provider connected successfully</p>
+					<p>{messagePopupContents}</p>
 				</DialogContent>
 			</Dialog>
 
@@ -110,15 +129,28 @@ export const GitProvidersOverview = ({
 												</span>
 											</div>
 										</div>
-										<span
-											className={`text-sm ${provider.isConnected === true ? 'text-green-500 dark:text-green-400' : provider.isConnected === false ? 'text-red-500 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'}`}
-										>
-											{provider.isConnected === true
-												? 'Connected'
-												: provider.isConnected === false
-													? 'Not connected'
-													: 'Unknown'}
-										</span>
+										<div className='flex items-center gap-4'>
+											<span
+												className={`text-sm ${provider.isConnected === true ? 'text-green-500 dark:text-green-400' : provider.isConnected === false ? 'text-red-500 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'}`}
+											>
+												{provider.isConnected === true
+													? 'Connected'
+													: provider.isConnected === false
+														? 'Not connected'
+														: 'Unknown'}
+											</span>
+											{!provider.hasInstallation &&
+												provider.appUrl &&
+												provider.appUrl.length > 0 && (
+													<Link
+														href={`${provider.appUrl}/installations/new?state=github_install:${provider.id}`}
+													>
+														<Button size='sm' variant='outline'>
+															Install
+														</Button>
+													</Link>
+												)}
+										</div>
 									</li>
 								))}
 							</ul>

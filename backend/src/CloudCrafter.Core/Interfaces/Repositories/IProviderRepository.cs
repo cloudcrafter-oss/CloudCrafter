@@ -8,4 +8,6 @@ public interface IProviderRepository
 {
     Task<GithubProvider> CreateGithubProvider(GitHubAppFromManifest data);
     Task<List<GithubProvider>> GetGithubProviders(ProviderFilterRequest filter);
+    Task<GithubProvider> GetGithubProvider(Guid providerId);
+    Task SaveChangesAsync();
 }

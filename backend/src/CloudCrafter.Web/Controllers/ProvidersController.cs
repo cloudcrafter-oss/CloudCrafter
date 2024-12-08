@@ -21,8 +21,32 @@ public class ProvidersController : CloudCrafterController
     }
 
     [HttpGet]
-    public async Task<ProviderOverviewDto> GetProviders(ISender sender, [FromQuery] ProviderFilterRequest filter)
+    public async Task<ProviderOverviewDto> GetProviders(
+        ISender sender,
+        [FromQuery] ProviderFilterRequest filter
+    )
     {
         return await sender.Send(new GetProvidersQuery.Query(filter));
+    }
+
+    [HttpPut("github/{id}/install")]
+    public async Task<IResult> PutUpdateGithubProvider(
+        ISender sender,
+        [FromRoute] Guid id,
+        [FromBody] UpdateGithubInstallationCommand.Request request
+    )
+    {
+        await sender.Send(new UpdateGithubInstallationCommand.Command(request, id));
+
+        return Results.Ok();
+    }
+
+    [HttpGet("github/{id}/repositories")]
+    public async Task<List<GitProviderRepositoryDto>> GetGithubRepositories(
+        ISender sender,
+        [FromRoute] Guid id
+    )
+    {
+        return await sender.Send(new GetGithubRepositoriesQuery.Query(id));
     }
 }

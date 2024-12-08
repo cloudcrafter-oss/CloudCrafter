@@ -23,6 +23,7 @@ export type { GetDeploymentLogsPathParams, GetDeploymentLogs200, GetDeploymentLo
 export type { GetDeploymentsForServerPathParams, GetDeploymentsForServerQueryParams, GetDeploymentsForServer200, GetDeploymentsForServerQueryResponse, GetDeploymentsForServerQuery } from "./GetDeploymentsForServer";
 export type { GetDeploymentsForStackPathParams, GetDeploymentsForStack200, GetDeploymentsForStackQueryResponse, GetDeploymentsForStackQuery } from "./GetDeploymentsForStack";
 export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilterableFieldsQuery } from "./GetFilterableFields";
+export type { GetGithubRepositoriesPathParams, GetGithubRepositories200, GetGithubRepositoriesQueryResponse, GetGithubRepositoriesQuery } from "./GetGithubRepositories";
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from "./GetProject";
 export type { GetProjectEnvironmentEnhancedPathParams, GetProjectEnvironmentEnhanced200, GetProjectEnvironmentEnhanced404, GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhancedQuery } from "./GetProjectEnvironmentEnhanced";
 export type { GetProjectsQueryParams, GetProjects200, GetProjectsQueryResponse, GetProjectsQuery } from "./GetProjects";
@@ -31,6 +32,7 @@ export type { GetServerByIdPathParams, GetServerById200, GetServerByIdQueryRespo
 export type { GetServers200, GetServersQueryResponse, GetServersQuery } from "./GetServers";
 export type { GetStackDetailPathParams, GetStackDetail200, GetStackDetail404, GetStackDetailQueryResponse, GetStackDetailQuery } from "./GetStackDetail";
 export type { GetUsers200, GetUsersMutationRequest, GetUsersMutationResponse, GetUsersMutation } from "./GetUsers";
+export type { GitProviderRepositoryDto } from "./GitProviderRepositoryDto";
 export type { GitRepositoryCheckResultDto } from "./GitRepositoryCheckResultDto";
 export type { GitSettings } from "./GitSettings";
 export type { PaginatedListOfSimpleDeploymentDto } from "./PaginatedListOfSimpleDeploymentDto";
@@ -51,6 +53,8 @@ export type { ProblemDetails } from "./ProblemDetails";
 export type { ProjectDto } from "./ProjectDto";
 export type { ProjectEnvironmentEnhancedDto } from "./ProjectEnvironmentEnhancedDto";
 export type { ProviderOverviewDto } from "./ProviderOverviewDto";
+export type { PutUpdateGithubProviderPathParams, PutUpdateGithubProvider200, PutUpdateGithubProviderMutationRequest, PutUpdateGithubProviderMutationResponse, PutUpdateGithubProviderMutation } from "./PutUpdateGithubProvider";
+export type { Request } from "./Request";
 export type { ServerDetailDto } from "./ServerDetailDto";
 export type { ServerDto } from "./ServerDto";
 export type { ServerPingDto } from "./ServerPingDto";

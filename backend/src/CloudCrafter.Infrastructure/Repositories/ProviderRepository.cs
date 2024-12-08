@@ -4,6 +4,7 @@ using CloudCrafter.Domain.Domain.Providers;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Octokit;
+using NotFoundException = Ardalis.GuardClauses.NotFoundException;
 
 namespace CloudCrafter.Infrastructure.Repositories;
 
@@ -18,6 +19,7 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
             Name = data.Name,
             AppId = data.Id,
             IsValid = null,
+            AppUrl = data.HtmlUrl,
             AppClientId = data.ClientId,
             AppClientSecret = data.ClientSecret,
             AppWebhookSecret = data.WebhookSecret,
@@ -44,5 +46,24 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
         }
 
         return query.OrderByDescending(x => x.CreatedAt).ToListAsync();
+    }
+
+    public async Task<GithubProvider> GetGithubProvider(Guid providerId)
+    {
+        var provider = await context
+            .GithubProviders.Where(x => x.Id == providerId)
+            .FirstOrDefaultAsync();
+
+        if (provider == null)
+        {
+            throw new NotFoundException("server", "Server not found");
+        }
+
+        return provider;
+    }
+
+    public Task SaveChangesAsync()
+    {
+        return context.SaveChangesAsync();
     }
 }
