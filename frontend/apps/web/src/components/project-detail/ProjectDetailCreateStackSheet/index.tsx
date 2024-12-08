@@ -1,6 +1,7 @@
 'use client'
 
 import {
+	useGetProvidersHook,
 	useGetServersHook,
 	usePostCreateStackHook,
 	usePostValidateGithubRepoHook,
@@ -59,6 +60,10 @@ export const ProjectDetailCreateStackSheet = ({
 	const { mutateAsync, isPending } = usePostValidateGithubRepoHook()
 	const { mutateAsync: createStack } = usePostCreateStackHook()
 	const { data: servers } = useGetServersHook()
+
+	const { data: providers } = useGetProvidersHook({
+		IsActive: true,
+	})
 
 	async function validateRepository(url: string) {
 		const errorMessage = 'The provided Git repository is not valid'
@@ -188,6 +193,38 @@ export const ProjectDetailCreateStackSheet = ({
 										<FormDescription>
 											Enter the URL of your public Git repository.
 										</FormDescription>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name='providerId'
+								render={({ field }) => (
+									<FormItem className='space-y-2'>
+										<FormLabel>Provider</FormLabel>
+										<FormControl>
+											<Select
+												disabled={inputDisabled}
+												onValueChange={field.onChange}
+												value={field.value}
+											>
+												<SelectTrigger>
+													{field.value
+														? providers?.github.find(
+																(provider) => provider.id === field.value,
+															)?.name
+														: 'Select a provider'}
+												</SelectTrigger>
+												<SelectContent>
+													{providers?.github.map((provider) => (
+														<SelectItem key={provider.id} value={provider.id}>
+															{provider.name}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}

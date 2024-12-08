@@ -26,7 +26,7 @@ export { getFilterableFields200Schema, getFilterableFieldsQueryResponseSchema } 
 export { getProjectEnvironmentEnhancedPathParamsSchema, getProjectEnvironmentEnhanced200Schema, getProjectEnvironmentEnhanced404Schema, getProjectEnvironmentEnhancedQueryResponseSchema } from "./getProjectEnvironmentEnhancedSchema";
 export { getProjectPathParamsSchema, getProject200Schema, getProject404Schema, getProjectQueryResponseSchema } from "./getProjectSchema";
 export { getProjectsQueryParamsSchema, getProjects200Schema, getProjectsQueryResponseSchema } from "./getProjectsSchema";
-export { getProviders200Schema, getProvidersQueryResponseSchema } from "./getProvidersSchema";
+export { getProvidersQueryParamsSchema, getProviders200Schema, getProvidersQueryResponseSchema } from "./getProvidersSchema";
 export { getServerByIdPathParamsSchema, getServerById200Schema, getServerByIdQueryResponseSchema } from "./getServerByIdSchema";
 export { getServers200Schema, getServersQueryResponseSchema } from "./getServersSchema";
 export { getStackDetailPathParamsSchema, getStackDetail200Schema, getStackDetail404Schema, getStackDetailQueryResponseSchema } from "./getStackDetailSchema";
@@ -47,6 +47,7 @@ export { postRefreshTokens200Schema, postRefreshTokensMutationRequestSchema, pos
 export { postRefreshUserTokensQuerySchema } from "./postRefreshUserTokensQuerySchema";
 export { postRotateAgentKeyPathParamsSchema, postRotateAgentKey200Schema, postRotateAgentKeyMutationResponseSchema } from "./postRotateAgentKeySchema";
 export { postValidateGithubRepo200Schema, postValidateGithubRepoMutationRequestSchema, postValidateGithubRepoMutationResponseSchema } from "./postValidateGithubRepoSchema";
+export { problemDetailsSchema } from "./problemDetailsSchema";
 export { projectDtoSchema } from "./projectDtoSchema";
 export { projectEnvironmentEnhancedDtoSchema } from "./projectEnvironmentEnhancedDtoSchema";
 export { providerOverviewDtoSchema } from "./providerOverviewDtoSchema";

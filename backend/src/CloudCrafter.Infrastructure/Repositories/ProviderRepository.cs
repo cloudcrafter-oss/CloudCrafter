@@ -1,5 +1,6 @@
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Repositories;
+using CloudCrafter.Domain.Domain.Providers;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Octokit;
@@ -31,8 +32,17 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
         return provider;
     }
 
-    public Task<List<GithubProvider>> GetGithubProviders()
+    public Task<List<GithubProvider>> GetGithubProviders(ProviderFilterRequest filter)
     {
-        return context.GithubProviders.OrderByDescending(x => x.CreatedAt).ToListAsync();
+        var query = context.GithubProviders.AsQueryable();
+
+        if (filter.IsActive.HasValue)
+        {
+            query = query.Where(x =>
+                x.IsValid.HasValue && x.IsValid.Value == filter.IsActive.Value
+            );
+        }
+
+        return query.OrderByDescending(x => x.CreatedAt).ToListAsync();
     }
 }

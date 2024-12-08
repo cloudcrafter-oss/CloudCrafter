@@ -5,5 +5,5 @@ namespace CloudCrafter.Core.Interfaces.Domain.Providers;
 public interface IProvidersService
 {
     Task<bool> CreateGithubProvider(string code);
-    Task<ProviderOverviewDto> GetProviders();
+    Task<ProviderOverviewDto> GetProviders(ProviderFilterRequest filter);
 }

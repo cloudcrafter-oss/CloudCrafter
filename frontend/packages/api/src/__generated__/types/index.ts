@@ -26,7 +26,7 @@ export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilte
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from "./GetProject";
 export type { GetProjectEnvironmentEnhancedPathParams, GetProjectEnvironmentEnhanced200, GetProjectEnvironmentEnhanced404, GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhancedQuery } from "./GetProjectEnvironmentEnhanced";
 export type { GetProjectsQueryParams, GetProjects200, GetProjectsQueryResponse, GetProjectsQuery } from "./GetProjects";
-export type { GetProviders200, GetProvidersQueryResponse, GetProvidersQuery } from "./GetProviders";
+export type { GetProvidersQueryParams, GetProviders200, GetProvidersQueryResponse, GetProvidersQuery } from "./GetProviders";
 export type { GetServerByIdPathParams, GetServerById200, GetServerByIdQueryResponse, GetServerByIdQuery } from "./GetServerById";
 export type { GetServers200, GetServersQueryResponse, GetServersQuery } from "./GetServers";
 export type { GetStackDetailPathParams, GetStackDetail200, GetStackDetail404, GetStackDetailQueryResponse, GetStackDetailQuery } from "./GetStackDetail";
@@ -47,6 +47,7 @@ export type { PostRefreshTokens200, PostRefreshTokensMutationRequest, PostRefres
 export type { PostRefreshUserTokensQuery } from "./PostRefreshUserTokensQuery";
 export type { PostRotateAgentKeyPathParams, PostRotateAgentKey200, PostRotateAgentKeyMutationResponse, PostRotateAgentKeyMutation } from "./PostRotateAgentKey";
 export type { PostValidateGithubRepo200, PostValidateGithubRepoMutationRequest, PostValidateGithubRepoMutationResponse, PostValidateGithubRepoMutation } from "./PostValidateGithubRepo";
+export type { ProblemDetails } from "./ProblemDetails";
 export type { ProjectDto } from "./ProjectDto";
 export type { ProjectEnvironmentEnhancedDto } from "./ProjectEnvironmentEnhancedDto";
 export type { ProviderOverviewDto } from "./ProviderOverviewDto";

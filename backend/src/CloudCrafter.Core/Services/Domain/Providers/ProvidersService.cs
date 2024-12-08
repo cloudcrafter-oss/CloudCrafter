@@ -40,9 +40,9 @@ public class ProvidersService(
         return false;
     }
 
-    public async Task<ProviderOverviewDto> GetProviders()
+    public async Task<ProviderOverviewDto> GetProviders(ProviderFilterRequest filter)
     {
-        var github = await repository.GetGithubProviders();
+        var github = await repository.GetGithubProviders(filter);
 
         return new ProviderOverviewDto
         {

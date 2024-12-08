@@ -80,7 +80,7 @@ export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilte
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from "./types/GetProject";
 export type { GetProjectEnvironmentEnhancedPathParams, GetProjectEnvironmentEnhanced200, GetProjectEnvironmentEnhanced404, GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhancedQuery } from "./types/GetProjectEnvironmentEnhanced";
 export type { GetProjectsQueryParams, GetProjects200, GetProjectsQueryResponse, GetProjectsQuery } from "./types/GetProjects";
-export type { GetProviders200, GetProvidersQueryResponse, GetProvidersQuery } from "./types/GetProviders";
+export type { GetProvidersQueryParams, GetProviders200, GetProvidersQueryResponse, GetProvidersQuery } from "./types/GetProviders";
 export type { GetServerByIdPathParams, GetServerById200, GetServerByIdQueryResponse, GetServerByIdQuery } from "./types/GetServerById";
 export type { GetServers200, GetServersQueryResponse, GetServersQuery } from "./types/GetServers";
 export type { GetStackDetailPathParams, GetStackDetail200, GetStackDetail404, GetStackDetailQueryResponse, GetStackDetailQuery } from "./types/GetStackDetail";
@@ -101,6 +101,7 @@ export type { PostRefreshTokens200, PostRefreshTokensMutationRequest, PostRefres
 export type { PostRefreshUserTokensQuery } from "./types/PostRefreshUserTokensQuery";
 export type { PostRotateAgentKeyPathParams, PostRotateAgentKey200, PostRotateAgentKeyMutationResponse, PostRotateAgentKeyMutation } from "./types/PostRotateAgentKey";
 export type { PostValidateGithubRepo200, PostValidateGithubRepoMutationRequest, PostValidateGithubRepoMutationResponse, PostValidateGithubRepoMutation } from "./types/PostValidateGithubRepo";
+export type { ProblemDetails } from "./types/ProblemDetails";
 export type { ProjectDto } from "./types/ProjectDto";
 export type { ProjectEnvironmentEnhancedDto } from "./types/ProjectEnvironmentEnhancedDto";
 export type { ProviderOverviewDto } from "./types/ProviderOverviewDto";
@@ -246,7 +247,7 @@ export { getFilterableFields200Schema, getFilterableFieldsQueryResponseSchema } 
 export { getProjectEnvironmentEnhancedPathParamsSchema, getProjectEnvironmentEnhanced200Schema, getProjectEnvironmentEnhanced404Schema, getProjectEnvironmentEnhancedQueryResponseSchema } from "./zod/getProjectEnvironmentEnhancedSchema";
 export { getProjectPathParamsSchema, getProject200Schema, getProject404Schema, getProjectQueryResponseSchema } from "./zod/getProjectSchema";
 export { getProjectsQueryParamsSchema, getProjects200Schema, getProjectsQueryResponseSchema } from "./zod/getProjectsSchema";
-export { getProviders200Schema, getProvidersQueryResponseSchema } from "./zod/getProvidersSchema";
+export { getProvidersQueryParamsSchema, getProviders200Schema, getProvidersQueryResponseSchema } from "./zod/getProvidersSchema";
 export { getServerByIdPathParamsSchema, getServerById200Schema, getServerByIdQueryResponseSchema } from "./zod/getServerByIdSchema";
 export { getServers200Schema, getServersQueryResponseSchema } from "./zod/getServersSchema";
 export { getStackDetailPathParamsSchema, getStackDetail200Schema, getStackDetail404Schema, getStackDetailQueryResponseSchema } from "./zod/getStackDetailSchema";
@@ -267,6 +268,7 @@ export { postRefreshTokens200Schema, postRefreshTokensMutationRequestSchema, pos
 export { postRefreshUserTokensQuerySchema } from "./zod/postRefreshUserTokensQuerySchema";
 export { postRotateAgentKeyPathParamsSchema, postRotateAgentKey200Schema, postRotateAgentKeyMutationResponseSchema } from "./zod/postRotateAgentKeySchema";
 export { postValidateGithubRepo200Schema, postValidateGithubRepoMutationRequestSchema, postValidateGithubRepoMutationResponseSchema } from "./zod/postValidateGithubRepoSchema";
+export { problemDetailsSchema } from "./zod/problemDetailsSchema";
 export { projectDtoSchema } from "./zod/projectDtoSchema";
 export { projectEnvironmentEnhancedDtoSchema } from "./zod/projectEnvironmentEnhancedDtoSchema";
 export { providerOverviewDtoSchema } from "./zod/providerOverviewDtoSchema";

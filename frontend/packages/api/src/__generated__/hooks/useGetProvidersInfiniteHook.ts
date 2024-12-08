@@ -1,29 +1,32 @@
 // @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
 import client from "../../frontend/client";
 import type { RequestConfig } from "../../frontend/client";
-import type { GetProvidersQueryResponse } from "../types/GetProviders";
+import type { GetProvidersQueryResponse, GetProvidersQueryParams } from "../types/GetProviders";
 import type { InfiniteData, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult } from "@tanstack/react-query";
 import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
 
- export const getProvidersInfiniteQueryKey = () => [{ url: "/api/Providers" }] as const;
+ export const getProvidersInfiniteQueryKey = (params?: GetProvidersQueryParams) => [{ url: "/api/Providers" }, ...(params ? [params] : [])] as const;
 
  export type GetProvidersInfiniteQueryKey = ReturnType<typeof getProvidersInfiniteQueryKey>;
 
  /**
  * {@link /api/Providers}
  */
-async function getProvidersHook(config: Partial<RequestConfig> = {}) {
-    const res = await client<GetProvidersQueryResponse, Error, unknown>({ method: "GET", url: `/api/Providers`, ...config });
+async function getProvidersHook(params?: GetProvidersQueryParams, config: Partial<RequestConfig> = {}) {
+    const res = await client<GetProvidersQueryResponse, Error, unknown>({ method: "GET", url: `/api/Providers`, params, ...config });
     return res.data;
 }
 
- export function getProvidersInfiniteQueryOptionsHook(config: Partial<RequestConfig> = {}) {
-    const queryKey = getProvidersInfiniteQueryKey();
+ export function getProvidersInfiniteQueryOptionsHook(params?: GetProvidersQueryParams, config: Partial<RequestConfig> = {}) {
+    const queryKey = getProvidersInfiniteQueryKey(params);
     return infiniteQueryOptions({
         queryKey,
-        queryFn: async ({ signal }) => {
+        queryFn: async ({ signal, pageParam }) => {
             config.signal = signal;
-            return getProvidersHook(config);
+            if (params) {
+                params["id"] = pageParam as unknown as GetProvidersQueryParams["id"];
+            }
+            return getProvidersHook(params, config);
         },
         initialPageParam: 0,
         getNextPageParam: (lastPage, _allPages, lastPageParam) => Array.isArray(lastPage) && lastPage.length === 0 ? undefined : lastPageParam + 1,
@@ -34,14 +37,14 @@ async function getProvidersHook(config: Partial<RequestConfig> = {}) {
  /**
  * {@link /api/Providers}
  */
-export function useGetProvidersInfiniteHook<TData = InfiniteData<GetProvidersQueryResponse>, TQueryData = GetProvidersQueryResponse, TQueryKey extends QueryKey = GetProvidersInfiniteQueryKey>(options: {
+export function useGetProvidersInfiniteHook<TData = InfiniteData<GetProvidersQueryResponse>, TQueryData = GetProvidersQueryResponse, TQueryKey extends QueryKey = GetProvidersInfiniteQueryKey>(params?: GetProvidersQueryParams, options: {
     query?: Partial<InfiniteQueryObserverOptions<GetProvidersQueryResponse, Error, TData, TQueryData, TQueryKey>>;
     client?: Partial<RequestConfig>;
 } = {}) {
     const { query: queryOptions, client: config = {} } = options ?? {};
-    const queryKey = queryOptions?.queryKey ?? getProvidersInfiniteQueryKey();
+    const queryKey = queryOptions?.queryKey ?? getProvidersInfiniteQueryKey(params);
     const query = useInfiniteQuery({
-        ...getProvidersInfiniteQueryOptionsHook(config) as unknown as InfiniteQueryObserverOptions,
+        ...getProvidersInfiniteQueryOptionsHook(params, config) as unknown as InfiniteQueryObserverOptions,
         queryKey,
         ...queryOptions as unknown as Omit<InfiniteQueryObserverOptions, "queryKey">
     }) as UseInfiniteQueryResult<TData, Error> & {
