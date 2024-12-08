@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using AutoMapper;
 using CloudCrafter.Core.Interfaces.Domain.Providers;
 using CloudCrafter.Core.Interfaces.Repositories;
@@ -6,6 +7,7 @@ using CloudCrafter.Core.Services.Domain.Providers.Github;
 using CloudCrafter.Domain.Domain.Providers;
 using CloudCrafter.Domain.Domain.Providers.Github;
 using Microsoft.Extensions.Logging;
+using Octokit;
 
 namespace CloudCrafter.Core.Services.Domain.Providers;
 
@@ -62,17 +64,27 @@ public class ProvidersService(
             var app = await client.GitHubApps.GetCurrent();
             var installations = await client.GitHubApps.GetAllInstallationsForCurrent();
 
+            var repositoriesList = new List<GitProviderRepositoryDto>();
+
             foreach (var installation in installations)
             {
-                // // Get repositories for each installation
-                // Console.WriteLine($"Repositories for Installation {installation.Id}:");
-                // foreach (var repo in installationRepositories.Repositories)
-                // {
-                //     Console.WriteLine($"- {repo.FullName}");
-                // }
+                var token = await client.GitHubApps.CreateInstallationToken(installation.Id);
+
+                var installationClient = clientProvider.GetClientForToken(token.Token);
+
+                var result =
+                    await installationClient.GitHubApps.Installation.GetAllRepositoriesForCurrent();
+
+                repositoriesList.AddRange(
+                    result.Repositories.Select(x => new GitProviderRepositoryDto
+                    {
+                        FullName = x.FullName,
+                        Id = x.Id,
+                    })
+                );
             }
 
-            return new List<GitProviderRepositoryDto>();
+            return repositoriesList;
         }
         catch (Exception ex)
         {
