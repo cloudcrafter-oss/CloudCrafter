@@ -26,6 +26,7 @@ using CloudCrafter.Core.Services.Domain.Applications.Deployments;
 using CloudCrafter.Core.Services.Domain.Environments;
 using CloudCrafter.Core.Services.Domain.Projects;
 using CloudCrafter.Core.Services.Domain.Providers;
+using CloudCrafter.Core.Services.Domain.Providers.Github;
 using CloudCrafter.Core.Services.Domain.Servers;
 using CloudCrafter.Core.Services.Domain.Stacks;
 using CloudCrafter.Core.Services.Domain.Users;
@@ -213,6 +214,7 @@ public static class ApplicationServiceExtensions
         ));
 
         services.AddSingleton<IGithubClientProvider, GithubClientProvider>();
+        services.AddTransient<GithubBackendClientProvider>();
         return services;
     }
 }

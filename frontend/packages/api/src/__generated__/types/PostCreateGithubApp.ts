@@ -1,4 +1,5 @@
 import type { CreateGithubProviderCommandCommand } from "./CreateGithubProviderCommandCommand";
+import type { ProblemDetails } from "./ProblemDetails";
 
  /**
  * @description Created
@@ -8,7 +9,7 @@ export type PostCreateGithubApp201 = any;
  /**
  * @description Bad Request
 */
-export type PostCreateGithubApp400 = any;
+export type PostCreateGithubApp400 = ProblemDetails;
 
  export type PostCreateGithubAppMutationRequest = CreateGithubProviderCommandCommand;
 

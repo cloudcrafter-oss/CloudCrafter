@@ -1,6 +1,7 @@
 'use client'
 
 import {
+	useGetProvidersHook,
 	useGetServersHook,
 	usePostCreateStackHook,
 	usePostValidateGithubRepoHook,
@@ -41,6 +42,8 @@ import type * as z from 'zod'
 
 const formSchema = createStackCommandCommandSchema
 
+type RepositorySource = 'provider' | 'public'
+
 export const ProjectDetailCreateStackSheet = ({
 	environmentId,
 }: { environmentId: string }) => {
@@ -55,10 +58,16 @@ export const ProjectDetailCreateStackSheet = ({
 
 	const [formIsSubmitting, setFormIsSubmitting] = useState(false)
 	const [createdStack, setCreatedStack] = useState<StackCreatedDto | null>(null)
+	const [repositorySource, setRepositorySource] =
+		useState<RepositorySource>('public')
 
 	const { mutateAsync, isPending } = usePostValidateGithubRepoHook()
 	const { mutateAsync: createStack } = usePostCreateStackHook()
 	const { data: servers } = useGetServersHook()
+
+	const { data: providers } = useGetProvidersHook({
+		IsActive: true,
+	})
 
 	async function validateRepository(url: string) {
 		const errorMessage = 'The provided Git repository is not valid'
@@ -147,47 +156,135 @@ export const ProjectDetailCreateStackSheet = ({
 									</FormItem>
 								)}
 							/>
+							<div className='flex space-x-2 mb-4'>
+								<Button
+									type='button'
+									variant={
+										repositorySource === 'public' ? 'default' : 'outline'
+									}
+									onClick={() => setRepositorySource('public')}
+									disabled={inputDisabled}
+								>
+									Open Repository
+								</Button>
+								<Button
+									type='button'
+									variant={
+										repositorySource === 'provider' ? 'default' : 'outline'
+									}
+									onClick={() => setRepositorySource('provider')}
+									disabled={inputDisabled}
+								>
+									From Provider
+								</Button>
+							</div>
+
+							{repositorySource === 'public' ? (
+								<FormField
+									control={form.control}
+									name='gitRepository'
+									render={({ field }) => (
+										<FormItem className='space-y-2'>
+											<FormLabel>Git Repository (Public)</FormLabel>
+											<div className='flex space-x-2'>
+												<FormControl>
+													<Input
+														{...field}
+														disabled={inputDisabled || isPending}
+														autoComplete='off'
+														onBlur={(e) => {
+															field.onBlur()
+															validateRepository(e.target.value)
+														}}
+													/>
+												</FormControl>
+												<Button
+													type='button'
+													size='icon'
+													variant={
+														form.formState.errors.gitRepository
+															? 'destructive'
+															: 'outline'
+													}
+													onClick={() => validateRepository(field.value)}
+													disabled={inputDisabled || isPending}
+												>
+													{isPending ? (
+														<Loader2 className='h-4 w-4 animate-spin' />
+													) : form.formState.errors.gitRepository ? (
+														<XCircle className='h-4 w-4 ' />
+													) : (
+														<CheckCircle className='h-4 w-4' />
+													)}
+												</Button>
+											</div>
+											<FormDescription>
+												Enter the URL of your public Git repository.
+											</FormDescription>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							) : (
+								<FormField
+									control={form.control}
+									name='gitRepository'
+									render={({ field }) => (
+										<FormItem className='space-y-2'>
+											<FormLabel>Select Repository</FormLabel>
+											<FormControl>
+												<Select
+													disabled={inputDisabled}
+													onValueChange={field.onChange}
+													value={field.value}
+												>
+													<SelectTrigger>
+														{field.value || 'Select a repository'}
+													</SelectTrigger>
+													<SelectContent>
+														<SelectItem value='https://github.com/example/repo1'>
+															example/repo1
+														</SelectItem>
+														<SelectItem value='https://github.com/example/repo2'>
+															example/repo2
+														</SelectItem>
+													</SelectContent>
+												</Select>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							)}
+
 							<FormField
 								control={form.control}
-								name='gitRepository'
+								name='providerId'
 								render={({ field }) => (
 									<FormItem className='space-y-2'>
-										<FormLabel>Git Repository (Public)</FormLabel>
-										<div className='flex space-x-2'>
-											<FormControl>
-												<Input
-													{...field}
-													disabled={inputDisabled || isPending}
-													autoComplete='off'
-													onBlur={(e) => {
-														field.onBlur()
-														validateRepository(e.target.value)
-													}}
-												/>
-											</FormControl>
-											<Button
-												type='button'
-												size='icon'
-												variant={
-													form.formState.errors.gitRepository
-														? 'destructive'
-														: 'outline'
-												} // Update variant
-												onClick={() => validateRepository(field.value)}
-												disabled={inputDisabled || isPending}
+										<FormLabel>Provider</FormLabel>
+										<FormControl>
+											<Select
+												disabled={inputDisabled}
+												onValueChange={field.onChange}
+												value={field.value}
 											>
-												{isPending ? (
-													<Loader2 className='h-4 w-4 animate-spin' />
-												) : form.formState.errors.gitRepository ? (
-													<XCircle className='h-4 w-4 ' /> // Show red cross icon
-												) : (
-													<CheckCircle className='h-4 w-4' />
-												)}
-											</Button>
-										</div>
-										<FormDescription>
-											Enter the URL of your public Git repository.
-										</FormDescription>
+												<SelectTrigger>
+													{field.value
+														? providers?.github.find(
+																(provider) => provider.id === field.value,
+															)?.name
+														: 'Select a provider'}
+												</SelectTrigger>
+												<SelectContent>
+													{providers?.github.map((provider) => (
+														<SelectItem key={provider.id} value={provider.id}>
+															{provider.name}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}

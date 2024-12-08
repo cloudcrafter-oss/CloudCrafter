@@ -168,11 +168,17 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Property<string>("AppPrivateKey")
                         .HasColumnType("text");
 
+                    b.Property<string>("AppUrl")
+                        .HasColumnType("text");
+
                     b.Property<string>("AppWebhookSecret")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("InstallationId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool?>("IsValid")
                         .HasColumnType("boolean");

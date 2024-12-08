@@ -1,6 +1,8 @@
 import { providerOverviewDtoSchema } from "./providerOverviewDtoSchema";
 import { z } from "zod";
 
+ export const getProvidersQueryParamsSchema = z.object({ "IsActive": z.boolean().optional() }).optional();
+
  /**
  * @description OK
  */
