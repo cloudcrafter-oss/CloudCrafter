@@ -53,8 +53,20 @@ public static class FakerInstances
             .RuleFor(x => x.AppClientSecret, f => f.Random.Guid().ToString())
             .RuleFor(x => x.AppWebhookSecret, f => f.Random.Guid().ToString())
             .RuleFor(x => x.AppPrivateKey, f => f.Random.Guid().ToString())
+            .RuleFor(x => x.InstallationId, f => null)
+            .RuleFor(x => x.AppUrl, f => f.Internet.Url())
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+
+    public static Faker<SourceProvider> SourceProviderFaker =>
+        new Faker<SourceProvider>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, Guid.NewGuid)
+            .RuleFor(x => x.Name, f => f.Person.FirstName)
+            .RuleFor(x => x.Github, f => null)
+            .RuleFor(x => x.CreatedAt, f => DateTime.UtcNow)
+            .RuleFor(x => x.UpdatedAt, f => DateTime.UtcNow)
+            .RuleFor(x => x.GithubProviderId, f => null);
 
     public static Faker<EntityStackServiceHealthStatus> EntityHealthStatusFaker =>
         new Faker<EntityStackServiceHealthStatus>()

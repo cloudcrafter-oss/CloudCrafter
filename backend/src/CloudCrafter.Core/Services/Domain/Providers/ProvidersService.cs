@@ -59,7 +59,7 @@ public class ProvidersService(
         var provider = await repository.GetGithubProvider(providerId);
         try
         {
-            var client = githubBackendClientProvider.CreateClientForProvider(provider);
+            var client = githubBackendClientProvider.CreateClientForProvider(provider.Github!);
 
             var app = await client.GitHubApps.GetCurrent();
             var installations = await client.GitHubApps.GetAllInstallationsForCurrent();
@@ -97,12 +97,12 @@ public class ProvidersService(
     {
         var provider = await repository.GetGithubProvider(providerId);
 
-        if (provider.InstallationId.HasValue)
+        if (provider.Github!.InstallationId.HasValue)
         {
             return;
         }
 
-        provider.InstallationId = installationId;
+        provider.Github.InstallationId = installationId;
         await repository.SaveChangesAsync();
     }
 }

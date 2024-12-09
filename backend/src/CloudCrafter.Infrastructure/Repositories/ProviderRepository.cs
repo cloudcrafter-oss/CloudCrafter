@@ -10,7 +10,7 @@ namespace CloudCrafter.Infrastructure.Repositories;
 
 public class ProviderRepository(IApplicationDbContext context) : IProviderRepository
 {
-    public async Task<GithubProvider> CreateGithubProvider(GitHubAppFromManifest data)
+    public async Task<SourceProvider> CreateGithubProvider(GitHubAppFromManifest data)
     {
         var provider = new GithubProvider
         {
@@ -28,35 +28,49 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
             UpdatedAt = DateTime.UtcNow,
         };
 
-        context.GithubProviders.Add(provider);
+        var sourceProvider = new SourceProvider()
+        {
+            Id = Guid.NewGuid(),
+            Name = data.Name,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            Github = provider,
+        };
+
+        context.SourceProviders.Add(sourceProvider);
         await context.SaveChangesAsync();
 
-        return provider;
+        return sourceProvider;
     }
 
-    public Task<List<GithubProvider>> GetGithubProviders(ProviderFilterRequest filter)
+    public Task<List<SourceProvider>> GetGithubProviders(ProviderFilterRequest filter)
     {
-        var query = context.GithubProviders.AsQueryable();
+        var query = context.SourceProviders.AsQueryable();
+
+        query = query.Where(x => x.GithubProviderId.HasValue).Include(x => x.Github);
 
         if (filter.IsActive.HasValue)
         {
             query = query.Where(x =>
-                x.IsValid.HasValue && x.IsValid.Value == filter.IsActive.Value
+                x.Github != null
+                && x.Github.IsValid.HasValue
+                && x.Github.IsValid.Value == filter.IsActive.Value
             );
         }
 
         return query.OrderByDescending(x => x.CreatedAt).ToListAsync();
     }
 
-    public async Task<GithubProvider> GetGithubProvider(Guid providerId)
+    public async Task<SourceProvider> GetGithubProvider(Guid providerId)
     {
         var provider = await context
-            .GithubProviders.Where(x => x.Id == providerId)
+            .SourceProviders.Where(x => x.Id == providerId)
+            .Include(x => x.Github)
             .FirstOrDefaultAsync();
 
-        if (provider == null)
+        if (provider == null || provider.Github == null)
         {
-            throw new NotFoundException("server", "Server not found");
+            throw new NotFoundException("github", "Github provider not found");
         }
 
         return provider;
