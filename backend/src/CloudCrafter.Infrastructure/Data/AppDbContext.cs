@@ -43,6 +43,7 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     public DbSet<StackServiceType> StackServiceTypes => Set<StackServiceType>();
 
     public DbSet<GithubProvider> GithubProviders => Set<GithubProvider>();
+    public DbSet<SourceProvider> SourceProviders => Set<SourceProvider>();
 
     public DbSet<ServerConnectivityCheckJob> ServerConnectivityCheckJobs =>
         Set<ServerConnectivityCheckJob>();

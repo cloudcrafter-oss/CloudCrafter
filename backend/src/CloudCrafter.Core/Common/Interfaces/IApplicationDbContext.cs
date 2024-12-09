@@ -20,6 +20,7 @@ public interface IApplicationDbContext
     DbSet<ServerConnectivityCheckJob> ServerConnectivityCheckJobs { get; }
 
     DbSet<GithubProvider> GithubProviders { get; }
+    DbSet<SourceProvider> SourceProviders { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     int SaveChanges();

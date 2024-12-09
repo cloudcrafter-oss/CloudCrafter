@@ -1,6 +1,6 @@
 namespace CloudCrafter.Domain.Entities;
 
-public class GithubProvider : GitProvider
+public class GithubProvider : BaseGitProvider
 {
     public required string? AppName { get; set; }
     public required long? AppId { get; set; }
