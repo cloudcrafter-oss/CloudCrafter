@@ -52,7 +52,6 @@ export { postValidateGithubRepo200Schema, postValidateGithubRepoMutationRequestS
 export { problemDetailsSchema } from "./problemDetailsSchema";
 export { projectDtoSchema } from "./projectDtoSchema";
 export { projectEnvironmentEnhancedDtoSchema } from "./projectEnvironmentEnhancedDtoSchema";
-export { providerOverviewDtoSchema } from "./providerOverviewDtoSchema";
 export { putUpdateGithubProviderPathParamsSchema, putUpdateGithubProvider200Schema, putUpdateGithubProviderMutationRequestSchema, putUpdateGithubProviderMutationResponseSchema } from "./putUpdateGithubProviderSchema";
 export { requestSchema } from "./requestSchema";
 export { serverDetailDtoSchema } from "./serverDetailDtoSchema";
@@ -61,6 +60,7 @@ export { serverPingDtoSchema } from "./serverPingDtoSchema";
 export { serverStatusDtoValueSchema } from "./serverStatusDtoValueSchema";
 export { simpleDeploymentDtoSchema } from "./simpleDeploymentDtoSchema";
 export { simpleGithubProviderDtoSchema } from "./simpleGithubProviderDtoSchema";
+export { sourceProviderDtoSchema } from "./sourceProviderDtoSchema";
 export { stackCreatedDtoSchema } from "./stackCreatedDtoSchema";
 export { stackDetailDtoSchema } from "./stackDetailDtoSchema";
 export { stackServerDtoSchema } from "./stackServerDtoSchema";

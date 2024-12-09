@@ -1,13 +1,11 @@
-using System.ComponentModel;
 using AutoMapper;
 using CloudCrafter.Core.Interfaces.Domain.Providers;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Core.Services.Core.Providers;
 using CloudCrafter.Core.Services.Domain.Providers.Github;
 using CloudCrafter.Domain.Domain.Providers;
-using CloudCrafter.Domain.Domain.Providers.Github;
+using CloudCrafter.Domain.Entities;
 using Microsoft.Extensions.Logging;
-using Octokit;
 
 namespace CloudCrafter.Core.Services.Domain.Providers;
 
@@ -44,14 +42,11 @@ public class ProvidersService(
         return false;
     }
 
-    public async Task<ProviderOverviewDto> GetProviders(ProviderFilterRequest filter)
+    public async Task<List<SourceProviderDto>> GetProviders(ProviderFilterRequest filter)
     {
-        var github = await repository.GetGithubProviders(filter);
+        List<SourceProvider> providers = await repository.GetProviders(filter);
 
-        return new ProviderOverviewDto
-        {
-            Github = mapper.Map<List<SimpleGithubProviderDto>>(github),
-        };
+        return mapper.Map<List<SourceProviderDto>>(providers);
     }
 
     public async Task<List<GitProviderRepositoryDto>> GetGithubRepositories(Guid providerId)

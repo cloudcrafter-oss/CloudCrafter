@@ -23,4 +23,4 @@ export type SimpleGithubProviderDto = {
      * @type string
     */
     appUrl: string | null;
-};
+} | null;

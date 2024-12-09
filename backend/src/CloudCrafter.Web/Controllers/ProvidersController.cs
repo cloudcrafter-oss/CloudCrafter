@@ -21,7 +21,7 @@ public class ProvidersController : CloudCrafterController
     }
 
     [HttpGet]
-    public async Task<ProviderOverviewDto> GetProviders(
+    public async Task<List<SourceProviderDto>> GetProviders(
         ISender sender,
         [FromQuery] ProviderFilterRequest filter
     )

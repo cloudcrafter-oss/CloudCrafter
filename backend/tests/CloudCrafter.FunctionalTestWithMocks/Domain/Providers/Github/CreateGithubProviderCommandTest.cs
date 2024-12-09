@@ -30,9 +30,10 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
             {
                 services.RemoveAll<IGithubClientProvider>();
 
-                services
-                    .RemoveAll<IUser>()
-                    .AddTransient(provider => Mock.Of<IUser>(s => s.Id == _userId));
+                ServiceCollectionServiceExtensions.AddTransient(
+                    services.RemoveAll<IUser>(),
+                    provider => Mock.Of<IUser>(s => s.Id == _userId)
+                );
                 services.AddScoped<IGithubClientProvider>(_ => _mockProvider.Object);
             }
         );
@@ -107,6 +108,8 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         firstItem.AppClientSecret.Should().Be(manifest.ClientSecret);
         firstItem.AppWebhookSecret.Should().Be(manifest.WebhookSecret);
         firstItem.AppPrivateKey.Should().Be(manifest.Pem);
+        firstItem.InstallationId.Should().BeNull();
+        firstItem.AppUrl.Should().Be(manifest.HtmlUrl);
     }
 
     [Test]

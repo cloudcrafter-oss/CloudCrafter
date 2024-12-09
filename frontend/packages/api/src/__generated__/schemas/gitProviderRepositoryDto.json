@@ -1,1 +1,1 @@
-{"type":"object","x-readme-ref-name":"GitProviderRepositoryDto"}
+{"required":["fullName","id"],"type":"object","properties":{"fullName":{"type":"string"},"id":{"type":"integer","format":"int64"}},"x-readme-ref-name":"GitProviderRepositoryDto"}

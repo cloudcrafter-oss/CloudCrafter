@@ -58,6 +58,9 @@ public static class FakerInstances
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
+    public static Faker<SourceProvider> SourceProviderFakerWithGitHub =>
+        SourceProviderFaker.RuleFor(x => x.Github, f => GithubProviderFaker.Generate());
+
     public static Faker<SourceProvider> SourceProviderFaker =>
         new Faker<SourceProvider>()
             .StrictMode(true)

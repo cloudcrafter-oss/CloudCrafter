@@ -1,4 +1,4 @@
-import type { ProviderOverviewDto } from "./ProviderOverviewDto";
+import type { SourceProviderDto } from "./SourceProviderDto";
 
  export type GetProvidersQueryParams = {
     /**
@@ -10,7 +10,7 @@ import type { ProviderOverviewDto } from "./ProviderOverviewDto";
  /**
  * @description OK
 */
-export type GetProviders200 = ProviderOverviewDto;
+export type GetProviders200 = SourceProviderDto[];
 
  export type GetProvidersQueryResponse = GetProviders200;
 

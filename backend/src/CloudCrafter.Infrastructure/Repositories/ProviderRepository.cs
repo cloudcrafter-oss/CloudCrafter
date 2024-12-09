@@ -28,7 +28,7 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
             UpdatedAt = DateTime.UtcNow,
         };
 
-        var sourceProvider = new SourceProvider()
+        var sourceProvider = new SourceProvider
         {
             Id = Guid.NewGuid(),
             Name = data.Name,
@@ -41,24 +41,6 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
         await context.SaveChangesAsync();
 
         return sourceProvider;
-    }
-
-    public Task<List<SourceProvider>> GetGithubProviders(ProviderFilterRequest filter)
-    {
-        var query = context.SourceProviders.AsQueryable();
-
-        query = query.Where(x => x.GithubProviderId.HasValue).Include(x => x.Github);
-
-        if (filter.IsActive.HasValue)
-        {
-            query = query.Where(x =>
-                x.Github != null
-                && x.Github.IsValid.HasValue
-                && x.Github.IsValid.Value == filter.IsActive.Value
-            );
-        }
-
-        return query.OrderByDescending(x => x.CreatedAt).ToListAsync();
     }
 
     public async Task<SourceProvider> GetGithubProvider(Guid providerId)
@@ -79,5 +61,39 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
     public Task SaveChangesAsync()
     {
         return context.SaveChangesAsync();
+    }
+
+    public Task<List<SourceProvider>> GetProviders(ProviderFilterRequest filter)
+    {
+        IQueryable<SourceProvider> query = context.SourceProviders.Include(x => x.Github);
+
+        if (filter.IsActive.HasValue)
+        {
+            query = query.Where(x =>
+                x.Github != null
+                && x.Github.IsValid.HasValue
+                && x.Github.IsValid.Value == filter.IsActive.Value
+            );
+        }
+
+        return query.OrderBy(x => x.CreatedAt).ToListAsync();
+    }
+
+    public Task<List<SourceProvider>> GetGithubProviders(ProviderFilterRequest filter)
+    {
+        var query = context.SourceProviders.AsQueryable();
+
+        query = query.Where(x => x.GithubProviderId.HasValue).Include(x => x.Github);
+
+        if (filter.IsActive.HasValue)
+        {
+            query = query.Where(x =>
+                x.Github != null
+                && x.Github.IsValid.HasValue
+                && x.Github.IsValid.Value == filter.IsActive.Value
+            );
+        }
+
+        return query.OrderByDescending(x => x.CreatedAt).ToListAsync();
     }
 }

@@ -52,7 +52,6 @@ export type { PostValidateGithubRepo200, PostValidateGithubRepoMutationRequest, 
 export type { ProblemDetails } from "./ProblemDetails";
 export type { ProjectDto } from "./ProjectDto";
 export type { ProjectEnvironmentEnhancedDto } from "./ProjectEnvironmentEnhancedDto";
-export type { ProviderOverviewDto } from "./ProviderOverviewDto";
 export type { PutUpdateGithubProviderPathParams, PutUpdateGithubProvider200, PutUpdateGithubProviderMutationRequest, PutUpdateGithubProviderMutationResponse, PutUpdateGithubProviderMutation } from "./PutUpdateGithubProvider";
 export type { Request } from "./Request";
 export type { ServerDetailDto } from "./ServerDetailDto";
@@ -61,6 +60,7 @@ export type { ServerPingDto } from "./ServerPingDto";
 export type { ServerStatusDtoValueEnum, ServerStatusDtoValue } from "./ServerStatusDtoValue";
 export type { SimpleDeploymentDto } from "./SimpleDeploymentDto";
 export type { SimpleGithubProviderDto } from "./SimpleGithubProviderDto";
+export type { SourceProviderDto } from "./SourceProviderDto";
 export type { StackCreatedDto } from "./StackCreatedDto";
 export type { StackDetailDto } from "./StackDetailDto";
 export type { StackServerDto } from "./StackServerDto";
