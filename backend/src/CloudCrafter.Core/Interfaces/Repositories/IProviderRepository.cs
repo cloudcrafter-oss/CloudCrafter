@@ -10,4 +10,5 @@ public interface IProviderRepository
     Task<SourceProvider> GetGithubProvider(Guid providerId);
     Task SaveChangesAsync();
     Task<List<SourceProvider>> GetProviders(ProviderFilterRequest filter);
+    Task DeleteProvider(Guid providerId);
 }

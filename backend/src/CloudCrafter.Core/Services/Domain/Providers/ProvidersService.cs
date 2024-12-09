@@ -100,4 +100,9 @@ public class ProvidersService(
         provider.Github.InstallationId = installationId;
         await repository.SaveChangesAsync();
     }
+
+    public Task DeleteProvider(Guid providerId)
+    {
+        return repository.DeleteProvider(providerId);
+    }
 }

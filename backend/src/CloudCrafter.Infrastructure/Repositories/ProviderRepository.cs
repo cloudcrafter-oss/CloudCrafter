@@ -79,6 +79,19 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
         return query.OrderBy(x => x.CreatedAt).ToListAsync();
     }
 
+    public async Task DeleteProvider(Guid providerId)
+    {
+        var provider = await context.SourceProviders.FirstOrDefaultAsync(x => x.Id == providerId);
+
+        if (provider == null)
+        {
+            throw new NotFoundException("provider", "Source provider not found");
+        }
+
+        context.SourceProviders.Remove(provider);
+        await context.SaveChangesAsync();
+    }
+
     public Task<List<SourceProvider>> GetGithubProviders(ProviderFilterRequest filter)
     {
         var query = context.SourceProviders.AsQueryable();

@@ -49,4 +49,12 @@ public class ProvidersController : CloudCrafterController
     {
         return await sender.Send(new GetGithubRepositoriesQuery.Query(id));
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IResult> DeleteProvider(ISender sender, [FromRoute] Guid id)
+    {
+        await sender.Send(new DeleteProviderCommand.Command(id));
+
+        return Results.Ok();
+    }
 }
