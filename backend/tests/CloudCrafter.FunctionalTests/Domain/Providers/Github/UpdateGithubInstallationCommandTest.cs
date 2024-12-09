@@ -48,21 +48,17 @@ public class UpdateGithubInstallationCommandTest : BaseTestFixture
     {
         await RunAsAdministratorAsync();
 
-        var sourceProvider = FakerInstances.SourceProviderFaker.Generate();
         var githubProvider = FakerInstances.GithubProviderFaker.Generate();
-        sourceProvider.Github = githubProvider;
 
-        await AddAsync(sourceProvider);
+        await AddAsync(githubProvider);
 
         githubProvider.InstallationId.Should().BeNull();
-
-        (await CountAsync<SourceProvider>()).Should().Be(1);
         (await CountAsync<GithubProvider>()).Should().Be(1);
 
         await SendAsync(
             new UpdateGithubInstallationCommand.Command(
                 new UpdateGithubInstallationCommand.Request(123),
-                sourceProvider.Id
+                githubProvider.Id
             )
         );
 
@@ -76,23 +72,20 @@ public class UpdateGithubInstallationCommandTest : BaseTestFixture
     {
         await RunAsAdministratorAsync();
 
-        var sourceProvider = FakerInstances.SourceProviderFaker.Generate();
         var githubProvider = FakerInstances
             .GithubProviderFaker.RuleFor(x => x.InstallationId, f => f.Random.Long())
             .Generate();
-        sourceProvider.Github = githubProvider;
 
-        await AddAsync(sourceProvider);
+        await AddAsync(githubProvider);
 
         githubProvider.InstallationId.Should().NotBeNull();
 
-        (await CountAsync<SourceProvider>()).Should().Be(1);
         (await CountAsync<GithubProvider>()).Should().Be(1);
 
         await SendAsync(
             new UpdateGithubInstallationCommand.Command(
                 new UpdateGithubInstallationCommand.Request(123),
-                sourceProvider.Id
+                githubProvider.Id
             )
         );
 

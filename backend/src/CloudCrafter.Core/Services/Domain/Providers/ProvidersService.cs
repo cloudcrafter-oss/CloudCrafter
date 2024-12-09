@@ -44,7 +44,7 @@ public class ProvidersService(
 
     public async Task<List<SourceProviderDto>> GetProviders(ProviderFilterRequest filter)
     {
-        List<SourceProvider> providers = await repository.GetProviders(filter);
+        List<BaseSourceProvider> providers = await repository.GetProviders(filter);
 
         return mapper.Map<List<SourceProviderDto>>(providers);
     }
@@ -54,7 +54,7 @@ public class ProvidersService(
         var provider = await repository.GetGithubProvider(providerId);
         try
         {
-            var client = githubBackendClientProvider.CreateClientForProvider(provider.Github!);
+            var client = githubBackendClientProvider.CreateClientForProvider(provider);
 
             var app = await client.GitHubApps.GetCurrent();
             var installations = await client.GitHubApps.GetAllInstallationsForCurrent();
@@ -92,12 +92,12 @@ public class ProvidersService(
     {
         var provider = await repository.GetGithubProvider(providerId);
 
-        if (provider.Github!.InstallationId.HasValue)
+        if (provider.InstallationId.HasValue)
         {
             return;
         }
 
-        provider.Github.InstallationId = installationId;
+        provider.InstallationId = installationId;
         await repository.SaveChangesAsync();
     }
 

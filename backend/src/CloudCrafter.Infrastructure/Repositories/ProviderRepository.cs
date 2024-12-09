@@ -10,7 +10,7 @@ namespace CloudCrafter.Infrastructure.Repositories;
 
 public class ProviderRepository(IApplicationDbContext context) : IProviderRepository
 {
-    public async Task<SourceProvider> CreateGithubProvider(GitHubAppFromManifest data)
+    public async Task<GithubProvider> CreateGithubProvider(GitHubAppFromManifest data)
     {
         var provider = new GithubProvider
         {
@@ -28,29 +28,20 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
             UpdatedAt = DateTime.UtcNow,
         };
 
-        var sourceProvider = new SourceProvider
-        {
-            Id = Guid.NewGuid(),
-            Name = data.Name,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
-            Github = provider,
-        };
-
-        context.SourceProviders.Add(sourceProvider);
+        context.SourceProviders.Add(provider);
         await context.SaveChangesAsync();
 
-        return sourceProvider;
+        return provider;
     }
 
-    public async Task<SourceProvider> GetGithubProvider(Guid providerId)
+    public async Task<GithubProvider> GetGithubProvider(Guid providerId)
     {
         var provider = await context
-            .SourceProviders.Where(x => x.Id == providerId)
-            .Include(x => x.Github)
+            .SourceProviders.OfType<GithubProvider>()
+            .Where(x => x.Id == providerId)
             .FirstOrDefaultAsync();
 
-        if (provider == null || provider.Github == null)
+        if (provider == null)
         {
             throw new NotFoundException("github", "Github provider not found");
         }
@@ -63,17 +54,15 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
         return context.SaveChangesAsync();
     }
 
-    public Task<List<SourceProvider>> GetProviders(ProviderFilterRequest filter)
+    public Task<List<BaseSourceProvider>> GetProviders(ProviderFilterRequest filter)
     {
-        IQueryable<SourceProvider> query = context.SourceProviders.Include(x => x.Github);
+        IQueryable<BaseSourceProvider> query = context.SourceProviders;
 
         if (filter.IsActive.HasValue)
         {
-            query = query.Where(x =>
-                x.Github != null
-                && x.Github.IsValid.HasValue
-                && x.Github.IsValid.Value == filter.IsActive.Value
-            );
+            query = query
+                .OfType<GithubProvider>()
+                .Where(gp => gp.IsValid.HasValue && gp.IsValid.Value == filter.IsActive.Value);
         }
 
         return query.OrderBy(x => x.CreatedAt).ToListAsync();
@@ -92,18 +81,14 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
         await context.SaveChangesAsync();
     }
 
-    public Task<List<SourceProvider>> GetGithubProviders(ProviderFilterRequest filter)
+    public Task<List<GithubProvider>> GetGithubProviders(ProviderFilterRequest filter)
     {
-        var query = context.SourceProviders.AsQueryable();
-
-        query = query.Where(x => x.GithubProviderId.HasValue).Include(x => x.Github);
+        var query = context.SourceProviders.OfType<GithubProvider>().AsQueryable();
 
         if (filter.IsActive.HasValue)
         {
             query = query.Where(x =>
-                x.Github != null
-                && x.Github.IsValid.HasValue
-                && x.Github.IsValid.Value == filter.IsActive.Value
+                x.IsValid.HasValue && x.IsValid.Value == filter.IsActive.Value
             );
         }
 

@@ -58,7 +58,6 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         (await CountAsync<GithubProvider>())
             .Should()
             .Be(0);
-        (await CountAsync<SourceProvider>()).Should().Be(0);
 
         var appsMock = new Mock<IGitHubAppsClient>();
 
@@ -94,7 +93,6 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         result.Should().BeTrue();
 
         (await CountAsync<GithubProvider>()).Should().Be(1);
-        (await CountAsync<SourceProvider>()).Should().Be(1);
         var firstItem = await QueryFirstOrDefaultAsync<GithubProvider>(x =>
             x.AppClientId == "clientId"
         );

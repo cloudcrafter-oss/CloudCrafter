@@ -14,7 +14,7 @@ public class SourceProviderDto
     {
         public Mapping()
         {
-            CreateMap<SourceProvider, SourceProviderDto>();
+            //   CreateMap<SourceProvider, SourceProviderDto>();
         }
     }
 }

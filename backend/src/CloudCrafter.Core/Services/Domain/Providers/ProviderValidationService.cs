@@ -16,7 +16,9 @@ public class ProviderValidationService(
     public async Task ValidateAll()
     {
         var githubProviders = await context
-            .GithubProviders.OrderByDescending(x => x.CreatedAt)
+            .SourceProviders.OfType<GithubProvider>()
+            .Where(x => x.IsValid != false)
+            .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();
 
         foreach (var githubProvider in githubProviders)
