@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization.Metadata;
-using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces;
 using CloudCrafter.Infrastructure;
@@ -11,7 +9,6 @@ using CloudCrafter.Web.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.OpenApi;
-using Polly;
 
 namespace CloudCrafter.Web;
 
@@ -77,16 +74,23 @@ public static class DependencyInjection
         {
             options.AddSchemaTransformer<RequireNotNullableSchemaFilter>();
 
-            options.AddOperationTransformer((operation, context, arg3) =>
-            {
-                if (string.IsNullOrEmpty(operation.OperationId) && context.Description.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
+            options.AddOperationTransformer(
+                (operation, context, arg3) =>
                 {
-                    operation.OperationId = controllerActionDescriptor.ActionName;
-                }
-                return Task.CompletedTask;
-            });
+                    if (
+                        string.IsNullOrEmpty(operation.OperationId)
+                        && context.Description.ActionDescriptor
+                            is ControllerActionDescriptor controllerActionDescriptor
+                    )
+                    {
+                        operation.OperationId = controllerActionDescriptor.ActionName;
+                    }
 
-            options.CreateSchemaReferenceId = (JsonTypeInfo info) =>
+                    return Task.CompletedTask;
+                }
+            );
+
+            options.CreateSchemaReferenceId = info =>
             {
                 var schema = OpenApiOptions.CreateDefaultSchemaReferenceId(info);
 
@@ -110,7 +114,7 @@ public static class DependencyInjection
 
                 return string.Join("", commandParts);
             };
-            
+
             options.AddDocumentTransformer(
                 (doc, context, ct) =>
                 {
@@ -150,7 +154,6 @@ public static class DependencyInjection
         );
 
         services.AddEndpointsApiExplorer();
-        
 
         return services;
     }

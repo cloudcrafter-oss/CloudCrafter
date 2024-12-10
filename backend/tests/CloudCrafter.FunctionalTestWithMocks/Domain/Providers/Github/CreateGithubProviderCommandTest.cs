@@ -30,9 +30,10 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
             {
                 services.RemoveAll<IGithubClientProvider>();
 
-                services
-                    .RemoveAll<IUser>()
-                    .AddTransient(provider => Mock.Of<IUser>(s => s.Id == _userId));
+                ServiceCollectionServiceExtensions.AddTransient(
+                    services.RemoveAll<IUser>(),
+                    provider => Mock.Of<IUser>(s => s.Id == _userId)
+                );
                 services.AddScoped<IGithubClientProvider>(_ => _mockProvider.Object);
             }
         );
@@ -57,6 +58,7 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         (await CountAsync<GithubProvider>())
             .Should()
             .Be(0);
+        (await CountAsync<SourceProvider>()).Should().Be(0);
 
         var appsMock = new Mock<IGitHubAppsClient>();
 
@@ -92,7 +94,7 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         result.Should().BeTrue();
 
         (await CountAsync<GithubProvider>()).Should().Be(1);
-
+        (await CountAsync<SourceProvider>()).Should().Be(1);
         var firstItem = await QueryFirstOrDefaultAsync<GithubProvider>(x =>
             x.AppClientId == "clientId"
         );
@@ -100,12 +102,13 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         firstItem.Should().NotBeNull();
 
         firstItem!.AppName.Should().Be(manifest.Name);
-        firstItem.Name.Should().Be(manifest.Name);
         firstItem.AppId.Should().Be(manifest.Id);
         firstItem.AppClientId.Should().Be(manifest.ClientId);
         firstItem.AppClientSecret.Should().Be(manifest.ClientSecret);
         firstItem.AppWebhookSecret.Should().Be(manifest.WebhookSecret);
         firstItem.AppPrivateKey.Should().Be(manifest.Pem);
+        firstItem.InstallationId.Should().BeNull();
+        firstItem.AppUrl.Should().Be(manifest.HtmlUrl);
     }
 
     [Test]

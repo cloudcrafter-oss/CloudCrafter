@@ -15,6 +15,9 @@ export type { GetDeploymentsForStackSuspenseQueryKey } from "./useGetDeployments
 export type { GetFilterableFieldsQueryKey } from "./useGetFilterableFieldsHook";
 export type { GetFilterableFieldsInfiniteQueryKey } from "./useGetFilterableFieldsInfiniteHook";
 export type { GetFilterableFieldsSuspenseQueryKey } from "./useGetFilterableFieldsSuspenseHook";
+export type { GetGithubRepositoriesQueryKey } from "./useGetGithubRepositoriesHook";
+export type { GetGithubRepositoriesInfiniteQueryKey } from "./useGetGithubRepositoriesInfiniteHook";
+export type { GetGithubRepositoriesSuspenseQueryKey } from "./useGetGithubRepositoriesSuspenseHook";
 export type { GetProjectEnvironmentEnhancedQueryKey } from "./useGetProjectEnvironmentEnhancedHook";
 export type { GetProjectEnvironmentEnhancedInfiniteQueryKey } from "./useGetProjectEnvironmentEnhancedInfiniteHook";
 export type { GetProjectEnvironmentEnhancedSuspenseQueryKey } from "./useGetProjectEnvironmentEnhancedSuspenseHook";
@@ -45,6 +48,7 @@ export type { PostLoginUserMutationKey } from "./usePostLoginUserHook";
 export type { PostRefreshTokensMutationKey } from "./usePostRefreshTokensHook";
 export type { PostRotateAgentKeyMutationKey } from "./usePostRotateAgentKeyHook";
 export type { PostValidateGithubRepoMutationKey } from "./usePostValidateGithubRepoHook";
+export type { PutUpdateGithubProviderMutationKey } from "./usePutUpdateGithubProviderHook";
 export type { TestQueryKey } from "./useTestHook";
 export type { TestInfiniteQueryKey } from "./useTestInfiniteHook";
 export type { TestSuspenseQueryKey } from "./useTestSuspenseHook";
@@ -69,6 +73,9 @@ export { getDeploymentsForStackSuspenseQueryKey, getDeploymentsForStackSuspenseQ
 export { getFilterableFieldsQueryKey, getFilterableFieldsQueryOptionsHook, useGetFilterableFieldsHook } from "./useGetFilterableFieldsHook";
 export { getFilterableFieldsInfiniteQueryKey, getFilterableFieldsInfiniteQueryOptionsHook, useGetFilterableFieldsInfiniteHook } from "./useGetFilterableFieldsInfiniteHook";
 export { getFilterableFieldsSuspenseQueryKey, getFilterableFieldsSuspenseQueryOptionsHook, useGetFilterableFieldsSuspenseHook } from "./useGetFilterableFieldsSuspenseHook";
+export { getGithubRepositoriesQueryKey, getGithubRepositoriesQueryOptionsHook, useGetGithubRepositoriesHook } from "./useGetGithubRepositoriesHook";
+export { getGithubRepositoriesInfiniteQueryKey, getGithubRepositoriesInfiniteQueryOptionsHook, useGetGithubRepositoriesInfiniteHook } from "./useGetGithubRepositoriesInfiniteHook";
+export { getGithubRepositoriesSuspenseQueryKey, getGithubRepositoriesSuspenseQueryOptionsHook, useGetGithubRepositoriesSuspenseHook } from "./useGetGithubRepositoriesSuspenseHook";
 export { getProjectEnvironmentEnhancedQueryKey, getProjectEnvironmentEnhancedQueryOptionsHook, useGetProjectEnvironmentEnhancedHook } from "./useGetProjectEnvironmentEnhancedHook";
 export { getProjectEnvironmentEnhancedInfiniteQueryKey, getProjectEnvironmentEnhancedInfiniteQueryOptionsHook, useGetProjectEnvironmentEnhancedInfiniteHook } from "./useGetProjectEnvironmentEnhancedInfiniteHook";
 export { getProjectEnvironmentEnhancedSuspenseQueryKey, getProjectEnvironmentEnhancedSuspenseQueryOptionsHook, useGetProjectEnvironmentEnhancedSuspenseHook } from "./useGetProjectEnvironmentEnhancedSuspenseHook";
@@ -99,6 +106,7 @@ export { postLoginUserMutationKey, usePostLoginUserHook } from "./usePostLoginUs
 export { postRefreshTokensMutationKey, usePostRefreshTokensHook } from "./usePostRefreshTokensHook";
 export { postRotateAgentKeyMutationKey, usePostRotateAgentKeyHook } from "./usePostRotateAgentKeyHook";
 export { postValidateGithubRepoMutationKey, usePostValidateGithubRepoHook } from "./usePostValidateGithubRepoHook";
+export { putUpdateGithubProviderMutationKey, usePutUpdateGithubProviderHook } from "./usePutUpdateGithubProviderHook";
 export { testQueryKey, testQueryOptionsHook, useTestHook } from "./useTestHook";
 export { testInfiniteQueryKey, testInfiniteQueryOptionsHook, useTestInfiniteHook } from "./useTestInfiniteHook";
 export { testSuspenseQueryKey, testSuspenseQueryOptionsHook, useTestSuspenseHook } from "./useTestSuspenseHook";
