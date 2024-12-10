@@ -19,7 +19,7 @@ import {
 	DialogTitle,
 } from '@cloudcrafter/ui/components/dialog'
 import { SiBitbucket, SiGithub, SiGitlab } from '@icons-pack/react-simple-icons'
-import { Plus } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -183,6 +183,9 @@ const GithubRow = ({
 							</Button>
 						</Link>
 					)}
+				<Button size='sm' variant='destructive'>
+					<Trash2 className='h-4 w-4' />
+				</Button>
 			</div>
 		</li>
 	)

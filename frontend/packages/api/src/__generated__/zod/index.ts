@@ -8,6 +8,7 @@ export { createServerCommandCommandSchema } from "./createServerCommandCommandSc
 export { createServer200Schema, createServerMutationRequestSchema, createServerMutationResponseSchema } from "./createServerSchema";
 export { createStackCommandCommandSchema } from "./createStackCommandCommandSchema";
 export { deleteProjectPathParamsSchema, deleteProject200Schema, deleteProjectMutationResponseSchema } from "./deleteProjectSchema";
+export { deleteProviderPathParamsSchema, deleteProvider200Schema, deleteProviderMutationResponseSchema } from "./deleteProviderSchema";
 export { deleteServerByIdPathParamsSchema, deleteServerById200Schema, deleteServerByIdMutationResponseSchema } from "./deleteServerByIdSchema";
 export { deployedStackDtoSchema } from "./deployedStackDtoSchema";
 export { deploymentCreatedDetailsDtoSchema } from "./deploymentCreatedDetailsDtoSchema";

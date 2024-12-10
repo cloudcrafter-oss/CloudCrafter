@@ -12,17 +12,19 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
 {
     public async Task<SourceProvider> CreateGithubProvider(GitHubAppFromManifest data)
     {
+        var providerId = Guid.NewGuid();
         var sourceProvider = new SourceProvider
         {
             Name = data.Name,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
+            GithubProviderId = providerId,
             Id = Guid.NewGuid(),
         };
         var provider = new GithubProvider
         {
             AppName = data.Name,
-            Id = Guid.NewGuid(),
+            Id = providerId,
             AppId = data.Id,
             IsValid = null,
             AppUrl = data.HtmlUrl,
@@ -63,7 +65,7 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
 
     public Task<List<SourceProvider>> GetProviders(ProviderFilterRequest filter)
     {
-        IQueryable<SourceProvider> query = context.SourceProviders;
+        IQueryable<SourceProvider> query = context.SourceProviders.Include(x => x.GithubProvider);
 
         if (filter.IsActive.HasValue)
         {

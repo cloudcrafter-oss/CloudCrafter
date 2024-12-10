@@ -41,25 +41,26 @@ public static class FakerInstances
             .RuleFor(x => x.Environments, new List<Environment>())
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
-    public static Faker<SourceProvider> SourceProviderFaker =>
+    public static Faker<SourceProvider> SourceProviderFaker(Guid? githubProviderId = null) =>
         new Faker<SourceProvider>()
             .StrictMode(true)
             .RuleFor(x => x.Id, f => Guid.NewGuid())
             .RuleFor(x => x.Name, f => f.Person.FirstName)
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.GithubProvider, f => null)
-            .RuleFor(x => x.GithubProviderId, f => null)
+            .RuleFor(x => x.GithubProviderId, f => githubProviderId)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
     public static Faker<GithubProvider> GithubProviderFaker
     {
         get
         {
-            var provider = SourceProviderFaker.Generate();
+            var githubProviderId = Guid.NewGuid();
+            var provider = SourceProviderFaker(githubProviderId).Generate();
 
             return new Faker<GithubProvider>()
                 .StrictMode(true)
-                .RuleFor(x => x.Id, Guid.NewGuid)
+                .RuleFor(x => x.Id, githubProviderId)
                 .RuleFor(x => x.AppName, f => f.Person.FullName)
                 .RuleFor(x => x.IsValid, f => null)
                 .RuleFor(x => x.AppId, f => f.Random.Long())

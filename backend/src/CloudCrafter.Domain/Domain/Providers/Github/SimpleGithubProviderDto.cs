@@ -19,6 +19,7 @@ public class SimpleGithubProviderDto
         public Mapping()
         {
             CreateMap<GithubProvider, SimpleGithubProviderDto>()
+                .ForMember(x => x.Name, opt => opt.MapFrom(src => src.AppName))
                 .ForMember(x => x.IsConnected, opt => opt.MapFrom(dest => dest.IsValid))
                 .ForMember(
                     x => x.HasInstallation,

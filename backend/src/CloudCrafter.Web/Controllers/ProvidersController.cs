@@ -26,7 +26,9 @@ public class ProvidersController : CloudCrafterController
         [FromQuery] ProviderFilterRequest filter
     )
     {
-        return await sender.Send(new GetProvidersQuery.Query(filter));
+        var result = await sender.Send(new GetProvidersQuery.Query(filter));
+
+        return result;
     }
 
     [HttpPut("github/{id}/install")]

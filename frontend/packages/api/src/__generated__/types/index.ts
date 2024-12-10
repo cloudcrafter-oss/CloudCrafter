@@ -8,6 +8,7 @@ export type { CreateServer200, CreateServerMutationRequest, CreateServerMutation
 export type { CreateServerCommandCommand } from "./CreateServerCommandCommand";
 export type { CreateStackCommandCommand } from "./CreateStackCommandCommand";
 export type { DeleteProjectPathParams, DeleteProject200, DeleteProjectMutationResponse, DeleteProjectMutation } from "./DeleteProject";
+export type { DeleteProviderPathParams, DeleteProvider200, DeleteProviderMutationResponse, DeleteProviderMutation } from "./DeleteProvider";
 export type { DeleteServerByIdPathParams, DeleteServerById200, DeleteServerByIdMutationResponse, DeleteServerByIdMutation } from "./DeleteServerById";
 export type { DeployedStackDto } from "./DeployedStackDto";
 export type { DeploymentCreatedDetailsDto } from "./DeploymentCreatedDetailsDto";

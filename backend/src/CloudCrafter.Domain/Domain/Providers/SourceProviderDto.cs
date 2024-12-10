@@ -14,7 +14,8 @@ public class SourceProviderDto
     {
         public Mapping()
         {
-            CreateMap<SourceProvider, SourceProviderDto>();
+            CreateMap<SourceProvider, SourceProviderDto>()
+                .ForMember(x => x.Github, opt => opt.MapFrom(src => src.GithubProvider));
         }
     }
 }

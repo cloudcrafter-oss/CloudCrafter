@@ -4,6 +4,7 @@ using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Services.Core.Providers;
 using CloudCrafter.Domain.Entities;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
@@ -99,9 +100,18 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
             x.AppClientId == "clientId"
         );
 
+        var ctx = GetService<IApplicationDbContext>();
+        var provider = await ctx
+            .SourceProviders.Include(x => x.GithubProvider)
+            .FirstOrDefaultAsync();
+
+        provider.Should().NotBeNull();
         firstItem.Should().NotBeNull();
 
-        firstItem!.AppName.Should().Be(manifest.Name);
+        provider!.GithubProvider.Should().NotBeNull();
+        provider.GithubProviderId.Should().Be(firstItem!.Id);
+
+        firstItem.AppName.Should().Be(manifest.Name);
         firstItem.AppId.Should().Be(manifest.Id);
         firstItem.AppClientId.Should().Be(manifest.ClientId);
         firstItem.AppClientSecret.Should().Be(manifest.ClientSecret);

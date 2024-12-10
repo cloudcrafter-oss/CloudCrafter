@@ -1,6 +1,7 @@
 export { createProject } from "./createProject";
 export { createServer } from "./createServer";
 export { deleteProject } from "./deleteProject";
+export { deleteProvider } from "./deleteProvider";
 export { deleteServerById } from "./deleteServerById";
 export { dispatchStackDeployment } from "./dispatchStackDeployment";
 export { getDeploymentLogs } from "./getDeploymentLogs";

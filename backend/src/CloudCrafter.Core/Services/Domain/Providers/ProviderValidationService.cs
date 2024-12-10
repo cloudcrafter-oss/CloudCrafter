@@ -16,14 +16,14 @@ public class ProviderValidationService(
     public async Task ValidateAll()
     {
         var githubProviders = await context
-            .SourceProviders.OfType<GithubProvider>()
-            .Where(x => x.IsValid != false)
+            .SourceProviders.Include(x => x.GithubProvider)
+            .Where(x => x.GithubProvider != null && x.GithubProvider.IsValid != false)
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();
 
-        foreach (var githubProvider in githubProviders)
+        foreach (var sourceProvider in githubProviders)
         {
-            await ValidateGithubProvider(githubProvider);
+            await ValidateGithubProvider(sourceProvider.GithubProvider!);
         }
 
         await context.SaveChangesAsync();

@@ -1,6 +1,7 @@
 export type { CreateProjectMutationKey } from "./useCreateProjectHook";
 export type { CreateServerMutationKey } from "./useCreateServerHook";
 export type { DeleteProjectMutationKey } from "./useDeleteProjectHook";
+export type { DeleteProviderMutationKey } from "./useDeleteProviderHook";
 export type { DeleteServerByIdMutationKey } from "./useDeleteServerByIdHook";
 export type { DispatchStackDeploymentMutationKey } from "./useDispatchStackDeploymentHook";
 export type { GetDeploymentLogsQueryKey } from "./useGetDeploymentLogsHook";
@@ -59,6 +60,7 @@ export type { UpdateStackServiceMutationKey } from "./useUpdateStackServiceHook"
 export { createProjectMutationKey, useCreateProjectHook } from "./useCreateProjectHook";
 export { createServerMutationKey, useCreateServerHook } from "./useCreateServerHook";
 export { deleteProjectMutationKey, useDeleteProjectHook } from "./useDeleteProjectHook";
+export { deleteProviderMutationKey, useDeleteProviderHook } from "./useDeleteProviderHook";
 export { deleteServerByIdMutationKey, useDeleteServerByIdHook } from "./useDeleteServerByIdHook";
 export { dispatchStackDeploymentMutationKey, useDispatchStackDeploymentHook } from "./useDispatchStackDeploymentHook";
 export { getDeploymentLogsQueryKey, getDeploymentLogsQueryOptionsHook, useGetDeploymentLogsHook } from "./useGetDeploymentLogsHook";
