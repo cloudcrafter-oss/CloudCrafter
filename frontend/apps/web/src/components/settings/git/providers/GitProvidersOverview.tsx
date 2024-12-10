@@ -7,10 +7,21 @@ import { BitbucketPopup } from '@/src/components/settings/git/providers/bitbucke
 import { GithubPopup } from '@/src/components/settings/git/providers/github/AddGithubPopup'
 import { GitlabPopup } from '@/src/components/settings/git/providers/gitlab/AddGitlabPopup'
 import { formatDate } from '@/src/utils/date/date-utils'
-import type {
-	SimpleGithubProviderDto,
-	SourceProviderDto,
+import {
+	type SimpleGithubProviderDto,
+	type SourceProviderDto,
+	useDeleteProviderHook,
 } from '@cloudcrafter/api'
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from '@cloudcrafter/ui/components/alert-dialog'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Dialog,
@@ -20,6 +31,7 @@ import {
 } from '@cloudcrafter/ui/components/dialog'
 import { SiBitbucket, SiGithub, SiGitlab } from '@icons-pack/react-simple-icons'
 import { Plus, Trash2 } from 'lucide-react'
+import { revalidatePath } from 'next/cache'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -145,48 +157,92 @@ const GithubRow = ({
 	provider: SimpleGithubProviderDto
 	sourceProvider: SourceProviderDto
 }) => {
+	const [showDeleteAlert, setShowDeleteAlert] = useState(false)
+
+	const deleteMutation = useDeleteProviderHook({
+		mutation: {
+			onSuccess: () => {
+				setShowDeleteAlert(false)
+				revalidatePath('/admin/settings/git-providers')
+			},
+		},
+	})
+
 	if (provider == null) {
 		return null
 	}
 
+	const handleDelete = () => {
+		deleteMutation.mutate({
+			id: sourceProvider.id,
+		})
+	}
+
 	return (
-		<li key={provider.id} className='p-4 flex items-center justify-between'>
-			<div className='flex items-center space-x-3'>
-				<SiGithub className='w-5 h-5 text-gray-700 dark:text-gray-300' />
-				<div className='flex flex-col'>
-					<span className='font-medium dark:text-gray-200'>
-						{provider.name}
-					</span>
-					<span className='text-sm text-gray-500 dark:text-gray-400'>
-						Added {formatDate(provider.createdAt, 'MMMM d, yyyy HH:mm')}
-					</span>
-				</div>
-			</div>
-			<div className='flex items-center gap-4'>
-				<span
-					className={`text-sm ${provider.isConnected === true ? 'text-green-500 dark:text-green-400' : provider.isConnected === false ? 'text-red-500 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'}`}
-				>
-					{provider.isConnected === true
-						? 'Connected'
-						: provider.isConnected === false
-							? 'Not connected'
-							: 'Unknown'}
-				</span>
-				{!provider.hasInstallation &&
-					provider.appUrl &&
-					provider.appUrl.length > 0 && (
-						<Link
-							href={`${provider.appUrl}/installations/new?state=github_install:${sourceProvider.id}`}
+		<>
+			<AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
+				<AlertDialogContent>
+					<AlertDialogHeader>
+						<AlertDialogTitle>Are you sure?</AlertDialogTitle>
+						<AlertDialogDescription>
+							This will permanently delete the Git provider "{provider.name}".
+							This action cannot be undone.
+						</AlertDialogDescription>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogAction
+							onClick={handleDelete}
+							className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
 						>
-							<Button size='sm' variant='outline'>
-								Install
-							</Button>
-						</Link>
-					)}
-				<Button size='sm' variant='destructive'>
-					<Trash2 className='h-4 w-4' />
-				</Button>
-			</div>
-		</li>
+							Delete
+						</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
+
+			<li key={provider.id} className='p-4 flex items-center justify-between'>
+				<div className='flex items-center space-x-3'>
+					<SiGithub className='w-5 h-5 text-gray-700 dark:text-gray-300' />
+					<div className='flex flex-col'>
+						<span className='font-medium dark:text-gray-200'>
+							{provider.name}
+						</span>
+						<span className='text-sm text-gray-500 dark:text-gray-400'>
+							Added {formatDate(provider.createdAt, 'MMMM d, yyyy HH:mm')}
+						</span>
+					</div>
+				</div>
+				<div className='flex items-center gap-4'>
+					<span
+						className={`text-sm ${provider.isConnected === true ? 'text-green-500 dark:text-green-400' : provider.isConnected === false ? 'text-red-500 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'}`}
+					>
+						{provider.isConnected === true
+							? 'Connected'
+							: provider.isConnected === false
+								? 'Not connected'
+								: 'Unknown'}
+					</span>
+					{!provider.hasInstallation &&
+						provider.appUrl &&
+						provider.appUrl.length > 0 && (
+							<Link
+								href={`${provider.appUrl}/installations/new?state=github_install:${sourceProvider.id}`}
+							>
+								<Button size='sm' variant='outline'>
+									Install
+								</Button>
+							</Link>
+						)}
+					<Button
+						size='sm'
+						variant='destructive'
+						onClick={() => setShowDeleteAlert(true)}
+					>
+						<Trash2 className='h-4 w-4' />
+					</Button>
+				</div>
+			</li>
+		</>
 	)
 }
