@@ -1,30 +1,12 @@
 'use client'
 
 import {
-	useGetProvidersHook,
-	useGetServersHook,
 	usePostCreateStackHook,
 	usePostValidateGithubRepoHook,
 } from '@cloudcrafter/api'
 import type { StackCreatedDto } from '@cloudcrafter/api'
 import { createStackCommandCommandSchema } from '@cloudcrafter/api'
 import { Button } from '@cloudcrafter/ui/components/button'
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from '@cloudcrafter/ui/components/form'
-import { Input } from '@cloudcrafter/ui/components/input'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-} from '@cloudcrafter/ui/components/select'
 import {
 	Sheet,
 	SheetContent,
@@ -34,19 +16,28 @@ import {
 	SheetTrigger,
 } from '@cloudcrafter/ui/components/sheet'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CheckCircle, Loader2, Plus, XCircle } from 'lucide-react'
+import { CheckCircle, Plus } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import type * as z from 'zod'
+import { PrivateRepositoryForm } from './PrivateRepositoryForm'
+import { PublicRepositoryForm } from './PublicRepositoryForm'
 
 const formSchema = createStackCommandCommandSchema
 
-type RepositorySource = 'provider' | 'public'
+type RepositorySource = 'public' | 'private'
+type WizardStep = 'source' | 'details'
 
 export const ProjectDetailCreateStackSheet = ({
 	environmentId,
 }: { environmentId: string }) => {
+	const [currentStep, setCurrentStep] = useState<WizardStep>('source')
+	const [repositorySource, setRepositorySource] =
+		useState<RepositorySource>('public')
+	const [formIsSubmitting, setFormIsSubmitting] = useState(false)
+	const [createdStack, setCreatedStack] = useState<StackCreatedDto | null>(null)
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -56,18 +47,8 @@ export const ProjectDetailCreateStackSheet = ({
 		},
 	})
 
-	const [formIsSubmitting, setFormIsSubmitting] = useState(false)
-	const [createdStack, setCreatedStack] = useState<StackCreatedDto | null>(null)
-	const [repositorySource, setRepositorySource] =
-		useState<RepositorySource>('public')
-
 	const { mutateAsync, isPending } = usePostValidateGithubRepoHook()
 	const { mutateAsync: createStack } = usePostCreateStackHook()
-	const { data: servers } = useGetServersHook()
-
-	const { data: providers } = useGetProvidersHook({
-		IsActive: true,
-	})
 
 	async function validateRepository(url: string) {
 		const errorMessage = 'The provided Git repository is not valid'
@@ -98,17 +79,65 @@ export const ProjectDetailCreateStackSheet = ({
 			setFormIsSubmitting(false)
 			return
 		}
-		// Handle form submission
 		try {
 			const createdStackFromApi = await createStack({ data: values })
-			console.log(createdStackFromApi)
 			setCreatedStack(createdStackFromApi)
 		} finally {
 			setFormIsSubmitting(false)
 		}
 	}
 
-	const inputDisabled = formIsSubmitting
+	const renderSourceStep = () => (
+		<div className='space-y-6'>
+			<div className='flex flex-col gap-4'>
+				<Button
+					type='button'
+					variant={repositorySource === 'public' ? 'default' : 'outline'}
+					className='w-full h-16 flex flex-row items-center justify-start px-4 space-x-4'
+					onClick={() => setRepositorySource('public')}
+				>
+					<div className='text-xl'>🌐</div>
+					<div className='font-semibold'>Public Repository</div>
+				</Button>
+				<Button
+					type='button'
+					variant={repositorySource === 'private' ? 'default' : 'outline'}
+					className='w-full h-16 flex flex-row items-center justify-start px-4 space-x-4'
+					onClick={() => setRepositorySource('private')}
+				>
+					<div className='text-xl'>🔒</div>
+					<div className='font-semibold'>Private Repository</div>
+				</Button>
+			</div>
+			<div className='text-sm text-muted-foreground text-center'>
+				{repositorySource === 'public'
+					? 'Use a public Git repository'
+					: 'Connect to a private repository'}
+			</div>
+			<div className='flex justify-end'>
+				<Button onClick={() => setCurrentStep('details')}>Continue</Button>
+			</div>
+		</div>
+	)
+
+	const renderDetailsStep = () => {
+		const commonProps = {
+			form,
+			onSubmit,
+			onBack: () => setCurrentStep('source'),
+			inputDisabled: formIsSubmitting,
+		}
+
+		return repositorySource === 'public' ? (
+			<PublicRepositoryForm
+				{...commonProps}
+				validateRepository={validateRepository}
+				isPending={isPending}
+			/>
+		) : (
+			<PrivateRepositoryForm {...commonProps} />
+		)
+	}
 
 	return (
 		<Sheet>
@@ -122,151 +151,32 @@ export const ProjectDetailCreateStackSheet = ({
 				<SheetHeader>
 					<SheetTitle>Deploy new Stack</SheetTitle>
 					<SheetDescription>
-						Enter the details for your new Stack.
+						{currentStep === 'source'
+							? 'Choose your repository source'
+							: 'Enter the details for your new Stack'}
 					</SheetDescription>
 				</SheetHeader>
 				{createdStack ? (
-					<div>
-						<h1>Stack created</h1>
-						<p>Stack ID: {createdStack.id}</p>
-						<Link href={`/admin/stacks/${createdStack.id}`}>Go to Stack</Link>
+					<div className='space-y-4'>
+						<div className='flex items-center space-x-2 text-green-600'>
+							<CheckCircle className='h-5 w-5' />
+							<h2 className='text-lg font-semibold'>
+								Stack created successfully
+							</h2>
+						</div>
+						<p className='text-sm text-muted-foreground'>
+							Stack ID: {createdStack.id}
+						</p>
+						<Button asChild>
+							<Link href={`/admin/stacks/${createdStack.id}`}>Go to Stack</Link>
+						</Button>
 					</div>
 				) : (
-					<Form {...form}>
-						<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-							{form.formState.errors.gitRepository && (
-								<div className='text-red-500'>
-									{form.formState.errors.gitRepository.message}
-								</div>
-							)}
-							<FormField
-								control={form.control}
-								name='name'
-								render={({ field }) => (
-									<FormItem className='space-y-2'>
-										<FormLabel>Name</FormLabel>
-										<FormControl>
-											<Input
-												disabled={inputDisabled}
-												{...field}
-												autoComplete='off'
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<div className='flex space-x-2 mb-4'>
-								<Button
-									type='button'
-									variant={
-										repositorySource === 'public' ? 'default' : 'outline'
-									}
-									onClick={() => setRepositorySource('public')}
-									disabled={inputDisabled}
-								>
-									Open Repository
-								</Button>
-								<Button
-									type='button'
-									variant={
-										repositorySource === 'provider' ? 'default' : 'outline'
-									}
-									onClick={() => setRepositorySource('provider')}
-									disabled={inputDisabled}
-								>
-									From Provider
-								</Button>
-							</div>
-
-							<FormField
-								control={form.control}
-								name='gitRepository'
-								render={({ field }) => (
-									<FormItem className='space-y-2'>
-										<FormLabel>Git Repository (Public)</FormLabel>
-										<div className='flex space-x-2'>
-											<FormControl>
-												<Input
-													{...field}
-													disabled={inputDisabled || isPending}
-													autoComplete='off'
-													onBlur={(e) => {
-														field.onBlur()
-														validateRepository(e.target.value)
-													}}
-												/>
-											</FormControl>
-											<Button
-												type='button'
-												size='icon'
-												variant={
-													form.formState.errors.gitRepository
-														? 'destructive'
-														: 'outline'
-												}
-												onClick={() => validateRepository(field.value)}
-												disabled={inputDisabled || isPending}
-											>
-												{isPending ? (
-													<Loader2 className='h-4 w-4 animate-spin' />
-												) : form.formState.errors.gitRepository ? (
-													<XCircle className='h-4 w-4 ' />
-												) : (
-													<CheckCircle className='h-4 w-4' />
-												)}
-											</Button>
-										</div>
-										<FormDescription>
-											Enter the URL of your public Git repository.
-										</FormDescription>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							<FormField
-								control={form.control}
-								name='serverId'
-								render={({ field }) => (
-									<FormItem className='space-y-2'>
-										<FormLabel>Server</FormLabel>
-										<FormControl>
-											<Select
-												disabled={inputDisabled}
-												onValueChange={field.onChange}
-												value={field.value}
-											>
-												<SelectTrigger>
-													{field.value
-														? servers?.find(
-																(server) => server.id === field.value,
-															)?.name
-														: 'Select a server'}
-												</SelectTrigger>
-												<SelectContent>
-													{servers?.map((server) => (
-														<SelectItem key={server.id} value={server.id}>
-															{server.name} ({server.ipAddress})
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-							<Button type='submit' disabled={inputDisabled}>
-								{formIsSubmitting && (
-									<>
-										<Loader2 className='h-4 w-4 animate-spin' />
-									</>
-								)}
-								Add Stack
-							</Button>
-						</form>
-					</Form>
+					<div className='mt-6'>
+						{currentStep === 'source'
+							? renderSourceStep()
+							: renderDetailsStep()}
+					</div>
 				)}
 			</SheetContent>
 		</Sheet>
