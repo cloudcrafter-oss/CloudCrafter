@@ -58,6 +58,7 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         (await CountAsync<GithubProvider>())
             .Should()
             .Be(0);
+        (await CountAsync<SourceProvider>()).Should().Be(0);
 
         var appsMock = new Mock<IGitHubAppsClient>();
 
@@ -93,6 +94,7 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         result.Should().BeTrue();
 
         (await CountAsync<GithubProvider>()).Should().Be(1);
+        (await CountAsync<SourceProvider>()).Should().Be(1);
         var firstItem = await QueryFirstOrDefaultAsync<GithubProvider>(x =>
             x.AppClientId == "clientId"
         );
@@ -100,7 +102,6 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         firstItem.Should().NotBeNull();
 
         firstItem!.AppName.Should().Be(manifest.Name);
-        firstItem.Name.Should().Be(manifest.Name);
         firstItem.AppId.Should().Be(manifest.Id);
         firstItem.AppClientId.Should().Be(manifest.ClientId);
         firstItem.AppClientSecret.Should().Be(manifest.ClientSecret);

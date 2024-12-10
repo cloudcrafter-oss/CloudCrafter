@@ -41,22 +41,40 @@ public static class FakerInstances
             .RuleFor(x => x.Environments, new List<Environment>())
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
-    public static Faker<GithubProvider> GithubProviderFaker =>
-        new Faker<GithubProvider>()
+    public static Faker<SourceProvider> SourceProviderFaker =>
+        new Faker<SourceProvider>()
             .StrictMode(true)
-            .RuleFor(x => x.Id, Guid.NewGuid)
-            .RuleFor(x => x.Name, f => f.Person.FullName)
-            .RuleFor(x => x.AppName, f => f.Person.FullName)
-            .RuleFor(x => x.IsValid, f => null)
-            .RuleFor(x => x.AppId, f => f.Random.Long())
-            .RuleFor(x => x.AppClientId, f => f.Random.Guid().ToString())
-            .RuleFor(x => x.AppClientSecret, f => f.Random.Guid().ToString())
-            .RuleFor(x => x.AppWebhookSecret, f => f.Random.Guid().ToString())
-            .RuleFor(x => x.AppPrivateKey, f => f.Random.Guid().ToString())
-            .RuleFor(x => x.InstallationId, f => null)
-            .RuleFor(x => x.AppUrl, f => f.Internet.Url())
+            .RuleFor(x => x.Id, f => Guid.NewGuid())
+            .RuleFor(x => x.Name, f => f.Person.FirstName)
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.GithubProvider, f => null)
+            .RuleFor(x => x.GithubProviderId, f => null)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+
+    public static Faker<GithubProvider> GithubProviderFaker
+    {
+        get
+        {
+            var provider = SourceProviderFaker.Generate();
+
+            return new Faker<GithubProvider>()
+                .StrictMode(true)
+                .RuleFor(x => x.Id, Guid.NewGuid)
+                .RuleFor(x => x.AppName, f => f.Person.FullName)
+                .RuleFor(x => x.IsValid, f => null)
+                .RuleFor(x => x.AppId, f => f.Random.Long())
+                .RuleFor(x => x.AppClientId, f => f.Random.Guid().ToString())
+                .RuleFor(x => x.AppClientSecret, f => f.Random.Guid().ToString())
+                .RuleFor(x => x.AppWebhookSecret, f => f.Random.Guid().ToString())
+                .RuleFor(x => x.AppPrivateKey, f => f.Random.Guid().ToString())
+                .RuleFor(x => x.InstallationId, f => null)
+                .RuleFor(x => x.AppUrl, f => f.Internet.Url())
+                .RuleFor(x => x.SourceProvider, f => provider)
+                .RuleFor(x => x.SourceProviderId, f => provider.Id)
+                .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+                .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+        }
+    }
 
     public static Faker<EntityStackServiceHealthStatus> EntityHealthStatusFaker =>
         new Faker<EntityStackServiceHealthStatus>()

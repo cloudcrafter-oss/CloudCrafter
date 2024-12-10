@@ -6,9 +6,9 @@ namespace CloudCrafter.Core.Interfaces.Repositories;
 
 public interface IProviderRepository
 {
-    Task<GithubProvider> CreateGithubProvider(GitHubAppFromManifest data);
-    Task<GithubProvider> GetGithubProvider(Guid providerId);
+    Task<SourceProvider> CreateGithubProvider(GitHubAppFromManifest data);
+    Task<SourceProvider> GetGithubProvider(Guid providerId);
     Task SaveChangesAsync();
-    Task<List<BaseSourceProvider>> GetProviders(ProviderFilterRequest filter);
+    Task<List<SourceProvider>> GetProviders(ProviderFilterRequest filter);
     Task DeleteProvider(Guid providerId);
 }

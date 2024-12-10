@@ -38,9 +38,11 @@ public class DeleteProviderCommandTest : BaseTestFixture
         await AddAsync(githubProvider);
 
         (await CountAsync<GithubProvider>()).Should().Be(1);
+        (await CountAsync<SourceProvider>()).Should().Be(1);
 
-        await SendAsync(new DeleteProviderCommand.Command(githubProvider.Id));
+        await SendAsync(new DeleteProviderCommand.Command(githubProvider.SourceProviderId));
 
         (await CountAsync<GithubProvider>()).Should().Be(0);
+        (await CountAsync<SourceProvider>()).Should().Be(0);
     }
 }
