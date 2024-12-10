@@ -53,6 +53,7 @@ export { postValidateGithubRepo200Schema, postValidateGithubRepoMutationRequestS
 export { problemDetailsSchema } from "./problemDetailsSchema";
 export { projectDtoSchema } from "./projectDtoSchema";
 export { projectEnvironmentEnhancedDtoSchema } from "./projectEnvironmentEnhancedDtoSchema";
+export { providerTypeSchema } from "./providerTypeSchema";
 export { putUpdateGithubProviderPathParamsSchema, putUpdateGithubProvider200Schema, putUpdateGithubProviderMutationRequestSchema, putUpdateGithubProviderMutationResponseSchema } from "./putUpdateGithubProviderSchema";
 export { requestSchema } from "./requestSchema";
 export { serverDetailDtoSchema } from "./serverDetailDtoSchema";

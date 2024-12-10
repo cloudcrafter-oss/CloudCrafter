@@ -53,6 +53,7 @@ export type { PostValidateGithubRepo200, PostValidateGithubRepoMutationRequest, 
 export type { ProblemDetails } from "./ProblemDetails";
 export type { ProjectDto } from "./ProjectDto";
 export type { ProjectEnvironmentEnhancedDto } from "./ProjectEnvironmentEnhancedDto";
+export type { ProviderTypeEnum, ProviderType } from "./ProviderType";
 export type { PutUpdateGithubProviderPathParams, PutUpdateGithubProvider200, PutUpdateGithubProviderMutationRequest, PutUpdateGithubProviderMutationResponse, PutUpdateGithubProviderMutation } from "./PutUpdateGithubProvider";
 export type { Request } from "./Request";
 export type { ServerDetailDto } from "./ServerDetailDto";
@@ -84,5 +85,6 @@ export { channelOutputLogLineLevelEnum } from "./ChannelOutputLogLineLevel";
 export { deploymentStatusDtoEnum } from "./DeploymentStatusDto";
 export { entityHealthDtoValueEnum } from "./EntityHealthDtoValue";
 export { filterOperatorOptionEnum } from "./FilterOperatorOption";
+export { providerTypeEnum } from "./ProviderType";
 export { serverStatusDtoValueEnum } from "./ServerStatusDtoValue";
 export { stackSourceDtoTypeEnum } from "./StackSourceDtoType";

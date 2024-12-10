@@ -112,6 +112,7 @@ export type { PostValidateGithubRepo200, PostValidateGithubRepoMutationRequest, 
 export type { ProblemDetails } from "./types/ProblemDetails";
 export type { ProjectDto } from "./types/ProjectDto";
 export type { ProjectEnvironmentEnhancedDto } from "./types/ProjectEnvironmentEnhancedDto";
+export type { ProviderTypeEnum, ProviderType } from "./types/ProviderType";
 export type { PutUpdateGithubProviderPathParams, PutUpdateGithubProvider200, PutUpdateGithubProviderMutationRequest, PutUpdateGithubProviderMutationResponse, PutUpdateGithubProviderMutation } from "./types/PutUpdateGithubProvider";
 export type { Request } from "./types/Request";
 export type { ServerDetailDto } from "./types/ServerDetailDto";
@@ -235,6 +236,7 @@ export { channelOutputLogLineLevelEnum } from "./types/ChannelOutputLogLineLevel
 export { deploymentStatusDtoEnum } from "./types/DeploymentStatusDto";
 export { entityHealthDtoValueEnum } from "./types/EntityHealthDtoValue";
 export { filterOperatorOptionEnum } from "./types/FilterOperatorOption";
+export { providerTypeEnum } from "./types/ProviderType";
 export { serverStatusDtoValueEnum } from "./types/ServerStatusDtoValue";
 export { stackSourceDtoTypeEnum } from "./types/StackSourceDtoType";
 export { channelOutputLogLineLevelSchema } from "./zod/channelOutputLogLineLevelSchema";
@@ -292,6 +294,7 @@ export { postValidateGithubRepo200Schema, postValidateGithubRepoMutationRequestS
 export { problemDetailsSchema } from "./zod/problemDetailsSchema";
 export { projectDtoSchema } from "./zod/projectDtoSchema";
 export { projectEnvironmentEnhancedDtoSchema } from "./zod/projectEnvironmentEnhancedDtoSchema";
+export { providerTypeSchema } from "./zod/providerTypeSchema";
 export { putUpdateGithubProviderPathParamsSchema, putUpdateGithubProvider200Schema, putUpdateGithubProviderMutationRequestSchema, putUpdateGithubProviderMutationResponseSchema } from "./zod/putUpdateGithubProviderSchema";
 export { requestSchema } from "./zod/requestSchema";
 export { serverDetailDtoSchema } from "./zod/serverDetailDtoSchema";

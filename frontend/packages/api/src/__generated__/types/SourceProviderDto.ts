@@ -1,3 +1,4 @@
+import type { ProviderType } from "./ProviderType";
 import type { SimpleGithubProviderDto } from "./SimpleGithubProviderDto";
 
  export type SourceProviderDto = {
@@ -13,4 +14,5 @@ import type { SimpleGithubProviderDto } from "./SimpleGithubProviderDto";
      * @type object | undefined
     */
     github?: SimpleGithubProviderDto | null;
+    type: ProviderType;
 };
