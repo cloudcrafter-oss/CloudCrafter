@@ -8,6 +8,11 @@ public class BaseSourceProviderConfiguration : IEntityTypeConfiguration<BaseSour
 {
     public void Configure(EntityTypeBuilder<BaseSourceProvider> builder)
     {
-        builder.HasDiscriminator<string>("ProviderType").HasValue<GithubProvider>("Github");
+        builder
+            .ToTable("SourceProviders")
+            .HasDiscriminator<int>("ProviderType")
+            .HasValue<GithubProvider>(1);
+
+        builder.HasKey(sp => sp.Id);
     }
 }
