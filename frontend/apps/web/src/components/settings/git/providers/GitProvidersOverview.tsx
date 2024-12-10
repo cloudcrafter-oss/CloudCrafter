@@ -31,10 +31,11 @@ import {
 } from '@cloudcrafter/ui/components/dialog'
 import { SiBitbucket, SiGithub, SiGitlab } from '@icons-pack/react-simple-icons'
 import { Plus, Trash2 } from 'lucide-react'
-import { revalidatePath } from 'next/cache'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 export const GitProvidersOverview = ({
 	list,
@@ -158,12 +159,13 @@ const GithubRow = ({
 	sourceProvider: SourceProviderDto
 }) => {
 	const [showDeleteAlert, setShowDeleteAlert] = useState(false)
-
+	const router = useRouter()
 	const deleteMutation = useDeleteProviderHook({
 		mutation: {
 			onSuccess: () => {
 				setShowDeleteAlert(false)
-				revalidatePath('/admin/settings/git-providers')
+				toast.success('Provider deleted!    ')
+				router.refresh()
 			},
 		},
 	})
