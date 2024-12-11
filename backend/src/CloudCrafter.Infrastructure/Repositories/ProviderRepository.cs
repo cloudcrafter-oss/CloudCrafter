@@ -43,16 +43,16 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
         return sourceProvider;
     }
 
-    public async Task<SourceProvider> GetGithubProvider(Guid providerId)
+    public async Task<SourceProvider> GetSourceProvider(Guid providerId)
     {
         var provider = await context
             .SourceProviders.Where(x => x.Id == providerId)
             .Include(x => x.GithubProvider)
             .FirstOrDefaultAsync();
 
-        if (provider == null || provider.GithubProvider == null)
+        if (provider == null)
         {
-            throw new NotFoundException("github", "Github provider not found");
+            throw new NotFoundException("provider", "Source provider not found");
         }
 
         return provider;

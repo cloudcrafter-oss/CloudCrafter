@@ -10,10 +10,10 @@ using Microsoft.Extensions.Logging;
 namespace CloudCrafter.Core.Services.Domain.Providers;
 
 public class ProvidersService(
+    ISourceProviderProxy providerProxy,
     IGithubClientProvider clientProvider,
     IProviderRepository repository,
     ILogger<ProvidersService> logger,
-    GithubBackendClientProvider githubBackendClientProvider,
     IMapper mapper
 ) : IProvidersService
 {
@@ -51,49 +51,35 @@ public class ProvidersService(
 
     public async Task<List<GitProviderRepositoryDto>> GetGitRepositories(Guid providerId)
     {
-        // TODO: Add support for more providers, perhaps extract the logic at that time
-        var provider = await repository.GetGithubProvider(providerId);
+        var provider = await repository.GetSourceProvider(providerId);
         try
         {
-            var client = githubBackendClientProvider.CreateClientForProvider(
-                provider.GithubProvider!
-            );
-
-            var app = await client.GitHubApps.GetCurrent();
-            var installations = await client.GitHubApps.GetAllInstallationsForCurrent();
-
-            var repositoriesList = new List<GitProviderRepositoryDto>();
-
-            foreach (var installation in installations)
-            {
-                var token = await client.GitHubApps.CreateInstallationToken(installation.Id);
-
-                var installationClient = clientProvider.GetClientForToken(token.Token);
-
-                var result =
-                    await installationClient.GitHubApps.Installation.GetAllRepositoriesForCurrent();
-
-                repositoriesList.AddRange(
-                    result.Repositories.Select(x => new GitProviderRepositoryDto
-                    {
-                        FullName = x.FullName,
-                        Id = x.Id,
-                    })
-                );
-            }
-
-            return repositoriesList;
+            return await providerProxy.GetRepositories(provider);
         }
         catch (Exception ex)
         {
-            logger.LogCritical(ex, "Failed to get Github repositories");
+            logger.LogCritical(ex, "Failed to get repositories at Source Provider");
+            throw;
+        }
+    }
+
+    public async Task<List<GitProviderBranchDto>> GetBranches(Guid providerId, string repositoryId)
+    {
+        var provider = await repository.GetSourceProvider(providerId);
+        try
+        {
+            return await providerProxy.GetBranches(provider, repositoryId);
+        }
+        catch (Exception ex)
+        {
+            logger.LogCritical(ex, "Failed to get branches at Source Provider");
             throw;
         }
     }
 
     public async Task InstallGithubProvider(Guid providerId, long installationId)
     {
-        var provider = await repository.GetGithubProvider(providerId);
+        var provider = await repository.GetSourceProvider(providerId);
 
         if (provider.GithubProvider == null || provider.GithubProvider.InstallationId.HasValue)
         {

@@ -52,6 +52,18 @@ public class ProvidersController : CloudCrafterController
         return await sender.Send(new GetGitRepositoriesFromProviderQuery.Query(id));
     }
 
+    [HttpGet("{id}/branches/{repositoryId}")]
+    public async Task<List<GitProviderBranchDto>> GetGitBranches(
+        ISender sender,
+        [FromRoute] Guid id,
+        [FromRoute] string repositoryId
+    )
+    {
+        return await sender.Send(
+            new GetGitBranchesForProviderAndRepositoryQuery.Query(id, repositoryId)
+        );
+    }
+
     [HttpDelete("{id}")]
     public async Task<IResult> DeleteProvider(ISender sender, [FromRoute] Guid id)
     {

@@ -9,4 +9,5 @@ public interface IProvidersService
     Task<List<GitProviderRepositoryDto>> GetGitRepositories(Guid providerId);
     Task InstallGithubProvider(Guid providerId, long installationId);
     Task DeleteProvider(Guid providerId);
+    Task<List<GitProviderBranchDto>> GetBranches(Guid providerId, string repositoryId);
 }

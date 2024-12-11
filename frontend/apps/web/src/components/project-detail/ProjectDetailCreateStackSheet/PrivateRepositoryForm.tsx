@@ -19,6 +19,7 @@ import { useState } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import type * as z from 'zod'
 import { ServerSelect } from './ServerSelect'
+import { GitBranchesList } from './private-repo/git-branches-list'
 import { GitRepositoriesList } from './private-repo/git-repositories-list'
 
 interface PrivateRepositoryFormProps {
@@ -71,6 +72,8 @@ export const PrivateRepositoryForm = ({
 		})
 
 	const [selectedProvider, setSelectedProvider] = useState<string | null>(null)
+	const [selectedRepositoryId, setSelectedRepositoryId] = useState<string>('')
+	const [selectedBranchName, setSelecterBranchName] = useState<string>('')
 
 	if (!selectedProvider) {
 		return (
@@ -122,7 +125,18 @@ export const PrivateRepositoryForm = ({
 					)}
 				/>
 
-				<GitRepositoriesList providerId={selectedProvider} />
+				<GitRepositoriesList
+					providerId={selectedProvider}
+					selectedRepositoryId={selectedRepositoryId}
+					setSelectedRepositoryId={setSelectedRepositoryId}
+				/>
+
+				{selectedRepositoryId.length > 0 && (
+					<GitBranchesList
+						providerId={selectedProvider}
+						repositoryId={selectedRepositoryId}
+					/>
+				)}
 
 				<ServerSelect form={form} inputDisabled={inputDisabled} />
 

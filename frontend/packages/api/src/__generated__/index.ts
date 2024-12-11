@@ -16,6 +16,9 @@ export type { GetDeploymentsForStackSuspenseQueryKey } from "./hooks/useGetDeplo
 export type { GetFilterableFieldsQueryKey } from "./hooks/useGetFilterableFieldsHook";
 export type { GetFilterableFieldsInfiniteQueryKey } from "./hooks/useGetFilterableFieldsInfiniteHook";
 export type { GetFilterableFieldsSuspenseQueryKey } from "./hooks/useGetFilterableFieldsSuspenseHook";
+export type { GetGitBranchesQueryKey } from "./hooks/useGetGitBranchesHook";
+export type { GetGitBranchesInfiniteQueryKey } from "./hooks/useGetGitBranchesInfiniteHook";
+export type { GetGitBranchesSuspenseQueryKey } from "./hooks/useGetGitBranchesSuspenseHook";
 export type { GetGitRepositoriesQueryKey } from "./hooks/useGetGitRepositoriesHook";
 export type { GetGitRepositoriesInfiniteQueryKey } from "./hooks/useGetGitRepositoriesInfiniteHook";
 export type { GetGitRepositoriesSuspenseQueryKey } from "./hooks/useGetGitRepositoriesSuspenseHook";
@@ -83,6 +86,7 @@ export type { GetDeploymentLogsPathParams, GetDeploymentLogs200, GetDeploymentLo
 export type { GetDeploymentsForServerPathParams, GetDeploymentsForServerQueryParams, GetDeploymentsForServer200, GetDeploymentsForServerQueryResponse, GetDeploymentsForServerQuery } from "./types/GetDeploymentsForServer";
 export type { GetDeploymentsForStackPathParams, GetDeploymentsForStack200, GetDeploymentsForStackQueryResponse, GetDeploymentsForStackQuery } from "./types/GetDeploymentsForStack";
 export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilterableFieldsQuery } from "./types/GetFilterableFields";
+export type { GetGitBranchesPathParams, GetGitBranches200, GetGitBranchesQueryResponse, GetGitBranchesQuery } from "./types/GetGitBranches";
 export type { GetGitRepositoriesPathParams, GetGitRepositories200, GetGitRepositoriesQueryResponse, GetGitRepositoriesQuery } from "./types/GetGitRepositories";
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from "./types/GetProject";
 export type { GetProjectEnvironmentEnhancedPathParams, GetProjectEnvironmentEnhanced200, GetProjectEnvironmentEnhanced404, GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhancedQuery } from "./types/GetProjectEnvironmentEnhanced";
@@ -92,6 +96,7 @@ export type { GetServerByIdPathParams, GetServerById200, GetServerByIdQueryRespo
 export type { GetServers200, GetServersQueryResponse, GetServersQuery } from "./types/GetServers";
 export type { GetStackDetailPathParams, GetStackDetail200, GetStackDetail404, GetStackDetailQueryResponse, GetStackDetailQuery } from "./types/GetStackDetail";
 export type { GetUsers200, GetUsersMutationRequest, GetUsersMutationResponse, GetUsersMutation } from "./types/GetUsers";
+export type { GitProviderBranchDto } from "./types/GitProviderBranchDto";
 export type { GitProviderRepositoryDto } from "./types/GitProviderRepositoryDto";
 export type { GitRepositoryCheckResultDto } from "./types/GitRepositoryCheckResultDto";
 export type { GitSettings } from "./types/GitSettings";
@@ -150,6 +155,7 @@ export { getDeploymentLogs } from "./axios-backend/getDeploymentLogs";
 export { getDeploymentsForServer } from "./axios-backend/getDeploymentsForServer";
 export { getDeploymentsForStack } from "./axios-backend/getDeploymentsForStack";
 export { getFilterableFields } from "./axios-backend/getFilterableFields";
+export { getGitBranches } from "./axios-backend/getGitBranches";
 export { getGitRepositories } from "./axios-backend/getGitRepositories";
 export { getProject } from "./axios-backend/getProject";
 export { getProjectEnvironmentEnhanced } from "./axios-backend/getProjectEnvironmentEnhanced";
@@ -190,6 +196,9 @@ export { getDeploymentsForStackSuspenseQueryKey, getDeploymentsForStackSuspenseQ
 export { getFilterableFieldsQueryKey, getFilterableFieldsQueryOptionsHook, useGetFilterableFieldsHook } from "./hooks/useGetFilterableFieldsHook";
 export { getFilterableFieldsInfiniteQueryKey, getFilterableFieldsInfiniteQueryOptionsHook, useGetFilterableFieldsInfiniteHook } from "./hooks/useGetFilterableFieldsInfiniteHook";
 export { getFilterableFieldsSuspenseQueryKey, getFilterableFieldsSuspenseQueryOptionsHook, useGetFilterableFieldsSuspenseHook } from "./hooks/useGetFilterableFieldsSuspenseHook";
+export { getGitBranchesQueryKey, getGitBranchesQueryOptionsHook, useGetGitBranchesHook } from "./hooks/useGetGitBranchesHook";
+export { getGitBranchesInfiniteQueryKey, getGitBranchesInfiniteQueryOptionsHook, useGetGitBranchesInfiniteHook } from "./hooks/useGetGitBranchesInfiniteHook";
+export { getGitBranchesSuspenseQueryKey, getGitBranchesSuspenseQueryOptionsHook, useGetGitBranchesSuspenseHook } from "./hooks/useGetGitBranchesSuspenseHook";
 export { getGitRepositoriesQueryKey, getGitRepositoriesQueryOptionsHook, useGetGitRepositoriesHook } from "./hooks/useGetGitRepositoriesHook";
 export { getGitRepositoriesInfiniteQueryKey, getGitRepositoriesInfiniteQueryOptionsHook, useGetGitRepositoriesInfiniteHook } from "./hooks/useGetGitRepositoriesInfiniteHook";
 export { getGitRepositoriesSuspenseQueryKey, getGitRepositoriesSuspenseQueryOptionsHook, useGetGitRepositoriesSuspenseHook } from "./hooks/useGetGitRepositoriesSuspenseHook";
@@ -265,6 +274,7 @@ export { getDeploymentLogsPathParamsSchema, getDeploymentLogs200Schema, getDeplo
 export { getDeploymentsForServerPathParamsSchema, getDeploymentsForServerQueryParamsSchema, getDeploymentsForServer200Schema, getDeploymentsForServerQueryResponseSchema } from "./zod/getDeploymentsForServerSchema";
 export { getDeploymentsForStackPathParamsSchema, getDeploymentsForStack200Schema, getDeploymentsForStackQueryResponseSchema } from "./zod/getDeploymentsForStackSchema";
 export { getFilterableFields200Schema, getFilterableFieldsQueryResponseSchema } from "./zod/getFilterableFieldsSchema";
+export { getGitBranchesPathParamsSchema, getGitBranches200Schema, getGitBranchesQueryResponseSchema } from "./zod/getGitBranchesSchema";
 export { getGitRepositoriesPathParamsSchema, getGitRepositories200Schema, getGitRepositoriesQueryResponseSchema } from "./zod/getGitRepositoriesSchema";
 export { getProjectEnvironmentEnhancedPathParamsSchema, getProjectEnvironmentEnhanced200Schema, getProjectEnvironmentEnhanced404Schema, getProjectEnvironmentEnhancedQueryResponseSchema } from "./zod/getProjectEnvironmentEnhancedSchema";
 export { getProjectPathParamsSchema, getProject200Schema, getProject404Schema, getProjectQueryResponseSchema } from "./zod/getProjectSchema";
@@ -274,6 +284,7 @@ export { getServerByIdPathParamsSchema, getServerById200Schema, getServerByIdQue
 export { getServers200Schema, getServersQueryResponseSchema } from "./zod/getServersSchema";
 export { getStackDetailPathParamsSchema, getStackDetail200Schema, getStackDetail404Schema, getStackDetailQueryResponseSchema } from "./zod/getStackDetailSchema";
 export { getUsers200Schema, getUsersMutationRequestSchema, getUsersMutationResponseSchema } from "./zod/getUsersSchema";
+export { gitProviderBranchDtoSchema } from "./zod/gitProviderBranchDtoSchema";
 export { gitProviderRepositoryDtoSchema } from "./zod/gitProviderRepositoryDtoSchema";
 export { gitRepositoryCheckResultDtoSchema } from "./zod/gitRepositoryCheckResultDtoSchema";
 export { gitSettingsSchema } from "./zod/gitSettingsSchema";

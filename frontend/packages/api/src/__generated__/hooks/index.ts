@@ -16,6 +16,9 @@ export type { GetDeploymentsForStackSuspenseQueryKey } from "./useGetDeployments
 export type { GetFilterableFieldsQueryKey } from "./useGetFilterableFieldsHook";
 export type { GetFilterableFieldsInfiniteQueryKey } from "./useGetFilterableFieldsInfiniteHook";
 export type { GetFilterableFieldsSuspenseQueryKey } from "./useGetFilterableFieldsSuspenseHook";
+export type { GetGitBranchesQueryKey } from "./useGetGitBranchesHook";
+export type { GetGitBranchesInfiniteQueryKey } from "./useGetGitBranchesInfiniteHook";
+export type { GetGitBranchesSuspenseQueryKey } from "./useGetGitBranchesSuspenseHook";
 export type { GetGitRepositoriesQueryKey } from "./useGetGitRepositoriesHook";
 export type { GetGitRepositoriesInfiniteQueryKey } from "./useGetGitRepositoriesInfiniteHook";
 export type { GetGitRepositoriesSuspenseQueryKey } from "./useGetGitRepositoriesSuspenseHook";
@@ -75,6 +78,9 @@ export { getDeploymentsForStackSuspenseQueryKey, getDeploymentsForStackSuspenseQ
 export { getFilterableFieldsQueryKey, getFilterableFieldsQueryOptionsHook, useGetFilterableFieldsHook } from "./useGetFilterableFieldsHook";
 export { getFilterableFieldsInfiniteQueryKey, getFilterableFieldsInfiniteQueryOptionsHook, useGetFilterableFieldsInfiniteHook } from "./useGetFilterableFieldsInfiniteHook";
 export { getFilterableFieldsSuspenseQueryKey, getFilterableFieldsSuspenseQueryOptionsHook, useGetFilterableFieldsSuspenseHook } from "./useGetFilterableFieldsSuspenseHook";
+export { getGitBranchesQueryKey, getGitBranchesQueryOptionsHook, useGetGitBranchesHook } from "./useGetGitBranchesHook";
+export { getGitBranchesInfiniteQueryKey, getGitBranchesInfiniteQueryOptionsHook, useGetGitBranchesInfiniteHook } from "./useGetGitBranchesInfiniteHook";
+export { getGitBranchesSuspenseQueryKey, getGitBranchesSuspenseQueryOptionsHook, useGetGitBranchesSuspenseHook } from "./useGetGitBranchesSuspenseHook";
 export { getGitRepositoriesQueryKey, getGitRepositoriesQueryOptionsHook, useGetGitRepositoriesHook } from "./useGetGitRepositoriesHook";
 export { getGitRepositoriesInfiniteQueryKey, getGitRepositoriesInfiniteQueryOptionsHook, useGetGitRepositoriesInfiniteHook } from "./useGetGitRepositoriesInfiniteHook";
 export { getGitRepositoriesSuspenseQueryKey, getGitRepositoriesSuspenseQueryOptionsHook, useGetGitRepositoriesSuspenseHook } from "./useGetGitRepositoriesSuspenseHook";

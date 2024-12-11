@@ -24,6 +24,7 @@ export type { GetDeploymentLogsPathParams, GetDeploymentLogs200, GetDeploymentLo
 export type { GetDeploymentsForServerPathParams, GetDeploymentsForServerQueryParams, GetDeploymentsForServer200, GetDeploymentsForServerQueryResponse, GetDeploymentsForServerQuery } from "./GetDeploymentsForServer";
 export type { GetDeploymentsForStackPathParams, GetDeploymentsForStack200, GetDeploymentsForStackQueryResponse, GetDeploymentsForStackQuery } from "./GetDeploymentsForStack";
 export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilterableFieldsQuery } from "./GetFilterableFields";
+export type { GetGitBranchesPathParams, GetGitBranches200, GetGitBranchesQueryResponse, GetGitBranchesQuery } from "./GetGitBranches";
 export type { GetGitRepositoriesPathParams, GetGitRepositories200, GetGitRepositoriesQueryResponse, GetGitRepositoriesQuery } from "./GetGitRepositories";
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from "./GetProject";
 export type { GetProjectEnvironmentEnhancedPathParams, GetProjectEnvironmentEnhanced200, GetProjectEnvironmentEnhanced404, GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhancedQuery } from "./GetProjectEnvironmentEnhanced";
@@ -33,6 +34,7 @@ export type { GetServerByIdPathParams, GetServerById200, GetServerByIdQueryRespo
 export type { GetServers200, GetServersQueryResponse, GetServersQuery } from "./GetServers";
 export type { GetStackDetailPathParams, GetStackDetail200, GetStackDetail404, GetStackDetailQueryResponse, GetStackDetailQuery } from "./GetStackDetail";
 export type { GetUsers200, GetUsersMutationRequest, GetUsersMutationResponse, GetUsersMutation } from "./GetUsers";
+export type { GitProviderBranchDto } from "./GitProviderBranchDto";
 export type { GitProviderRepositoryDto } from "./GitProviderRepositoryDto";
 export type { GitRepositoryCheckResultDto } from "./GitRepositoryCheckResultDto";
 export type { GitSettings } from "./GitSettings";
