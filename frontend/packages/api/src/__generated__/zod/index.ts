@@ -24,7 +24,7 @@ export { getDeploymentLogsPathParamsSchema, getDeploymentLogs200Schema, getDeplo
 export { getDeploymentsForServerPathParamsSchema, getDeploymentsForServerQueryParamsSchema, getDeploymentsForServer200Schema, getDeploymentsForServerQueryResponseSchema } from "./getDeploymentsForServerSchema";
 export { getDeploymentsForStackPathParamsSchema, getDeploymentsForStack200Schema, getDeploymentsForStackQueryResponseSchema } from "./getDeploymentsForStackSchema";
 export { getFilterableFields200Schema, getFilterableFieldsQueryResponseSchema } from "./getFilterableFieldsSchema";
-export { getGithubRepositoriesPathParamsSchema, getGithubRepositories200Schema, getGithubRepositoriesQueryResponseSchema } from "./getGithubRepositoriesSchema";
+export { getGitRepositoriesPathParamsSchema, getGitRepositories200Schema, getGitRepositoriesQueryResponseSchema } from "./getGitRepositoriesSchema";
 export { getProjectEnvironmentEnhancedPathParamsSchema, getProjectEnvironmentEnhanced200Schema, getProjectEnvironmentEnhanced404Schema, getProjectEnvironmentEnhancedQueryResponseSchema } from "./getProjectEnvironmentEnhancedSchema";
 export { getProjectPathParamsSchema, getProject200Schema, getProject404Schema, getProjectQueryResponseSchema } from "./getProjectSchema";
 export { getProjectsQueryParamsSchema, getProjects200Schema, getProjectsQueryResponseSchema } from "./getProjectsSchema";

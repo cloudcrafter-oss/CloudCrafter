@@ -6,7 +6,7 @@ public interface IProvidersService
 {
     Task<bool> CreateGithubProvider(string code);
     Task<List<SourceProviderDto>> GetProviders(ProviderFilterRequest filter);
-    Task<List<GitProviderRepositoryDto>> GetGithubRepositories(Guid providerId);
+    Task<List<GitProviderRepositoryDto>> GetGitRepositories(Guid providerId);
     Task InstallGithubProvider(Guid providerId, long installationId);
     Task DeleteProvider(Guid providerId);
 }

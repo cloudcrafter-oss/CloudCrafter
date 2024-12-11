@@ -24,7 +24,7 @@ export type { GetDeploymentLogsPathParams, GetDeploymentLogs200, GetDeploymentLo
 export type { GetDeploymentsForServerPathParams, GetDeploymentsForServerQueryParams, GetDeploymentsForServer200, GetDeploymentsForServerQueryResponse, GetDeploymentsForServerQuery } from "./GetDeploymentsForServer";
 export type { GetDeploymentsForStackPathParams, GetDeploymentsForStack200, GetDeploymentsForStackQueryResponse, GetDeploymentsForStackQuery } from "./GetDeploymentsForStack";
 export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilterableFieldsQuery } from "./GetFilterableFields";
-export type { GetGithubRepositoriesPathParams, GetGithubRepositories200, GetGithubRepositoriesQueryResponse, GetGithubRepositoriesQuery } from "./GetGithubRepositories";
+export type { GetGitRepositoriesPathParams, GetGitRepositories200, GetGitRepositoriesQueryResponse, GetGitRepositoriesQuery } from "./GetGitRepositories";
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from "./GetProject";
 export type { GetProjectEnvironmentEnhancedPathParams, GetProjectEnvironmentEnhanced200, GetProjectEnvironmentEnhanced404, GetProjectEnvironmentEnhancedQueryResponse, GetProjectEnvironmentEnhancedQuery } from "./GetProjectEnvironmentEnhanced";
 export type { GetProjectsQueryParams, GetProjects200, GetProjectsQueryResponse, GetProjectsQuery } from "./GetProjects";

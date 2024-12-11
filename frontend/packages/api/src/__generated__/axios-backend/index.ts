@@ -8,7 +8,7 @@ export { getDeploymentLogs } from "./getDeploymentLogs";
 export { getDeploymentsForServer } from "./getDeploymentsForServer";
 export { getDeploymentsForStack } from "./getDeploymentsForStack";
 export { getFilterableFields } from "./getFilterableFields";
-export { getGithubRepositories } from "./getGithubRepositories";
+export { getGitRepositories } from "./getGitRepositories";
 export { getProject } from "./getProject";
 export { getProjectEnvironmentEnhanced } from "./getProjectEnvironmentEnhanced";
 export { getProjects } from "./getProjects";

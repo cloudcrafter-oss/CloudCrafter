@@ -49,8 +49,9 @@ public class ProvidersService(
         return mapper.Map<List<SourceProviderDto>>(providers);
     }
 
-    public async Task<List<GitProviderRepositoryDto>> GetGithubRepositories(Guid providerId)
+    public async Task<List<GitProviderRepositoryDto>> GetGitRepositories(Guid providerId)
     {
+        // TODO: Add support for more providers, perhaps extract the logic at that time
         var provider = await repository.GetGithubProvider(providerId);
         try
         {

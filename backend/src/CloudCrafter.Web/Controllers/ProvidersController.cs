@@ -43,13 +43,13 @@ public class ProvidersController : CloudCrafterController
         return Results.Ok();
     }
 
-    [HttpGet("github/{id}/repositories")]
-    public async Task<List<GitProviderRepositoryDto>> GetGithubRepositories(
+    [HttpGet("{id}/repositories")]
+    public async Task<List<GitProviderRepositoryDto>> GetGitRepositories(
         ISender sender,
         [FromRoute] Guid id
     )
     {
-        return await sender.Send(new GetGithubRepositoriesQuery.Query(id));
+        return await sender.Send(new GetGitRepositoriesFromProviderQuery.Query(id));
     }
 
     [HttpDelete("{id}")]

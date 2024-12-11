@@ -19,6 +19,7 @@ import { useState } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import type * as z from 'zod'
 import { ServerSelect } from './ServerSelect'
+import { GitRepositoriesList } from './private-repo/git-repositories-list'
 
 interface PrivateRepositoryFormProps {
 	form: UseFormReturn<z.infer<typeof createStackCommandCommandSchema>>
@@ -65,7 +66,10 @@ export const PrivateRepositoryForm = ({
 	inputDisabled,
 }: PrivateRepositoryFormProps) => {
 	const { data: providers, isLoading: isLoadingProviders } =
-		useGetProvidersHook()
+		useGetProvidersHook({
+			IsActive: true,
+		})
+
 	const [selectedProvider, setSelectedProvider] = useState<string | null>(null)
 
 	if (!selectedProvider) {
@@ -118,16 +122,7 @@ export const PrivateRepositoryForm = ({
 					)}
 				/>
 
-				{/* Add GitHub integration setup here */}
-				<div className='p-4 border rounded-md'>
-					<p className='text-sm text-muted-foreground'>
-						To use private repositories, you need to set up GitHub integration
-						first.
-					</p>
-					<Button className='mt-2' variant='outline'>
-						Configure GitHub Integration
-					</Button>
-				</div>
+				<GitRepositoriesList providerId={selectedProvider} />
 
 				<ServerSelect form={form} inputDisabled={inputDisabled} />
 

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Providers.Github;
 
-public static class GetGithubRepositoriesQuery
+public static class GetGitRepositoriesFromProviderQuery
 {
     // TODO: Add future check for ACL on provider
     //  [Authorize]
@@ -18,7 +18,7 @@ public static class GetGithubRepositoriesQuery
             CancellationToken cancellationToken
         )
         {
-            return service.GetGithubRepositories(request.ProviderId);
+            return service.GetGitRepositories(request.ProviderId);
         }
     }
 }
