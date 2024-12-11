@@ -46,6 +46,7 @@ export type { GetStackDetailSuspenseQueryKey } from "./hooks/useGetStackDetailSu
 export type { GetUsersMutationKey } from "./hooks/useGetUsersHook";
 export type { PostCreateDeploymentMutationKey } from "./hooks/usePostCreateDeploymentHook";
 export type { PostCreateGithubAppMutationKey } from "./hooks/usePostCreateGithubAppHook";
+export type { PostCreateStackFromSourceProviderMutationKey } from "./hooks/usePostCreateStackFromSourceProviderHook";
 export type { PostCreateStackMutationKey } from "./hooks/usePostCreateStackHook";
 export type { PostCreateUserMutationKey } from "./hooks/usePostCreateUserHook";
 export type { PostLoginUserMutationKey } from "./hooks/usePostLoginUserHook";
@@ -69,6 +70,7 @@ export type { CreateProjectCommandCommand } from "./types/CreateProjectCommandCo
 export type { CreateServer200, CreateServerMutationRequest, CreateServerMutationResponse, CreateServerMutation } from "./types/CreateServer";
 export type { CreateServerCommandCommand } from "./types/CreateServerCommandCommand";
 export type { CreateStackCommandCommand } from "./types/CreateStackCommandCommand";
+export type { CreateStackFromSourceProviderCommandCommand } from "./types/CreateStackFromSourceProviderCommandCommand";
 export type { DeleteProjectPathParams, DeleteProject200, DeleteProjectMutationResponse, DeleteProjectMutation } from "./types/DeleteProject";
 export type { DeleteProviderPathParams, DeleteProvider200, DeleteProviderMutationResponse, DeleteProviderMutation } from "./types/DeleteProvider";
 export type { DeleteServerByIdPathParams, DeleteServerById200, DeleteServerByIdMutationResponse, DeleteServerByIdMutation } from "./types/DeleteServerById";
@@ -106,6 +108,7 @@ export type { PaginatedRequestOfUserDto } from "./types/PaginatedRequestOfUserDt
 export type { PostCreateDeploymentPathParams, PostCreateDeployment200, PostCreateDeploymentMutationResponse, PostCreateDeploymentMutation } from "./types/PostCreateDeployment";
 export type { PostCreateGithubApp201, PostCreateGithubApp400, PostCreateGithubAppMutationRequest, PostCreateGithubAppMutationResponse, PostCreateGithubAppMutation } from "./types/PostCreateGithubApp";
 export type { PostCreateStack200, PostCreateStackMutationRequest, PostCreateStackMutationResponse, PostCreateStackMutation } from "./types/PostCreateStack";
+export type { PostCreateStackFromSourceProvider200, PostCreateStackFromSourceProviderMutationRequest, PostCreateStackFromSourceProviderMutationResponse, PostCreateStackFromSourceProviderMutation } from "./types/PostCreateStackFromSourceProvider";
 export type { PostCreateUser200, PostCreateUserMutationRequest, PostCreateUserMutationResponse, PostCreateUserMutation } from "./types/PostCreateUser";
 export type { PostCreateUserQuery } from "./types/PostCreateUserQuery";
 export type { PostLoginUser200, PostLoginUserMutationRequest, PostLoginUserMutationResponse, PostLoginUserMutation } from "./types/PostLoginUser";
@@ -168,6 +171,7 @@ export { getUsers } from "./axios-backend/getUsers";
 export { postCreateDeployment } from "./axios-backend/postCreateDeployment";
 export { postCreateGithubApp } from "./axios-backend/postCreateGithubApp";
 export { postCreateStack } from "./axios-backend/postCreateStack";
+export { postCreateStackFromSourceProvider } from "./axios-backend/postCreateStackFromSourceProvider";
 export { postCreateUser } from "./axios-backend/postCreateUser";
 export { postLoginUser } from "./axios-backend/postLoginUser";
 export { postRotateAgentKey } from "./axios-backend/postRotateAgentKey";
@@ -226,6 +230,7 @@ export { getStackDetailSuspenseQueryKey, getStackDetailSuspenseQueryOptionsHook,
 export { getUsersMutationKey, useGetUsersHook } from "./hooks/useGetUsersHook";
 export { postCreateDeploymentMutationKey, usePostCreateDeploymentHook } from "./hooks/usePostCreateDeploymentHook";
 export { postCreateGithubAppMutationKey, usePostCreateGithubAppHook } from "./hooks/usePostCreateGithubAppHook";
+export { postCreateStackFromSourceProviderMutationKey, usePostCreateStackFromSourceProviderHook } from "./hooks/usePostCreateStackFromSourceProviderHook";
 export { postCreateStackMutationKey, usePostCreateStackHook } from "./hooks/usePostCreateStackHook";
 export { postCreateUserMutationKey, usePostCreateUserHook } from "./hooks/usePostCreateUserHook";
 export { postLoginUserMutationKey, usePostLoginUserHook } from "./hooks/usePostLoginUserHook";
@@ -257,6 +262,7 @@ export { createProject200Schema, createProjectMutationRequestSchema, createProje
 export { createServerCommandCommandSchema } from "./zod/createServerCommandCommandSchema";
 export { createServer200Schema, createServerMutationRequestSchema, createServerMutationResponseSchema } from "./zod/createServerSchema";
 export { createStackCommandCommandSchema } from "./zod/createStackCommandCommandSchema";
+export { createStackFromSourceProviderCommandCommandSchema } from "./zod/createStackFromSourceProviderCommandCommandSchema";
 export { deleteProjectPathParamsSchema, deleteProject200Schema, deleteProjectMutationResponseSchema } from "./zod/deleteProjectSchema";
 export { deleteProviderPathParamsSchema, deleteProvider200Schema, deleteProviderMutationResponseSchema } from "./zod/deleteProviderSchema";
 export { deleteServerByIdPathParamsSchema, deleteServerById200Schema, deleteServerByIdMutationResponseSchema } from "./zod/deleteServerByIdSchema";
@@ -293,6 +299,7 @@ export { paginatedListOfUserDtoSchema } from "./zod/paginatedListOfUserDtoSchema
 export { paginatedRequestOfUserDtoSchema } from "./zod/paginatedRequestOfUserDtoSchema";
 export { postCreateDeploymentPathParamsSchema, postCreateDeployment200Schema, postCreateDeploymentMutationResponseSchema } from "./zod/postCreateDeploymentSchema";
 export { postCreateGithubApp201Schema, postCreateGithubApp400Schema, postCreateGithubAppMutationRequestSchema, postCreateGithubAppMutationResponseSchema } from "./zod/postCreateGithubAppSchema";
+export { postCreateStackFromSourceProvider200Schema, postCreateStackFromSourceProviderMutationRequestSchema, postCreateStackFromSourceProviderMutationResponseSchema } from "./zod/postCreateStackFromSourceProviderSchema";
 export { postCreateStack200Schema, postCreateStackMutationRequestSchema, postCreateStackMutationResponseSchema } from "./zod/postCreateStackSchema";
 export { postCreateUserQuerySchema } from "./zod/postCreateUserQuerySchema";
 export { postCreateUser200Schema, postCreateUserMutationRequestSchema, postCreateUserMutationResponseSchema } from "./zod/postCreateUserSchema";

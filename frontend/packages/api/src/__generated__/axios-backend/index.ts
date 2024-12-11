@@ -21,6 +21,7 @@ export { getUsers } from "./getUsers";
 export { postCreateDeployment } from "./postCreateDeployment";
 export { postCreateGithubApp } from "./postCreateGithubApp";
 export { postCreateStack } from "./postCreateStack";
+export { postCreateStackFromSourceProvider } from "./postCreateStackFromSourceProvider";
 export { postCreateUser } from "./postCreateUser";
 export { postLoginUser } from "./postLoginUser";
 export { postRotateAgentKey } from "./postRotateAgentKey";

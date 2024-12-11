@@ -7,6 +7,7 @@ export { createProject200Schema, createProjectMutationRequestSchema, createProje
 export { createServerCommandCommandSchema } from "./createServerCommandCommandSchema";
 export { createServer200Schema, createServerMutationRequestSchema, createServerMutationResponseSchema } from "./createServerSchema";
 export { createStackCommandCommandSchema } from "./createStackCommandCommandSchema";
+export { createStackFromSourceProviderCommandCommandSchema } from "./createStackFromSourceProviderCommandCommandSchema";
 export { deleteProjectPathParamsSchema, deleteProject200Schema, deleteProjectMutationResponseSchema } from "./deleteProjectSchema";
 export { deleteProviderPathParamsSchema, deleteProvider200Schema, deleteProviderMutationResponseSchema } from "./deleteProviderSchema";
 export { deleteServerByIdPathParamsSchema, deleteServerById200Schema, deleteServerByIdMutationResponseSchema } from "./deleteServerByIdSchema";
@@ -43,6 +44,7 @@ export { paginatedListOfUserDtoSchema } from "./paginatedListOfUserDtoSchema";
 export { paginatedRequestOfUserDtoSchema } from "./paginatedRequestOfUserDtoSchema";
 export { postCreateDeploymentPathParamsSchema, postCreateDeployment200Schema, postCreateDeploymentMutationResponseSchema } from "./postCreateDeploymentSchema";
 export { postCreateGithubApp201Schema, postCreateGithubApp400Schema, postCreateGithubAppMutationRequestSchema, postCreateGithubAppMutationResponseSchema } from "./postCreateGithubAppSchema";
+export { postCreateStackFromSourceProvider200Schema, postCreateStackFromSourceProviderMutationRequestSchema, postCreateStackFromSourceProviderMutationResponseSchema } from "./postCreateStackFromSourceProviderSchema";
 export { postCreateStack200Schema, postCreateStackMutationRequestSchema, postCreateStackMutationResponseSchema } from "./postCreateStackSchema";
 export { postCreateUserQuerySchema } from "./postCreateUserQuerySchema";
 export { postCreateUser200Schema, postCreateUserMutationRequestSchema, postCreateUserMutationResponseSchema } from "./postCreateUserSchema";

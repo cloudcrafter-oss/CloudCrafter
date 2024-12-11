@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core.Commands.Stacks;
+using CloudCrafter.Core.Commands.Stacks.Providers;
 using CloudCrafter.Core.Commands.Stacks.Service;
 using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Domain.Stack;
@@ -14,6 +15,7 @@ public class Stacks : EndpointGroupBase
     {
         app.MapGroup(this)
             .MapPost(PostCreateStack)
+            .MapPost(PostCreateStackFromSourceProvider, "provider")
             .MapGet(GetStackDetail, "{id}")
             .MapGet(GetDeploymentsForStack, "{id}/deployments")
             .MapGet(GetDeploymentLogs, "deployments/{deploymentId}/logs")
@@ -24,6 +26,14 @@ public class Stacks : EndpointGroupBase
 
     public async Task<StackCreatedDto> PostCreateStack(
         CreateStackCommand.Command command,
+        ISender sender
+    )
+    {
+        return await sender.Send(command);
+    }
+
+    public async Task<StackCreatedDto> PostCreateStackFromSourceProvider(
+        CreateStackFromSourceProviderCommand.Command command,
         ISender sender
     )
     {

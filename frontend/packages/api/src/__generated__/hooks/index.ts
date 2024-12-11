@@ -46,6 +46,7 @@ export type { GetStackDetailSuspenseQueryKey } from "./useGetStackDetailSuspense
 export type { GetUsersMutationKey } from "./useGetUsersHook";
 export type { PostCreateDeploymentMutationKey } from "./usePostCreateDeploymentHook";
 export type { PostCreateGithubAppMutationKey } from "./usePostCreateGithubAppHook";
+export type { PostCreateStackFromSourceProviderMutationKey } from "./usePostCreateStackFromSourceProviderHook";
 export type { PostCreateStackMutationKey } from "./usePostCreateStackHook";
 export type { PostCreateUserMutationKey } from "./usePostCreateUserHook";
 export type { PostLoginUserMutationKey } from "./usePostLoginUserHook";
@@ -108,6 +109,7 @@ export { getStackDetailSuspenseQueryKey, getStackDetailSuspenseQueryOptionsHook,
 export { getUsersMutationKey, useGetUsersHook } from "./useGetUsersHook";
 export { postCreateDeploymentMutationKey, usePostCreateDeploymentHook } from "./usePostCreateDeploymentHook";
 export { postCreateGithubAppMutationKey, usePostCreateGithubAppHook } from "./usePostCreateGithubAppHook";
+export { postCreateStackFromSourceProviderMutationKey, usePostCreateStackFromSourceProviderHook } from "./usePostCreateStackFromSourceProviderHook";
 export { postCreateStackMutationKey, usePostCreateStackHook } from "./usePostCreateStackHook";
 export { postCreateUserMutationKey, usePostCreateUserHook } from "./usePostCreateUserHook";
 export { postLoginUserMutationKey, usePostLoginUserHook } from "./usePostLoginUserHook";

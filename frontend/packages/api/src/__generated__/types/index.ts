@@ -7,6 +7,7 @@ export type { CreateProjectCommandCommand } from "./CreateProjectCommandCommand"
 export type { CreateServer200, CreateServerMutationRequest, CreateServerMutationResponse, CreateServerMutation } from "./CreateServer";
 export type { CreateServerCommandCommand } from "./CreateServerCommandCommand";
 export type { CreateStackCommandCommand } from "./CreateStackCommandCommand";
+export type { CreateStackFromSourceProviderCommandCommand } from "./CreateStackFromSourceProviderCommandCommand";
 export type { DeleteProjectPathParams, DeleteProject200, DeleteProjectMutationResponse, DeleteProjectMutation } from "./DeleteProject";
 export type { DeleteProviderPathParams, DeleteProvider200, DeleteProviderMutationResponse, DeleteProviderMutation } from "./DeleteProvider";
 export type { DeleteServerByIdPathParams, DeleteServerById200, DeleteServerByIdMutationResponse, DeleteServerByIdMutation } from "./DeleteServerById";
@@ -44,6 +45,7 @@ export type { PaginatedRequestOfUserDto } from "./PaginatedRequestOfUserDto";
 export type { PostCreateDeploymentPathParams, PostCreateDeployment200, PostCreateDeploymentMutationResponse, PostCreateDeploymentMutation } from "./PostCreateDeployment";
 export type { PostCreateGithubApp201, PostCreateGithubApp400, PostCreateGithubAppMutationRequest, PostCreateGithubAppMutationResponse, PostCreateGithubAppMutation } from "./PostCreateGithubApp";
 export type { PostCreateStack200, PostCreateStackMutationRequest, PostCreateStackMutationResponse, PostCreateStackMutation } from "./PostCreateStack";
+export type { PostCreateStackFromSourceProvider200, PostCreateStackFromSourceProviderMutationRequest, PostCreateStackFromSourceProviderMutationResponse, PostCreateStackFromSourceProviderMutation } from "./PostCreateStackFromSourceProvider";
 export type { PostCreateUser200, PostCreateUserMutationRequest, PostCreateUserMutationResponse, PostCreateUserMutation } from "./PostCreateUser";
 export type { PostCreateUserQuery } from "./PostCreateUserQuery";
 export type { PostLoginUser200, PostLoginUserMutationRequest, PostLoginUserMutationResponse, PostLoginUserMutation } from "./PostLoginUser";
