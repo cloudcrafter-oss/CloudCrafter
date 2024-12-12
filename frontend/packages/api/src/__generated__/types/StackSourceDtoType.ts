@@ -1,6 +1,6 @@
 export const stackSourceDtoTypeEnum = {
     "Git": "Git",
-    "GitSsh": "GitSsh"
+    "GithubApp": "GithubApp"
 } as const;
 
  export type StackSourceDtoTypeEnum = (typeof stackSourceDtoTypeEnum)[keyof typeof stackSourceDtoTypeEnum];

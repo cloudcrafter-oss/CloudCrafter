@@ -23,4 +23,8 @@ export type CreateStackFromSourceProviderCommandCommand = {
      * @type string, uuid
     */
     serverId: string;
+    /**
+     * @type string
+    */
+    repository: string;
 };
