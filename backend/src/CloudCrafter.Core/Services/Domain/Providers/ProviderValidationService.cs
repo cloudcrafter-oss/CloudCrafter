@@ -5,11 +5,13 @@ using CloudCrafter.Core.Services.Domain.Providers.Github;
 using CloudCrafter.Domain.Entities;
 using GitHubJwt;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Services.Domain.Providers;
 
 public class ProviderValidationService(
     IApplicationDbContext context,
+    ILogger<ProviderValidationService> logger,
     IGithubClientProvider clientProvider
 ) : IProviderValidationService
 {
@@ -60,8 +62,9 @@ public class ProviderValidationService(
 
             provider.IsValid = result != null;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogCritical(ex, "Failed to validate Github provider");
             provider.IsValid = false;
         }
     }

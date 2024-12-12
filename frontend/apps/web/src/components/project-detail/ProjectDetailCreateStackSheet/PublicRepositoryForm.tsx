@@ -1,4 +1,9 @@
-import type { createStackCommandCommandSchema } from '@cloudcrafter/api'
+import {
+	type StackCreatedDto,
+	usePostCreateStackHook,
+	usePostValidateGithubRepoHook,
+} from '@cloudcrafter/api'
+import { createStackCommandCommandSchema } from '@cloudcrafter/api'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Form,
@@ -10,30 +15,81 @@ import {
 	FormMessage,
 } from '@cloudcrafter/ui/components/form'
 import { Input } from '@cloudcrafter/ui/components/input'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckCircle, Loader2, XCircle } from 'lucide-react'
-import type { UseFormReturn } from 'react-hook-form'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import type * as z from 'zod'
 import { ServerSelect } from './ServerSelect'
 
 interface PublicRepositoryFormProps {
-	form: UseFormReturn<z.infer<typeof createStackCommandCommandSchema>>
-	onSubmit: (
-		values: z.infer<typeof createStackCommandCommandSchema>,
-	) => Promise<void>
+	environmentId: string
 	onBack: () => void
-	validateRepository: (url: string) => Promise<boolean>
-	isPending: boolean
-	inputDisabled: boolean
+	onStackCreated: (stack: StackCreatedDto) => void
 }
 
 export const PublicRepositoryForm = ({
-	form,
-	onSubmit,
+	environmentId,
 	onBack,
-	validateRepository,
-	isPending,
-	inputDisabled,
+	onStackCreated,
 }: PublicRepositoryFormProps) => {
+	const [formIsSubmitting, setFormIsSubmitting] = useState(false)
+	const form = useForm<z.infer<typeof createStackCommandCommandSchema>>({
+		resolver: zodResolver(createStackCommandCommandSchema),
+		defaultValues: {
+			gitRepository: 'https://github.com/cloudcrafter-oss/demo-examples',
+			name: '',
+			environmentId,
+		},
+	})
+
+	const { mutateAsync: validateRepo, isPending } =
+		usePostValidateGithubRepoHook()
+	const { mutateAsync: createStack } = usePostCreateStackHook()
+
+	const onSubmit = async (
+		values: z.infer<typeof createStackCommandCommandSchema>,
+	) => {
+		setFormIsSubmitting(true)
+		try {
+			const isValid = await validateRepo({
+				data: { repository: values.gitRepository },
+			})
+			if (!isValid) {
+				form.setError('gitRepository', {
+					type: 'manual',
+					message: 'The provided Git repository is not valid',
+				})
+				return
+			}
+			const createdStackFromApi = await createStack({ data: values })
+			onStackCreated(createdStackFromApi)
+		} finally {
+			setFormIsSubmitting(false)
+		}
+	}
+
+	const handleValidateRepo = async (url: string) => {
+		try {
+			const result = await validateRepo({
+				data: { repository: url },
+			})
+			if (!result.isValid) {
+				form.setError('gitRepository', {
+					type: 'manual',
+					message: 'The provided Git repository is not valid',
+				})
+			} else {
+				form.clearErrors('gitRepository')
+			}
+		} catch (error) {
+			form.setError('gitRepository', {
+				type: 'manual',
+				message: 'The provided Git repository is not valid',
+			})
+		}
+	}
+
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
@@ -44,7 +100,11 @@ export const PublicRepositoryForm = ({
 						<FormItem className='space-y-2'>
 							<FormLabel>Name</FormLabel>
 							<FormControl>
-								<Input disabled={inputDisabled} {...field} autoComplete='off' />
+								<Input
+									disabled={formIsSubmitting}
+									{...field}
+									autoComplete='off'
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -60,11 +120,11 @@ export const PublicRepositoryForm = ({
 								<FormControl>
 									<Input
 										{...field}
-										disabled={inputDisabled || isPending}
+										disabled={formIsSubmitting || isPending}
 										autoComplete='off'
 										onBlur={(e) => {
 											field.onBlur()
-											validateRepository(e.target.value)
+											handleValidateRepo(e.target.value)
 										}}
 									/>
 								</FormControl>
@@ -76,8 +136,8 @@ export const PublicRepositoryForm = ({
 											? 'destructive'
 											: 'outline'
 									}
-									onClick={() => validateRepository(field.value)}
-									disabled={inputDisabled || isPending}
+									onClick={() => handleValidateRepo(field.value)}
+									disabled={formIsSubmitting || isPending}
 								>
 									{isPending ? (
 										<Loader2 className='h-4 w-4 animate-spin' />
@@ -96,14 +156,16 @@ export const PublicRepositoryForm = ({
 					)}
 				/>
 
-				<ServerSelect form={form} inputDisabled={inputDisabled} />
+				<ServerSelect form={form} inputDisabled={formIsSubmitting} />
 
 				<div className='flex justify-between'>
 					<Button type='button' variant='outline' onClick={onBack}>
 						Back
 					</Button>
-					<Button type='submit' disabled={inputDisabled}>
-						{inputDisabled && <Loader2 className='h-4 w-4 animate-spin mr-2' />}
+					<Button type='submit' disabled={formIsSubmitting}>
+						{formIsSubmitting && (
+							<Loader2 className='h-4 w-4 animate-spin mr-2' />
+						)}
 						Add Stack
 					</Button>
 				</div>

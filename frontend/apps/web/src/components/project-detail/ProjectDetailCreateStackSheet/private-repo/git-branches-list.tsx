@@ -7,6 +7,7 @@ import {
 	SelectValue,
 } from '@cloudcrafter/ui/components/select'
 import { Loader2 } from 'lucide-react'
+import { useEffect } from 'react'
 
 export const GitBranchesList = ({
 	providerId,
@@ -20,6 +21,12 @@ export const GitBranchesList = ({
 	setSelectedBranchName: (name: string) => void
 }) => {
 	const { data, isLoading } = useGetGitBranchesHook(providerId, repositoryId)
+
+	useEffect(() => {
+		if (data?.length === 1 && !selectedBranchName) {
+			setSelectedBranchName(data[0].name)
+		}
+	}, [data, selectedBranchName, setSelectedBranchName])
 
 	if (isLoading) {
 		return (
