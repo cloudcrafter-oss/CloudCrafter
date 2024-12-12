@@ -3,6 +3,7 @@ using System;
 using CloudCrafter.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CloudCrafter.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241212101513_AddGithubAppToSource")]
+    partial class AddGithubAppToSource
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -906,18 +909,6 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                                 {
                                     b2.Property<Guid>("ApplicationSourceStackId")
                                         .HasColumnType("uuid");
-
-                                    b2.Property<string>("Branch")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.Property<string>("Repository")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.Property<string>("RepositoryId")
-                                        .IsRequired()
-                                        .HasColumnType("text");
 
                                     b2.Property<Guid>("SourceProviderId")
                                         .HasColumnType("uuid");

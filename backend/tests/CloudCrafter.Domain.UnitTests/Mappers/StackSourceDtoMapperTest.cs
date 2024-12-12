@@ -8,7 +8,7 @@ public class StackSourceDtoMapperTest : BaseMapperTest
 {
     [Test]
     [TestCase(ApplicationSourceType.Git, StackSourceDtoType.Git)]
-    [TestCase(ApplicationSourceType.GitSsh, StackSourceDtoType.GitSsh)]
+    [TestCase(ApplicationSourceType.GithubApp, StackSourceDtoType.GithubApp)]
     public void ShouldBeAbleToMapStackSourceDto(
         ApplicationSourceType type,
         StackSourceDtoType dtoType
