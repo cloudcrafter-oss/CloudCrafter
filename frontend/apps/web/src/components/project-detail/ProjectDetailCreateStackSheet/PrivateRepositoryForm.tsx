@@ -176,9 +176,10 @@ export const PrivateRepositoryForm = ({
 				<GitRepositoriesList
 					providerId={selectedProvider}
 					selectedRepositoryId={selectedRepositoryId}
-					setSelectedRepositoryId={(repositoryId) => {
-						setSelectedRepositoryId(repositoryId)
-						form.setValue('repositoryId', repositoryId)
+					onRepositorySelect={(id, name) => {
+						setSelectedRepositoryId(id)
+						form.setValue('repositoryId', id)
+						form.setValue('repository', name)
 					}}
 				/>
 

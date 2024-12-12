@@ -11,11 +11,11 @@ import { Loader2 } from 'lucide-react'
 export const GitRepositoriesList = ({
 	providerId,
 	selectedRepositoryId,
-	setSelectedRepositoryId,
+	onRepositorySelect,
 }: {
 	providerId: string
 	selectedRepositoryId: string
-	setSelectedRepositoryId: (id: string) => void
+	onRepositorySelect: (id: string, name: string) => void
 }) => {
 	const { data, isLoading } = useGetGitRepositoriesHook(providerId)
 
@@ -31,7 +31,12 @@ export const GitRepositoriesList = ({
 	return (
 		<Select
 			value={selectedRepositoryId}
-			onValueChange={setSelectedRepositoryId}
+			onValueChange={(id) => {
+				const repository = data?.find((repo) => repo.id.toString() === id)
+				if (repository) {
+					onRepositorySelect(id, repository.fullName)
+				}
+			}}
 		>
 			<SelectTrigger>
 				<SelectValue placeholder='Select a repository' />
