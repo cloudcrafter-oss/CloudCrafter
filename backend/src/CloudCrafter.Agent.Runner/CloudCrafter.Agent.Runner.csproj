@@ -22,4 +22,8 @@
 
     <PackageReference Include="Serilog.AspNetCore"/>
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Validators\GitCheckoutFromSourceProviderParamsValidator.cs" />
+  </ItemGroup>
 </Project>

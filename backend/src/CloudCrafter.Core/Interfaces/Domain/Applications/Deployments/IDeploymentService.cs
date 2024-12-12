@@ -5,7 +5,7 @@ namespace CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
 
 public interface IDeploymentService
 {
-    Task<Guid> DeployAsync(Guid requestApplicationId);
+    Task<Guid> DeployAsync(Guid stackId);
 
     Task StoreDeploymentLogAsync(Guid deploymentId, ChannelOutputLogLine log);
     Task MarkDeployment(Guid deploymentId, DeploymentStatusDto status);
