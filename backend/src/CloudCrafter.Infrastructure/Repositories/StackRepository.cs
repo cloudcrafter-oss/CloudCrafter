@@ -21,7 +21,7 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
 {
     public async Task<Stack> CreateStack(CreateStackArgsDto args)
     {
-        if (!args.IsGithubApp() || args.IsPublicGitRepo())
+        if (!args.IsGithubApp() && !args.IsPublicGitRepo())
         {
             throw new ArgumentOutOfRangeException("Provided configuration not supported");
         }
