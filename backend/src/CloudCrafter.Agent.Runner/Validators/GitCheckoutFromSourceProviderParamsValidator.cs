@@ -16,7 +16,7 @@ public class GitCheckoutFromSourceProviderParamsValidator
     }
 }
 
-[DeploymentStep(DeploymentBuildStepType.FetchGitRepositoryFromProvider)]
+//[DeploymentStep(DeploymentBuildStepType.FetchGitRepositoryFromProvider)]
 public class GitCheckoutFromSourceProviderConfig
     : IDeploymentStepConfig<GitCheckoutFromSourceProviderParams>
 {
