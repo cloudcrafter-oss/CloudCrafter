@@ -21,7 +21,6 @@ import { GithubIcon, GitlabIcon, Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import type * as z from 'zod'
-import { ServerSelect } from './ServerSelect'
 import { GitBranchesList } from './private-repo/git-branches-list'
 import { GitRepositoriesList } from './private-repo/git-repositories-list'
 
@@ -195,7 +194,7 @@ export const PrivateRepositoryForm = ({
 					/>
 				)}
 
-				<ServerSelect form={form} inputDisabled={formIsSubmitting} />
+				{/* <ServerSelect form={form} inputDisabled={formIsSubmitting} /> */}
 
 				<div className='space-y-2 rounded-md bg-slate-950 p-4 text-xs text-slate-50'>
 					<pre>Form Values: {JSON.stringify(formValues, null, 2)}</pre>
