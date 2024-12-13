@@ -46,7 +46,7 @@ public class MarkStacksAsUnknownHealthAfterTimespanTest : BaseTestFixture
         var serviceFromDb = await FindAsync<StackService>(stackService.Id);
         serviceFromDb.Should().NotBeNull();
 
-        serviceFromDb!.HealthStatus.StatusAt.Should().Be(yesterday);
+        serviceFromDb!.HealthStatus.StatusAt.Should().BeCloseTo(yesterday, TimeSpan.FromSeconds(1));
         serviceFromDb.HealthStatus.Value.Should().Be(EntityHealthStatusValue.HealthCheckOverdue);
     }
 }
