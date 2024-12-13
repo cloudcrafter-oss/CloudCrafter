@@ -25,10 +25,10 @@ public class GetProvidersQueryTest : BaseTestFixture
         await RunAsAdministratorAsync();
         (await CountAsync<GithubProvider>()).Should().Be(0);
 
-        var providers = FakerInstances.GithubProviderFaker.Generate(10);
-        foreach (var provider in providers)
+        for (int i = 0; i < 10; i++)
         {
-            await AddAsync(provider);
+            var createdProvider = FakerInstances.GithubProviderFaker.Generate();
+            await AddAsync(createdProvider);
         }
 
         var result = await SendAsync(new GetProvidersQuery.Query(new ProviderFilterRequest()));
