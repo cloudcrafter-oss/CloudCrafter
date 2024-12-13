@@ -58,7 +58,7 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
         var isPublicApp = !string.IsNullOrWhiteSpace(Options.Stack.Source?.Git?.Repository);
         var isGithubApp = Options.Stack.Source?.GithubApp != null;
 
-        if (!isPublicApp || !isGithubApp)
+        if (!isPublicApp && !isGithubApp)
         {
             throw new InvalidOperationException(
                 "SimpleAppRecipeGenerator can only be used with stacks that have a public git repository and a github app configured."
