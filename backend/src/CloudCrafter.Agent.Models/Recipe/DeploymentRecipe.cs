@@ -56,8 +56,7 @@ public class DeploymentBuildStep
 public enum DeploymentBuildStepType
 {
     FetchGitRepository,
-
-    //  FetchGitRepositoryFromProvider,
+    FetchGitRepositoryFromProvider,
     NixpacksDetermineBuildPack,
     NixpacksGeneratePlan,
     NixpacksAlterPlan,
