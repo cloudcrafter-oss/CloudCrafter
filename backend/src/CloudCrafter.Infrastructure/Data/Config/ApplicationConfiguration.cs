@@ -13,6 +13,7 @@ public class ApplicationConfiguration : IEntityTypeConfiguration<Stack>
             source =>
             {
                 source.OwnsOne(x => x.Git);
+                source.OwnsOne(x => x.GithubApp);
             }
         );
     }

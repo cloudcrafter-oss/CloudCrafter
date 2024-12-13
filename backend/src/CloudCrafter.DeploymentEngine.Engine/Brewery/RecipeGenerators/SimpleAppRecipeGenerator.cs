@@ -55,14 +55,27 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
     {
         AddNetworkExistsStep("cloudcrafter");
 
-        if (!string.IsNullOrWhiteSpace(Options.Stack.Source?.Git?.Repository))
+        var isPublicApp = !string.IsNullOrWhiteSpace(Options.Stack.Source?.Git?.Repository);
+        var isGithubApp = Options.Stack.Source?.GithubApp != null;
+
+        if (!isPublicApp && !isGithubApp)
         {
-            // TODO: It should never be possible that it is null or empty in this case.
-            // Maybe we should throw an exception if it happens.
+            throw new InvalidOperationException(
+                "SimpleAppRecipeGenerator can only be used with stacks that have a public git repository and a github app configured."
+            );
+        }
+
+        if (isPublicApp)
+        {
             AddFetchGitRepositoryStep(
-                Options.Stack.Source.Git.Repository,
+                Options.Stack.Source!.Git!.Repository,
                 "HEAD" // TODO: change
             );
+        }
+
+        if (isGithubApp)
+        {
+            AddFetchGitRepositoryFromGithubAppStep(Options.Stack.Source!.GithubApp!);
         }
 
         var firstService = Options.Stack.Services.First();

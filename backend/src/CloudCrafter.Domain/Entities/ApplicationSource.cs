@@ -6,6 +6,8 @@ public class ApplicationSource
 
     // When Type == Type.Git
     public ApplicationSourceGit? Git { get; set; }
+
+    public ApplicationSourceGithubApp? GithubApp { get; set; }
 }
 
 public class ApplicationSourceGit
@@ -20,8 +22,22 @@ public class ApplicationSourceGit
     public string? Branch { get; set; }
 }
 
+public class ApplicationSourceGithubApp
+{
+    public required Guid SourceProviderId { get; set; }
+    public SourceProvider SourceProvider { get; set; } = null!;
+
+    public required string RepositoryId { get; set; }
+    public required string Branch { get; set; }
+
+    /// <summary>
+    ///     Should only be set, Repository Id is leading
+    /// </summary>
+    public required string Repository { get; set; }
+}
+
 public enum ApplicationSourceType
 {
     Git,
-    GitSsh,
+    GithubApp,
 }

@@ -25,5 +25,5 @@ public class StackSourceDto
 public enum StackSourceDtoType
 {
     Git,
-    GitSsh,
+    GithubApp,
 }

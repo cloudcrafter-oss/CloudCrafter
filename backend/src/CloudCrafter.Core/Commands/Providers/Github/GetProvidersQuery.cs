@@ -8,13 +8,17 @@ namespace CloudCrafter.Core.Commands.Providers.Github;
 public static class GetProvidersQuery
 {
     [Authorize]
-    public record Query : IRequest<ProviderOverviewDto>;
+    public record Query(ProviderFilterRequest Filter) : IRequest<List<SourceProviderDto>>;
 
-    public class Handler(IProvidersService service) : IRequestHandler<Query, ProviderOverviewDto>
+    public class Handler(IProvidersService service)
+        : IRequestHandler<Query, List<SourceProviderDto>>
     {
-        public Task<ProviderOverviewDto> Handle(Query request, CancellationToken cancellationToken)
+        public Task<List<SourceProviderDto>> Handle(
+            Query request,
+            CancellationToken cancellationToken
+        )
         {
-            return service.GetProviders();
+            return service.GetProviders(request.Filter);
         }
     }
 }

@@ -5,20 +5,20 @@ import type { PostCreateGithubAppMutationRequest, PostCreateGithubAppMutationRes
 import type { UseMutationOptions } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 
- export const postCreateGithubAppMutationKey = () => [{ "url": "/api/Providers/github" }] as const;
+ export const postCreateGithubAppMutationKey = () => [{ "url": "/api/Providers" }] as const;
 
  export type PostCreateGithubAppMutationKey = ReturnType<typeof postCreateGithubAppMutationKey>;
 
  /**
- * {@link /api/Providers/github}
+ * {@link /api/Providers}
  */
 async function postCreateGithubAppHook(data: PostCreateGithubAppMutationRequest, config: Partial<RequestConfig<PostCreateGithubAppMutationRequest>> = {}) {
-    const res = await client<PostCreateGithubAppMutationResponse, PostCreateGithubApp400, PostCreateGithubAppMutationRequest>({ method: "POST", url: `/api/Providers/github`, data, ...config });
+    const res = await client<PostCreateGithubAppMutationResponse, PostCreateGithubApp400, PostCreateGithubAppMutationRequest>({ method: "POST", url: `/api/Providers`, data, headers: { "Content-Type": "application/*+json", ...config.headers }, ...config });
     return res.data;
 }
 
  /**
- * {@link /api/Providers/github}
+ * {@link /api/Providers}
  */
 export function usePostCreateGithubAppHook(options: {
     mutation?: UseMutationOptions<PostCreateGithubAppMutationResponse, PostCreateGithubApp400, {

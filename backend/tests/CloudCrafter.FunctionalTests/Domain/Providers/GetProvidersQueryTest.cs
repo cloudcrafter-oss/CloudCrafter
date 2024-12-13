@@ -1,4 +1,5 @@
 using CloudCrafter.Core.Commands.Providers.Github;
+using CloudCrafter.Domain.Domain.Providers;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
@@ -14,7 +15,7 @@ public class GetProvidersQueryTest : BaseTestFixture
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
         Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await SendAsync(new GetProvidersQuery.Query())
+            async () => await SendAsync(new GetProvidersQuery.Query(new ProviderFilterRequest()))
         );
     }
 
@@ -24,17 +25,19 @@ public class GetProvidersQueryTest : BaseTestFixture
         await RunAsAdministratorAsync();
         (await CountAsync<GithubProvider>()).Should().Be(0);
 
-        var providers = FakerInstances.GithubProviderFaker.Generate(10);
-        foreach (var provider in providers)
+        for (int i = 0; i < 10; i++)
         {
-            await AddAsync(provider);
+            var createdProvider = FakerInstances.GithubProviderFaker.Generate();
+            await AddAsync(createdProvider);
         }
 
-        var result = await SendAsync(new GetProvidersQuery.Query());
-        result.Github.Count().Should().Be(10);
+        var result = await SendAsync(new GetProvidersQuery.Query(new ProviderFilterRequest()));
+        result.Count().Should().Be(10);
 
-        foreach (var provider in result.Github)
+        foreach (var provider in result)
         {
+            provider.Github.Should().NotBeNull();
+            provider.Github!.Name.Should().NotBeNull();
             provider.Name.Should().NotBeNullOrEmpty();
             provider.Id.Should().NotBe(Guid.Empty);
         }

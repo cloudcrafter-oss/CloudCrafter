@@ -168,23 +168,31 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Property<string>("AppPrivateKey")
                         .HasColumnType("text");
 
+                    b.Property<string>("AppUrl")
+                        .HasColumnType("text");
+
                     b.Property<string>("AppWebhookSecret")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<long?>("InstallationId")
+                        .HasColumnType("bigint");
+
                     b.Property<bool?>("IsValid")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("SourceProviderId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SourceProviderId")
+                        .IsUnique();
 
                     b.ToTable("GithubProviders");
                 });
@@ -313,6 +321,30 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Servers");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.SourceProvider", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("GithubProviderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SourceProviders");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Stack", b =>
@@ -753,6 +785,17 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Navigation("Project");
                 });
 
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.GithubProvider", b =>
+                {
+                    b.HasOne("CloudCrafter.Domain.Entities.SourceProvider", "SourceProvider")
+                        .WithOne("GithubProvider")
+                        .HasForeignKey("CloudCrafter.Domain.Entities.GithubProvider", "SourceProviderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SourceProvider");
+                });
+
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Jobs.ServerConnectivityCheckJob", b =>
                 {
                     b.HasOne("CloudCrafter.Domain.Entities.Server", "Server")
@@ -859,7 +902,47 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                                         .HasForeignKey("ApplicationSourceStackId");
                                 });
 
+                            b1.OwnsOne("CloudCrafter.Domain.Entities.ApplicationSourceGithubApp", "GithubApp", b2 =>
+                                {
+                                    b2.Property<Guid>("ApplicationSourceStackId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<string>("Branch")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.Property<string>("Repository")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.Property<string>("RepositoryId")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.Property<Guid>("SourceProviderId")
+                                        .HasColumnType("uuid");
+
+                                    b2.HasKey("ApplicationSourceStackId");
+
+                                    b2.HasIndex("SourceProviderId");
+
+                                    b2.ToTable("Stacks");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("ApplicationSourceStackId");
+
+                                    b2.HasOne("CloudCrafter.Domain.Entities.SourceProvider", "SourceProvider")
+                                        .WithMany()
+                                        .HasForeignKey("SourceProviderId")
+                                        .OnDelete(DeleteBehavior.Cascade)
+                                        .IsRequired();
+
+                                    b2.Navigation("SourceProvider");
+                                });
+
                             b1.Navigation("Git");
+
+                            b1.Navigation("GithubApp");
                         });
 
                     b.OwnsOne("CloudCrafter.Domain.Entities.Jobs.StackHealthEntity", "HealthStatus", b1 =>
@@ -1069,6 +1152,11 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Server", b =>
                 {
                     b.Navigation("Stacks");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.SourceProvider", b =>
+                {
+                    b.Navigation("GithubProvider");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Stack", b =>

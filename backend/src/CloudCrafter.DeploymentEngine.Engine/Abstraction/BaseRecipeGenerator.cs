@@ -170,6 +170,14 @@ public abstract class BaseRecipeGenerator
         Recipe.AddBuildStep(generator);
     }
 
+    protected void AddFetchGitRepositoryFromGithubAppStep(ApplicationSourceGithubApp app)
+    {
+        var generator = new FetchGitRepositoryDeploymentStepGenerator(
+            new FetchGitRepositoryDeploymentStepGenerator.Args { Repository = "", Commit = "" }
+        );
+        Recipe.AddBuildStep(generator);
+    }
+
     public abstract BaseDockerComposeGenerator CreateDockerComposeGenerator();
 
     public abstract Task<GeneratedResult> Generate();

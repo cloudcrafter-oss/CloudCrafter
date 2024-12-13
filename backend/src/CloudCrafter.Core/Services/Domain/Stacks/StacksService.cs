@@ -181,7 +181,7 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
 
         foreach (var stack in stacks)
         {
-            stack.HealthStatus.SetStatus(EntityHealthStatusValue.HealthCheckOverdue);
+            stack.HealthStatus.SetStatusWithoutDate(EntityHealthStatusValue.HealthCheckOverdue);
 
             foreach (var service in stack.Services)
             {
@@ -190,7 +190,9 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
                     || service.HealthStatus.StatusAt.Value < DateTime.UtcNow - maxHealthCheckAge
                 )
                 {
-                    service.HealthStatus.SetStatus(EntityHealthStatusValue.HealthCheckOverdue);
+                    service.HealthStatus.SetStatusWithoutDate(
+                        EntityHealthStatusValue.HealthCheckOverdue
+                    );
                 }
             }
         }

@@ -4,6 +4,7 @@ using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Services.Core.Providers;
 using CloudCrafter.Domain.Entities;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
@@ -30,9 +31,10 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
             {
                 services.RemoveAll<IGithubClientProvider>();
 
-                services
-                    .RemoveAll<IUser>()
-                    .AddTransient(provider => Mock.Of<IUser>(s => s.Id == _userId));
+                ServiceCollectionServiceExtensions.AddTransient(
+                    services.RemoveAll<IUser>(),
+                    provider => Mock.Of<IUser>(s => s.Id == _userId)
+                );
                 services.AddScoped<IGithubClientProvider>(_ => _mockProvider.Object);
             }
         );
@@ -57,6 +59,7 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         (await CountAsync<GithubProvider>())
             .Should()
             .Be(0);
+        (await CountAsync<SourceProvider>()).Should().Be(0);
 
         var appsMock = new Mock<IGitHubAppsClient>();
 
@@ -92,20 +95,30 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         result.Should().BeTrue();
 
         (await CountAsync<GithubProvider>()).Should().Be(1);
-
+        (await CountAsync<SourceProvider>()).Should().Be(1);
         var firstItem = await QueryFirstOrDefaultAsync<GithubProvider>(x =>
             x.AppClientId == "clientId"
         );
 
+        var ctx = GetService<IApplicationDbContext>();
+        var provider = await ctx
+            .SourceProviders.Include(x => x.GithubProvider)
+            .FirstOrDefaultAsync();
+
+        provider.Should().NotBeNull();
         firstItem.Should().NotBeNull();
 
-        firstItem!.AppName.Should().Be(manifest.Name);
-        firstItem.Name.Should().Be(manifest.Name);
+        provider!.GithubProvider.Should().NotBeNull();
+        provider.GithubProviderId.Should().Be(firstItem!.Id);
+
+        firstItem.AppName.Should().Be(manifest.Name);
         firstItem.AppId.Should().Be(manifest.Id);
         firstItem.AppClientId.Should().Be(manifest.ClientId);
         firstItem.AppClientSecret.Should().Be(manifest.ClientSecret);
         firstItem.AppWebhookSecret.Should().Be(manifest.WebhookSecret);
         firstItem.AppPrivateKey.Should().Be(manifest.Pem);
+        firstItem.InstallationId.Should().BeNull();
+        firstItem.AppUrl.Should().Be(manifest.HtmlUrl);
     }
 
     [Test]

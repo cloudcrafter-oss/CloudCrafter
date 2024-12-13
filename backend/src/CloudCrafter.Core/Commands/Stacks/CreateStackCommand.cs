@@ -38,7 +38,7 @@ public static class CreateStackCommand
                 Name = request.Name,
                 EnvironmentId = request.EnvironmentId,
                 ServerId = request.ServerId,
-                GitRepository = request.GitRepository,
+                PublicGit = new CreateStackPublicGitRepo { GitRepository = request.GitRepository },
             };
 
             return await service.CreateStack(args);

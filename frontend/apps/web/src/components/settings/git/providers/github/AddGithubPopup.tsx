@@ -60,6 +60,7 @@ export const GithubPopup: React.FC<{
 				},
 				callback_urls: [`${origin}/api/git-providers/github/setup`],
 				public: false,
+				setup_on_update: true,
 				request_oauth_on_install: true,
 				default_permissions: {
 					contents: 'read',
@@ -100,8 +101,8 @@ export const GithubPopup: React.FC<{
 						<form
 							action={
 								isOrganization
-									? `https://github.com/organizations/${organizationName}/settings/apps/new?state=gh_init:some-data`
-									: 'https://github.com/settings/apps/new?state=gh_init:some-data'
+									? `https://github.com/organizations/${organizationName}/settings/apps/new?state=github_init`
+									: 'https://github.com/settings/apps/new?state=github_init'
 							}
 							method='post'
 						>
