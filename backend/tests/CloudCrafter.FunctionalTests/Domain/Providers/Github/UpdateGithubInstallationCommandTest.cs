@@ -58,7 +58,7 @@ public class UpdateGithubInstallationCommandTest : BaseTestFixture
         await SendAsync(
             new UpdateGithubInstallationCommand.Command(
                 new UpdateGithubInstallationCommand.Request(123),
-                githubProvider.Id
+                githubProvider.SourceProvider.Id
             )
         );
 
