@@ -8,31 +8,31 @@ namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery;
 
 public class DeploymentStepAnnotationTests
 {
-    private static IEnumerable<string> GetClassesWithDeploymentStepAnnotation()
-    {
-        var namespaceToCheck = "CloudCrafter.Agent.Models.Deployment.Steps.Params";
-        var baseClassType = typeof(BaseParams);
-
-        // Get all types in the assembly
-        var assembly = Assembly.GetAssembly(baseClassType);
-
-        if (assembly is null)
-        {
-            throw new Exception("Could not load assembly");
-        }
-
-        var deploymentStepClasses = assembly
-            .GetTypes()
-            .Where(t =>
-                t.Namespace != null
-                && t.Namespace.StartsWith(namespaceToCheck)
-                && t.IsClass
-                && !t.IsAbstract
-                && t.GetCustomAttributes(typeof(DeploymentStepAttribute), true).Any()
-            );
-
-        return deploymentStepClasses.Select(t => t.FullName!);
-    }
+    // private static IEnumerable<string> GetClassesWithDeploymentStepAnnotation()
+    // {
+    //     var namespaceToCheck = "CloudCrafter.Agent.Models.Deployment.Steps.Params";
+    //     var baseClassType = typeof(BaseParams);
+    //
+    //     // Get all types in the assembly
+    //     var assembly = Assembly.GetAssembly(baseClassType);
+    //
+    //     if (assembly is null)
+    //     {
+    //         throw new Exception("Could not load assembly");
+    //     }
+    //
+    //     var deploymentStepClasses = assembly
+    //         .GetTypes()
+    //         .Where(t =>
+    //             t.Namespace != null
+    //             && t.Namespace.StartsWith(namespaceToCheck)
+    //             && t.IsClass
+    //             && !t.IsAbstract
+    //             && t.GetCustomAttributes(typeof(DeploymentStepAttribute), true).Any()
+    //         );
+    //
+    //     return deploymentStepClasses.Select(t => t.FullName!);
+    // }
 
     [Test]
     public void EnsureAllDeploymentStepClassesHaveTests()

@@ -21,8 +21,8 @@ public class AlterNixpacksBuildPlanBuildStepGeneratorTest
         var buildStep = generator.Generate();
 
         // Assert
-        var result = Serializer.GetConfig<NixpacksAlterPlanParams>(buildStep);
-        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, result.Validator);
+        var handler = Serializer.GetHandler<NixpacksAlterPlanParams>(buildStep);
+        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, handler.Validator);
 
         paramObject.Packages.Count().Should().Be(2);
         paramObject.Packages.Should().BeEquivalentTo("package1", "package2");

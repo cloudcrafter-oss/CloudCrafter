@@ -22,8 +22,8 @@ public class DockerComposeUpBuildStepGeneratorTest
         var buildStep = generator.Generate();
 
         // Assert
-        var result = Serializer.GetConfig<DockerComposeUpParams>(buildStep);
-        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, result.Validator);
+        var handler = Serializer.GetHandler<DockerComposeUpParams>(buildStep);
+        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, handler.Validator);
 
         paramObject.StoreServiceNames.Should().Be(true);
         paramObject.DockerComposeFile.Should().Be("docker-compose-my-test.yml");
