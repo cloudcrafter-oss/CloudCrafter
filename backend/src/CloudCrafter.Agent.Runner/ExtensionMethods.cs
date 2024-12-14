@@ -82,17 +82,4 @@ public static class ExtensionMethods
         //
         // return services;
     }
-
-    private static DeploymentBuildStepType GetDeploymentBuildStepType(Type type)
-    {
-        var attribute = type.GetCustomAttribute<DeploymentStepAttribute>();
-        if (attribute == null)
-        {
-            throw new InvalidOperationException(
-                $"Type {type.Name} is missing DeploymentStepAttribute"
-            );
-        }
-
-        return attribute.StepType;
-    }
 }
