@@ -55,6 +55,7 @@
     <PackageVersion Include="BouncyCastle.Cryptography" Version="2.4.0"/>
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.0"/>
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0"/>
+    <PackageVersion Include="Scrutor" Version="5.0.2"/>
     <!-- Tests -->
     <PackageVersion Include="Docker.DotNet" Version="3.125.15"/>
     <PackageVersion Include="Serilog.Sinks.NUnit" Version="1.0.3"/>

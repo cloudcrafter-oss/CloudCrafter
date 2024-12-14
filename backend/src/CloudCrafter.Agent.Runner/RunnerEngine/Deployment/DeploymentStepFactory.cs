@@ -1,15 +1,16 @@
 ﻿using CloudCrafter.Agent.Models.Deployment;
 using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Recipe;
+using CloudCrafter.Agent.Runner.Factories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 
 public class DeploymentStepFactory(IServiceProvider serviceProvider) : IDeploymentStepFactory
 {
-    public IDeploymentStepHandler<TParams> CreateHandler<TParams>(DeploymentBuildStepType type)
+    public IDeploymentStep<TParams> CreateHandler<TParams>(DeploymentBuildStepType type)
     {
-        var handler = serviceProvider.GetKeyedService<IDeploymentStepHandler<TParams>>(type);
+        var handler = serviceProvider.GetServices<IDeploymentStep>();
         if (handler == null)
         {
             throw new InvalidOperationException(
