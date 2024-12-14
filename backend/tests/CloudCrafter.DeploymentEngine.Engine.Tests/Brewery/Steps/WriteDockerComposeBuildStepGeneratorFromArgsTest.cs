@@ -4,7 +4,7 @@ using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery.Steps;
 
-public class WriteDockerComposeBuildStepGeneratorTest
+public class WriteDockerComposeBuildStepGeneratorFromArgsTest
 {
     [Test]
     public void ShouldBeAbleToGenerateStep()
