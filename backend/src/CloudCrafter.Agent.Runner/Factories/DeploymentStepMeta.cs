@@ -5,16 +5,31 @@ using FluentValidation;
 
 namespace CloudCrafter.Agent.Runner.Factories;
 
-public interface IDeploymentStep<in TParams>
+public interface IDeploymentStep
 {
-    Task ExecuteAsync(TParams pameters, DeploymentContext context);
-    Task DryRun(TParams parameters, DeploymentContext context);
-
-    IValidator<TParams> Validator { get; }
     DeploymentBuildStepType Type { get; }
+    Type ParamType { get; }
 }
 
-public class DeploymentStepMeta : IDeploymentStep<GitCheckoutParams>
+public interface IDeploymentStep<TParams> : IDeploymentStep
+    where TParams : BaseParams
+{
+    Task ExecuteAsync(TParams parameters, DeploymentContext context);
+    Task DryRun(TParams parameters, DeploymentContext context);
+    IValidator<TParams> Validator { get; }
+}
+
+public abstract class BaseDeploymentStep<TParams> : IDeploymentStep<TParams>
+    where TParams : BaseParams
+{
+    public abstract DeploymentBuildStepType Type { get; }
+    public Type ParamType => typeof(TParams);
+    public abstract IValidator<TParams> Validator { get; }
+    public abstract Task ExecuteAsync(TParams parameters, DeploymentContext context);
+    public abstract Task DryRun(TParams parameters, DeploymentContext context);
+}
+
+public class GitCheckoutDeploymentStep : BaseDeploymentStep<GitCheckoutParams>
 {
     public class GitCheckoutParamsValidator : AbstractValidator<GitCheckoutParams>
     {
@@ -25,16 +40,16 @@ public class DeploymentStepMeta : IDeploymentStep<GitCheckoutParams>
         }
     }
 
-    public Task ExecuteAsync(GitCheckoutParams pameters, DeploymentContext context)
+    public override Task ExecuteAsync(GitCheckoutParams parameters, DeploymentContext context)
     {
         throw new NotImplementedException();
     }
 
-    public Task DryRun(GitCheckoutParams parameters, DeploymentContext context)
+    public override Task DryRun(GitCheckoutParams parameters, DeploymentContext context)
     {
         throw new NotImplementedException();
     }
 
-    public IValidator<GitCheckoutParams> Validator => new GitCheckoutParamsValidator();
-    public DeploymentBuildStepType Type => DeploymentBuildStepType.FetchGitRepository;
+    public override IValidator<GitCheckoutParams> Validator => new GitCheckoutParamsValidator();
+    public override DeploymentBuildStepType Type => DeploymentBuildStepType.FetchGitRepository;
 }

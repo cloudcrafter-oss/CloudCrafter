@@ -1,22 +1,26 @@
-﻿using CloudCrafter.Agent.Models.Deployment;
-using CloudCrafter.Agent.Models.Deployment.Steps;
-using CloudCrafter.Agent.Models.Deployment.Steps.Params;
+﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Exceptions;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
 using CloudCrafter.Agent.Runner.Cli.Helpers;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
+using CloudCrafter.Agent.Runner.Factories;
+using CloudCrafter.Agent.Runner.Validators;
+using FluentValidation;
 
 namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
 
-[DeploymentStep(DeploymentBuildStepType.NixpacksAlterPlan)]
-// ReSharper disable once UnusedType.Global
 public class NixpacksAlterPlanHandler(IMessagePump pump)
-    : IDeploymentStepHandler<NixpacksAlterPlanParams>
+    : BaseDeploymentStep<NixpacksAlterPlanParams>
 {
     private readonly IDeploymentLogger _logger = pump.CreateLogger<NixpacksAlterPlanHandler>();
 
-    public Task ExecuteAsync(NixpacksAlterPlanParams parameters, DeploymentContext context)
+    public override DeploymentBuildStepType Type => DeploymentBuildStepType.NixpacksAlterPlan;
+
+    public override IValidator<NixpacksAlterPlanParams> Validator =>
+        new NixpacksAlterPlanParamsValidator();
+
+    public override Task ExecuteAsync(NixpacksAlterPlanParams parameters, DeploymentContext context)
     {
         _logger.LogInfo("Starting altering nixpacks plan");
 
@@ -52,7 +56,7 @@ public class NixpacksAlterPlanHandler(IMessagePump pump)
         return Task.CompletedTask;
     }
 
-    public Task DryRun(NixpacksAlterPlanParams parameters, DeploymentContext context)
+    public override Task DryRun(NixpacksAlterPlanParams parameters, DeploymentContext context)
     {
         _logger.LogInfo("Alter nixpacks plan handler");
 

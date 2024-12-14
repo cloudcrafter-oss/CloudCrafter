@@ -1,21 +1,30 @@
-﻿using CloudCrafter.Agent.Models.Deployment;
-using CloudCrafter.Agent.Models.Deployment.Steps;
-using CloudCrafter.Agent.Models.Deployment.Steps.Params.Network;
+﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params.Network;
 using CloudCrafter.Agent.Models.Exceptions;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
+using CloudCrafter.Agent.Runner.Factories;
+using CloudCrafter.Agent.Runner.Validators.Network;
+using FluentValidation;
 
 namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps.Network;
 
-[DeploymentStep(DeploymentBuildStepType.DockerValidateNetworksExists)]
 public class NetworkExistsCheckHandler(IMessagePump pump, IDockerHelper dockerHelper)
-    : IDeploymentStepHandler<NetworkExistsCheckParams>
+    : BaseDeploymentStep<NetworkExistsCheckParams>
 {
     private readonly IDeploymentLogger _logger = pump.CreateLogger<NetworkExistsCheckHandler>();
 
-    public async Task ExecuteAsync(NetworkExistsCheckParams parameters, DeploymentContext context)
+    public override DeploymentBuildStepType Type =>
+        DeploymentBuildStepType.DockerValidateNetworksExists;
+
+    public override IValidator<NetworkExistsCheckParams> Validator =>
+        new NetworkExistsCheckValidator();
+
+    public override async Task ExecuteAsync(
+        NetworkExistsCheckParams parameters,
+        DeploymentContext context
+    )
     {
         _logger.LogInfo("Checking if provided networks exist");
 
@@ -44,7 +53,7 @@ public class NetworkExistsCheckHandler(IMessagePump pump, IDockerHelper dockerHe
         _logger.LogInfo("All provided networks exist");
     }
 
-    public Task DryRun(NetworkExistsCheckParams parameters, DeploymentContext context)
+    public override Task DryRun(NetworkExistsCheckParams parameters, DeploymentContext context)
     {
         _logger.LogInfo("Checking if provided networks exist in dry run mode");
 

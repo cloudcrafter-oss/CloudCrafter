@@ -1,9 +1,5 @@
-﻿using CloudCrafter.Agent.Models.Recipe;
+﻿namespace CloudCrafter.Agent.Models.Deployment.Steps.Params;
 
-namespace CloudCrafter.Agent.Models.Deployment.Steps.Params;
-
-[DeploymentStep(DeploymentBuildStepType.RunPlainCommand)]
-// ReSharper disable once ClassNeverInstantiated.Global
 public class RunPlainCommandParams : BaseParams
 {
     public bool? AllowFailure { get; init; } = false;

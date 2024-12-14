@@ -100,9 +100,3 @@ public class ContainerHealthCheckParamsOptionsValidator
             || options.HttpPort.HasValue;
     }
 }
-
-[DeploymentStep(DeploymentBuildStepType.ContainerHealthCheck)]
-public class ContainerHealthCheckConfig : IDeploymentStepConfig<ContainerHealthCheckParams>
-{
-    public IValidator<ContainerHealthCheckParams> Validator => new ContainerHealthCheckValidator();
-}

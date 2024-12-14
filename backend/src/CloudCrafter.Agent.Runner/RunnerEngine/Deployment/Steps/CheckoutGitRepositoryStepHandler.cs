@@ -1,22 +1,25 @@
-﻿using CloudCrafter.Agent.Models.Deployment;
-using CloudCrafter.Agent.Models.Deployment.Steps;
-using CloudCrafter.Agent.Models.Deployment.Steps.Params;
+﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Exceptions;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
+using CloudCrafter.Agent.Runner.Factories;
+using CloudCrafter.Agent.Runner.Validators;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
+using FluentValidation;
 
 namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
 
-[DeploymentStep(DeploymentBuildStepType.FetchGitRepository)]
 public class CheckoutGitRepositoryStepHandler(IMessagePump pump, ICommandExecutor executor)
-    : IDeploymentStepHandler<GitCheckoutParams>
+    : BaseDeploymentStep<GitCheckoutParams>
 {
     private readonly IDeploymentLogger _logger =
         pump.CreateLogger<CheckoutGitRepositoryStepHandler>();
 
-    public async Task ExecuteAsync(GitCheckoutParams parameters, DeploymentContext context)
+    public override DeploymentBuildStepType Type => DeploymentBuildStepType.FetchGitRepository;
+    public override IValidator<GitCheckoutParams> Validator => new GitCheckoutParamsValidator();
+
+    public override async Task ExecuteAsync(GitCheckoutParams parameters, DeploymentContext context)
     {
         _logger.LogInfo("Start ExecuteAsync");
 
@@ -39,7 +42,7 @@ public class CheckoutGitRepositoryStepHandler(IMessagePump pump, ICommandExecuto
         }
     }
 
-    public Task DryRun(GitCheckoutParams parameters, DeploymentContext context)
+    public override Task DryRun(GitCheckoutParams parameters, DeploymentContext context)
     {
         _logger.LogInfo("Checkout Git Repository dryrun");
 

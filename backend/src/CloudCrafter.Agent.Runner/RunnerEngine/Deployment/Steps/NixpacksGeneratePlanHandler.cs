@@ -1,22 +1,28 @@
-﻿using CloudCrafter.Agent.Models.Deployment;
-using CloudCrafter.Agent.Models.Deployment.Steps;
-using CloudCrafter.Agent.Models.Deployment.Steps.Params;
+﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
-using CloudCrafter.Agent.Runner.Cli.Helpers;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
+using CloudCrafter.Agent.Runner.Factories;
+using CloudCrafter.Agent.Runner.Validators;
+using FluentValidation;
 
 namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
 
-[DeploymentStep(DeploymentBuildStepType.NixpacksGeneratePlan)]
-// ReSharper disable once UnusedType.Global
 public class NixpacksGeneratePlanHandler(IMessagePump pump, INixpacksHelper nixpacksHelper)
-    : IDeploymentStepHandler<NixpacksGeneratePlanParams>
+    : BaseDeploymentStep<NixpacksGeneratePlanParams>
 {
     private readonly IDeploymentLogger _logger = pump.CreateLogger<NixpacksGeneratePlanHandler>();
 
-    public async Task ExecuteAsync(NixpacksGeneratePlanParams parameters, DeploymentContext context)
+    public override DeploymentBuildStepType Type => DeploymentBuildStepType.NixpacksGeneratePlan;
+
+    public override IValidator<NixpacksGeneratePlanParams> Validator =>
+        new NixpacksGeneratePlanParamsValidator();
+
+    public override async Task ExecuteAsync(
+        NixpacksGeneratePlanParams parameters,
+        DeploymentContext context
+    )
     {
         _logger.LogInfo("Starting nixpacks plan handler");
         var fullPath = context.GetGitDirectory() + $"/git/{parameters.Path}";
@@ -27,7 +33,7 @@ public class NixpacksGeneratePlanHandler(IMessagePump pump, INixpacksHelper nixp
         _logger.LogInfo("Saved nixpacks plan to to context.");
     }
 
-    public Task DryRun(NixpacksGeneratePlanParams parameters, DeploymentContext context)
+    public override Task DryRun(NixpacksGeneratePlanParams parameters, DeploymentContext context)
     {
         _logger.LogInfo("Generate nixpacks plan handler");
 

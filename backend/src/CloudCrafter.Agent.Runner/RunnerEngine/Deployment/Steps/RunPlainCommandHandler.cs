@@ -1,20 +1,27 @@
-﻿using CloudCrafter.Agent.Models.Deployment;
-using CloudCrafter.Agent.Models.Deployment.Steps;
-using CloudCrafter.Agent.Models.Deployment.Steps.Params;
+﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
+using CloudCrafter.Agent.Runner.Factories;
+using CloudCrafter.Agent.Runner.Validators;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
+using FluentValidation;
 
 namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
 
-[DeploymentStep(DeploymentBuildStepType.RunPlainCommand)]
 public class RunPlainCommandHandler(IMessagePump pump, ICommandExecutor commandExecutor)
-    : IDeploymentStepHandler<RunPlainCommandParams>
+    : BaseDeploymentStep<RunPlainCommandParams>
 {
     private readonly IDeploymentLogger _logger = pump.CreateLogger<RunPlainCommandHandler>();
 
-    public async Task ExecuteAsync(RunPlainCommandParams parameters, DeploymentContext context)
+    public override DeploymentBuildStepType Type => DeploymentBuildStepType.RunPlainCommand;
+
+    public override IValidator<RunPlainCommandParams> Validator => new RunPlainCommandValidator();
+
+    public override async Task ExecuteAsync(
+        RunPlainCommandParams parameters,
+        DeploymentContext context
+    )
     {
         _logger.LogInfo($"Executing provided command: '{parameters.Command}'");
 
@@ -45,7 +52,7 @@ public class RunPlainCommandHandler(IMessagePump pump, ICommandExecutor commandE
         }
     }
 
-    public Task DryRun(RunPlainCommandParams parameters, DeploymentContext context)
+    public override Task DryRun(RunPlainCommandParams parameters, DeploymentContext context)
     {
         _logger.LogInfo("Running plain command in dry run mode");
 

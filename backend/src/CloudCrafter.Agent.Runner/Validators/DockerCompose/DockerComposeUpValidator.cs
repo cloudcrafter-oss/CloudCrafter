@@ -13,9 +13,3 @@ public class DockerComposeUpValidator : AbstractValidator<DockerComposeUpParams>
         RuleFor(x => x.DockerComposeFile).NotEmpty();
     }
 }
-
-[DeploymentStep(DeploymentBuildStepType.DockerComposeUp)]
-public class DockerComposeUpConfig : IDeploymentStepConfig<DockerComposeUpParams>
-{
-    public IValidator<DockerComposeUpParams> Validator => new DockerComposeUpValidator();
-}

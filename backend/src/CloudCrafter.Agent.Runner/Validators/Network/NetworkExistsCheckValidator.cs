@@ -14,9 +14,3 @@ public class NetworkExistsCheckValidator : AbstractValidator<NetworkExistsCheckP
         RuleFor(x => x.Networks).NotEmpty();
     }
 }
-
-[DeploymentStep(DeploymentBuildStepType.DockerValidateNetworksExists)]
-public class DockerComposeUpConfig : IDeploymentStepConfig<NetworkExistsCheckParams>
-{
-    public IValidator<NetworkExistsCheckParams> Validator => new NetworkExistsCheckValidator();
-}

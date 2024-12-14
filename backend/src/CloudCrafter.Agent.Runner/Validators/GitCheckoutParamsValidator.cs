@@ -14,9 +14,3 @@ public class GitCheckoutParamsValidator : AbstractValidator<GitCheckoutParams>
         RuleFor(x => x.Repo).NotEmpty();
     }
 }
-
-[DeploymentStep(DeploymentBuildStepType.FetchGitRepository)]
-public class GitCheckoutConfig : IDeploymentStepConfig<GitCheckoutParams>
-{
-    public IValidator<GitCheckoutParams> Validator => new GitCheckoutParamsValidator();
-}
