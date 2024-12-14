@@ -15,6 +15,7 @@ public static class ExtensionMethods
 {
     public static IServiceCollection AddDeploymentStepsConfig(this IServiceCollection services)
     {
+        services.AddTransient<DeploymentStepSerializerFactory>();
         var assembly = typeof(IAgentRunnerTarget).Assembly;
         return services.Scan(scan =>
         {

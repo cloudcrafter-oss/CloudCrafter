@@ -1,6 +1,11 @@
 ﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params.DockerCompose;
+using CloudCrafter.Agent.Runner;
+using CloudCrafter.Agent.Runner.Factories;
+using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
 
@@ -15,16 +20,14 @@ public class WriteDockerComposeBuildStepGeneratorTest
         {
             DockerComposeFileName = "docker-compose-testing.yml",
         };
-
         var generator = new WriteDockerComposeBuildStepGenerator(options);
 
         // Act
         var buildStep = generator.Generate();
+        var handler = Serializer.GetHandler<DockerComposeWriteToFileSystemParams>(buildStep);
+        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, handler.Validator);
 
         // Assert
-        var result = Serializer.GetConfig<DockerComposeWriteToFileSystemParams>(buildStep);
-        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, result.Validator);
-
         paramObject.DockerComposeFile.Should().Be("docker-compose-testing.yml");
     }
 }
