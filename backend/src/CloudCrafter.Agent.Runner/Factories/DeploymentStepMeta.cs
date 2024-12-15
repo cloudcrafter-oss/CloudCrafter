@@ -28,28 +28,3 @@ public abstract class BaseDeploymentStep<TParams> : IDeploymentStep<TParams>
     public abstract Task ExecuteAsync(TParams parameters, DeploymentContext context);
     public abstract Task DryRun(TParams parameters, DeploymentContext context);
 }
-
-public class GitCheckoutDeploymentStep : BaseDeploymentStep<GitCheckoutParams>
-{
-    public class GitCheckoutParamsValidator : AbstractValidator<GitCheckoutParams>
-    {
-        public GitCheckoutParamsValidator()
-        {
-            RuleFor(x => x.Commit).NotEmpty();
-            RuleFor(x => x.Repo).NotEmpty();
-        }
-    }
-
-    public override Task ExecuteAsync(GitCheckoutParams parameters, DeploymentContext context)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override Task DryRun(GitCheckoutParams parameters, DeploymentContext context)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override IValidator<GitCheckoutParams> Validator => new GitCheckoutParamsValidator();
-    public override DeploymentBuildStepType Type => DeploymentBuildStepType.FetchGitRepository;
-}
