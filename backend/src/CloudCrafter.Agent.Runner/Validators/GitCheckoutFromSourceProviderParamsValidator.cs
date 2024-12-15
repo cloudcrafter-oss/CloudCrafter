@@ -12,7 +12,7 @@ public class GitCheckoutFromSourceProviderParamsValidator
     public GitCheckoutFromSourceProviderParamsValidator()
     {
         RuleFor(x => x.AccessToken).NotEmpty().MinimumLength(3);
-        RuleFor(x => x.Repo).NotEmpty();
+        RuleFor(x => x.Repository).NotEmpty();
         RuleFor(x => x.Branch).NotEmpty();
     }
 }

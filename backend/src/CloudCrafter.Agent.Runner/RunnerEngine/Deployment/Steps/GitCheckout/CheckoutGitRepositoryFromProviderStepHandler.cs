@@ -30,7 +30,7 @@ public class CheckoutGitRepositoryFromProviderStepHandler(
     {
         _logger.LogInfo("Start ExecuteAsync");
 
-        var repositoryUrl = parameters.Repo;
+        var repositoryUrl = parameters.Repository;
         var gitDirectory = context.GetGitDirectory();
 
         var gitCheckoutDirectory = $"{gitDirectory}/git";
