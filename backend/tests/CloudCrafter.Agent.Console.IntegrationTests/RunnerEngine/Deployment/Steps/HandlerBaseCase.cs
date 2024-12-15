@@ -52,7 +52,7 @@ public abstract class HandlerBaseCase
                     {
                         Name = "Fetch git",
                         Description = "Fetch the git application",
-                        Type = DeploymentBuildStepType.FetchGitRepository,
+                        Type = DeploymentBuildStepType.FetchPublicGitRepository,
                         Params = new Dictionary<string, object>
                         {
                             { "repo", "https://github.com/cloudcrafter-oss/demo-examples.git" },

@@ -41,7 +41,7 @@ public class DeploymentRecipeValidatorTest
                     {
                         Name = "dummy",
                         Description = "description",
-                        Type = DeploymentBuildStepType.FetchGitRepository,
+                        Type = DeploymentBuildStepType.FetchPublicGitRepository,
                         Params = new Dictionary<string, object>
                         {
                             { "repo", "https://github.com/cloudcrafter-oss/demo-examples.git" },

@@ -2,14 +2,15 @@
 using CloudCrafter.Agent.Models.Exceptions;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
+using CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps.GitCheckout;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CloudCrafter.Agent.Console.IntegrationTests.RunnerEngine.Deployment.Steps;
 
-public class CheckoutGitRepositoryStepHandlerTest : HandlerBaseCase
+public class CheckoutPublicGitRepositoryStepHandlerTest : HandlerBaseCase
 {
-    private CheckoutGitRepositoryStepHandler _handler;
+    private CheckoutPublicGitRepositoryStepHandler _handler;
 
     [SetUp]
     public void Setup()
@@ -20,7 +21,7 @@ public class CheckoutGitRepositoryStepHandlerTest : HandlerBaseCase
         var pump = host.Services.GetRequiredService<IMessagePump>();
         var executor = host.Services.GetRequiredService<ICommandExecutor>();
 
-        _handler = new CheckoutGitRepositoryStepHandler(pump, executor);
+        _handler = new CheckoutPublicGitRepositoryStepHandler(pump, executor);
     }
 
     [Test]
