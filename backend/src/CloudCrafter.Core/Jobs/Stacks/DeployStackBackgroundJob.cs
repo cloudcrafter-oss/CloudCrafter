@@ -2,8 +2,7 @@
 using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Agent;
-using CloudCrafter.DeploymentEngine.Engine.Abstraction;
-using CloudCrafter.DeploymentEngine.Engine.Brewery.RecipeGenerators;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Strategy;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.Strategy.Factory;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -92,7 +91,8 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
 
             var recipeGenerator = await strategy.GenerateRecipeAsync(
                 _deployment!.Stack!,
-                _deployment!
+                _deployment!,
+                serviceProvider.GetRequiredService<IProvideProviderAccessToken>()
             );
             var recipe = await recipeGenerator.Generate();
             logger.LogDebug("Recipe brewed!");

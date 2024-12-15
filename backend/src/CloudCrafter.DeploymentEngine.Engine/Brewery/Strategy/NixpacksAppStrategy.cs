@@ -8,7 +8,8 @@ public class NixpacksAppStrategy : BaseStrategy
 {
     public override Task<BaseRecipeGenerator> GenerateRecipeAsync(
         Stack stack,
-        Deployment deployment
+        Deployment deployment,
+        IProvideProviderAccessToken providerAccessTokenProvider
     )
     {
         var recipeGenerator = new SimpleAppRecipeGenerator(

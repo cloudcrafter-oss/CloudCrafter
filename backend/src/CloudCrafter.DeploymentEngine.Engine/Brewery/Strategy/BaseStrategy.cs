@@ -7,6 +7,12 @@ public abstract class BaseStrategy
 {
     public abstract Task<BaseRecipeGenerator> GenerateRecipeAsync(
         Stack stack,
-        Deployment deployment
+        Deployment deployment,
+        IProvideProviderAccessToken providerAccessTokenProvider
     );
+}
+
+public interface IProvideProviderAccessToken
+{
+    Task<string> GetProviderAccessTokenAsync(SourceProvider provider);
 }

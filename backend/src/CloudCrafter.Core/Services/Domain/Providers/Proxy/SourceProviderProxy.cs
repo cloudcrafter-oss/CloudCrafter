@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core.Interfaces.Domain.Providers;
+using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Providers;
 using CloudCrafter.Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,16 @@ public class SourceProviderProxy([FromKeyedServices("github")] ISourceProviderSe
         if (provider.GithubProvider != null)
         {
             return await githubService.GetBranches(provider, repositoryId);
+        }
+
+        throw new NotImplementedException("Not implemented for given provider");
+    }
+
+    public async Task<string> GetCheckoutAccessTokenAsync(SourceProvider provider)
+    {
+        if (provider.GithubProvider != null)
+        {
+            return await githubService.GetCheckoutAccessTokenAsync(provider);
         }
 
         throw new NotImplementedException("Not implemented for given provider");

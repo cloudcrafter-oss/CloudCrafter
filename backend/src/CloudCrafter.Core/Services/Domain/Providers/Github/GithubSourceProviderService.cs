@@ -56,6 +56,30 @@ public class GithubSourceProviderService(
         return branchResult;
     }
 
+    public async Task<string> GetCheckoutAccessTokenAsync(SourceProvider provider)
+    {
+        if (!provider.GithubProvider!.InstallationId.HasValue)
+        {
+            throw new Exception("Provider is not a Github provider or not installed properly.");
+        }
+
+        var client = githubBackendClientProvider.CreateClientForProvider(provider.GithubProvider!);
+
+        var token = await client.GitHubApps.CreateInstallationToken(
+            provider.GithubProvider!.InstallationId.Value
+        );
+
+        var installationClient = clientProvider.GetClientForToken(token.Token);
+        var result = await installationClient.User.Current();
+
+        if (result == null)
+        {
+            throw new Exception("Failed to get user");
+        }
+
+        return token.Token;
+    }
+
     private async Task<IGitHubClient> CreateInstallationClient(SourceProvider provider)
     {
         if (!provider.GithubProvider!.InstallationId.HasValue)
