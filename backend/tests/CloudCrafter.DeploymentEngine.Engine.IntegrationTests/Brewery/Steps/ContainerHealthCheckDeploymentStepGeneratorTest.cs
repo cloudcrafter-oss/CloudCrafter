@@ -48,8 +48,8 @@ public class ContainerHealthCheckDeploymentStepGeneratorTest
         var buildStep = generator.Generate();
 
         // Assert
-        var result = Serializer.GetConfig<ContainerHealthCheckParams>(buildStep);
-        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, result.Validator);
+        var handler = Serializer.GetHandler<ContainerHealthCheckParams>(buildStep);
+        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, handler.Validator);
 
         paramObject.DockerComposeSettings.Should().NotBeNull();
         paramObject.DockerComposeSettings!.FetchServicesFromContext.Should().BeTrue();

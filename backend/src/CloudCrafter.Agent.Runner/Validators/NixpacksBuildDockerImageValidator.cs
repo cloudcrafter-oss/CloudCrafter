@@ -16,10 +16,3 @@ public class NixpacksBuildDockerImageValidator : AbstractValidator<NixpacksBuild
         RuleFor(x => x.Tag).NotEmpty();
     }
 }
-
-[DeploymentStep(DeploymentBuildStepType.NixpacksBuildDockerImage)]
-public class NixpacksBuildDockerImageConfig : IDeploymentStepConfig<NixpacksBuildDockerImageParams>
-{
-    public IValidator<NixpacksBuildDockerImageParams> Validator =>
-        new NixpacksBuildDockerImageValidator();
-}

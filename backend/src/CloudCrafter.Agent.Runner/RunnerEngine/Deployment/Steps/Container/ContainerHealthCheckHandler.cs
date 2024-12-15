@@ -1,24 +1,31 @@
-﻿using CloudCrafter.Agent.Models.Deployment;
-using CloudCrafter.Agent.Models.Deployment.Steps;
-using CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
+﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
 using CloudCrafter.Agent.Models.Exceptions;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
-using CloudCrafter.Agent.Runner.Cli.Helpers;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
+using CloudCrafter.Agent.Runner.Factories;
+using CloudCrafter.Agent.Runner.Validators.Container;
+using FluentValidation;
 
 namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps.Container;
 
-[DeploymentStep(DeploymentBuildStepType.ContainerHealthCheck)]
 public class ContainerHealthCheckHandler(
     IMessagePump pump,
     IDockerHealthCheckHelper dockerHealthCheckHelper
-) : IDeploymentStepHandler<ContainerHealthCheckParams>
+) : BaseDeploymentStep<ContainerHealthCheckParams>
 {
     private readonly IDeploymentLogger _logger = pump.CreateLogger<ContainerHealthCheckHandler>();
 
-    public async Task ExecuteAsync(ContainerHealthCheckParams parameters, DeploymentContext context)
+    public override DeploymentBuildStepType Type => DeploymentBuildStepType.ContainerHealthCheck;
+
+    public override IValidator<ContainerHealthCheckParams> Validator =>
+        new ContainerHealthCheckValidator();
+
+    public override async Task ExecuteAsync(
+        ContainerHealthCheckParams parameters,
+        DeploymentContext context
+    )
     {
         _logger.LogInfo("Running container health check");
 
@@ -85,7 +92,7 @@ public class ContainerHealthCheckHandler(
         _logger.LogInfo("All provided containers are healthy");
     }
 
-    public Task DryRun(ContainerHealthCheckParams parameters, DeploymentContext context)
+    public override Task DryRun(ContainerHealthCheckParams parameters, DeploymentContext context)
     {
         _logger.LogInfo("Running container health check in dry run mode");
 

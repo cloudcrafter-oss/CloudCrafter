@@ -1,22 +1,28 @@
-﻿using CloudCrafter.Agent.Models.Deployment;
-using CloudCrafter.Agent.Models.Deployment.Steps;
-using CloudCrafter.Agent.Models.Deployment.Steps.Params.DockerCompose;
+﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params.DockerCompose;
 using CloudCrafter.Agent.Models.Exceptions;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
-using CloudCrafter.Agent.Runner.Cli.Helpers;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
+using CloudCrafter.Agent.Runner.Factories;
+using CloudCrafter.Agent.Runner.Validators.DockerCompose;
+using FluentValidation;
 
 namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps.DockerCompose;
 
-[DeploymentStep(DeploymentBuildStepType.DockerComposeUp)]
 public class DockerComposeUpHandler(IMessagePump pump, IDockerComposeHelper dockerComposeHelper)
-    : IDeploymentStepHandler<DockerComposeUpParams>
+    : BaseDeploymentStep<DockerComposeUpParams>
 {
     private readonly IDeploymentLogger _logger = pump.CreateLogger<DockerComposeUpHandler>();
 
-    public async Task ExecuteAsync(DockerComposeUpParams parameters, DeploymentContext context)
+    public override DeploymentBuildStepType Type => DeploymentBuildStepType.DockerComposeUp;
+
+    public override IValidator<DockerComposeUpParams> Validator => new DockerComposeUpValidator();
+
+    public override async Task ExecuteAsync(
+        DockerComposeUpParams parameters,
+        DeploymentContext context
+    )
     {
         _logger.LogInfo("Running docker compose up");
 
@@ -50,7 +56,7 @@ public class DockerComposeUpHandler(IMessagePump pump, IDockerComposeHelper dock
         }
     }
 
-    public Task DryRun(DockerComposeUpParams parameters, DeploymentContext context)
+    public override Task DryRun(DockerComposeUpParams parameters, DeploymentContext context)
     {
         _logger.LogInfo("Running docker compose up in dry run mode");
 

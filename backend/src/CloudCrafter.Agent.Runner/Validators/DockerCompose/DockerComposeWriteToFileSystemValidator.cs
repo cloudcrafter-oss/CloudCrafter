@@ -14,11 +14,3 @@ public class DockerComposeWriteToFileSystemValidator
         RuleFor(x => x.DockerComposeFile).NotEmpty();
     }
 }
-
-[DeploymentStep(DeploymentBuildStepType.DockerComposeWriteToFileSystem)]
-public class DockerComposeWriteToFileSystemConfig
-    : IDeploymentStepConfig<DockerComposeWriteToFileSystemParams>
-{
-    public IValidator<DockerComposeWriteToFileSystemParams> Validator =>
-        new DockerComposeWriteToFileSystemValidator();
-}

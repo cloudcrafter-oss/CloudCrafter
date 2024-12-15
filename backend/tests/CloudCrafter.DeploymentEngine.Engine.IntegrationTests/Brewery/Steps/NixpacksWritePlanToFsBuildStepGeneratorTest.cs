@@ -18,8 +18,8 @@ public class NixpacksWritePlanToFsBuildStepGeneratorTest
         var buildStep = generator.Generate();
 
         // Assert
-        var result = Serializer.GetConfig<NixpacksWritePlanToFileSystemParams>(buildStep);
-        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, result.Validator);
+        var handler = Serializer.GetHandler<NixpacksWritePlanToFileSystemParams>(buildStep);
+        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, handler.Validator);
 
         paramObject.Path.Should().Be("/some/path");
     }

@@ -13,9 +13,3 @@ public class RunPlainCommandValidator : AbstractValidator<RunPlainCommandParams>
         RuleFor(x => x.Command).NotEmpty().WithMessage("Provide a command.");
     }
 }
-
-[DeploymentStep(DeploymentBuildStepType.RunPlainCommand)]
-public class RunPlainCommandConfig : IDeploymentStepConfig<RunPlainCommandParams>
-{
-    public IValidator<RunPlainCommandParams> Validator => new RunPlainCommandValidator();
-}

@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using CloudCrafter.Agent.Models.Deployment.Steps;
 using CloudCrafter.Agent.Models.Deployment.Steps.Params;
+using CloudCrafter.Agent.Runner.Factories;
 using CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
 using FluentAssertions;
 
@@ -8,76 +9,53 @@ namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery;
 
 public class DeploymentStepAnnotationTests
 {
-    private static IEnumerable<string> GetClassesWithDeploymentStepAnnotation()
-    {
-        var namespaceToCheck = "CloudCrafter.Agent.Models.Deployment.Steps.Params";
-        var baseClassType = typeof(BaseParams);
-
-        // Get all types in the assembly
-        var assembly = Assembly.GetAssembly(baseClassType);
-
-        if (assembly is null)
-        {
-            throw new Exception("Could not load assembly");
-        }
-
-        var deploymentStepClasses = assembly
-            .GetTypes()
-            .Where(t =>
-                t.Namespace != null
-                && t.Namespace.StartsWith(namespaceToCheck)
-                && t.IsClass
-                && !t.IsAbstract
-                && t.GetCustomAttributes(typeof(DeploymentStepAttribute), true).Any()
-            );
-
-        return deploymentStepClasses.Select(t => t.FullName!);
-    }
-
     [Test]
     public void EnsureAllDeploymentStepClassesHaveTests()
     {
-        var baseParamsAssembly = typeof(BaseParams).Assembly;
+        // Get all types in the assembly containing BaseParams
+        var baseParamsType = typeof(BaseParams);
+        var assembly = Assembly.GetAssembly(baseParamsType);
+        assembly.Should().NotBeNull("Assembly containing BaseParams should be loaded");
 
-        var classesWithAnnotation = GetClassesWithDeploymentStepAnnotation().ToList();
-        var testClasses = Assembly
-            .GetExecutingAssembly()
+        // Find all non-abstract classes that inherit from BaseParams
+        var paramClasses = assembly!
             .GetTypes()
-            .Where(t =>
-                t.BaseType != null
-                && t.BaseType.IsGenericType
-                && t.BaseType.GetGenericTypeDefinition() == typeof(BaseParameterConversionTest<>)
-            )
+            .Where(t => t.IsClass && !t.IsAbstract && baseParamsType.IsAssignableFrom(t))
             .ToList();
 
-        var missingTests = new List<string>();
+        paramClasses.Should().NotBeEmpty("There should be at least one parameter class");
 
-        foreach (var className in classesWithAnnotation)
+        // Get the assembly containing BaseDeploymentStep
+        var deploymentStepAssembly = typeof(BaseDeploymentStep<>).Assembly;
+        var testAssembly = typeof(BaseParameterConversionTest<>).Assembly;
+
+        foreach (var paramClass in paramClasses)
         {
-            var type = baseParamsAssembly.GetType(className);
-            if (type == null)
-            {
-                missingTests.Add($"{className} (Type not found)");
-                continue;
-            }
+            // Check for handler (BaseDeploymentStep implementation)
+            var handlerType = typeof(BaseDeploymentStep<>).MakeGenericType(paramClass);
+            var handlers = deploymentStepAssembly
+                .GetTypes()
+                .Where(t => t.IsClass && !t.IsAbstract && handlerType.IsAssignableFrom(t))
+                .ToList();
 
-            var hasMatchingTestClass = testClasses.Any(t =>
-                t.BaseType != null
-                && t.BaseType.IsGenericType
-                && t.BaseType.GetGenericArguments().FirstOrDefault() == type
-            );
+            handlers
+                .Should()
+                .NotBeEmpty(
+                    $"Parameter class {paramClass.Name} should have at least one handler that inherits from BaseDeploymentStep<{paramClass.Name}>"
+                );
+            handlers.Count.Should().Be(1);
+            // Check for test class (BaseParameterConversionTest implementation)
+            var testBaseType = typeof(BaseParameterConversionTest<>).MakeGenericType(paramClass);
+            var tests = testAssembly
+                .GetTypes()
+                .Where(t => t.IsClass && !t.IsAbstract && testBaseType.IsAssignableFrom(t))
+                .ToList();
 
-            if (!hasMatchingTestClass)
-            {
-                missingTests.Add(type.Name);
-            }
+            tests
+                .Should()
+                .NotBeEmpty(
+                    $"Parameter class {paramClass.Name} should have at least one test class that inherits from BaseParameterConversionTest<{paramClass.Name}>"
+                );
         }
-
-        missingTests
-            .Should()
-            .BeEmpty(
-                $"All classes with DeploymentStepAttribute should have a corresponding test class extending BaseParameterConversionTest<>. Missing tests for: {string.Join(", ", missingTests)}"
-            );
-        classesWithAnnotation.Count().Should().Be(testClasses.Count());
     }
 }

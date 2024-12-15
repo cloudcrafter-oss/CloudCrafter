@@ -18,9 +18,8 @@ public class GenerateNixpacksPlanBuildStepGeneratorTest
         var buildStep = generator.Generate();
 
         // Assert
-        var result = Serializer.GetConfig<NixpacksGeneratePlanParams>(buildStep);
-        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, result.Validator);
-
+        var handler = Serializer.GetHandler<NixpacksGeneratePlanParams>(buildStep);
+        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, handler.Validator);
         paramObject.Path.Should().Be("/some/path");
     }
 }

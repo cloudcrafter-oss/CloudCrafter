@@ -26,8 +26,8 @@ public class NixpacksBuildDockerImageBuildStepGeneratorTest
         var buildStep = generator.Generate();
 
         // Assert
-        var result = Serializer.GetConfig<NixpacksBuildDockerImageParams>(buildStep);
-        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, result.Validator);
+        var handler = Serializer.GetHandler<NixpacksBuildDockerImageParams>(buildStep);
+        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, handler.Validator);
 
         paramObject.Path.Should().Be("/some/path");
         paramObject.Env.Should().NotBeNull();

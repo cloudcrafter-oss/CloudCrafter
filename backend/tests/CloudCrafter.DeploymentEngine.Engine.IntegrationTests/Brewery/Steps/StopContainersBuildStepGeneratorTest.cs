@@ -23,8 +23,8 @@ public class StopContainersBuildStepGeneratorTest
         var buildStep = generator.Generate();
 
         // Assert
-        var result = Serializer.GetConfig<StopContainersParams>(buildStep);
-        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, result.Validator);
+        var handler = Serializer.GetHandler<StopContainersParams>(buildStep);
+        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, handler.Validator);
 
         paramObject.OnlyCloudCrafterContainers.Should().Be(true);
         paramObject.Filters.Should().ContainKey("labels");

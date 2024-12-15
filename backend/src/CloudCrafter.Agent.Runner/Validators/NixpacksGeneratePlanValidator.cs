@@ -13,10 +13,3 @@ public class NixpacksGeneratePlanParamsValidator : AbstractValidator<NixpacksGen
         RuleFor(x => x.Path).NotEmpty();
     }
 }
-
-[DeploymentStep(DeploymentBuildStepType.NixpacksGeneratePlan)]
-public class NixpacksGeneratePlanConfig : IDeploymentStepConfig<NixpacksGeneratePlanParams>
-{
-    public IValidator<NixpacksGeneratePlanParams> Validator =>
-        new NixpacksGeneratePlanParamsValidator();
-}

@@ -1,7 +1,8 @@
 ﻿using System.Reflection;
-using CloudCrafter.Agent.Models.Deployment.Steps;
 using CloudCrafter.Agent.Models.Deployment.Steps.Params;
+using CloudCrafter.Agent.Runner.Factories;
 using FluentAssertions;
+using NUnit.Framework;
 
 namespace CloudCrafter.Agent.Runner.Tests.Models;
 
@@ -21,30 +22,59 @@ public class ParamsShouldExtendBaseParamsTest
             throw new Exception("Could not load assembly");
         }
 
-        var deploymentStepClasses = assembly
+        var parameterClasses = assembly
             .GetTypes()
             .Where(t =>
                 t.Namespace != null
                 && t.Namespace.StartsWith(namespaceToCheck)
                 && t.IsClass
                 && !t.IsAbstract
-                && t.GetCustomAttributes(typeof(DeploymentStepAttribute), true).Any()
+                && t.Name.EndsWith("Params") // Convention: All parameter classes end with "Params"
             );
 
-        deploymentStepClasses.Count().Should().BeGreaterThan(0);
+        parameterClasses.Count().Should().BeGreaterThan(0);
+
         // Check each type
-        foreach (var type in deploymentStepClasses)
+        foreach (var type in parameterClasses)
         {
-            Assert.IsTrue(
-                baseClassType.IsAssignableFrom(type),
-                $"DeploymentStep class {type.Name} in namespace {type.Namespace} does not inherit from {baseClassType.Name}"
-            );
+            baseClassType
+                .IsAssignableFrom(type)
+                .Should()
+                .BeTrue(
+                    $"Parameter class {type.Name} in namespace {type.Namespace} must inherit from {baseClassType.Name}"
+                );
+        }
+    }
+
+    [Test]
+    public void EnsureAllParamsFollowNamingConvention()
+    {
+        var namespaceToCheck = "CloudCrafter.Agent.Models.Deployment.Steps.Params";
+        var baseClassType = typeof(BaseParams);
+        var assembly = Assembly.GetAssembly(baseClassType);
+
+        if (assembly is null)
+        {
+            throw new Exception("Could not load assembly");
         }
 
-        // Ensure we found at least one DeploymentStep class
-        Assert.IsTrue(
-            deploymentStepClasses.Any(),
-            $"No classes with [DeploymentStep] attribute found in namespace {namespaceToCheck} or its sub-namespaces"
-        );
+        var allTypesInNamespace = assembly
+            .GetTypes()
+            .Where(t =>
+                t.Namespace != null
+                && t.Namespace.StartsWith(namespaceToCheck)
+                && t.IsClass
+                && !t.IsAbstract
+                && baseClassType.IsAssignableFrom(t)
+            );
+
+        foreach (var type in allTypesInNamespace)
+        {
+            type.Name.Should()
+                .EndWith(
+                    "Params",
+                    $"All parameter classes must end with 'Params'. {type.Name} does not follow this convention."
+                );
+        }
     }
 }

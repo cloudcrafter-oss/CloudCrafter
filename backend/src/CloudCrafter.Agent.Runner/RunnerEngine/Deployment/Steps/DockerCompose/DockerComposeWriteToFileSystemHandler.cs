@@ -1,28 +1,31 @@
 ﻿using System.Text;
-using CloudCrafter.Agent.Models.Deployment;
-using CloudCrafter.Agent.Models.Deployment.Steps;
-using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Deployment.Steps.Params.DockerCompose;
 using CloudCrafter.Agent.Models.Exceptions;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
-using CloudCrafter.Agent.Runner.Cli.Helpers;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
+using CloudCrafter.Agent.Runner.Factories;
+using CloudCrafter.Agent.Runner.Validators.DockerCompose;
+using FluentValidation;
 
 namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps.DockerCompose;
 
-[DeploymentStep(DeploymentBuildStepType.DockerComposeWriteToFileSystem)]
-// ReSharper disable once UnusedType.Global
 public class DockerComposeWriteToFileSystemHandler(
     IMessagePump pump,
     IFileSystemHelper fileSystemHelper
-) : IDeploymentStepHandler<DockerComposeWriteToFileSystemParams>
+) : BaseDeploymentStep<DockerComposeWriteToFileSystemParams>
 {
     private readonly IDeploymentLogger _logger =
         pump.CreateLogger<DockerComposeWriteToFileSystemHandler>();
 
-    public async Task ExecuteAsync(
+    public override DeploymentBuildStepType Type =>
+        DeploymentBuildStepType.DockerComposeWriteToFileSystem;
+
+    public override IValidator<DockerComposeWriteToFileSystemParams> Validator =>
+        new DockerComposeWriteToFileSystemValidator();
+
+    public override async Task ExecuteAsync(
         DockerComposeWriteToFileSystemParams parameters,
         DeploymentContext context
     )
@@ -57,7 +60,10 @@ public class DockerComposeWriteToFileSystemHandler(
         _logger.LogInfo($"Successfully wrote docker compose file to {fullPath}");
     }
 
-    public Task DryRun(DockerComposeWriteToFileSystemParams parameters, DeploymentContext context)
+    public override Task DryRun(
+        DockerComposeWriteToFileSystemParams parameters,
+        DeploymentContext context
+    )
     {
         _logger.LogInfo("Writing docker compose file to the file system");
 

@@ -1,9 +1,5 @@
-﻿using CloudCrafter.Agent.Models.Recipe;
+﻿namespace CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
 
-namespace CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
-
-[DeploymentStep(DeploymentBuildStepType.ContainerHealthCheck)]
-// ReSharper disable once ClassNeverInstantiated.Global
 public class ContainerHealthCheckParams : BaseParams
 {
     public Dictionary<string, ContainerHealthCheckParamsOptions> Services { get; init; } = new();
