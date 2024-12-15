@@ -1,5 +1,8 @@
 ﻿using System.Reflection;
 using CloudCrafter.Agent.Models.Configs;
+using CloudCrafter.Agent.Runner.Cli;
+using CloudCrafter.Agent.Runner.Cli.Helpers;
+using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.Agent.Runner.Common.Behaviour;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
 using CloudCrafter.Agent.Runner.DeploymentLogPump.Implementation;
@@ -66,6 +69,16 @@ public class BaseHostCreator
                     services.AddSingleton<IHubWrapper, HubWrapper>();
                     services.AddSingleton<HostInfoService>();
                     services.AddSingleton<IHubConnectionProvider, HubConnectionProvider>();
+
+                    services
+                        .AddTransient<INixpacksHelper, NixpacksHelper>()
+                        .AddTransient<IDockerHealthCheckHelper, DockerHealthCheckHelper>()
+                        .AddTransient<IDockerHelper, DockerHelper>()
+                        .AddTransient<IDockerClientProvider, DockerClientProvider>()
+                        .AddTransient<IDockerComposeHelper, DockerComposeHelper>();
+                    services
+                        .AddTransient<ICommandParser, CommandParser>()
+                        .AddTransient<IFileSystemHelper, FileSystemHelper>();
 
                     services.AddSerilog();
 
