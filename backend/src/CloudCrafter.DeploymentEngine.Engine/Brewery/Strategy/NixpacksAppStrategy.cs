@@ -13,7 +13,12 @@ public class NixpacksAppStrategy : BaseStrategy
     )
     {
         var recipeGenerator = new SimpleAppRecipeGenerator(
-            new BaseRecipeGenerator.Args { Stack = stack, DeploymentId = deployment.Id }
+            new BaseRecipeGenerator.Args
+            {
+                Stack = stack,
+                DeploymentId = deployment.Id,
+                ProviderAccessTokenProvider = providerAccessTokenProvider,
+            }
         );
 
         return Task.FromResult<BaseRecipeGenerator>(recipeGenerator);

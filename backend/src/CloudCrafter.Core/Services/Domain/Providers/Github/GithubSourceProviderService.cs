@@ -70,11 +70,12 @@ public class GithubSourceProviderService(
         );
 
         var installationClient = clientProvider.GetClientForToken(token.Token);
-        var result = await installationClient.User.Current();
+        var result =
+            await installationClient.GitHubApps.Installation.GetAllRepositoriesForCurrent();
 
         if (result == null)
         {
-            throw new Exception("Failed to get user");
+            throw new Exception("Failed to get installation repositories");
         }
 
         return token.Token;

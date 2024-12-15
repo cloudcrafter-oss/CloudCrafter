@@ -7,21 +7,39 @@ public static class EntityFaker
 {
     public static Stack GenerateBasicAppStack(GenerateBasicAppArgs args)
     {
+        ApplicationSource? source = null;
+        if (args.SourceProvider != null)
+        {
+            source = new ApplicationSource
+            {
+                Type = ApplicationSourceType.GithubApp,
+                GithubApp = new ApplicationSourceGithubApp
+                {
+                    SourceProvider = args.SourceProvider,
+                    SourceProviderId = args.SourceProvider.Id,
+                    Branch = "main",
+                    Repository = "https://github.com/cloudcrafter-oss/ci-private-tests",
+                    RepositoryId = "903683855",
+                },
+            };
+        }
+        else
+        {
+            source = new ApplicationSource
+            {
+                Type = ApplicationSourceType.Git,
+                Git = new ApplicationSourceGit
+                {
+                    Repository = args.GitRepository,
+                    Path = args.GitPath,
+                },
+            };
+        }
+
         var stack = FakerInstances
             .StackFaker(args.EnvironmentId)
             .RuleFor(x => x.Id, args.StackId)
-            .RuleFor(
-                x => x.Source,
-                new ApplicationSource
-                {
-                    Type = ApplicationSourceType.Git,
-                    Git = new ApplicationSourceGit
-                    {
-                        Repository = args.GitRepository,
-                        Path = args.GitPath,
-                    },
-                }
-            )
+            .RuleFor(x => x.Source, source)
             .RuleFor(x => x.Name, args.StackName)
             .Generate();
 
@@ -55,6 +73,7 @@ public static class EntityFaker
         public required string DomainName { get; init; }
 
         public required string StackServiceName { get; init; }
+        public required SourceProvider? SourceProvider { get; init; }
 
         public string GitRepository { get; init; } =
             "https://github.com/cloudcrafter-oss/demo-examples";
