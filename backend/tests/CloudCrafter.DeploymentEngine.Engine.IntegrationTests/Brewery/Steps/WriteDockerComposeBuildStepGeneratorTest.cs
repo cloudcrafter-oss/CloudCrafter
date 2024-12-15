@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params.DockerCompose;
+using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Runner;
 using CloudCrafter.Agent.Runner.Factories;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
@@ -28,6 +29,7 @@ public class WriteDockerComposeBuildStepGeneratorTest
         var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, handler.Validator);
 
         // Assert
+        buildStep.Type.Should().Be(DeploymentBuildStepType.DockerComposeWriteToFileSystem);
         paramObject.DockerComposeFile.Should().Be("docker-compose-testing.yml");
     }
 }
