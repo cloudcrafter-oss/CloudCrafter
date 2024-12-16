@@ -21,10 +21,8 @@ buildOptions:
     description: Fetches the git repository from source provider
     type: FetchGitRepositoryFromProvider
     params:
-      repository: https://github.com/cloudcrafter-oss/ci-private-tests
-      repositoryId: 903683855
-      branch: main
-      accessToken: dummy
+      fullPathWithToken: https://x-access-token:dummy@github.com/cloudcrafter-oss/ci-private-tests
+      providerPath: cloudcrafter-oss/ci-private-tests
   - name: Determine Nixpacks buildpack
     description: Determines the Nixpacks buildpack to use for the application
     type: NixpacksDetermineBuildPack
