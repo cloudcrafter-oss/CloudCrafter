@@ -173,16 +173,16 @@ public abstract class BaseRecipeGenerator
 
     protected void AddFetchGitRepositoryFromGithubAppStep(
         ApplicationSourceGithubApp app,
-        string accessToken
+        string accessToken,
+        GitSourceLocationDto sourceLocation
     )
     {
+        var fullPath = $"https://x-access-token:{accessToken}@github.com/{sourceLocation.FullPath}";
         var generator = new FetchGitRepositoryFromGithubAppDeploymentStepGenerator(
             new FetchGitRepositoryFromGithubAppDeploymentStepGenerator.Args
             {
-                Repository = app.Repository,
-                RepositoryId = app.RepositoryId,
-                Branch = app.Branch,
-                AccessToken = accessToken,
+                FullPathWithToken = fullPath,
+                ProviderPath = sourceLocation.FullPath,
             }
         );
         Recipe.AddBuildStep(generator);
@@ -196,7 +196,7 @@ public abstract class BaseRecipeGenerator
     {
         public required Stack Stack { get; init; }
         public required Guid DeploymentId { get; init; }
-        public required IProvideProviderAccessToken ProviderAccessTokenProvider { get; init; }
+        public required ISourceProviderHelper ProviderHelperProvider { get; init; }
     }
 
     public class GeneratedResult

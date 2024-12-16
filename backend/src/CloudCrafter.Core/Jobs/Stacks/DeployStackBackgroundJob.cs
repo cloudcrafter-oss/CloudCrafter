@@ -92,9 +92,10 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
             var recipeGenerator = await strategy.GenerateRecipeAsync(
                 _deployment!.Stack!,
                 _deployment!,
-                serviceProvider.GetRequiredService<IProvideProviderAccessToken>()
+                serviceProvider.GetRequiredService<ISourceProviderHelper>()
             );
             var recipe = await recipeGenerator.Generate();
+
             logger.LogDebug("Recipe brewed!");
             logger.LogDebug("Writing recipe to database...");
 

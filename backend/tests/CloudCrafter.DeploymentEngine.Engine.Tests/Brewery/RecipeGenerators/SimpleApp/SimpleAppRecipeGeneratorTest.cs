@@ -37,7 +37,7 @@ public class SimpleAppRecipeGeneratorTest
             {
                 Stack = stack,
                 DeploymentId = deploymentId,
-                ProviderAccessTokenProvider = new DummyAccessTokenProvider(),
+                ProviderHelperProvider = new DummyHelperProvider(),
             }
         );
 
@@ -90,7 +90,7 @@ public class SimpleAppRecipeGeneratorTest
             {
                 Stack = stack,
                 DeploymentId = deploymentId,
-                ProviderAccessTokenProvider = new DummyAccessTokenProvider(),
+                ProviderHelperProvider = new DummyHelperProvider(),
             }
         );
 
@@ -177,7 +177,7 @@ public class SimpleAppRecipeGeneratorTest
             {
                 Stack = stack,
                 DeploymentId = deploymentId,
-                ProviderAccessTokenProvider = new DummyAccessTokenProvider(),
+                ProviderHelperProvider = new DummyHelperProvider(),
             }
         );
 

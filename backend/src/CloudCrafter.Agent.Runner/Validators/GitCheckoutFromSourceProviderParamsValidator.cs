@@ -1,7 +1,4 @@
-﻿using CloudCrafter.Agent.Models.Deployment.Steps;
-using CloudCrafter.Agent.Models.Deployment.Steps.Params;
-using CloudCrafter.Agent.Models.Recipe;
-using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
+﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using FluentValidation;
 
 namespace CloudCrafter.Agent.Runner.Validators;
@@ -11,8 +8,7 @@ public class GitCheckoutFromSourceProviderParamsValidator
 {
     public GitCheckoutFromSourceProviderParamsValidator()
     {
-        RuleFor(x => x.AccessToken).NotEmpty().MinimumLength(3);
-        RuleFor(x => x.Repository).NotEmpty();
-        RuleFor(x => x.Branch).NotEmpty();
+        RuleFor(x => x.FullPathWithToken).NotEmpty().MinimumLength(3);
+        RuleFor(x => x.ProviderPath).NotEmpty().MinimumLength(3);
     }
 }

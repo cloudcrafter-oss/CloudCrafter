@@ -16,19 +16,15 @@ public class FetchGitRepositoryFromGithubAppDeploymentStepGenerator(
             Type = DeploymentBuildStepType.FetchGitRepositoryFromProvider,
             Params = new Dictionary<string, object>
             {
-                { "repository", options.Repository },
-                { "repositoryId", options.RepositoryId },
-                { "branch", options.Branch },
-                { "accessToken", options.AccessToken },
+                { "fullPathWithToken", options.FullPathWithToken },
+                { "providerPath", options.ProviderPath },
             },
         };
     }
 
     public class Args
     {
-        public required string Repository { get; init; }
-        public required string Branch { get; init; }
-        public required string RepositoryId { get; set; }
-        public required string AccessToken { get; set; }
+        public required string FullPathWithToken { get; init; }
+        public required string ProviderPath { get; set; }
     }
 }

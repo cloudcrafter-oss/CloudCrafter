@@ -1,6 +1,4 @@
-using CloudCrafter.Agent.Models.IO;
 using CloudCrafter.Agent.Models.Recipe;
-using CloudCrafter.Agent.Runner.IO;
 using CloudCrafter.Core.Services.Core.Providers;
 using CloudCrafter.Core.Services.Domain.Providers;
 using CloudCrafter.Core.Services.Domain.Providers.Github;
@@ -95,16 +93,14 @@ public class SimpleAppRecipeWithGithubAppTest
             new GithubClientProvider()
         );
 
-        var proxy = new ProvideProviderAccessTokenService(
-            new SourceProviderProxy(githubProviderService)
-        );
+        var proxy = new SourceProviderHelperService(new SourceProviderProxy(githubProviderService));
 
         var generator = new SimpleAppRecipeGenerator(
             new BaseRecipeGenerator.Args
             {
                 Stack = stack,
                 DeploymentId = deploymentId,
-                ProviderAccessTokenProvider = proxy,
+                ProviderHelperProvider = proxy,
             }
         );
 
@@ -117,17 +113,12 @@ public class SimpleAppRecipeWithGithubAppTest
 
         githubCheckoutStep.Should().NotBeNull();
 
-        githubCheckoutStep!
-            .Params["repository"]
-            .Should()
-            .Be("https://github.com/cloudcrafter-oss/ci-private-tests");
-        githubCheckoutStep.Params["repositoryId"].Should().Be("903683855");
-        githubCheckoutStep.Params["branch"].Should().Be("main");
+        githubCheckoutStep!.Params["fullPathWithToken"].Should().NotBeNull();
 
-        githubCheckoutStep.Params["accessToken"].Should().NotBeNull();
+        githubCheckoutStep.Params["providerPath"].Should().Be("cloudcrafter-oss/ci-private-tests");
 
-        string token = (string)githubCheckoutStep.Params["accessToken"];
-        token.Should().NotBeEmpty();
-        token.Length.Should().BeGreaterThan(5);
+        var fullPath = (string)githubCheckoutStep.Params["fullPathWithToken"];
+        fullPath.Should().NotBeEmpty();
+        fullPath.Should().Contain("cloudcrafter-oss/ci-private-tests");
     }
 }

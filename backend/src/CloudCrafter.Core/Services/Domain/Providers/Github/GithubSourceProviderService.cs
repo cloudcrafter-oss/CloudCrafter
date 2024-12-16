@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.Core.Interfaces.Domain.Providers;
 using CloudCrafter.Core.Services.Core.Providers;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Strategy;
 using CloudCrafter.Domain.Domain.Providers;
 using CloudCrafter.Domain.Entities;
 using Microsoft.Extensions.Logging;
@@ -79,6 +80,27 @@ public class GithubSourceProviderService(
         }
 
         return token.Token;
+    }
+
+    public async Task<GitSourceLocationDto> GetSourceLocation(
+        SourceProvider provider,
+        ApplicationSource source
+    )
+    {
+        if (source.GithubApp == null)
+        {
+            throw new Exception("Provided service is not a Github service");
+        }
+
+        var client = await CreateInstallationClient(provider);
+
+        var repository = await client.Repository.Get(long.Parse(source.GithubApp.RepositoryId));
+
+        return new GitSourceLocationDto
+        {
+            FullPath = repository.FullName,
+            GitUrl = repository.GitUrl,
+        };
     }
 
     private async Task<IGitHubClient> CreateInstallationClient(SourceProvider provider)

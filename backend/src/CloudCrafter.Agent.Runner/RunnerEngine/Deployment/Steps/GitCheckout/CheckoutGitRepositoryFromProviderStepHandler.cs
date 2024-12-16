@@ -20,6 +20,7 @@ public class CheckoutGitRepositoryFromProviderStepHandler(
 
     public override DeploymentBuildStepType Type =>
         DeploymentBuildStepType.FetchGitRepositoryFromProvider;
+
     public override IValidator<GitCheckoutFromSourceProviderParams> Validator =>
         new GitCheckoutFromSourceProviderParamsValidator();
 
@@ -30,8 +31,9 @@ public class CheckoutGitRepositoryFromProviderStepHandler(
     {
         _logger.LogInfo("Start ExecuteAsync");
 
-        var repositoryUrl = parameters.Repository;
         var gitDirectory = context.GetGitDirectory();
+
+        var repositoryUrl = "";
 
         var gitCheckoutDirectory = $"{gitDirectory}/git";
 

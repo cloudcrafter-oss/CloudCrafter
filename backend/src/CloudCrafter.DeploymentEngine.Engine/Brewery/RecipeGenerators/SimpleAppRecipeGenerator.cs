@@ -75,10 +75,15 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
 
         if (isGithubApp)
         {
-            var token = await Options.ProviderAccessTokenProvider.GetProviderAccessTokenAsync(
+            var token = await Options.ProviderHelperProvider.GetProviderAccessTokenAsync(
                 Options.Stack.Source!.GithubApp!.SourceProvider
             );
-            AddFetchGitRepositoryFromGithubAppStep(Options.Stack.Source!.GithubApp!, token);
+
+            var dto = await Options.ProviderHelperProvider.GetSourceLocation(
+                Options.Stack.Source!.GithubApp!.SourceProvider,
+                Options.Stack.Source!
+            );
+            AddFetchGitRepositoryFromGithubAppStep(Options.Stack.Source!.GithubApp!, token, dto);
         }
 
         var firstService = Options.Stack.Services.First();

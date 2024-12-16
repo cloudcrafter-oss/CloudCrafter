@@ -13,10 +13,9 @@ public class FetchGitRepositoryFromGithubAppDeploymentStepGeneratorTest
         // Arrange
         var options = new FetchGitRepositoryFromGithubAppDeploymentStepGenerator.Args
         {
-            Repository = "some-repository.git",
-            Branch = "main",
-            RepositoryId = "1234",
-            AccessToken = "some-access-token",
+            FullPathWithToken =
+                "https://x-access-token:dummy@github.com/cloudcrafter-oss/ci-private-tests",
+            ProviderPath = "cloudcrafter-oss/ci-private-tests",
         };
         var generator = new FetchGitRepositoryFromGithubAppDeploymentStepGenerator(options);
 
@@ -27,9 +26,7 @@ public class FetchGitRepositoryFromGithubAppDeploymentStepGeneratorTest
         var handler = Serializer.GetHandler<GitCheckoutFromSourceProviderParams>(buildStep);
         var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, handler.Validator);
 
-        paramObject.Repository.Should().Be("some-repository.git");
-        paramObject.Branch.Should().Be("main");
-        paramObject.RepositoryId.Should().Be("1234");
-        paramObject.AccessToken.Should().Be("some-access-token");
+        paramObject.FullPathWithToken.Should().Be(options.FullPathWithToken);
+        paramObject.ProviderPath.Should().Be(options.ProviderPath);
     }
 }
