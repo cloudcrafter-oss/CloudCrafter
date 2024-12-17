@@ -33,7 +33,7 @@ public class CheckoutGitRepositoryFromProviderStepHandler(
 
         var gitDirectory = context.GetGitDirectory();
 
-        var repositoryUrl = "";
+        var repositoryUrl = parameters.ProviderPath;
 
         var gitCheckoutDirectory = $"{gitDirectory}/git";
 
@@ -41,7 +41,7 @@ public class CheckoutGitRepositoryFromProviderStepHandler(
 
         var result = await executor.ExecuteAsync(
             "git",
-            ["clone", repositoryUrl, gitCheckoutDirectory]
+            ["clone", parameters.FullPathWithToken, gitCheckoutDirectory]
         );
 
         if (result.ExitCode != 0)
@@ -56,7 +56,7 @@ public class CheckoutGitRepositoryFromProviderStepHandler(
         DeploymentContext context
     )
     {
-        _logger.LogInfo("Checkout Git Repository dryrun");
+        _logger.LogInfo("Checkout Git Repository for Provider dryrun");
 
         return Task.CompletedTask;
     }
