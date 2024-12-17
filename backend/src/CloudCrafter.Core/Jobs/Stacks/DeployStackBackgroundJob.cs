@@ -45,6 +45,8 @@ public class DeployStackBackgroundJob : BaseDeploymentJob, IJob
             .Include(dep => dep.Stack)
             .ThenInclude(stack => stack!.Source)
             .ThenInclude(source => source!.GithubApp)
+            .ThenInclude(x => x!.SourceProvider)
+            .ThenInclude(x => x.GithubProvider)
             .FirstOrDefaultAsync();
 
         if (_deployment == null || _deployment.Stack == null || _deployment.Stack.Server == null)
