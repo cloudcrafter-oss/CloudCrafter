@@ -231,6 +231,10 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
             .Include(x => x.Server)
             .Include(x => x.Environment)
             .ThenInclude(x => x!.Project)
+            .Include(x => x.Source)
+            .ThenInclude(x => x!.GithubApp)
+            .ThenInclude(x => x!.SourceProvider)
+            .ThenInclude(x => x!.GithubProvider)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (stack is null && throwExceptionOnNotFound)

@@ -40,7 +40,7 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
             .SetDockerComposeOptions(dockerComposeEditor, dockerComposeLocation)
             .SetDestination(dockerComposeLocation, gitCheckoutDirectory);
 
-        AddSteps(dockerComposeEditor);
+        await AddSteps(dockerComposeEditor);
 
         var recipe = Recipe.Build();
 
@@ -51,7 +51,7 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
         };
     }
 
-    private void AddSteps(DockerComposeEditor dockerComposeEditor)
+    private async Task AddSteps(DockerComposeEditor dockerComposeEditor)
     {
         AddNetworkExistsStep("cloudcrafter");
 
@@ -75,7 +75,15 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
 
         if (isGithubApp)
         {
-            AddFetchGitRepositoryFromGithubAppStep(Options.Stack.Source!.GithubApp!);
+            var token = await Options.ProviderHelperProvider.GetProviderAccessTokenAsync(
+                Options.Stack.Source!.GithubApp!.SourceProvider
+            );
+
+            var dto = await Options.ProviderHelperProvider.GetSourceLocation(
+                Options.Stack.Source!.GithubApp!.SourceProvider,
+                Options.Stack.Source!
+            );
+            AddFetchGitRepositoryFromGithubAppStep(Options.Stack.Source!.GithubApp!, token, dto);
         }
 
         var firstService = Options.Stack.Services.First();

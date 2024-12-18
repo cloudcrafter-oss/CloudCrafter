@@ -36,6 +36,7 @@ public class SimpleAppDeploymentTest : BaseTestFixture
                 StackServiceId = StackServiceId,
                 StackName = "My Custom Stack 123",
                 StackServiceName = "My Custom Service : 123",
+                SourceProvider = null,
             }
         );
     }

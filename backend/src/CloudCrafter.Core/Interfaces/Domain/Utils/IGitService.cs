@@ -9,4 +9,6 @@ public interface IGitService
         string? path = null,
         string? branch = null
     );
+
+    Task<GitRepositoryCheckResultDto> ValidateSourceProviderBranch(Guid stackId, string branchName);
 }

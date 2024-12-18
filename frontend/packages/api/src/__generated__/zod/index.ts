@@ -35,6 +35,8 @@ export { getServerByIdPathParamsSchema, getServerById200Schema, getServerByIdQue
 export { getServers200Schema, getServersQueryResponseSchema } from "./getServersSchema";
 export { getStackDetailPathParamsSchema, getStackDetail200Schema, getStackDetail404Schema, getStackDetailQueryResponseSchema } from "./getStackDetailSchema";
 export { getUsers200Schema, getUsersMutationRequestSchema, getUsersMutationResponseSchema } from "./getUsersSchema";
+export { gitApplicationSourceDtoSchema } from "./gitApplicationSourceDtoSchema";
+export { githubApplicationSourceDtoSchema } from "./githubApplicationSourceDtoSchema";
 export { gitProviderBranchDtoSchema } from "./gitProviderBranchDtoSchema";
 export { gitProviderRepositoryDtoSchema } from "./gitProviderRepositoryDtoSchema";
 export { gitRepositoryCheckResultDtoSchema } from "./gitRepositoryCheckResultDtoSchema";

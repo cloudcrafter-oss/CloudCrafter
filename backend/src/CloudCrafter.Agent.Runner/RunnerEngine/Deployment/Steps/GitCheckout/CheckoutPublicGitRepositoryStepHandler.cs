@@ -8,15 +8,15 @@ using CloudCrafter.Agent.Runner.Validators;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using FluentValidation;
 
-namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
+namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps.GitCheckout;
 
-public class CheckoutGitRepositoryStepHandler(IMessagePump pump, ICommandExecutor executor)
+public class CheckoutPublicGitRepositoryStepHandler(IMessagePump pump, ICommandExecutor executor)
     : BaseDeploymentStep<GitCheckoutParams>
 {
     private readonly IDeploymentLogger _logger =
-        pump.CreateLogger<CheckoutGitRepositoryStepHandler>();
+        pump.CreateLogger<CheckoutPublicGitRepositoryStepHandler>();
 
-    public override DeploymentBuildStepType Type => DeploymentBuildStepType.FetchGitRepository;
+    public override DeploymentBuildStepType Type => DeploymentBuildStepType.FetchPublicGitRepository;
     public override IValidator<GitCheckoutParams> Validator => new GitCheckoutParamsValidator();
 
     public override async Task ExecuteAsync(GitCheckoutParams parameters, DeploymentContext context)

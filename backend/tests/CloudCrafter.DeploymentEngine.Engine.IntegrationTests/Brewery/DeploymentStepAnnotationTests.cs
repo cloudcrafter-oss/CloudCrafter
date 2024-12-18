@@ -1,9 +1,12 @@
 ﻿using System.Reflection;
+using CloudCrafter.Agent.Console;
 using CloudCrafter.Agent.Models.Deployment.Steps;
 using CloudCrafter.Agent.Models.Deployment.Steps.Params;
+using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Runner.Factories;
 using CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery;
 
@@ -56,6 +59,31 @@ public class DeploymentStepAnnotationTests
                 .NotBeEmpty(
                     $"Parameter class {paramClass.Name} should have at least one test class that inherits from BaseParameterConversionTest<{paramClass.Name}>"
                 );
+        }
+    }
+
+    [Test]
+    public void EnsureThatEachDeploymentBuildStepTypeHasAHandler()
+    {
+        var builder = Program.CreateHostBuilder([]);
+        var host = builder.Build();
+
+        var deploymentSteps = host.Services.GetServices<IDeploymentStep>();
+        // Get all enum values from DeploymentBuildStepType
+        var stepTypes = Enum.GetValues<DeploymentBuildStepType>();
+        stepTypes.Should().NotBeEmpty("There should be at least one deployment step type");
+
+        // For each step type, ensure there is a handler
+        foreach (var stepType in stepTypes)
+        {
+            var handlers = deploymentSteps.Where(x => x.Type == stepType).ToList();
+
+            handlers
+                .Should()
+                .NotBeEmpty(
+                    $"Step type {stepType} should have at least one handler that implements IDeploymentStep"
+                );
+            handlers.Count.Should().Be(1, $"Step type {stepType} should have exactly one handler");
         }
     }
 }

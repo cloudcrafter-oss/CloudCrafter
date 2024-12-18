@@ -19,7 +19,7 @@ buildOptions:
       - cloudcrafter
   - name: Fetch git repository
     description: Fetches the git repository
-    type: FetchGitRepository
+    type: FetchPublicGitRepository
     params:
       repo: https://github.com/cloudcrafter-oss/demo-examples
       commit: HEAD

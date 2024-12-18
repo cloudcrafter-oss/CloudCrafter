@@ -4,6 +4,7 @@ using CloudCrafter.Agent.Models.Runner;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
+using CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps.GitCheckout;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,7 +12,7 @@ namespace CloudCrafter.Agent.Console.IntegrationTests.RunnerEngine.Deployment.St
 
 public class NixpacksDetermineBuildPackHandlerTest : HandlerBaseCase
 {
-    private CheckoutGitRepositoryStepHandler _checkoutHandler;
+    private CheckoutPublicGitRepositoryStepHandler _checkoutHandler;
     private NixpacksDetermineBuildPackHandler _handler;
 
     [SetUp]
@@ -25,7 +26,7 @@ public class NixpacksDetermineBuildPackHandlerTest : HandlerBaseCase
 
         var executor = host.Services.GetRequiredService<ICommandExecutor>();
         _handler = new NixpacksDetermineBuildPackHandler(pump, helper);
-        _checkoutHandler = new CheckoutGitRepositoryStepHandler(pump, executor);
+        _checkoutHandler = new CheckoutPublicGitRepositoryStepHandler(pump, executor);
     }
 
     [Test]
