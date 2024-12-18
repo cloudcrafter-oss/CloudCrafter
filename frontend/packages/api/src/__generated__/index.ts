@@ -98,6 +98,8 @@ export type { GetServerByIdPathParams, GetServerById200, GetServerByIdQueryRespo
 export type { GetServers200, GetServersQueryResponse, GetServersQuery } from "./types/GetServers";
 export type { GetStackDetailPathParams, GetStackDetail200, GetStackDetail404, GetStackDetailQueryResponse, GetStackDetailQuery } from "./types/GetStackDetail";
 export type { GetUsers200, GetUsersMutationRequest, GetUsersMutationResponse, GetUsersMutation } from "./types/GetUsers";
+export type { GitApplicationSourceDto } from "./types/GitApplicationSourceDto";
+export type { GithubApplicationSourceDto } from "./types/GithubApplicationSourceDto";
 export type { GitProviderBranchDto } from "./types/GitProviderBranchDto";
 export type { GitProviderRepositoryDto } from "./types/GitProviderRepositoryDto";
 export type { GitRepositoryCheckResultDto } from "./types/GitRepositoryCheckResultDto";
@@ -290,6 +292,8 @@ export { getServerByIdPathParamsSchema, getServerById200Schema, getServerByIdQue
 export { getServers200Schema, getServersQueryResponseSchema } from "./zod/getServersSchema";
 export { getStackDetailPathParamsSchema, getStackDetail200Schema, getStackDetail404Schema, getStackDetailQueryResponseSchema } from "./zod/getStackDetailSchema";
 export { getUsers200Schema, getUsersMutationRequestSchema, getUsersMutationResponseSchema } from "./zod/getUsersSchema";
+export { gitApplicationSourceDtoSchema } from "./zod/gitApplicationSourceDtoSchema";
+export { githubApplicationSourceDtoSchema } from "./zod/githubApplicationSourceDtoSchema";
 export { gitProviderBranchDtoSchema } from "./zod/gitProviderBranchDtoSchema";
 export { gitProviderRepositoryDtoSchema } from "./zod/gitProviderRepositoryDtoSchema";
 export { gitRepositoryCheckResultDtoSchema } from "./zod/gitRepositoryCheckResultDtoSchema";

@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
+using Environment = System.Environment;
 
 namespace CloudCrafter.TestUtilities.DomainHelpers;
 
@@ -59,6 +60,78 @@ public static class EntityFaker
             .Generate();
 
         stack.Services.Add(stackService);
+
+        return stack;
+    }
+
+    public static Stack GenerateStackWithGithubApp(
+        Guid environmentId,
+        Guid stackId,
+        Guid stackServiceId
+    )
+    {
+        var sourceProvider = new SourceProvider
+        {
+            Id = Guid.NewGuid(),
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            Name = "Github OSS Test",
+            GithubProviderId = Guid.NewGuid(),
+        };
+
+        var stack = GenerateBasicAppStack(
+            new GenerateBasicAppArgs
+            {
+                DomainName = "my-custom-domain.com",
+                EnvironmentId = environmentId,
+                StackId = stackId,
+                StackServiceId = stackServiceId,
+                StackName = "My Custom Stack 123",
+                StackServiceName = "My Custom Service : 123",
+                SourceProvider = new SourceProvider
+                {
+                    Id = Guid.NewGuid(),
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    Name = "Github OSS Test",
+                    GithubProviderId = Guid.NewGuid(),
+                    GithubProvider = new GithubProvider
+                    {
+                        Id = Guid.NewGuid(),
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow,
+                        InstallationId = 58413956,
+                        AppName = "[CI TESTS] CloudCrafter-OSS",
+                        AppId = long.Parse(
+                            Environment.GetEnvironmentVariable("TESTS_GITHUB_APP_APP_ID") ?? "0"
+                        ),
+                        AppClientId = Environment.GetEnvironmentVariable(
+                            "TESTS_GITHUB_APP_CLIENT_ID"
+                        ),
+                        AppClientSecret = Environment.GetEnvironmentVariable(
+                            "TESTS_GITHUB_APP_CLIENT_SECRET"
+                        ),
+                        AppWebhookSecret = Environment.GetEnvironmentVariable(
+                            "TESTS_GITHUB_APP_WEBHOOK_SECRET"
+                        ),
+                        AppUrl = Environment.GetEnvironmentVariable("TESTS_GITHUB_APP_URL"),
+                        AppPrivateKey = Environment.GetEnvironmentVariable(
+                            "TESTS_GITHUB_APP_PRIVATE_KEY"
+                        ),
+                        IsValid = true,
+                        SourceProvider = sourceProvider,
+                    },
+                },
+                HealthcheckConfiguration = new EntityHealthcheckConfiguration
+                {
+                    HttpHost = null,
+                    HttpMethod = null,
+                    HttpPath = null,
+                    HttpPort = null,
+                    HttpSchema = null,
+                },
+            }
+        );
 
         return stack;
     }
