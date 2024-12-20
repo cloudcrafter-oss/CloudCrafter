@@ -23,16 +23,18 @@ buildOptions:
     params:
       fullPathWithToken: https://x-access-token:dummy@github.com/cloudcrafter-oss/ci-private-tests
       providerPath: cloudcrafter-oss/ci-private-tests
+      branch: main
+      path: /
   - name: Determine Nixpacks buildpack
     description: Determines the Nixpacks buildpack to use for the application
     type: NixpacksDetermineBuildPack
     params:
-      path: ''
+      path: /
   - name: Generate Nixpacks plan
     description: Generates the Nixpacks plan for the application
     type: NixpacksGeneratePlan
     params:
-      path: ''
+      path: /
   - name: Alter Nixpacks build plan
     description: Alters the Nixpacks build plan for the application
     type: NixpacksAlterPlan
@@ -44,12 +46,12 @@ buildOptions:
     description: Writes the Nixpacks plan to the filesystem
     type: NixpacksWritePlanToFileSystem
     params:
-      path: ''
+      path: /
   - name: Build Docker image
     description: Builds the Docker image for the application
     type: NixpacksBuildDockerImage
     params:
-      path: ''
+      path: /
       image: b34a6560-701d-4f0e-b024-b4b7b2155bcf
       tag: latest
       disableCache: true
