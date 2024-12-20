@@ -11,4 +11,8 @@ export type GithubApplicationSourceDto = {
      * @type string
     */
     repository: string;
+    /**
+     * @type string
+    */
+    path: string;
 } | null;

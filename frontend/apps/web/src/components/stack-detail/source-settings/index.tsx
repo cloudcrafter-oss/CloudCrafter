@@ -11,6 +11,7 @@ import {
 } from '@cloudcrafter/ui/components/card'
 import { PencilIcon } from 'lucide-react'
 import { useState } from 'react'
+import { GithubAppForm } from './github-app/form'
 import { PublicGitForm } from './public-git/form'
 export const SourceSettings = ({
 	stackDetails,
@@ -38,6 +39,14 @@ export const SourceSettings = ({
 				<CardContent className='space-y-4'>
 					{stackDetails.source?.type === stackSourceDtoTypeEnum.Git && (
 						<PublicGitForm
+							stackDetails={stackDetails}
+							setIsEditing={setIsEditing}
+							isEditing={isEditing}
+						/>
+					)}
+
+					{stackDetails.source?.type === stackSourceDtoTypeEnum.GithubApp && (
+						<GithubAppForm
 							stackDetails={stackDetails}
 							setIsEditing={setIsEditing}
 							isEditing={isEditing}

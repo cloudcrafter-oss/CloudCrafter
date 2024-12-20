@@ -77,6 +77,7 @@ export const PrivateRepositoryForm = ({
 		defaultValues: {
 			name: '',
 			environmentId,
+			path: '/',
 		},
 	})
 
@@ -194,6 +195,24 @@ export const PrivateRepositoryForm = ({
 						}}
 					/>
 				)}
+
+				<FormField
+					control={form.control}
+					name='path'
+					render={({ field }) => (
+						<FormItem className='space-y-2'>
+							<FormLabel>Path in repository</FormLabel>
+							<FormControl>
+								<Input
+									disabled={formIsSubmitting}
+									{...field}
+									autoComplete='off'
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
 
 				<ServerSelect form={form} inputDisabled={formIsSubmitting} />
 

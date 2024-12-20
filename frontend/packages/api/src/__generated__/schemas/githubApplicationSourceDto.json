@@ -1,1 +1,1 @@
-{"required":["repositoryId","branch","repository"],"type":"object","properties":{"repositoryId":{"type":"string"},"branch":{"type":"string"},"repository":{"type":"string"}},"nullable":true,"x-readme-ref-name":"GithubApplicationSourceDto"}
+{"required":["repositoryId","branch","repository","path"],"type":"object","properties":{"repositoryId":{"type":"string"},"branch":{"type":"string"},"repository":{"type":"string"},"path":{"type":"string"}},"nullable":true,"x-readme-ref-name":"GithubApplicationSourceDto"}

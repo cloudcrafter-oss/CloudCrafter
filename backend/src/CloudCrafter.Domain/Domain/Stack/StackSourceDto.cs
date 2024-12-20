@@ -47,6 +47,8 @@ public sealed class GithubApplicationSourceDto
     /// </summary>
     public required string Repository { get; init; }
 
+    public required string Path { get; init; }
+
     private class Mapping : Profile
     {
         public Mapping()
