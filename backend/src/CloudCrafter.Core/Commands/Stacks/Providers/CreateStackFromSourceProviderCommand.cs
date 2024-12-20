@@ -26,6 +26,8 @@ public static class CreateStackFromSourceProviderCommand
         [MinLength(1)]
         public required string Branch { get; init; }
 
+        public required string Path { get; init; }
+
         public required Guid EnvironmentId { get; set; }
 
         public required Guid ServerId { get; set; }
@@ -54,6 +56,7 @@ public static class CreateStackFromSourceProviderCommand
                     Branch = request.Branch,
                     ProviderId = request.ProviderId,
                     Repository = request.Repository,
+                    Path = request.Path,
                 },
             };
 

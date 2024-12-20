@@ -35,6 +35,7 @@ using CloudCrafter.Core.Services.Domain.Utils;
 using CloudCrafter.Core.SignalR;
 using CloudCrafter.Core.SignalR.HubActions;
 using CloudCrafter.Core.SignalR.Tracking;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Strategy;
 using CloudCrafter.Domain;
 using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
@@ -219,6 +220,7 @@ public static class ApplicationServiceExtensions
         services.AddTransient<GithubBackendClientProvider>();
         services.AddTransient<ISourceProviderProxy, SourceProviderProxy>();
         services.AddKeyedScoped<ISourceProviderService, GithubSourceProviderService>("github");
+        services.AddTransient<ISourceProviderHelper, SourceProviderHelperService>();
 
         return services;
     }

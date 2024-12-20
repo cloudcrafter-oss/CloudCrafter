@@ -1,0 +1,1 @@
+{"required":["repository"],"type":"object","properties":{"repository":{"type":"string"},"path":{"type":"string","nullable":true},"branch":{"type":"string","nullable":true}},"nullable":true,"x-readme-ref-name":"GitApplicationSourceDto"}

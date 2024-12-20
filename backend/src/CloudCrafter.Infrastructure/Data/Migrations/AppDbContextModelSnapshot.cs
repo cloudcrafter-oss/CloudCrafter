@@ -911,6 +911,10 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                                         .IsRequired()
                                         .HasColumnType("text");
 
+                                    b2.Property<string>("Path")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
                                     b2.Property<string>("Repository")
                                         .IsRequired()
                                         .HasColumnType("text");

@@ -40,7 +40,7 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
             .SetDockerComposeOptions(dockerComposeEditor, dockerComposeLocation)
             .SetDestination(dockerComposeLocation, gitCheckoutDirectory);
 
-        AddSteps(dockerComposeEditor);
+        await AddSteps(dockerComposeEditor);
 
         var recipe = Recipe.Build();
 
@@ -51,7 +51,7 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
         };
     }
 
-    private void AddSteps(DockerComposeEditor dockerComposeEditor)
+    private async Task AddSteps(DockerComposeEditor dockerComposeEditor)
     {
         AddNetworkExistsStep("cloudcrafter");
 
@@ -65,17 +65,30 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
             );
         }
 
+        string? pathInGit = null;
         if (isPublicApp)
         {
             AddFetchGitRepositoryStep(
                 Options.Stack.Source!.Git!.Repository,
                 "HEAD" // TODO: change
             );
+
+            pathInGit = Options.Stack.Source!.Git!.Path;
         }
 
         if (isGithubApp)
         {
-            AddFetchGitRepositoryFromGithubAppStep(Options.Stack.Source!.GithubApp!);
+            var token = await Options.ProviderHelperProvider.GetProviderAccessTokenAsync(
+                Options.Stack.Source!.GithubApp!.SourceProvider
+            );
+
+            var dto = await Options.ProviderHelperProvider.GetSourceLocation(
+                Options.Stack.Source!.GithubApp!.SourceProvider,
+                Options.Stack.Source!
+            );
+            AddFetchGitRepositoryFromGithubAppStep(Options.Stack.Source!.GithubApp!, token, dto);
+
+            pathInGit = Options.Stack.Source!.GithubApp!.Path;
         }
 
         var firstService = Options.Stack.Services.First();
@@ -91,15 +104,13 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
 
         var dockerComposeFileName = "docker-compose.yml";
 
-        AddDetermineBuildpackStep(Options.Stack.Source?.Git?.Path);
-        AddGenerateBuildPlan(Options.Stack.Source?.Git?.Path);
+        AddDetermineBuildpackStep(pathInGit);
+
+        AddGenerateBuildPlan(pathInGit);
+
         AlterNixpacksPlan(["iputils-ping", "curl"]);
-        AddWritePlanToFilesystemStep(Options.Stack.Source?.Git?.Path);
-        AddBuildNixpacksDockerImageStep(
-            firstService.Id.ToString(),
-            "latest",
-            Options.Stack.Source?.Git?.Path
-        );
+        AddWritePlanToFilesystemStep(pathInGit);
+        AddBuildNixpacksDockerImageStep(firstService.Id.ToString(), "latest", pathInGit);
         AddWriteDockerComposeFileStep(dockerComposeFileName);
         AddStartDockerComposeStep(dockerComposeFileName);
 

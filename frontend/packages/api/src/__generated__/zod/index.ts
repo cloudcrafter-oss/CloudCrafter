@@ -35,10 +35,13 @@ export { getServerByIdPathParamsSchema, getServerById200Schema, getServerByIdQue
 export { getServers200Schema, getServersQueryResponseSchema } from "./getServersSchema";
 export { getStackDetailPathParamsSchema, getStackDetail200Schema, getStackDetail404Schema, getStackDetailQueryResponseSchema } from "./getStackDetailSchema";
 export { getUsers200Schema, getUsersMutationRequestSchema, getUsersMutationResponseSchema } from "./getUsersSchema";
+export { gitApplicationSourceDtoSchema } from "./gitApplicationSourceDtoSchema";
+export { githubApplicationSourceDtoSchema } from "./githubApplicationSourceDtoSchema";
+export { githubSettingsSchema } from "./githubSettingsSchema";
 export { gitProviderBranchDtoSchema } from "./gitProviderBranchDtoSchema";
 export { gitProviderRepositoryDtoSchema } from "./gitProviderRepositoryDtoSchema";
+export { gitPublicSettingsSchema } from "./gitPublicSettingsSchema";
 export { gitRepositoryCheckResultDtoSchema } from "./gitRepositoryCheckResultDtoSchema";
-export { gitSettingsSchema } from "./gitSettingsSchema";
 export { paginatedListOfSimpleDeploymentDtoSchema } from "./paginatedListOfSimpleDeploymentDtoSchema";
 export { paginatedListOfUserDtoSchema } from "./paginatedListOfUserDtoSchema";
 export { paginatedRequestOfUserDtoSchema } from "./paginatedRequestOfUserDtoSchema";

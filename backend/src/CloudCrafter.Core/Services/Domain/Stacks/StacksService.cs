@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Reflection.Metadata;
+using AutoMapper;
 using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Core.Common.Responses;
@@ -150,19 +151,32 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
         {
             // Update git related settings
 
-            if (!string.IsNullOrWhiteSpace(request.GitSettings?.GitRepository))
+            if (!string.IsNullOrWhiteSpace(request.GitPublicSettings?.Repository))
             {
-                stack.Source.Git.Repository = request.GitSettings.GitRepository;
+                stack.Source.Git.Repository = request.GitPublicSettings.Repository;
             }
 
-            if (!string.IsNullOrWhiteSpace(request.GitSettings?.GitBranch))
+            if (!string.IsNullOrWhiteSpace(request.GitPublicSettings?.Branch))
             {
-                stack.Source.Git.Branch = request.GitSettings.GitBranch;
+                stack.Source.Git.Branch = request.GitPublicSettings.Branch;
             }
 
-            if (!string.IsNullOrWhiteSpace(request.GitSettings?.GitPath))
+            if (!string.IsNullOrWhiteSpace(request.GitPublicSettings?.Path))
             {
-                stack.Source.Git.Path = request.GitSettings.GitPath;
+                stack.Source.Git.Path = request.GitPublicSettings.Path;
+            }
+        }
+
+        if (stack.Source?.GithubApp != null)
+        {
+            if (!string.IsNullOrWhiteSpace(request.GithubSettings?.Branch))
+            {
+                stack.Source.GithubApp.Branch = request.GithubSettings.Branch;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.GithubSettings?.Path))
+            {
+                stack.Source.GithubApp.Path = request.GithubSettings.Path;
             }
         }
 

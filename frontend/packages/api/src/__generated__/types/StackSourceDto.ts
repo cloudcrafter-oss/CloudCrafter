@@ -1,17 +1,15 @@
+import type { GitApplicationSourceDto } from "./GitApplicationSourceDto";
+import type { GithubApplicationSourceDto } from "./GithubApplicationSourceDto";
 import type { StackSourceDtoType } from "./StackSourceDtoType";
 
  export type StackSourceDto = {
     type: StackSourceDtoType;
     /**
-     * @type string
+     * @type object
     */
-    gitRepository?: string | null;
+    git: GitApplicationSourceDto | null;
     /**
-     * @type string
+     * @type object
     */
-    gitPath?: string | null;
-    /**
-     * @type string
-    */
-    gitBranch?: string | null;
+    githubApp: GithubApplicationSourceDto | null;
 } | null;

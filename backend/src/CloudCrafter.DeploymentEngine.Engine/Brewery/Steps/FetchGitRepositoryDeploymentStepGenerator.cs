@@ -13,7 +13,7 @@ public class FetchGitRepositoryDeploymentStepGenerator(
         {
             Name = "Fetch git repository",
             Description = "Fetches the git repository",
-            Type = DeploymentBuildStepType.FetchGitRepository,
+            Type = DeploymentBuildStepType.FetchPublicGitRepository,
             Params = new Dictionary<string, object>
             {
                 { "repo", options.Repository },

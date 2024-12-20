@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.Core.Interfaces.Domain.Providers;
 using CloudCrafter.Core.Services.Core.Providers;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Strategy;
 using CloudCrafter.Domain.Domain.Providers;
 using CloudCrafter.Domain.Entities;
 using Microsoft.Extensions.Logging;
@@ -54,6 +55,52 @@ public class GithubSourceProviderService(
         }
 
         return branchResult;
+    }
+
+    public async Task<string> GetCheckoutAccessTokenAsync(SourceProvider provider)
+    {
+        if (!provider.GithubProvider!.InstallationId.HasValue)
+        {
+            throw new Exception("Provider is not a Github provider or not installed properly.");
+        }
+
+        var client = githubBackendClientProvider.CreateClientForProvider(provider.GithubProvider!);
+
+        var token = await client.GitHubApps.CreateInstallationToken(
+            provider.GithubProvider!.InstallationId.Value
+        );
+
+        var installationClient = clientProvider.GetClientForToken(token.Token);
+        var result =
+            await installationClient.GitHubApps.Installation.GetAllRepositoriesForCurrent();
+
+        if (result == null)
+        {
+            throw new Exception("Failed to get installation repositories");
+        }
+
+        return token.Token;
+    }
+
+    public async Task<GitSourceLocationDto> GetSourceLocation(
+        SourceProvider provider,
+        ApplicationSource source
+    )
+    {
+        if (source.GithubApp == null)
+        {
+            throw new Exception("Provided service is not a Github service");
+        }
+
+        var client = await CreateInstallationClient(provider);
+
+        var repository = await client.Repository.Get(long.Parse(source.GithubApp.RepositoryId));
+
+        return new GitSourceLocationDto
+        {
+            FullPath = repository.FullName,
+            GitUrl = repository.GitUrl,
+        };
     }
 
     private async Task<IGitHubClient> CreateInstallationClient(SourceProvider provider)

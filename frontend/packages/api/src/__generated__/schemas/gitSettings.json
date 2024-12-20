@@ -1,1 +1,0 @@
-{"type":"object","properties":{"gitRepository":{"type":"string","nullable":true},"gitPath":{"type":"string","nullable":true},"gitBranch":{"type":"string","nullable":true}},"default":null,"nullable":true,"x-readme-ref-name":"GitSettings"}

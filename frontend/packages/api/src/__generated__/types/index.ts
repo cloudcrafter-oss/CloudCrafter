@@ -35,10 +35,13 @@ export type { GetServerByIdPathParams, GetServerById200, GetServerByIdQueryRespo
 export type { GetServers200, GetServersQueryResponse, GetServersQuery } from "./GetServers";
 export type { GetStackDetailPathParams, GetStackDetail200, GetStackDetail404, GetStackDetailQueryResponse, GetStackDetailQuery } from "./GetStackDetail";
 export type { GetUsers200, GetUsersMutationRequest, GetUsersMutationResponse, GetUsersMutation } from "./GetUsers";
+export type { GitApplicationSourceDto } from "./GitApplicationSourceDto";
+export type { GithubApplicationSourceDto } from "./GithubApplicationSourceDto";
+export type { GithubSettings } from "./GithubSettings";
 export type { GitProviderBranchDto } from "./GitProviderBranchDto";
 export type { GitProviderRepositoryDto } from "./GitProviderRepositoryDto";
+export type { GitPublicSettings } from "./GitPublicSettings";
 export type { GitRepositoryCheckResultDto } from "./GitRepositoryCheckResultDto";
-export type { GitSettings } from "./GitSettings";
 export type { PaginatedListOfSimpleDeploymentDto } from "./PaginatedListOfSimpleDeploymentDto";
 export type { PaginatedListOfUserDto } from "./PaginatedListOfUserDto";
 export type { PaginatedRequestOfUserDto } from "./PaginatedRequestOfUserDto";

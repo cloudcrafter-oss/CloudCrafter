@@ -1,7 +1,6 @@
 ﻿using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.DockerCompose;
 using CloudCrafter.TestUtilities.DomainHelpers;
-using EntityFrameworkCore.EncryptColumn.Util;
 using FluentAssertions;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery.DockerCompose;
@@ -27,6 +26,7 @@ public class SimpleAppDockerComposeGeneratorTest
                 StackName = "My Custom Stack 123",
                 StackServiceName = "My Custom Service : 123",
                 ContainerHttpPort = 3000,
+                SourceProvider = null,
             }
         );
         var generator = new SimpleAppDockerComposeGenerator(

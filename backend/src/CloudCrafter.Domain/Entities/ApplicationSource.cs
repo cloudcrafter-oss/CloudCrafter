@@ -29,6 +29,7 @@ public class ApplicationSourceGithubApp
 
     public required string RepositoryId { get; set; }
     public required string Branch { get; set; }
+    public required string Path { get; set; }
 
     /// <summary>
     ///     Should only be set, Repository Id is leading
