@@ -18,6 +18,7 @@ public static class EntityFaker
                 {
                     SourceProvider = args.SourceProvider,
                     SourceProviderId = args.SourceProvider.Id,
+                    Path = "/",
                     Branch = "main",
                     Repository = "https://github.com/cloudcrafter-oss/ci-private-tests",
                     RepositoryId = "903683855",

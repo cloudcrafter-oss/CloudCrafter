@@ -16,6 +16,10 @@ export type CreateStackFromSourceProviderCommandCommand = {
     */
     branch: string;
     /**
+     * @type string
+    */
+    path: string;
+    /**
      * @type string, uuid
     */
     environmentId: string;

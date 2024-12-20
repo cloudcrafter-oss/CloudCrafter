@@ -37,4 +37,6 @@ public class CreateStackGithubAppDto
     ///     Only a read-only property, Repository Id is leading
     /// </summary>
     public required string Repository { get; set; }
+
+    public required string Path { get; set; }
 }

@@ -24,15 +24,16 @@ public static class UpdateStackCommand
     [DefaultValue(null)]
     public class GitPublicSettings
     {
-        public string? GitRepository { get; set; }
-        public string? GitPath { get; set; }
-        public string? GitBranch { get; set; }
+        public string? Repository { get; set; }
+        public string? Path { get; set; }
+        public string? Branch { get; set; }
     }
 
     [DefaultValue(null)]
     public class GithubSettings
     {
         public string? Branch { get; set; }
+        public string? Path { get; set; }
     }
 
     public record Handler(IStacksService StackService, IGitService GitService)
@@ -43,12 +44,12 @@ public static class UpdateStackCommand
             CancellationToken cancellationToken
         )
         {
-            if (!string.IsNullOrEmpty(request.GitPublicSettings?.GitRepository))
+            if (!string.IsNullOrEmpty(request.GitPublicSettings?.Repository))
             {
                 var isValidGitRepo = await GitService.ValidateRepository(
-                    request.GitPublicSettings.GitRepository,
-                    request.GitPublicSettings.GitPath,
-                    request.GitPublicSettings.GitBranch
+                    request.GitPublicSettings.Repository,
+                    request.GitPublicSettings.Path,
+                    request.GitPublicSettings.Branch
                 );
 
                 if (!isValidGitRepo.IsValid)

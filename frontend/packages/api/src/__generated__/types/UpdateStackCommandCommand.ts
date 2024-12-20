@@ -1,4 +1,5 @@
-import type { GitSettings } from "./GitSettings";
+import type { GithubSettings } from "./GithubSettings";
+import type { GitPublicSettings } from "./GitPublicSettings";
 
  export type UpdateStackCommandCommand = {
     /**
@@ -16,5 +17,9 @@ import type { GitSettings } from "./GitSettings";
     /**
      * @type object | undefined
     */
-    gitSettings?: GitSettings | null;
+    gitPublicSettings?: GitPublicSettings | null;
+    /**
+     * @type object | undefined
+    */
+    githubSettings?: GithubSettings | null;
 };

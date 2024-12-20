@@ -100,10 +100,11 @@ export type { GetStackDetailPathParams, GetStackDetail200, GetStackDetail404, Ge
 export type { GetUsers200, GetUsersMutationRequest, GetUsersMutationResponse, GetUsersMutation } from "./types/GetUsers";
 export type { GitApplicationSourceDto } from "./types/GitApplicationSourceDto";
 export type { GithubApplicationSourceDto } from "./types/GithubApplicationSourceDto";
+export type { GithubSettings } from "./types/GithubSettings";
 export type { GitProviderBranchDto } from "./types/GitProviderBranchDto";
 export type { GitProviderRepositoryDto } from "./types/GitProviderRepositoryDto";
+export type { GitPublicSettings } from "./types/GitPublicSettings";
 export type { GitRepositoryCheckResultDto } from "./types/GitRepositoryCheckResultDto";
-export type { GitSettings } from "./types/GitSettings";
 export type { PaginatedListOfSimpleDeploymentDto } from "./types/PaginatedListOfSimpleDeploymentDto";
 export type { PaginatedListOfUserDto } from "./types/PaginatedListOfUserDto";
 export type { PaginatedRequestOfUserDto } from "./types/PaginatedRequestOfUserDto";
@@ -294,10 +295,11 @@ export { getStackDetailPathParamsSchema, getStackDetail200Schema, getStackDetail
 export { getUsers200Schema, getUsersMutationRequestSchema, getUsersMutationResponseSchema } from "./zod/getUsersSchema";
 export { gitApplicationSourceDtoSchema } from "./zod/gitApplicationSourceDtoSchema";
 export { githubApplicationSourceDtoSchema } from "./zod/githubApplicationSourceDtoSchema";
+export { githubSettingsSchema } from "./zod/githubSettingsSchema";
 export { gitProviderBranchDtoSchema } from "./zod/gitProviderBranchDtoSchema";
 export { gitProviderRepositoryDtoSchema } from "./zod/gitProviderRepositoryDtoSchema";
+export { gitPublicSettingsSchema } from "./zod/gitPublicSettingsSchema";
 export { gitRepositoryCheckResultDtoSchema } from "./zod/gitRepositoryCheckResultDtoSchema";
-export { gitSettingsSchema } from "./zod/gitSettingsSchema";
 export { paginatedListOfSimpleDeploymentDtoSchema } from "./zod/paginatedListOfSimpleDeploymentDtoSchema";
 export { paginatedListOfUserDtoSchema } from "./zod/paginatedListOfUserDtoSchema";
 export { paginatedRequestOfUserDtoSchema } from "./zod/paginatedRequestOfUserDtoSchema";

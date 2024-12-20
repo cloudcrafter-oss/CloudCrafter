@@ -151,19 +151,19 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
         {
             // Update git related settings
 
-            if (!string.IsNullOrWhiteSpace(request.GitPublicSettings?.GitRepository))
+            if (!string.IsNullOrWhiteSpace(request.GitPublicSettings?.Repository))
             {
-                stack.Source.Git.Repository = request.GitPublicSettings.GitRepository;
+                stack.Source.Git.Repository = request.GitPublicSettings.Repository;
             }
 
-            if (!string.IsNullOrWhiteSpace(request.GitPublicSettings?.GitBranch))
+            if (!string.IsNullOrWhiteSpace(request.GitPublicSettings?.Branch))
             {
-                stack.Source.Git.Branch = request.GitPublicSettings.GitBranch;
+                stack.Source.Git.Branch = request.GitPublicSettings.Branch;
             }
 
-            if (!string.IsNullOrWhiteSpace(request.GitPublicSettings?.GitPath))
+            if (!string.IsNullOrWhiteSpace(request.GitPublicSettings?.Path))
             {
-                stack.Source.Git.Path = request.GitPublicSettings.GitPath;
+                stack.Source.Git.Path = request.GitPublicSettings.Path;
             }
         }
 
@@ -172,6 +172,11 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
             if (!string.IsNullOrWhiteSpace(request.GithubSettings?.Branch))
             {
                 stack.Source.GithubApp.Branch = request.GithubSettings.Branch;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.GithubSettings?.Path))
+            {
+                stack.Source.GithubApp.Path = request.GithubSettings.Path;
             }
         }
 

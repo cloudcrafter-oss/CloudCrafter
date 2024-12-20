@@ -64,9 +64,9 @@ public class UpdateStackCommandTest : BaseTestFixture
                 stack.Id,
                 GitPublicSettings: new UpdateStackCommand.GitPublicSettings
                 {
-                    GitBranch = "main",
-                    GitPath = "/",
-                    GitRepository = newValue,
+                    Branch = "main",
+                    Path = "/",
+                    Repository = newValue,
                 }
             ),
             _ => throw new ArgumentException($"Unsupported property: {propertyName}"),
@@ -103,9 +103,9 @@ public class UpdateStackCommandTest : BaseTestFixture
             stack.Id,
             GitPublicSettings: new UpdateStackCommand.GitPublicSettings
             {
-                GitBranch = "dummy",
-                GitPath = "/",
-                GitRepository = "http://github.com/non/existing",
+                Branch = "dummy",
+                Path = "/",
+                Repository = "http://github.com/non/existing",
             }
         );
 

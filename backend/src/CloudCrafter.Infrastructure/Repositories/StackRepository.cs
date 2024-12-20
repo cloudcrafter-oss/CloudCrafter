@@ -48,6 +48,7 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
                     RepositoryId = args.GithubApp!.RepositoryId,
                     SourceProviderId = args.GithubApp.ProviderId,
                     Repository = args.GithubApp.Repository,
+                    Path = args.GithubApp.Path,
                 },
             };
         }
