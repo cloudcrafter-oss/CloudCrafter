@@ -18,6 +18,8 @@ public class FetchGitRepositoryFromGithubAppDeploymentStepGenerator(
             {
                 { "fullPathWithToken", options.FullPathWithToken },
                 { "providerPath", options.ProviderPath },
+                { "branch", options.Branch },
+                { "path", options.Path },
             },
         };
     }
@@ -26,5 +28,7 @@ public class FetchGitRepositoryFromGithubAppDeploymentStepGenerator(
     {
         public required string FullPathWithToken { get; init; }
         public required string ProviderPath { get; set; }
+        public required string Path { get; set; }
+        public required string Branch { get; set; }
     }
 }

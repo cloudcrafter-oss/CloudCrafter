@@ -183,6 +183,8 @@ public abstract class BaseRecipeGenerator
             {
                 FullPathWithToken = fullPath,
                 ProviderPath = sourceLocation.FullPath,
+                Path = app.Path,
+                Branch = app.Branch,
             }
         );
         Recipe.AddBuildStep(generator);

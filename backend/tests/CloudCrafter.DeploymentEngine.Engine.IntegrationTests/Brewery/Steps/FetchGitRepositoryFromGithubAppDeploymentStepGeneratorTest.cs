@@ -16,6 +16,8 @@ public class FetchGitRepositoryFromGithubAppDeploymentStepGeneratorTest
             FullPathWithToken =
                 "https://x-access-token:dummy@github.com/cloudcrafter-oss/ci-private-tests",
             ProviderPath = "cloudcrafter-oss/ci-private-tests",
+            Branch = "main",
+            Path = "/",
         };
         var generator = new FetchGitRepositoryFromGithubAppDeploymentStepGenerator(options);
 
@@ -28,5 +30,7 @@ public class FetchGitRepositoryFromGithubAppDeploymentStepGeneratorTest
 
         paramObject.FullPathWithToken.Should().Be(options.FullPathWithToken);
         paramObject.ProviderPath.Should().Be(options.ProviderPath);
+        paramObject.Path.Should().Be(options.Path);
+        paramObject.Branch.Should().Be(options.Branch);
     }
 }

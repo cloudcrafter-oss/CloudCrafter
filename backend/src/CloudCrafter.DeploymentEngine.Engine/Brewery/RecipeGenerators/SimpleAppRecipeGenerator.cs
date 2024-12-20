@@ -65,12 +65,15 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
             );
         }
 
+        string? pathInGit = null;
         if (isPublicApp)
         {
             AddFetchGitRepositoryStep(
                 Options.Stack.Source!.Git!.Repository,
                 "HEAD" // TODO: change
             );
+
+            pathInGit = Options.Stack.Source!.Git!.Path;
         }
 
         if (isGithubApp)
@@ -84,6 +87,8 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
                 Options.Stack.Source!
             );
             AddFetchGitRepositoryFromGithubAppStep(Options.Stack.Source!.GithubApp!, token, dto);
+
+            pathInGit = Options.Stack.Source!.GithubApp!.Path;
         }
 
         var firstService = Options.Stack.Services.First();
@@ -99,15 +104,13 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
 
         var dockerComposeFileName = "docker-compose.yml";
 
-        AddDetermineBuildpackStep(Options.Stack.Source?.Git?.Path);
-        AddGenerateBuildPlan(Options.Stack.Source?.Git?.Path);
+        AddDetermineBuildpackStep(pathInGit);
+
+        AddGenerateBuildPlan(pathInGit);
+
         AlterNixpacksPlan(["iputils-ping", "curl"]);
-        AddWritePlanToFilesystemStep(Options.Stack.Source?.Git?.Path);
-        AddBuildNixpacksDockerImageStep(
-            firstService.Id.ToString(),
-            "latest",
-            Options.Stack.Source?.Git?.Path
-        );
+        AddWritePlanToFilesystemStep(pathInGit);
+        AddBuildNixpacksDockerImageStep(firstService.Id.ToString(), "latest", pathInGit);
         AddWriteDockerComposeFileStep(dockerComposeFileName);
         AddStartDockerComposeStep(dockerComposeFileName);
 
