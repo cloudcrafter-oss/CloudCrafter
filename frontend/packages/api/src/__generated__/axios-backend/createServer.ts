@@ -1,11 +1,26 @@
-import client from "../../backend/client";
-import type { RequestConfig } from "../../backend/client";
-import type { CreateServerMutationRequest, CreateServerMutationResponse } from "../types/CreateServer";
+import client from '../../backend/client.ts'
+import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import type { CreateServerMutationRequest, CreateServerMutationResponse } from '../types/CreateServer'
 
- /**
+export function getCreateServerUrl() {
+  return `/api/Servers` as const
+}
+
+/**
  * {@link /api/Servers}
  */
-export async function createServer(data: CreateServerMutationRequest, config: Partial<RequestConfig<CreateServerMutationRequest>> = {}) {
-    const res = await client<CreateServerMutationResponse, Error, CreateServerMutationRequest>({ method: "POST", url: `/api/Servers`, data, headers: { "Content-Type": "application/*+json", ...config.headers }, ...config });
-    return res.data;
+export async function createServer(
+  data: CreateServerMutationRequest,
+  config: Partial<RequestConfig<CreateServerMutationRequest>> & { client?: typeof client } = {},
+) {
+  const { client: request = client, ...requestConfig } = config
+
+  const res = await request<CreateServerMutationResponse, ResponseErrorConfig<Error>, CreateServerMutationRequest>({
+    method: 'POST',
+    url: getCreateServerUrl().toString(),
+    data,
+    ...requestConfig,
+    headers: { 'Content-Type': 'application/*+json', ...requestConfig.headers },
+  })
+  return res.data
 }

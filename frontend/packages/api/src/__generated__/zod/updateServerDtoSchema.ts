@@ -1,3 +1,5 @@
-import { z } from "zod";
+import { z } from 'zod'
 
- export const updateServerDtoSchema = z.object({ "name": z.string().nullable().nullish() });
+export const updateServerDtoSchema = z.object({
+  name: z.string().nullable().nullish(),
+})

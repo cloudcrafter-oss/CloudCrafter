@@ -1,6 +1,6 @@
 export type DeploymentCreatedDetailsDto = {
-    /**
-     * @type string, uuid
-    */
-    deploymentId: string;
-};
+  /**
+   * @type string, uuid
+   */
+  deploymentId: string
+}

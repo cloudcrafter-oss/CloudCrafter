@@ -1,6 +1,6 @@
 export type CreateServerCommandCommand = {
-    /**
-     * @type string
-    */
-    name: string;
-};
+  /**
+   * @type string
+   */
+  name: string
+}

@@ -1,16 +1,18 @@
-import { projectDtoSchema } from "./projectDtoSchema";
-import { z } from "zod";
+import { projectDtoSchema } from './projectDtoSchema'
+import { z } from 'zod'
 
- export const getProjectPathParamsSchema = z.object({ "id": z.string().uuid() });
+export const getProjectPathParamsSchema = z.object({
+  id: z.string().uuid(),
+})
 
- /**
+/**
  * @description OK
  */
-export const getProject200Schema = z.lazy(() => projectDtoSchema);
+export const getProject200Schema = z.lazy(() => projectDtoSchema)
 
- /**
+/**
  * @description Not Found
  */
-export const getProject404Schema = z.any();
+export const getProject404Schema = z.any()
 
- export const getProjectQueryResponseSchema = z.lazy(() => getProject200Schema);
+export const getProjectQueryResponseSchema = z.lazy(() => getProject200Schema)

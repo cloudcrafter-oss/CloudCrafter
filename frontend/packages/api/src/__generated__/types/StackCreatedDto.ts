@@ -1,6 +1,6 @@
 export type StackCreatedDto = {
-    /**
-     * @type string, uuid
-    */
-    id: string;
-};
+  /**
+   * @type string, uuid
+   */
+  id: string
+}

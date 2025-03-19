@@ -1,21 +1,21 @@
-import type { ServerDetailDto } from "./ServerDetailDto";
+import type { ServerDetailDto } from './ServerDetailDto'
 
- export type GetServerByIdPathParams = {
-    /**
-     * @type string, uuid
-    */
-    id: string;
-};
+export type GetServerByIdPathParams = {
+  /**
+   * @type string, uuid
+   */
+  id: string
+}
 
- /**
+/**
  * @description OK
-*/
-export type GetServerById200 = ServerDetailDto;
+ */
+export type GetServerById200 = ServerDetailDto
 
- export type GetServerByIdQueryResponse = GetServerById200;
+export type GetServerByIdQueryResponse = GetServerById200
 
- export type GetServerByIdQuery = {
-    Response: GetServerById200;
-    PathParams: GetServerByIdPathParams;
-    Errors: any;
-};
+export type GetServerByIdQuery = {
+  Response: GetServerById200
+  PathParams: GetServerByIdPathParams
+  Errors: any
+}

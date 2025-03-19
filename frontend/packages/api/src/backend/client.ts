@@ -45,11 +45,25 @@ axiosInstance.interceptors.request.use(async (request) => {
 	return request
 })
 
-export const axiosClient = async <
-	TData,
-	TError = unknown,
-	TVariables = unknown,
->(
+export type ResponseErrorConfig<TError = unknown> = TError
+
+// export const axiosClient = async <
+// 	TData,
+// 	TError = unknown,
+// 	TVariables = unknown,
+// >(
+// 	config: RequestConfig<TVariables>,
+// ): Promise<ResponseConfig<TData>> => {
+// 	const promise = axiosInstance
+// 		.request<TVariables, ResponseConfig<TData>>({ ...config })
+// 		.catch((e: AxiosError<TError>) => {
+// 			throw e
+// 		})
+
+// 	return promise
+// }
+
+export const client = async <TData, TError = unknown, TVariables = unknown>(
 	config: RequestConfig<TVariables>,
 ): Promise<ResponseConfig<TData>> => {
 	const promise = axiosInstance
@@ -61,4 +75,4 @@ export const axiosClient = async <
 	return promise
 }
 
-export default axiosClient
+export default client

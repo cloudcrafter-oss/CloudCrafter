@@ -1,6 +1,6 @@
 export type CheckValidGitRepoCommandCommand = {
-    /**
-     * @type string
-    */
-    repository: string;
-};
+  /**
+   * @type string
+   */
+  repository: string
+}

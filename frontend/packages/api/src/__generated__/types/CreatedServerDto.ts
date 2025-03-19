@@ -1,6 +1,6 @@
 export type CreatedServerDto = {
-    /**
-     * @type string, uuid
-    */
-    id: string;
-};
+  /**
+   * @type string, uuid
+   */
+  id: string
+}

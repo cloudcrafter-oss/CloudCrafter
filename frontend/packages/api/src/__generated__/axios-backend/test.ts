@@ -1,11 +1,17 @@
-import client from "../../backend/client";
-import type { RequestConfig } from "../../backend/client";
-import type { TestQueryResponse } from "../types/Test";
+import client from '../../backend/client.ts'
+import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import type { TestQueryResponse } from '../types/Test'
 
- /**
+export function getTestUrl() {
+  return `/api/Users/test` as const
+}
+
+/**
  * {@link /api/Users/test}
  */
-export async function test(config: Partial<RequestConfig> = {}) {
-    const res = await client<TestQueryResponse, Error, unknown>({ method: "GET", url: `/api/Users/test`, ...config });
-    return res.data;
+export async function test(config: Partial<RequestConfig> & { client?: typeof client } = {}) {
+  const { client: request = client, ...requestConfig } = config
+
+  const res = await request<TestQueryResponse, ResponseErrorConfig<Error>, unknown>({ method: 'GET', url: getTestUrl().toString(), ...requestConfig })
+  return res.data
 }

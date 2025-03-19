@@ -1,26 +1,26 @@
-import type { ProjectDto } from "./ProjectDto";
+import type { ProjectDto } from './ProjectDto'
 
- export type GetProjectPathParams = {
-    /**
-     * @type string, uuid
-    */
-    id: string;
-};
+export type GetProjectPathParams = {
+  /**
+   * @type string, uuid
+   */
+  id: string
+}
 
- /**
+/**
  * @description OK
-*/
-export type GetProject200 = ProjectDto;
+ */
+export type GetProject200 = ProjectDto
 
- /**
+/**
  * @description Not Found
-*/
-export type GetProject404 = any;
+ */
+export type GetProject404 = any
 
- export type GetProjectQueryResponse = GetProject200;
+export type GetProjectQueryResponse = GetProject200
 
- export type GetProjectQuery = {
-    Response: GetProject200;
-    PathParams: GetProjectPathParams;
-    Errors: GetProject404;
-};
+export type GetProjectQuery = {
+  Response: GetProject200
+  PathParams: GetProjectPathParams
+  Errors: GetProject404
+}

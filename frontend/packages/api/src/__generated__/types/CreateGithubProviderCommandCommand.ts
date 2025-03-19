@@ -1,6 +1,6 @@
 export type CreateGithubProviderCommandCommand = {
-    /**
-     * @type string
-    */
-    code: string;
-};
+  /**
+   * @type string
+   */
+  code: string
+}

@@ -1,11 +1,27 @@
-import client from "../../backend/client";
-import type { RequestConfig } from "../../backend/client";
-import type { UpdateStackServiceMutationRequest, UpdateStackServiceMutationResponse, UpdateStackServicePathParams } from "../types/UpdateStackService";
+import client from '../../backend/client.ts'
+import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import type { UpdateStackServiceMutationRequest, UpdateStackServiceMutationResponse, UpdateStackServicePathParams } from '../types/UpdateStackService'
 
- /**
+export function getUpdateStackServiceUrl(stackId: UpdateStackServicePathParams['stackId'], stackServiceId: UpdateStackServicePathParams['stackServiceId']) {
+  return `/api/Stacks/${stackId}/services/${stackServiceId}` as const
+}
+
+/**
  * {@link /api/Stacks/:stackId/services/:stackServiceId}
  */
-export async function updateStackService(stackId: UpdateStackServicePathParams["stackId"], stackServiceId: UpdateStackServicePathParams["stackServiceId"], data: UpdateStackServiceMutationRequest, config: Partial<RequestConfig<UpdateStackServiceMutationRequest>> = {}) {
-    const res = await client<UpdateStackServiceMutationResponse, Error, UpdateStackServiceMutationRequest>({ method: "PATCH", url: `/api/Stacks/${stackId}/services/${stackServiceId}`, data, ...config });
-    return res.data;
+export async function updateStackService(
+  stackId: UpdateStackServicePathParams['stackId'],
+  stackServiceId: UpdateStackServicePathParams['stackServiceId'],
+  data: UpdateStackServiceMutationRequest,
+  config: Partial<RequestConfig<UpdateStackServiceMutationRequest>> & { client?: typeof client } = {},
+) {
+  const { client: request = client, ...requestConfig } = config
+
+  const res = await request<UpdateStackServiceMutationResponse, ResponseErrorConfig<Error>, UpdateStackServiceMutationRequest>({
+    method: 'PATCH',
+    url: getUpdateStackServiceUrl(stackId, stackServiceId).toString(),
+    data,
+    ...requestConfig,
+  })
+  return res.data
 }

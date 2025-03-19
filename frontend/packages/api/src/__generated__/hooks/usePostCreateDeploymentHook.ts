@@ -1,40 +1,41 @@
-// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
-import client from "../../frontend/client";
-import type { RequestConfig } from "../../frontend/client";
-import type { PostCreateDeploymentMutationResponse, PostCreateDeploymentPathParams } from "../types/PostCreateDeployment";
-import type { UseMutationOptions } from "@tanstack/react-query";
-import { useMutation } from "@tanstack/react-query";
+import client from '../../frontend/client.ts'
+import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
+import type { PostCreateDeploymentMutationResponse, PostCreateDeploymentPathParams } from '../types/PostCreateDeployment'
+import type { UseMutationOptions } from '@tanstack/react-query'
+import { postCreateDeployment } from '../axios-backend/postCreateDeployment'
+import { useMutation } from '@tanstack/react-query'
 
- export const postCreateDeploymentMutationKey = () => [{ "url": "/api/Applications/{applicationId}/deployment" }] as const;
+export const postCreateDeploymentMutationKey = () => [{ url: '/api/Applications/{applicationId}/deployment' }] as const
 
- export type PostCreateDeploymentMutationKey = ReturnType<typeof postCreateDeploymentMutationKey>;
+export type PostCreateDeploymentMutationKey = ReturnType<typeof postCreateDeploymentMutationKey>
 
- /**
+/**
  * {@link /api/Applications/:applicationId/deployment}
  */
-async function postCreateDeploymentHook(applicationId: PostCreateDeploymentPathParams["applicationId"], config: Partial<RequestConfig> = {}) {
-    const res = await client<PostCreateDeploymentMutationResponse, Error, unknown>({ method: "POST", url: `/api/Applications/${applicationId}/deployment`, ...config });
-    return res.data;
-}
+export function usePostCreateDeploymentHook<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PostCreateDeploymentMutationResponse,
+      ResponseErrorConfig<Error>,
+      { applicationId: PostCreateDeploymentPathParams['applicationId'] },
+      TContext
+    >
+    client?: Partial<RequestConfig> & { client?: typeof client }
+  } = {},
+) {
+  const { mutation: mutationOptions, client: config = {} } = options ?? {}
+  const mutationKey = mutationOptions?.mutationKey ?? postCreateDeploymentMutationKey()
 
- /**
- * {@link /api/Applications/:applicationId/deployment}
- */
-export function usePostCreateDeploymentHook(options: {
-    mutation?: UseMutationOptions<PostCreateDeploymentMutationResponse, Error, {
-        applicationId: PostCreateDeploymentPathParams["applicationId"];
-    }>;
-    client?: Partial<RequestConfig>;
-} = {}) {
-    const { mutation: mutationOptions, client: config = {} } = options ?? {};
-    const mutationKey = mutationOptions?.mutationKey ?? postCreateDeploymentMutationKey();
-    return useMutation<PostCreateDeploymentMutationResponse, Error, {
-        applicationId: PostCreateDeploymentPathParams["applicationId"];
-    }>({
-        mutationFn: async ({ applicationId }) => {
-            return postCreateDeploymentHook(applicationId, config);
-        },
-        mutationKey,
-        ...mutationOptions
-    });
+  return useMutation<
+    PostCreateDeploymentMutationResponse,
+    ResponseErrorConfig<Error>,
+    { applicationId: PostCreateDeploymentPathParams['applicationId'] },
+    TContext
+  >({
+    mutationFn: async ({ applicationId }) => {
+      return postCreateDeployment(applicationId, config)
+    },
+    mutationKey,
+    ...mutationOptions,
+  })
 }

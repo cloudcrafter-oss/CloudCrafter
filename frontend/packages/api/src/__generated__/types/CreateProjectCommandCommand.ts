@@ -1,6 +1,6 @@
 export type CreateProjectCommandCommand = {
-    /**
-     * @type string
-    */
-    name: string;
-};
+  /**
+   * @type string
+   */
+  name: string
+}
