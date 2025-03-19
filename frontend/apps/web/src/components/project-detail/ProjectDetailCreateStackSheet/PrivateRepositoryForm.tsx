@@ -125,7 +125,7 @@ export const PrivateRepositoryForm = ({
 					<h2 className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
 						Select Provider
 					</h2>
-					<div className='flex gap-2'>
+					<div className='flex flex-col space-y-2'>
 						{isLoadingProviders ? (
 							<div className='w-full flex justify-center'>
 								<Loader2 className='h-4 w-4 animate-spin' />
