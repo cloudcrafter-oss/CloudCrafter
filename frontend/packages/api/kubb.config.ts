@@ -71,7 +71,7 @@ export default defineConfig({
 				// banner:
 				// 	'// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters',
 			},
-			infinite: {},
+			infinite: false,
 		}),
 	],
 })

@@ -4,7 +4,8 @@
 	"private": true,
 	"scripts": {
 		"generate:component": "turbo gen react-component",
-		"ui:add": "pnpm dlx shadcn@latest add"
+		"ui:add": "pnpm dlx shadcn@latest add",
+		"typecheck": "tsc --noEmit"
 	},
 	"devDependencies": {
 		"@cloudcrafter/typescript-config": "workspace:*",

@@ -7,7 +7,8 @@
 		".": "./src/index.ts"
 	},
 	"scripts": {
-		"generate-clients": "kubb generate --config kubb.config.ts"
+		"generate-clients": "kubb generate --config kubb.config.ts",
+		"typecheck": "tsc --noEmit"
 	},
 	"devDependencies": {
 		"@cloudcrafter/typescript-config": "workspace:*",
@@ -17,7 +18,8 @@
 		"@kubb/plugin-oas": "^3.6.4",
 		"@kubb/plugin-react-query": "^3.6.4",
 		"@kubb/plugin-ts": "^3.6.4",
-		"@kubb/plugin-zod": "^3.6.4"
+		"@kubb/plugin-zod": "^3.6.4",
+		"@types/node": "^20.10.6"
 	},
 	"dependencies": {
 		"@tanstack/react-query": "^5.49.0",

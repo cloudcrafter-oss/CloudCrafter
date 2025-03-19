@@ -7,7 +7,7 @@
 		"dev": "next dev --port 3001",
 		"build": "next build",
 		"start": "next start --port 3001",
-		"typecheck": "npx tsc --noEmit --incremental false"
+		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@auth/unstorage-adapter": "^2.4.1",

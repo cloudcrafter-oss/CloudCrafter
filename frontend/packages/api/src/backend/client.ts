@@ -1,7 +1,7 @@
-import { auth } from '@/src/auth'
-import { backendEnv } from '@/src/core/env/cloudcrafter-env'
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import axios from 'axios'
+// import { auth } from '../auth'
+import { backendEnv } from '../env/cloudcrafter-env'
 
 /**
  * Subset of AxiosRequestConfig
@@ -36,11 +36,11 @@ export const axiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.request.use(async (request) => {
-	const session = await auth()
+	// const session = await auth()
 
-	if (session) {
-		request.headers.Authorization = `Bearer ${session.accessToken}`
-	}
+	// if (session) {
+	// 	request.headers.Authorization = `Bearer ${session.accessToken}`
+	// }
 
 	return request
 })

@@ -5,43 +5,30 @@ export type { DeleteProviderMutationKey } from './hooks/useDeleteProviderHook'
 export type { DeleteServerByIdMutationKey } from './hooks/useDeleteServerByIdHook'
 export type { DispatchStackDeploymentMutationKey } from './hooks/useDispatchStackDeploymentHook'
 export type { GetDeploymentLogsQueryKey } from './hooks/useGetDeploymentLogsHook'
-export type { GetDeploymentLogsInfiniteQueryKey } from './hooks/useGetDeploymentLogsInfiniteHook'
 export type { GetDeploymentLogsSuspenseQueryKey } from './hooks/useGetDeploymentLogsSuspenseHook'
 export type { GetDeploymentsForServerQueryKey } from './hooks/useGetDeploymentsForServerHook'
-export type { GetDeploymentsForServerInfiniteQueryKey } from './hooks/useGetDeploymentsForServerInfiniteHook'
 export type { GetDeploymentsForServerSuspenseQueryKey } from './hooks/useGetDeploymentsForServerSuspenseHook'
 export type { GetDeploymentsForStackQueryKey } from './hooks/useGetDeploymentsForStackHook'
-export type { GetDeploymentsForStackInfiniteQueryKey } from './hooks/useGetDeploymentsForStackInfiniteHook'
 export type { GetDeploymentsForStackSuspenseQueryKey } from './hooks/useGetDeploymentsForStackSuspenseHook'
 export type { GetFilterableFieldsQueryKey } from './hooks/useGetFilterableFieldsHook'
-export type { GetFilterableFieldsInfiniteQueryKey } from './hooks/useGetFilterableFieldsInfiniteHook'
 export type { GetFilterableFieldsSuspenseQueryKey } from './hooks/useGetFilterableFieldsSuspenseHook'
 export type { GetGitBranchesQueryKey } from './hooks/useGetGitBranchesHook'
-export type { GetGitBranchesInfiniteQueryKey } from './hooks/useGetGitBranchesInfiniteHook'
 export type { GetGitBranchesSuspenseQueryKey } from './hooks/useGetGitBranchesSuspenseHook'
 export type { GetGitRepositoriesQueryKey } from './hooks/useGetGitRepositoriesHook'
-export type { GetGitRepositoriesInfiniteQueryKey } from './hooks/useGetGitRepositoriesInfiniteHook'
 export type { GetGitRepositoriesSuspenseQueryKey } from './hooks/useGetGitRepositoriesSuspenseHook'
 export type { GetProjectEnvironmentEnhancedQueryKey } from './hooks/useGetProjectEnvironmentEnhancedHook'
-export type { GetProjectEnvironmentEnhancedInfiniteQueryKey } from './hooks/useGetProjectEnvironmentEnhancedInfiniteHook'
 export type { GetProjectEnvironmentEnhancedSuspenseQueryKey } from './hooks/useGetProjectEnvironmentEnhancedSuspenseHook'
 export type { GetProjectQueryKey } from './hooks/useGetProjectHook'
-export type { GetProjectInfiniteQueryKey } from './hooks/useGetProjectInfiniteHook'
 export type { GetProjectsQueryKey } from './hooks/useGetProjectsHook'
-export type { GetProjectsInfiniteQueryKey } from './hooks/useGetProjectsInfiniteHook'
 export type { GetProjectsSuspenseQueryKey } from './hooks/useGetProjectsSuspenseHook'
 export type { GetProjectSuspenseQueryKey } from './hooks/useGetProjectSuspenseHook'
 export type { GetProvidersQueryKey } from './hooks/useGetProvidersHook'
-export type { GetProvidersInfiniteQueryKey } from './hooks/useGetProvidersInfiniteHook'
 export type { GetProvidersSuspenseQueryKey } from './hooks/useGetProvidersSuspenseHook'
 export type { GetServerByIdQueryKey } from './hooks/useGetServerByIdHook'
-export type { GetServerByIdInfiniteQueryKey } from './hooks/useGetServerByIdInfiniteHook'
 export type { GetServerByIdSuspenseQueryKey } from './hooks/useGetServerByIdSuspenseHook'
 export type { GetServersQueryKey } from './hooks/useGetServersHook'
-export type { GetServersInfiniteQueryKey } from './hooks/useGetServersInfiniteHook'
 export type { GetServersSuspenseQueryKey } from './hooks/useGetServersSuspenseHook'
 export type { GetStackDetailQueryKey } from './hooks/useGetStackDetailHook'
-export type { GetStackDetailInfiniteQueryKey } from './hooks/useGetStackDetailInfiniteHook'
 export type { GetStackDetailSuspenseQueryKey } from './hooks/useGetStackDetailSuspenseHook'
 export type { GetUsersMutationKey } from './hooks/useGetUsersHook'
 export type { PostCreateDeploymentMutationKey } from './hooks/usePostCreateDeploymentHook'
@@ -54,7 +41,6 @@ export type { PostRotateAgentKeyMutationKey } from './hooks/usePostRotateAgentKe
 export type { PostValidateGithubRepoMutationKey } from './hooks/usePostValidateGithubRepoHook'
 export type { PutUpdateGithubProviderMutationKey } from './hooks/usePutUpdateGithubProviderHook'
 export type { TestQueryKey } from './hooks/useTestHook'
-export type { TestInfiniteQueryKey } from './hooks/useTestInfiniteHook'
 export type { TestSuspenseQueryKey } from './hooks/useTestSuspenseHook'
 export type { UpdateProjectMutationKey } from './hooks/useUpdateProjectHook'
 export type { UpdateServerMutationKey } from './hooks/useUpdateServerHook'
@@ -277,11 +263,6 @@ export { deleteServerByIdMutationKey, useDeleteServerByIdHook } from './hooks/us
 export { dispatchStackDeploymentMutationKey, useDispatchStackDeploymentHook } from './hooks/useDispatchStackDeploymentHook'
 export { getDeploymentLogsQueryKey, getDeploymentLogsQueryOptionsHook, useGetDeploymentLogsHook } from './hooks/useGetDeploymentLogsHook'
 export {
-  getDeploymentLogsInfiniteQueryKey,
-  getDeploymentLogsInfiniteQueryOptionsHook,
-  useGetDeploymentLogsInfiniteHook,
-} from './hooks/useGetDeploymentLogsInfiniteHook'
-export {
   getDeploymentLogsSuspenseQueryKey,
   getDeploymentLogsSuspenseQueryOptionsHook,
   useGetDeploymentLogsSuspenseHook,
@@ -292,21 +273,11 @@ export {
   useGetDeploymentsForServerHook,
 } from './hooks/useGetDeploymentsForServerHook'
 export {
-  getDeploymentsForServerInfiniteQueryKey,
-  getDeploymentsForServerInfiniteQueryOptionsHook,
-  useGetDeploymentsForServerInfiniteHook,
-} from './hooks/useGetDeploymentsForServerInfiniteHook'
-export {
   getDeploymentsForServerSuspenseQueryKey,
   getDeploymentsForServerSuspenseQueryOptionsHook,
   useGetDeploymentsForServerSuspenseHook,
 } from './hooks/useGetDeploymentsForServerSuspenseHook'
 export { getDeploymentsForStackQueryKey, getDeploymentsForStackQueryOptionsHook, useGetDeploymentsForStackHook } from './hooks/useGetDeploymentsForStackHook'
-export {
-  getDeploymentsForStackInfiniteQueryKey,
-  getDeploymentsForStackInfiniteQueryOptionsHook,
-  useGetDeploymentsForStackInfiniteHook,
-} from './hooks/useGetDeploymentsForStackInfiniteHook'
 export {
   getDeploymentsForStackSuspenseQueryKey,
   getDeploymentsForStackSuspenseQueryOptionsHook,
@@ -314,24 +285,13 @@ export {
 } from './hooks/useGetDeploymentsForStackSuspenseHook'
 export { getFilterableFieldsQueryKey, getFilterableFieldsQueryOptionsHook, useGetFilterableFieldsHook } from './hooks/useGetFilterableFieldsHook'
 export {
-  getFilterableFieldsInfiniteQueryKey,
-  getFilterableFieldsInfiniteQueryOptionsHook,
-  useGetFilterableFieldsInfiniteHook,
-} from './hooks/useGetFilterableFieldsInfiniteHook'
-export {
   getFilterableFieldsSuspenseQueryKey,
   getFilterableFieldsSuspenseQueryOptionsHook,
   useGetFilterableFieldsSuspenseHook,
 } from './hooks/useGetFilterableFieldsSuspenseHook'
 export { getGitBranchesQueryKey, getGitBranchesQueryOptionsHook, useGetGitBranchesHook } from './hooks/useGetGitBranchesHook'
-export { getGitBranchesInfiniteQueryKey, getGitBranchesInfiniteQueryOptionsHook, useGetGitBranchesInfiniteHook } from './hooks/useGetGitBranchesInfiniteHook'
 export { getGitBranchesSuspenseQueryKey, getGitBranchesSuspenseQueryOptionsHook, useGetGitBranchesSuspenseHook } from './hooks/useGetGitBranchesSuspenseHook'
 export { getGitRepositoriesQueryKey, getGitRepositoriesQueryOptionsHook, useGetGitRepositoriesHook } from './hooks/useGetGitRepositoriesHook'
-export {
-  getGitRepositoriesInfiniteQueryKey,
-  getGitRepositoriesInfiniteQueryOptionsHook,
-  useGetGitRepositoriesInfiniteHook,
-} from './hooks/useGetGitRepositoriesInfiniteHook'
 export {
   getGitRepositoriesSuspenseQueryKey,
   getGitRepositoriesSuspenseQueryOptionsHook,
@@ -343,32 +303,21 @@ export {
   useGetProjectEnvironmentEnhancedHook,
 } from './hooks/useGetProjectEnvironmentEnhancedHook'
 export {
-  getProjectEnvironmentEnhancedInfiniteQueryKey,
-  getProjectEnvironmentEnhancedInfiniteQueryOptionsHook,
-  useGetProjectEnvironmentEnhancedInfiniteHook,
-} from './hooks/useGetProjectEnvironmentEnhancedInfiniteHook'
-export {
   getProjectEnvironmentEnhancedSuspenseQueryKey,
   getProjectEnvironmentEnhancedSuspenseQueryOptionsHook,
   useGetProjectEnvironmentEnhancedSuspenseHook,
 } from './hooks/useGetProjectEnvironmentEnhancedSuspenseHook'
 export { getProjectQueryKey, getProjectQueryOptionsHook, useGetProjectHook } from './hooks/useGetProjectHook'
-export { getProjectInfiniteQueryKey, getProjectInfiniteQueryOptionsHook, useGetProjectInfiniteHook } from './hooks/useGetProjectInfiniteHook'
 export { getProjectsQueryKey, getProjectsQueryOptionsHook, useGetProjectsHook } from './hooks/useGetProjectsHook'
-export { getProjectsInfiniteQueryKey, getProjectsInfiniteQueryOptionsHook, useGetProjectsInfiniteHook } from './hooks/useGetProjectsInfiniteHook'
 export { getProjectsSuspenseQueryKey, getProjectsSuspenseQueryOptionsHook, useGetProjectsSuspenseHook } from './hooks/useGetProjectsSuspenseHook'
 export { getProjectSuspenseQueryKey, getProjectSuspenseQueryOptionsHook, useGetProjectSuspenseHook } from './hooks/useGetProjectSuspenseHook'
 export { getProvidersQueryKey, getProvidersQueryOptionsHook, useGetProvidersHook } from './hooks/useGetProvidersHook'
-export { getProvidersInfiniteQueryKey, getProvidersInfiniteQueryOptionsHook, useGetProvidersInfiniteHook } from './hooks/useGetProvidersInfiniteHook'
 export { getProvidersSuspenseQueryKey, getProvidersSuspenseQueryOptionsHook, useGetProvidersSuspenseHook } from './hooks/useGetProvidersSuspenseHook'
 export { getServerByIdQueryKey, getServerByIdQueryOptionsHook, useGetServerByIdHook } from './hooks/useGetServerByIdHook'
-export { getServerByIdInfiniteQueryKey, getServerByIdInfiniteQueryOptionsHook, useGetServerByIdInfiniteHook } from './hooks/useGetServerByIdInfiniteHook'
 export { getServerByIdSuspenseQueryKey, getServerByIdSuspenseQueryOptionsHook, useGetServerByIdSuspenseHook } from './hooks/useGetServerByIdSuspenseHook'
 export { getServersQueryKey, getServersQueryOptionsHook, useGetServersHook } from './hooks/useGetServersHook'
-export { getServersInfiniteQueryKey, getServersInfiniteQueryOptionsHook, useGetServersInfiniteHook } from './hooks/useGetServersInfiniteHook'
 export { getServersSuspenseQueryKey, getServersSuspenseQueryOptionsHook, useGetServersSuspenseHook } from './hooks/useGetServersSuspenseHook'
 export { getStackDetailQueryKey, getStackDetailQueryOptionsHook, useGetStackDetailHook } from './hooks/useGetStackDetailHook'
-export { getStackDetailInfiniteQueryKey, getStackDetailInfiniteQueryOptionsHook, useGetStackDetailInfiniteHook } from './hooks/useGetStackDetailInfiniteHook'
 export { getStackDetailSuspenseQueryKey, getStackDetailSuspenseQueryOptionsHook, useGetStackDetailSuspenseHook } from './hooks/useGetStackDetailSuspenseHook'
 export { getUsersMutationKey, useGetUsersHook } from './hooks/useGetUsersHook'
 export { postCreateDeploymentMutationKey, usePostCreateDeploymentHook } from './hooks/usePostCreateDeploymentHook'
@@ -381,7 +330,6 @@ export { postRotateAgentKeyMutationKey, usePostRotateAgentKeyHook } from './hook
 export { postValidateGithubRepoMutationKey, usePostValidateGithubRepoHook } from './hooks/usePostValidateGithubRepoHook'
 export { putUpdateGithubProviderMutationKey, usePutUpdateGithubProviderHook } from './hooks/usePutUpdateGithubProviderHook'
 export { testQueryKey, testQueryOptionsHook, useTestHook } from './hooks/useTestHook'
-export { testInfiniteQueryKey, testInfiniteQueryOptionsHook, useTestInfiniteHook } from './hooks/useTestInfiniteHook'
 export { testSuspenseQueryKey, testSuspenseQueryOptionsHook, useTestSuspenseHook } from './hooks/useTestSuspenseHook'
 export { updateProjectMutationKey, useUpdateProjectHook } from './hooks/useUpdateProjectHook'
 export { updateServerMutationKey, useUpdateServerHook } from './hooks/useUpdateServerHook'
