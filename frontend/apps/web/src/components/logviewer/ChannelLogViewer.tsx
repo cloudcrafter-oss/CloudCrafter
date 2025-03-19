@@ -46,6 +46,8 @@ type LogLevel =
 	(typeof channelOutputLogLineLevelEnum)[keyof typeof channelOutputLogLineLevelEnum]
 
 const LOG_LEVEL_COLORS = {
+	[channelOutputLogLineLevelEnum.Verbose]:
+		'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
 	[channelOutputLogLineLevelEnum.Debug]:
 		'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
 	[channelOutputLogLineLevelEnum.Information]:
