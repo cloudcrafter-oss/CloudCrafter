@@ -48,7 +48,7 @@ type LogLevel =
 const LOG_LEVEL_COLORS = {
 	[channelOutputLogLineLevelEnum.Debug]:
 		'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
-	[channelOutputLogLineLevelEnum.Info]:
+	[channelOutputLogLineLevelEnum.Information]:
 		'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
 	[channelOutputLogLineLevelEnum.Warning]:
 		'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
@@ -56,8 +56,6 @@ const LOG_LEVEL_COLORS = {
 		'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
 	[channelOutputLogLineLevelEnum.Fatal]:
 		'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
-	[channelOutputLogLineLevelEnum.Trace]:
-		'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
 }
 
 const formatLogMessage = (message: DeploymentLogDto) => {
