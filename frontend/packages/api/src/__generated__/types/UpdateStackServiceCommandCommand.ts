@@ -15,4 +15,12 @@ export type UpdateStackServiceCommandCommand = {
      * @type string
     */
     domainName?: string | null;
+    /**
+     * @type integer, int32
+    */
+    containerPortExposes?: number | null;
+    /**
+     * @type integer, int32
+    */
+    containerHealthCheckPort?: number | null;
 };

@@ -16,7 +16,7 @@ import {
 	FormMessage,
 } from '@cloudcrafter/ui/components/form'
 import { Input } from '@cloudcrafter/ui/components/input'
-import { Loader2 } from 'lucide-react'
+import { Github, Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -69,12 +69,43 @@ export const GithubAppForm = ({
 		},
 	]
 
+	const repositoryUri = `https://www.github.com/${stackDetails.source?.githubApp?.repository}`
+
 	return (
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmitSourceInfo)}
 				className='space-y-4'
 			>
+				{stackDetails.source?.githubApp?.repository && (
+					<div className='mb-6 flex flex-col space-y-2'>
+						<div className='flex items-center space-x-2'>
+							<Github className='h-5 w-5' />
+							<h3 className='text-md font-medium'>Repository</h3>
+						</div>
+						<div className='flex items-center'>
+							<Button
+								variant='outline'
+								size='sm'
+								asChild
+								className='inline-flex items-center gap-2 hover:bg-accent hover:text-accent-foreground'
+							>
+								<a
+									href={repositoryUri}
+									target='_blank'
+									rel='noopener noreferrer'
+									className='flex items-center'
+								>
+									<span className='font-medium'>
+										{stackDetails.source.githubApp.repository}
+									</span>
+									<span className='ml-2 text-xs text-muted-foreground'>↗</span>
+								</a>
+							</Button>
+						</div>
+					</div>
+				)}
+
 				{textFields.map((textField) => (
 					<FormField
 						key={textField.name}

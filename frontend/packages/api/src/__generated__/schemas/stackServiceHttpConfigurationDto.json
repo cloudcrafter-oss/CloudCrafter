@@ -1,1 +1,1 @@
-{"required":["domainName"],"type":"object","properties":{"domainName":{"type":"string","nullable":true}},"nullable":true,"x-readme-ref-name":"StackServiceHttpConfigurationDto"}
+{"required":["domainName","containerHttpPort"],"type":"object","properties":{"domainName":{"type":"string","nullable":true},"containerHttpPort":{"type":"integer","format":"int32","nullable":true}},"nullable":true,"x-readme-ref-name":"StackServiceHttpConfigurationDto"}

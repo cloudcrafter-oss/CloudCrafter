@@ -74,6 +74,7 @@ export { stackCreatedDtoSchema } from "./stackCreatedDtoSchema";
 export { stackDetailDtoSchema } from "./stackDetailDtoSchema";
 export { stackServerDtoSchema } from "./stackServerDtoSchema";
 export { stackServiceDtoSchema } from "./stackServiceDtoSchema";
+export { stackServiceHealthcheckConfigurationDtoSchema } from "./stackServiceHealthcheckConfigurationDtoSchema";
 export { stackServiceHttpConfigurationDtoSchema } from "./stackServiceHttpConfigurationDtoSchema";
 export { stackSourceDtoSchema } from "./stackSourceDtoSchema";
 export { stackSourceDtoTypeSchema } from "./stackSourceDtoTypeSchema";

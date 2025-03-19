@@ -1,4 +1,5 @@
 import type { EntityHealthDto } from "./EntityHealthDto";
+import type { StackServiceHealthcheckConfigurationDto } from "./StackServiceHealthcheckConfigurationDto";
 import type { StackServiceHttpConfigurationDto } from "./StackServiceHttpConfigurationDto";
 
  export type StackServiceDto = {
@@ -18,6 +19,10 @@ import type { StackServiceHttpConfigurationDto } from "./StackServiceHttpConfigu
      * @type object
     */
     httpConfiguration: StackServiceHttpConfigurationDto | null;
+    /**
+     * @type object
+    */
+    healthcheckConfiguration: StackServiceHealthcheckConfigurationDto;
     /**
      * @type object
     */

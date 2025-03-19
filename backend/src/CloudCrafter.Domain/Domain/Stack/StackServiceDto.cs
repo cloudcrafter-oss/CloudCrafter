@@ -11,6 +11,7 @@ public class StackServiceDto
     public required string? Description { get; init; }
 
     public required StackServiceHttpConfigurationDto? HttpConfiguration { get; init; }
+    public required StackServiceHealthcheckConfigurationDto HealthcheckConfiguration { get; init; }
     public required EntityHealthDto Health { get; init; }
 
     private class Mapping : Profile
@@ -26,12 +27,26 @@ public class StackServiceDto
 public class StackServiceHttpConfigurationDto
 {
     public required string? DomainName { get; init; }
+    public required int? ContainerHttpPort { get; init; }
 
     private class Mapping : Profile
     {
         public Mapping()
         {
             CreateMap<EntityHttpConfiguration, StackServiceHttpConfigurationDto>();
+        }
+    }
+}
+
+public class StackServiceHealthcheckConfigurationDto
+{
+    public required int? HttpPort { get; init; }
+
+    private class Mapping : Profile
+    {
+        public Mapping()
+        {
+            CreateMap<EntityHealthcheckConfiguration, StackServiceHealthcheckConfigurationDto>();
         }
     }
 }

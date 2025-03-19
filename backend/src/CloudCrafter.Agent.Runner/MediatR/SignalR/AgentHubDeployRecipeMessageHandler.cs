@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Agent.Models.SignalR;
+﻿using CloudCrafter.Agent.Models.Exceptions;
+using CloudCrafter.Agent.Models.SignalR;
 using CloudCrafter.Agent.Runner.Common.Interfaces;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
 using CloudCrafter.Agent.Runner.SignalR;
@@ -39,6 +40,13 @@ public static class AgentHubDeployRecipeMessageHandler
 
                 await request.TypedHubConnection.InvokeAsync(hub =>
                     hub.MarkDeploymentFinished(request.Message.DeploymentId)
+                );
+            }
+            catch (DeploymentException deploymentException)
+            {
+                logger.LogCritical(deploymentException, "Error while deploying recipe");
+                await request.TypedHubConnection.InvokeAsync(hub =>
+                    hub.MarkDeploymentFailed(request.Message.DeploymentId)
                 );
             }
             catch (Exception ex)

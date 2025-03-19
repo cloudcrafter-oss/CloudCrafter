@@ -74,6 +74,7 @@ export type { StackCreatedDto } from "./StackCreatedDto";
 export type { StackDetailDto } from "./StackDetailDto";
 export type { StackServerDto } from "./StackServerDto";
 export type { StackServiceDto } from "./StackServiceDto";
+export type { StackServiceHealthcheckConfigurationDto } from "./StackServiceHealthcheckConfigurationDto";
 export type { StackServiceHttpConfigurationDto } from "./StackServiceHttpConfigurationDto";
 export type { StackSourceDto } from "./StackSourceDto";
 export type { StackSourceDtoTypeEnum, StackSourceDtoType } from "./StackSourceDtoType";
