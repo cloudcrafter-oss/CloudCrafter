@@ -230,9 +230,14 @@ export const ChannelLogViewer = ({ channelId }: { channelId: string }) => {
 
 	// Handle scroll events to temporarily disable auto-scroll when manually scrolling
 	const handleScroll = useCallback(
-		(scrollTop: number, scrollHeight: number, clientHeight: number) => {
+		(args: {
+			scrollTop: number
+			scrollHeight: number
+			clientHeight: number
+		}) => {
 			// If we're at the bottom or very close to it
-			const isAtBottom = scrollHeight - scrollTop - clientHeight < 50
+			const isAtBottom =
+				args.scrollHeight - args.scrollTop - args.clientHeight < 50
 
 			if (autoScroll) {
 				if (!isAtBottom && !autoScrollPaused) {
