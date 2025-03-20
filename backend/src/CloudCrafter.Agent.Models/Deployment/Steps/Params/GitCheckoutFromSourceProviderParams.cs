@@ -1,12 +1,9 @@
-﻿using CloudCrafter.Agent.Models.Recipe;
+﻿namespace CloudCrafter.Agent.Models.Deployment.Steps.Params;
 
-namespace CloudCrafter.Agent.Models.Deployment.Steps.Params;
-
-
-// [DeploymentStep(DeploymentBuildStepType.FetchGitRepositoryFromProvider)]
-// // ReSharper disable once ClassNeverInstantiated.Global
-// public class GitCheckoutFromSourceProviderParams : BaseParams
-// {
-//     public string Repo { get; set; } = string.Empty;
-//     public string Commit { get; set; } = string.Empty;
-// }
+public class GitCheckoutFromSourceProviderParams : BaseParams
+{
+    public string FullPathWithToken { get; set; } = string.Empty;
+    public string ProviderPath { get; set; } = string.Empty;
+    public string Path { get; set; } = string.Empty;
+    public string Branch { get; set; } = string.Empty;
+}

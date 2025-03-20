@@ -31,7 +31,7 @@ public class ChannelIdEnricher(IServiceProvider serviceProvider) : ILogEventEnri
             return;
         }
 
-        var logMessage = logEvent.RenderMessage();
+        var logMessage = GetEnhancedLogMessage(logEvent);
 
         ChannelOutputLogLineLevel level = logEvent.Level switch
         {
@@ -58,5 +58,18 @@ public class ChannelIdEnricher(IServiceProvider serviceProvider) : ILogEventEnri
             )
         );
         _sequence++;
+    }
+
+    private string GetEnhancedLogMessage(LogEvent logEvent)
+    {
+        var message = logEvent.RenderMessage();
+
+        if (logEvent.Exception == null)
+        {
+            return message;
+        }
+
+        // Include the exception details in the message
+        return $"{message}\n\nException: {logEvent.Exception.GetType().FullName}: {logEvent.Exception.Message}\n{logEvent.Exception.StackTrace}";
     }
 }

@@ -1,40 +1,31 @@
-// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
-import client from "../../frontend/client";
-import type { RequestConfig } from "../../frontend/client";
-import type { GetUsersMutationRequest, GetUsersMutationResponse } from "../types/GetUsers";
-import type { UseMutationOptions } from "@tanstack/react-query";
-import { useMutation } from "@tanstack/react-query";
+import client from '../../frontend/client.ts'
+import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
+import type { GetUsersMutationRequest, GetUsersMutationResponse } from '../types/GetUsers'
+import type { UseMutationOptions } from '@tanstack/react-query'
+import { getUsers } from '../axios-backend/getUsers'
+import { useMutation } from '@tanstack/react-query'
 
- export const getUsersMutationKey = () => [{ "url": "/api/Users" }] as const;
+export const getUsersMutationKey = () => [{ url: '/api/Users' }] as const
 
- export type GetUsersMutationKey = ReturnType<typeof getUsersMutationKey>;
+export type GetUsersMutationKey = ReturnType<typeof getUsersMutationKey>
 
- /**
+/**
  * {@link /api/Users}
  */
-async function getUsersHook(data: GetUsersMutationRequest, config: Partial<RequestConfig<GetUsersMutationRequest>> = {}) {
-    const res = await client<GetUsersMutationResponse, Error, GetUsersMutationRequest>({ method: "POST", url: `/api/Users`, data, ...config });
-    return res.data;
-}
+export function useGetUsersHook<TContext>(
+  options: {
+    mutation?: UseMutationOptions<GetUsersMutationResponse, ResponseErrorConfig<Error>, { data: GetUsersMutationRequest }, TContext>
+    client?: Partial<RequestConfig<GetUsersMutationRequest>> & { client?: typeof client }
+  } = {},
+) {
+  const { mutation: mutationOptions, client: config = {} } = options ?? {}
+  const mutationKey = mutationOptions?.mutationKey ?? getUsersMutationKey()
 
- /**
- * {@link /api/Users}
- */
-export function useGetUsersHook(options: {
-    mutation?: UseMutationOptions<GetUsersMutationResponse, Error, {
-        data: GetUsersMutationRequest;
-    }>;
-    client?: Partial<RequestConfig<GetUsersMutationRequest>>;
-} = {}) {
-    const { mutation: mutationOptions, client: config = {} } = options ?? {};
-    const mutationKey = mutationOptions?.mutationKey ?? getUsersMutationKey();
-    return useMutation<GetUsersMutationResponse, Error, {
-        data: GetUsersMutationRequest;
-    }>({
-        mutationFn: async ({ data }) => {
-            return getUsersHook(data, config);
-        },
-        mutationKey,
-        ...mutationOptions
-    });
+  return useMutation<GetUsersMutationResponse, ResponseErrorConfig<Error>, { data: GetUsersMutationRequest }, TContext>({
+    mutationFn: async ({ data }) => {
+      return getUsers(data, config)
+    },
+    mutationKey,
+    ...mutationOptions,
+  })
 }

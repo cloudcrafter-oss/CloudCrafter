@@ -14,10 +14,12 @@ public static class UpdateStackServiceCommand
         Guid StackId,
         Guid StackServiceId,
         string? Name = null,
-        string? DomainName = null
+        string? DomainName = null,
+        int? ContainerPortExposes = null,
+        int? ContainerHealthCheckPort = null
     ) : IRequest<StackServiceDto?>, IRequireStackAccess;
 
-    public record Handler(IStackServicesService stackServicesService, IGitService GitService)
+    public record Handler(IStackServicesService StackServicesService, IGitService GitService)
         : IRequestHandler<Command, StackServiceDto?>
     {
         public async Task<StackServiceDto?> Handle(
@@ -25,7 +27,7 @@ public static class UpdateStackServiceCommand
             CancellationToken cancellationToken
         )
         {
-            var stack = await stackServicesService.UpdateStackService(request);
+            var stack = await StackServicesService.UpdateStackService(request);
 
             return stack;
         }

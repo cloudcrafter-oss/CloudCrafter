@@ -1,42 +1,41 @@
-// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
-import client from "../../frontend/client";
-import type { RequestConfig } from "../../frontend/client";
-import type { UpdateProjectMutationRequest, UpdateProjectMutationResponse, UpdateProjectPathParams } from "../types/UpdateProject";
-import type { UseMutationOptions } from "@tanstack/react-query";
-import { useMutation } from "@tanstack/react-query";
+import client from '../../frontend/client.ts'
+import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
+import type { UpdateProjectMutationRequest, UpdateProjectMutationResponse, UpdateProjectPathParams } from '../types/UpdateProject'
+import type { UseMutationOptions } from '@tanstack/react-query'
+import { updateProject } from '../axios-backend/updateProject'
+import { useMutation } from '@tanstack/react-query'
 
- export const updateProjectMutationKey = () => [{ "url": "/api/Projects/{id}" }] as const;
+export const updateProjectMutationKey = () => [{ url: '/api/Projects/{id}' }] as const
 
- export type UpdateProjectMutationKey = ReturnType<typeof updateProjectMutationKey>;
+export type UpdateProjectMutationKey = ReturnType<typeof updateProjectMutationKey>
 
- /**
+/**
  * {@link /api/Projects/:id}
  */
-async function updateProjectHook(id: UpdateProjectPathParams["id"], data?: UpdateProjectMutationRequest, config: Partial<RequestConfig<UpdateProjectMutationRequest>> = {}) {
-    const res = await client<UpdateProjectMutationResponse, Error, UpdateProjectMutationRequest>({ method: "POST", url: `/api/Projects/${id}`, data, ...config });
-    return res.data;
-}
+export function useUpdateProjectHook<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      UpdateProjectMutationResponse,
+      ResponseErrorConfig<Error>,
+      { id: UpdateProjectPathParams['id']; data?: UpdateProjectMutationRequest },
+      TContext
+    >
+    client?: Partial<RequestConfig<UpdateProjectMutationRequest>> & { client?: typeof client }
+  } = {},
+) {
+  const { mutation: mutationOptions, client: config = {} } = options ?? {}
+  const mutationKey = mutationOptions?.mutationKey ?? updateProjectMutationKey()
 
- /**
- * {@link /api/Projects/:id}
- */
-export function useUpdateProjectHook(options: {
-    mutation?: UseMutationOptions<UpdateProjectMutationResponse, Error, {
-        id: UpdateProjectPathParams["id"];
-        data?: UpdateProjectMutationRequest;
-    }>;
-    client?: Partial<RequestConfig<UpdateProjectMutationRequest>>;
-} = {}) {
-    const { mutation: mutationOptions, client: config = {} } = options ?? {};
-    const mutationKey = mutationOptions?.mutationKey ?? updateProjectMutationKey();
-    return useMutation<UpdateProjectMutationResponse, Error, {
-        id: UpdateProjectPathParams["id"];
-        data?: UpdateProjectMutationRequest;
-    }>({
-        mutationFn: async ({ id, data }) => {
-            return updateProjectHook(id, data, config);
-        },
-        mutationKey,
-        ...mutationOptions
-    });
+  return useMutation<
+    UpdateProjectMutationResponse,
+    ResponseErrorConfig<Error>,
+    { id: UpdateProjectPathParams['id']; data?: UpdateProjectMutationRequest },
+    TContext
+  >({
+    mutationFn: async ({ id, data }) => {
+      return updateProject(id, data, config)
+    },
+    mutationKey,
+    ...mutationOptions,
+  })
 }

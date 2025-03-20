@@ -16,16 +16,24 @@ public static class UpdateStackCommand
         Guid StackId,
         string? Name = null,
         string? Description = null,
-        GitSettings? GitSettings = null
+        GitPublicSettings? GitPublicSettings = null,
+        GithubSettings? GithubSettings = null
     // Add other updatable properties here
     ) : IRequest<StackDetailDto?>, IRequireStackAccess;
 
     [DefaultValue(null)]
-    public class GitSettings
+    public class GitPublicSettings
     {
-        public string? GitRepository { get; set; }
-        public string? GitPath { get; set; }
-        public string? GitBranch { get; set; }
+        public string? Repository { get; set; }
+        public string? Path { get; set; }
+        public string? Branch { get; set; }
+    }
+
+    [DefaultValue(null)]
+    public class GithubSettings
+    {
+        public string? Branch { get; set; }
+        public string? Path { get; set; }
     }
 
     public record Handler(IStacksService StackService, IGitService GitService)
@@ -36,17 +44,30 @@ public static class UpdateStackCommand
             CancellationToken cancellationToken
         )
         {
-            if (!string.IsNullOrEmpty(request.GitSettings?.GitRepository))
+            if (!string.IsNullOrEmpty(request.GitPublicSettings?.Repository))
             {
                 var isValidGitRepo = await GitService.ValidateRepository(
-                    request.GitSettings.GitRepository,
-                    request.GitSettings.GitPath,
-                    request.GitSettings.GitBranch
+                    request.GitPublicSettings.Repository,
+                    request.GitPublicSettings.Path,
+                    request.GitPublicSettings.Branch
                 );
 
                 if (!isValidGitRepo.IsValid)
                 {
                     throw new ValidationException("GitRepository", "Invalid Git repository");
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.GithubSettings?.Branch))
+            {
+                var isValidGitBranch = await GitService.ValidateSourceProviderBranch(
+                    request.StackId,
+                    request.GithubSettings.Branch
+                );
+
+                if (!isValidGitBranch.IsValid)
+                {
+                    throw new ValidationException("Branch", "Invalid branch");
                 }
             }
 

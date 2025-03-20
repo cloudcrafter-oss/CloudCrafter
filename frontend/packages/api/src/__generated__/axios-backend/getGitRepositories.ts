@@ -1,11 +1,21 @@
-import client from "../../backend/client";
-import type { RequestConfig } from "../../backend/client";
-import type { GetGitRepositoriesQueryResponse, GetGitRepositoriesPathParams } from "../types/GetGitRepositories";
+import client from '../../backend/client.ts'
+import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import type { GetGitRepositoriesQueryResponse, GetGitRepositoriesPathParams } from '../types/GetGitRepositories'
 
- /**
+export function getGetGitRepositoriesUrl(id: GetGitRepositoriesPathParams['id']) {
+  return `/api/Providers/${id}/repositories` as const
+}
+
+/**
  * {@link /api/Providers/:id/repositories}
  */
-export async function getGitRepositories(id: GetGitRepositoriesPathParams["id"], config: Partial<RequestConfig> = {}) {
-    const res = await client<GetGitRepositoriesQueryResponse, Error, unknown>({ method: "GET", url: `/api/Providers/${id}/repositories`, ...config });
-    return res.data;
+export async function getGitRepositories(id: GetGitRepositoriesPathParams['id'], config: Partial<RequestConfig> & { client?: typeof client } = {}) {
+  const { client: request = client, ...requestConfig } = config
+
+  const res = await request<GetGitRepositoriesQueryResponse, ResponseErrorConfig<Error>, unknown>({
+    method: 'GET',
+    url: getGetGitRepositoriesUrl(id).toString(),
+    ...requestConfig,
+  })
+  return res.data
 }

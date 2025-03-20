@@ -1,9 +1,9 @@
 export const serverStatusDtoValueEnum = {
-    "Unknown": "Unknown",
-    "Connected": "Connected",
-    "Disconnected": "Disconnected"
-} as const;
+  Unknown: 'Unknown',
+  Connected: 'Connected',
+  Disconnected: 'Disconnected',
+} as const
 
- export type ServerStatusDtoValueEnum = (typeof serverStatusDtoValueEnum)[keyof typeof serverStatusDtoValueEnum];
+export type ServerStatusDtoValueEnum = (typeof serverStatusDtoValueEnum)[keyof typeof serverStatusDtoValueEnum]
 
- export type ServerStatusDtoValue = ServerStatusDtoValueEnum;
+export type ServerStatusDtoValue = ServerStatusDtoValueEnum

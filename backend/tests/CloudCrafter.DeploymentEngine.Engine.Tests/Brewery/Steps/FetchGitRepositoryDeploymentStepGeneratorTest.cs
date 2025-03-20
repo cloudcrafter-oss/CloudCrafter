@@ -22,7 +22,7 @@ public class FetchGitRepositoryDeploymentStepGeneratorTest
         var step = generator.Generate();
 
         // Assert
-        step.Type.Should().Be(DeploymentBuildStepType.FetchGitRepository);
+        step.Type.Should().Be(DeploymentBuildStepType.FetchPublicGitRepository);
         step.Params.Should().ContainKey("repo");
         step.Params.Should().ContainKey("commit");
         step.Params["repo"].Should().Be(options.Repository);

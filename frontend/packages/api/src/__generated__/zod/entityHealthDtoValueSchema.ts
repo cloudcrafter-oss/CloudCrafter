@@ -1,3 +1,3 @@
-import { z } from "zod";
+import { z } from 'zod'
 
- export const entityHealthDtoValueSchema = z.enum(["Unknown", "Unsupported", "Degraded", "Unhealthy", "Healthy", "HeathCheckOverdue"]);
+export const entityHealthDtoValueSchema = z.enum(['Unknown', 'Unsupported', 'Degraded', 'Unhealthy', 'Healthy', 'HeathCheckOverdue'])

@@ -1,3 +1,3 @@
-import { z } from "zod";
+import { z } from 'zod'
 
- export const stackSourceDtoTypeSchema = z.enum(["Git", "GithubApp"]);
+export const stackSourceDtoTypeSchema = z.enum(['Git', 'GithubApp'])

@@ -1,3 +1,5 @@
-import { z } from "zod";
+import { z } from 'zod'
 
- export const gitProviderBranchDtoSchema = z.object({ "name": z.string() });
+export const gitProviderBranchDtoSchema = z.object({
+  name: z.string(),
+})

@@ -1,3 +1,5 @@
-import { z } from "zod";
+import { z } from 'zod'
 
- export const requestSchema = z.object({ "installationId": z.number().int() });
+export const requestSchema = z.object({
+  installationId: z.number().int(),
+})

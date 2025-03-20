@@ -6,6 +6,7 @@ const nextConfig = {
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
+	allowedDevOrigins: ['frontend-7f000001.nip.io'],
 }
 
 export default nextConfig

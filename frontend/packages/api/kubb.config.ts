@@ -60,12 +60,18 @@ export default defineConfig({
 			client: {
 				importPath: '../../frontend/client.ts',
 			},
+			exclude: [
+				{
+					type: 'tag',
+					pattern: 'cloudCrafterAuthTest',
+				},
+			],
 			output: {
 				path: './hooks',
-				banner:
-					'// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters',
+				// banner:
+				// 	'// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters',
 			},
-			infinite: {},
+			infinite: false,
 		}),
 	],
 })

@@ -1,13 +1,16 @@
-import { updateStackServiceCommandCommandSchema } from "./updateStackServiceCommandCommandSchema";
-import { z } from "zod";
+import { updateStackServiceCommandCommandSchema } from './updateStackServiceCommandCommandSchema'
+import { z } from 'zod'
 
- export const updateStackServicePathParamsSchema = z.object({ "stackId": z.string().uuid(), "stackServiceId": z.string().uuid() });
+export const updateStackServicePathParamsSchema = z.object({
+  stackId: z.string().uuid(),
+  stackServiceId: z.string().uuid(),
+})
 
- /**
+/**
  * @description OK
  */
-export const updateStackService200Schema = z.any();
+export const updateStackService200Schema = z.any()
 
- export const updateStackServiceMutationRequestSchema = z.lazy(() => updateStackServiceCommandCommandSchema);
+export const updateStackServiceMutationRequestSchema = z.lazy(() => updateStackServiceCommandCommandSchema)
 
- export const updateStackServiceMutationResponseSchema = z.lazy(() => updateStackService200Schema);
+export const updateStackServiceMutationResponseSchema = z.lazy(() => updateStackService200Schema)

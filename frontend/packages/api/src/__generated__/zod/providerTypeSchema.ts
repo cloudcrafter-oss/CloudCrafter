@@ -1,3 +1,3 @@
-import { z } from "zod";
+import { z } from 'zod'
 
- export const providerTypeSchema = z.enum(["Unknown", "Github"]);
+export const providerTypeSchema = z.enum(['Unknown', 'Github'])

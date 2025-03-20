@@ -1,5 +1,4 @@
 import { useGetServersHook } from '@cloudcrafter/api'
-import type { createStackCommandCommandSchema } from '@cloudcrafter/api'
 import {
 	FormControl,
 	FormField,
@@ -13,21 +12,23 @@ import {
 	SelectItem,
 	SelectTrigger,
 } from '@cloudcrafter/ui/components/select'
-import type { UseFormReturn } from 'react-hook-form'
-import type * as z from 'zod'
+import type { FieldPath, UseFormReturn } from 'react-hook-form'
 
-interface ServerSelectProps {
-	form: UseFormReturn<z.infer<typeof createStackCommandCommandSchema>>
+interface ServerSelectProps<T extends { serverId: string }> {
+	form: UseFormReturn<T>
 	inputDisabled: boolean
 }
 
-export const ServerSelect = ({ form, inputDisabled }: ServerSelectProps) => {
+export const ServerSelect = <T extends { serverId: string }>({
+	form,
+	inputDisabled,
+}: ServerSelectProps<T>) => {
 	const { data: servers } = useGetServersHook()
 
 	return (
 		<FormField
 			control={form.control}
-			name='serverId'
+			name={'serverId' as FieldPath<T>}
 			render={({ field }) => (
 				<FormItem className='space-y-2'>
 					<FormLabel>Server</FormLabel>

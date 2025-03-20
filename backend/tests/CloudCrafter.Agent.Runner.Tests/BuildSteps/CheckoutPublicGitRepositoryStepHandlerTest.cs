@@ -4,16 +4,17 @@ using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
+using CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps.GitCheckout;
 using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using Moq;
 
 namespace CloudCrafter.Agent.Runner.Tests.BuildSteps;
 
-public class CheckoutGitRepositoryStepHandlerTest : BaseTest
+public class CheckoutPublicGitRepositoryStepHandlerTest : BaseTest
 {
     private DeploymentContext _context;
-    private CheckoutGitRepositoryStepHandler _handler;
+    private CheckoutPublicGitRepositoryStepHandler _handler;
     private Mock<ICommandExecutor> _mockExecutor;
     private Mock<IDeploymentLogger> _mockLogger;
 
@@ -28,10 +29,10 @@ public class CheckoutGitRepositoryStepHandlerTest : BaseTest
         _mockExecutor = new Mock<ICommandExecutor>();
         _mockLogger = new Mock<IDeploymentLogger>();
         _mockPump
-            .Setup(p => p.CreateLogger<CheckoutGitRepositoryStepHandler>())
+            .Setup(p => p.CreateLogger<CheckoutPublicGitRepositoryStepHandler>())
             .Returns(_mockLogger.Object);
 
-        _handler = new CheckoutGitRepositoryStepHandler(_mockPump.Object, _mockExecutor.Object);
+        _handler = new CheckoutPublicGitRepositoryStepHandler(_mockPump.Object, _mockExecutor.Object);
 
         _params = new GitCheckoutParams { Repo = "https://github.com/example/repo.git" };
         _recipe = GetTestRecipe();

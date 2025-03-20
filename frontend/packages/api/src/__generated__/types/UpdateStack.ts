@@ -1,30 +1,30 @@
-import type { StackDetailDto } from "./StackDetailDto";
-import type { UpdateStackCommandCommand } from "./UpdateStackCommandCommand";
+import type { StackDetailDto } from './StackDetailDto'
+import type { UpdateStackCommandCommand } from './UpdateStackCommandCommand'
 
- export type UpdateStackPathParams = {
-    /**
-     * @type string, uuid
-    */
-    id: string;
-};
+export type UpdateStackPathParams = {
+  /**
+   * @type string, uuid
+   */
+  id: string
+}
 
- /**
+/**
  * @description OK
-*/
-export type UpdateStack200 = StackDetailDto;
+ */
+export type UpdateStack200 = StackDetailDto
 
- /**
+/**
  * @description Not Found
-*/
-export type UpdateStack404 = any;
+ */
+export type UpdateStack404 = any
 
- export type UpdateStackMutationRequest = UpdateStackCommandCommand;
+export type UpdateStackMutationRequest = UpdateStackCommandCommand
 
- export type UpdateStackMutationResponse = UpdateStack200;
+export type UpdateStackMutationResponse = UpdateStack200
 
- export type UpdateStackMutation = {
-    Response: UpdateStack200;
-    Request: UpdateStackMutationRequest;
-    PathParams: UpdateStackPathParams;
-    Errors: UpdateStack404;
-};
+export type UpdateStackMutation = {
+  Response: UpdateStack200
+  Request: UpdateStackMutationRequest
+  PathParams: UpdateStackPathParams
+  Errors: UpdateStack404
+}

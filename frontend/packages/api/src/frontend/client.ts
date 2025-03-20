@@ -30,6 +30,8 @@ export type ResponseConfig<TData = unknown> = {
 	headers?: AxiosResponse['headers']
 }
 
+export type ResponseErrorConfig<TError = unknown> = TError
+
 export const axiosInstance = axios.create({
 	baseURL: backendEnv.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL,
 })

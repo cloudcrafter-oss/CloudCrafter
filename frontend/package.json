@@ -4,6 +4,7 @@
 		"build": "turbo build",
 		"dev": "turbo dev",
 		"lint": "turbo lint -- --fix",
+		"typecheck": "turbo typecheck",
 		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
 		"ui:add": "pnpm --filter @cloudcrafter/ui ui:add",
 		"generate-clients": "pnpm --filter @cloudcrafter/api generate-clients",

@@ -77,7 +77,12 @@ public class NixpacksHelper(
             baseCommand,
             streamResult =>
             {
-                // TODO: Save this somewhere
+                if (streamResult.IsStdErr)
+                {
+                    logger.LogCritical(streamResult.Log);
+                    return;
+                }
+
                 logger.LogInformation(streamResult.Log);
             }
         );

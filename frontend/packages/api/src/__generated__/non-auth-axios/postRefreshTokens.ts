@@ -1,11 +1,25 @@
-import client from "@kubb/plugin-client/client";
-import type { PostRefreshTokensMutationRequest, PostRefreshTokensMutationResponse } from "../types/PostRefreshTokens";
-import type { RequestConfig } from "@kubb/plugin-client/client";
+import client from '@kubb/plugin-client/clients/axios'
+import type { PostRefreshTokensMutationRequest, PostRefreshTokensMutationResponse } from '../types/PostRefreshTokens'
+import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
 
- /**
+export function getPostRefreshTokensUrl() {
+  return `/api/Auth/refresh` as const
+}
+
+/**
  * {@link /api/Auth/refresh}
  */
-export async function postRefreshTokens(data: PostRefreshTokensMutationRequest, config: Partial<RequestConfig<PostRefreshTokensMutationRequest>> = {}) {
-    const res = await client<PostRefreshTokensMutationResponse, Error, PostRefreshTokensMutationRequest>({ method: "POST", url: `/api/Auth/refresh`, data, ...config });
-    return res.data;
+export async function postRefreshTokens(
+  data: PostRefreshTokensMutationRequest,
+  config: Partial<RequestConfig<PostRefreshTokensMutationRequest>> & { client?: typeof client } = {},
+) {
+  const { client: request = client, ...requestConfig } = config
+
+  const res = await request<PostRefreshTokensMutationResponse, ResponseErrorConfig<Error>, PostRefreshTokensMutationRequest>({
+    method: 'POST',
+    url: getPostRefreshTokensUrl().toString(),
+    data,
+    ...requestConfig,
+  })
+  return res.data
 }

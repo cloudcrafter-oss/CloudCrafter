@@ -2,7 +2,9 @@
 	"extends": "@cloudcrafter/typescript-config/react-library.json",
 	"compilerOptions": {
 		"baseUrl": ".",
-		"noEmit": true
+		"noEmit": true,
+		"target": "ES2015",
+		"lib": ["ES2015", "DOM"]
 	},
 	"include": ["src"],
 	"exclude": ["node_modules", "dist"]

@@ -34,6 +34,18 @@
     <None Update="Brewery\AppGenerators\SimpleAppGeneratorTest.ShouldCreateDockerComposeEditor.verified.txt">
       <DependentUpon>SimpleAppDockerComposeGeneratorTest.cs</DependentUpon>
     </None>
+    <None Update="Brewery\RecipeGenerators\SimpleApp\SimpleAppRecipeGeneratorTest.ShouldBeAbleToGenerateRecipeForSimpleApp.verified.txt">
+      <ParentFile>SimpleAppRecipeGeneratorTest</ParentFile>
+      <DependentUpon>SimpleAppRecipeGeneratorTest.cs</DependentUpon>
+    </None>
+    <None Update="Brewery\RecipeGenerators\SimpleApp\SimpleAppRecipeGeneratorTest.ShouldBeAbleToGenerateRecipeForSimpleAppWithoutHealthCheck.received.txt">
+      <ParentFile>SimpleAppRecipeGeneratorTest</ParentFile>
+      <DependentUpon>SimpleAppRecipeGeneratorTest.cs</DependentUpon>
+    </None>
+    <None Update="Brewery\RecipeGenerators\SimpleApp\SimpleAppRecipeGeneratorTest.ShouldBeAbleToGenerateRecipeForSimpleAppWithoutHealthCheck.verified.txt">
+      <ParentFile>SimpleAppRecipeGeneratorTest</ParentFile>
+      <DependentUpon>SimpleAppRecipeGeneratorTest.cs</DependentUpon>
+    </None>
   </ItemGroup>
 
 </Project>

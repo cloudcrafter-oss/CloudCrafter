@@ -1,3 +1,3 @@
-import { z } from "zod";
+import { z } from 'zod'
 
- export const serverStatusDtoValueSchema = z.enum(["Unknown", "Connected", "Disconnected"]);
+export const serverStatusDtoValueSchema = z.enum(['Unknown', 'Connected', 'Disconnected'])

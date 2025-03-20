@@ -1,6 +1,6 @@
 export type GitRepositoryCheckResultDto = {
-    /**
-     * @type boolean
-    */
-    isValid: boolean;
-};
+  /**
+   * @type boolean
+   */
+  isValid: boolean
+}

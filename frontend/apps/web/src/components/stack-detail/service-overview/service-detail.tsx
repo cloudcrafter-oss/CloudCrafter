@@ -36,6 +36,12 @@ export const ServiceDetail = ({
 			stackServiceId: service.id,
 			name: service.name,
 			domainName: service.httpConfiguration?.domainName,
+			containerPortExposes: service.httpConfiguration?.containerHttpPort
+				? Number(service.httpConfiguration.containerHttpPort)
+				: undefined,
+			containerHealthCheckPort: service.healthcheckConfiguration.httpPort
+				? Number(service.healthcheckConfiguration.httpPort)
+				: undefined,
 		},
 	})
 
@@ -109,6 +115,58 @@ export const ServiceDetail = ({
 												{...field}
 												value={field.value ?? ''}
 												placeholder='Enter domain name'
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name='containerPortExposes'
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Container Port Exposes</FormLabel>
+										<FormControl>
+											<Input
+												{...field}
+												value={field.value ?? ''}
+												type='number'
+												onChange={(e) =>
+													field.onChange(
+														e.target.value === ''
+															? undefined
+															: Number(e.target.value),
+													)
+												}
+												placeholder='Enter container port (e.g. 3000)'
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name='containerHealthCheckPort'
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Container Health Check Port</FormLabel>
+										<FormControl>
+											<Input
+												{...field}
+												value={field.value ?? ''}
+												type='number'
+												onChange={(e) =>
+													field.onChange(
+														e.target.value === ''
+															? undefined
+															: Number(e.target.value),
+													)
+												}
+												placeholder='Enter container health check port (e.g. 3000)'
 											/>
 										</FormControl>
 										<FormMessage />

@@ -1,6 +1,7 @@
 ﻿using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.DeploymentEngine.Engine.Brewery;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Strategy;
 using CloudCrafter.DockerCompose.Engine.Yaml;
 using CloudCrafter.DockerCompose.Shared.Labels;
 using CloudCrafter.Domain.Entities;
@@ -170,10 +171,21 @@ public abstract class BaseRecipeGenerator
         Recipe.AddBuildStep(generator);
     }
 
-    protected void AddFetchGitRepositoryFromGithubAppStep(ApplicationSourceGithubApp app)
+    protected void AddFetchGitRepositoryFromGithubAppStep(
+        ApplicationSourceGithubApp app,
+        string accessToken,
+        GitSourceLocationDto sourceLocation
+    )
     {
-        var generator = new FetchGitRepositoryDeploymentStepGenerator(
-            new FetchGitRepositoryDeploymentStepGenerator.Args { Repository = "", Commit = "" }
+        var fullPath = $"https://x-access-token:{accessToken}@github.com/{sourceLocation.FullPath}";
+        var generator = new FetchGitRepositoryFromGithubAppDeploymentStepGenerator(
+            new FetchGitRepositoryFromGithubAppDeploymentStepGenerator.Args
+            {
+                FullPathWithToken = fullPath,
+                ProviderPath = sourceLocation.FullPath,
+                Path = app.Path,
+                Branch = app.Branch,
+            }
         );
         Recipe.AddBuildStep(generator);
     }
@@ -186,6 +198,7 @@ public abstract class BaseRecipeGenerator
     {
         public required Stack Stack { get; init; }
         public required Guid DeploymentId { get; init; }
+        public required ISourceProviderHelper ProviderHelperProvider { get; init; }
     }
 
     public class GeneratedResult

@@ -1,40 +1,31 @@
-// @ts-nocheck - This file is auto-generated and contains intentionally unused type parameters
-import client from "../../frontend/client";
-import type { RequestConfig } from "../../frontend/client";
-import type { CreateServerMutationRequest, CreateServerMutationResponse } from "../types/CreateServer";
-import type { UseMutationOptions } from "@tanstack/react-query";
-import { useMutation } from "@tanstack/react-query";
+import client from '../../frontend/client.ts'
+import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
+import type { CreateServerMutationRequest, CreateServerMutationResponse } from '../types/CreateServer'
+import type { UseMutationOptions } from '@tanstack/react-query'
+import { createServer } from '../axios-backend/createServer'
+import { useMutation } from '@tanstack/react-query'
 
- export const createServerMutationKey = () => [{ "url": "/api/Servers" }] as const;
+export const createServerMutationKey = () => [{ url: '/api/Servers' }] as const
 
- export type CreateServerMutationKey = ReturnType<typeof createServerMutationKey>;
+export type CreateServerMutationKey = ReturnType<typeof createServerMutationKey>
 
- /**
+/**
  * {@link /api/Servers}
  */
-async function createServerHook(data: CreateServerMutationRequest, config: Partial<RequestConfig<CreateServerMutationRequest>> = {}) {
-    const res = await client<CreateServerMutationResponse, Error, CreateServerMutationRequest>({ method: "POST", url: `/api/Servers`, data, headers: { "Content-Type": "application/*+json", ...config.headers }, ...config });
-    return res.data;
-}
+export function useCreateServerHook<TContext>(
+  options: {
+    mutation?: UseMutationOptions<CreateServerMutationResponse, ResponseErrorConfig<Error>, { data: CreateServerMutationRequest }, TContext>
+    client?: Partial<RequestConfig<CreateServerMutationRequest>> & { client?: typeof client }
+  } = {},
+) {
+  const { mutation: mutationOptions, client: config = {} } = options ?? {}
+  const mutationKey = mutationOptions?.mutationKey ?? createServerMutationKey()
 
- /**
- * {@link /api/Servers}
- */
-export function useCreateServerHook(options: {
-    mutation?: UseMutationOptions<CreateServerMutationResponse, Error, {
-        data: CreateServerMutationRequest;
-    }>;
-    client?: Partial<RequestConfig<CreateServerMutationRequest>>;
-} = {}) {
-    const { mutation: mutationOptions, client: config = {} } = options ?? {};
-    const mutationKey = mutationOptions?.mutationKey ?? createServerMutationKey();
-    return useMutation<CreateServerMutationResponse, Error, {
-        data: CreateServerMutationRequest;
-    }>({
-        mutationFn: async ({ data }) => {
-            return createServerHook(data, config);
-        },
-        mutationKey,
-        ...mutationOptions
-    });
+  return useMutation<CreateServerMutationResponse, ResponseErrorConfig<Error>, { data: CreateServerMutationRequest }, TContext>({
+    mutationFn: async ({ data }) => {
+      return createServer(data, config)
+    },
+    mutationKey,
+    ...mutationOptions,
+  })
 }

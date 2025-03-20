@@ -43,6 +43,22 @@ public class StackServicesService(IStackRepository stackRepository, IMapper mapp
             stackService.HttpConfiguration.DomainName = request.DomainName;
         }
 
+        if (request.ContainerPortExposes.HasValue)
+        {
+            stackService.HttpConfiguration ??= new()
+            {
+                DomainName = null,
+                ContainerHttpPort = null,
+            };
+
+            stackService.HttpConfiguration.ContainerHttpPort = request.ContainerPortExposes;
+        }
+
+        if (request.ContainerHealthCheckPort.HasValue)
+        {
+            stackService.HealthcheckConfiguration.HttpPort = request.ContainerHealthCheckPort;
+        }
+
         await stackRepository.SaveChangesAsync();
 
         return mapper.Map<StackServiceDto>(stackService);
