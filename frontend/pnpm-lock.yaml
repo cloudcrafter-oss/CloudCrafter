@@ -166,7 +166,7 @@ importers:
         specifier: ^0.453.0
         version: 0.453.0(react@19.0.0)
       next:
-        specifier: latest
+        specifier: ^15.2.3
         version: 15.2.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       next-auth:
         specifier: 5.0.0-beta.25
