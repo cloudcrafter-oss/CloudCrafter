@@ -1,6 +1,7 @@
 import { auth } from '@/src/auth'
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 import axios from 'axios'
+import { getSession } from 'next-auth/react'
 import { backendEnv } from '../env/cloudcrafter-env'
 
 /**
@@ -36,7 +37,16 @@ export const axiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.request.use(async (request) => {
-	const session = await auth()
+	const isServer = typeof window === 'undefined'
+	let session = null
+
+	if (isServer) {
+		// Fetch session on the server side
+		session = await auth()
+	} else {
+		// Fetch session on the client side
+		session = await getSession()
+	}
 
 	if (session) {
 		request.headers.Authorization = `Bearer ${session.accessToken}`
@@ -71,6 +81,7 @@ export const client = async <TData, TError = unknown, TVariables = unknown>(
 		.catch((e: AxiosError<TError>) => {
 			throw e
 		})
+	const val = backendEnv.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL
 
 	return promise
 }
