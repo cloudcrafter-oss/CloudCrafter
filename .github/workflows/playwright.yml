@@ -1,4 +1,4 @@
-name: Frontend - E2E tests
+name: Frontend E2E tests
 on:
   push:
     branches: [ main ]
