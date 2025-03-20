@@ -7,7 +7,7 @@ import NextAuth, {
 import 'next-auth/jwt'
 import { validateEnv } from '@/auth-utils/providers'
 import { authJsRefreshAccessToken } from '@/auth-utils/utils'
-import { postLoginUser } from '@cloudcrafter/api'
+import { type TokenDto, postCreateUser, postLoginUser } from '@cloudcrafter/api'
 import { jwtDecode } from 'jwt-decode'
 import type { JWT } from 'next-auth/jwt'
 import type { Provider } from 'next-auth/providers'
@@ -36,6 +36,36 @@ if (auth0Enabled && auth0Config) {
 			issuer: auth0Config.AUTH_AUTH0_ISSUER,
 		}),
 	)
+}
+
+const createUserObject = (result: TokenDto): User => {
+	const access: DecodedJWT = jwtDecode(result.accessToken)
+
+	const user: UserObject = {
+		name: access.name,
+		email: access.email,
+		id: access.id,
+	}
+
+	const date = new Date(result.refreshTokenExpires)
+
+	// Get the epoch time in milliseconds and convert to seconds
+	const epochSeconds = Math.floor(date.getTime() / 1000)
+
+	const validity: AuthValidity = {
+		valid_until: access.exp,
+		refresh_until: epochSeconds,
+	}
+
+	return {
+		id: access.jti, // User object is forced to have a string id so use refresh token id
+		tokens: {
+			access: result.accessToken,
+			refresh: result.refreshToken,
+		},
+		user: user,
+		validity: validity,
+	} as User
 }
 
 // Add Credentials provider
@@ -69,33 +99,7 @@ if (credentialsEnabled && credentialsConfig) {
 						password: credentials.password as string,
 					})
 
-					const access: DecodedJWT = jwtDecode(result.accessToken)
-
-					const user: UserObject = {
-						name: access.name,
-						email: access.email,
-						id: access.id,
-					}
-
-					const date = new Date(result.refreshTokenExpires)
-
-					// Get the epoch time in milliseconds and convert to seconds
-					const epochSeconds = Math.floor(date.getTime() / 1000)
-
-					const validity: AuthValidity = {
-						valid_until: access.exp,
-						refresh_until: epochSeconds,
-					}
-
-					return {
-						id: access.jti, // User object is forced to have a string id so use refresh token id
-						tokens: {
-							access: result.accessToken,
-							refresh: result.refreshToken,
-						},
-						user: user,
-						validity: validity,
-					} as User
+					return createUserObject(result)
 				} catch (error) {
 					console.error('Error during credentials authorization:', error)
 					return null
@@ -132,6 +136,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 	callbacks: {
 		async jwt({ token, user, account }) {
 			if (account && user) {
+				if (account.type === 'oidc') {
+					const result = await postCreateUser({
+						name: user.name || '',
+						email: user.email || '',
+					})
+
+					const userObject = createUserObject(result)
+					return { ...token, data: userObject }
+				}
+
 				console.debug('initial signin')
 				return { ...token, data: user }
 			}
@@ -150,7 +164,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
 			console.debug('Both tokens have expired')
 
-			return { ...token, error: 'RefreshTokenExpired' } as JWT
+			return { error: 'RefreshTokenExpired' } as JWT
 		},
 		async session({ session, token }) {
 			session.user = token.data.user

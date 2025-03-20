@@ -21,9 +21,10 @@ public class JwtService(
     {
         var authClaims = new List<Claim>
         {
-            new(ClaimTypes.Name, user.UserName!),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
+            new(JwtRegisteredClaimNames.Name, user.FullName),
+            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
         };
 
         var tokenDto = GenerateForClaims(authClaims);
