@@ -1,68 +1,18 @@
-import NextAuth, { type User } from 'next-auth'
+import NextAuth, {
+	type AuthValidity,
+	type DecodedJWT,
+	type User,
+	type UserObject,
+} from 'next-auth'
 import 'next-auth/jwt'
-import { debugToken } from '@/src/utils/auth/jwt-utils'
-import {
-	postCreateUser,
-	postLoginUser,
-	postRefreshTokens,
-} from '@cloudcrafter/api'
+import { validateEnv } from '@/auth-utils/providers'
+import { authJsRefreshAccessToken } from '@/auth-utils/utils'
+import { postLoginUser } from '@cloudcrafter/api'
+import { jwtDecode } from 'jwt-decode'
 import type { JWT } from 'next-auth/jwt'
 import type { Provider } from 'next-auth/providers'
 import Auth0 from 'next-auth/providers/auth0'
 import Credentials from 'next-auth/providers/credentials'
-import { z } from 'zod'
-
-// Define schema for Auth0 environment variables
-const auth0EnvSchema = z.object({
-	AUTH_AUTH0_ID: z.string().min(1),
-	AUTH_AUTH0_SECRET: z.string().min(1),
-	AUTH_AUTH0_ISSUER: z.string().url(),
-})
-
-const credentialsEnvSchema = z.object({
-	AUTH_CREDENTIALS_ENABLED: z.string().transform((val) => val === 'true'),
-})
-
-// Define schema for NextAuth environment variables
-const nextAuthEnvSchema = z.object({
-	NEXTAUTH_URL: z.string().url().optional(),
-	NEXTAUTH_SECRET: z.string().min(1).optional(),
-})
-
-// Validate environment variables
-const validateEnv = () => {
-	// For Auth0 - this is optional, so we use safeParse
-	const auth0Result = auth0EnvSchema.safeParse({
-		AUTH_AUTH0_ID: process.env.AUTH_AUTH0_ID,
-		AUTH_AUTH0_SECRET: process.env.AUTH_AUTH0_SECRET,
-		AUTH_AUTH0_ISSUER: process.env.AUTH_AUTH0_ISSUER,
-	})
-
-	const credentialsResult = credentialsEnvSchema.safeParse({
-		AUTH_CREDENTIALS_ENABLED: process.env.AUTH_CREDENTIALS_ENABLED,
-	})
-
-	// For NextAuth - this is required, so we use parse (will throw if invalid)
-	try {
-		nextAuthEnvSchema.parse({
-			NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-			NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-		})
-	} catch (error) {
-		console.error('NextAuth environment validation failed:', error)
-		// In production, you might want to handle this differently
-	}
-
-	return {
-		auth0Enabled: auth0Result.success,
-		auth0Config: auth0Result.success ? auth0Result.data : null,
-		credentialsEnabled: credentialsResult.success,
-
-		credentialsConfig: credentialsResult.success
-			? credentialsResult.data.AUTH_CREDENTIALS_ENABLED
-			: null,
-	}
-}
 
 // Initialize providers array
 const providers: Provider[] = []
@@ -102,11 +52,11 @@ if (credentialsEnabled && credentialsConfig) {
 				password: { label: 'Password', type: 'password' },
 			},
 			async authorize(credentials, request) {
-				if (!credentials?.email || !credentials?.password) {
-					return null
-				}
-
 				try {
+					if (!credentials?.email || !credentials?.password) {
+						return null
+					}
+
 					// This is where you would typically validate credentials against your backend
 					// For example:
 					// const user = await validateCredentials(credentials.email, credentials.password)
@@ -115,21 +65,37 @@ if (credentialsEnabled && credentialsConfig) {
 					// In production, replace this with actual authentication logic
 
 					const result = await postLoginUser({
-						email: credentials.email,
-						password: credentials.password,
+						email: credentials.email as string,
+						password: credentials.password as string,
 					})
 
-					// Transform TokenDto into User object
-					return {
-						id: credentials.email as string,
-						email: credentials.email as string,
-						name: credentials.email as string,
-						userCloudCraftAccessToken: result.accessToken,
-						userCloudCraftRefreshToken: result.refreshToken,
-						userCloudCraftAccessTokenExpires:
-							Date.now() + result.expiresIn * 1000,
-						ssoType: 'email',
+					const access: DecodedJWT = jwtDecode(result.accessToken)
+
+					const user: UserObject = {
+						name: access.name,
+						email: access.email,
+						id: access.id,
 					}
+
+					const date = new Date(result.refreshTokenExpires)
+
+					// Get the epoch time in milliseconds and convert to seconds
+					const epochSeconds = Math.floor(date.getTime() / 1000)
+
+					const validity: AuthValidity = {
+						valid_until: access.exp,
+						refresh_until: epochSeconds,
+					}
+
+					return {
+						id: access.jti, // User object is forced to have a string id so use refresh token id
+						tokens: {
+							access: result.accessToken,
+							refresh: result.refreshToken,
+						},
+						user: user,
+						validity: validity,
+					} as User
 				} catch (error) {
 					console.error('Error during credentials authorization:', error)
 					return null
@@ -139,32 +105,24 @@ if (credentialsEnabled && credentialsConfig) {
 	)
 }
 
-export const providerMap = providers.map((provider) => {
-	if (typeof provider === 'function') {
-		const providerData = provider()
-		return { id: providerData.id, name: providerData.name }
-	}
-	return { id: provider.id, name: provider.name }
-})
-
-async function refreshAccessToken(token: JWT): Promise<JWT> {
-	try {
-		const response = await postRefreshTokens({
-			refreshToken: token.refreshToken as string,
-		})
-		return {
-			...token,
-			accessToken: response.accessToken,
-			accessTokenExpires: Date.now() + response.expiresIn * 1000,
-			refreshToken: response.refreshToken, // This will be the new refresh token
-		}
-	} catch (error) {
-		console.log('cannot refresh tokens!')
-		return {
-			error: 'RefreshAccessTokenError',
-		}
-	}
-}
+// async function refreshAccessToken(token: JWT): Promise<JWT> {
+// 	try {
+// 		const response = await postRefreshTokens({
+// 			refreshToken: token.refreshToken as string,
+// 		});
+// 		return {
+// 			...token,
+// 			accessToken: response.accessToken,
+// 			accessTokenExpires: Date.now() + response.expiresIn * 1000,
+// 			refreshToken: response.refreshToken, // This will be the new refresh token
+// 		};
+// 	} catch (error) {
+// 		console.log("cannot refresh tokens!");
+// 		return {
+// 			error: "RefreshAccessTokenError",
+// 		};
+// 	}
+// }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
@@ -174,46 +132,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 	callbacks: {
 		async jwt({ token, user, account }) {
 			if (account && user) {
-				if (account.provider !== 'credentials') {
-					const result = await postCreateUser({
-						name: user.name || '',
-						email: user.email || '',
-					})
-
-					return {
-						accessToken: result.accessToken,
-						accessTokenExpires: Date.now() + result.expiresIn * 1000,
-						refreshToken: result.refreshToken,
-						user,
-					}
-				}
-
-				return {
-					accessToken: user.userCloudCraftAccessToken,
-					accessTokenExpires:
-						Date.now() + (user.userCloudCraftAccessTokenExpires ?? 0) * 1000,
-					refreshToken: user.userCloudCraftRefreshToken,
-					user,
-				}
+				console.debug('initial signin')
+				return { ...token, data: user }
 			}
 
-			if (user && (user as User).ssoType === 'email') {
-				token.accessToken = user.userCloudCraftAccessToken
-			}
-
-			debugToken(token.accessToken as string, 'jwt')
-			// Return previous token if the access token has not expired yet
-			if (Date.now() < (token.accessTokenExpires as number)) {
+			// The current access token is still valid
+			if (Date.now() < token.data.validity.valid_until * 1000) {
+				console.debug('Access token is still valid')
+				console.debug('token: ', token.data.tokens)
 				return token
 			}
 
-			// Access token has expired, try to update it
-			return await refreshAccessToken(token)
+			if (Date.now() < token.data.validity.refresh_until * 1000) {
+				console.debug('Access token is being refreshed')
+				return await authJsRefreshAccessToken(token)
+			}
+
+			console.debug('Both tokens have expired')
+
+			return { ...token, error: 'RefreshTokenExpired' } as JWT
 		},
 		async session({ session, token }) {
-			session.accessToken = token.accessToken as string
-			session.error = token.error as string | undefined
-
+			session.user = token.data.user
+			session.validity = token.data.validity
+			session.error = token.error
+			session.accessToken = token.data.tokens.access as string
 			return session
 		},
 		authorized: async ({ request, auth }) => {
@@ -233,29 +176,3 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		},
 	},
 })
-
-declare module 'next-auth' {
-	interface Session {
-		accessToken?: string
-		sessionCloudCraftAccessToken?: string
-		sessionCloudCraftRefreshToken?: string
-		error?: string
-	}
-
-	interface User {
-		userCloudCraftAccessToken?: string
-		userCloudCraftRefreshToken?: string
-		userCloudCraftAccessTokenExpires?: number
-		ssoType: SsoType
-	}
-}
-
-type SsoType = 'email' | other
-
-declare module 'next-auth/jwt' {
-	interface JWT {
-		accessToken?: string
-		jwtCloudCraftAccessToken?: string
-		jwtCloudCraftRefreshToken?: string
-	}
-}

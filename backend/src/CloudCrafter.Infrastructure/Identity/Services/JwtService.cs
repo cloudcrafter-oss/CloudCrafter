@@ -30,13 +30,16 @@ public class JwtService(
 
         // Store refresh token
         var refreshToken = GenerateRefreshToken();
+        var refreshTokenExpiresAt = DateTime.UtcNow.AddSeconds(
+            jwtSettings.Value.RefreshTokenValidInSeconds
+        );
         await userRefreshTokenRepository.AddRefreshTokenToUserAsync(
             user.Id,
             refreshToken,
-            DateTime.UtcNow.AddSeconds(jwtSettings.Value.RefreshTokenValidInSeconds)
+            refreshTokenExpiresAt
         );
 
-        return new TokenDto(tokenDto.Item1, refreshToken, tokenDto.Item2);
+        return new TokenDto(tokenDto.Item1, refreshToken, refreshTokenExpiresAt);
     }
 
     public async Task<Guid?> GetUserIdFromRefreshToken(string refreshToken)

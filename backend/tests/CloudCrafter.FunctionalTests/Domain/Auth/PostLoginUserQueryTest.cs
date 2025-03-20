@@ -27,6 +27,6 @@ public class PostLoginUserQueryTest : BaseTestFixture
 
         result.RefreshToken.Length.Should().BeGreaterThan(10); // safe to assume its there
         result.AccessToken.Length.Should().BeGreaterThan(10); // safe to assume its there
-        result.ValidTo.Should().BeAfter(now);
+        result.RefreshTokenExpires.Should().BeAfter(now);
     }
 }

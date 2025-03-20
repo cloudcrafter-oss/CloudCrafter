@@ -1,6 +1,7 @@
 namespace CloudCrafter.Domain.Domain.Auth;
 
-public record TokenDto(string AccessToken, string RefreshToken, DateTime ValidTo)
+public record TokenDto(string AccessToken, string RefreshToken, DateTime RefreshTokenExpires)
 {
-    public int ExpiresIn => (int)ValidTo.Subtract(DateTime.UtcNow).TotalSeconds;
+    public int RefreshTokenExpiresIn =>
+        (int)RefreshTokenExpires.Subtract(DateTime.UtcNow).TotalSeconds;
 }
