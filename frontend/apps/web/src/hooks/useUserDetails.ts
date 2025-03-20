@@ -20,9 +20,9 @@ export const useUserDetails = (): NotLoggedIn | LoggedIn => {
 		return { loggedIn: false }
 	}
 
-	const initials = data.user.name
+	const initials = (data.user.name ?? '')
 		.split(' ')
-		.map((name) => name[0].toUpperCase())
+		.map((name) => name[0]?.toUpperCase() ?? '')
 		.join('')
 	return {
 		loggedIn,
