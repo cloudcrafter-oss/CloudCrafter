@@ -64,7 +64,9 @@ export function CloudCrafterUserNav({
 								<span className='truncate font-semibold'>
 									{details.user.name}
 								</span>
-								<span className='truncate text-xs'>{details.user.email}</span>
+								<span data-testid='user-email' className='truncate text-xs'>
+									{details.user.email}
+								</span>
 							</div>
 							<ChevronsUpDown className='ml-auto size-4' />
 						</SidebarMenuButton>

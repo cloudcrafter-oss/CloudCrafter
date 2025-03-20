@@ -18,10 +18,15 @@ test.describe('Authentication', () => {
 		const emailField = page.getByRole('textbox', { name: 'Email' })
 		const passwordField = page.getByRole('textbox', { name: 'Password' })
 
-		await emailField.fill('demo@cloudcrafter.com')
-		await passwordField.fill('password')
+		await emailField.fill('demo@cloudcrafter.app')
+		await passwordField.fill('P@ssw0rd!123')
 
 		await page.getByRole('button', { name: 'Sign in with Credentials' }).click()
+
+		await expect(page).toHaveURL('/admin')
+
+		const userEmail = page.getByTestId('user-email')
+		await expect(userEmail).toHaveText('demo@cloudcrafter.app')
 	})
 
 	// test('should show both authentication options when available', async ({ page }) => {
