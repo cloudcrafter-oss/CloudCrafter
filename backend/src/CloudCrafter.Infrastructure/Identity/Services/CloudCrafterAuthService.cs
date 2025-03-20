@@ -1,3 +1,4 @@
+using Ardalis.GuardClauses;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Auth;
 using CloudCrafter.Domain.Domain.Auth;
@@ -48,6 +49,23 @@ public class CloudCrafterAuthService(
         }
 
         return await CreateTokenForUserAsync(userFromManager);
+    }
+
+    public async Task CreateUserWithPasswordAsync(string email, string name, string password)
+    {
+        var user = await userManager.FindByEmailAsync(email);
+
+        if (user != null)
+        {
+            return;
+        }
+
+        var result = await identityService.CreateUserAsync(email, password);
+
+        if (!result.Result.IsSuccess)
+        {
+            throw new UnauthorizedAccessException();
+        }
     }
 
     public async Task<TokenDto> FetchTokensForRefreshToken(string refreshToken)

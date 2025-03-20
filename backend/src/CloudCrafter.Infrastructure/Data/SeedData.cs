@@ -1,11 +1,11 @@
-﻿using CloudCrafter.Domain.Entities;
+﻿using CloudCrafter.Core.Interfaces.Domain.Auth;
+using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Environment = System.Environment;
 
 namespace CloudCrafter.Infrastructure.Data;
 
@@ -14,41 +14,47 @@ public static class SeedData
     public static void Initialize(IServiceProvider serviceProvider)
     {
         var cloudCrafterConfig = serviceProvider.GetRequiredService<IOptions<CloudCrafterConfig>>();
-        using (
-            var dbContext = new AppDbContext(
-                serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(),
-                null,
-                cloudCrafterConfig
-            )
-        )
+        using var dbContext = new AppDbContext(
+            serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>(),
+            null,
+            cloudCrafterConfig
+        );
+
+        var authService = serviceProvider.GetRequiredService<ICloudCrafterAuthService>();
+
+        // ensure that E2E user exists
+        authService
+            .CreateUserWithPasswordAsync("demo@cloudcrafter.app", "Demo User", "P@ssw0rd!123")
+            .ConfigureAwait(false)
+            .GetAwaiter()
+            .GetResult();
+
+        var userCount = dbContext.Users.Count();
+
+        if (userCount < 100)
         {
-            var userCount = dbContext.Users.Count();
+            PopulateUsers(dbContext, authService);
+        }
 
-            if (userCount < 100)
-            {
-                PopulateUsers(dbContext);
-            }
+        var serverCount = dbContext.Servers.Count();
 
-            var serverCount = dbContext.Servers.Count();
+        if (serverCount == 0)
+        {
+            PopulateServers(dbContext);
+        }
 
-            if (serverCount == 0)
-            {
-                PopulateServers(dbContext);
-            }
+        var projectCount = dbContext.Projects.Count();
 
-            var projectCount = dbContext.Projects.Count();
+        if (projectCount == 0)
+        {
+            PopulateProjects(dbContext);
+        }
 
-            if (projectCount == 0)
-            {
-                PopulateProjects(dbContext);
-            }
+        var applicationCount = dbContext.Stacks.Count();
 
-            var applicationCount = dbContext.Stacks.Count();
-
-            if (applicationCount == 0)
-            {
-                PopulateStacks(dbContext);
-            }
+        if (applicationCount == 0)
+        {
+            PopulateStacks(dbContext);
         }
     }
 
@@ -122,15 +128,26 @@ public static class SeedData
         dbContext.SaveChanges();
     }
 
-    public static void PopulateUsers(AppDbContext dbContext)
+    public static void PopulateUsers(AppDbContext dbContext, ICloudCrafterAuthService service)
     {
         var users = FakerInstances.UserFaker.Generate(100);
         foreach (var user in users)
         {
-            dbContext.Users.Add(user);
+            service
+                .CreateUserWithPasswordAsync(user.Email!, user.FullName, "P@ssw0rd!123")
+                .ConfigureAwait(false)
+                .GetAwaiter()
+                .GetResult();
+
+            // dbContext.Users.Add(user);
         }
 
-        dbContext.SaveChanges();
+        // dbContext.SaveChanges();
+
+        // foreach (var user in users.Where(x => !string.IsNullOrEmpty(x.Email)))
+        // {
+        //     service.SetPasswordAsync(user.Email!, "P@ssw0rd!123").ConfigureAwait(false).GetAwaiter().GetResult();
+        // }
     }
 
     public static void InitializeIdentity(IServiceProvider services)
