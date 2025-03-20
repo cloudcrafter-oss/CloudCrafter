@@ -1,9 +1,9 @@
-name: Playwright Tests
+name: Frontend - E2E tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
 jobs:
   test:
     timeout-minutes: 60
@@ -13,6 +13,38 @@ jobs:
         working-directory: frontend
     steps:
     - uses: actions/checkout@v4
+       - name: Start Docker Compose services
+      working-directory: ${{ github.workspace }}
+      run: |
+        docker network create cloudcrafter || true
+        docker compose -f docker-compose.yml -f docker-compose.e2e.yml up -d
+    - name: Wait for backend to be ready
+      working-directory: ${{ github.workspace }}
+      run: |
+        timeout=180  # 3 minutes in seconds
+        start_time=$(date +%s)
+        echo "Waiting for backend service to be ready..."
+        
+        while true; do
+          current_time=$(date +%s)
+          elapsed=$((current_time - start_time))
+          
+          if [ $elapsed -ge $timeout ]; then
+            echo "Timeout reached. Backend service is not ready after $timeout seconds."
+            docker compose -f docker-compose.yml -f docker-compose.e2e.yml logs
+            exit 1
+          fi
+          
+          status_code=$(curl -s -o /dev/null -w "%{http_code}" http://backend-7f000001.nip.io/scalar/v1 || echo "000")
+          
+          if [ "$status_code" = "200" ]; then
+            echo "Backend service is ready! (Status code: $status_code)"
+            break
+          else
+            echo "Backend service not ready yet. Status code: $status_code. Retrying in 5 seconds..."
+            sleep 5
+          fi
+        done
     - uses: actions/setup-node@v4
       with:
         node-version: 20
@@ -36,7 +68,7 @@ jobs:
       run: pnpm install
     - name: Install Playwright Browsers
       run: pnpm --filter cloudcrafter-frontend exec playwright install --with-deps
-    - name: Run Playwright tests
+   - name: Run Playwright tests
       run: pnpm test:e2e
     - uses: actions/upload-artifact@v4
       if: always()
