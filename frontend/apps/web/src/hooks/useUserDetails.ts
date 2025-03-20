@@ -8,7 +8,7 @@ interface NotLoggedIn {
 interface LoggedIn {
 	loggedIn: true
 	user: UserObject
-	initials?: string
+	initials: string
 }
 
 export const useUserDetails = (): NotLoggedIn | LoggedIn => {
