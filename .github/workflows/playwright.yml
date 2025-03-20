@@ -68,6 +68,8 @@ jobs:
       run: pnpm install
     - name: Install Playwright Browsers
       run: pnpm --filter cloudcrafter-frontend exec playwright install --with-deps
+    - name: Copy E2E environment file
+      run: cp apps/web/.env.e2e apps/web/.env
     - name: Run Playwright tests
       run: pnpm test:e2e
     - uses: actions/upload-artifact@v4
