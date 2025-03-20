@@ -13,7 +13,7 @@ jobs:
         working-directory: frontend
     steps:
     - uses: actions/checkout@v4
-       - name: Start Docker Compose services
+    - name: Start Docker Compose services
       working-directory: ${{ github.workspace }}
       run: |
         docker network create cloudcrafter || true
