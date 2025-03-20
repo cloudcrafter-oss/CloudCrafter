@@ -7,7 +7,11 @@
 		"dev": "next dev --port 3001",
 		"build": "next build",
 		"start": "next start --port 3001",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"test:e2e": "playwright test",
+		"test:e2e:ui": "playwright test --ui",
+		"test:e2e:debug": "playwright test --debug",
+		"test:e2e:report": "playwright show-report"
 	},
 	"dependencies": {
 		"@auth/unstorage-adapter": "^2.4.1",
@@ -46,6 +50,7 @@
 	},
 	"devDependencies": {
 		"@cloudcrafter/typescript-config": "workspace:*",
+		"@playwright/test": "^1.51.1",
 		"@types/eslint": "^8",
 		"@types/node": "^20",
 		"@types/react": "^19",

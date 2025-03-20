@@ -10,7 +10,11 @@
 		"generate-clients": "pnpm --filter @cloudcrafter/api generate-clients",
 		"format-and-lint": "biome check .",
 		"format-and-lint:fix": "biome check . --write",
-		"format-and-lint:hook": "biome check --write --staged --files-ignore-unknown=true --no-errors-on-unmatched  && git update-index --again"
+		"format-and-lint:hook": "biome check --write --staged --files-ignore-unknown=true --no-errors-on-unmatched  && git update-index --again",
+		"test:e2e": "pnpm --filter cloudcrafter-frontend exec playwright test",
+		"test:e2e:ui": "pnpm --filter cloudcrafter-frontend exec playwright test --ui",
+		"test:e2e:debug": "pnpm --filter cloudcrafter-frontend exec playwright test --debug",
+		"test:e2e:report": "pnpm --filter cloudcrafter-frontend exec playwright show-report"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.8.3",
