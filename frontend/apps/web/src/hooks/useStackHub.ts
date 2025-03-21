@@ -19,7 +19,7 @@ export const useStackHub = ({
 		const connection = new signalR.HubConnectionBuilder()
 			.withUrl(`${host}/hub/stack`, {
 				accessTokenFactory: () => {
-					return session?.accessToken || ''
+					return session?.tokens.access || ''
 				},
 			})
 			.withAutomaticReconnect()
@@ -59,7 +59,7 @@ export const useStackHub = ({
 				console.error(err)
 			}
 		}
-	}, [session?.accessToken, stack])
+	}, [session?.tokens.access, stack])
 
 	return {
 		stack,
