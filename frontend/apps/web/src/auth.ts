@@ -166,10 +166,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			return { error: 'RefreshTokenExpired' } as JWT
 		},
 		async session({ session, token }) {
-			session.user = token.data.user
+			session.user = {
+				...token.data.user,
+				emailVerified: null,
+				tokens: token.data.tokens,
+				user: token.data.user,
+				validity: token.data.validity,
+				id: '0',
+			}
 			session.validity = token.data.validity
 			session.error = token.error
-			session.accessToken = token.data.tokens.access as string
+			session.tokens = token.data.tokens
 			return session
 		},
 		authorized: async ({ request, auth }) => {

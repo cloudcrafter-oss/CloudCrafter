@@ -49,7 +49,7 @@ axiosInstance.interceptors.request.use(async (request) => {
 	}
 
 	if (session) {
-		request.headers.Authorization = `Bearer ${session.accessToken}`
+		request.headers.Authorization = `Bearer ${session.tokens.access}`
 	}
 
 	return request

@@ -2,7 +2,7 @@ import type { User } from 'next-auth'
 
 declare module 'next-auth' {
 	export interface UserObject {
-		id: number
+		id: string
 		email: string
 		name: string
 	}
@@ -61,6 +61,7 @@ declare module 'next-auth' {
 	export interface Session {
 		user: UserObject
 		validity: AuthValidity
+		tokens: BackendJWT
 		error: 'RefreshTokenExpired' | 'RefreshAccessTokenError'
 	}
 }
