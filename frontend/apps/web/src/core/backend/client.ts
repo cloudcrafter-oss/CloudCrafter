@@ -39,7 +39,7 @@ axiosInstance.interceptors.request.use(async (request) => {
 	const session = await auth()
 
 	if (session) {
-		request.headers.Authorization = `Bearer ${session.accessToken}`
+		request.headers.Authorization = `Bearer ${session.tokens.access}`
 	}
 
 	return request
