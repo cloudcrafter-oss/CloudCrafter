@@ -21,11 +21,11 @@ const providers: Provider[] = []
 const { auth0Enabled, auth0Config, credentialsEnabled, credentialsConfig } =
 	validateEnv()
 
-console.log({
-	credentialsEnabled,
-	credentialsConfig,
-	test: process.env.AUTH_CREDENTIALS_ENABLED,
-})
+// console.log({
+// 	credentialsEnabled,
+// 	credentialsConfig,
+// 	test: process.env.AUTH_CREDENTIALS_ENABLED,
+// })
 
 // Add Auth0 provider if environment variables are valid
 if (auth0Enabled && auth0Config) {
@@ -131,7 +131,6 @@ if (credentialsEnabled && credentialsConfig) {
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
 	providers,
-	basePath: '/auth',
 	//debug: process.env.NODE_ENV !== 'production' ? true : false,
 	callbacks: {
 		async jwt({ token, user, account }) {
@@ -146,14 +145,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 					return { ...token, data: userObject }
 				}
 
-				console.debug('initial signin')
+				//console.debug('initial signin')
 				return { ...token, data: user }
 			}
 
 			// The current access token is still valid
 			if (Date.now() < token.data.validity.valid_until * 1000) {
-				console.debug('Access token is still valid')
-				console.debug('token: ', token.data.tokens)
+				//console.debug('Access token is still valid')
+				//console.debug('token: ', token.data.tokens)
 				return token
 			}
 
@@ -162,7 +161,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				return await authJsRefreshAccessToken(token)
 			}
 
-			console.debug('Both tokens have expired')
+			//console.debug('Both tokens have expired')
 
 			return { error: 'RefreshTokenExpired' } as JWT
 		},
