@@ -7,7 +7,14 @@ export { createProject200Schema, createProjectMutationRequestSchema, createProje
 export { createServerCommandCommandSchema } from './createServerCommandCommandSchema'
 export { createServer200Schema, createServerMutationRequestSchema, createServerMutationResponseSchema } from './createServerSchema'
 export { createStackCommandCommandSchema } from './createStackCommandCommandSchema'
+export { createStackEnvironmentVariableCommandSchema } from './createStackEnvironmentVariableCommandSchema'
 export { createStackFromSourceProviderCommandCommandSchema } from './createStackFromSourceProviderCommandCommandSchema'
+export {
+  deleteEnvironmentVariablePathParamsSchema,
+  deleteEnvironmentVariable200Schema,
+  deleteEnvironmentVariable400Schema,
+  deleteEnvironmentVariableMutationResponseSchema,
+} from './deleteEnvironmentVariableSchema'
 export { deleteProjectPathParamsSchema, deleteProject200Schema, deleteProjectMutationResponseSchema } from './deleteProjectSchema'
 export { deleteProviderPathParamsSchema, deleteProvider200Schema, deleteProviderMutationResponseSchema } from './deleteProviderSchema'
 export { deleteServerByIdPathParamsSchema, deleteServerById200Schema, deleteServerByIdMutationResponseSchema } from './deleteServerByIdSchema'
@@ -15,14 +22,10 @@ export { deployedStackDtoSchema } from './deployedStackDtoSchema'
 export { deploymentCreatedDetailsDtoSchema } from './deploymentCreatedDetailsDtoSchema'
 export { deploymentLogDtoSchema } from './deploymentLogDtoSchema'
 export { deploymentStatusDtoSchema } from './deploymentStatusDtoSchema'
-export {
-  dispatchStackDeploymentPathParamsSchema,
-  dispatchStackDeployment200Schema,
-  dispatchStackDeploymentMutationResponseSchema,
-} from './dispatchStackDeploymentSchema'
 export { entityHealthDtoSchema } from './entityHealthDtoSchema'
 export { entityHealthDtoValueSchema } from './entityHealthDtoValueSchema'
 export { environmentDtoSchema } from './environmentDtoSchema'
+export { environmentVariableTypeSchema } from './environmentVariableTypeSchema'
 export { filterCritereaSchema } from './filterCritereaSchema'
 export { filterOperatorOptionSchema } from './filterOperatorOptionSchema'
 export { getDeploymentLogsPathParamsSchema, getDeploymentLogs200Schema, getDeploymentLogsQueryResponseSchema } from './getDeploymentLogsSchema'
@@ -37,9 +40,22 @@ export {
   getDeploymentsForStack200Schema,
   getDeploymentsForStackQueryResponseSchema,
 } from './getDeploymentsForStackSchema'
+export {
+  getEnvironmentVariablesPathParamsSchema,
+  getEnvironmentVariablesQueryParamsSchema,
+  getEnvironmentVariables200Schema,
+  getEnvironmentVariablesQueryResponseSchema,
+} from './getEnvironmentVariablesSchema'
+export {
+  getExportEnvironmentVariablesPathParamsSchema,
+  getExportEnvironmentVariablesQueryParamsSchema,
+  getExportEnvironmentVariables200Schema,
+  getExportEnvironmentVariablesQueryResponseSchema,
+} from './getExportEnvironmentVariablesSchema'
 export { getFilterableFields200Schema, getFilterableFieldsQueryResponseSchema } from './getFilterableFieldsSchema'
 export { getGitBranchesPathParamsSchema, getGitBranches200Schema, getGitBranchesQueryResponseSchema } from './getGitBranchesSchema'
 export { getGitRepositoriesPathParamsSchema, getGitRepositories200Schema, getGitRepositoriesQueryResponseSchema } from './getGitRepositoriesSchema'
+export { getHistoryPathParamsSchema, getHistoryQueryParamsSchema, getHistory200Schema, getHistoryQueryResponseSchema } from './getHistorySchema'
 export {
   getProjectEnvironmentEnhancedPathParamsSchema,
   getProjectEnvironmentEnhanced200Schema,
@@ -63,7 +79,21 @@ export { gitRepositoryCheckResultDtoSchema } from './gitRepositoryCheckResultDto
 export { paginatedListOfSimpleDeploymentDtoSchema } from './paginatedListOfSimpleDeploymentDtoSchema'
 export { paginatedListOfUserDtoSchema } from './paginatedListOfUserDtoSchema'
 export { paginatedRequestOfUserDtoSchema } from './paginatedRequestOfUserDtoSchema'
+export {
+  postApplyTemplatePathParamsSchema,
+  postApplyTemplateQueryParamsSchema,
+  postApplyTemplate200Schema,
+  postApplyTemplate400Schema,
+  postApplyTemplateMutationResponseSchema,
+} from './postApplyTemplateSchema'
 export { postCreateDeploymentPathParamsSchema, postCreateDeployment200Schema, postCreateDeploymentMutationResponseSchema } from './postCreateDeploymentSchema'
+export {
+  postCreateEnvironmentVariablePathParamsSchema,
+  postCreateEnvironmentVariable201Schema,
+  postCreateEnvironmentVariable400Schema,
+  postCreateEnvironmentVariableMutationRequestSchema,
+  postCreateEnvironmentVariableMutationResponseSchema,
+} from './postCreateEnvironmentVariableSchema'
 export {
   postCreateGithubApp201Schema,
   postCreateGithubApp400Schema,
@@ -78,6 +108,17 @@ export {
 export { postCreateStack200Schema, postCreateStackMutationRequestSchema, postCreateStackMutationResponseSchema } from './postCreateStackSchema'
 export { postCreateUserQuerySchema } from './postCreateUserQuerySchema'
 export { postCreateUser200Schema, postCreateUserMutationRequestSchema, postCreateUserMutationResponseSchema } from './postCreateUserSchema'
+export {
+  postDispatchStackDeploymentPathParamsSchema,
+  postDispatchStackDeployment200Schema,
+  postDispatchStackDeploymentMutationResponseSchema,
+} from './postDispatchStackDeploymentSchema'
+export {
+  postImportEnvironmentVariablesPathParamsSchema,
+  postImportEnvironmentVariables200Schema,
+  postImportEnvironmentVariables400Schema,
+  postImportEnvironmentVariablesMutationResponseSchema,
+} from './postImportEnvironmentVariablesSchema'
 export { postLoginUserQuerySchema } from './postLoginUserQuerySchema'
 export { postLoginUser200Schema, postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema } from './postLoginUserSchema'
 export { postRefreshTokens200Schema, postRefreshTokensMutationRequestSchema, postRefreshTokensMutationResponseSchema } from './postRefreshTokensSchema'
@@ -92,6 +133,13 @@ export { problemDetailsSchema } from './problemDetailsSchema'
 export { projectDtoSchema } from './projectDtoSchema'
 export { projectEnvironmentEnhancedDtoSchema } from './projectEnvironmentEnhancedDtoSchema'
 export { providerTypeSchema } from './providerTypeSchema'
+export {
+  putUpdateEnvironmentVariablePathParamsSchema,
+  putUpdateEnvironmentVariable200Schema,
+  putUpdateEnvironmentVariable400Schema,
+  putUpdateEnvironmentVariableMutationRequestSchema,
+  putUpdateEnvironmentVariableMutationResponseSchema,
+} from './putUpdateEnvironmentVariableSchema'
 export {
   putUpdateGithubProviderPathParamsSchema,
   putUpdateGithubProvider200Schema,
@@ -108,6 +156,8 @@ export { simpleGithubProviderDtoSchema } from './simpleGithubProviderDtoSchema'
 export { sourceProviderDtoSchema } from './sourceProviderDtoSchema'
 export { stackCreatedDtoSchema } from './stackCreatedDtoSchema'
 export { stackDetailDtoSchema } from './stackDetailDtoSchema'
+export { stackEnvironmentVariableDtoSchema } from './stackEnvironmentVariableDtoSchema'
+export { stackEnvironmentVariableHistoryDtoSchema } from './stackEnvironmentVariableHistoryDtoSchema'
 export { stackServerDtoSchema } from './stackServerDtoSchema'
 export { stackServiceDtoSchema } from './stackServiceDtoSchema'
 export { stackServiceHealthcheckConfigurationDtoSchema } from './stackServiceHealthcheckConfigurationDtoSchema'
@@ -131,6 +181,7 @@ export {
   updateServerMutationResponseSchema,
 } from './updateServerSchema'
 export { updateStackCommandCommandSchema } from './updateStackCommandCommandSchema'
+export { updateStackEnvironmentVariableCommandSchema } from './updateStackEnvironmentVariableCommandSchema'
 export {
   updateStackPathParamsSchema,
   updateStack200Schema,

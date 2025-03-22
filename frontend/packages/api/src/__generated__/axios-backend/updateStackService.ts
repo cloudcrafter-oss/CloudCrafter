@@ -22,6 +22,7 @@ export async function updateStackService(
     url: getUpdateStackServiceUrl(stackId, stackServiceId).toString(),
     data,
     ...requestConfig,
+    headers: { 'Content-Type': 'application/*+json', ...requestConfig.headers },
   })
   return res.data
 }

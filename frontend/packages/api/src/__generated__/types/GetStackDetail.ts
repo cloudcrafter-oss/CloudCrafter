@@ -1,3 +1,4 @@
+import type { ProblemDetails } from './ProblemDetails'
 import type { StackDetailDto } from './StackDetailDto'
 
 export type GetStackDetailPathParams = {
@@ -15,7 +16,7 @@ export type GetStackDetail200 = StackDetailDto
 /**
  * @description Not Found
  */
-export type GetStackDetail404 = any
+export type GetStackDetail404 = ProblemDetails
 
 export type GetStackDetailQueryResponse = GetStackDetail200
 

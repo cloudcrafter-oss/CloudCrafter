@@ -1,0 +1,1 @@
+{"required":["stackId","key","value"],"type":"object","properties":{"stackId":{"type":"string","format":"uuid"},"key":{"type":"string"},"value":{"type":"string"}},"x-readme-ref-name":"CreateStackEnvironmentVariableCommand"}

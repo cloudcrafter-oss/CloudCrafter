@@ -20,6 +20,7 @@ export async function postCreateStack(
     url: getPostCreateStackUrl().toString(),
     data,
     ...requestConfig,
+    headers: { 'Content-Type': 'application/*+json', ...requestConfig.headers },
   })
   return res.data
 }

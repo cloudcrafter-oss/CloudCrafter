@@ -1,3 +1,4 @@
+import { problemDetailsSchema } from './problemDetailsSchema'
 import { stackDetailDtoSchema } from './stackDetailDtoSchema'
 import { updateStackCommandCommandSchema } from './updateStackCommandCommandSchema'
 import { z } from 'zod'
@@ -14,7 +15,7 @@ export const updateStack200Schema = z.lazy(() => stackDetailDtoSchema)
 /**
  * @description Not Found
  */
-export const updateStack404Schema = z.any()
+export const updateStack404Schema = z.lazy(() => problemDetailsSchema)
 
 export const updateStackMutationRequestSchema = z.lazy(() => updateStackCommandCommandSchema)
 

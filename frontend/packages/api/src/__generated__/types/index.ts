@@ -7,7 +7,15 @@ export type { CreateProjectCommandCommand } from './CreateProjectCommandCommand'
 export type { CreateServer200, CreateServerMutationRequest, CreateServerMutationResponse, CreateServerMutation } from './CreateServer'
 export type { CreateServerCommandCommand } from './CreateServerCommandCommand'
 export type { CreateStackCommandCommand } from './CreateStackCommandCommand'
+export type { CreateStackEnvironmentVariableCommand } from './CreateStackEnvironmentVariableCommand'
 export type { CreateStackFromSourceProviderCommandCommand } from './CreateStackFromSourceProviderCommandCommand'
+export type {
+  DeleteEnvironmentVariablePathParams,
+  DeleteEnvironmentVariable200,
+  DeleteEnvironmentVariable400,
+  DeleteEnvironmentVariableMutationResponse,
+  DeleteEnvironmentVariableMutation,
+} from './DeleteEnvironmentVariable'
 export type { DeleteProjectPathParams, DeleteProject200, DeleteProjectMutationResponse, DeleteProjectMutation } from './DeleteProject'
 export type { DeleteProviderPathParams, DeleteProvider200, DeleteProviderMutationResponse, DeleteProviderMutation } from './DeleteProvider'
 export type { DeleteServerByIdPathParams, DeleteServerById200, DeleteServerByIdMutationResponse, DeleteServerByIdMutation } from './DeleteServerById'
@@ -15,15 +23,10 @@ export type { DeployedStackDto } from './DeployedStackDto'
 export type { DeploymentCreatedDetailsDto } from './DeploymentCreatedDetailsDto'
 export type { DeploymentLogDto } from './DeploymentLogDto'
 export type { DeploymentStatusDtoEnum, DeploymentStatusDto } from './DeploymentStatusDto'
-export type {
-  DispatchStackDeploymentPathParams,
-  DispatchStackDeployment200,
-  DispatchStackDeploymentMutationResponse,
-  DispatchStackDeploymentMutation,
-} from './DispatchStackDeployment'
 export type { EntityHealthDto } from './EntityHealthDto'
 export type { EntityHealthDtoValueEnum, EntityHealthDtoValue } from './EntityHealthDtoValue'
 export type { EnvironmentDto } from './EnvironmentDto'
+export type { EnvironmentVariableType } from './EnvironmentVariableType'
 export type { FilterCriterea } from './FilterCriterea'
 export type { FilterOperatorOptionEnum, FilterOperatorOption } from './FilterOperatorOption'
 export type { GetDeploymentLogsPathParams, GetDeploymentLogs200, GetDeploymentLogsQueryResponse, GetDeploymentLogsQuery } from './GetDeploymentLogs'
@@ -40,9 +43,24 @@ export type {
   GetDeploymentsForStackQueryResponse,
   GetDeploymentsForStackQuery,
 } from './GetDeploymentsForStack'
+export type {
+  GetEnvironmentVariablesPathParams,
+  GetEnvironmentVariablesQueryParams,
+  GetEnvironmentVariables200,
+  GetEnvironmentVariablesQueryResponse,
+  GetEnvironmentVariablesQuery,
+} from './GetEnvironmentVariables'
+export type {
+  GetExportEnvironmentVariablesPathParams,
+  GetExportEnvironmentVariablesQueryParams,
+  GetExportEnvironmentVariables200,
+  GetExportEnvironmentVariablesQueryResponse,
+  GetExportEnvironmentVariablesQuery,
+} from './GetExportEnvironmentVariables'
 export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilterableFieldsQuery } from './GetFilterableFields'
 export type { GetGitBranchesPathParams, GetGitBranches200, GetGitBranchesQueryResponse, GetGitBranchesQuery } from './GetGitBranches'
 export type { GetGitRepositoriesPathParams, GetGitRepositories200, GetGitRepositoriesQueryResponse, GetGitRepositoriesQuery } from './GetGitRepositories'
+export type { GetHistoryPathParams, GetHistoryQueryParams, GetHistory200, GetHistoryQueryResponse, GetHistoryQuery } from './GetHistory'
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from './GetProject'
 export type {
   GetProjectEnvironmentEnhancedPathParams,
@@ -68,11 +86,27 @@ export type { PaginatedListOfSimpleDeploymentDto } from './PaginatedListOfSimple
 export type { PaginatedListOfUserDto } from './PaginatedListOfUserDto'
 export type { PaginatedRequestOfUserDto } from './PaginatedRequestOfUserDto'
 export type {
+  PostApplyTemplatePathParams,
+  PostApplyTemplateQueryParams,
+  PostApplyTemplate200,
+  PostApplyTemplate400,
+  PostApplyTemplateMutationResponse,
+  PostApplyTemplateMutation,
+} from './PostApplyTemplate'
+export type {
   PostCreateDeploymentPathParams,
   PostCreateDeployment200,
   PostCreateDeploymentMutationResponse,
   PostCreateDeploymentMutation,
 } from './PostCreateDeployment'
+export type {
+  PostCreateEnvironmentVariablePathParams,
+  PostCreateEnvironmentVariable201,
+  PostCreateEnvironmentVariable400,
+  PostCreateEnvironmentVariableMutationRequest,
+  PostCreateEnvironmentVariableMutationResponse,
+  PostCreateEnvironmentVariableMutation,
+} from './PostCreateEnvironmentVariable'
 export type {
   PostCreateGithubApp201,
   PostCreateGithubApp400,
@@ -89,6 +123,19 @@ export type {
 } from './PostCreateStackFromSourceProvider'
 export type { PostCreateUser200, PostCreateUserMutationRequest, PostCreateUserMutationResponse, PostCreateUserMutation } from './PostCreateUser'
 export type { PostCreateUserQuery } from './PostCreateUserQuery'
+export type {
+  PostDispatchStackDeploymentPathParams,
+  PostDispatchStackDeployment200,
+  PostDispatchStackDeploymentMutationResponse,
+  PostDispatchStackDeploymentMutation,
+} from './PostDispatchStackDeployment'
+export type {
+  PostImportEnvironmentVariablesPathParams,
+  PostImportEnvironmentVariables200,
+  PostImportEnvironmentVariables400,
+  PostImportEnvironmentVariablesMutationResponse,
+  PostImportEnvironmentVariablesMutation,
+} from './PostImportEnvironmentVariables'
 export type { PostLoginUser200, PostLoginUserMutationRequest, PostLoginUserMutationResponse, PostLoginUserMutation } from './PostLoginUser'
 export type { PostLoginUserQuery } from './PostLoginUserQuery'
 export type { PostRefreshTokens200, PostRefreshTokensMutationRequest, PostRefreshTokensMutationResponse, PostRefreshTokensMutation } from './PostRefreshTokens'
@@ -104,6 +151,14 @@ export type { ProblemDetails } from './ProblemDetails'
 export type { ProjectDto } from './ProjectDto'
 export type { ProjectEnvironmentEnhancedDto } from './ProjectEnvironmentEnhancedDto'
 export type { ProviderTypeEnum, ProviderType } from './ProviderType'
+export type {
+  PutUpdateEnvironmentVariablePathParams,
+  PutUpdateEnvironmentVariable200,
+  PutUpdateEnvironmentVariable400,
+  PutUpdateEnvironmentVariableMutationRequest,
+  PutUpdateEnvironmentVariableMutationResponse,
+  PutUpdateEnvironmentVariableMutation,
+} from './PutUpdateEnvironmentVariable'
 export type {
   PutUpdateGithubProviderPathParams,
   PutUpdateGithubProvider200,
@@ -121,6 +176,8 @@ export type { SimpleGithubProviderDto } from './SimpleGithubProviderDto'
 export type { SourceProviderDto } from './SourceProviderDto'
 export type { StackCreatedDto } from './StackCreatedDto'
 export type { StackDetailDto } from './StackDetailDto'
+export type { StackEnvironmentVariableDto } from './StackEnvironmentVariableDto'
+export type { StackEnvironmentVariableHistoryDto } from './StackEnvironmentVariableHistoryDto'
 export type { StackServerDto } from './StackServerDto'
 export type { StackServiceDto } from './StackServiceDto'
 export type { StackServiceHealthcheckConfigurationDto } from './StackServiceHealthcheckConfigurationDto'
@@ -148,6 +205,7 @@ export type {
   UpdateStackMutation,
 } from './UpdateStack'
 export type { UpdateStackCommandCommand } from './UpdateStackCommandCommand'
+export type { UpdateStackEnvironmentVariableCommand } from './UpdateStackEnvironmentVariableCommand'
 export type {
   UpdateStackServicePathParams,
   UpdateStackService200,

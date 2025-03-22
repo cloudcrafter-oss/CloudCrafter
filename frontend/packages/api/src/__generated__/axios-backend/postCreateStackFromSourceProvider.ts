@@ -23,6 +23,7 @@ export async function postCreateStackFromSourceProvider(
     url: getPostCreateStackFromSourceProviderUrl().toString(),
     data,
     ...requestConfig,
+    headers: { 'Content-Type': 'application/*+json', ...requestConfig.headers },
   })
   return res.data
 }
