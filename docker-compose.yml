@@ -16,31 +16,6 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
-  stats:
-    image: virtualzone/docker-container-stats
-    container_name: stats
-    networks:
-      - cloudcrafter
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - stats_db:/opt/docker-stats/db
-    environment:
-      - STATS_UPDATE_INTERVAL=10
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.stats.rule=Host(`stats.127.0.0.1.sslip.io`)"
-      - "traefik.http.routers.stats.entrypoints=web"
-      - "traefik.http.services.stats.loadbalancer.server.port=8080"
-
-  whoami:
-    image: "traefik/whoami"
-    container_name: "simple-service"
-    networks:
-      - cloudcrafter
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`whoami.127.0.0.1.sslip.io`)"
-      - "traefik.http.routers.whoami.entrypoints=web"
 
   postgres:
     image: postgres:16-alpine
@@ -55,31 +30,13 @@ services:
     ports:
       - '5432:5432'
 
-  postgres-tests:
-    networks:
-      - cloudcrafter
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_USER: cloudcrafter
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: cloudcrafter-tests
-    volumes:
-      - pgdata-testing:/var/lib/postgresql/data
-    ports:
-      - '5678:5432'
-      
   redis:
     image: redis:alpine
     networks:
       - cloudcrafter
     ports:
       - '6379:6379'
-  redis-tests:
-    networks:
-      - cloudcrafter
-    image: redis:alpine
-    ports:
-      - '6380:6379'
+
 
 networks:
   cloudcrafter:

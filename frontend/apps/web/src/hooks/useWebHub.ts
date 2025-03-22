@@ -15,7 +15,7 @@ export const useWebHub = ({ channelId }: { channelId: string }) => {
 		const connection = new signalR.HubConnectionBuilder()
 			.withUrl(`${host}/hub/web`, {
 				accessTokenFactory: () => {
-					return session?.accessToken || ''
+					return session?.tokens.access || ''
 				},
 			})
 			.withAutomaticReconnect()
@@ -39,7 +39,7 @@ export const useWebHub = ({ channelId }: { channelId: string }) => {
 				console.error(err)
 			}
 		}
-	}, [session?.accessToken, channelId])
+	}, [session?.tokens.access, channelId])
 
 	return {
 		messages,

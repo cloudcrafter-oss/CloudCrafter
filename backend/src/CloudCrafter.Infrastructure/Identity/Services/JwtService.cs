@@ -21,22 +21,26 @@ public class JwtService(
     {
         var authClaims = new List<Claim>
         {
-            new(ClaimTypes.Name, user.UserName!),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
+            new(JwtRegisteredClaimNames.Name, user.FullName),
+            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
         };
 
         var tokenDto = GenerateForClaims(authClaims);
 
         // Store refresh token
         var refreshToken = GenerateRefreshToken();
+        var refreshTokenExpiresAt = DateTime.UtcNow.AddSeconds(
+            jwtSettings.Value.RefreshTokenValidInSeconds
+        );
         await userRefreshTokenRepository.AddRefreshTokenToUserAsync(
             user.Id,
             refreshToken,
-            DateTime.UtcNow.AddSeconds(jwtSettings.Value.RefreshTokenValidInSeconds)
+            refreshTokenExpiresAt
         );
 
-        return new TokenDto(tokenDto.Item1, refreshToken, tokenDto.Item2);
+        return new TokenDto(tokenDto.Item1, refreshToken, refreshTokenExpiresAt);
     }
 
     public async Task<Guid?> GetUserIdFromRefreshToken(string refreshToken)

@@ -7,7 +7,9 @@ export const ServiceOverview = ({
 }: { stackDetails: StackDetailDto }) => {
 	const services = stackDetails?.services ?? []
 
-	const [expandedService, setExpandedService] = useState<string | null>(null)
+	const [expandedService, setExpandedService] = useState<string | null>(
+		services[0]?.name ?? null,
+	)
 
 	const toggleService = (serviceName: string) => {
 		setExpandedService(expandedService === serviceName ? null : serviceName)

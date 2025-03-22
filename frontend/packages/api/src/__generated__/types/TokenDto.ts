@@ -10,9 +10,9 @@ export type TokenDto = {
   /**
    * @type string, date-time
    */
-  validTo: string
+  refreshTokenExpires: string
   /**
    * @type integer, int32
    */
-  expiresIn: number
+  refreshTokenExpiresIn: number
 }

@@ -7,7 +7,11 @@
 		"dev": "next dev --port 3001",
 		"build": "next build",
 		"start": "next start --port 3001",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"test:e2e": "playwright test",
+		"test:e2e:ui": "playwright test --ui",
+		"test:e2e:debug": "playwright test --debug",
+		"test:e2e:report": "playwright show-report"
 	},
 	"dependencies": {
 		"@auth/unstorage-adapter": "^2.4.1",
@@ -28,6 +32,7 @@
 		"clsx": "^2.1.0",
 		"date-fns": "^3.6.0",
 		"dayjs": "^1.11.13",
+		"jwt-decode": "^4.0.0",
 		"lucide-react": "^0.453.0",
 		"next": "^15.2.3",
 		"next-auth": "5.0.0-beta.25",
@@ -46,6 +51,7 @@
 	},
 	"devDependencies": {
 		"@cloudcrafter/typescript-config": "workspace:*",
+		"@playwright/test": "^1.51.1",
 		"@types/eslint": "^8",
 		"@types/node": "^20",
 		"@types/react": "^19",

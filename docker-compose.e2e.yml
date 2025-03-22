@@ -1,0 +1,66 @@
+services:
+  web:
+    container_name: web
+    hostname: web
+    restart: on-failure:5
+    build:
+      context: backend/
+      dockerfile: src/CloudCrafter.Web/Dockerfile
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - cloudcrafter
+    volumes:
+      - ./docker/test-host:/test-host
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web.rule=Host(`backend-7f000001.nip.io`)"
+      - "traefik.http.services.web.loadbalancer.server.port=8080"
+      - "traefik.http.routers.web.entrypoints=web"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__PostgresConnection=Host=postgres;Username=cloudcrafter;Password=password;Database=cloudcrafter
+      - ConnectionStrings__RedisConnection=redis
+      - CloudCrafter__AppKey=QCE4ndQUfPUOBE1cSzH3txf21YwR9yZQ
+      - JwtSettings__SecretKey=This is a very very very very very very very secret key
+      - JwtSettings__Issuer=CloudCrafter Web
+      - JwtSettings__Audience=CloudCrafter Web
+      - JwtSettings__AccessTokenValidInSeconds=600
+      - JwtSettings__RefreshTokenValidInSeconds=900
+      - SPECIAL_TESTHOST_PATH=/test-host/id_rsa
+      - CorsSettings__AllowedOrigins__0=http://frontend-7f000001.nip.io
+
+  agent:
+    container_name: agent
+    build:
+      context: backend/
+      dockerfile: src/CloudCrafter.Agent.Console/Dockerfile
+    depends_on:
+      - web
+    networks:
+      - cloudcrafter
+    volumes:
+      - testhostdata:/data/cloudcrafter
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - CLOUDCRAFTER_Agent__ServerId=ffcdd9ee-ff31-4344-a3ab-efdc9b5e44f1
+      - CLOUDCRAFTER_Agent__AgentKey=${CLOUDCRAFTER_AGENT_KEY}
+      - CLOUDCRAFTER_Agent__CloudCrafterHost=http://web:8080
+
+  job-runner-base:
+    build:
+      context: backend/
+      dockerfile: src/CloudCrafter.Worker.Console/Dockerfile
+    hostname: job-runner-base
+    networks:
+      - cloudcrafter
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__PostgresConnection=Host=postgres;Username=cloudcrafter;Password=password;Database=cloudcrafter
+      - ConnectionStrings__RedisConnection=redis
+      - CloudCrafter__AppKey=QCE4ndQUfPUOBE1cSzH3txf21YwR9yZQ

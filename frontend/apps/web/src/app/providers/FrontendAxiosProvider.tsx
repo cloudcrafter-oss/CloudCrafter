@@ -1,7 +1,4 @@
 'use client'
-
-import { axiosInstance as frontendAxiosInstance } from '@cloudcrafter/api/frontend-axios'
-import { getSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
 export const FrontendAxiosProvider = () => {
@@ -10,15 +7,15 @@ export const FrontendAxiosProvider = () => {
 	useEffect(() => {
 		if (hasSetInterceptors) return
 
-		frontendAxiosInstance.interceptors.request.use(async (request) => {
-			const session = await getSession()
+		// frontendAxiosInstance.interceptors.request.use(async (request) => {
+		// 	const session = await getSession()
 
-			if (session) {
-				request.headers.Authorization = `Bearer ${session.accessToken}`
-			}
+		// 	if (session) {
+		// 		request.headers.Authorization = `Bearer ${session.t.accessToken}`
+		// 	}
 
-			return request
-		})
+		// 	return request
+		// })
 
 		setHasSetInterceptors(true)
 	}, [hasSetInterceptors])

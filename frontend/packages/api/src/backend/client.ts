@@ -49,29 +49,13 @@ axiosInstance.interceptors.request.use(async (request) => {
 	}
 
 	if (session) {
-		request.headers.Authorization = `Bearer ${session.accessToken}`
+		request.headers.Authorization = `Bearer ${session.tokens.access}`
 	}
 
 	return request
 })
 
 export type ResponseErrorConfig<TError = unknown> = TError
-
-// export const axiosClient = async <
-// 	TData,
-// 	TError = unknown,
-// 	TVariables = unknown,
-// >(
-// 	config: RequestConfig<TVariables>,
-// ): Promise<ResponseConfig<TData>> => {
-// 	const promise = axiosInstance
-// 		.request<TVariables, ResponseConfig<TData>>({ ...config })
-// 		.catch((e: AxiosError<TError>) => {
-// 			throw e
-// 		})
-
-// 	return promise
-// }
 
 export const client = async <TData, TError = unknown, TVariables = unknown>(
 	config: RequestConfig<TVariables>,
@@ -81,7 +65,6 @@ export const client = async <TData, TError = unknown, TVariables = unknown>(
 		.catch((e: AxiosError<TError>) => {
 			throw e
 		})
-	const val = backendEnv.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL
 
 	return promise
 }

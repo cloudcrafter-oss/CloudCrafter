@@ -1,3 +1,4 @@
+import { useUserDetails } from '@/src/hooks/useUserDetails'
 import {
 	Avatar,
 	AvatarFallback,
@@ -26,6 +27,7 @@ import {
 	LogOut,
 	Sparkles,
 } from 'lucide-react'
+import { signOut } from 'next-auth/react'
 
 export function CloudCrafterUserNav({
 	user,
@@ -37,6 +39,11 @@ export function CloudCrafterUserNav({
 	}
 }) {
 	const { isMobile } = useSidebar()
+	const details = useUserDetails()
+
+	if (details.loggedIn === false) {
+		return null
+	}
 
 	return (
 		<SidebarMenu>
@@ -48,12 +55,18 @@ export function CloudCrafterUserNav({
 							className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
 						>
 							<Avatar className='h-8 w-8 rounded-lg'>
-								<AvatarImage src={user.avatar} alt={user.name} />
-								<AvatarFallback className='rounded-lg'>CN</AvatarFallback>
+								<AvatarImage src={user.avatar} alt={details.user.name} />
+								<AvatarFallback className='rounded-lg'>
+									{details.initials}
+								</AvatarFallback>
 							</Avatar>
 							<div className='grid flex-1 text-left text-sm leading-tight'>
-								<span className='truncate font-semibold'>{user.name}</span>
-								<span className='truncate text-xs'>{user.email}</span>
+								<span className='truncate font-semibold'>
+									{details.user.name}
+								</span>
+								<span data-testid='user-email' className='truncate text-xs'>
+									{details.user.email}
+								</span>
 							</div>
 							<ChevronsUpDown className='ml-auto size-4' />
 						</SidebarMenuButton>
@@ -68,11 +81,15 @@ export function CloudCrafterUserNav({
 							<div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
 								<Avatar className='h-8 w-8 rounded-lg'>
 									<AvatarImage src={user.avatar} alt={user.name} />
-									<AvatarFallback className='rounded-lg'>CN</AvatarFallback>
+									<AvatarFallback className='rounded-lg'>
+										{details.initials}
+									</AvatarFallback>
 								</Avatar>
 								<div className='grid flex-1 text-left text-sm leading-tight'>
-									<span className='truncate font-semibold'>{user.name}</span>
-									<span className='truncate text-xs'>{user.email}</span>
+									<span className='truncate font-semibold'>
+										{details.user.name}
+									</span>
+									<span className='truncate text-xs'>{details.user.email}</span>
 								</div>
 							</div>
 						</DropdownMenuLabel>
@@ -99,7 +116,7 @@ export function CloudCrafterUserNav({
 							</DropdownMenuItem>
 						</DropdownMenuGroup>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem>
+						<DropdownMenuItem onClick={() => signOut()}>
 							<LogOut />
 							Log out
 						</DropdownMenuItem>

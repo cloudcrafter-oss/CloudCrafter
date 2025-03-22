@@ -1,75 +1,182 @@
-import NextAuth from 'next-auth'
+import NextAuth, {
+	type AuthValidity,
+	type DecodedJWT,
+	type User,
+	type UserObject,
+} from 'next-auth'
 import 'next-auth/jwt'
-import { debugToken } from '@/src/utils/auth/jwt-utils'
-import { postCreateUser } from '@cloudcrafter/api'
-import { postRefreshTokens } from '@cloudcrafter/api'
+import { validateEnv } from '@/auth-utils/providers'
+import { authJsRefreshAccessToken } from '@/auth-utils/utils'
+import { type TokenDto, postCreateUser, postLoginUser } from '@cloudcrafter/api'
+import { jwtDecode } from 'jwt-decode'
 import type { JWT } from 'next-auth/jwt'
 import type { Provider } from 'next-auth/providers'
 import Auth0 from 'next-auth/providers/auth0'
+import Credentials from 'next-auth/providers/credentials'
 
-const providers: Provider[] = [Auth0]
+// Initialize providers array
+const providers: Provider[] = []
 
-export const providerMap = providers.map((provider) => {
-	if (typeof provider === 'function') {
-		const providerData = provider()
-		return { id: providerData.id, name: providerData.name }
-	}
-	return { id: provider.id, name: provider.name }
-})
+// Validate environment and conditionally add Auth0
+const { auth0Enabled, auth0Config, credentialsEnabled, credentialsConfig } =
+	validateEnv()
 
-async function refreshAccessToken(token: JWT): Promise<JWT> {
-	try {
-		const response = await postRefreshTokens({
-			refreshToken: token.refreshToken as string,
-		})
-		return {
-			...token,
-			accessToken: response.accessToken,
-			accessTokenExpires: Date.now() + response.expiresIn * 1000,
-			refreshToken: response.refreshToken, // This will be the new refresh token
-		}
-	} catch (error) {
-		console.log('cannot refresh tokens!')
-		return {
-			error: 'RefreshAccessTokenError',
-		}
-	}
+// console.log({
+// 	credentialsEnabled,
+// 	credentialsConfig,
+// 	test: process.env.AUTH_CREDENTIALS_ENABLED,
+// })
+
+// Add Auth0 provider if environment variables are valid
+if (auth0Enabled && auth0Config) {
+	providers.push(
+		Auth0({
+			clientId: auth0Config.AUTH_AUTH0_ID,
+			clientSecret: auth0Config.AUTH_AUTH0_SECRET,
+			issuer: auth0Config.AUTH_AUTH0_ISSUER,
+		}),
+	)
 }
+
+const createUserObject = (result: TokenDto): User => {
+	const access: DecodedJWT = jwtDecode(result.accessToken)
+
+	const user: UserObject = {
+		name: access.name,
+		email: access.email,
+		id: access.id,
+	}
+
+	const date = new Date(result.refreshTokenExpires)
+
+	// Get the epoch time in milliseconds and convert to seconds
+	const epochSeconds = Math.floor(date.getTime() / 1000)
+
+	const validity: AuthValidity = {
+		valid_until: access.exp,
+		refresh_until: epochSeconds,
+	}
+
+	return {
+		id: access.jti, // User object is forced to have a string id so use refresh token id
+		tokens: {
+			access: result.accessToken,
+			refresh: result.refreshToken,
+		},
+		user: user,
+		validity: validity,
+	} as User
+}
+
+// Add Credentials provider
+if (credentialsEnabled && credentialsConfig) {
+	providers.push(
+		Credentials({
+			name: 'Credentials',
+			credentials: {
+				email: {
+					label: 'Email',
+					type: 'email',
+					placeholder: 'email@example.com',
+				},
+				password: { label: 'Password', type: 'password' },
+			},
+			async authorize(credentials, request) {
+				try {
+					if (!credentials?.email || !credentials?.password) {
+						return null
+					}
+
+					// This is where you would typically validate credentials against your backend
+					// For example:
+					// const user = await validateCredentials(credentials.email, credentials.password)
+
+					// For testing purposes, we'll use a simple check
+					// In production, replace this with actual authentication logic
+
+					const result = await postLoginUser({
+						email: credentials.email as string,
+						password: credentials.password as string,
+					})
+
+					return createUserObject(result)
+				} catch (error) {
+					console.error('Error during credentials authorization:', error)
+					return null
+				}
+			},
+		}),
+	)
+}
+
+// async function refreshAccessToken(token: JWT): Promise<JWT> {
+// 	try {
+// 		const response = await postRefreshTokens({
+// 			refreshToken: token.refreshToken as string,
+// 		});
+// 		return {
+// 			...token,
+// 			accessToken: response.accessToken,
+// 			accessTokenExpires: Date.now() + response.expiresIn * 1000,
+// 			refreshToken: response.refreshToken, // This will be the new refresh token
+// 		};
+// 	} catch (error) {
+// 		console.log("cannot refresh tokens!");
+// 		return {
+// 			error: "RefreshAccessTokenError",
+// 		};
+// 	}
+// }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
 	providers,
-	basePath: '/auth',
 	//debug: process.env.NODE_ENV !== 'production' ? true : false,
 	callbacks: {
 		async jwt({ token, user, account }) {
 			if (account && user) {
-				const result = await postCreateUser({
-					name: user.name || '',
-					email: user.email || '',
-				})
+				if (account.type === 'oidc') {
+					const result = await postCreateUser({
+						name: user.name || '',
+						email: user.email || '',
+					})
 
-				return {
-					accessToken: result.accessToken,
-					accessTokenExpires: Date.now() + result.expiresIn * 1000,
-					refreshToken: result.refreshToken,
-					user,
+					const userObject = createUserObject(result)
+					return { ...token, data: userObject }
 				}
+
+				//console.debug('initial signin')
+				return { ...token, data: user }
 			}
 
-			debugToken(token.accessToken as string, 'jwt')
-			// Return previous token if the access token has not expired yet
-			if (Date.now() < (token.accessTokenExpires as number)) {
+			// The current access token is still valid
+			if (Date.now() < token.data.validity.valid_until * 1000) {
+				//console.debug('Access token is still valid')
+				//console.debug('token: ', token.data.tokens)
 				return token
 			}
 
-			// Access token has expired, try to update it
-			return await refreshAccessToken(token)
+			if (Date.now() < token.data.validity.refresh_until * 1000) {
+				console.debug('Access token is being refreshed')
+				return await authJsRefreshAccessToken(token)
+			}
+
+			//console.debug('Both tokens have expired')
+
+			return { error: 'RefreshTokenExpired' } as JWT
 		},
 		async session({ session, token }) {
-			session.accessToken = token.accessToken as string
-			session.error = token.error as string | undefined
-
+			session.user = {
+				...token.data.user,
+				emailVerified: null,
+				tokens: token.data.tokens,
+				user: token.data.user,
+				validity: token.data.validity,
+				id: '0',
+			}
+			session.validity = token.data.validity
+			session.error = token.error
+			session.tokens = token.data.tokens
 			return session
 		},
 		authorized: async ({ request, auth }) => {
@@ -89,26 +196,3 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		},
 	},
 })
-
-declare module 'next-auth' {
-	interface Session {
-		accessToken?: string
-		sessionCloudCraftAccessToken?: string
-		sessionCloudCraftRefreshToken?: string
-		error?: string
-	}
-
-	interface User {
-		userCloudCraftAccessToken?: string
-		userCloudCraftRefreshToken?: string
-		userCloudCraftAccessTokenExpires?: number
-	}
-}
-
-declare module 'next-auth/jwt' {
-	interface JWT {
-		accessToken?: string
-		jwtCloudCraftAccessToken?: string
-		jwtCloudCraftRefreshToken?: string
-	}
-}

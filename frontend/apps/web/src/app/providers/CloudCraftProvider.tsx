@@ -11,7 +11,7 @@ export const CloudCraftProvider = async ({
 
 	return (
 		<>
-			<SessionProvider basePath={'/auth'} session={session}>
+			<SessionProvider basePath={'/api/auth'} session={session}>
 				<FrontendAxiosProvider />
 				<QueryProvider>{children}</QueryProvider>
 			</SessionProvider>
