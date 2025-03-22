@@ -12,16 +12,12 @@ export type { GetDeploymentsForStackQueryKey } from './hooks/useGetDeploymentsFo
 export type { GetDeploymentsForStackSuspenseQueryKey } from './hooks/useGetDeploymentsForStackSuspenseHook'
 export type { GetEnvironmentVariablesQueryKey } from './hooks/useGetEnvironmentVariablesHook'
 export type { GetEnvironmentVariablesSuspenseQueryKey } from './hooks/useGetEnvironmentVariablesSuspenseHook'
-export type { GetExportEnvironmentVariablesQueryKey } from './hooks/useGetExportEnvironmentVariablesHook'
-export type { GetExportEnvironmentVariablesSuspenseQueryKey } from './hooks/useGetExportEnvironmentVariablesSuspenseHook'
 export type { GetFilterableFieldsQueryKey } from './hooks/useGetFilterableFieldsHook'
 export type { GetFilterableFieldsSuspenseQueryKey } from './hooks/useGetFilterableFieldsSuspenseHook'
 export type { GetGitBranchesQueryKey } from './hooks/useGetGitBranchesHook'
 export type { GetGitBranchesSuspenseQueryKey } from './hooks/useGetGitBranchesSuspenseHook'
 export type { GetGitRepositoriesQueryKey } from './hooks/useGetGitRepositoriesHook'
 export type { GetGitRepositoriesSuspenseQueryKey } from './hooks/useGetGitRepositoriesSuspenseHook'
-export type { GetHistoryQueryKey } from './hooks/useGetHistoryHook'
-export type { GetHistorySuspenseQueryKey } from './hooks/useGetHistorySuspenseHook'
 export type { GetProjectEnvironmentEnhancedQueryKey } from './hooks/useGetProjectEnvironmentEnhancedHook'
 export type { GetProjectEnvironmentEnhancedSuspenseQueryKey } from './hooks/useGetProjectEnvironmentEnhancedSuspenseHook'
 export type { GetProjectQueryKey } from './hooks/useGetProjectHook'
@@ -37,7 +33,6 @@ export type { GetServersSuspenseQueryKey } from './hooks/useGetServersSuspenseHo
 export type { GetStackDetailQueryKey } from './hooks/useGetStackDetailHook'
 export type { GetStackDetailSuspenseQueryKey } from './hooks/useGetStackDetailSuspenseHook'
 export type { GetUsersMutationKey } from './hooks/useGetUsersHook'
-export type { PostApplyTemplateMutationKey } from './hooks/usePostApplyTemplateHook'
 export type { PostCreateDeploymentMutationKey } from './hooks/usePostCreateDeploymentHook'
 export type { PostCreateEnvironmentVariableMutationKey } from './hooks/usePostCreateEnvironmentVariableHook'
 export type { PostCreateGithubAppMutationKey } from './hooks/usePostCreateGithubAppHook'
@@ -45,7 +40,6 @@ export type { PostCreateStackFromSourceProviderMutationKey } from './hooks/usePo
 export type { PostCreateStackMutationKey } from './hooks/usePostCreateStackHook'
 export type { PostCreateUserMutationKey } from './hooks/usePostCreateUserHook'
 export type { PostDispatchStackDeploymentMutationKey } from './hooks/usePostDispatchStackDeploymentHook'
-export type { PostImportEnvironmentVariablesMutationKey } from './hooks/usePostImportEnvironmentVariablesHook'
 export type { PostLoginUserMutationKey } from './hooks/usePostLoginUserHook'
 export type { PostRotateAgentKeyMutationKey } from './hooks/usePostRotateAgentKeyHook'
 export type { PostValidateGithubRepoMutationKey } from './hooks/usePostValidateGithubRepoHook'
@@ -109,17 +103,9 @@ export type {
   GetEnvironmentVariablesQueryResponse,
   GetEnvironmentVariablesQuery,
 } from './types/GetEnvironmentVariables'
-export type {
-  GetExportEnvironmentVariablesPathParams,
-  GetExportEnvironmentVariablesQueryParams,
-  GetExportEnvironmentVariables200,
-  GetExportEnvironmentVariablesQueryResponse,
-  GetExportEnvironmentVariablesQuery,
-} from './types/GetExportEnvironmentVariables'
 export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilterableFieldsQuery } from './types/GetFilterableFields'
 export type { GetGitBranchesPathParams, GetGitBranches200, GetGitBranchesQueryResponse, GetGitBranchesQuery } from './types/GetGitBranches'
 export type { GetGitRepositoriesPathParams, GetGitRepositories200, GetGitRepositoriesQueryResponse, GetGitRepositoriesQuery } from './types/GetGitRepositories'
-export type { GetHistoryPathParams, GetHistoryQueryParams, GetHistory200, GetHistoryQueryResponse, GetHistoryQuery } from './types/GetHistory'
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from './types/GetProject'
 export type {
   GetProjectEnvironmentEnhancedPathParams,
@@ -144,14 +130,6 @@ export type { GitRepositoryCheckResultDto } from './types/GitRepositoryCheckResu
 export type { PaginatedListOfSimpleDeploymentDto } from './types/PaginatedListOfSimpleDeploymentDto'
 export type { PaginatedListOfUserDto } from './types/PaginatedListOfUserDto'
 export type { PaginatedRequestOfUserDto } from './types/PaginatedRequestOfUserDto'
-export type {
-  PostApplyTemplatePathParams,
-  PostApplyTemplateQueryParams,
-  PostApplyTemplate200,
-  PostApplyTemplate400,
-  PostApplyTemplateMutationResponse,
-  PostApplyTemplateMutation,
-} from './types/PostApplyTemplate'
 export type {
   PostCreateDeploymentPathParams,
   PostCreateDeployment200,
@@ -188,13 +166,6 @@ export type {
   PostDispatchStackDeploymentMutationResponse,
   PostDispatchStackDeploymentMutation,
 } from './types/PostDispatchStackDeployment'
-export type {
-  PostImportEnvironmentVariablesPathParams,
-  PostImportEnvironmentVariables200,
-  PostImportEnvironmentVariables400,
-  PostImportEnvironmentVariablesMutationResponse,
-  PostImportEnvironmentVariablesMutation,
-} from './types/PostImportEnvironmentVariables'
 export type { PostLoginUser200, PostLoginUserMutationRequest, PostLoginUserMutationResponse, PostLoginUserMutation } from './types/PostLoginUser'
 export type { PostLoginUserQuery } from './types/PostLoginUserQuery'
 export type {
@@ -246,7 +217,6 @@ export type { SourceProviderDto } from './types/SourceProviderDto'
 export type { StackCreatedDto } from './types/StackCreatedDto'
 export type { StackDetailDto } from './types/StackDetailDto'
 export type { StackEnvironmentVariableDto } from './types/StackEnvironmentVariableDto'
-export type { StackEnvironmentVariableHistoryDto } from './types/StackEnvironmentVariableHistoryDto'
 export type { StackServerDto } from './types/StackServerDto'
 export type { StackServiceDto } from './types/StackServiceDto'
 export type { StackServiceHealthcheckConfigurationDto } from './types/StackServiceHealthcheckConfigurationDto'
@@ -300,11 +270,9 @@ export { getGetDeploymentLogsUrl, getDeploymentLogs } from './axios-backend/getD
 export { getGetDeploymentsForServerUrl, getDeploymentsForServer } from './axios-backend/getDeploymentsForServer'
 export { getGetDeploymentsForStackUrl, getDeploymentsForStack } from './axios-backend/getDeploymentsForStack'
 export { getGetEnvironmentVariablesUrl, getEnvironmentVariables } from './axios-backend/getEnvironmentVariables'
-export { getGetExportEnvironmentVariablesUrl, getExportEnvironmentVariables } from './axios-backend/getExportEnvironmentVariables'
 export { getGetFilterableFieldsUrl, getFilterableFields } from './axios-backend/getFilterableFields'
 export { getGetGitBranchesUrl, getGitBranches } from './axios-backend/getGitBranches'
 export { getGetGitRepositoriesUrl, getGitRepositories } from './axios-backend/getGitRepositories'
-export { getGetHistoryUrl, getHistory } from './axios-backend/getHistory'
 export { getGetProjectUrl, getProject } from './axios-backend/getProject'
 export { getGetProjectEnvironmentEnhancedUrl, getProjectEnvironmentEnhanced } from './axios-backend/getProjectEnvironmentEnhanced'
 export { getGetProjectsUrl, getProjects } from './axios-backend/getProjects'
@@ -313,7 +281,6 @@ export { getGetServerByIdUrl, getServerById } from './axios-backend/getServerByI
 export { getGetServersUrl, getServers } from './axios-backend/getServers'
 export { getGetStackDetailUrl, getStackDetail } from './axios-backend/getStackDetail'
 export { getGetUsersUrl, getUsers } from './axios-backend/getUsers'
-export { getPostApplyTemplateUrl, postApplyTemplate } from './axios-backend/postApplyTemplate'
 export { getPostCreateDeploymentUrl, postCreateDeployment } from './axios-backend/postCreateDeployment'
 export { getPostCreateEnvironmentVariableUrl, postCreateEnvironmentVariable } from './axios-backend/postCreateEnvironmentVariable'
 export { getPostCreateGithubAppUrl, postCreateGithubApp } from './axios-backend/postCreateGithubApp'
@@ -321,7 +288,6 @@ export { getPostCreateStackUrl, postCreateStack } from './axios-backend/postCrea
 export { getPostCreateStackFromSourceProviderUrl, postCreateStackFromSourceProvider } from './axios-backend/postCreateStackFromSourceProvider'
 export { getPostCreateUserUrl, postCreateUser } from './axios-backend/postCreateUser'
 export { getPostDispatchStackDeploymentUrl, postDispatchStackDeployment } from './axios-backend/postDispatchStackDeployment'
-export { getPostImportEnvironmentVariablesUrl, postImportEnvironmentVariables } from './axios-backend/postImportEnvironmentVariables'
 export { getPostLoginUserUrl, postLoginUser } from './axios-backend/postLoginUser'
 export { getPostRotateAgentKeyUrl, postRotateAgentKey } from './axios-backend/postRotateAgentKey'
 export { getPostValidateGithubRepoUrl, postValidateGithubRepo } from './axios-backend/postValidateGithubRepo'
@@ -370,16 +336,6 @@ export {
   getEnvironmentVariablesSuspenseQueryOptionsHook,
   useGetEnvironmentVariablesSuspenseHook,
 } from './hooks/useGetEnvironmentVariablesSuspenseHook'
-export {
-  getExportEnvironmentVariablesQueryKey,
-  getExportEnvironmentVariablesQueryOptionsHook,
-  useGetExportEnvironmentVariablesHook,
-} from './hooks/useGetExportEnvironmentVariablesHook'
-export {
-  getExportEnvironmentVariablesSuspenseQueryKey,
-  getExportEnvironmentVariablesSuspenseQueryOptionsHook,
-  useGetExportEnvironmentVariablesSuspenseHook,
-} from './hooks/useGetExportEnvironmentVariablesSuspenseHook'
 export { getFilterableFieldsQueryKey, getFilterableFieldsQueryOptionsHook, useGetFilterableFieldsHook } from './hooks/useGetFilterableFieldsHook'
 export {
   getFilterableFieldsSuspenseQueryKey,
@@ -394,8 +350,6 @@ export {
   getGitRepositoriesSuspenseQueryOptionsHook,
   useGetGitRepositoriesSuspenseHook,
 } from './hooks/useGetGitRepositoriesSuspenseHook'
-export { getHistoryQueryKey, getHistoryQueryOptionsHook, useGetHistoryHook } from './hooks/useGetHistoryHook'
-export { getHistorySuspenseQueryKey, getHistorySuspenseQueryOptionsHook, useGetHistorySuspenseHook } from './hooks/useGetHistorySuspenseHook'
 export {
   getProjectEnvironmentEnhancedQueryKey,
   getProjectEnvironmentEnhancedQueryOptionsHook,
@@ -419,7 +373,6 @@ export { getServersSuspenseQueryKey, getServersSuspenseQueryOptionsHook, useGetS
 export { getStackDetailQueryKey, getStackDetailQueryOptionsHook, useGetStackDetailHook } from './hooks/useGetStackDetailHook'
 export { getStackDetailSuspenseQueryKey, getStackDetailSuspenseQueryOptionsHook, useGetStackDetailSuspenseHook } from './hooks/useGetStackDetailSuspenseHook'
 export { getUsersMutationKey, useGetUsersHook } from './hooks/useGetUsersHook'
-export { postApplyTemplateMutationKey, usePostApplyTemplateHook } from './hooks/usePostApplyTemplateHook'
 export { postCreateDeploymentMutationKey, usePostCreateDeploymentHook } from './hooks/usePostCreateDeploymentHook'
 export { postCreateEnvironmentVariableMutationKey, usePostCreateEnvironmentVariableHook } from './hooks/usePostCreateEnvironmentVariableHook'
 export { postCreateGithubAppMutationKey, usePostCreateGithubAppHook } from './hooks/usePostCreateGithubAppHook'
@@ -427,7 +380,6 @@ export { postCreateStackFromSourceProviderMutationKey, usePostCreateStackFromSou
 export { postCreateStackMutationKey, usePostCreateStackHook } from './hooks/usePostCreateStackHook'
 export { postCreateUserMutationKey, usePostCreateUserHook } from './hooks/usePostCreateUserHook'
 export { postDispatchStackDeploymentMutationKey, usePostDispatchStackDeploymentHook } from './hooks/usePostDispatchStackDeploymentHook'
-export { postImportEnvironmentVariablesMutationKey, usePostImportEnvironmentVariablesHook } from './hooks/usePostImportEnvironmentVariablesHook'
 export { postLoginUserMutationKey, usePostLoginUserHook } from './hooks/usePostLoginUserHook'
 export { postRotateAgentKeyMutationKey, usePostRotateAgentKeyHook } from './hooks/usePostRotateAgentKeyHook'
 export { postValidateGithubRepoMutationKey, usePostValidateGithubRepoHook } from './hooks/usePostValidateGithubRepoHook'
@@ -495,16 +447,9 @@ export {
   getEnvironmentVariables200Schema,
   getEnvironmentVariablesQueryResponseSchema,
 } from './zod/getEnvironmentVariablesSchema'
-export {
-  getExportEnvironmentVariablesPathParamsSchema,
-  getExportEnvironmentVariablesQueryParamsSchema,
-  getExportEnvironmentVariables200Schema,
-  getExportEnvironmentVariablesQueryResponseSchema,
-} from './zod/getExportEnvironmentVariablesSchema'
 export { getFilterableFields200Schema, getFilterableFieldsQueryResponseSchema } from './zod/getFilterableFieldsSchema'
 export { getGitBranchesPathParamsSchema, getGitBranches200Schema, getGitBranchesQueryResponseSchema } from './zod/getGitBranchesSchema'
 export { getGitRepositoriesPathParamsSchema, getGitRepositories200Schema, getGitRepositoriesQueryResponseSchema } from './zod/getGitRepositoriesSchema'
-export { getHistoryPathParamsSchema, getHistoryQueryParamsSchema, getHistory200Schema, getHistoryQueryResponseSchema } from './zod/getHistorySchema'
 export {
   getProjectEnvironmentEnhancedPathParamsSchema,
   getProjectEnvironmentEnhanced200Schema,
@@ -528,13 +473,6 @@ export { gitRepositoryCheckResultDtoSchema } from './zod/gitRepositoryCheckResul
 export { paginatedListOfSimpleDeploymentDtoSchema } from './zod/paginatedListOfSimpleDeploymentDtoSchema'
 export { paginatedListOfUserDtoSchema } from './zod/paginatedListOfUserDtoSchema'
 export { paginatedRequestOfUserDtoSchema } from './zod/paginatedRequestOfUserDtoSchema'
-export {
-  postApplyTemplatePathParamsSchema,
-  postApplyTemplateQueryParamsSchema,
-  postApplyTemplate200Schema,
-  postApplyTemplate400Schema,
-  postApplyTemplateMutationResponseSchema,
-} from './zod/postApplyTemplateSchema'
 export {
   postCreateDeploymentPathParamsSchema,
   postCreateDeployment200Schema,
@@ -566,12 +504,6 @@ export {
   postDispatchStackDeployment200Schema,
   postDispatchStackDeploymentMutationResponseSchema,
 } from './zod/postDispatchStackDeploymentSchema'
-export {
-  postImportEnvironmentVariablesPathParamsSchema,
-  postImportEnvironmentVariables200Schema,
-  postImportEnvironmentVariables400Schema,
-  postImportEnvironmentVariablesMutationResponseSchema,
-} from './zod/postImportEnvironmentVariablesSchema'
 export { postLoginUserQuerySchema } from './zod/postLoginUserQuerySchema'
 export { postLoginUser200Schema, postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema } from './zod/postLoginUserSchema'
 export { postRefreshTokens200Schema, postRefreshTokensMutationRequestSchema, postRefreshTokensMutationResponseSchema } from './zod/postRefreshTokensSchema'
@@ -610,7 +542,6 @@ export { sourceProviderDtoSchema } from './zod/sourceProviderDtoSchema'
 export { stackCreatedDtoSchema } from './zod/stackCreatedDtoSchema'
 export { stackDetailDtoSchema } from './zod/stackDetailDtoSchema'
 export { stackEnvironmentVariableDtoSchema } from './zod/stackEnvironmentVariableDtoSchema'
-export { stackEnvironmentVariableHistoryDtoSchema } from './zod/stackEnvironmentVariableHistoryDtoSchema'
 export { stackServerDtoSchema } from './zod/stackServerDtoSchema'
 export { stackServiceDtoSchema } from './zod/stackServiceDtoSchema'
 export { stackServiceHealthcheckConfigurationDtoSchema } from './zod/stackServiceHealthcheckConfigurationDtoSchema'

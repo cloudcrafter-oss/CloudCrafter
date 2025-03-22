@@ -1,7 +1,7 @@
 'use client'
 
 import {
-	useDispatchStackDeploymentHook,
+	usePostDispatchStackDeploymentHook,
 	useUpdateStackHook,
 } from '@cloudcrafter/api'
 import type { StackDetailDto } from '@cloudcrafter/api'
@@ -52,7 +52,7 @@ export const BasicInfo = ({
 }: { stackDetails: StackDetailDto }) => {
 	const [isEditing, setIsEditing] = useState(false)
 
-	const { mutateAsync } = useDispatchStackDeploymentHook()
+	const { mutateAsync } = usePostDispatchStackDeploymentHook()
 	const handleDeploy = async () => {
 		const deploymentCreatedDto = await mutateAsync({ id: stackDetails.id })
 		setLogChannelId(deploymentCreatedDto.deploymentId)

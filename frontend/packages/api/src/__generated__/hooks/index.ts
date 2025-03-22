@@ -12,16 +12,12 @@ export type { GetDeploymentsForStackQueryKey } from './useGetDeploymentsForStack
 export type { GetDeploymentsForStackSuspenseQueryKey } from './useGetDeploymentsForStackSuspenseHook'
 export type { GetEnvironmentVariablesQueryKey } from './useGetEnvironmentVariablesHook'
 export type { GetEnvironmentVariablesSuspenseQueryKey } from './useGetEnvironmentVariablesSuspenseHook'
-export type { GetExportEnvironmentVariablesQueryKey } from './useGetExportEnvironmentVariablesHook'
-export type { GetExportEnvironmentVariablesSuspenseQueryKey } from './useGetExportEnvironmentVariablesSuspenseHook'
 export type { GetFilterableFieldsQueryKey } from './useGetFilterableFieldsHook'
 export type { GetFilterableFieldsSuspenseQueryKey } from './useGetFilterableFieldsSuspenseHook'
 export type { GetGitBranchesQueryKey } from './useGetGitBranchesHook'
 export type { GetGitBranchesSuspenseQueryKey } from './useGetGitBranchesSuspenseHook'
 export type { GetGitRepositoriesQueryKey } from './useGetGitRepositoriesHook'
 export type { GetGitRepositoriesSuspenseQueryKey } from './useGetGitRepositoriesSuspenseHook'
-export type { GetHistoryQueryKey } from './useGetHistoryHook'
-export type { GetHistorySuspenseQueryKey } from './useGetHistorySuspenseHook'
 export type { GetProjectEnvironmentEnhancedQueryKey } from './useGetProjectEnvironmentEnhancedHook'
 export type { GetProjectEnvironmentEnhancedSuspenseQueryKey } from './useGetProjectEnvironmentEnhancedSuspenseHook'
 export type { GetProjectQueryKey } from './useGetProjectHook'
@@ -37,7 +33,6 @@ export type { GetServersSuspenseQueryKey } from './useGetServersSuspenseHook'
 export type { GetStackDetailQueryKey } from './useGetStackDetailHook'
 export type { GetStackDetailSuspenseQueryKey } from './useGetStackDetailSuspenseHook'
 export type { GetUsersMutationKey } from './useGetUsersHook'
-export type { PostApplyTemplateMutationKey } from './usePostApplyTemplateHook'
 export type { PostCreateDeploymentMutationKey } from './usePostCreateDeploymentHook'
 export type { PostCreateEnvironmentVariableMutationKey } from './usePostCreateEnvironmentVariableHook'
 export type { PostCreateGithubAppMutationKey } from './usePostCreateGithubAppHook'
@@ -45,7 +40,6 @@ export type { PostCreateStackFromSourceProviderMutationKey } from './usePostCrea
 export type { PostCreateStackMutationKey } from './usePostCreateStackHook'
 export type { PostCreateUserMutationKey } from './usePostCreateUserHook'
 export type { PostDispatchStackDeploymentMutationKey } from './usePostDispatchStackDeploymentHook'
-export type { PostImportEnvironmentVariablesMutationKey } from './usePostImportEnvironmentVariablesHook'
 export type { PostLoginUserMutationKey } from './usePostLoginUserHook'
 export type { PostRotateAgentKeyMutationKey } from './usePostRotateAgentKeyHook'
 export type { PostValidateGithubRepoMutationKey } from './usePostValidateGithubRepoHook'
@@ -87,16 +81,6 @@ export {
   getEnvironmentVariablesSuspenseQueryOptionsHook,
   useGetEnvironmentVariablesSuspenseHook,
 } from './useGetEnvironmentVariablesSuspenseHook'
-export {
-  getExportEnvironmentVariablesQueryKey,
-  getExportEnvironmentVariablesQueryOptionsHook,
-  useGetExportEnvironmentVariablesHook,
-} from './useGetExportEnvironmentVariablesHook'
-export {
-  getExportEnvironmentVariablesSuspenseQueryKey,
-  getExportEnvironmentVariablesSuspenseQueryOptionsHook,
-  useGetExportEnvironmentVariablesSuspenseHook,
-} from './useGetExportEnvironmentVariablesSuspenseHook'
 export { getFilterableFieldsQueryKey, getFilterableFieldsQueryOptionsHook, useGetFilterableFieldsHook } from './useGetFilterableFieldsHook'
 export {
   getFilterableFieldsSuspenseQueryKey,
@@ -111,8 +95,6 @@ export {
   getGitRepositoriesSuspenseQueryOptionsHook,
   useGetGitRepositoriesSuspenseHook,
 } from './useGetGitRepositoriesSuspenseHook'
-export { getHistoryQueryKey, getHistoryQueryOptionsHook, useGetHistoryHook } from './useGetHistoryHook'
-export { getHistorySuspenseQueryKey, getHistorySuspenseQueryOptionsHook, useGetHistorySuspenseHook } from './useGetHistorySuspenseHook'
 export {
   getProjectEnvironmentEnhancedQueryKey,
   getProjectEnvironmentEnhancedQueryOptionsHook,
@@ -136,7 +118,6 @@ export { getServersSuspenseQueryKey, getServersSuspenseQueryOptionsHook, useGetS
 export { getStackDetailQueryKey, getStackDetailQueryOptionsHook, useGetStackDetailHook } from './useGetStackDetailHook'
 export { getStackDetailSuspenseQueryKey, getStackDetailSuspenseQueryOptionsHook, useGetStackDetailSuspenseHook } from './useGetStackDetailSuspenseHook'
 export { getUsersMutationKey, useGetUsersHook } from './useGetUsersHook'
-export { postApplyTemplateMutationKey, usePostApplyTemplateHook } from './usePostApplyTemplateHook'
 export { postCreateDeploymentMutationKey, usePostCreateDeploymentHook } from './usePostCreateDeploymentHook'
 export { postCreateEnvironmentVariableMutationKey, usePostCreateEnvironmentVariableHook } from './usePostCreateEnvironmentVariableHook'
 export { postCreateGithubAppMutationKey, usePostCreateGithubAppHook } from './usePostCreateGithubAppHook'
@@ -144,7 +125,6 @@ export { postCreateStackFromSourceProviderMutationKey, usePostCreateStackFromSou
 export { postCreateStackMutationKey, usePostCreateStackHook } from './usePostCreateStackHook'
 export { postCreateUserMutationKey, usePostCreateUserHook } from './usePostCreateUserHook'
 export { postDispatchStackDeploymentMutationKey, usePostDispatchStackDeploymentHook } from './usePostDispatchStackDeploymentHook'
-export { postImportEnvironmentVariablesMutationKey, usePostImportEnvironmentVariablesHook } from './usePostImportEnvironmentVariablesHook'
 export { postLoginUserMutationKey, usePostLoginUserHook } from './usePostLoginUserHook'
 export { postRotateAgentKeyMutationKey, usePostRotateAgentKeyHook } from './usePostRotateAgentKeyHook'
 export { postValidateGithubRepoMutationKey, usePostValidateGithubRepoHook } from './usePostValidateGithubRepoHook'

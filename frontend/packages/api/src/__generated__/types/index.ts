@@ -50,17 +50,9 @@ export type {
   GetEnvironmentVariablesQueryResponse,
   GetEnvironmentVariablesQuery,
 } from './GetEnvironmentVariables'
-export type {
-  GetExportEnvironmentVariablesPathParams,
-  GetExportEnvironmentVariablesQueryParams,
-  GetExportEnvironmentVariables200,
-  GetExportEnvironmentVariablesQueryResponse,
-  GetExportEnvironmentVariablesQuery,
-} from './GetExportEnvironmentVariables'
 export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilterableFieldsQuery } from './GetFilterableFields'
 export type { GetGitBranchesPathParams, GetGitBranches200, GetGitBranchesQueryResponse, GetGitBranchesQuery } from './GetGitBranches'
 export type { GetGitRepositoriesPathParams, GetGitRepositories200, GetGitRepositoriesQueryResponse, GetGitRepositoriesQuery } from './GetGitRepositories'
-export type { GetHistoryPathParams, GetHistoryQueryParams, GetHistory200, GetHistoryQueryResponse, GetHistoryQuery } from './GetHistory'
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from './GetProject'
 export type {
   GetProjectEnvironmentEnhancedPathParams,
@@ -85,14 +77,6 @@ export type { GitRepositoryCheckResultDto } from './GitRepositoryCheckResultDto'
 export type { PaginatedListOfSimpleDeploymentDto } from './PaginatedListOfSimpleDeploymentDto'
 export type { PaginatedListOfUserDto } from './PaginatedListOfUserDto'
 export type { PaginatedRequestOfUserDto } from './PaginatedRequestOfUserDto'
-export type {
-  PostApplyTemplatePathParams,
-  PostApplyTemplateQueryParams,
-  PostApplyTemplate200,
-  PostApplyTemplate400,
-  PostApplyTemplateMutationResponse,
-  PostApplyTemplateMutation,
-} from './PostApplyTemplate'
 export type {
   PostCreateDeploymentPathParams,
   PostCreateDeployment200,
@@ -129,13 +113,6 @@ export type {
   PostDispatchStackDeploymentMutationResponse,
   PostDispatchStackDeploymentMutation,
 } from './PostDispatchStackDeployment'
-export type {
-  PostImportEnvironmentVariablesPathParams,
-  PostImportEnvironmentVariables200,
-  PostImportEnvironmentVariables400,
-  PostImportEnvironmentVariablesMutationResponse,
-  PostImportEnvironmentVariablesMutation,
-} from './PostImportEnvironmentVariables'
 export type { PostLoginUser200, PostLoginUserMutationRequest, PostLoginUserMutationResponse, PostLoginUserMutation } from './PostLoginUser'
 export type { PostLoginUserQuery } from './PostLoginUserQuery'
 export type { PostRefreshTokens200, PostRefreshTokensMutationRequest, PostRefreshTokensMutationResponse, PostRefreshTokensMutation } from './PostRefreshTokens'
@@ -177,7 +154,6 @@ export type { SourceProviderDto } from './SourceProviderDto'
 export type { StackCreatedDto } from './StackCreatedDto'
 export type { StackDetailDto } from './StackDetailDto'
 export type { StackEnvironmentVariableDto } from './StackEnvironmentVariableDto'
-export type { StackEnvironmentVariableHistoryDto } from './StackEnvironmentVariableHistoryDto'
 export type { StackServerDto } from './StackServerDto'
 export type { StackServiceDto } from './StackServiceDto'
 export type { StackServiceHealthcheckConfigurationDto } from './StackServiceHealthcheckConfigurationDto'

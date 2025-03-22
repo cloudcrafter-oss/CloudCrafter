@@ -155,59 +155,59 @@ public class StacksController : CloudCrafterController
         return deleted ? Results.Ok() : Results.BadRequest();
     }
 
-    [HttpPost("{stackId}/environment-variables/templates/{templateId}/apply")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IResult PostApplyTemplate(
-        ISender sender,
-        [FromRoute] Guid stackId,
-        [FromRoute] Guid templateId,
-        [FromQuery] bool overrideExisting = false
-    )
-    {
-        // TODO: Implement template application
-        // This endpoint will be used to apply a predefined template of environment variables to a stack
-        // For now, it returns a not implemented result
-        return Results.BadRequest("Template application not yet implemented");
-    }
-
-    [HttpGet("{stackId}/environment-variables/history")]
-    public List<StackEnvironmentVariableHistoryDto> GetHistory(
-        ISender sender,
-        [FromRoute] Guid stackId,
-        [FromQuery] DateTime? startDate = null,
-        [FromQuery] DateTime? endDate = null
-    )
-    {
-        // TODO: Implement history retrieval
-        // This endpoint will be used to get the version history of environment variables for a stack
-        // For now, it returns an empty list
-        return new List<StackEnvironmentVariableHistoryDto>();
-    }
-
-    [HttpPost("{stackId}/environment-variables/import")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IResult PostImportEnvironmentVariables(
-        ISender sender,
-        [FromRoute] Guid stackId
-    // [FromBody] ImportStackEnvironmentVariablesCommand command
-    )
-    {
-        // TODO: Implement import logic
-        // This endpoint will be used to import environment variables in bulk
-        return Results.BadRequest("Import functionality not yet implemented");
-    }
-
-    [HttpGet("{stackId}/environment-variables/export")]
-    public IResult GetExportEnvironmentVariables(
-        ISender sender,
-        [FromRoute] Guid stackId,
-        [FromQuery] bool includeSecrets = false
-    )
-    {
-        // TODO: Implement export logic
-        // This endpoint will be used to export environment variables
-        return Results.BadRequest("Export functionality not yet implemented");
-    }
+    // [HttpPost("{stackId}/environment-variables/templates/{templateId}/apply")]
+    // [ProducesResponseType(StatusCodes.Status200OK)]
+    // [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    // public IResult PostApplyTemplate(
+    //     ISender sender,
+    //     [FromRoute] Guid stackId,
+    //     [FromRoute] Guid templateId,
+    //     [FromQuery] bool overrideExisting = false
+    // )
+    // {
+    //     // TODO: Implement template application
+    //     // This endpoint will be used to apply a predefined template of environment variables to a stack
+    //     // For now, it returns a not implemented result
+    //     return Results.BadRequest("Template application not yet implemented");
+    // }
+    //
+    // [HttpGet("{stackId}/environment-variables/history")]
+    // public List<StackEnvironmentVariableHistoryDto> GetHistory(
+    //     ISender sender,
+    //     [FromRoute] Guid stackId,
+    //     [FromQuery] DateTime? startDate = null,
+    //     [FromQuery] DateTime? endDate = null
+    // )
+    // {
+    //     // TODO: Implement history retrieval
+    //     // This endpoint will be used to get the version history of environment variables for a stack
+    //     // For now, it returns an empty list
+    //     return new List<StackEnvironmentVariableHistoryDto>();
+    // }
+    //
+    // [HttpPost("{stackId}/environment-variables/import")]
+    // [ProducesResponseType(StatusCodes.Status200OK)]
+    // [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    // public IResult PostImportEnvironmentVariables(
+    //     ISender sender,
+    //     [FromRoute] Guid stackId
+    // // [FromBody] ImportStackEnvironmentVariablesCommand command
+    // )
+    // {
+    //     // TODO: Implement import logic
+    //     // This endpoint will be used to import environment variables in bulk
+    //     return Results.BadRequest("Import functionality not yet implemented");
+    // }
+    //
+    // [HttpGet("{stackId}/environment-variables/export")]
+    // public IResult GetExportEnvironmentVariables(
+    //     ISender sender,
+    //     [FromRoute] Guid stackId,
+    //     [FromQuery] bool includeSecrets = false
+    // )
+    // {
+    //     // TODO: Implement export logic
+    //     // This endpoint will be used to export environment variables
+    //     return Results.BadRequest("Export functionality not yet implemented");
+    // }
 }
