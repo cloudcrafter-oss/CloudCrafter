@@ -1,6 +1,9 @@
 'use client'
 
-import type { StackDetailDto } from '@cloudcrafter/api'
+import type {
+	CreateStackEnvironmentVariableCommand,
+	StackDetailDto,
+} from '@cloudcrafter/api'
 import { toast } from 'sonner'
 import {
 	type EnvVar,
@@ -81,14 +84,6 @@ export const EnvironmentVariables: React.FC<{
 	// Sheet state for adding/editing variables
 	const [sheetOpen, setSheetOpen] = useState(false)
 	const [editingVariable, setEditingVariable] = useState<EnvVar | null>(null)
-	const [newVariable, setNewVariable] = useState<Partial<EnvVar>>({
-		key: '',
-		value: '',
-		groupId: '',
-		variableType: VariableType.Both,
-		isSecret: false,
-		isInherited: false,
-	})
 
 	// Mock loading data - would be replaced with actual API call
 	useEffect(() => {
@@ -191,9 +186,11 @@ export const EnvironmentVariables: React.FC<{
 	}, [])
 
 	// Add or update a variable
-	const handleSaveVariable = () => {
+	const handleSaveVariable = (
+		command: CreateStackEnvironmentVariableCommand,
+	) => {
 		const isEditing = !!editingVariable
-		const variable = isEditing ? editingVariable : newVariable
+		const variable = command
 
 		// Form validation
 		if (!variable.key) {
@@ -254,16 +251,6 @@ export const EnvironmentVariables: React.FC<{
 			}
 			setVariables([...variables, newVarComplete])
 			toast.success(`Environment variable ${newVarComplete.key} created`)
-
-			// Reset form
-			setNewVariable({
-				key: '',
-				value: '',
-				groupId: '',
-				variableType: VariableType.Both,
-				isSecret: false,
-				isInherited: false,
-			})
 		}
 
 		setSheetOpen(false)
