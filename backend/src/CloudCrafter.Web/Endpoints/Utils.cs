@@ -13,7 +13,7 @@ public class Utils : EndpointGroupBase
     }
 
     public Task<GitRepositoryCheckResultDto> PostValidateGithubRepo(
-        CheckValidGitRepoCommand.Command command,
+        CheckValidGitRepoCommand command,
         ISender sender
     )
     {

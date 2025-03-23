@@ -9,7 +9,7 @@ public interface IServersService
     Task<ServerDetailDto?> GetServer(Guid id);
 
     Task<bool> IsValidAgent(Guid serverId, string serverKey);
-    Task<CreatedServerDto> CreateServer(CreateServerCommand.Command request);
+    Task<CreatedServerDto> CreateServer(CreateServerCommand request);
     Task MarkServersStateAsUnknownAfterTimespan(TimeSpan fromMinutes);
     Task DeleteServer(Guid id);
     Task RotateServerKey(Guid id);

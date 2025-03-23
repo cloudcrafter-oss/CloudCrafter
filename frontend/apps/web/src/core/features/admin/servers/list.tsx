@@ -29,7 +29,7 @@ import {
 	useGetServersHook,
 } from '@cloudcrafter/api'
 import {
-	createServerCommandCommandSchema,
+	createServerCommandSchema,
 	type serverStatusDtoValueSchema,
 } from '@cloudcrafter/api'
 import {
@@ -68,7 +68,7 @@ const StateMap: Record<
 	),
 }
 
-const formSchema = createServerCommandCommandSchema
+const formSchema = createServerCommandSchema
 
 export const ServersList = () => {
 	const [open, setOpen] = useState(false)
@@ -77,7 +77,7 @@ export const ServersList = () => {
 
 	const { data: servers } = useGetServersHook()
 
-	const form = useForm<z.infer<typeof createServerCommandCommandSchema>>({
+	const form = useForm<z.infer<typeof createServerCommandSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: '',

@@ -1,4 +1,4 @@
-import type { CreateStackFromSourceProviderCommandCommand } from './CreateStackFromSourceProviderCommandCommand'
+import type { CreateStackFromSourceProviderCommand } from './CreateStackFromSourceProviderCommand'
 import type { StackCreatedDto } from './StackCreatedDto'
 
 /**
@@ -6,7 +6,7 @@ import type { StackCreatedDto } from './StackCreatedDto'
  */
 export type PostCreateStackFromSourceProvider200 = StackCreatedDto
 
-export type PostCreateStackFromSourceProviderMutationRequest = CreateStackFromSourceProviderCommandCommand
+export type PostCreateStackFromSourceProviderMutationRequest = CreateStackFromSourceProviderCommand
 
 export type PostCreateStackFromSourceProviderMutationResponse = PostCreateStackFromSourceProvider200
 

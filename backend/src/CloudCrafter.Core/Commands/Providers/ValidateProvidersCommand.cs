@@ -3,15 +3,19 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Providers;
 
-public static class ValidateProvidersCommand
-{
-    public record Command : IRequest;
+public record ValidateAllProvidersCommand : IRequest;
 
-    public class Handler(IProviderValidationService service) : IRequestHandler<Command>
+public class ValidateAllProvidersCommandHandler : IRequestHandler<ValidateAllProvidersCommand>
+{
+    private readonly IProviderValidationService _service;
+
+    public ValidateAllProvidersCommandHandler(IProviderValidationService service)
     {
-        public Task Handle(Command request, CancellationToken cancellationToken)
-        {
-            return service.ValidateAll();
-        }
+        _service = service;
+    }
+
+    public Task Handle(ValidateAllProvidersCommand request, CancellationToken cancellationToken)
+    {
+        return _service.ValidateAll();
     }
 }

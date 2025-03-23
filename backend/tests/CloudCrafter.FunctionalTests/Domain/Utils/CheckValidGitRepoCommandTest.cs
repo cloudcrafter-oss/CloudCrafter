@@ -12,7 +12,7 @@ public class CheckValidGitRepoCommandTest : BaseTestFixture
     [TestCase("https://gitlab.com/gitlab-org/gitlab")]
     public async Task ShouldBeAValidGitRepo(string repo)
     {
-        var command = new CheckValidGitRepoCommand.Command(repo);
+        var command = new CheckValidGitRepoCommand(repo);
 
         var result = await SendAsync(command);
 
@@ -24,7 +24,7 @@ public class CheckValidGitRepoCommandTest : BaseTestFixture
     [TestCase("https://www.google.nl")]
     public async Task ShouldBeInvalidGitRepo(string repo)
     {
-        var command = new CheckValidGitRepoCommand.Command(repo);
+        var command = new CheckValidGitRepoCommand(repo);
 
         var result = await SendAsync(command);
 

@@ -46,7 +46,7 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
         Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await SendAsync(new CreateGithubProviderCommand.Command("dummy"))
+            async () => await SendAsync(new CreateGithubProviderCommand("dummy"))
         );
     }
 
@@ -77,7 +77,7 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
             DateTimeOffset.Now,
             DateTimeOffset.Now,
             new InstallationPermissions(),
-            [],
+            new string[] { },
             "clientId",
             "clientSecret",
             "webHookSecret",
@@ -89,7 +89,7 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         _mockProvider.Setup(x => x.GetClient()).Returns(_mockClient.Object);
 
         // Act
-        var result = await SendAsync(new CreateGithubProviderCommand.Command("dummy"));
+        var result = await SendAsync(new CreateGithubProviderCommand("dummy"));
 
         // Assert
         result.Should().BeTrue();
@@ -142,7 +142,7 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         _mockProvider.Setup(x => x.GetClient()).Returns(_mockClient.Object);
 
         // Act
-        var result = await SendAsync(new CreateGithubProviderCommand.Command("dummy"));
+        var result = await SendAsync(new CreateGithubProviderCommand("dummy"));
 
         // Assert
         result.Should().BeFalse();

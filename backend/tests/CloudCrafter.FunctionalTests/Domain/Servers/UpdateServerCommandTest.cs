@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Servers;
+using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Domain.Domain.Server;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
@@ -11,7 +11,7 @@ using static Testing;
 
 public class UpdateServerCommandTest : BaseTestFixture
 {
-    private readonly UpdateServerCommand.Command Command = new(Guid.Empty, new UpdateServerDto());
+    private readonly UpdateServerCommand Command = new(Guid.Empty, new UpdateServerDto());
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
@@ -39,10 +39,7 @@ public class UpdateServerCommandTest : BaseTestFixture
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
 
-        var command = new UpdateServerCommand.Command(
-            server.Id,
-            new UpdateServerDto { Name = "New Name" }
-        );
+        var command = new UpdateServerCommand(server.Id, new UpdateServerDto { Name = "New Name" });
         server.Name.Should().NotBe(command.UpdateDetails.Name);
 
         await SendAsync(command);
@@ -61,7 +58,7 @@ public class UpdateServerCommandTest : BaseTestFixture
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
 
-        var command = new UpdateServerCommand.Command(server.Id, new UpdateServerDto());
+        var command = new UpdateServerCommand(server.Id, new UpdateServerDto());
         server.Name.Should().NotBe(command.UpdateDetails.Name);
 
         await SendAsync(command);

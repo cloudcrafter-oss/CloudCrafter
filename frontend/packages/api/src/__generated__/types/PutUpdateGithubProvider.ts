@@ -1,4 +1,4 @@
-import type { Request } from './Request'
+import type { UpdateGithubInstallationRequest } from './UpdateGithubInstallationRequest'
 
 export type PutUpdateGithubProviderPathParams = {
   /**
@@ -12,7 +12,7 @@ export type PutUpdateGithubProviderPathParams = {
  */
 export type PutUpdateGithubProvider200 = any
 
-export type PutUpdateGithubProviderMutationRequest = Request
+export type PutUpdateGithubProviderMutationRequest = UpdateGithubInstallationRequest
 
 export type PutUpdateGithubProviderMutationResponse = PutUpdateGithubProvider200
 

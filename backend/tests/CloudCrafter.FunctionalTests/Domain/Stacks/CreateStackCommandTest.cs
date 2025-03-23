@@ -10,7 +10,7 @@ using static Testing;
 
 public class CreateStackCommandTest : BaseTestFixture
 {
-    private readonly CreateStackCommand.Command Command =
+    private readonly CreateStackCommand Command =
         new()
         {
             Name = "Dummy Stack",

@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 using CloudCrafter.Core.Commands.Providers.Github;
 using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Domain.Domain.Providers;
@@ -19,8 +19,8 @@ public class UpdateGithubInstallationCommandTest : BaseTestFixture
         Assert.ThrowsAsync<UnauthorizedAccessException>(
             async () =>
                 await SendAsync(
-                    new UpdateGithubInstallationCommand.Command(
-                        new UpdateGithubInstallationCommand.Request(123),
+                    new UpdateGithubInstallationCommand(
+                        new UpdateGithubInstallationRequest(123),
                         Guid.NewGuid()
                     )
                 )
@@ -35,8 +35,8 @@ public class UpdateGithubInstallationCommandTest : BaseTestFixture
         Assert.ThrowsAsync<NotFoundException>(
             async () =>
                 await SendAsync(
-                    new UpdateGithubInstallationCommand.Command(
-                        new UpdateGithubInstallationCommand.Request(123),
+                    new UpdateGithubInstallationCommand(
+                        new UpdateGithubInstallationRequest(123),
                         Guid.NewGuid()
                     )
                 )
@@ -56,8 +56,8 @@ public class UpdateGithubInstallationCommandTest : BaseTestFixture
         (await CountAsync<GithubProvider>()).Should().Be(1);
 
         await SendAsync(
-            new UpdateGithubInstallationCommand.Command(
-                new UpdateGithubInstallationCommand.Request(123),
+            new UpdateGithubInstallationCommand(
+                new UpdateGithubInstallationRequest(123),
                 githubProvider.SourceProvider.Id
             )
         );
@@ -83,8 +83,8 @@ public class UpdateGithubInstallationCommandTest : BaseTestFixture
         (await CountAsync<GithubProvider>()).Should().Be(1);
 
         await SendAsync(
-            new UpdateGithubInstallationCommand.Command(
-                new UpdateGithubInstallationCommand.Request(123),
+            new UpdateGithubInstallationCommand(
+                new UpdateGithubInstallationRequest(123),
                 githubProvider.SourceProvider.Id
             )
         );

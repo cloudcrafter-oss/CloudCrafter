@@ -1,19 +1,23 @@
-﻿using CloudCrafter.Core.Common.Security;
+using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Projects;
 using MediatR;
 
 namespace CloudCrafter.Core.Commands.Projects;
 
-public static class DeleteProjectCommand
-{
-    [Authorize]
-    public record Command(Guid Id) : IRequest;
+[Authorize]
+public record DeleteProjectCommand(Guid Id) : IRequest;
 
-    private class Handler(IProjectsService service) : IRequestHandler<Command>
+internal class DeleteProjectCommandHandler : IRequestHandler<DeleteProjectCommand>
+{
+    private readonly IProjectsService _service;
+
+    public DeleteProjectCommandHandler(IProjectsService service)
     {
-        public Task Handle(Command request, CancellationToken cancellationToken)
-        {
-            return service.DeleteProject(request.Id);
-        }
+        _service = service;
+    }
+
+    public Task Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
+    {
+        return _service.DeleteProject(request.Id);
     }
 }

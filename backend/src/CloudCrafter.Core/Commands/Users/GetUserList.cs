@@ -8,19 +8,24 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Users;
 
-public static class GetUserList
-{
-    [Authorize]
-    public record Query(PaginatedRequest<UserDto> Pagination) : IRequest<PaginatedList<UserDto>>;
+[Authorize]
+public record GetUserListQuery(PaginatedRequest<UserDto> Pagination)
+    : IRequest<PaginatedList<UserDto>>;
 
-    private class Handler(IUsersService service) : IRequestHandler<Query, PaginatedList<UserDto>>
+public class GetUserListQueryHandler : IRequestHandler<GetUserListQuery, PaginatedList<UserDto>>
+{
+    private readonly IUsersService _service;
+
+    public GetUserListQueryHandler(IUsersService service)
     {
-        public async Task<PaginatedList<UserDto>> Handle(
-            Query request,
-            CancellationToken cancellationToken
-        )
-        {
-            return await service.GetUsers(request.Pagination);
-        }
+        _service = service;
+    }
+
+    public async Task<PaginatedList<UserDto>> Handle(
+        GetUserListQuery request,
+        CancellationToken cancellationToken
+    )
+    {
+        return await _service.GetUsers(request.Pagination);
     }
 }

@@ -1,9 +1,8 @@
-﻿using FluentValidation;
+using FluentValidation;
 
 namespace CloudCrafter.Core.Commands.Stacks.Service.Validation;
 
-public class UpdateStackServiceCommandValidator
-    : AbstractValidator<UpdateStackServiceCommand.Command>
+public class UpdateStackServiceCommandValidator : AbstractValidator<UpdateStackServiceCommand>
 {
     public UpdateStackServiceCommandValidator()
     {

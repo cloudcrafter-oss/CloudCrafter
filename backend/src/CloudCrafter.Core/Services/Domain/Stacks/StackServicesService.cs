@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Bogus.DataSets;
 using CloudCrafter.Core.Commands.Stacks.Service;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
@@ -15,9 +15,7 @@ public class StackServicesService(IStackRepository stackRepository, IMapper mapp
         await stackRepository.AddAppServiceToStack(stackId, name);
     }
 
-    public async Task<StackServiceDto?> UpdateStackService(
-        UpdateStackServiceCommand.Command request
-    )
+    public async Task<StackServiceDto?> UpdateStackService(UpdateStackServiceCommand request)
     {
         var stackService = await stackRepository.GetService(request.StackServiceId);
 

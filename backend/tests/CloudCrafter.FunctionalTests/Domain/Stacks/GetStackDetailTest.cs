@@ -13,10 +13,10 @@ public class GetStackDetailTest : BaseTestFixture
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
         Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await SendAsync(new GetStackDetail.Query { StackId = Guid.NewGuid() }
-            ));
+            async () => await SendAsync(new GetStackDetailQuery { StackId = Guid.NewGuid() })
+        );
     }
-    
+
     [Test]
     [Ignore("TODO: ACL check not yet implemented")]
     public async Task ShoulThrowErrorWhenNoAccessBecauseItDoesNotExists()
@@ -25,7 +25,7 @@ public class GetStackDetailTest : BaseTestFixture
 
         var deploymentId = Guid.NewGuid();
         var ex = Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await SendAsync(new GetStackDetail.Query { StackId = Guid.NewGuid() })
+            async () => await SendAsync(new GetStackDetailQuery { StackId = Guid.NewGuid() })
         );
 
         ex.Message.Should().Be($"User does not have access to stack {deploymentId}");
@@ -41,15 +41,14 @@ public class GetStackDetailTest : BaseTestFixture
 
         var environment = FakerInstances.EnvironmentFaker(project).Generate();
         await AddAsync(environment);
-        
+
         var stack = FakerInstances.StackFaker(environment.Id).Generate();
         await AddAsync(stack);
-        
-        var result = await SendAsync(new GetStackDetail.Query { StackId = stack.Id });
+
+        var result = await SendAsync(new GetStackDetailQuery { StackId = stack.Id });
 
         result.Should().NotBeNull();
         result!.Id.Should().Be(stack.Id);
         result.Name.Should().Be(stack.Name);
     }
-
 }

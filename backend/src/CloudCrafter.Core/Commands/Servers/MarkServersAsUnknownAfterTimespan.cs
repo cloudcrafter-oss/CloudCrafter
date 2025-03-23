@@ -3,15 +3,23 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Servers;
 
-public static class MarkServersAsUnknownAfterTimespan
-{
-    public record Command : IRequest;
+public record MarkServersAsUnknownAfterTimespanCommand : IRequest;
 
-    public class Handler(IServersService serversService) : IRequestHandler<Command>
+public class MarkServersAsUnknownAfterTimespanCommandHandler
+    : IRequestHandler<MarkServersAsUnknownAfterTimespanCommand>
+{
+    private readonly IServersService _serversService;
+
+    public MarkServersAsUnknownAfterTimespanCommandHandler(IServersService serversService)
     {
-        public Task Handle(Command request, CancellationToken cancellationToken)
-        {
-            return serversService.MarkServersStateAsUnknownAfterTimespan(TimeSpan.FromMinutes(5));
-        }
+        _serversService = serversService;
+    }
+
+    public Task Handle(
+        MarkServersAsUnknownAfterTimespanCommand request,
+        CancellationToken cancellationToken
+    )
+    {
+        return _serversService.MarkServersStateAsUnknownAfterTimespan(TimeSpan.FromMinutes(5));
     }
 }

@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Jobs.Dispatcher;
 using MediatR;
@@ -6,15 +6,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.Core.Commands.Servers;
 
-public static class DispatchConnectivityChecksCommand
-{
-    public record Query() : IRequest;
+public record DispatchConnectivityChecksCommand() : IRequest;
 
-    private class Handler(ICloudCrafterDispatcher dispatcher) : IRequestHandler<Query>
+internal class DispatchConnectivityChecksCommandHandler
+    : IRequestHandler<DispatchConnectivityChecksCommand>
+{
+    private readonly ICloudCrafterDispatcher _dispatcher;
+
+    public DispatchConnectivityChecksCommandHandler(ICloudCrafterDispatcher dispatcher)
     {
-        public async Task Handle(Query request, CancellationToken cancellationToken)
-        {
-            await dispatcher.EnqueueConnectivityChecks();
-        }
+        _dispatcher = dispatcher;
+    }
+
+    public async Task Handle(
+        DispatchConnectivityChecksCommand request,
+        CancellationToken cancellationToken
+    )
+    {
+        await _dispatcher.EnqueueConnectivityChecks();
     }
 }

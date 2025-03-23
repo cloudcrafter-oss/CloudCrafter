@@ -1,17 +1,21 @@
-﻿using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
+using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
 using MediatR;
 
 namespace CloudCrafter.Core.Commands.Applications.Deployments;
 
-public static class CreateDeploymentCommand
-{
-    public record Query(Guid ApplicationId) : IApplicationCommand, IRequest<Guid>;
+public record CreateDeploymentCommand(Guid ApplicationId) : IApplicationCommand, IRequest<Guid>;
 
-    private class Handler(IDeploymentService service) : IRequestHandler<Query, Guid>
+internal class CreateDeploymentCommandHandler : IRequestHandler<CreateDeploymentCommand, Guid>
+{
+    private readonly IDeploymentService _service;
+
+    public CreateDeploymentCommandHandler(IDeploymentService service)
     {
-        public Task<Guid> Handle(Query request, CancellationToken cancellationToken)
-        {
-            return service.DeployAsync(request.ApplicationId);
-        }
+        _service = service;
+    }
+
+    public Task<Guid> Handle(CreateDeploymentCommand request, CancellationToken cancellationToken)
+    {
+        return _service.DeployAsync(request.ApplicationId);
     }
 }

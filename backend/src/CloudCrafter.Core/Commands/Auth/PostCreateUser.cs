@@ -1,18 +1,25 @@
-﻿using CloudCrafter.Core.Interfaces.Domain.Auth;
+using CloudCrafter.Core.Interfaces.Domain.Auth;
 using CloudCrafter.Domain.Domain.Auth;
 using MediatR;
 
 namespace CloudCrafter.Core.Commands.Auth;
 
-public static class PostCreateUser
-{
-    public record Query(string Email, string Name) : IRequest<TokenDto>;
+public record CreateUserCommand(string Email, string Name) : IRequest<TokenDto>;
 
-    private class Handler(ICloudCrafterAuthService service) : IRequestHandler<Query, TokenDto>
+public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, TokenDto>
+{
+    private readonly ICloudCrafterAuthService _service;
+
+    public CreateUserCommandHandler(ICloudCrafterAuthService service)
     {
-        public async Task<TokenDto> Handle(Query request, CancellationToken cancellationToken)
-        {
-            return await service.CreateUserAsync(request.Email, request.Name);
-        }
+        _service = service;
+    }
+
+    public async Task<TokenDto> Handle(
+        CreateUserCommand request,
+        CancellationToken cancellationToken
+    )
+    {
+        return await _service.CreateUserAsync(request.Email, request.Name);
     }
 }

@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Servers;
+using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
@@ -10,7 +10,7 @@ using static Testing;
 
 public class GetServerDetailQueryTest : BaseTestFixture
 {
-    private readonly GetServerDetail.Query Query = new(Guid.Empty);
+    private readonly GetServerDetailQuery Query = new(Guid.Empty);
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
@@ -23,7 +23,7 @@ public class GetServerDetailQueryTest : BaseTestFixture
     {
         await RunAsAdministratorAsync();
 
-        var result = await SendAsync(new GetServerDetail.Query(Guid.NewGuid()));
+        var result = await SendAsync(new GetServerDetailQuery(Guid.NewGuid()));
 
         result.Should().BeNull();
     }
@@ -38,7 +38,7 @@ public class GetServerDetailQueryTest : BaseTestFixture
 
         await AddAsync(server);
 
-        var result = await SendAsync(new GetServerDetail.Query(server.Id));
+        var result = await SendAsync(new GetServerDetailQuery(server.Id));
 
         result.Should().NotBeNull();
         result!.Id.Should().NotBe(Guid.Empty);

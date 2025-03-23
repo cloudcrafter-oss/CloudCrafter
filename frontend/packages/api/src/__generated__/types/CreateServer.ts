@@ -1,12 +1,12 @@
 import type { CreatedServerDto } from './CreatedServerDto'
-import type { CreateServerCommandCommand } from './CreateServerCommandCommand'
+import type { CreateServerCommand } from './CreateServerCommand'
 
 /**
  * @description OK
  */
 export type CreateServer200 = CreatedServerDto
 
-export type CreateServerMutationRequest = CreateServerCommandCommand
+export type CreateServerMutationRequest = CreateServerCommand
 
 export type CreateServerMutationResponse = CreateServer200
 

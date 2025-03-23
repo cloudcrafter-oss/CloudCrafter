@@ -55,7 +55,7 @@ public class SocketManager
             async message =>
             {
                 await _sender.Send(
-                    new AgentHubDeployRecipeMessageHandler.Command(
+                    new AgentHubDeployRecipeCommand(
                         message,
                         _wrapper.TypedHubConnection,
                         message.MessageId

@@ -4,21 +4,29 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Providers.Github;
 
-public static class UpdateGithubInstallationCommand
+public record UpdateGithubInstallationRequest(long InstallationId);
+
+[Authorize]
+public record UpdateGithubInstallationCommand(
+    UpdateGithubInstallationRequest Request,
+    Guid GithubProviderId
+) : IRequest;
+
+public class UpdateGithubInstallationCommandHandler
+    : IRequestHandler<UpdateGithubInstallationCommand>
 {
-    public record Request(long InstallationId);
+    private readonly IProvidersService _service;
 
-    [Authorize]
-    public record Command(Request Request, Guid GithubProviderId) : IRequest;
-
-    public class Handler(IProvidersService service) : IRequestHandler<Command>
+    public UpdateGithubInstallationCommandHandler(IProvidersService service)
     {
-        public Task Handle(Command request, CancellationToken cancellationToken)
-        {
-            return service.InstallGithubProvider(
-                request.GithubProviderId,
-                request.Request.InstallationId
-            );
-        }
+        _service = service;
+    }
+
+    public Task Handle(UpdateGithubInstallationCommand request, CancellationToken cancellationToken)
+    {
+        return _service.InstallGithubProvider(
+            request.GithubProviderId,
+            request.Request.InstallationId
+        );
     }
 }

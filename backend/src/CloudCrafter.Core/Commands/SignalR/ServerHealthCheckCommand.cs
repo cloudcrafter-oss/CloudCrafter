@@ -4,15 +4,19 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.SignalR;
 
-public static class ServerHealthCheckCommand
-{
-    public record Command(Guid ServerId, HealthCheckCommandArgs Data) : IRequest;
+public record ServerHealthCheckCommand(Guid ServerId, HealthCheckCommandArgs Data) : IRequest;
 
-    private class Handler(IServerConnectivityService service) : IRequestHandler<Command>
+internal class ServerHealthCheckCommandHandler : IRequestHandler<ServerHealthCheckCommand>
+{
+    private readonly IServerConnectivityService _service;
+
+    public ServerHealthCheckCommandHandler(IServerConnectivityService service)
     {
-        public Task Handle(Command request, CancellationToken cancellationToken)
-        {
-            return service.StoreServerInfo(request.ServerId, request.Data);
-        }
+        _service = service;
+    }
+
+    public Task Handle(ServerHealthCheckCommand request, CancellationToken cancellationToken)
+    {
+        return _service.StoreServerInfo(request.ServerId, request.Data);
     }
 }

@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 using CloudCrafter.Core.Commands.Providers.Github;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
@@ -15,7 +15,7 @@ public class DeleteProviderCommandTest : BaseTestFixture
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
         Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await SendAsync(new DeleteProviderCommand.Command(Guid.Empty))
+            async () => await SendAsync(new DeleteProviderCommand(Guid.Empty))
         );
     }
 
@@ -25,7 +25,7 @@ public class DeleteProviderCommandTest : BaseTestFixture
         await RunAsAdministratorAsync();
 
         Assert.ThrowsAsync<NotFoundException>(
-            async () => await SendAsync(new DeleteProviderCommand.Command(Guid.NewGuid()))
+            async () => await SendAsync(new DeleteProviderCommand(Guid.NewGuid()))
         );
     }
 
@@ -40,7 +40,7 @@ public class DeleteProviderCommandTest : BaseTestFixture
         (await CountAsync<GithubProvider>()).Should().Be(1);
         (await CountAsync<SourceProvider>()).Should().Be(1);
 
-        await SendAsync(new DeleteProviderCommand.Command(githubProvider.SourceProviderId));
+        await SendAsync(new DeleteProviderCommand(githubProvider.SourceProviderId));
 
         (await CountAsync<GithubProvider>()).Should().Be(0);
         (await CountAsync<SourceProvider>()).Should().Be(0);

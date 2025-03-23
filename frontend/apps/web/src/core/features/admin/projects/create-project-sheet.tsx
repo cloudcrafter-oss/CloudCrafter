@@ -1,4 +1,5 @@
 import { createProjectAction } from '@/src/app/_actions'
+import { createProjectCommandSchema } from '@cloudcrafter/api'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Form,
@@ -16,15 +17,13 @@ import {
 } from '@cloudcrafter/ui/components/sheet'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import type { z } from 'zod'
 
-import { createProjectCommandCommandSchema } from '@cloudcrafter/api'
-import { toast } from 'sonner'
-
-type FormValues = z.infer<typeof createProjectCommandCommandSchema>
+type FormValues = z.infer<typeof createProjectCommandSchema>
 export const CreateProjectSheet = ({ onClose }: { onClose: () => void }) => {
-	const form = useForm<z.infer<typeof createProjectCommandCommandSchema>>({
-		resolver: zodResolver(createProjectCommandCommandSchema),
+	const form = useForm<z.infer<typeof createProjectCommandSchema>>({
+		resolver: zodResolver(createProjectCommandSchema),
 		defaultValues: {
 			name: '',
 		},

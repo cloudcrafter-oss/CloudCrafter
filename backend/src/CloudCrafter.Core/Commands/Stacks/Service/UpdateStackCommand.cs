@@ -7,29 +7,38 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Stacks.Service;
 
-public static class UpdateStackServiceCommand
+[Authorize]
+public record UpdateStackServiceCommand(
+    Guid StackId,
+    Guid StackServiceId,
+    string? Name = null,
+    string? DomainName = null,
+    int? ContainerPortExposes = null,
+    int? ContainerHealthCheckPort = null
+) : IRequest<StackServiceDto?>, IRequireStackAccess;
+
+internal class UpdateStackServiceCommandHandler
+    : IRequestHandler<UpdateStackServiceCommand, StackServiceDto?>
 {
-    [Authorize]
-    public record Command(
-        Guid StackId,
-        Guid StackServiceId,
-        string? Name = null,
-        string? DomainName = null,
-        int? ContainerPortExposes = null,
-        int? ContainerHealthCheckPort = null
-    ) : IRequest<StackServiceDto?>, IRequireStackAccess;
+    private readonly IStackServicesService _stackServicesService;
+    private readonly IGitService _gitService;
 
-    public record Handler(IStackServicesService StackServicesService, IGitService GitService)
-        : IRequestHandler<Command, StackServiceDto?>
+    public UpdateStackServiceCommandHandler(
+        IStackServicesService stackServicesService,
+        IGitService gitService
+    )
     {
-        public async Task<StackServiceDto?> Handle(
-            Command request,
-            CancellationToken cancellationToken
-        )
-        {
-            var stack = await StackServicesService.UpdateStackService(request);
+        _stackServicesService = stackServicesService;
+        _gitService = gitService;
+    }
 
-            return stack;
-        }
+    public async Task<StackServiceDto?> Handle(
+        UpdateStackServiceCommand request,
+        CancellationToken cancellationToken
+    )
+    {
+        var stack = await _stackServicesService.UpdateStackService(request);
+
+        return stack;
     }
 }

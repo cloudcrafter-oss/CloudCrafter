@@ -36,7 +36,7 @@ public class ServersService(IServerRepository repository, IMapper mapper) : ISer
         return repository.HasAgent(serverId, serverKey);
     }
 
-    public async Task<CreatedServerDto> CreateServer(CreateServerCommand.Command request)
+    public async Task<CreatedServerDto> CreateServer(CreateServerCommand request)
     {
         var server = await repository.CreateServer(request.Name);
         return mapper.Map<CreatedServerDto>(server);

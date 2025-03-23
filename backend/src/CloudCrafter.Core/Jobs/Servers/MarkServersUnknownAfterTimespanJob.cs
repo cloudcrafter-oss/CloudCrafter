@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Servers;
+using CloudCrafter.Core.Commands.Servers;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +10,6 @@ public class MarkServersUnknownAfterTimespanJob : ISimpleJob
     {
         var sender = serviceProvider.GetRequiredService<ISender>();
 
-        return sender.Send(new MarkServersAsUnknownAfterTimespan.Command());
+        return sender.Send(new MarkServersAsUnknownAfterTimespanCommand());
     }
 }

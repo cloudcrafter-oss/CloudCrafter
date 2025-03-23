@@ -4,15 +4,22 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Auth;
 
-public static class PostLoginUser
-{
-    public record Query(string Email, string Password) : IRequest<TokenDto>;
+public record LoginUserCommand(string Email, string Password) : IRequest<TokenDto>;
 
-    private class Handler(ICloudCrafterAuthService service) : IRequestHandler<Query, TokenDto>
+public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, TokenDto>
+{
+    private readonly ICloudCrafterAuthService _service;
+
+    public LoginUserCommandHandler(ICloudCrafterAuthService service)
     {
-        public async Task<TokenDto> Handle(Query request, CancellationToken cancellationToken)
-        {
-            return await service.LoginAsync(request.Email, request.Password);
-        }
+        _service = service;
+    }
+
+    public async Task<TokenDto> Handle(
+        LoginUserCommand request,
+        CancellationToken cancellationToken
+    )
+    {
+        return await _service.LoginAsync(request.Email, request.Password);
     }
 }

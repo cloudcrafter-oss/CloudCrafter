@@ -5,16 +5,23 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Projects;
 
-public static class GetProjectQuery
-{
-    [Authorize]
-    public record Query(Guid Id) : IRequest<ProjectDto?>;
+[Authorize]
+public record GetProjectDetailQuery(Guid Id) : IRequest<ProjectDto?>;
 
-    public class Handler(IProjectsService service) : IRequestHandler<Query, ProjectDto?>
+public class GetProjectDetailQueryHandler : IRequestHandler<GetProjectDetailQuery, ProjectDto?>
+{
+    private readonly IProjectsService _service;
+
+    public GetProjectDetailQueryHandler(IProjectsService service)
     {
-        public async Task<ProjectDto?> Handle(Query request, CancellationToken cancellationToken)
-        {
-            return await service.GetProject(request.Id);
-        }
+        _service = service;
+    }
+
+    public async Task<ProjectDto?> Handle(
+        GetProjectDetailQuery request,
+        CancellationToken cancellationToken
+    )
+    {
+        return await _service.GetProject(request.Id);
     }
 }

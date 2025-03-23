@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Stacks;
+using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
@@ -35,7 +35,7 @@ public class MarkStacksAsUnknownHealthAfterTimespanTest : BaseTestFixture
             .Generate();
         await AddAsync(stackService);
 
-        await SendAsync(new MarkStacksAsUnknownHealthAfterTimespan.Command());
+        await SendAsync(new MarkStacksAsUnknownHealthAfterTimespanCommand());
 
         var stackFromDb = await FindAsync<Stack>(stack.Id);
         stackFromDb.Should().NotBeNull();

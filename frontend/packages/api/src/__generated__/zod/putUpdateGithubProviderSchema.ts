@@ -1,4 +1,4 @@
-import { requestSchema } from './requestSchema'
+import { updateGithubInstallationRequestSchema } from './updateGithubInstallationRequestSchema'
 import { z } from 'zod'
 
 export const putUpdateGithubProviderPathParamsSchema = z.object({
@@ -10,6 +10,6 @@ export const putUpdateGithubProviderPathParamsSchema = z.object({
  */
 export const putUpdateGithubProvider200Schema = z.any()
 
-export const putUpdateGithubProviderMutationRequestSchema = z.lazy(() => requestSchema)
+export const putUpdateGithubProviderMutationRequestSchema = z.lazy(() => updateGithubInstallationRequestSchema)
 
 export const putUpdateGithubProviderMutationResponseSchema = z.lazy(() => putUpdateGithubProvider200Schema)

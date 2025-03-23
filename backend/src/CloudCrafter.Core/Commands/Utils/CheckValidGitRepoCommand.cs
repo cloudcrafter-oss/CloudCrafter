@@ -1,25 +1,29 @@
-﻿using CloudCrafter.Core.Common.Security;
+using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Utils;
 using CloudCrafter.Domain.Domain.Utils;
 using MediatR;
 
 namespace CloudCrafter.Core.Commands.Utils;
 
-public static class CheckValidGitRepoCommand
-{
-    // [Authorize]
-    // TODO: Add Authorize
-    public record Command(string Repository) : IRequest<GitRepositoryCheckResultDto>;
+// [Authorize]
+// TODO: Add Authorize
+public record CheckValidGitRepoCommand(string Repository) : IRequest<GitRepositoryCheckResultDto>;
 
-    private class Handler(IGitService service)
-        : IRequestHandler<Command, GitRepositoryCheckResultDto>
+internal class CheckValidGitRepoCommandHandler
+    : IRequestHandler<CheckValidGitRepoCommand, GitRepositoryCheckResultDto>
+{
+    private readonly IGitService _service;
+
+    public CheckValidGitRepoCommandHandler(IGitService service)
     {
-        public Task<GitRepositoryCheckResultDto> Handle(
-            Command request,
-            CancellationToken cancellationToken
-        )
-        {
-            return service.ValidateRepository(request.Repository);
-        }
+        _service = service;
+    }
+
+    public Task<GitRepositoryCheckResultDto> Handle(
+        CheckValidGitRepoCommand request,
+        CancellationToken cancellationToken
+    )
+    {
+        return _service.ValidateRepository(request.Repository);
     }
 }

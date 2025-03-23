@@ -1,19 +1,23 @@
-﻿using CloudCrafter.Core.Common.Security;
+using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using MediatR;
 
 namespace CloudCrafter.Core.Commands.Servers;
 
-public static class RotateServerKeyCommand
-{
-    [Authorize]
-    public record Command(Guid ServerId) : IRequest;
+[Authorize]
+public record RotateServerKeyCommand(Guid ServerId) : IRequest;
 
-    private class Handler(IServersService service) : IRequestHandler<Command>
+internal class RotateServerKeyCommandHandler : IRequestHandler<RotateServerKeyCommand>
+{
+    private readonly IServersService _service;
+
+    public RotateServerKeyCommandHandler(IServersService service)
     {
-        public async Task Handle(Command request, CancellationToken cancellationToken)
-        {
-            await service.RotateServerKey(request.ServerId);
-        }
+        _service = service;
+    }
+
+    public async Task Handle(RotateServerKeyCommand request, CancellationToken cancellationToken)
+    {
+        await _service.RotateServerKey(request.ServerId);
     }
 }

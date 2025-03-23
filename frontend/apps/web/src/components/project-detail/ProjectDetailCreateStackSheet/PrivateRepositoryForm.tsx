@@ -1,7 +1,7 @@
 import {
 	type SourceProviderDto,
 	type StackCreatedDto,
-	createStackFromSourceProviderCommandCommandSchema,
+	createStackFromSourceProviderCommandSchema,
 	useGetProvidersHook,
 	usePostCreateStackFromSourceProviderHook,
 } from '@cloudcrafter/api'
@@ -71,9 +71,9 @@ export const PrivateRepositoryForm = ({
 }: PrivateRepositoryFormProps) => {
 	const [formIsSubmitting, setFormIsSubmitting] = useState(false)
 	const form = useForm<
-		z.infer<typeof createStackFromSourceProviderCommandCommandSchema>
+		z.infer<typeof createStackFromSourceProviderCommandSchema>
 	>({
-		resolver: zodResolver(createStackFromSourceProviderCommandCommandSchema),
+		resolver: zodResolver(createStackFromSourceProviderCommandSchema),
 		defaultValues: {
 			name: '',
 			environmentId,
@@ -93,7 +93,7 @@ export const PrivateRepositoryForm = ({
 	const [selectedBranchName, setSelectedBranchName] = useState<string>('')
 
 	const onSubmit = async (
-		values: z.infer<typeof createStackFromSourceProviderCommandCommandSchema>,
+		values: z.infer<typeof createStackFromSourceProviderCommandSchema>,
 	) => {
 		try {
 			setFormIsSubmitting(true)

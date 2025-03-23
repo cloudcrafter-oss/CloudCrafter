@@ -22,17 +22,17 @@ public class Auth : EndpointGroupBase
             );
     }
 
-    public async Task<TokenDto> PostLoginUser(ISender sender, PostLoginUser.Query query)
+    public async Task<TokenDto> PostLoginUser(ISender sender, LoginUserCommand query)
     {
         return await sender.Send(query);
     }
 
-    public async Task<TokenDto> PostCreateUser(ISender sender, PostCreateUser.Query query)
+    public async Task<TokenDto> PostCreateUser(ISender sender, CreateUserCommand query)
     {
         return await sender.Send(query);
     }
 
-    public async Task<TokenDto> PostRefreshTokens(ISender sender, PostRefreshUserTokens.Query query)
+    public async Task<TokenDto> PostRefreshTokens(ISender sender, RefreshUserTokenCommand query)
     {
         return await sender.Send(query);
     }

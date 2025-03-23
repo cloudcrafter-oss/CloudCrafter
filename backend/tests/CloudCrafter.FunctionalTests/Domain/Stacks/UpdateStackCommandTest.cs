@@ -19,7 +19,7 @@ public class UpdateStackCommandTest : BaseTestFixture
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
         Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await SendAsync(new UpdateStackCommand.Command(Guid.NewGuid()))
+            async () => await SendAsync(new UpdateStackCommand(Guid.NewGuid()))
         );
     }
 
@@ -30,7 +30,7 @@ public class UpdateStackCommandTest : BaseTestFixture
 
         var stackId = Guid.NewGuid();
         var ex = Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await SendAsync(new UpdateStackCommand.Command(stackId))
+            async () => await SendAsync(new UpdateStackCommand(stackId))
         );
 
         ex.Message.Should().Be($"User does not have access to stack {stackId}");
@@ -55,21 +55,15 @@ public class UpdateStackCommandTest : BaseTestFixture
             }
         );
 
-        // Create command dynamically based on property name
-        var command = propertyName switch
+        UpdateStackCommand command = propertyName switch
         {
-            "Name" => new UpdateStackCommand.Command(stack.Id, newValue),
-            "Description" => new UpdateStackCommand.Command(stack.Id, Description: newValue),
-            "PublicGitRepo" => new UpdateStackCommand.Command(
+            "Name" => new UpdateStackCommand(stack.Id, newValue),
+            "Description" => new UpdateStackCommand(stack.Id, Description: newValue),
+            "PublicGitRepo" => new UpdateStackCommand(
                 stack.Id,
-                GitPublicSettings: new UpdateStackCommand.GitPublicSettings
-                {
-                    Branch = "main",
-                    Path = "/",
-                    Repository = newValue,
-                }
+                GitPublicSettings: new UpdateStackGitPublicSettings { Repository = newValue }
             ),
-            _ => throw new ArgumentException($"Unsupported property: {propertyName}"),
+            _ => throw new NotImplementedException(),
         };
 
         await SendAsync(command);
@@ -99,13 +93,13 @@ public class UpdateStackCommandTest : BaseTestFixture
         await RunAsAdministratorAsync();
         var stack = await CreateSampleStack();
 
-        var command = new UpdateStackCommand.Command(
+        var command = new UpdateStackCommand(
             stack.Id,
-            GitPublicSettings: new UpdateStackCommand.GitPublicSettings
+            GitPublicSettings: new UpdateStackGitPublicSettings
             {
-                Branch = "dummy",
-                Path = "/",
                 Repository = "http://github.com/non/existing",
+                Branch = "main",
+                Path = "/",
             }
         );
 
@@ -140,9 +134,9 @@ public class UpdateStackCommandTest : BaseTestFixture
         var stack = EntityFaker.GenerateStackWithGithubApp(environmentId, stackId, stackServiceId);
         await AddAsync(stack);
 
-        var command = new UpdateStackCommand.Command(
+        var command = new UpdateStackCommand(
             stack.Id,
-            GithubSettings: new UpdateStackCommand.GithubSettings { Branch = "dummy" }
+            GithubSettings: new UpdateStackGithubSettings { Branch = "dummy" }
         );
 
         var exception = Assert.ThrowsAsync<ValidationException>(
@@ -176,9 +170,9 @@ public class UpdateStackCommandTest : BaseTestFixture
         var stack = EntityFaker.GenerateStackWithGithubApp(environmentId, stackId, stackServiceId);
         await AddAsync(stack);
 
-        var command = new UpdateStackCommand.Command(
+        var command = new UpdateStackCommand(
             stack.Id,
-            GithubSettings: new UpdateStackCommand.GithubSettings { Branch = "test-branch" }
+            GithubSettings: new UpdateStackGithubSettings { Branch = "test-branch" }
         );
 
         await SendAsync(command);

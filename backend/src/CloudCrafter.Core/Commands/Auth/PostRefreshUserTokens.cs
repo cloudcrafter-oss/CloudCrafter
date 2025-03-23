@@ -4,15 +4,22 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Auth;
 
-public static class PostRefreshUserTokens
-{
-    public record Query(string RefreshToken) : IRequest<TokenDto>;
+public record RefreshUserTokenCommand(string RefreshToken) : IRequest<TokenDto>;
 
-    private class Handler(ICloudCrafterAuthService service) : IRequestHandler<Query, TokenDto>
+public class RefreshUserTokenCommandHandler : IRequestHandler<RefreshUserTokenCommand, TokenDto>
+{
+    private readonly ICloudCrafterAuthService _service;
+
+    public RefreshUserTokenCommandHandler(ICloudCrafterAuthService service)
     {
-        public async Task<TokenDto> Handle(Query request, CancellationToken cancellationToken)
-        {
-            return await service.FetchTokensForRefreshToken(request.RefreshToken);
-        }
+        _service = service;
+    }
+
+    public async Task<TokenDto> Handle(
+        RefreshUserTokenCommand request,
+        CancellationToken cancellationToken
+    )
+    {
+        return await _service.FetchTokensForRefreshToken(request.RefreshToken);
     }
 }

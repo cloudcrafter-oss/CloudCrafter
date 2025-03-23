@@ -5,16 +5,23 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Projects;
 
-public static class CreateProjectCommand
-{
-    [Authorize]
-    public record Command(string Name) : IRequest<ProjectDto>;
+[Authorize]
+public record CreateProjectCommand(string Name) : IRequest<ProjectDto>;
 
-    private class Handler(IProjectsService service) : IRequestHandler<Command, ProjectDto>
+internal class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand, ProjectDto>
+{
+    private readonly IProjectsService _service;
+
+    public CreateProjectCommandHandler(IProjectsService service)
     {
-        public Task<ProjectDto> Handle(Command request, CancellationToken cancellationToken)
-        {
-            return service.CreateProject(request.Name);
-        }
+        _service = service;
+    }
+
+    public Task<ProjectDto> Handle(
+        CreateProjectCommand request,
+        CancellationToken cancellationToken
+    )
+    {
+        return _service.CreateProject(request.Name);
     }
 }

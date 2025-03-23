@@ -1,4 +1,4 @@
-import type { CreateProjectCommandCommand } from './CreateProjectCommandCommand'
+import type { CreateProjectCommand } from './CreateProjectCommand'
 import type { ProjectDto } from './ProjectDto'
 
 /**
@@ -6,7 +6,7 @@ import type { ProjectDto } from './ProjectDto'
  */
 export type CreateProject200 = ProjectDto
 
-export type CreateProjectMutationRequest = CreateProjectCommandCommand
+export type CreateProjectMutationRequest = CreateProjectCommand
 
 export type CreateProjectMutationResponse = CreateProject200
 

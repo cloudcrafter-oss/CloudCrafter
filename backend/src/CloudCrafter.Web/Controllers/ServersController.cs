@@ -14,11 +14,11 @@ public class ServersController : CloudCrafterController
     [HttpGet]
     public async Task<List<ServerDto>> GetServers(ISender sender)
     {
-        return await sender.Send(new GetServerList.Query());
+        return await sender.Send(new GetServerListQuery());
     }
 
     [HttpPost]
-    public Task<CreatedServerDto> CreateServer(ISender sender, CreateServerCommand.Command command)
+    public Task<CreatedServerDto> CreateServer(ISender sender, CreateServerCommand command)
     {
         return sender.Send(command);
     }
@@ -27,7 +27,7 @@ public class ServersController : CloudCrafterController
     [ProducesResponseType<ServerDetailDto>(StatusCodes.Status200OK)]
     public async Task<IResult> GetServerById(ISender sender, Guid id)
     {
-        var result = await sender.Send(new GetServerDetail.Query(id));
+        var result = await sender.Send(new GetServerDetailQuery(id));
 
         if (result == null)
         {
@@ -40,7 +40,7 @@ public class ServersController : CloudCrafterController
     [HttpDelete("{id}")]
     public async Task<IResult> DeleteServerById(ISender sender, Guid id)
     {
-        await sender.Send(new DeleteServerCommand.Command(id));
+        await sender.Send(new DeleteServerCommand(id));
 
         return Results.Ok();
     }
@@ -48,7 +48,7 @@ public class ServersController : CloudCrafterController
     [HttpPost("{id}/rotate-key")]
     public async Task<IResult> PostRotateAgentKey(ISender sender, Guid id)
     {
-        await sender.Send(new RotateServerKeyCommand.Command(id));
+        await sender.Send(new RotateServerKeyCommand(id));
 
         return Results.Ok();
     }
@@ -70,7 +70,7 @@ public class ServersController : CloudCrafterController
         ISender sender
     )
     {
-        await sender.Send(new UpdateServerCommand.Command(id, updateDto));
+        await sender.Send(new UpdateServerCommand(id, updateDto));
         return Results.Ok();
     }
 }

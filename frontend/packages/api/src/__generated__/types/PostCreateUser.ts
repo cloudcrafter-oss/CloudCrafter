@@ -1,4 +1,4 @@
-import type { PostCreateUserQuery } from './PostCreateUserQuery'
+import type { CreateUserCommand } from './CreateUserCommand'
 import type { TokenDto } from './TokenDto'
 
 /**
@@ -6,7 +6,7 @@ import type { TokenDto } from './TokenDto'
  */
 export type PostCreateUser200 = TokenDto
 
-export type PostCreateUserMutationRequest = PostCreateUserQuery
+export type PostCreateUserMutationRequest = CreateUserCommand
 
 export type PostCreateUserMutationResponse = PostCreateUser200
 

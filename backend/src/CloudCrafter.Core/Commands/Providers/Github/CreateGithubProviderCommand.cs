@@ -4,16 +4,23 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Providers.Github;
 
-public static class CreateGithubProviderCommand
-{
-    [Authorize]
-    public record Command(string Code) : IRequest<bool>;
+[Authorize]
+public record CreateGithubProviderCommand(string Code) : IRequest<bool>;
 
-    public class Handler(IProvidersService service) : IRequestHandler<Command, bool>
+public class CreateGithubProviderCommandHandler : IRequestHandler<CreateGithubProviderCommand, bool>
+{
+    private readonly IProvidersService _service;
+
+    public CreateGithubProviderCommandHandler(IProvidersService service)
     {
-        public Task<bool> Handle(Command request, CancellationToken cancellationToken)
-        {
-            return service.CreateGithubProvider(request.Code);
-        }
+        _service = service;
+    }
+
+    public Task<bool> Handle(
+        CreateGithubProviderCommand request,
+        CancellationToken cancellationToken
+    )
+    {
+        return _service.CreateGithubProvider(request.Code);
     }
 }

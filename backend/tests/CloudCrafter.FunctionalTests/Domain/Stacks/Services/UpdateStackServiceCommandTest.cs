@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Stacks.Service;
+using CloudCrafter.Core.Commands.Stacks.Service;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data;
@@ -18,9 +18,7 @@ public class UpdateStackServiceCommandTest : BaseTestFixture
     {
         Assert.ThrowsAsync<UnauthorizedAccessException>(
             async () =>
-                await SendAsync(
-                    new UpdateStackServiceCommand.Command(Guid.NewGuid(), Guid.NewGuid())
-                )
+                await SendAsync(new UpdateStackServiceCommand(Guid.NewGuid(), Guid.NewGuid()))
         );
     }
 
@@ -31,7 +29,7 @@ public class UpdateStackServiceCommandTest : BaseTestFixture
 
         var stackId = Guid.NewGuid();
         var ex = Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await SendAsync(new UpdateStackServiceCommand.Command(stackId, stackId))
+            async () => await SendAsync(new UpdateStackServiceCommand(stackId, stackId))
         );
 
         ex.Message.Should().Be($"User does not have access to stack {stackId}");
@@ -53,8 +51,8 @@ public class UpdateStackServiceCommandTest : BaseTestFixture
         // Create command dynamically based on property name
         var command = propertyName switch
         {
-            "Name" => new UpdateStackServiceCommand.Command(stack.Id, stackService.Id, newValue),
-            "DomainName" => new UpdateStackServiceCommand.Command(
+            "Name" => new UpdateStackServiceCommand(stack.Id, stackService.Id, newValue),
+            "DomainName" => new UpdateStackServiceCommand(
                 stack.Id,
                 stackService.Id,
                 DomainName: newValue
@@ -110,8 +108,8 @@ public class UpdateStackServiceCommandTest : BaseTestFixture
         // Create command dynamically based on property name
         var command = propertyName switch
         {
-            "Name" => new UpdateStackServiceCommand.Command(stack.Id, stackService.Id, newValue),
-            "DomainName" => new UpdateStackServiceCommand.Command(
+            "Name" => new UpdateStackServiceCommand(stack.Id, stackService.Id, newValue),
+            "DomainName" => new UpdateStackServiceCommand(
                 stack.Id,
                 stackService.Id,
                 DomainName: newValue

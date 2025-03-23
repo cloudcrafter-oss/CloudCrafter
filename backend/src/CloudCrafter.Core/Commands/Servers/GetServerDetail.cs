@@ -1,23 +1,27 @@
-﻿using CloudCrafter.Core.Common.Security;
+using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Domain.Domain.Server;
 using MediatR;
 
 namespace CloudCrafter.Core.Commands.Servers;
 
-public static class GetServerDetail
-{
-    [Authorize]
-    public record Query(Guid Id) : IRequest<ServerDetailDto?>;
+[Authorize]
+public record GetServerDetailQuery(Guid Id) : IRequest<ServerDetailDto?>;
 
-    private class Handler(IServersService service) : IRequestHandler<Query, ServerDetailDto?>
+internal class GetServerDetailQueryHandler : IRequestHandler<GetServerDetailQuery, ServerDetailDto?>
+{
+    private readonly IServersService _service;
+
+    public GetServerDetailQueryHandler(IServersService service)
     {
-        public async Task<ServerDetailDto?> Handle(
-            Query request,
-            CancellationToken cancellationToken
-        )
-        {
-            return await service.GetServer(request.Id);
-        }
+        _service = service;
+    }
+
+    public async Task<ServerDetailDto?> Handle(
+        GetServerDetailQuery request,
+        CancellationToken cancellationToken
+    )
+    {
+        return await _service.GetServer(request.Id);
     }
 }

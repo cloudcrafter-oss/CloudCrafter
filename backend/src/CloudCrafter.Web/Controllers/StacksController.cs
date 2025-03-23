@@ -14,7 +14,7 @@ public class StacksController : CloudCrafterController
 {
     [HttpPost]
     public async Task<ActionResult<StackCreatedDto>> PostCreateStack(
-        [FromBody] CreateStackCommand.Command command,
+        [FromBody] CreateStackCommand command,
         ISender sender
     )
     {
@@ -23,7 +23,7 @@ public class StacksController : CloudCrafterController
 
     [HttpPost("provider")]
     public async Task<ActionResult<StackCreatedDto>> PostCreateStackFromSourceProvider(
-        [FromBody] CreateStackFromSourceProviderCommand.Command command,
+        [FromBody] CreateStackFromSourceProviderCommand command,
         ISender sender
     )
     {
@@ -38,7 +38,7 @@ public class StacksController : CloudCrafterController
         ISender sender
     )
     {
-        var details = await sender.Send(new GetStackDetail.Query { StackId = id });
+        var details = await sender.Send(new GetStackDetailQuery { StackId = id });
         return details is not null ? Ok(details) : NotFound();
     }
 
@@ -74,7 +74,7 @@ public class StacksController : CloudCrafterController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<StackDetailDto>> UpdateStack(
         [FromRoute] Guid id,
-        [FromBody] UpdateStackCommand.Command command,
+        [FromBody] UpdateStackCommand command,
         ISender sender
     )
     {
@@ -87,7 +87,7 @@ public class StacksController : CloudCrafterController
     public async Task<IActionResult> UpdateStackService(
         [FromRoute] Guid stackId,
         [FromRoute] Guid stackServiceId,
-        [FromBody] UpdateStackServiceCommand.Command command,
+        [FromBody] UpdateStackServiceCommand command,
         ISender sender
     )
     {

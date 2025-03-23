@@ -4,16 +4,20 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Providers.Github;
 
-public static class DeleteProviderCommand
-{
-    [Authorize]
-    public record Command(Guid ProviderId) : IRequest;
+[Authorize]
+public record DeleteProviderCommand(Guid ProviderId) : IRequest;
 
-    public class Handler(IProvidersService service) : IRequestHandler<Command>
+public class DeleteProviderCommandHandler : IRequestHandler<DeleteProviderCommand>
+{
+    private readonly IProvidersService _service;
+
+    public DeleteProviderCommandHandler(IProvidersService service)
     {
-        public Task Handle(Command request, CancellationToken cancellationToken)
-        {
-            return service.DeleteProvider(request.ProviderId);
-        }
+        _service = service;
+    }
+
+    public Task Handle(DeleteProviderCommand request, CancellationToken cancellationToken)
+    {
+        return _service.DeleteProvider(request.ProviderId);
     }
 }
