@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using AutoMapper;
+using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Stacks;
@@ -8,23 +9,14 @@ using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Services.Domain.Stacks;
 
-public class StackEnvironmentVariablesService : IStackEnvironmentVariablesService
+public class StackEnvironmentVariablesService(
+    IStackRepository repository,
+    ILogger<StackEnvironmentVariablesService> logger,
+    IMapper mapper
+) : IStackEnvironmentVariablesService
 {
-    private readonly IStackRepository _repository;
-    private readonly ILogger<StackEnvironmentVariablesService> _logger;
-    private readonly IMapper _mapper;
-    private static readonly Regex KeyRegex = new Regex("^[A-Z][A-Z0-9_]*$", RegexOptions.Compiled);
-
-    public StackEnvironmentVariablesService(
-        IStackRepository repository,
-        ILogger<StackEnvironmentVariablesService> logger,
-        IMapper mapper
-    )
-    {
-        _repository = repository;
-        _logger = logger;
-        _mapper = mapper;
-    }
+    private static readonly Regex KeyRegex = new("^[A-Z][A-Z0-9_]*$", RegexOptions.Compiled);
+    private readonly IMapper _mapper = mapper;
 
     public async Task<List<StackEnvironmentVariableDto>> GetEnvironmentVariables(
         Guid stackId,
@@ -34,11 +26,11 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
     {
         try
         {
-            var stack = await _repository.GetStack(stackId);
+            var stack = await repository.GetStack(stackId);
 
             if (stack == null)
             {
-                _logger.LogWarning("Stack with id {StackId} not found", stackId);
+                logger.LogWarning("Stack with id {StackId} not found", stackId);
                 return new List<StackEnvironmentVariableDto>();
             }
 
@@ -50,14 +42,14 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
             if (includeInherited && stack.Environment != null)
             {
                 // TODO: Implement inherited variables retrieval when environment variables are added
-                _logger.LogInformation("Inherited variables support is not yet implemented");
+                logger.LogInformation("Inherited variables support is not yet implemented");
             }
 
             return result;
         }
         catch (Exception ex)
         {
-            _logger.LogError(
+            logger.LogError(
                 ex,
                 "Error retrieving environment variables for stack {StackId}",
                 stackId
@@ -66,7 +58,7 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
         }
     }
 
-    public async Task<bool> CreateEnvironmentVariable(
+    public async Task CreateEnvironmentVariable(
         Guid stackId,
         string key,
         string value,
@@ -74,109 +66,30 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
         EnvironmentVariableType type = EnvironmentVariableType.Both
     )
     {
-        try
+        // Validate stack exists
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
         {
-            // Validate stack exists
-            var stack = await _repository.GetStack(stackId);
-
-            if (stack == null)
-            {
-                _logger.LogWarning("Stack with id {StackId} not found", stackId);
-                return false;
-            }
-
-            // Validate key format
-            if (!KeyRegex.IsMatch(key))
-            {
-                _logger.LogWarning("Invalid environment variable key format: {Key}", key);
-                return false;
-            }
-
-            // Validate key length
-            if (key.Length > 100)
-            {
-                _logger.LogWarning(
-                    "Environment variable key exceeds maximum length: {KeyLength}",
-                    key.Length
-                );
-                return false;
-            }
-
-            // Validate value length
-            if (value.Length > 2000)
-            {
-                _logger.LogWarning(
-                    "Environment variable value exceeds maximum length: {ValueLength}",
-                    value.Length
-                );
-                return false;
-            }
-
-            // Check for duplicate key
-            var existingVar = stack.EnvironmentVariables.FirstOrDefault(v => v.Key == key);
-
-            if (existingVar != null)
-            {
-                _logger.LogWarning(
-                    "Environment variable with key {Key} already exists for stack {StackId}",
-                    key,
-                    stackId
-                );
-                return false;
-            }
-
-            // Auto-detect secrets if not explicitly set
-            if (!isSecret)
-            {
-                isSecret =
-                    key.Contains("SECRET") || key.Contains("PASSWORD") || key.Contains("KEY");
-            }
-
-            // Create the environment variable
-            var variable = new StackEnvironmentVariable
-            {
-                Id = Guid.NewGuid(),
-                StackId = stackId,
-                Stack = stack,
-                Key = key,
-                Value = value,
-                Type = type,
-                IsSecret = isSecret,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-            };
-
-            stack.EnvironmentVariables.Add(variable);
-            await _repository.SaveChangesAsync();
-
-            // Add to history record
-            _logger.LogInformation(
-                "Environment variable history: Stack {StackId}, Variable {Key}, Change {ChangeType}, "
-                    + "Old Value: {OldValue}, New Value: {NewValue}",
-                stackId,
-                key,
-                "Created",
-                null,
-                isSecret ? "[HIDDEN]" : value
-            );
-
-            _logger.LogInformation(
-                "Created environment variable {Key} for stack {StackId}",
-                key,
-                stackId
-            );
-
-            return true;
+            throw StackValidations.Create(StackValidations.StackNotFound);
         }
-        catch (Exception ex)
+
+        // Create the environment variable
+        var variable = new StackEnvironmentVariable
         {
-            _logger.LogError(
-                ex,
-                "Error creating environment variable for stack {StackId}",
-                stackId
-            );
-            return false;
-        }
+            Id = Guid.NewGuid(),
+            StackId = stackId,
+            Stack = stack,
+            Key = key,
+            Value = value,
+            Type = type,
+            IsSecret = isSecret,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+        };
+
+        stack.EnvironmentVariables.Add(variable);
+        await repository.SaveChangesAsync();
     }
 
     public async Task<bool> UpdateEnvironmentVariable(
@@ -191,11 +104,11 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
         try
         {
             // Get the stack
-            var stack = await _repository.GetStack(stackId);
+            var stack = await repository.GetStack(stackId);
 
             if (stack == null)
             {
-                _logger.LogWarning("Stack with id {StackId} not found", stackId);
+                logger.LogWarning("Stack with id {StackId} not found", stackId);
                 return false;
             }
 
@@ -204,37 +117,10 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
 
             if (variable == null)
             {
-                _logger.LogWarning(
+                logger.LogWarning(
                     "Environment variable with id {Id} not found for stack {StackId}",
                     id,
                     stackId
-                );
-                return false;
-            }
-
-            // Validate key format
-            if (!KeyRegex.IsMatch(key))
-            {
-                _logger.LogWarning("Invalid environment variable key format: {Key}", key);
-                return false;
-            }
-
-            // Validate key length
-            if (key.Length > 100)
-            {
-                _logger.LogWarning(
-                    "Environment variable key exceeds maximum length: {KeyLength}",
-                    key.Length
-                );
-                return false;
-            }
-
-            // Validate value length
-            if (value.Length > 2000)
-            {
-                _logger.LogWarning(
-                    "Environment variable value exceeds maximum length: {ValueLength}",
-                    value.Length
                 );
                 return false;
             }
@@ -248,7 +134,7 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
 
                 if (existingVar != null)
                 {
-                    _logger.LogWarning(
+                    logger.LogWarning(
                         "Environment variable with key {Key} already exists for stack {StackId}",
                         key,
                         stackId
@@ -282,10 +168,10 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
                 variable.Type = type.Value;
             }
 
-            await _repository.SaveChangesAsync();
+            await repository.SaveChangesAsync();
 
             // Add to history record
-            _logger.LogInformation(
+            logger.LogInformation(
                 "Environment variable history: Stack {StackId}, Variable {Key}, Change {ChangeType}, "
                     + "Old Value: {OldValue}, New Value: {NewValue}",
                 stackId,
@@ -295,7 +181,7 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
                 variable.IsSecret ? "[HIDDEN]" : value
             );
 
-            _logger.LogInformation(
+            logger.LogInformation(
                 "Updated environment variable from {OldKey} to {NewKey} for stack {StackId}",
                 oldKey,
                 key,
@@ -306,7 +192,7 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
         }
         catch (Exception ex)
         {
-            _logger.LogError(
+            logger.LogError(
                 ex,
                 "Error updating environment variable {Id} for stack {StackId}",
                 id,
@@ -321,11 +207,11 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
         try
         {
             // Get the stack
-            var stack = await _repository.GetStack(stackId);
+            var stack = await repository.GetStack(stackId);
 
             if (stack == null)
             {
-                _logger.LogWarning("Stack with id {StackId} not found", stackId);
+                logger.LogWarning("Stack with id {StackId} not found", stackId);
                 return false;
             }
 
@@ -334,7 +220,7 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
 
             if (variable == null)
             {
-                _logger.LogWarning(
+                logger.LogWarning(
                     "Environment variable with id {Id} not found for stack {StackId}",
                     id,
                     stackId
@@ -351,7 +237,7 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
             stack.EnvironmentVariables.Remove(variable);
 
             // Add to history record before deleting
-            _logger.LogInformation(
+            logger.LogInformation(
                 "Environment variable history: Stack {StackId}, Variable {Key}, Change {ChangeType}, "
                     + "Old Value: {OldValue}, New Value: {NewValue}",
                 stackId,
@@ -361,9 +247,9 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
                 null
             );
 
-            await _repository.SaveChangesAsync();
+            await repository.SaveChangesAsync();
 
-            _logger.LogInformation(
+            logger.LogInformation(
                 "Deleted environment variable {Key} from stack {StackId}",
                 key,
                 stackId
@@ -373,7 +259,7 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
         }
         catch (Exception ex)
         {
-            _logger.LogError(
+            logger.LogError(
                 ex,
                 "Error deleting environment variable {Id} for stack {StackId}",
                 id,
@@ -392,22 +278,22 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
         try
         {
             // Check if stack exists
-            var stack = await _repository.GetStack(stackId);
+            var stack = await repository.GetStack(stackId);
 
             if (stack == null)
             {
-                _logger.LogWarning("Stack with id {StackId} not found", stackId);
+                logger.LogWarning("Stack with id {StackId} not found", stackId);
                 return 0;
             }
 
             // Implement template application logic here
             // For now, return 0 as this is not yet implemented
-            _logger.LogWarning("Template application is not yet implemented");
+            logger.LogWarning("Template application is not yet implemented");
             return 0;
         }
         catch (Exception ex)
         {
-            _logger.LogError(
+            logger.LogError(
                 ex,
                 "Error applying template {TemplateId} to stack {StackId}",
                 templateId,
@@ -426,22 +312,22 @@ public class StackEnvironmentVariablesService : IStackEnvironmentVariablesServic
         try
         {
             // Check if stack exists
-            var stack = await _repository.GetStack(stackId);
+            var stack = await repository.GetStack(stackId);
 
             if (stack == null)
             {
-                _logger.LogWarning("Stack with id {StackId} not found", stackId);
+                logger.LogWarning("Stack with id {StackId} not found", stackId);
                 return new List<StackEnvironmentVariableHistoryDto>();
             }
 
             // Implement history retrieval logic here
             // For now, return empty list as this depends on a history table that isn't set up yet
-            _logger.LogWarning("Environment variable history retrieval is not yet implemented");
+            logger.LogWarning("Environment variable history retrieval is not yet implemented");
             return new List<StackEnvironmentVariableHistoryDto>();
         }
         catch (Exception ex)
         {
-            _logger.LogError(
+            logger.LogError(
                 ex,
                 "Error retrieving environment variable history for stack {StackId}",
                 stackId

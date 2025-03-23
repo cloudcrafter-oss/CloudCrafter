@@ -6,7 +6,7 @@ namespace CloudCrafter.Core.Interfaces.Domain.Stacks;
 public interface IStackEnvironmentVariablesService
 {
     /// <summary>
-    /// Retrieves all environment variables for a stack
+    ///     Retrieves all environment variables for a stack
     /// </summary>
     /// <param name="stackId">ID of the stack</param>
     /// <param name="includeInherited">Whether to include variables inherited from the environment</param>
@@ -19,7 +19,7 @@ public interface IStackEnvironmentVariablesService
     );
 
     /// <summary>
-    /// Creates a new environment variable for a stack
+    ///     Creates a new environment variable for a stack
     /// </summary>
     /// <param name="stackId">ID of the stack</param>
     /// <param name="key">Environment variable key</param>
@@ -27,7 +27,7 @@ public interface IStackEnvironmentVariablesService
     /// <param name="isSecret">Whether the variable is a secret</param>
     /// <param name="type">Type of environment variable (BuildTime, Runtime, Both)</param>
     /// <returns>True if successfully created, false otherwise</returns>
-    Task<bool> CreateEnvironmentVariable(
+    Task CreateEnvironmentVariable(
         Guid stackId,
         string key,
         string value,
@@ -36,7 +36,7 @@ public interface IStackEnvironmentVariablesService
     );
 
     /// <summary>
-    /// Updates an existing environment variable
+    ///     Updates an existing environment variable
     /// </summary>
     /// <param name="id">ID of the environment variable</param>
     /// <param name="stackId">ID of the stack</param>
@@ -55,7 +55,7 @@ public interface IStackEnvironmentVariablesService
     );
 
     /// <summary>
-    /// Deletes an environment variable
+    ///     Deletes an environment variable
     /// </summary>
     /// <param name="id">ID of the environment variable</param>
     /// <param name="stackId">ID of the stack</param>
@@ -63,7 +63,7 @@ public interface IStackEnvironmentVariablesService
     Task<bool> DeleteEnvironmentVariable(Guid id, Guid stackId);
 
     /// <summary>
-    /// Applies a template of environment variables to a stack
+    ///     Applies a template of environment variables to a stack
     /// </summary>
     /// <param name="stackId">ID of the stack</param>
     /// <param name="templateId">ID of the template to apply</param>
@@ -72,7 +72,7 @@ public interface IStackEnvironmentVariablesService
     Task<int> ApplyTemplate(Guid stackId, Guid templateId, bool overrideExisting = false);
 
     /// <summary>
-    /// Gets the version history of environment variables for a stack
+    ///     Gets the version history of environment variables for a stack
     /// </summary>
     /// <param name="stackId">ID of the stack</param>
     /// <param name="startDate">Optional start date for filtering</param>

@@ -1,0 +1,79 @@
+using CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
+using CloudCrafter.Core.Exceptions;
+using CloudCrafter.Domain.Entities;
+using FluentAssertions;
+using NUnit.Framework;
+
+namespace CloudCrafter.FunctionalTests.Domain.Stacks.EnvironmentVariables;
+
+using static Testing;
+
+public class CreateStackEnvironmentVariableCommandTest : BaseTestFixture
+{
+    private readonly CreateStackEnvironmentVariableCommand Command =
+        new()
+        {
+            StackId = Guid.NewGuid(),
+            Key = "",
+            Value = "",
+            IsSecret = false,
+            Type = EnvironmentVariableType.BuildTime,
+        };
+
+    [Test]
+    public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
+    {
+        Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
+    }
+
+    private async Task AssertEnvCount(int count)
+    {
+        (await CountAsync<StackEnvironmentVariable>()).Should().Be(count);
+    }
+
+    [Test]
+    public async Task ShouldNotCreateEnvironmentVariableBecauseValidation()
+    {
+        await RunAsAdministratorAsync();
+
+        var exception = Assert.ThrowsAsync<ValidationException>(
+            async () => await SendAsync(Command)
+        );
+
+        exception.Should().NotBeNull();
+        exception!.Errors.Should().ContainKey("Key").And.HaveCount(2);
+        exception!.Errors["Key"].Should().Contain("Environment variable key is required");
+        exception!.Errors["Value"].Should().Contain("Environment variable value is required");
+
+        await AssertEnvCount(0);
+    }
+
+    [Test]
+    public async Task ShouldNotCreateEnvironmentVariableBecauseStackDoesNotExists()
+    {
+        await RunAsAdministratorAsync();
+        await AssertEnvCount(0);
+
+        var exception = Assert.ThrowsAsync<ValidationException>(
+            async () => await SendAsync(Command with { Key = "Test", Value = "Dummy" })
+        );
+        exception.Should().NotBeNull();
+        exception!.Errors.Should().ContainKey("Stack").And.HaveCount(1);
+        exception!.Errors["Stack"].Should().Contain("Stack not found");
+
+        await AssertEnvCount(0);
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToCreateEnvironmentVariable()
+    {
+        await RunAsAdministratorAsync();
+        await AssertEnvCount(0);
+
+        var stack = await CreateSampleStack();
+
+        await SendAsync(Command with { StackId = stack.Id, Key = "Test", Value = "Dummy" });
+
+        await AssertEnvCount(1);
+    }
+}

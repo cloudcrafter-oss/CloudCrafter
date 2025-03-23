@@ -36,6 +36,14 @@ services:
       - cloudcrafter
     ports:
       - '6379:6379'
+  
+  redis-testing:
+    image: redis:alpine
+    networks:
+      - cloudcrafter
+    ports:
+      - '6380:6379'
+
 
 
 networks:
