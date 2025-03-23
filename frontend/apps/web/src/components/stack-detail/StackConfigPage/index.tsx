@@ -7,6 +7,9 @@ import { cn } from '@cloudcrafter/ui/lib/utils'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { DummyInfoTab } from '../DummyInfoTab'
+import { EnvironmentVariables } from '../environment-variables/EnvironmentVariables'
+import { VariableHistory } from '../environment-variables/VariableHistory'
+import { VariableTemplates } from '../environment-variables/VariableTemplates'
 import { BasicInfo } from '../general-settings/BasicInfo'
 import { ServiceOverview } from '../service-overview'
 
@@ -36,6 +39,29 @@ const sections = [
 				id: 'advanced',
 				title: 'Advanced Settings',
 				component: DummyInfoTab as React.ComponentType<BaseComponentProps>,
+			},
+		],
+	},
+	{
+		id: 'environment',
+		title: 'Environment Variables',
+		description: 'Manage environment variables for your stack',
+		subTabs: [
+			{
+				id: 'variables',
+				title: 'Variables',
+				component:
+					EnvironmentVariables as React.ComponentType<BaseComponentProps>,
+			},
+			{
+				id: 'templates',
+				title: 'Templates',
+				component: VariableTemplates as React.ComponentType<BaseComponentProps>,
+			},
+			{
+				id: 'history',
+				title: 'History',
+				component: VariableHistory as React.ComponentType<BaseComponentProps>,
 			},
 		],
 	},
