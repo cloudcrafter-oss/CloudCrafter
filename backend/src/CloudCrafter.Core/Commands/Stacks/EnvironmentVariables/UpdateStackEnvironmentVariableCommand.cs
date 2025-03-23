@@ -1,10 +1,12 @@
 using System.Text.Json.Serialization;
+using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Domain.Entities;
 using MediatR;
 
 namespace CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
 
-public class UpdateStackEnvironmentVariableCommand : IRequest<Guid>
+[Authorize]
+public record UpdateStackEnvironmentVariableCommand : IRequest<Guid>
 {
     [JsonIgnore]
     public Guid StackId { get; set; }

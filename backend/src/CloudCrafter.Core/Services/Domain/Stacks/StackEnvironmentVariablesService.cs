@@ -138,7 +138,15 @@ public class StackEnvironmentVariablesService(
             variable.Type = type.Value;
         }
 
-        await repository.SaveChangesAsync();
+        try
+        {
+            await repository.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+            when (ex.InnerException is PostgresException { SqlState: "23505" })
+        {
+            throw StackValidations.Create(StackValidations.EnvironmentVariableNotUnique);
+        }
 
         return variable.Id;
     }
