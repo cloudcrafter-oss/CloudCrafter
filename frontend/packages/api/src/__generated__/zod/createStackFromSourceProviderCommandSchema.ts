@@ -6,7 +6,7 @@ export const createStackFromSourceProviderCommandSchema = z.object({
   repositoryId: z.string().min(1),
   branch: z.string().min(1),
   path: z.string(),
+  repository: z.string(),
   environmentId: z.string().uuid(),
   serverId: z.string().uuid(),
-  repository: z.string(),
 })

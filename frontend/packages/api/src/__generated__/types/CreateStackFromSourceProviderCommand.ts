@@ -23,6 +23,10 @@ export type CreateStackFromSourceProviderCommand = {
    */
   path: string
   /**
+   * @type string
+   */
+  repository: string
+  /**
    * @type string, uuid
    */
   environmentId: string
@@ -30,8 +34,4 @@ export type CreateStackFromSourceProviderCommand = {
    * @type string, uuid
    */
   serverId: string
-  /**
-   * @type string
-   */
-  repository: string
 }

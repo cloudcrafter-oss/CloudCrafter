@@ -139,7 +139,6 @@ export type {
 export type {
   PostCreateEnvironmentVariablePathParams,
   PostCreateEnvironmentVariable201,
-  PostCreateEnvironmentVariable400,
   PostCreateEnvironmentVariableMutationRequest,
   PostCreateEnvironmentVariableMutationResponse,
   PostCreateEnvironmentVariableMutation,
@@ -481,7 +480,6 @@ export {
 export {
   postCreateEnvironmentVariablePathParamsSchema,
   postCreateEnvironmentVariable201Schema,
-  postCreateEnvironmentVariable400Schema,
   postCreateEnvironmentVariableMutationRequestSchema,
   postCreateEnvironmentVariableMutationResponseSchema,
 } from './zod/postCreateEnvironmentVariableSchema'

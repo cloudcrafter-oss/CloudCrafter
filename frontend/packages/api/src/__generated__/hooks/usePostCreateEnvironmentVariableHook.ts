@@ -4,7 +4,6 @@ import type {
   PostCreateEnvironmentVariableMutationRequest,
   PostCreateEnvironmentVariableMutationResponse,
   PostCreateEnvironmentVariablePathParams,
-  PostCreateEnvironmentVariable400,
 } from '../types/PostCreateEnvironmentVariable'
 import type { UseMutationOptions } from '@tanstack/react-query'
 import { postCreateEnvironmentVariable } from '../axios-backend/postCreateEnvironmentVariable'
@@ -21,7 +20,7 @@ export function usePostCreateEnvironmentVariableHook<TContext>(
   options: {
     mutation?: UseMutationOptions<
       PostCreateEnvironmentVariableMutationResponse,
-      ResponseErrorConfig<PostCreateEnvironmentVariable400>,
+      ResponseErrorConfig<Error>,
       { stackId: PostCreateEnvironmentVariablePathParams['stackId']; data: PostCreateEnvironmentVariableMutationRequest },
       TContext
     >
@@ -33,7 +32,7 @@ export function usePostCreateEnvironmentVariableHook<TContext>(
 
   return useMutation<
     PostCreateEnvironmentVariableMutationResponse,
-    ResponseErrorConfig<PostCreateEnvironmentVariable400>,
+    ResponseErrorConfig<Error>,
     { stackId: PostCreateEnvironmentVariablePathParams['stackId']; data: PostCreateEnvironmentVariableMutationRequest },
     TContext
   >({

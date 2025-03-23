@@ -4,7 +4,6 @@ import type {
   PostCreateEnvironmentVariableMutationRequest,
   PostCreateEnvironmentVariableMutationResponse,
   PostCreateEnvironmentVariablePathParams,
-  PostCreateEnvironmentVariable400,
 } from '../types/PostCreateEnvironmentVariable'
 
 export function getPostCreateEnvironmentVariableUrl(stackId: PostCreateEnvironmentVariablePathParams['stackId']) {
@@ -21,11 +20,7 @@ export async function postCreateEnvironmentVariable(
 ) {
   const { client: request = client, ...requestConfig } = config
 
-  const res = await request<
-    PostCreateEnvironmentVariableMutationResponse,
-    ResponseErrorConfig<PostCreateEnvironmentVariable400>,
-    PostCreateEnvironmentVariableMutationRequest
-  >({
+  const res = await request<PostCreateEnvironmentVariableMutationResponse, ResponseErrorConfig<Error>, PostCreateEnvironmentVariableMutationRequest>({
     method: 'POST',
     url: getPostCreateEnvironmentVariableUrl(stackId).toString(),
     data,

@@ -86,7 +86,6 @@ export type {
 export type {
   PostCreateEnvironmentVariablePathParams,
   PostCreateEnvironmentVariable201,
-  PostCreateEnvironmentVariable400,
   PostCreateEnvironmentVariableMutationRequest,
   PostCreateEnvironmentVariableMutationResponse,
   PostCreateEnvironmentVariableMutation,

@@ -1,3 +1,5 @@
+import type { EnvironmentVariableType } from './EnvironmentVariableType'
+
 export type UpdateStackEnvironmentVariableCommand = {
   /**
    * @type string, uuid
@@ -15,4 +17,12 @@ export type UpdateStackEnvironmentVariableCommand = {
    * @type string
    */
   value: string
+  /**
+   * @type integer
+   */
+  type: EnvironmentVariableType
+  /**
+   * @type boolean
+   */
+  isSecret: boolean
 }

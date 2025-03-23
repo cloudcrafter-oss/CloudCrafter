@@ -1,8 +1,6 @@
+import type { EnvironmentVariableType } from './EnvironmentVariableType'
+
 export type CreateStackEnvironmentVariableCommand = {
-  /**
-   * @type string, uuid
-   */
-  stackId: string
   /**
    * @type string
    */
@@ -11,4 +9,12 @@ export type CreateStackEnvironmentVariableCommand = {
    * @type string
    */
   value: string
+  /**
+   * @type integer
+   */
+  type: EnvironmentVariableType
+  /**
+   * @type boolean
+   */
+  isSecret: boolean
 }

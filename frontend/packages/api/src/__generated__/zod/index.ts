@@ -76,7 +76,6 @@ export { postCreateDeploymentPathParamsSchema, postCreateDeployment200Schema, po
 export {
   postCreateEnvironmentVariablePathParamsSchema,
   postCreateEnvironmentVariable201Schema,
-  postCreateEnvironmentVariable400Schema,
   postCreateEnvironmentVariableMutationRequestSchema,
   postCreateEnvironmentVariableMutationResponseSchema,
 } from './postCreateEnvironmentVariableSchema'
