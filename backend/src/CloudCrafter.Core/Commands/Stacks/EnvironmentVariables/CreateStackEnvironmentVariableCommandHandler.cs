@@ -4,21 +4,11 @@ using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
 
-public class CreateStackEnvironmentVariableCommandHandler
-    : IRequestHandler<CreateStackEnvironmentVariableCommand, bool>
+public class CreateStackEnvironmentVariableCommandHandler(
+    IStackEnvironmentVariablesService environmentVariablesService,
+    ILogger<CreateStackEnvironmentVariableCommandHandler> logger
+) : IRequestHandler<CreateStackEnvironmentVariableCommand, bool>
 {
-    private readonly IStackEnvironmentVariablesService _environmentVariablesService;
-    private readonly ILogger<CreateStackEnvironmentVariableCommandHandler> _logger;
-
-    public CreateStackEnvironmentVariableCommandHandler(
-        IStackEnvironmentVariablesService environmentVariablesService,
-        ILogger<CreateStackEnvironmentVariableCommandHandler> logger
-    )
-    {
-        _environmentVariablesService = environmentVariablesService;
-        _logger = logger;
-    }
-
     public async Task<bool> Handle(
         CreateStackEnvironmentVariableCommand request,
         CancellationToken cancellationToken
@@ -26,7 +16,7 @@ public class CreateStackEnvironmentVariableCommandHandler
     {
         try
         {
-            var result = await _environmentVariablesService.CreateEnvironmentVariable(
+            var result = await environmentVariablesService.CreateEnvironmentVariable(
                 request.StackId,
                 request.Key,
                 request.Value
@@ -36,7 +26,7 @@ public class CreateStackEnvironmentVariableCommandHandler
         }
         catch (Exception ex)
         {
-            _logger.LogError(
+            logger.LogError(
                 ex,
                 "Error creating environment variable for stack {StackId}",
                 request.StackId

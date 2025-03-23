@@ -5,25 +5,18 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Utils;
 
-// [Authorize]
+[Authorize]
 // TODO: Add Authorize
 public record CheckValidGitRepoCommand(string Repository) : IRequest<GitRepositoryCheckResultDto>;
 
-internal class CheckValidGitRepoCommandHandler
+internal class CheckValidGitRepoCommandHandler(IGitService service)
     : IRequestHandler<CheckValidGitRepoCommand, GitRepositoryCheckResultDto>
 {
-    private readonly IGitService _service;
-
-    public CheckValidGitRepoCommandHandler(IGitService service)
-    {
-        _service = service;
-    }
-
     public Task<GitRepositoryCheckResultDto> Handle(
         CheckValidGitRepoCommand request,
         CancellationToken cancellationToken
     )
     {
-        return _service.ValidateRepository(request.Repository);
+        return service.ValidateRepository(request.Repository);
     }
 }

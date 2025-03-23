@@ -8,20 +8,14 @@ namespace CloudCrafter.Core.Commands.Projects;
 [Authorize]
 public record GetProjectDetailQuery(Guid Id) : IRequest<ProjectDto?>;
 
-public class GetProjectDetailQueryHandler : IRequestHandler<GetProjectDetailQuery, ProjectDto?>
+public class GetProjectDetailQueryHandler(IProjectsService service)
+    : IRequestHandler<GetProjectDetailQuery, ProjectDto?>
 {
-    private readonly IProjectsService _service;
-
-    public GetProjectDetailQueryHandler(IProjectsService service)
-    {
-        _service = service;
-    }
-
     public async Task<ProjectDto?> Handle(
         GetProjectDetailQuery request,
         CancellationToken cancellationToken
     )
     {
-        return await _service.GetProject(request.Id);
+        return await service.GetProject(request.Id);
     }
 }

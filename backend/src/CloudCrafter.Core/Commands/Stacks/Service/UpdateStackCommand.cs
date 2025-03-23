@@ -1,7 +1,6 @@
 using CloudCrafter.Core.Common.Interfaces.Access;
 using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
-using CloudCrafter.Core.Interfaces.Domain.Utils;
 using CloudCrafter.Domain.Domain.Stack;
 using MediatR;
 
@@ -17,27 +16,15 @@ public record UpdateStackServiceCommand(
     int? ContainerHealthCheckPort = null
 ) : IRequest<StackServiceDto?>, IRequireStackAccess;
 
-internal class UpdateStackServiceCommandHandler
+internal class UpdateStackServiceCommandHandler(IStackServicesService stackServicesService)
     : IRequestHandler<UpdateStackServiceCommand, StackServiceDto?>
 {
-    private readonly IStackServicesService _stackServicesService;
-    private readonly IGitService _gitService;
-
-    public UpdateStackServiceCommandHandler(
-        IStackServicesService stackServicesService,
-        IGitService gitService
-    )
-    {
-        _stackServicesService = stackServicesService;
-        _gitService = gitService;
-    }
-
     public async Task<StackServiceDto?> Handle(
         UpdateStackServiceCommand request,
         CancellationToken cancellationToken
     )
     {
-        var stack = await _stackServicesService.UpdateStackService(request);
+        var stack = await stackServicesService.UpdateStackService(request);
 
         return stack;
     }

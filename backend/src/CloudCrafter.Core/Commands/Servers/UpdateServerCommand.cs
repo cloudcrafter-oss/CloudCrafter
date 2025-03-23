@@ -11,17 +11,11 @@ public record UpdateServerCommand(Guid ServerId, UpdateServerDto UpdateDetails)
     : IRequireServerAccess,
         IRequest;
 
-internal class UpdateServerCommandHandler : IRequestHandler<UpdateServerCommand>
+internal class UpdateServerCommandHandler(IServersService serversService)
+    : IRequestHandler<UpdateServerCommand>
 {
-    private readonly IServersService _serversService;
-
-    public UpdateServerCommandHandler(IServersService serversService)
-    {
-        _serversService = serversService;
-    }
-
     public Task Handle(UpdateServerCommand request, CancellationToken cancellationToken)
     {
-        return _serversService.UpdateServer(request.ServerId, request.UpdateDetails);
+        return serversService.UpdateServer(request.ServerId, request.UpdateDetails);
     }
 }

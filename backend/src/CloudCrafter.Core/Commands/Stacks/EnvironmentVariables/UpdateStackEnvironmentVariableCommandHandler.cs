@@ -4,21 +4,11 @@ using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
 
-public class UpdateStackEnvironmentVariableCommandHandler
-    : IRequestHandler<UpdateStackEnvironmentVariableCommand, bool>
+public class UpdateStackEnvironmentVariableCommandHandler(
+    IStackEnvironmentVariablesService environmentVariablesService,
+    ILogger<UpdateStackEnvironmentVariableCommandHandler> logger
+) : IRequestHandler<UpdateStackEnvironmentVariableCommand, bool>
 {
-    private readonly IStackEnvironmentVariablesService _environmentVariablesService;
-    private readonly ILogger<UpdateStackEnvironmentVariableCommandHandler> _logger;
-
-    public UpdateStackEnvironmentVariableCommandHandler(
-        IStackEnvironmentVariablesService environmentVariablesService,
-        ILogger<UpdateStackEnvironmentVariableCommandHandler> logger
-    )
-    {
-        _environmentVariablesService = environmentVariablesService;
-        _logger = logger;
-    }
-
     public async Task<bool> Handle(
         UpdateStackEnvironmentVariableCommand request,
         CancellationToken cancellationToken
@@ -26,7 +16,7 @@ public class UpdateStackEnvironmentVariableCommandHandler
     {
         try
         {
-            var result = await _environmentVariablesService.UpdateEnvironmentVariable(
+            var result = await environmentVariablesService.UpdateEnvironmentVariable(
                 request.Id,
                 request.StackId,
                 request.Key,
@@ -37,7 +27,7 @@ public class UpdateStackEnvironmentVariableCommandHandler
         }
         catch (Exception ex)
         {
-            _logger.LogError(
+            logger.LogError(
                 ex,
                 "Error updating environment variable {Id} for stack {StackId}",
                 request.Id,

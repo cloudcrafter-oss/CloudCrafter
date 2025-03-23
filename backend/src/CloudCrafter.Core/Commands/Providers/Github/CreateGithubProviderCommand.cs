@@ -7,20 +7,14 @@ namespace CloudCrafter.Core.Commands.Providers.Github;
 [Authorize]
 public record CreateGithubProviderCommand(string Code) : IRequest<bool>;
 
-public class CreateGithubProviderCommandHandler : IRequestHandler<CreateGithubProviderCommand, bool>
+public class CreateGithubProviderCommandHandler(IProvidersService service)
+    : IRequestHandler<CreateGithubProviderCommand, bool>
 {
-    private readonly IProvidersService _service;
-
-    public CreateGithubProviderCommandHandler(IProvidersService service)
-    {
-        _service = service;
-    }
-
     public Task<bool> Handle(
         CreateGithubProviderCommand request,
         CancellationToken cancellationToken
     )
     {
-        return _service.CreateGithubProvider(request.Code);
+        return service.CreateGithubProvider(request.Code);
     }
 }

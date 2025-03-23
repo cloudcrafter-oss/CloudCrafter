@@ -5,21 +5,14 @@ namespace CloudCrafter.Core.Commands.Servers;
 
 public record MarkServersAsUnknownAfterTimespanCommand : IRequest;
 
-public class MarkServersAsUnknownAfterTimespanCommandHandler
+public class MarkServersAsUnknownAfterTimespanCommandHandler(IServersService serversService)
     : IRequestHandler<MarkServersAsUnknownAfterTimespanCommand>
 {
-    private readonly IServersService _serversService;
-
-    public MarkServersAsUnknownAfterTimespanCommandHandler(IServersService serversService)
-    {
-        _serversService = serversService;
-    }
-
     public Task Handle(
         MarkServersAsUnknownAfterTimespanCommand request,
         CancellationToken cancellationToken
     )
     {
-        return _serversService.MarkServersStateAsUnknownAfterTimespan(TimeSpan.FromMinutes(5));
+        return serversService.MarkServersStateAsUnknownAfterTimespan(TimeSpan.FromMinutes(5));
     }
 }

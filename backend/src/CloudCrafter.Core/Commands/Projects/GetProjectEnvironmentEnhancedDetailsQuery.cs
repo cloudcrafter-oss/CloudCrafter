@@ -17,22 +17,15 @@ public class GetProjectEnvironmentEnhancedDetailsQuery
     public required Guid ProjectId { get; init; }
 }
 
-internal class GetProjectEnvironmentEnhancedDetailsQueryHandler
+internal class GetProjectEnvironmentEnhancedDetailsQueryHandler(IProjectsService service)
     : IRequestHandler<GetProjectEnvironmentEnhancedDetailsQuery, ProjectEnvironmentEnhancedDto?>
 {
-    private readonly IProjectsService _service;
-
-    public GetProjectEnvironmentEnhancedDetailsQueryHandler(IProjectsService service)
-    {
-        _service = service;
-    }
-
     public Task<ProjectEnvironmentEnhancedDto?> Handle(
         GetProjectEnvironmentEnhancedDetailsQuery request,
         CancellationToken cancellationToken
     )
     {
-        return _service.GetProjectEnvironmentEnhancedDetails(
+        return service.GetProjectEnvironmentEnhancedDetails(
             request.ProjectId,
             request.EnvironmentId
         );

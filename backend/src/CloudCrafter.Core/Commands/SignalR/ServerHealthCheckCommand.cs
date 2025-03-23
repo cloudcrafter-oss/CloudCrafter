@@ -6,17 +6,11 @@ namespace CloudCrafter.Core.Commands.SignalR;
 
 public record ServerHealthCheckCommand(Guid ServerId, HealthCheckCommandArgs Data) : IRequest;
 
-internal class ServerHealthCheckCommandHandler : IRequestHandler<ServerHealthCheckCommand>
+internal class ServerHealthCheckCommandHandler(IServerConnectivityService service)
+    : IRequestHandler<ServerHealthCheckCommand>
 {
-    private readonly IServerConnectivityService _service;
-
-    public ServerHealthCheckCommandHandler(IServerConnectivityService service)
-    {
-        _service = service;
-    }
-
     public Task Handle(ServerHealthCheckCommand request, CancellationToken cancellationToken)
     {
-        return _service.StoreServerInfo(request.ServerId, request.Data);
+        return service.StoreServerInfo(request.ServerId, request.Data);
     }
 }

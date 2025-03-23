@@ -8,20 +8,14 @@ namespace CloudCrafter.Core.Commands.Servers;
 [Authorize]
 public record GetServerDetailQuery(Guid Id) : IRequest<ServerDetailDto?>;
 
-internal class GetServerDetailQueryHandler : IRequestHandler<GetServerDetailQuery, ServerDetailDto?>
+internal class GetServerDetailQueryHandler(IServersService service)
+    : IRequestHandler<GetServerDetailQuery, ServerDetailDto?>
 {
-    private readonly IServersService _service;
-
-    public GetServerDetailQueryHandler(IServersService service)
-    {
-        _service = service;
-    }
-
     public async Task<ServerDetailDto?> Handle(
         GetServerDetailQuery request,
         CancellationToken cancellationToken
     )
     {
-        return await _service.GetServer(request.Id);
+        return await service.GetServer(request.Id);
     }
 }

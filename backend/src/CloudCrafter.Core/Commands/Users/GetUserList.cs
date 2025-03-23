@@ -12,20 +12,14 @@ namespace CloudCrafter.Core.Commands.Users;
 public record GetUserListQuery(PaginatedRequest<UserDto> Pagination)
     : IRequest<PaginatedList<UserDto>>;
 
-public class GetUserListQueryHandler : IRequestHandler<GetUserListQuery, PaginatedList<UserDto>>
+public class GetUserListQueryHandler(IUsersService service)
+    : IRequestHandler<GetUserListQuery, PaginatedList<UserDto>>
 {
-    private readonly IUsersService _service;
-
-    public GetUserListQueryHandler(IUsersService service)
-    {
-        _service = service;
-    }
-
     public async Task<PaginatedList<UserDto>> Handle(
         GetUserListQuery request,
         CancellationToken cancellationToken
     )
     {
-        return await _service.GetUsers(request.Pagination);
+        return await service.GetUsers(request.Pagination);
     }
 }

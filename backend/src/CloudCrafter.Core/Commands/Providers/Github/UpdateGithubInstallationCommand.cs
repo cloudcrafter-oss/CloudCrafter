@@ -12,19 +12,12 @@ public record UpdateGithubInstallationCommand(
     Guid GithubProviderId
 ) : IRequest;
 
-public class UpdateGithubInstallationCommandHandler
+public class UpdateGithubInstallationCommandHandler(IProvidersService service)
     : IRequestHandler<UpdateGithubInstallationCommand>
 {
-    private readonly IProvidersService _service;
-
-    public UpdateGithubInstallationCommandHandler(IProvidersService service)
-    {
-        _service = service;
-    }
-
     public Task Handle(UpdateGithubInstallationCommand request, CancellationToken cancellationToken)
     {
-        return _service.InstallGithubProvider(
+        return service.InstallGithubProvider(
             request.GithubProviderId,
             request.Request.InstallationId
         );

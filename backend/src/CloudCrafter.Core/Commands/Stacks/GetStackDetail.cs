@@ -12,20 +12,14 @@ public class GetStackDetailQuery : IRequest<StackDetailDto?>, IRequireStackAcces
     public required Guid StackId { get; init; }
 }
 
-internal class GetStackDetailQueryHandler : IRequestHandler<GetStackDetailQuery, StackDetailDto?>
+internal class GetStackDetailQueryHandler(IStacksService stacksService)
+    : IRequestHandler<GetStackDetailQuery, StackDetailDto?>
 {
-    private readonly IStacksService _stacksService;
-
-    public GetStackDetailQueryHandler(IStacksService stacksService)
-    {
-        _stacksService = stacksService;
-    }
-
     public async Task<StackDetailDto?> Handle(
         GetStackDetailQuery request,
         CancellationToken cancellationToken
     )
     {
-        return await _stacksService.GetStackDetail(request.StackId);
+        return await stacksService.GetStackDetail(request.StackId);
     }
 }

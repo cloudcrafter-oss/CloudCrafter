@@ -5,21 +5,11 @@ using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
 
-public class GetStackEnvironmentVariablesQueryHandler
-    : IRequestHandler<GetStackEnvironmentVariablesQuery, List<StackEnvironmentVariableDto>>
+public class GetStackEnvironmentVariablesQueryHandler(
+    IStackEnvironmentVariablesService environmentVariablesService,
+    ILogger<GetStackEnvironmentVariablesQueryHandler> logger
+) : IRequestHandler<GetStackEnvironmentVariablesQuery, List<StackEnvironmentVariableDto>>
 {
-    private readonly IStackEnvironmentVariablesService _environmentVariablesService;
-    private readonly ILogger<GetStackEnvironmentVariablesQueryHandler> _logger;
-
-    public GetStackEnvironmentVariablesQueryHandler(
-        IStackEnvironmentVariablesService environmentVariablesService,
-        ILogger<GetStackEnvironmentVariablesQueryHandler> logger
-    )
-    {
-        _environmentVariablesService = environmentVariablesService;
-        _logger = logger;
-    }
-
     public async Task<List<StackEnvironmentVariableDto>> Handle(
         GetStackEnvironmentVariablesQuery request,
         CancellationToken cancellationToken
@@ -27,7 +17,7 @@ public class GetStackEnvironmentVariablesQueryHandler
     {
         try
         {
-            return await _environmentVariablesService.GetEnvironmentVariables(
+            return await environmentVariablesService.GetEnvironmentVariables(
                 request.StackId,
                 request.IncludeInherited,
                 request.IncludeSecrets
@@ -35,7 +25,7 @@ public class GetStackEnvironmentVariablesQueryHandler
         }
         catch (Exception ex)
         {
-            _logger.LogError(
+            logger.LogError(
                 ex,
                 "Error retrieving environment variables for stack {StackId}",
                 request.StackId

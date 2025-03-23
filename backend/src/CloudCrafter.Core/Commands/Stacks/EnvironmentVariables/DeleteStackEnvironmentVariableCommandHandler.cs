@@ -4,21 +4,11 @@ using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
 
-public class DeleteStackEnvironmentVariableCommandHandler
-    : IRequestHandler<DeleteStackEnvironmentVariableCommand, bool>
+public class DeleteStackEnvironmentVariableCommandHandler(
+    IStackEnvironmentVariablesService environmentVariablesService,
+    ILogger<DeleteStackEnvironmentVariableCommandHandler> logger
+) : IRequestHandler<DeleteStackEnvironmentVariableCommand, bool>
 {
-    private readonly IStackEnvironmentVariablesService _environmentVariablesService;
-    private readonly ILogger<DeleteStackEnvironmentVariableCommandHandler> _logger;
-
-    public DeleteStackEnvironmentVariableCommandHandler(
-        IStackEnvironmentVariablesService environmentVariablesService,
-        ILogger<DeleteStackEnvironmentVariableCommandHandler> logger
-    )
-    {
-        _environmentVariablesService = environmentVariablesService;
-        _logger = logger;
-    }
-
     public async Task<bool> Handle(
         DeleteStackEnvironmentVariableCommand request,
         CancellationToken cancellationToken
@@ -26,7 +16,7 @@ public class DeleteStackEnvironmentVariableCommandHandler
     {
         try
         {
-            var result = await _environmentVariablesService.DeleteEnvironmentVariable(
+            var result = await environmentVariablesService.DeleteEnvironmentVariable(
                 request.Id,
                 request.StackId
             );
@@ -35,7 +25,7 @@ public class DeleteStackEnvironmentVariableCommandHandler
         }
         catch (Exception ex)
         {
-            _logger.LogError(
+            logger.LogError(
                 ex,
                 "Error deleting environment variable {Id} for stack {StackId}",
                 request.Id,

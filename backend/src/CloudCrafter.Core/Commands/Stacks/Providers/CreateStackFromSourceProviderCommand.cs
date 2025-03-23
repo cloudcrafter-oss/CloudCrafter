@@ -26,26 +26,19 @@ public class CreateStackFromSourceProviderCommand
 
     public required string Path { get; init; }
 
+    /// <summary>
+    ///     Only cosmetic, RepositoryId is leading
+    /// </summary>
+    public required string Repository { get; set; }
+
     public required Guid EnvironmentId { get; set; }
 
     public required Guid ServerId { get; set; }
-
-    /// <summary>
-    /// Only cosmetic, RepositoryId is leading
-    /// </summary>
-    public required string Repository { get; set; }
 }
 
-internal class CreateStackFromSourceProviderCommandHandler
+internal class CreateStackFromSourceProviderCommandHandler(IStacksService service)
     : IRequestHandler<CreateStackFromSourceProviderCommand, StackCreatedDto>
 {
-    private readonly IStacksService _service;
-
-    public CreateStackFromSourceProviderCommandHandler(IStacksService service)
-    {
-        _service = service;
-    }
-
     public async Task<StackCreatedDto> Handle(
         CreateStackFromSourceProviderCommand request,
         CancellationToken cancellationToken
@@ -66,6 +59,6 @@ internal class CreateStackFromSourceProviderCommandHandler
             },
         };
 
-        return await _service.CreateStack(args);
+        return await service.CreateStack(args);
     }
 }
