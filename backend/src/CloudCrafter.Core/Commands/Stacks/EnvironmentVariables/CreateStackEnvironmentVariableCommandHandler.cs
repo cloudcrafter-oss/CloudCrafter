@@ -5,19 +5,19 @@ namespace CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
 
 public class CreateStackEnvironmentVariableCommandHandler(
     IStackEnvironmentVariablesService environmentVariablesService
-) : IRequestHandler<CreateStackEnvironmentVariableCommand, bool>
+) : IRequestHandler<CreateStackEnvironmentVariableCommand, Guid>
 {
-    public async Task<bool> Handle(
+    public async Task<Guid> Handle(
         CreateStackEnvironmentVariableCommand request,
         CancellationToken cancellationToken
     )
     {
-        await environmentVariablesService.CreateEnvironmentVariable(
+        var id = await environmentVariablesService.CreateEnvironmentVariable(
             request.StackId,
             request.Key,
             request.Value
         );
 
-        return true;
+        return id;
     }
 }

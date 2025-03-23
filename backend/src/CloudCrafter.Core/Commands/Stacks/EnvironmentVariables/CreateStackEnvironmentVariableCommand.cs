@@ -6,7 +6,7 @@ using MediatR;
 namespace CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
 
 [Authorize]
-public record CreateStackEnvironmentVariableCommand : IRequest<bool>
+public record CreateStackEnvironmentVariableCommand : IRequest<Guid>
 {
     [JsonIgnore]
     public Guid StackId { get; set; }

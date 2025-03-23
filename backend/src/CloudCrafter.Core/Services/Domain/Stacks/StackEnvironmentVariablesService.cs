@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-using AutoMapper;
 using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Repositories;
@@ -54,7 +52,7 @@ public class StackEnvironmentVariablesService(
         }
     }
 
-    public async Task CreateEnvironmentVariable(
+    public async Task<Guid> CreateEnvironmentVariable(
         Guid stackId,
         string key,
         string value,
@@ -86,6 +84,8 @@ public class StackEnvironmentVariablesService(
         // Add the variable to the context first
         await repository.AddEnvironmentVariable(variable);
         await repository.SaveChangesAsync();
+
+        return variable.Id;
     }
 
     public async Task<bool> UpdateEnvironmentVariable(

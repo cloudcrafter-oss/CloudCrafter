@@ -114,7 +114,6 @@ public class StacksController : CloudCrafterController
 
     [HttpPost("{stackId}/environment-variables")]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IResult> PostCreateEnvironmentVariable(
         ISender sender,
         [FromRoute] Guid stackId,
@@ -122,8 +121,8 @@ public class StacksController : CloudCrafterController
     )
     {
         command.StackId = stackId;
-        var created = await sender.Send(command);
-        return created ? Results.Created() : Results.BadRequest();
+        await sender.Send(command);
+        return Results.Created();
     }
 
     [HttpPut("{stackId}/environment-variables/{id}")]

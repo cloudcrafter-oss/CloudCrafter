@@ -72,8 +72,22 @@ public class CreateStackEnvironmentVariableCommandTest : BaseTestFixture
 
         var stack = await CreateSampleStack();
 
-        await SendAsync(Command with { StackId = stack.Id, Key = "Test", Value = "Dummy" });
+        var result = await SendAsync(
+            Command with
+            {
+                StackId = stack.Id,
+                Key = "Test",
+                Value = "Dummy",
+            }
+        );
 
         await AssertEnvCount(1);
+
+        var entity = FetchEntity<StackEnvironmentVariable>(x => x.Id == result);
+        entity.Should().NotBeNull();
+        entity!.Key.Should().Be("Test");
+        entity!.Value.Should().Be("Dummy");
+        entity!.IsSecret.Should().BeFalse();
+        entity.StackId.Should().Be(stack.Id);
     }
 }

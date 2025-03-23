@@ -27,7 +27,7 @@ public interface IStackEnvironmentVariablesService
     /// <param name="isSecret">Whether the variable is a secret</param>
     /// <param name="type">Type of environment variable (BuildTime, Runtime, Both)</param>
     /// <returns>True if successfully created, false otherwise</returns>
-    Task CreateEnvironmentVariable(
+    Task<Guid> CreateEnvironmentVariable(
         Guid stackId,
         string key,
         string value,
