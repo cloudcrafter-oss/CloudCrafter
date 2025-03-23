@@ -41,16 +41,6 @@ public static class FakerInstances
             .RuleFor(x => x.Environments, new List<Environment>())
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
-    public static Faker<SourceProvider> SourceProviderFaker(Guid? githubProviderId = null) =>
-        new Faker<SourceProvider>()
-            .StrictMode(true)
-            .RuleFor(x => x.Id, f => Guid.NewGuid())
-            .RuleFor(x => x.Name, f => f.Person.FirstName)
-            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
-            .RuleFor(x => x.GithubProvider, f => null)
-            .RuleFor(x => x.GithubProviderId, f => githubProviderId)
-            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
-
     public static Faker<GithubProvider> GithubProviderFaker
     {
         get
@@ -86,6 +76,36 @@ public static class FakerInstances
 
     public static StackServiceType StackServiceAppTypeType =>
         new() { Id = StackServiceTypeConstants.App, Type = nameof(StackServiceTypeConstants.App) };
+
+    public static Faker<StackEnvironmentVariable> StackEnvironmentVariableFaker(Stack stack)
+    {
+        return new Faker<StackEnvironmentVariable>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, Guid.NewGuid)
+            .RuleFor(x => x.Key, f => f.Lorem.Word())
+            .RuleFor(x => x.Value, f => f.Lorem.Word())
+            .RuleFor(x => x.StackId, stack.Id)
+            .RuleFor(x => x.IsSecret, f => false)
+            // ReSharper disable once RedundantCast
+            .RuleFor(x => x.Stack, f => (Stack?)null)
+            .RuleFor(x => x.Type, f => EnvironmentVariableType.Both)
+            .RuleFor(x => x.CreatedBy, f => null)
+            .RuleFor(x => x.LastModifiedBy, f => null)
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    }
+
+    public static Faker<SourceProvider> SourceProviderFaker(Guid? githubProviderId = null)
+    {
+        return new Faker<SourceProvider>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, f => Guid.NewGuid())
+            .RuleFor(x => x.Name, f => f.Person.FirstName)
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.GithubProvider, f => null)
+            .RuleFor(x => x.GithubProviderId, f => githubProviderId)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    }
 
     public static Faker<Deployment> DeploymentFaker(Stack Stack)
     {

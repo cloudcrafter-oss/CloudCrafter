@@ -1,6 +1,7 @@
 using CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -89,5 +90,42 @@ public class CreateStackEnvironmentVariableCommandTest : BaseTestFixture
         entity!.Value.Should().Be("Dummy");
         entity!.IsSecret.Should().BeFalse();
         entity.StackId.Should().Be(stack.Id);
+    }
+
+    [Test]
+    public async Task ShouldNotBeAbleToCreateAnEnvironmentVariableWithSameKey()
+    {
+        await RunAsAdministratorAsync();
+        await AssertEnvCount(0);
+
+        var stack = await CreateSampleStack();
+
+        var envVar = FakerInstances
+            .StackEnvironmentVariableFaker(stack)
+            .RuleFor(x => x.Key, "MY_KEY")
+            .Generate();
+
+        await AddAsync(envVar);
+        await AssertEnvCount(1);
+
+        var exception = Assert.ThrowsAsync<ValidationException>(
+            async () =>
+                await SendAsync(
+                    Command with
+                    {
+                        StackId = stack.Id,
+                        Key = "MY_KEY",
+                        Value = "Another value",
+                    }
+                )
+        );
+
+        exception.Should().NotBeNull();
+        exception!.Errors.Should().ContainKey("EnvironmentVariable").And.HaveCount(1);
+        exception!
+            .Errors["EnvironmentVariable"]
+            .Should()
+            .Contain("Environment variable key must be unique");
+        await AssertEnvCount(1);
     }
 }

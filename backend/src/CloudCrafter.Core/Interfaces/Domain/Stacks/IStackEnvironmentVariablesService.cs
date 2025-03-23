@@ -45,7 +45,7 @@ public interface IStackEnvironmentVariablesService
     /// <param name="isSecret">Whether the variable is a secret</param>
     /// <param name="type">Type of environment variable (BuildTime, Runtime, Both)</param>
     /// <returns>True if successfully updated, false otherwise</returns>
-    Task<bool> UpdateEnvironmentVariable(
+    Task<Guid> UpdateEnvironmentVariable(
         Guid id,
         Guid stackId,
         string key,

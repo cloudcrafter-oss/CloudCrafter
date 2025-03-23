@@ -137,8 +137,8 @@ public class StacksController : CloudCrafterController
     {
         command.StackId = stackId;
         command.Id = id;
-        var updated = await sender.Send(command);
-        return updated ? Results.Ok() : Results.BadRequest();
+        await sender.Send(command);
+        return Results.Ok();
     }
 
     [HttpDelete("{stackId}/environment-variables/{id}")]

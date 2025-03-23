@@ -3,7 +3,9 @@ using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Stacks;
 using CloudCrafter.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 
 namespace CloudCrafter.Core.Services.Domain.Stacks;
 
@@ -83,12 +85,20 @@ public class StackEnvironmentVariablesService(
 
         // Add the variable to the context first
         await repository.AddEnvironmentVariable(variable);
-        await repository.SaveChangesAsync();
+        try
+        {
+            await repository.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+            when (ex.InnerException is PostgresException { SqlState: "23505" })
+        {
+            throw StackValidations.Create(StackValidations.EnvironmentVariableNotUnique);
+        }
 
         return variable.Id;
     }
 
-    public async Task<bool> UpdateEnvironmentVariable(
+    public async Task<Guid> UpdateEnvironmentVariable(
         Guid id,
         Guid stackId,
         string key,
@@ -97,105 +107,40 @@ public class StackEnvironmentVariablesService(
         EnvironmentVariableType? type = null
     )
     {
-        try
+        // Get the stack
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
         {
-            // Get the stack
-            var stack = await repository.GetStack(stackId);
-
-            if (stack == null)
-            {
-                logger.LogWarning("Stack with id {StackId} not found", stackId);
-                return false;
-            }
-
-            // Find the variable to update
-            var variable = stack.EnvironmentVariables.FirstOrDefault(v => v.Id == id);
-
-            if (variable == null)
-            {
-                logger.LogWarning(
-                    "Environment variable with id {Id} not found for stack {StackId}",
-                    id,
-                    stackId
-                );
-                return false;
-            }
-
-            // If key is changed, check for duplicates
-            if (key != variable.Key)
-            {
-                var existingVar = stack.EnvironmentVariables.FirstOrDefault(v =>
-                    v.Key == key && v.Id != id
-                );
-
-                if (existingVar != null)
-                {
-                    logger.LogWarning(
-                        "Environment variable with key {Key} already exists for stack {StackId}",
-                        key,
-                        stackId
-                    );
-                    return false;
-                }
-            }
-
-            // Record old values for history tracking
-            var oldKey = variable.Key;
-            var oldValue = variable.Value;
-
-            // Update the variable
-            variable.Key = key;
-            variable.Value = value;
-            variable.UpdatedAt = DateTime.UtcNow;
-
-            if (isSecret.HasValue)
-            {
-                variable.IsSecret = isSecret.Value;
-            }
-            else if (key != oldKey)
-            {
-                // Auto-detect secrets if key changed and isSecret not explicitly set
-                variable.IsSecret =
-                    key.Contains("SECRET") || key.Contains("PASSWORD") || key.Contains("KEY");
-            }
-
-            if (type.HasValue)
-            {
-                variable.Type = type.Value;
-            }
-
-            await repository.SaveChangesAsync();
-
-            // Add to history record
-            logger.LogInformation(
-                "Environment variable history: Stack {StackId}, Variable {Key}, Change {ChangeType}, "
-                    + "Old Value: {OldValue}, New Value: {NewValue}",
-                stackId,
-                key,
-                "Updated",
-                variable.IsSecret ? "[HIDDEN]" : oldValue,
-                variable.IsSecret ? "[HIDDEN]" : value
-            );
-
-            logger.LogInformation(
-                "Updated environment variable from {OldKey} to {NewKey} for stack {StackId}",
-                oldKey,
-                key,
-                stackId
-            );
-
-            return true;
+            throw StackValidations.Create(StackValidations.StackNotFound);
         }
-        catch (Exception ex)
+
+        // Find the variable to update
+        var variable = stack.EnvironmentVariables.FirstOrDefault(v => v.Id == id);
+
+        if (variable == null)
         {
-            logger.LogError(
-                ex,
-                "Error updating environment variable {Id} for stack {StackId}",
-                id,
-                stackId
-            );
-            return false;
+            throw StackValidations.Create(StackValidations.EnvironmentVariableNotFound);
         }
+
+        // Update the variable
+        variable.Key = key;
+        variable.Value = value;
+        variable.UpdatedAt = DateTime.UtcNow;
+
+        if (isSecret.HasValue)
+        {
+            variable.IsSecret = isSecret.Value;
+        }
+
+        if (type.HasValue)
+        {
+            variable.Type = type.Value;
+        }
+
+        await repository.SaveChangesAsync();
+
+        return variable.Id;
     }
 
     public async Task<bool> DeleteEnvironmentVariable(Guid id, Guid stackId)

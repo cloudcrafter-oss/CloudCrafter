@@ -6,6 +6,12 @@ public static class StackValidations
 {
     public static ValidationError StackNotFound => new("Stack", "Stack not found");
 
+    public static ValidationError EnvironmentVariableNotFound =>
+        new("EnvironmentVariable", "Environment variable not found");
+
+    public static ValidationError EnvironmentVariableNotUnique =>
+        new("EnvironmentVariable", "Environment variable key must be unique");
+
     public static ValidationException Create(ValidationError error)
     {
         return new ValidationException(error);
