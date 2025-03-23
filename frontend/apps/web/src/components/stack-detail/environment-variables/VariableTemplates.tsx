@@ -38,7 +38,7 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { VariableType } from './EnvironmentVariables'
+import { VariableType } from './EnvironmentVariableSheet'
 
 // Define the template structure
 interface TemplateVariable {

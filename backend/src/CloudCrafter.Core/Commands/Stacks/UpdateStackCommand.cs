@@ -34,17 +34,9 @@ public class UpdateStackGithubSettings
     public string? Path { get; set; }
 }
 
-internal class UpdateStackCommandHandler : IRequestHandler<UpdateStackCommand, StackDetailDto?>
+internal class UpdateStackCommandHandler(IStacksService stackService, IGitService gitService)
+    : IRequestHandler<UpdateStackCommand, StackDetailDto?>
 {
-    private readonly IStacksService _stackService;
-    private readonly IGitService _gitService;
-
-    public UpdateStackCommandHandler(IStacksService stackService, IGitService gitService)
-    {
-        _stackService = stackService;
-        _gitService = gitService;
-    }
-
     public async Task<StackDetailDto?> Handle(
         UpdateStackCommand request,
         CancellationToken cancellationToken
@@ -52,7 +44,7 @@ internal class UpdateStackCommandHandler : IRequestHandler<UpdateStackCommand, S
     {
         if (!string.IsNullOrEmpty(request.GitPublicSettings?.Repository))
         {
-            var isValidGitRepo = await _gitService.ValidateRepository(
+            var isValidGitRepo = await gitService.ValidateRepository(
                 request.GitPublicSettings.Repository,
                 request.GitPublicSettings.Path,
                 request.GitPublicSettings.Branch
@@ -66,7 +58,7 @@ internal class UpdateStackCommandHandler : IRequestHandler<UpdateStackCommand, S
 
         if (!string.IsNullOrWhiteSpace(request.GithubSettings?.Branch))
         {
-            var isValidGitBranch = await _gitService.ValidateSourceProviderBranch(
+            var isValidGitBranch = await gitService.ValidateSourceProviderBranch(
                 request.StackId,
                 request.GithubSettings.Branch
             );
@@ -77,7 +69,7 @@ internal class UpdateStackCommandHandler : IRequestHandler<UpdateStackCommand, S
             }
         }
 
-        var stack = await _stackService.UpdateStack(request);
+        var stack = await stackService.UpdateStack(request);
 
         return stack;
     }

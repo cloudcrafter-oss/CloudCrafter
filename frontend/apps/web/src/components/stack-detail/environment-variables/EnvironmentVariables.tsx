@@ -1,6 +1,13 @@
 'use client'
 
 import type { StackDetailDto } from '@cloudcrafter/api'
+import { toast } from 'sonner'
+import {
+	type EnvVar,
+	EnvironmentVariableSheet,
+	VariableType,
+} from './EnvironmentVariableSheet'
+
 import {
 	Accordion,
 	AccordionContent,
@@ -16,25 +23,9 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@cloudcrafter/ui/components/card'
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from '@cloudcrafter/ui/components/dialog'
 import { Input } from '@cloudcrafter/ui/components/input'
 import { Label } from '@cloudcrafter/ui/components/label'
 import { ScrollArea } from '@cloudcrafter/ui/components/scroll-area'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@cloudcrafter/ui/components/select'
 import { Switch } from '@cloudcrafter/ui/components/switch'
 import {
 	Table,
@@ -50,8 +41,9 @@ import {
 	TabsList,
 	TabsTrigger,
 } from '@cloudcrafter/ui/components/tabs'
+
 import {
-	Clipboard,
+	Copy,
 	Download,
 	Edit,
 	Eye,
@@ -63,15 +55,8 @@ import {
 	RefreshCw,
 	Trash2,
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
 
-// Define the types based on memories
-export enum VariableType {
-	BuildTime = 'BuildTime',
-	Runtime = 'Runtime',
-	Both = 'Both',
-}
+import { useEffect, useState } from 'react'
 
 interface EnvVarGroup {
 	id: string
@@ -80,23 +65,10 @@ interface EnvVarGroup {
 	inheritFromParent: boolean
 }
 
-interface EnvVar {
-	id: string
-	key: string
-	value: string
-	isSecret: boolean
-	variableType: VariableType
-	groupId?: string
-	description?: string
-	isInherited: boolean
-	createdAt: string
-	modifiedAt: string
-}
-
 export const EnvironmentVariables: React.FC<{
 	stackDetails: StackDetailDto
 }> = ({ stackDetails }) => {
-	// State for environment variables and UI
+	// Environment variables state
 	const [variables, setVariables] = useState<EnvVar[]>([])
 	const [groups, setGroups] = useState<EnvVarGroup[]>([])
 	const [isLoading, setIsLoading] = useState(true)
@@ -105,15 +77,25 @@ export const EnvironmentVariables: React.FC<{
 	const [includeInherited, setIncludeInherited] = useState(true)
 	const [searchTerm, setSearchTerm] = useState('')
 	const [groupView, setGroupView] = useState(true)
-	const [addDialogOpen, setAddDialogOpen] = useState(false)
+
+	// Sheet state for adding/editing variables
+	const [sheetOpen, setSheetOpen] = useState(false)
 	const [editingVariable, setEditingVariable] = useState<EnvVar | null>(null)
+	const [newVariable, setNewVariable] = useState<Partial<EnvVar>>({
+		key: '',
+		value: '',
+		groupId: '',
+		variableType: VariableType.Both,
+		isSecret: false,
+		isInherited: false,
+	})
 
 	// Mock loading data - would be replaced with actual API call
 	useEffect(() => {
 		// Simulate loading environment variables
 		const mockLoadData = async () => {
 			setIsLoading(true)
-			await new Promise((resolve) => setTimeout(resolve, 1000)) // Simulate network request
+			await new Promise((resolve) => setTimeout(resolve, 1000))
 
 			// Mock data
 			const mockGroups: EnvVarGroup[] = [
@@ -208,29 +190,97 @@ export const EnvironmentVariables: React.FC<{
 		mockLoadData()
 	}, [])
 
-	// New variable initial state
-	const initialNewVariable = {
-		id: '',
-		key: '',
-		value: '',
-		isSecret: false,
-		variableType: VariableType.Both,
-		description: '',
-		isInherited: false,
-		createdAt: new Date().toISOString(),
-		modifiedAt: new Date().toISOString(),
+	// Add or update a variable
+	const handleSaveVariable = () => {
+		const isEditing = !!editingVariable
+		const variable = isEditing ? editingVariable : newVariable
+
+		// Form validation
+		if (!variable.key) {
+			toast.error('Key is required')
+			return
+		}
+
+		// Validate key format (uppercase letters, numbers, underscores, starts with letter)
+		const keyRegex = /^[A-Z][A-Z0-9_]*$/
+		if (!keyRegex.test(variable.key)) {
+			toast.error(
+				'Key must start with an uppercase letter and contain only uppercase letters, numbers, and underscores',
+			)
+			return
+		}
+
+		// Validate key and value length
+		if (variable.key.length > 100) {
+			toast.error('Key must be 100 characters or less')
+			return
+		}
+
+		if (variable.value && variable.value.length > 2000) {
+			toast.error('Value must be 2000 characters or less')
+			return
+		}
+
+		// Check for duplicate keys
+		if (!isEditing && variables.some((v) => v.key === variable.key)) {
+			toast.error('A variable with this key already exists')
+			return
+		}
+
+		// Handle saving
+		if (isEditing && editingVariable) {
+			// Update existing variable
+			setVariables(
+				variables.map((v) =>
+					v.id === editingVariable.id
+						? { ...editingVariable, modifiedAt: new Date().toISOString() }
+						: v,
+				),
+			)
+			toast.success(`Environment variable ${editingVariable.key} updated`)
+		} else {
+			// Create new variable
+			const newVarComplete: EnvVar = {
+				id: crypto.randomUUID(),
+				key: variable.key,
+				value: variable.value || '',
+				groupId: variable.groupId || '',
+				variableType: variable.variableType || VariableType.Both,
+				description: variable.description || '',
+				isSecret: variable.isSecret || false,
+				isInherited: false,
+				createdAt: new Date().toISOString(),
+				modifiedAt: new Date().toISOString(),
+			}
+			setVariables([...variables, newVarComplete])
+			toast.success(`Environment variable ${newVarComplete.key} created`)
+
+			// Reset form
+			setNewVariable({
+				key: '',
+				value: '',
+				groupId: '',
+				variableType: VariableType.Both,
+				isSecret: false,
+				isInherited: false,
+			})
+		}
+
+		setSheetOpen(false)
+		setEditingVariable(null)
 	}
 
-	const [newVariable, setNewVariable] = useState<
-		Omit<EnvVar, 'id' | 'createdAt' | 'modifiedAt' | 'isInherited'>
-	>({
-		key: '',
-		value: '',
-		isSecret: false,
-		variableType: VariableType.Both,
-		groupId: undefined,
-		description: '',
-	})
+	// Handle edit button click
+	const handleEditVariable = (variable: EnvVar) => {
+		setEditingVariable({ ...variable })
+		setSheetOpen(true)
+	}
+
+	// Handle add button click
+	const handleAddVariable = () => {
+		setEditingVariable(null)
+		setSheetOpen(true)
+	}
 
 	// Filter variables based on search, tab, and other criteria
 	const filteredVariables = variables.filter((variable) => {
@@ -271,81 +321,6 @@ export const EnvironmentVariables: React.FC<{
 	const ungroupedVariables = filteredVariables.filter((v) => !v.groupId)
 
 	// Handlers for CRUD operations
-	const handleAddVariable = () => {
-		// Validate the new variable
-		if (!newVariable.key || !newVariable.key.match(/^[A-Z][A-Z0-9_]*$/)) {
-			toast.error(
-				'Key must start with a capital letter and contain only uppercase letters, numbers, and underscores',
-			)
-			return
-		}
-
-		if (newVariable.key.length > 100) {
-			toast.error('Key must be 100 characters or less')
-			return
-		}
-
-		if (newVariable.value.length > 2000) {
-			toast.error('Value must be 2000 characters or less')
-			return
-		}
-
-		if (variables.some((v) => v.key === newVariable.key)) {
-			toast.error('A variable with this key already exists')
-			return
-		}
-
-		// Add the new variable (in a real app, this would be an API call)
-		const id = `v${variables.length + 1}`
-		const timestamp = new Date().toISOString()
-
-		setVariables([
-			...variables,
-			{
-				...newVariable,
-				id,
-				isInherited: false,
-				createdAt: timestamp,
-				modifiedAt: timestamp,
-			},
-		])
-
-		// Reset form and close dialog
-		setNewVariable({
-			key: '',
-			value: '',
-			isSecret: false,
-			variableType: VariableType.Both,
-			groupId: undefined,
-			description: '',
-		})
-
-		setAddDialogOpen(false)
-		toast.success('Variable added successfully')
-	}
-
-	const handleEditVariable = (variable: EnvVar) => {
-		setEditingVariable(variable)
-		setAddDialogOpen(true)
-	}
-
-	const handleUpdateVariable = () => {
-		if (!editingVariable) return
-
-		// Update the variable (in a real app, this would be an API call)
-		setVariables(
-			variables.map((v) =>
-				v.id === editingVariable.id
-					? { ...editingVariable, modifiedAt: new Date().toISOString() }
-					: v,
-			),
-		)
-
-		setEditingVariable(null)
-		setAddDialogOpen(false)
-		toast.success('Variable updated successfully')
-	}
-
 	const handleDeleteVariable = (id: string) => {
 		// Delete the variable (in a real app, this would be an API call)
 		setVariables(variables.filter((v) => v.id !== id))
@@ -405,7 +380,7 @@ export const EnvironmentVariables: React.FC<{
 							at build time, runtime, or both.
 						</CardDescription>
 					</div>
-					<div className='flex gap-2'>
+					<div className='flex flex-wrap gap-2'>
 						<Button
 							variant='outline'
 							onClick={handleExportVariables}
@@ -414,232 +389,18 @@ export const EnvironmentVariables: React.FC<{
 							<Download className='h-4 w-4 mr-2' />
 							Export
 						</Button>
-						<Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
-							<DialogTrigger asChild>
-								<Button onClick={() => setEditingVariable(null)}>
-									<PlusCircle className='h-4 w-4 mr-2' />
-									Add Variable
-								</Button>
-							</DialogTrigger>
-							<DialogContent className='sm:max-w-[525px]'>
-								<DialogHeader>
-									<DialogTitle>
-										{editingVariable ? 'Edit Variable' : 'Add New Variable'}
-									</DialogTitle>
-									<DialogDescription>
-										{editingVariable
-											? 'Update your environment variable details below.'
-											: 'Create a new environment variable for your stack.'}
-									</DialogDescription>
-								</DialogHeader>
-								<div className='grid gap-4 py-4'>
-									<div className='grid grid-cols-4 items-center gap-4'>
-										<Label htmlFor='key' className='text-right'>
-											Key
-										</Label>
-										<Input
-											id='key'
-											className='col-span-3'
-											value={
-												editingVariable ? editingVariable.key : newVariable.key
-											}
-											onChange={(e) => {
-												if (editingVariable) {
-													setEditingVariable({
-														...editingVariable,
-														key: e.target.value,
-													})
-												} else {
-													setNewVariable({
-														...newVariable,
-														key: e.target.value,
-													})
-												}
-											}}
-											placeholder='DATABASE_URL'
-											disabled={editingVariable?.isInherited || false}
-										/>
-									</div>
-									<div className='grid grid-cols-4 items-center gap-4'>
-										<Label htmlFor='value' className='text-right'>
-											Value
-										</Label>
-										<Input
-											id='value'
-											className='col-span-3'
-											value={
-												editingVariable
-													? editingVariable.value
-													: newVariable.value
-											}
-											onChange={(e) => {
-												if (editingVariable) {
-													setEditingVariable({
-														...editingVariable,
-														value: e.target.value,
-													})
-												} else {
-													setNewVariable({
-														...newVariable,
-														value: e.target.value,
-													})
-												}
-											}}
-											placeholder='postgres://username:password@localhost:5432/mydatabase'
-											disabled={editingVariable?.isInherited || false}
-										/>
-									</div>
-									<div className='grid grid-cols-4 items-center gap-4'>
-										<Label htmlFor='variable-type' className='text-right'>
-											Type
-										</Label>
-										<Select
-											value={
-												editingVariable
-													? editingVariable.variableType
-													: newVariable.variableType
-											}
-											onValueChange={(value) => {
-												if (editingVariable) {
-													setEditingVariable({
-														...editingVariable,
-														variableType: value as VariableType,
-													})
-												} else {
-													setNewVariable({
-														...newVariable,
-														variableType: value as VariableType,
-													})
-												}
-											}}
-											disabled={editingVariable?.isInherited || false}
-										>
-											<SelectTrigger className='col-span-3'>
-												<SelectValue placeholder='Select type' />
-											</SelectTrigger>
-											<SelectContent>
-												<SelectItem value={VariableType.Both}>
-													Both (Build & Runtime)
-												</SelectItem>
-												<SelectItem value={VariableType.BuildTime}>
-													Build Time Only
-												</SelectItem>
-												<SelectItem value={VariableType.Runtime}>
-													Runtime Only
-												</SelectItem>
-											</SelectContent>
-										</Select>
-									</div>
-									<div className='grid grid-cols-4 items-center gap-4'>
-										<Label htmlFor='group' className='text-right'>
-											Group
-										</Label>
-										<Select
-											value={
-												editingVariable
-													? editingVariable.groupId
-													: newVariable.groupId
-											}
-											onValueChange={(value) => {
-												if (editingVariable) {
-													setEditingVariable({
-														...editingVariable,
-														groupId: value,
-													})
-												} else {
-													setNewVariable({ ...newVariable, groupId: value })
-												}
-											}}
-											disabled={editingVariable?.isInherited || false}
-										>
-											<SelectTrigger className='col-span-3'>
-												<SelectValue placeholder='Select group (optional)' />
-											</SelectTrigger>
-											<SelectContent>
-												<SelectItem value=''>No Group</SelectItem>
-												{groups.map((group) => (
-													<SelectItem key={group.id} value={group.id}>
-														{group.name}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
-									</div>
-									<div className='grid grid-cols-4 items-center gap-4'>
-										<Label htmlFor='description' className='text-right'>
-											Description
-										</Label>
-										<Input
-											id='description'
-											className='col-span-3'
-											value={
-												editingVariable
-													? editingVariable.description || ''
-													: newVariable.description || ''
-											}
-											onChange={(e) => {
-												if (editingVariable) {
-													setEditingVariable({
-														...editingVariable,
-														description: e.target.value,
-													})
-												} else {
-													setNewVariable({
-														...newVariable,
-														description: e.target.value,
-													})
-												}
-											}}
-											placeholder='Optional description'
-											disabled={editingVariable?.isInherited || false}
-										/>
-									</div>
-									<div className='grid grid-cols-4 items-center gap-4'>
-										<Label htmlFor='is-secret' className='text-right'>
-											Secret Value
-										</Label>
-										<div className='flex items-center space-x-2 col-span-3'>
-											<Switch
-												id='is-secret'
-												checked={
-													editingVariable
-														? editingVariable.isSecret
-														: newVariable.isSecret
-												}
-												onCheckedChange={(checked) => {
-													if (editingVariable) {
-														setEditingVariable({
-															...editingVariable,
-															isSecret: checked,
-														})
-													} else {
-														setNewVariable({
-															...newVariable,
-															isSecret: checked,
-														})
-													}
-												}}
-												disabled={editingVariable?.isInherited || false}
-											/>
-											<Label htmlFor='is-secret'>
-												Mask this value in logs and UI
-											</Label>
-										</div>
-									</div>
-								</div>
-								<DialogFooter>
-									<Button
-										type='submit'
-										onClick={
-											editingVariable ? handleUpdateVariable : handleAddVariable
-										}
-										disabled={editingVariable?.isInherited || false}
-									>
-										{editingVariable ? 'Update Variable' : 'Add Variable'}
-									</Button>
-								</DialogFooter>
-							</DialogContent>
-						</Dialog>
+						<EnvironmentVariableSheet
+							open={sheetOpen}
+							onOpenChange={setSheetOpen}
+							editingVariable={editingVariable}
+							groups={groups}
+							onSave={handleSaveVariable}
+							stackDetails={stackDetails}
+						/>
+						<Button onClick={handleAddVariable}>
+							<PlusCircle className='h-4 w-4 mr-2' />
+							Add Variable
+						</Button>
 					</div>
 				</div>
 			</CardHeader>
@@ -704,7 +465,7 @@ export const EnvironmentVariables: React.FC<{
 									<Button
 										variant='outline'
 										className='mt-4'
-										onClick={() => setAddDialogOpen(true)}
+										onClick={() => setSheetOpen(true)}
 									>
 										<PlusCircle className='h-4 w-4 mr-2' />
 										Add your first variable
@@ -824,11 +585,13 @@ const VariablesTable: React.FC<VariablesTableProps> = ({
 		<TableBody>
 			{variables.map((variable) => (
 				<TableRow key={variable.id}>
-					<TableCell className='font-mono'>
+					<TableCell className='font-mono relative'>
 						<div className='flex items-center gap-2'>
 							{variable.key}
 							{variable.isSecret && (
-								<Lock className='h-3 w-3 text-muted-foreground' />
+								<div className='absolute top-0 right-0 p-2'>
+									<Lock className='h-4 w-4 text-muted-foreground' />
+								</div>
 							)}
 							{variable.isInherited && (
 								<Badge variant='secondary' className='text-xs'>
@@ -852,7 +615,7 @@ const VariablesTable: React.FC<VariablesTableProps> = ({
 								onClick={() => onCopy(variable.value)}
 								title='Copy to clipboard'
 							>
-								<Clipboard className='h-3 w-3' />
+								<Copy className='h-3 w-3' />
 							</Button>
 						</div>
 					</TableCell>
