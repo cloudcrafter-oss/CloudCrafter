@@ -11,13 +11,9 @@ namespace CloudCrafter.Core.Services.Domain.Stacks;
 
 public class StackEnvironmentVariablesService(
     IStackRepository repository,
-    ILogger<StackEnvironmentVariablesService> logger,
-    IMapper mapper
+    ILogger<StackEnvironmentVariablesService> logger
 ) : IStackEnvironmentVariablesService
 {
-    private static readonly Regex KeyRegex = new("^[A-Z][A-Z0-9_]*$", RegexOptions.Compiled);
-    private readonly IMapper _mapper = mapper;
-
     public async Task<List<StackEnvironmentVariableDto>> GetEnvironmentVariables(
         Guid stackId,
         bool includeInherited = false,
@@ -79,7 +75,6 @@ public class StackEnvironmentVariablesService(
         {
             Id = Guid.NewGuid(),
             StackId = stackId,
-            Stack = stack,
             Key = key,
             Value = value,
             Type = type,
@@ -88,7 +83,8 @@ public class StackEnvironmentVariablesService(
             UpdatedAt = DateTime.UtcNow,
         };
 
-        stack.EnvironmentVariables.Add(variable);
+        // Add the variable to the context first
+        await repository.AddEnvironmentVariable(variable);
         await repository.SaveChangesAsync();
     }
 

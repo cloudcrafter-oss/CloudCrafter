@@ -4,7 +4,7 @@ namespace CloudCrafter.Domain.Entities;
 
 public class StackEnvironmentVariable : BaseAuditableEntity
 {
-    public required Stack Stack { get; set; }
+    public Stack Stack { get; set; } = null!;
     public required Guid StackId { get; set; }
     public required string Key { get; set; }
     public required string Value { get; set; }

@@ -20,5 +20,12 @@ public class StackEnvironmentVariableConfiguration
 
         // Value configuration
         builder.Property(v => v.Value).HasMaxLength(2000);
+
+        // Configure relationship with Stack
+        builder
+            .HasOne(v => v.Stack)
+            .WithMany(s => s.EnvironmentVariables)
+            .HasForeignKey(v => v.StackId)
+            .IsRequired();
     }
 }

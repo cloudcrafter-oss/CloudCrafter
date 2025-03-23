@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Core.Events.DomainEvents;
@@ -200,6 +200,11 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
         return await stacks.ToListAsync();
     }
 
+    public async Task AddEnvironmentVariable(StackEnvironmentVariable variable)
+    {
+        await context.StackEnvironmentVariables.AddAsync(variable);
+    }
+
     public Task SaveChangesAsync()
     {
         return context.SaveChangesAsync();
@@ -236,6 +241,7 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
             .ThenInclude(x => x!.GithubApp)
             .ThenInclude(x => x!.SourceProvider)
             .ThenInclude(x => x!.GithubProvider)
+            .Include(x => x.EnvironmentVariables)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (stack is null && throwExceptionOnNotFound)
