@@ -14,7 +14,6 @@ public interface IStackEnvironmentVariablesService
     /// <returns>List of environment variables</returns>
     Task<List<StackEnvironmentVariableDto>> GetEnvironmentVariables(
         Guid stackId,
-        bool includeInherited = false,
         bool includeSecrets = false
     );
 

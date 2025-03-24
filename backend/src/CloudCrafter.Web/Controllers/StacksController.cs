@@ -102,12 +102,11 @@ public class StacksController : CloudCrafterController
     public async Task<List<StackEnvironmentVariableDto>> GetEnvironmentVariables(
         ISender sender,
         [FromRoute] Guid stackId,
-        [FromQuery] bool includeInherited = false,
         [FromQuery] bool includeSecrets = false
     )
     {
         var result = await sender.Send(
-            new GetStackEnvironmentVariablesQuery(stackId, includeInherited, includeSecrets)
+            new GetStackEnvironmentVariablesQuery(stackId, includeSecrets)
         );
         return result;
     }

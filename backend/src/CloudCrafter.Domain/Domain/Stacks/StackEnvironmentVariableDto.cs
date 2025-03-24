@@ -1,17 +1,26 @@
+using AutoMapper;
 using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.Domain.Domain.Stacks;
 
 public class StackEnvironmentVariableDto
 {
-    public Guid Id { get; set; }
-    public Guid StackId { get; set; }
-    public string Key { get; set; } = string.Empty;
-    public string Value { get; set; } = string.Empty;
-    public bool IsSecret { get; set; }
-    public EnvironmentVariableType Type { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime? LastModifiedAt { get; set; }
-    public string? GroupName { get; set; }
-    public bool IsInherited { get; set; }
+    public required Guid Id { get; init; }
+    public required Guid StackId { get; init; }
+    public required Guid? GroupId { get; init; }
+    public required string Key { get; init; }
+    public required string Value { get; init; }
+    public required bool IsSecret { get; init; }
+    public required EnvironmentVariableType Type { get; init; }
+    public required DateTime CreatedAt { get; init; }
+    public DateTime? LastModifiedAt { get; init; }
+    public string? GroupName { get; init; }
+
+    private class Mapping : Profile
+    {
+        public Mapping()
+        {
+            CreateMap<StackEnvironmentVariable, StackEnvironmentVariableDto>();
+        }
+    }
 }
