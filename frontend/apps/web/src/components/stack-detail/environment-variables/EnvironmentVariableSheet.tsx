@@ -200,8 +200,18 @@ export function EnvironmentVariableSheet({
 		}
 	}
 
+	// Reset form when editing variable changes or when sheet is closed
 	useEffect(() => {
-		if (editingVariable) {
+		if (!open) {
+			form.reset({
+				key: '',
+				value: '',
+				type: VariableType.Both,
+				isSecret: false,
+				description: '',
+				groupId: undefined,
+			})
+		} else if (editingVariable) {
 			form.reset({
 				key: editingVariable.key,
 				value: editingVariable.value,
@@ -210,17 +220,8 @@ export function EnvironmentVariableSheet({
 				description: editingVariable.description,
 				groupId: editingVariable.groupId || 'none',
 			})
-		} else {
-			form.reset({
-				key: '',
-				value: '',
-				type: VariableType.Both,
-				isSecret: false,
-				description: '',
-				groupId: 'none',
-			})
 		}
-	}, [editingVariable, form])
+	}, [editingVariable, form, open])
 
 	const onSubmit = (data: EnvironmentVariableFormData) => {
 		const isEditing = !!editingVariable

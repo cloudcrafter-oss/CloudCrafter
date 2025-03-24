@@ -23,7 +23,7 @@ import {
 } from '@cloudcrafter/ui/components/sheet'
 import { Textarea } from '@cloudcrafter/ui/components/textarea'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -55,7 +55,6 @@ export function CreateEnvironmentVariableGroupSheet({
 				onSuccess: () => {
 					toast.success('Group created successfully')
 					setOpen(false)
-					form.reset()
 					onSuccess?.()
 				},
 				onError: (error) => {
@@ -63,6 +62,13 @@ export function CreateEnvironmentVariableGroupSheet({
 				},
 			},
 		})
+
+	// Reset form when sheet is closed
+	useEffect(() => {
+		if (!open) {
+			form.reset()
+		}
+	}, [open, form])
 
 	const onSubmit = (data: FormData) => {
 		createGroup({
