@@ -1,8 +1,10 @@
 'use client'
 
-import type {
-	CreateStackEnvironmentVariableCommand,
-	StackDetailDto,
+import {
+	type CreateStackEnvironmentVariableCommand,
+	type StackDetailDto,
+	useGetEnvironmentVariableGroupsHook,
+	useGetEnvironmentVariablesHook,
 } from '@cloudcrafter/api'
 import { toast } from 'sonner'
 import {
@@ -84,6 +86,13 @@ export const EnvironmentVariables: React.FC<{
 	// Sheet state for adding/editing variables
 	const [sheetOpen, setSheetOpen] = useState(false)
 	const [editingVariable, setEditingVariable] = useState<EnvVar | null>(null)
+
+	const environmentVarsHook = useGetEnvironmentVariablesHook(stackDetails.id, {
+		includeSecrets: showSecrets,
+	})
+	const environmentGroupsHook = useGetEnvironmentVariableGroupsHook(
+		stackDetails.id,
+	)
 
 	// Mock loading data - would be replaced with actual API call
 	useEffect(() => {
