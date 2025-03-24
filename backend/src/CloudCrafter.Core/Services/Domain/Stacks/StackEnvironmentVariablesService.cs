@@ -126,9 +126,10 @@ public class StackEnvironmentVariablesService(
         };
 
         // Add the variable to the context first
-        await repository.AddEnvironmentVariable(variable);
         try
         {
+            await repository.AddEnvironmentVariable(variable);
+
             await repository.SaveChangesAsync();
         }
         catch (DbUpdateException ex)
