@@ -272,21 +272,24 @@ export const EnvironmentVariables: React.FC<{
 		const filtered = getFilteredVariables()
 		const grouped: Record<string, EnvVar[]> = {}
 
+		// First, initialize all groups with empty arrays
+		groups.forEach((group) => {
+			grouped[group.name] = []
+		})
+
 		// Add variables without a group to 'Ungrouped'
 		const ungrouped = filtered.filter((v) => !v.groupId)
 		if (ungrouped.length > 0) {
 			grouped.Ungrouped = ungrouped
 		}
 
-		// Group the rest by their group name
+		// Add variables to their respective groups
 		filtered
 			.filter((v) => v.groupId)
 			.forEach((v) => {
 				const group = groups.find((g) => g.id === v.groupId)
 				if (group) {
-					const groupName = group.name
-					grouped[groupName] ??= []
-					grouped[groupName].push(v)
+					grouped[group.name].push(v)
 				}
 			})
 
@@ -416,57 +419,80 @@ export const EnvironmentVariables: React.FC<{
 								<ScrollArea className='h-[50vh]'>
 									<Accordion
 										type='multiple'
-										defaultValue={groups.map((g) => g.id)}
+										defaultValue={groups.map((g) => g.name)}
 									>
-										{getGroupedVariables()
-											? Object.entries(getGroupedVariables()).map(
-													([groupName, variables]) => (
-														<AccordionItem value={groupName} key={groupName}>
-															<AccordionTrigger>
-																<div className='flex items-center'>
-																	<Group className='h-4 w-4 mr-2' />
-																	<span>{groupName}</span>
-																	<Badge variant='outline' className='ml-2'>
-																		{variables.length}
+										{Object.entries(getGroupedVariables()).map(
+											([groupName, variables]) => (
+												<AccordionItem value={groupName} key={groupName}>
+													<AccordionTrigger>
+														<div className='flex items-center'>
+															<Group className='h-4 w-4 mr-2' />
+															<span>{groupName}</span>
+															<Badge variant='outline' className='ml-2'>
+																{variables.length}
+															</Badge>
+															{groupName !== 'Ungrouped' &&
+																groups.find((g) => g.name === groupName)
+																	?.inheritFromParent && (
+																	<Badge variant='secondary' className='ml-2'>
+																		Inheritable
 																	</Badge>
-																	{groupName !== 'Ungrouped' &&
-																		groups.find((g) => g.name === groupName)
-																			?.inheritFromParent && (
-																			<Badge
-																				variant='secondary'
-																				className='ml-2'
-																			>
-																				Inheritable
-																			</Badge>
-																		)}
+																)}
+															{groupName !== 'Ungrouped' && (
+																<div className='flex items-center ml-4 gap-2'>
+																	<Button
+																		variant='ghost'
+																		size='sm'
+																		className='h-8 w-8 p-0'
+																		onClick={(e) => {
+																			e.preventDefault()
+																			// TODO: Edit group
+																		}}
+																		title='Edit group'
+																	>
+																		<Edit className='h-4 w-4' />
+																	</Button>
+																	<Button
+																		variant='ghost'
+																		size='sm'
+																		className='h-8 w-8 p-0 text-destructive'
+																		onClick={(e) => {
+																			e.preventDefault()
+																			// TODO: Delete group
+																		}}
+																		title='Delete group'
+																	>
+																		<Trash2 className='h-4 w-4' />
+																	</Button>
 																</div>
-															</AccordionTrigger>
-															<AccordionContent>
-																{groupName !== 'Ungrouped' &&
-																	groups.find((g) => g.name === groupName)
-																		?.description && (
-																		<div className='text-sm text-muted-foreground mb-4'>
-																			{
-																				groups.find((g) => g.name === groupName)
-																					?.description
-																			}
-																		</div>
-																	)}
-																<VariablesTable
-																	variables={variables}
-																	renderValue={renderVariableValue}
-																	onEdit={(variable) =>
-																		setEditingVariable(variable)
+															)}
+														</div>
+													</AccordionTrigger>
+													<AccordionContent>
+														{groupName !== 'Ungrouped' &&
+															groups.find((g) => g.name === groupName)
+																?.description && (
+																<div className='text-sm text-muted-foreground mb-4'>
+																	{
+																		groups.find((g) => g.name === groupName)
+																			?.description
 																	}
-																	onDelete={handleDeleteVariable}
-																	onToggleSecret={handleToggleSecret}
-																	onCopy={handleCopyVariable}
-																/>
-															</AccordionContent>
-														</AccordionItem>
-													),
-												)
-											: null}
+																</div>
+															)}
+														<VariablesTable
+															variables={variables}
+															renderValue={renderVariableValue}
+															onEdit={(variable) =>
+																setEditingVariable(variable)
+															}
+															onDelete={handleDeleteVariable}
+															onToggleSecret={handleToggleSecret}
+															onCopy={handleCopyVariable}
+														/>
+													</AccordionContent>
+												</AccordionItem>
+											),
+										)}
 									</Accordion>
 								</ScrollArea>
 							) : (
