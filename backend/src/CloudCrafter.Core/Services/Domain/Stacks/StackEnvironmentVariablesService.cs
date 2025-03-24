@@ -75,6 +75,53 @@ public class StackEnvironmentVariablesService(
         await repository.SaveChangesAsync();
     }
 
+    public async Task<Guid> CreateEnvironmentVariableGroup(StackEnvironmentVariableGroup group)
+    {
+        // Validate stack exists
+        var stack = await repository.GetStack(group.StackId);
+
+        if (stack == null)
+        {
+            throw new NotFoundException("Stack", "Stack not found");
+        }
+
+        // Add the group to the repository
+        var groups = new List<StackEnvironmentVariableGroup> { group };
+        try
+        {
+            await repository.AddEnvironmentVariableGroups(groups);
+            await repository.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+            when (ex.InnerException is PostgresException { SqlState: "23505" })
+        {
+            throw StackValidations.Create(StackValidations.EnvironmentVariableGroupNotUnique);
+        }
+
+        return group.Id;
+    }
+
+    public async Task<Guid> CreateEnvironmentVariableGroup(
+        Guid stackId,
+        string name,
+        string? description
+    )
+    {
+        // Create a new environment variable group entity
+        var group = new StackEnvironmentVariableGroup
+        {
+            Id = Guid.NewGuid(),
+            StackId = stackId,
+            Name = name,
+            Description = description,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+        };
+
+        // Use the existing method to add the group
+        return await CreateEnvironmentVariableGroup(group);
+    }
+
     public async Task<List<StackEnvironmentVariableGroupDto>> GetEnvironmentVariableGroups(
         Guid stackId
     )

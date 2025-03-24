@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Domain.Common;
+using CloudCrafter.Domain.Common;
 
 namespace CloudCrafter.Domain.Entities;
 

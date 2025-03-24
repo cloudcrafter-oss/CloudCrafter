@@ -11,6 +11,11 @@ public static class StackValidations
 
     public static ValidationError EnvironmentVariableNotUnique =>
         new("EnvironmentVariable", "Environment variable key must be unique");
+    public static ValidationError EnvironmentVariableGroupNotUnique =>
+        new(
+            "EnvironmentVariableGroup",
+            "Environment variable group name must be unique for this Stack"
+        );
 
     public static ValidationException Create(ValidationError error)
     {

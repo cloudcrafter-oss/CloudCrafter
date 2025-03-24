@@ -163,6 +163,19 @@ public class StacksController : CloudCrafterController
         return result;
     }
 
+    [HttpPost("{stackId}/environment-variable-groups")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    public async Task<IResult> PostCreateEnvironmentVariableGroup(
+        ISender sender,
+        [FromRoute] Guid stackId,
+        [FromBody] CreateStackEnvironmentVariableGroupCommand command
+    )
+    {
+        command.StackId = stackId;
+        await sender.Send(command);
+        return Results.Created();
+    }
+
     // [HttpPost("{stackId}/environment-variables/templates/{templateId}/apply")]
     // [ProducesResponseType(StatusCodes.Status200OK)]
     // [ProducesResponseType(StatusCodes.Status400BadRequest)]
