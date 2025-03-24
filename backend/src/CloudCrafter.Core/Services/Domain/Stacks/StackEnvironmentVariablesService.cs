@@ -151,7 +151,8 @@ public class StackEnvironmentVariablesService(
         string key,
         string value,
         bool isSecret = false,
-        EnvironmentVariableType type = EnvironmentVariableType.Both
+        EnvironmentVariableType type = EnvironmentVariableType.Both,
+        Guid? groupId = null
     )
     {
         // Validate stack exists
@@ -162,11 +163,22 @@ public class StackEnvironmentVariablesService(
             throw StackValidations.Create(StackValidations.StackNotFound);
         }
 
+        if (groupId.HasValue)
+        {
+            var group = await repository.GetEnvironmentVariableGroup(stackId, groupId.Value);
+
+            if (group == null)
+            {
+                throw StackValidations.Create(StackValidations.EnvironmentVariableGroupNotFound);
+            }
+        }
+
         // Create the environment variable
         var variable = new StackEnvironmentVariable
         {
             Id = Guid.NewGuid(),
             StackId = stackId,
+            GroupId = groupId,
             Key = key,
             Value = value,
             Type = type,

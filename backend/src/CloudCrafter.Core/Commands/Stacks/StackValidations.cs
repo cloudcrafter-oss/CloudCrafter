@@ -9,6 +9,12 @@ public static class StackValidations
     public static ValidationError EnvironmentVariableNotFound =>
         new("EnvironmentVariable", "Environment variable not found");
 
+    public static ValidationError EnvironmentVariableGroupNotFound =>
+        new(
+            "EnvironmentVariableGroup",
+            "Environment variable group is not found within this Stack"
+        );
+
     public static ValidationError EnvironmentVariableNotUnique =>
         new("EnvironmentVariable", "Environment variable key must be unique");
     public static ValidationError EnvironmentVariableGroupNotUnique =>

@@ -61,6 +61,36 @@ public class CreateStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
     }
 
     [Test]
+    public async Task ShouldNotCreateEnvironmentVariableBecauseGroupDoesNotExists()
+    {
+        await RunAsAdministratorAsync();
+        await AssertEnvCount(0);
+
+        var stack = await CreateSampleStack();
+
+        var exception = Assert.ThrowsAsync<ValidationException>(
+            async () =>
+                await SendAsync(
+                    Command with
+                    {
+                        StackId = stack.Id,
+                        Key = "Test",
+                        Value = "Dummy",
+                        GroupId = Guid.NewGuid(),
+                    }
+                )
+        );
+        exception.Should().NotBeNull();
+        exception!.Errors.Should().ContainKey("EnvironmentVariableGroup").And.HaveCount(1);
+        exception!
+            .Errors["EnvironmentVariableGroup"]
+            .Should()
+            .Contain("Environment variable group is not found within this Stack");
+
+        await AssertEnvCount(0);
+    }
+
+    [Test]
     public async Task ShouldBeAbleToCreateEnvironmentVariable()
     {
         await RunAsAdministratorAsync();
@@ -84,6 +114,41 @@ public class CreateStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
         entity!.Key.Should().Be("Test");
         entity!.Value.Should().Be("Dummy");
         entity!.IsSecret.Should().BeFalse();
+        entity.GroupId.Should().BeNull();
+        entity.StackId.Should().Be(stack.Id);
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToCreateEnvironmentVariableWithGroup()
+    {
+        await RunAsAdministratorAsync();
+        await AssertEnvCount(0);
+
+        var stack = await CreateSampleStack();
+
+        var group = FakerInstances.StackEnvironmentVariableGroupFaker(stack).Generate();
+        await AddAsync(group);
+
+        await AssertEnvGroupCount(1);
+
+        var result = await SendAsync(
+            Command with
+            {
+                StackId = stack.Id,
+                GroupId = group.Id,
+                Key = "Test",
+                Value = "Dummy",
+            }
+        );
+
+        await AssertEnvCount(1);
+
+        var entity = FetchEntity<StackEnvironmentVariable>(x => x.Id == result);
+        entity.Should().NotBeNull();
+        entity!.Key.Should().Be("Test");
+        entity!.Value.Should().Be("Dummy");
+        entity!.IsSecret.Should().BeFalse();
+        entity.GroupId.Should().Be(group.Id);
         entity.StackId.Should().Be(stack.Id);
     }
 

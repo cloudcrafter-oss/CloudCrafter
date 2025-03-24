@@ -17,7 +17,8 @@ public class CreateStackEnvironmentVariableCommandHandler(
             request.Key,
             request.Value,
             request.IsSecret,
-            request.Type
+            request.Type,
+            request.GroupId
         );
 
         return id;

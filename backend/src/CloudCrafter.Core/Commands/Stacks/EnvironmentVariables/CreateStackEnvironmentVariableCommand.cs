@@ -15,4 +15,5 @@ public record CreateStackEnvironmentVariableCommand : IRequest<Guid>
     public required string Value { get; init; }
     public required EnvironmentVariableType Type { get; init; }
     public required bool IsSecret { get; init; }
+    public Guid? GroupId { get; init; }
 }

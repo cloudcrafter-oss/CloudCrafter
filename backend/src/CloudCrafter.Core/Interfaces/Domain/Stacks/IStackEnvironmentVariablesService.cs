@@ -32,13 +32,15 @@ public interface IStackEnvironmentVariablesService
     /// <param name="value">Environment variable value</param>
     /// <param name="isSecret">Whether the variable is a secret</param>
     /// <param name="type">Type of environment variable (BuildTime, Runtime, Both)</param>
+    /// <param name="groupId">ID of the group the variable belongs to</param>
     /// <returns>True if successfully created, false otherwise</returns>
     Task<Guid> CreateEnvironmentVariable(
         Guid stackId,
         string key,
         string value,
         bool isSecret = false,
-        EnvironmentVariableType type = EnvironmentVariableType.Both
+        EnvironmentVariableType type = EnvironmentVariableType.Both,
+        Guid? groupId = null
     );
 
     /// <summary>
