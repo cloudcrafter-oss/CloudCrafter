@@ -31,7 +31,10 @@ public class StackEnvironmentVariablesService(
 
         var environmentVariables = await repository.GetEnvironmentVariables(stackId);
 
-        return mapper.Map<List<StackEnvironmentVariableDto>>(environmentVariables);
+        return mapper.Map<List<StackEnvironmentVariableDto>>(
+            environmentVariables,
+            opt => opt.Items["IncludeSecrets"] = includeSecrets
+        );
     }
 
     public async Task CreateDefaultVariableGroups(Guid stackId)

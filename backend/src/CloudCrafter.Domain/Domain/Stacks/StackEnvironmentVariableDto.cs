@@ -1,4 +1,5 @@
 using AutoMapper;
+using CloudCrafter.Domain.Common.AutoMapper;
 using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.Domain.Domain.Stacks;
@@ -20,7 +21,8 @@ public class StackEnvironmentVariableDto
     {
         public Mapping()
         {
-            CreateMap<StackEnvironmentVariable, StackEnvironmentVariableDto>();
+            CreateMap<StackEnvironmentVariable, StackEnvironmentVariableDto>()
+                .ForMember(dest => dest.Value, opt => opt.MapFrom<SecretValueResolver>());
         }
     }
 }

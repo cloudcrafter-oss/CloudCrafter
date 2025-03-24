@@ -90,4 +90,39 @@ public class GetStackEnvironmentVariablesQueryTest : BaseEnvironmentVariablesTes
         nonGroupedEnvVar.Value.Should().Be(nonGroupedEnvironmentVariable.Value);
         nonGroupedEnvVar.GroupName.Should().BeNull();
     }
+
+    [TestCase("MY_VALUE", "MY_VALUE", true)]
+    [TestCase("MY_VALUE", "[MASKED]", false)]
+    public async Task ShouldBeAbleToSeeSecretWhenPassingRevealSecrets(
+        string input,
+        string expected,
+        bool includeSecrets
+    )
+    {
+        await RunAsAdministratorAsync();
+
+        await AssertEnvCount(0);
+        await AssertEnvGroupCount(0);
+
+        var stack = await CreateSampleStack();
+
+        var secretVariable = FakerInstances
+            .StackEnvironmentVariableFaker(stack)
+            .RuleFor(x => x.Key, f => "MY_SECRET")
+            .RuleFor(x => x.Value, input)
+            .RuleFor(x => x.IsSecret, true)
+            .Generate();
+        await AddAsync(secretVariable);
+
+        var result = await SendAsync(
+            new GetStackEnvironmentVariablesQuery(stack.Id, includeSecrets)
+        );
+
+        result.Count.Should().Be(1);
+
+        var firstItem = result.FirstOrDefault();
+        firstItem.Should().NotBeNull();
+        firstItem!.IsSecret.Should().Be(true);
+        firstItem.Value.Should().Be(expected);
+    }
 }
