@@ -85,6 +85,8 @@ public static class FakerInstances
             .RuleFor(x => x.Key, f => f.Lorem.Word())
             .RuleFor(x => x.Value, f => f.Lorem.Word())
             .RuleFor(x => x.StackId, stack.Id)
+            .RuleFor(x => x.Group, f => null)
+            .RuleFor(x => x.GroupId, f => null)
             .RuleFor(x => x.IsSecret, f => false)
             // ReSharper disable once RedundantCast
             .RuleFor(x => x.Stack, f => (Stack?)null)
