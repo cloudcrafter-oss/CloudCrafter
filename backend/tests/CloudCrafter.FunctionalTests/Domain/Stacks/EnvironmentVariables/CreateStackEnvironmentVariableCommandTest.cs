@@ -123,4 +123,63 @@ public class CreateStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
             .Contain("Environment variable key must be unique");
         await AssertEnvCount(1);
     }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToCreateAnEnvironmentVariableWithSecret(bool isSecret)
+    {
+        await RunAsAdministratorAsync();
+        await AssertEnvCount(0);
+
+        var stack = await CreateSampleStack();
+
+        var result = await SendAsync(
+            Command with
+            {
+                StackId = stack.Id,
+                Key = "Test",
+                Value = "Dummy",
+                IsSecret = isSecret,
+            }
+        );
+        await AssertEnvCount(1);
+
+        var entity = FetchEntity<StackEnvironmentVariable>(x => x.Id == result);
+        entity.Should().NotBeNull();
+        entity!.Key.Should().Be("Test");
+        entity!.Value.Should().Be("Dummy");
+        entity!.IsSecret.Should().Be(isSecret);
+        entity.StackId.Should().Be(stack.Id);
+    }
+
+    [TestCase(EnvironmentVariableType.Both)]
+    [TestCase(EnvironmentVariableType.BuildTime)]
+    [TestCase(EnvironmentVariableType.Runtime)]
+    public async Task ShouldBeAbleToCreateAnEnvironmentVariableWithType(
+        EnvironmentVariableType type
+    )
+    {
+        await RunAsAdministratorAsync();
+        await AssertEnvCount(0);
+
+        var stack = await CreateSampleStack();
+
+        var result = await SendAsync(
+            Command with
+            {
+                StackId = stack.Id,
+                Key = "Test",
+                Value = "Dummy",
+                Type = type,
+            }
+        );
+        await AssertEnvCount(1);
+
+        var entity = FetchEntity<StackEnvironmentVariable>(x => x.Id == result);
+        entity.Should().NotBeNull();
+        entity!.Key.Should().Be("Test");
+        entity!.Value.Should().Be("Dummy");
+        entity.StackId.Should().Be(stack.Id);
+        entity.Type.Should().Be(type);
+    }
 }

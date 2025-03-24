@@ -15,7 +15,9 @@ public class CreateStackEnvironmentVariableCommandHandler(
         var id = await environmentVariablesService.CreateEnvironmentVariable(
             request.StackId,
             request.Key,
-            request.Value
+            request.Value,
+            request.IsSecret,
+            request.Type
         );
 
         return id;
