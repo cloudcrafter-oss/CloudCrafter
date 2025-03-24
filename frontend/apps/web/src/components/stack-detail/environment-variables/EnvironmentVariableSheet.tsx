@@ -225,38 +225,6 @@ export function EnvironmentVariableSheet({
 	const onSubmit = (data: EnvironmentVariableFormData) => {
 		const isEditing = !!editingVariable
 
-		// Form validation
-		if (!data.key) {
-			toast.error('Key is required')
-			return
-		}
-
-		// Validate key format (uppercase letters, numbers, underscores, starts with letter)
-		const keyRegex = /^[A-Z][A-Z0-9_]*$/
-		if (!keyRegex.test(data.key)) {
-			toast.error(
-				'Key must start with an uppercase letter and contain only uppercase letters, numbers, and underscores',
-			)
-			return
-		}
-
-		// Validate key and value length
-		if (data.key.length > 100) {
-			toast.error('Key must be 100 characters or less')
-			return
-		}
-
-		if (data.value && data.value.length > 2000) {
-			toast.error('Value must be 2000 characters or less')
-			return
-		}
-
-		// Check for duplicate keys
-		if (!isEditing && variables.some((v) => v.key === data.key)) {
-			toast.error('A variable with this key already exists')
-			return
-		}
-
 		if (isEditing && editingVariable) {
 			// Update existing variable
 			handleUpdateVariable(data, editingVariable.id)
