@@ -6,4 +6,5 @@ export const updateStackEnvironmentVariableCommandSchema = z.object({
   value: z.string(),
   type: z.lazy(() => environmentVariableTypeSchema),
   isSecret: z.boolean(),
+  groupId: z.string().uuid().nullable().nullish(),
 })

@@ -17,4 +17,8 @@ export type CreateStackEnvironmentVariableCommand = {
    * @type boolean
    */
   isSecret: boolean
+  /**
+   * @type string, uuid
+   */
+  groupId?: string | null
 }

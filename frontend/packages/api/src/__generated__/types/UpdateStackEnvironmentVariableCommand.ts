@@ -17,4 +17,8 @@ export type UpdateStackEnvironmentVariableCommand = {
    * @type boolean
    */
   isSecret: boolean
+  /**
+   * @type string, uuid
+   */
+  groupId?: string | null
 }
