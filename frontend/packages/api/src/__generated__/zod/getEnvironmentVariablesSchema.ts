@@ -7,7 +7,6 @@ export const getEnvironmentVariablesPathParamsSchema = z.object({
 
 export const getEnvironmentVariablesQueryParamsSchema = z
   .object({
-    includeInherited: z.boolean().default(false),
     includeSecrets: z.boolean().default(false),
   })
   .optional()

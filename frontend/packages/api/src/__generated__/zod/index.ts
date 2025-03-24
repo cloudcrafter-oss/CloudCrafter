@@ -42,6 +42,11 @@ export {
   getDeploymentsForStackQueryResponseSchema,
 } from './getDeploymentsForStackSchema'
 export {
+  getEnvironmentVariableGroupsPathParamsSchema,
+  getEnvironmentVariableGroups200Schema,
+  getEnvironmentVariableGroupsQueryResponseSchema,
+} from './getEnvironmentVariableGroupsSchema'
+export {
   getEnvironmentVariablesPathParamsSchema,
   getEnvironmentVariablesQueryParamsSchema,
   getEnvironmentVariables200Schema,
@@ -133,6 +138,7 @@ export { sourceProviderDtoSchema } from './sourceProviderDtoSchema'
 export { stackCreatedDtoSchema } from './stackCreatedDtoSchema'
 export { stackDetailDtoSchema } from './stackDetailDtoSchema'
 export { stackEnvironmentVariableDtoSchema } from './stackEnvironmentVariableDtoSchema'
+export { stackEnvironmentVariableGroupDtoSchema } from './stackEnvironmentVariableGroupDtoSchema'
 export { stackServerDtoSchema } from './stackServerDtoSchema'
 export { stackServiceDtoSchema } from './stackServiceDtoSchema'
 export { stackServiceHealthcheckConfigurationDtoSchema } from './stackServiceHealthcheckConfigurationDtoSchema'

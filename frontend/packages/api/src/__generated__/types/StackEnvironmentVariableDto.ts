@@ -10,6 +10,10 @@ export type StackEnvironmentVariableDto = {
    */
   stackId: string
   /**
+   * @type string, uuid
+   */
+  groupId: string | null
+  /**
    * @type string
    */
   key: string
@@ -37,8 +41,4 @@ export type StackEnvironmentVariableDto = {
    * @type string
    */
   groupName?: string | null
-  /**
-   * @type boolean
-   */
-  isInherited: boolean
 }

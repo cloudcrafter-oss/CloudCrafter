@@ -45,6 +45,12 @@ export type {
   GetDeploymentsForStackQuery,
 } from './GetDeploymentsForStack'
 export type {
+  GetEnvironmentVariableGroupsPathParams,
+  GetEnvironmentVariableGroups200,
+  GetEnvironmentVariableGroupsQueryResponse,
+  GetEnvironmentVariableGroupsQuery,
+} from './GetEnvironmentVariableGroups'
+export type {
   GetEnvironmentVariablesPathParams,
   GetEnvironmentVariablesQueryParams,
   GetEnvironmentVariables200,
@@ -150,6 +156,7 @@ export type { SourceProviderDto } from './SourceProviderDto'
 export type { StackCreatedDto } from './StackCreatedDto'
 export type { StackDetailDto } from './StackDetailDto'
 export type { StackEnvironmentVariableDto } from './StackEnvironmentVariableDto'
+export type { StackEnvironmentVariableGroupDto } from './StackEnvironmentVariableGroupDto'
 export type { StackServerDto } from './StackServerDto'
 export type { StackServiceDto } from './StackServiceDto'
 export type { StackServiceHealthcheckConfigurationDto } from './StackServiceHealthcheckConfigurationDto'

@@ -10,6 +10,8 @@ export type { GetDeploymentsForServerQueryKey } from './hooks/useGetDeploymentsF
 export type { GetDeploymentsForServerSuspenseQueryKey } from './hooks/useGetDeploymentsForServerSuspenseHook'
 export type { GetDeploymentsForStackQueryKey } from './hooks/useGetDeploymentsForStackHook'
 export type { GetDeploymentsForStackSuspenseQueryKey } from './hooks/useGetDeploymentsForStackSuspenseHook'
+export type { GetEnvironmentVariableGroupsQueryKey } from './hooks/useGetEnvironmentVariableGroupsHook'
+export type { GetEnvironmentVariableGroupsSuspenseQueryKey } from './hooks/useGetEnvironmentVariableGroupsSuspenseHook'
 export type { GetEnvironmentVariablesQueryKey } from './hooks/useGetEnvironmentVariablesHook'
 export type { GetEnvironmentVariablesSuspenseQueryKey } from './hooks/useGetEnvironmentVariablesSuspenseHook'
 export type { GetFilterableFieldsQueryKey } from './hooks/useGetFilterableFieldsHook'
@@ -97,6 +99,12 @@ export type {
   GetDeploymentsForStackQueryResponse,
   GetDeploymentsForStackQuery,
 } from './types/GetDeploymentsForStack'
+export type {
+  GetEnvironmentVariableGroupsPathParams,
+  GetEnvironmentVariableGroups200,
+  GetEnvironmentVariableGroupsQueryResponse,
+  GetEnvironmentVariableGroupsQuery,
+} from './types/GetEnvironmentVariableGroups'
 export type {
   GetEnvironmentVariablesPathParams,
   GetEnvironmentVariablesQueryParams,
@@ -213,6 +221,7 @@ export type { SourceProviderDto } from './types/SourceProviderDto'
 export type { StackCreatedDto } from './types/StackCreatedDto'
 export type { StackDetailDto } from './types/StackDetailDto'
 export type { StackEnvironmentVariableDto } from './types/StackEnvironmentVariableDto'
+export type { StackEnvironmentVariableGroupDto } from './types/StackEnvironmentVariableGroupDto'
 export type { StackServerDto } from './types/StackServerDto'
 export type { StackServiceDto } from './types/StackServiceDto'
 export type { StackServiceHealthcheckConfigurationDto } from './types/StackServiceHealthcheckConfigurationDto'
@@ -268,6 +277,7 @@ export { getDeleteServerByIdUrl, deleteServerById } from './axios-backend/delete
 export { getGetDeploymentLogsUrl, getDeploymentLogs } from './axios-backend/getDeploymentLogs'
 export { getGetDeploymentsForServerUrl, getDeploymentsForServer } from './axios-backend/getDeploymentsForServer'
 export { getGetDeploymentsForStackUrl, getDeploymentsForStack } from './axios-backend/getDeploymentsForStack'
+export { getGetEnvironmentVariableGroupsUrl, getEnvironmentVariableGroups } from './axios-backend/getEnvironmentVariableGroups'
 export { getGetEnvironmentVariablesUrl, getEnvironmentVariables } from './axios-backend/getEnvironmentVariables'
 export { getGetFilterableFieldsUrl, getFilterableFields } from './axios-backend/getFilterableFields'
 export { getGetGitBranchesUrl, getGitBranches } from './axios-backend/getGitBranches'
@@ -325,6 +335,16 @@ export {
   getDeploymentsForStackSuspenseQueryOptionsHook,
   useGetDeploymentsForStackSuspenseHook,
 } from './hooks/useGetDeploymentsForStackSuspenseHook'
+export {
+  getEnvironmentVariableGroupsQueryKey,
+  getEnvironmentVariableGroupsQueryOptionsHook,
+  useGetEnvironmentVariableGroupsHook,
+} from './hooks/useGetEnvironmentVariableGroupsHook'
+export {
+  getEnvironmentVariableGroupsSuspenseQueryKey,
+  getEnvironmentVariableGroupsSuspenseQueryOptionsHook,
+  useGetEnvironmentVariableGroupsSuspenseHook,
+} from './hooks/useGetEnvironmentVariableGroupsSuspenseHook'
 export {
   getEnvironmentVariablesQueryKey,
   getEnvironmentVariablesQueryOptionsHook,
@@ -442,6 +462,11 @@ export {
   getDeploymentsForStackQueryResponseSchema,
 } from './zod/getDeploymentsForStackSchema'
 export {
+  getEnvironmentVariableGroupsPathParamsSchema,
+  getEnvironmentVariableGroups200Schema,
+  getEnvironmentVariableGroupsQueryResponseSchema,
+} from './zod/getEnvironmentVariableGroupsSchema'
+export {
   getEnvironmentVariablesPathParamsSchema,
   getEnvironmentVariablesQueryParamsSchema,
   getEnvironmentVariables200Schema,
@@ -537,6 +562,7 @@ export { sourceProviderDtoSchema } from './zod/sourceProviderDtoSchema'
 export { stackCreatedDtoSchema } from './zod/stackCreatedDtoSchema'
 export { stackDetailDtoSchema } from './zod/stackDetailDtoSchema'
 export { stackEnvironmentVariableDtoSchema } from './zod/stackEnvironmentVariableDtoSchema'
+export { stackEnvironmentVariableGroupDtoSchema } from './zod/stackEnvironmentVariableGroupDtoSchema'
 export { stackServerDtoSchema } from './zod/stackServerDtoSchema'
 export { stackServiceDtoSchema } from './zod/stackServiceDtoSchema'
 export { stackServiceHealthcheckConfigurationDtoSchema } from './zod/stackServiceHealthcheckConfigurationDtoSchema'

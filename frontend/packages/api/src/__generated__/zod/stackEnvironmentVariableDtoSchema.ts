@@ -4,6 +4,7 @@ import { z } from 'zod'
 export const stackEnvironmentVariableDtoSchema = z.object({
   id: z.string().uuid(),
   stackId: z.string().uuid(),
+  groupId: z.string().uuid().nullable(),
   key: z.string(),
   value: z.string(),
   isSecret: z.boolean(),
@@ -11,5 +12,4 @@ export const stackEnvironmentVariableDtoSchema = z.object({
   createdAt: z.string().datetime(),
   lastModifiedAt: z.string().datetime().nullable().nullish(),
   groupName: z.string().nullable().nullish(),
-  isInherited: z.boolean(),
 })

@@ -12,11 +12,6 @@ export type GetEnvironmentVariablesQueryParams = {
    * @default false
    * @type boolean | undefined
    */
-  includeInherited?: boolean
-  /**
-   * @default false
-   * @type boolean | undefined
-   */
   includeSecrets?: boolean
 }
 

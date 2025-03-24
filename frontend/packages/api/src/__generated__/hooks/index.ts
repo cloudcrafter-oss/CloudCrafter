@@ -10,6 +10,8 @@ export type { GetDeploymentsForServerQueryKey } from './useGetDeploymentsForServ
 export type { GetDeploymentsForServerSuspenseQueryKey } from './useGetDeploymentsForServerSuspenseHook'
 export type { GetDeploymentsForStackQueryKey } from './useGetDeploymentsForStackHook'
 export type { GetDeploymentsForStackSuspenseQueryKey } from './useGetDeploymentsForStackSuspenseHook'
+export type { GetEnvironmentVariableGroupsQueryKey } from './useGetEnvironmentVariableGroupsHook'
+export type { GetEnvironmentVariableGroupsSuspenseQueryKey } from './useGetEnvironmentVariableGroupsSuspenseHook'
 export type { GetEnvironmentVariablesQueryKey } from './useGetEnvironmentVariablesHook'
 export type { GetEnvironmentVariablesSuspenseQueryKey } from './useGetEnvironmentVariablesSuspenseHook'
 export type { GetFilterableFieldsQueryKey } from './useGetFilterableFieldsHook'
@@ -75,6 +77,16 @@ export {
   getDeploymentsForStackSuspenseQueryOptionsHook,
   useGetDeploymentsForStackSuspenseHook,
 } from './useGetDeploymentsForStackSuspenseHook'
+export {
+  getEnvironmentVariableGroupsQueryKey,
+  getEnvironmentVariableGroupsQueryOptionsHook,
+  useGetEnvironmentVariableGroupsHook,
+} from './useGetEnvironmentVariableGroupsHook'
+export {
+  getEnvironmentVariableGroupsSuspenseQueryKey,
+  getEnvironmentVariableGroupsSuspenseQueryOptionsHook,
+  useGetEnvironmentVariableGroupsSuspenseHook,
+} from './useGetEnvironmentVariableGroupsSuspenseHook'
 export { getEnvironmentVariablesQueryKey, getEnvironmentVariablesQueryOptionsHook, useGetEnvironmentVariablesHook } from './useGetEnvironmentVariablesHook'
 export {
   getEnvironmentVariablesSuspenseQueryKey,
