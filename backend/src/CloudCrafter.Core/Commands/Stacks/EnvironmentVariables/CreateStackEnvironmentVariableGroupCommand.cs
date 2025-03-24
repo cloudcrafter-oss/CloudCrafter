@@ -23,6 +23,7 @@ public record CreateStackEnvironmentVariableGroupCommand : IRequest<Guid>
     ///     Name of the environment variable group
     /// </summary>
     [Required]
+    [MinLength(1)]
     [MaxLength(100)]
     public required string Name { get; set; }
 

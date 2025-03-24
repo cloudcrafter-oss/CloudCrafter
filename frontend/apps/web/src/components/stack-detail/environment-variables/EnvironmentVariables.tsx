@@ -6,6 +6,7 @@ import {
 	useGetEnvironmentVariablesHook,
 } from '@cloudcrafter/api'
 import { toast } from 'sonner'
+import { CreateEnvironmentVariableGroupSheet } from './CreateEnvironmentVariableGroupSheet'
 import {
 	type EnvVar,
 	EnvironmentVariableSheet,
@@ -320,6 +321,10 @@ export const EnvironmentVariables: React.FC<{
 							<Download className='h-4 w-4 mr-2' />
 							Export
 						</Button>
+						<CreateEnvironmentVariableGroupSheet
+							stackId={stackDetails.id}
+							onSuccess={() => environmentGroupsHook.refetch()}
+						/>
 						<EnvironmentVariableSheet
 							open={sheetOpen}
 							onOpenChange={setSheetOpen}
