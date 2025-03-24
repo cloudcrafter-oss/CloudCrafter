@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Domain.Entities;
 using MediatR;
@@ -9,6 +10,7 @@ namespace CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
 /// <summary>
 ///     Command to create a new environment variable group for a stack
 /// </summary>
+[Authorize]
 public record CreateStackEnvironmentVariableGroupCommand : IRequest<Guid>
 {
     /// <summary>

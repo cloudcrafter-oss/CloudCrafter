@@ -22,6 +22,7 @@ public class StackEnvironmentVariableDto
         public Mapping()
         {
             CreateMap<StackEnvironmentVariable, StackEnvironmentVariableDto>()
+                .ForMember(x => x.LastModifiedAt, opt => opt.MapFrom(src => src.UpdatedAt))
                 .ForMember(dest => dest.Value, opt => opt.MapFrom<SecretValueResolver>());
         }
     }
