@@ -17,6 +17,7 @@ public class Stack : BaseAuditableEntity
     public List<Deployment> Deployments { get; set; } = new();
     public List<StackService> Services { get; set; } = new();
     public List<StackEnvironmentVariable> EnvironmentVariables { get; set; } = new();
+    public List<StackEnvironmentVariableGroup> EnvironmentVariableGroups { get; set; } = new();
 
     public required StackHealthEntity HealthStatus { get; init; }
     public required string? Description { get; set; }

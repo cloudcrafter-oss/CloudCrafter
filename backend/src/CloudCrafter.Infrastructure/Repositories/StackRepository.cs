@@ -205,6 +205,11 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
         await context.StackEnvironmentVariables.AddAsync(variable);
     }
 
+    public async Task AddEnvironmentVariableGroups(IList<StackEnvironmentVariableGroup> groups)
+    {
+        await context.StackEnvironmentVariableGroups.AddRangeAsync(groups);
+    }
+
     public Task SaveChangesAsync()
     {
         return context.SaveChangesAsync();

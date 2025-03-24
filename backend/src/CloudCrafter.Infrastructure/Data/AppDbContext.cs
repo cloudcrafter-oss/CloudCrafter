@@ -47,6 +47,9 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     public DbSet<StackEnvironmentVariable> StackEnvironmentVariables =>
         Set<StackEnvironmentVariable>();
 
+    public DbSet<StackEnvironmentVariableGroup> StackEnvironmentVariableGroups =>
+        Set<StackEnvironmentVariableGroup>();
+
     public DbSet<ServerConnectivityCheckJob> ServerConnectivityCheckJobs =>
         Set<ServerConnectivityCheckJob>();
 

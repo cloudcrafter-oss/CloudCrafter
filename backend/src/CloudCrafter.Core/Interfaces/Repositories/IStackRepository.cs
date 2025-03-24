@@ -29,4 +29,6 @@ public interface IStackRepository
         BasePaginationRequest paginatedRequest
     );
     Task AddEnvironmentVariable(StackEnvironmentVariable variable);
+
+    Task AddEnvironmentVariableGroups(IList<StackEnvironmentVariableGroup> groups);
 }

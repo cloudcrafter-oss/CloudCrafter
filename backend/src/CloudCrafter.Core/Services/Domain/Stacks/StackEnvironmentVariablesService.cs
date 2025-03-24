@@ -54,6 +54,44 @@ public class StackEnvironmentVariablesService(
         }
     }
 
+    public async Task CreateDefaultVariableGroups(Guid stackId)
+    {
+        // Validate stack exists
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            return;
+        }
+
+        // Create default variable groups
+        var groups = new List<StackEnvironmentVariableGroup>
+        {
+            new()
+            {
+                Id = Guid.NewGuid(),
+                StackId = stackId,
+                Name = "Application Settings",
+                Description = "Basic application environment variables",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                StackId = stackId,
+                Name = "Database Settings",
+                Description = "Database connection environment variables",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+            },
+        };
+
+        // Add the groups to the context
+        await repository.AddEnvironmentVariableGroups(groups);
+        await repository.SaveChangesAsync();
+    }
+
     public async Task<Guid> CreateEnvironmentVariable(
         Guid stackId,
         string key,

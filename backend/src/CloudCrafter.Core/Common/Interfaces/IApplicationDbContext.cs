@@ -21,6 +21,7 @@ public interface IApplicationDbContext
     DbSet<SourceProvider> SourceProviders { get; }
     DbSet<GithubProvider> GithubProviders { get; }
     DbSet<StackEnvironmentVariable> StackEnvironmentVariables { get; }
+    DbSet<StackEnvironmentVariableGroup> StackEnvironmentVariableGroups { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     int SaveChanges();

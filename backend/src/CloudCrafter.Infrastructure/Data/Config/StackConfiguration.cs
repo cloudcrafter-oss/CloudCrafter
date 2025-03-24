@@ -16,5 +16,11 @@ public class StackConfiguration : IEntityTypeConfiguration<Stack>
             .WithOne(v => v.Stack)
             .HasForeignKey(v => v.StackId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasMany(s => s.EnvironmentVariableGroups)
+            .WithOne(v => v.Stack)
+            .HasForeignKey(v => v.StackId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

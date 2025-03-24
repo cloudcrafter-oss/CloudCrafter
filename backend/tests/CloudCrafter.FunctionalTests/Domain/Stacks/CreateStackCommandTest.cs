@@ -75,11 +75,29 @@ public class CreateStackCommandTest : BaseTestFixture
         Command.EnvironmentId = environment.Id;
         Command.ServerId = server.Id;
 
+        (await CountAsync<StackEnvironmentVariableGroup>()).Should().Be(0);
+
         var result = await SendAsync(Command);
 
         result.Should().NotBeNull();
         result.Id.Should().NotBe(Guid.Empty);
 
         (await CountAsync<StackService>()).Should().Be(1);
+        (await CountAsync<StackEnvironmentVariableGroup>()).Should().Be(2);
+
+        // Check if the environment variable groups are created
+        var groups = FetchEntityList<StackEnvironmentVariableGroup>(x => x.StackId == result.Id);
+
+        groups.Should().HaveCount(2);
+
+        var appSettings = groups.FirstOrDefault(x => x.Name == "Application Settings");
+        appSettings.Should().NotBeNull();
+        appSettings!.StackId.Should().Be(result.Id);
+        appSettings.Description.Should().Be("Basic application environment variables");
+
+        var connectionStrings = groups.FirstOrDefault(x => x.Name == "Database Settings");
+        connectionStrings.Should().NotBeNull();
+        connectionStrings!.StackId.Should().Be(result.Id);
+        connectionStrings.Description.Should().Be("Database connection environment variables");
     }
 }

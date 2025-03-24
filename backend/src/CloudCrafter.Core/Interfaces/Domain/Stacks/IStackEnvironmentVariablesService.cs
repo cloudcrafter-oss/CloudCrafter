@@ -83,4 +83,6 @@ public interface IStackEnvironmentVariablesService
         DateTime? startDate = null,
         DateTime? endDate = null
     );
+
+    Task CreateDefaultVariableGroups(Guid stackId);
 }

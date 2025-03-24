@@ -8,7 +8,8 @@ namespace CloudCrafter.Core.Events.Handlers;
 
 public class StackCreatedEventHandler(
     ILogger<StackCreatedEventHandler> logger,
-    IStackServicesService stackServicesService
+    IStackServicesService stackServicesService,
+    IStackEnvironmentVariablesService stackEnvironmentVariablesService
 ) : INotificationHandler<StackCreatedEvent>
 {
     public async Task Handle(StackCreatedEvent notification, CancellationToken cancellationToken)
@@ -19,6 +20,13 @@ public class StackCreatedEventHandler(
         {
             await HandleNixpacks(notification.Stack);
         }
+
+        await CreateDefaultEnvironmentVariables(notification.Stack);
+    }
+
+    private async Task CreateDefaultEnvironmentVariables(Stack stack)
+    {
+        await stackEnvironmentVariablesService.CreateDefaultVariableGroups(stack.Id);
     }
 
     private async Task HandleNixpacks(Stack stack)
