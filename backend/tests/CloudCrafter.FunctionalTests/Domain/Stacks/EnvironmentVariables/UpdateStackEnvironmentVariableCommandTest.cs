@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
+using CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
@@ -141,11 +141,21 @@ public class UpdateStackEnvironmentVariableCommandTest : BaseTestFixture
 
         var firstEnvValue = FetchEntity<StackEnvironmentVariable>(x => x.Id == envVar.Id);
         firstEnvValue.Should().NotBeNull();
-        firstEnvValue.Should().BeEquivalentTo(envVar);
+        firstEnvValue
+            .Should()
+            .BeEquivalentTo(
+                envVar,
+                opt => opt.Excluding(x => x.CreatedAt).Excluding(x => x.UpdatedAt)
+            );
 
         var secondEnvValue = FetchEntity<StackEnvironmentVariable>(x => x.Id == envVarToUpdate.Id);
         secondEnvValue.Should().NotBeNull();
-        secondEnvValue.Should().BeEquivalentTo(envVarToUpdate);
+        secondEnvValue
+            .Should()
+            .BeEquivalentTo(
+                envVarToUpdate,
+                opt => opt.Excluding(x => x.CreatedAt).Excluding(x => x.UpdatedAt)
+            );
 
         await AssertEnvCount(2);
     }
