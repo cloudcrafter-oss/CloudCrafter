@@ -36,6 +36,7 @@ export type { GetStackDetailQueryKey } from './hooks/useGetStackDetailHook'
 export type { GetStackDetailSuspenseQueryKey } from './hooks/useGetStackDetailSuspenseHook'
 export type { GetUsersMutationKey } from './hooks/useGetUsersHook'
 export type { PostCreateDeploymentMutationKey } from './hooks/usePostCreateDeploymentHook'
+export type { PostCreateEnvironmentVariableGroupMutationKey } from './hooks/usePostCreateEnvironmentVariableGroupHook'
 export type { PostCreateEnvironmentVariableMutationKey } from './hooks/usePostCreateEnvironmentVariableHook'
 export type { PostCreateGithubAppMutationKey } from './hooks/usePostCreateGithubAppHook'
 export type { PostCreateStackFromSourceProviderMutationKey } from './hooks/usePostCreateStackFromSourceProviderHook'
@@ -63,6 +64,7 @@ export type { CreateServer200, CreateServerMutationRequest, CreateServerMutation
 export type { CreateServerCommand } from './types/CreateServerCommand'
 export type { CreateStackCommand } from './types/CreateStackCommand'
 export type { CreateStackEnvironmentVariableCommand } from './types/CreateStackEnvironmentVariableCommand'
+export type { CreateStackEnvironmentVariableGroupCommand } from './types/CreateStackEnvironmentVariableGroupCommand'
 export type { CreateStackFromSourceProviderCommand } from './types/CreateStackFromSourceProviderCommand'
 export type { CreateUserCommand } from './types/CreateUserCommand'
 export type {
@@ -151,6 +153,13 @@ export type {
   PostCreateEnvironmentVariableMutationResponse,
   PostCreateEnvironmentVariableMutation,
 } from './types/PostCreateEnvironmentVariable'
+export type {
+  PostCreateEnvironmentVariableGroupPathParams,
+  PostCreateEnvironmentVariableGroup201,
+  PostCreateEnvironmentVariableGroupMutationRequest,
+  PostCreateEnvironmentVariableGroupMutationResponse,
+  PostCreateEnvironmentVariableGroupMutation,
+} from './types/PostCreateEnvironmentVariableGroup'
 export type {
   PostCreateGithubApp201,
   PostCreateGithubApp400,
@@ -292,6 +301,7 @@ export { getGetStackDetailUrl, getStackDetail } from './axios-backend/getStackDe
 export { getGetUsersUrl, getUsers } from './axios-backend/getUsers'
 export { getPostCreateDeploymentUrl, postCreateDeployment } from './axios-backend/postCreateDeployment'
 export { getPostCreateEnvironmentVariableUrl, postCreateEnvironmentVariable } from './axios-backend/postCreateEnvironmentVariable'
+export { getPostCreateEnvironmentVariableGroupUrl, postCreateEnvironmentVariableGroup } from './axios-backend/postCreateEnvironmentVariableGroup'
 export { getPostCreateGithubAppUrl, postCreateGithubApp } from './axios-backend/postCreateGithubApp'
 export { getPostCreateStackUrl, postCreateStack } from './axios-backend/postCreateStack'
 export { getPostCreateStackFromSourceProviderUrl, postCreateStackFromSourceProvider } from './axios-backend/postCreateStackFromSourceProvider'
@@ -393,6 +403,7 @@ export { getStackDetailQueryKey, getStackDetailQueryOptionsHook, useGetStackDeta
 export { getStackDetailSuspenseQueryKey, getStackDetailSuspenseQueryOptionsHook, useGetStackDetailSuspenseHook } from './hooks/useGetStackDetailSuspenseHook'
 export { getUsersMutationKey, useGetUsersHook } from './hooks/useGetUsersHook'
 export { postCreateDeploymentMutationKey, usePostCreateDeploymentHook } from './hooks/usePostCreateDeploymentHook'
+export { postCreateEnvironmentVariableGroupMutationKey, usePostCreateEnvironmentVariableGroupHook } from './hooks/usePostCreateEnvironmentVariableGroupHook'
 export { postCreateEnvironmentVariableMutationKey, usePostCreateEnvironmentVariableHook } from './hooks/usePostCreateEnvironmentVariableHook'
 export { postCreateGithubAppMutationKey, usePostCreateGithubAppHook } from './hooks/usePostCreateGithubAppHook'
 export { postCreateStackFromSourceProviderMutationKey, usePostCreateStackFromSourceProviderHook } from './hooks/usePostCreateStackFromSourceProviderHook'
@@ -428,6 +439,7 @@ export { createServerCommandSchema } from './zod/createServerCommandSchema'
 export { createServer200Schema, createServerMutationRequestSchema, createServerMutationResponseSchema } from './zod/createServerSchema'
 export { createStackCommandSchema } from './zod/createStackCommandSchema'
 export { createStackEnvironmentVariableCommandSchema } from './zod/createStackEnvironmentVariableCommandSchema'
+export { createStackEnvironmentVariableGroupCommandSchema } from './zod/createStackEnvironmentVariableGroupCommandSchema'
 export { createStackFromSourceProviderCommandSchema } from './zod/createStackFromSourceProviderCommandSchema'
 export { createUserCommandSchema } from './zod/createUserCommandSchema'
 export {
@@ -502,6 +514,12 @@ export {
   postCreateDeployment200Schema,
   postCreateDeploymentMutationResponseSchema,
 } from './zod/postCreateDeploymentSchema'
+export {
+  postCreateEnvironmentVariableGroupPathParamsSchema,
+  postCreateEnvironmentVariableGroup201Schema,
+  postCreateEnvironmentVariableGroupMutationRequestSchema,
+  postCreateEnvironmentVariableGroupMutationResponseSchema,
+} from './zod/postCreateEnvironmentVariableGroupSchema'
 export {
   postCreateEnvironmentVariablePathParamsSchema,
   postCreateEnvironmentVariable201Schema,

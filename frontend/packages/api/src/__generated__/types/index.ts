@@ -8,6 +8,7 @@ export type { CreateServer200, CreateServerMutationRequest, CreateServerMutation
 export type { CreateServerCommand } from './CreateServerCommand'
 export type { CreateStackCommand } from './CreateStackCommand'
 export type { CreateStackEnvironmentVariableCommand } from './CreateStackEnvironmentVariableCommand'
+export type { CreateStackEnvironmentVariableGroupCommand } from './CreateStackEnvironmentVariableGroupCommand'
 export type { CreateStackFromSourceProviderCommand } from './CreateStackFromSourceProviderCommand'
 export type { CreateUserCommand } from './CreateUserCommand'
 export type {
@@ -96,6 +97,13 @@ export type {
   PostCreateEnvironmentVariableMutationResponse,
   PostCreateEnvironmentVariableMutation,
 } from './PostCreateEnvironmentVariable'
+export type {
+  PostCreateEnvironmentVariableGroupPathParams,
+  PostCreateEnvironmentVariableGroup201,
+  PostCreateEnvironmentVariableGroupMutationRequest,
+  PostCreateEnvironmentVariableGroupMutationResponse,
+  PostCreateEnvironmentVariableGroupMutation,
+} from './PostCreateEnvironmentVariableGroup'
 export type {
   PostCreateGithubApp201,
   PostCreateGithubApp400,

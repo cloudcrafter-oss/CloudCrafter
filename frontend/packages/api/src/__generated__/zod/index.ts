@@ -8,6 +8,7 @@ export { createServerCommandSchema } from './createServerCommandSchema'
 export { createServer200Schema, createServerMutationRequestSchema, createServerMutationResponseSchema } from './createServerSchema'
 export { createStackCommandSchema } from './createStackCommandSchema'
 export { createStackEnvironmentVariableCommandSchema } from './createStackEnvironmentVariableCommandSchema'
+export { createStackEnvironmentVariableGroupCommandSchema } from './createStackEnvironmentVariableGroupCommandSchema'
 export { createStackFromSourceProviderCommandSchema } from './createStackFromSourceProviderCommandSchema'
 export { createUserCommandSchema } from './createUserCommandSchema'
 export {
@@ -78,6 +79,12 @@ export { paginatedListOfSimpleDeploymentDtoSchema } from './paginatedListOfSimpl
 export { paginatedListOfUserDtoSchema } from './paginatedListOfUserDtoSchema'
 export { paginatedRequestOfUserDtoSchema } from './paginatedRequestOfUserDtoSchema'
 export { postCreateDeploymentPathParamsSchema, postCreateDeployment200Schema, postCreateDeploymentMutationResponseSchema } from './postCreateDeploymentSchema'
+export {
+  postCreateEnvironmentVariableGroupPathParamsSchema,
+  postCreateEnvironmentVariableGroup201Schema,
+  postCreateEnvironmentVariableGroupMutationRequestSchema,
+  postCreateEnvironmentVariableGroupMutationResponseSchema,
+} from './postCreateEnvironmentVariableGroupSchema'
 export {
   postCreateEnvironmentVariablePathParamsSchema,
   postCreateEnvironmentVariable201Schema,
