@@ -154,6 +154,16 @@ public class StacksController : CloudCrafterController
         return deleted ? Results.Ok() : Results.BadRequest();
     }
 
+    [HttpGet("{stackId}/environment-variable-groups")]
+    public async Task<List<StackEnvironmentVariableGroupDto>> GetEnvironmentVariableGroups(
+        ISender sender,
+        [FromRoute] Guid stackId
+    )
+    {
+        var result = await sender.Send(new GetStackEnvironmentVariableGroupsQuery(stackId));
+        return result;
+    }
+
     // [HttpPost("{stackId}/environment-variables/templates/{templateId}/apply")]
     // [ProducesResponseType(StatusCodes.Status200OK)]
     // [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -28,7 +28,10 @@ public interface IStackRepository
         DeploymentsFilter filter,
         BasePaginationRequest paginatedRequest
     );
+
     Task AddEnvironmentVariable(StackEnvironmentVariable variable);
 
     Task AddEnvironmentVariableGroups(IList<StackEnvironmentVariableGroup> groups);
+
+    Task<List<StackEnvironmentVariableGroup>> GetEnvironmentVariableGroups(Guid stackId);
 }

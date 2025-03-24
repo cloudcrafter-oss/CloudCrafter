@@ -202,12 +202,28 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
 
     public async Task AddEnvironmentVariable(StackEnvironmentVariable variable)
     {
-        await context.StackEnvironmentVariables.AddAsync(variable);
+        context.StackEnvironmentVariables.Add(variable);
+        await context.SaveChangesAsync();
     }
 
     public async Task AddEnvironmentVariableGroups(IList<StackEnvironmentVariableGroup> groups)
     {
-        await context.StackEnvironmentVariableGroups.AddRangeAsync(groups);
+        foreach (var group in groups)
+        {
+            context.StackEnvironmentVariableGroups.Add(group);
+        }
+
+        await context.SaveChangesAsync();
+    }
+
+    public async Task<List<StackEnvironmentVariableGroup>> GetEnvironmentVariableGroups(
+        Guid stackId
+    )
+    {
+        // We need to get groups but ensure they include their variables
+        return await context
+            .StackEnvironmentVariableGroups.Where(g => g.StackId == stackId)
+            .ToListAsync();
     }
 
     public Task SaveChangesAsync()
@@ -239,14 +255,14 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
     {
         var stack = await context
             .Stacks.Include(x => x.Services)
-            .Include(x => x.Server)
             .Include(x => x.Environment)
-            .ThenInclude(x => x!.Project)
+            .Include(x => x.Server)
             .Include(x => x.Source)
             .ThenInclude(x => x!.GithubApp)
             .ThenInclude(x => x!.SourceProvider)
             .ThenInclude(x => x!.GithubProvider)
             .Include(x => x.EnvironmentVariables)
+            .Include(x => x.EnvironmentVariableGroups)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (stack is null && throwExceptionOnNotFound)

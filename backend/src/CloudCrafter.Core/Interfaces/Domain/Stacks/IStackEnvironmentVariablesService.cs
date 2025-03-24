@@ -19,6 +19,13 @@ public interface IStackEnvironmentVariablesService
     );
 
     /// <summary>
+    ///     Retrieves all environment variable groups for a stack
+    /// </summary>
+    /// <param name="stackId">ID of the stack</param>
+    /// <returns>List of environment variable groups</returns>
+    Task<List<StackEnvironmentVariableGroupDto>> GetEnvironmentVariableGroups(Guid stackId);
+
+    /// <summary>
     ///     Creates a new environment variable for a stack
     /// </summary>
     /// <param name="stackId">ID of the stack</param>

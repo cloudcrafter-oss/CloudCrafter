@@ -9,7 +9,7 @@ namespace CloudCrafter.FunctionalTests.Domain.Stacks.EnvironmentVariables;
 
 using static Testing;
 
-public class UpdateStackEnvironmentVariableCommandTest : BaseTestFixture
+public class UpdateStackEnvironmentVariableCommandTest : BaseEnvironmentVariablesTest
 {
     private readonly UpdateStackEnvironmentVariableCommand Command =
         new()
@@ -20,11 +20,6 @@ public class UpdateStackEnvironmentVariableCommandTest : BaseTestFixture
             IsSecret = false,
             Type = EnvironmentVariableType.BuildTime,
         };
-
-    private async Task AssertEnvCount(int count)
-    {
-        (await CountAsync<StackEnvironmentVariable>()).Should().Be(count);
-    }
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()

@@ -1,3 +1,5 @@
+using Ardalis.GuardClauses;
+using AutoMapper;
 using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Repositories;
@@ -11,7 +13,8 @@ namespace CloudCrafter.Core.Services.Domain.Stacks;
 
 public class StackEnvironmentVariablesService(
     IStackRepository repository,
-    ILogger<StackEnvironmentVariablesService> logger
+    ILogger<StackEnvironmentVariablesService> logger,
+    IMapper mapper
 ) : IStackEnvironmentVariablesService
 {
     public async Task<List<StackEnvironmentVariableDto>> GetEnvironmentVariables(
@@ -90,6 +93,29 @@ public class StackEnvironmentVariablesService(
         // Add the groups to the context
         await repository.AddEnvironmentVariableGroups(groups);
         await repository.SaveChangesAsync();
+    }
+
+    public async Task<List<StackEnvironmentVariableGroupDto>> GetEnvironmentVariableGroups(
+        Guid stackId
+    )
+    {
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw new NotFoundException("Stack", "Stack not found");
+        }
+        // Get the variable groups for the stack
+        var groups = await repository.GetEnvironmentVariableGroups(stackId);
+
+        if (!groups.Any())
+        {
+            logger.LogWarning("No environment variable groups found for stack {StackId}", stackId);
+            return new List<StackEnvironmentVariableGroupDto>();
+        }
+
+        // Map groups to DTOs
+        return mapper.Map<List<StackEnvironmentVariableGroupDto>>(groups);
     }
 
     public async Task<Guid> CreateEnvironmentVariable(
