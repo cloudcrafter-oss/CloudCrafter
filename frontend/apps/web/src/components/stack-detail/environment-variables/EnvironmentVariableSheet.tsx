@@ -4,7 +4,11 @@ import type {
 	CreateStackEnvironmentVariableCommand,
 	StackDetailDto,
 } from '@cloudcrafter/api'
-import { createStackEnvironmentVariableCommandSchema } from '@cloudcrafter/api'
+import {
+	createStackEnvironmentVariableCommandSchema,
+	usePostCreateEnvironmentVariableHook,
+	usePutUpdateEnvironmentVariableHook,
+} from '@cloudcrafter/api'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Form,
@@ -36,9 +40,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Lock, PlusCircle } from 'lucide-react'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 // Define types
-interface EnvVarGroup {
+export type EnvVarGroup = {
 	id: string
 	name: string
 	description?: string
@@ -63,6 +68,20 @@ export enum VariableType {
 	Both = 2,
 }
 
+// Define custom form type that extends the API type to include optional fields
+interface EnvironmentVariableFormData
+	extends CreateStackEnvironmentVariableCommand {
+	description?: string
+	groupId?: string
+}
+
+// Define an extended API data type that includes our optional fields
+interface ExtendedEnvironmentVariableCommand
+	extends CreateStackEnvironmentVariableCommand {
+	description?: string
+	groupId?: string
+}
+
 // Extend the API schema with additional validation rules
 const extendedVariableSchema =
 	createStackEnvironmentVariableCommandSchema.extend({
@@ -74,33 +93,112 @@ const extendedVariableSchema =
 			.max(2000, 'Value must be 2000 characters or less'),
 	})
 
-type FormData = CreateStackEnvironmentVariableCommand
-
 interface EnvironmentVariableSheetProps {
 	open: boolean
 	onOpenChange: (open: boolean) => void
-	editingVariable: EnvVar | null
-	groups: EnvVarGroup[]
-	onSave: (command: CreateStackEnvironmentVariableCommand) => void
+	editingVariable?: EnvVar | null
+	groups?: EnvVarGroup[]
 	stackDetails: StackDetailDto
+	variables: EnvVar[]
+	onSuccess?: () => void
 }
 
 export function EnvironmentVariableSheet({
 	open,
 	onOpenChange,
 	editingVariable,
-	onSave,
+	groups = [],
 	stackDetails,
+	variables,
+	onSuccess,
 }: EnvironmentVariableSheetProps) {
-	const form = useForm<FormData>({
+	const form = useForm<EnvironmentVariableFormData>({
 		resolver: zodResolver(extendedVariableSchema),
 		defaultValues: {
 			key: '',
 			value: '',
 			type: VariableType.Both,
 			isSecret: false,
+			description: '',
+			groupId: '',
 		},
 	})
+
+	// Create and update environment variables
+	const { mutateAsync: createEnvironmentVariable } =
+		usePostCreateEnvironmentVariableHook()
+	const { mutateAsync: updateEnvironmentVariable } =
+		usePutUpdateEnvironmentVariableHook()
+
+	const handleCreateVariable = async (data: EnvironmentVariableFormData) => {
+		try {
+			const apiData: ExtendedEnvironmentVariableCommand = {
+				key: data.key,
+				value: data.value,
+				type: data.type,
+				isSecret: data.isSecret,
+			}
+
+			// Add description and groupId if they exist and aren't the 'none' placeholder
+			if (data.description) {
+				apiData.description = data.description
+			}
+
+			if (data.groupId && data.groupId !== 'none') {
+				apiData.groupId = data.groupId
+			}
+
+			await createEnvironmentVariable({
+				stackId: stackDetails.id,
+				data: apiData,
+			})
+
+			toast.success(`Environment variable ${data.key} created`)
+			onSuccess?.()
+			onOpenChange(false)
+		} catch (error: unknown) {
+			const errorMessage =
+				error instanceof Error ? error.message : 'Unknown error'
+			toast.error(`Error creating environment variable: ${errorMessage}`)
+		}
+	}
+
+	const handleUpdateVariable = async (
+		data: EnvironmentVariableFormData,
+		id: string,
+	) => {
+		try {
+			const apiData: ExtendedEnvironmentVariableCommand = {
+				key: data.key,
+				value: data.value,
+				type: data.type,
+				isSecret: data.isSecret,
+			}
+
+			// Add description and groupId if they exist and aren't the 'none' placeholder
+			if (data.description) {
+				apiData.description = data.description
+			}
+
+			if (data.groupId && data.groupId !== 'none') {
+				apiData.groupId = data.groupId
+			}
+
+			await updateEnvironmentVariable({
+				stackId: stackDetails.id,
+				id,
+				data: apiData,
+			})
+
+			toast.success(`Environment variable ${data.key} updated`)
+			onSuccess?.()
+			onOpenChange(false)
+		} catch (error: unknown) {
+			const errorMessage =
+				error instanceof Error ? error.message : 'Unknown error'
+			toast.error(`Error updating environment variable: ${errorMessage}`)
+		}
+	}
 
 	useEffect(() => {
 		if (editingVariable) {
@@ -109,6 +207,8 @@ export function EnvironmentVariableSheet({
 				value: editingVariable.value,
 				type: editingVariable.variableType,
 				isSecret: editingVariable.isSecret,
+				description: editingVariable.description,
+				groupId: editingVariable.groupId || 'none',
 			})
 		} else {
 			form.reset({
@@ -116,16 +216,58 @@ export function EnvironmentVariableSheet({
 				value: '',
 				type: VariableType.Both,
 				isSecret: false,
+				description: '',
+				groupId: 'none',
 			})
 		}
 	}, [editingVariable, form])
 
-	const onSubmit = (data: FormData) => {
-		onSave(data)
-		onOpenChange(false)
+	const onSubmit = (data: EnvironmentVariableFormData) => {
+		const isEditing = !!editingVariable
+
+		// Form validation
+		if (!data.key) {
+			toast.error('Key is required')
+			return
+		}
+
+		// Validate key format (uppercase letters, numbers, underscores, starts with letter)
+		const keyRegex = /^[A-Z][A-Z0-9_]*$/
+		if (!keyRegex.test(data.key)) {
+			toast.error(
+				'Key must start with an uppercase letter and contain only uppercase letters, numbers, and underscores',
+			)
+			return
+		}
+
+		// Validate key and value length
+		if (data.key.length > 100) {
+			toast.error('Key must be 100 characters or less')
+			return
+		}
+
+		if (data.value && data.value.length > 2000) {
+			toast.error('Value must be 2000 characters or less')
+			return
+		}
+
+		// Check for duplicate keys
+		if (!isEditing && variables.some((v) => v.key === data.key)) {
+			toast.error('A variable with this key already exists')
+			return
+		}
+
+		if (isEditing && editingVariable) {
+			// Update existing variable
+			handleUpdateVariable(data, editingVariable.id)
+		} else {
+			// Create new variable
+			handleCreateVariable(data)
+		}
 	}
 
 	const isEditing = !!editingVariable
+	const isLoading = false // Set to loading state when implementing API hooks
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
@@ -251,12 +393,67 @@ export function EnvironmentVariableSheet({
 							)}
 						/>
 
-						<SheetFooter>
-							<Button
-								type='submit'
-								disabled={isEditing && editingVariable?.isInherited}
-							>
-								{isEditing ? 'Update' : 'Create'} Variable
+						<FormField
+							control={form.control}
+							name='description'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Description</FormLabel>
+									<FormControl>
+										<Textarea
+											{...field}
+											placeholder='Variable description'
+											className='font-mono'
+											rows={3}
+											disabled={isEditing && editingVariable?.isInherited}
+										/>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<FormField
+							control={form.control}
+							name='groupId'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Group</FormLabel>
+									<FormControl>
+										<Select
+											value={field.value || 'none'}
+											onValueChange={(value) =>
+												field.onChange(value === 'none' ? '' : value)
+											}
+											disabled={isEditing && editingVariable?.isInherited}
+										>
+											<FormControl>
+												<SelectTrigger>
+													<SelectValue placeholder='Select group' />
+												</SelectTrigger>
+											</FormControl>
+											<SelectContent>
+												<SelectItem value='none'>No Group</SelectItem>
+												{groups?.map((group: EnvVarGroup) => (
+													<SelectItem key={group.id} value={group.id}>
+														{group.name}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+
+						<SheetFooter className='mt-4'>
+							<Button type='submit' disabled={isLoading}>
+								{isLoading
+									? 'Saving...'
+									: isEditing
+										? 'Save Changes'
+										: 'Add Variable'}
 							</Button>
 						</SheetFooter>
 					</form>

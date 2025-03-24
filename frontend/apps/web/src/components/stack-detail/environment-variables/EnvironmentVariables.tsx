@@ -269,6 +269,14 @@ export const EnvironmentVariables: React.FC<{
 		setSheetOpen(true)
 	}
 
+	// Handle successful variable creation or update
+	const handleVariableSuccess = () => {
+		// In a real implementation, this would refetch the variables
+		// For now, we'll just close the sheet
+		setSheetOpen(false)
+		setEditingVariable(null)
+	}
+
 	// Filter variables based on search, tab, and other criteria
 	const filteredVariables = variables.filter((variable) => {
 		// Filter by search term
@@ -381,8 +389,9 @@ export const EnvironmentVariables: React.FC<{
 							onOpenChange={setSheetOpen}
 							editingVariable={editingVariable}
 							groups={groups}
-							onSave={handleSaveVariable}
+							onSuccess={handleVariableSuccess}
 							stackDetails={stackDetails}
+							variables={variables}
 						/>
 						<Button onClick={handleAddVariable}>
 							<PlusCircle className='h-4 w-4 mr-2' />
