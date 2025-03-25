@@ -397,14 +397,6 @@ public class StackEnvironmentVariablesService(
         string? description
     )
     {
-        // Validate stack exists
-        var stack = await repository.GetStack(stackId);
-
-        if (stack == null)
-        {
-            throw new NotFoundException("Stack", "Stack not found");
-        }
-
         // Get the environment variable group directly from repository
         var existingGroup = await repository.GetEnvironmentVariableGroup(stackId, id);
 
@@ -435,14 +427,6 @@ public class StackEnvironmentVariablesService(
 
     public async Task DeleteEnvironmentVariableGroup(Guid id, Guid stackId)
     {
-        // Check if stack exists
-        var stack = await repository.GetStack(stackId);
-
-        if (stack == null)
-        {
-            throw new NotFoundException("Stack", "Stack not found");
-        }
-
         // Get the group directly from repository
         var group = await repository.GetEnvironmentVariableGroup(stackId, id);
 
@@ -455,7 +439,7 @@ public class StackEnvironmentVariablesService(
         }
 
         // Remove the group from the repository
-        stack.EnvironmentVariableGroups.Remove(group);
+        repository.RemoveEnvironmentVariableGroup(group);
 
         // Save changes
         await repository.SaveChangesAsync();

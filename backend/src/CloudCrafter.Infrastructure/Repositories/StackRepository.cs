@@ -243,6 +243,11 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
             .FirstOrDefaultAsync();
     }
 
+    public void RemoveEnvironmentVariableGroup(StackEnvironmentVariableGroup group)
+    {
+        context.StackEnvironmentVariableGroups.Remove(group);
+    }
+
     public Task SaveChangesAsync()
     {
         return context.SaveChangesAsync();

@@ -41,4 +41,10 @@ public interface IStackRepository
     /// <param name="groupId">ID of the environment variable group</param>
     /// <returns>The environment variable group, or null if not found</returns>
     Task<StackEnvironmentVariableGroup?> GetEnvironmentVariableGroup(Guid stackId, Guid groupId);
+
+    /// <summary>
+    ///     Removes an environment variable group
+    /// </summary>
+    /// <param name="group">The environment variable group to remove</param>
+    void RemoveEnvironmentVariableGroup(StackEnvironmentVariableGroup group);
 }
