@@ -16,7 +16,10 @@ let interceptorsInitialized = false
  */
 export const setupGlobalInterceptors = () => {
 	// Only set up interceptors once
-	if (interceptorsInitialized) return
+	if (interceptorsInitialized) {
+		console.log('Interceptors already initialized!!')
+		return
+	}
 
 	console.log('Setting up global axios interceptors')
 	axiosInstance.defaults.baseURL = backendEnv.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL

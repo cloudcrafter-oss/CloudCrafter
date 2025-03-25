@@ -1,4 +1,4 @@
-import { generateBackendClient } from '@/src/setup-client'
+import { backendEnv } from '@/src/core/env/cloudcrafter-env'
 import { postRefreshTokens } from '@cloudcrafter/api'
 import { jwtDecode } from 'jwt-decode'
 import type { DecodedJWT } from 'next-auth'
@@ -8,12 +8,11 @@ export const authJsRefreshAccessToken = async (
 	nextAuthJWT: JWT,
 ): Promise<JWT> => {
 	try {
-		const backendClient = generateBackendClient()
 		const response = await postRefreshTokens(
 			{
 				refreshToken: nextAuthJWT.data.tokens.refresh,
 			},
-			{ client: backendClient },
+			{ baseURL: backendEnv.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL },
 		)
 
 		const { exp }: DecodedJWT = jwtDecode(response.accessToken)

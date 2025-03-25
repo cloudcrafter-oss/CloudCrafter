@@ -1,5 +1,6 @@
 import { CloudCrafterSidebar } from '@/src/layout/components/Sidebar/CloudCrafterSidebar'
 import { ThemeProvider } from '@/src/layout/components/theme-provider'
+import { setupGlobalInterceptors } from '@/src/setup-client'
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -20,6 +21,7 @@ import type React from 'react'
 export default function NextAdminLayout({
 	children,
 }: { children: React.ReactNode }) {
+	setupGlobalInterceptors()
 	return (
 		<ThemeProvider defaultTheme={'dark'} storageKey={'cloudCraft-theme'}>
 			<TooltipProvider>

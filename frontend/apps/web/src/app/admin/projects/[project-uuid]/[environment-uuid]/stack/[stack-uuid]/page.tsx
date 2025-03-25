@@ -1,5 +1,6 @@
 import StackConfigPage from '@/src/components/stack-detail/StackConfigPage'
 import { DeploymentList } from '@/src/components/stack-detail/deployments/deployment-list'
+import { generateBackendClient } from '@/src/setup-client'
 import {
 	type StackRouteParams,
 	validateStackRouteParams,
@@ -21,8 +22,11 @@ export default async function StackPage({ params }: PageProps) {
 	const resolvedParams = await params
 	const routeData = validateStackRouteParams(resolvedParams)
 
-	const stackDetails = await getStackDetail(routeData['stack-uuid'])
-	const deployments = await getDeploymentsForStack(routeData['stack-uuid'])
+	const client = generateBackendClient()
+	const stackDetails = await getStackDetail(routeData['stack-uuid'], { client })
+	const deployments = await getDeploymentsForStack(routeData['stack-uuid'], {
+		client,
+	})
 	const tabs = [
 		{
 			name: 'Configuration',

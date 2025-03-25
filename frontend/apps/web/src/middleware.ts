@@ -67,6 +67,17 @@ setupGlobalInterceptors()
 
 export { auth as middleware } from './auth'
 
+// export default auth((req) => {
+// 	if (!req.auth && req.nextUrl.pathname.startsWith('/admin')) {
+// 		const newUrl = new URL('/login', req.nextUrl.origin)
+// 		//return Response.redirect(newUrl)
+// 	}
+
+// 	setupGlobalInterceptors()
+
+// 	return NextResponse.next()
+// })
+
 // Read more: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 export const config = {
 	matcher: ['/((?!api|_next|static|public|favicon.ico).*)'],
