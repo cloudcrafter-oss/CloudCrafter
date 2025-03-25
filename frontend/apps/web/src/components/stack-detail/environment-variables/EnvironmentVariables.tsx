@@ -2,16 +2,19 @@
 
 import {
 	type StackDetailDto,
+	type StackEnvironmentVariableGroupDto,
 	useGetEnvironmentVariableGroupsHook,
 	useGetEnvironmentVariablesHook,
 } from '@cloudcrafter/api'
 import { toast } from 'sonner'
 import { CreateEnvironmentVariableGroupSheet } from './CreateEnvironmentVariableGroupSheet'
+import { DeleteEnvironmentVariableGroupDialog } from './DeleteEnvironmentVariableGroupDialog'
 import {
 	type EnvVar,
 	EnvironmentVariableSheet,
 	VariableType,
 } from './EnvironmentVariableSheet'
+import { UpdateEnvironmentVariableGroupSheet } from './UpdateEnvironmentVariableGroupSheet'
 
 import {
 	Accordion,
@@ -63,11 +66,17 @@ import {
 
 import { useEffect, useState } from 'react'
 
-interface EnvVarGroup {
+// Extended version of StackEnvironmentVariableGroupDto to include properties
+// we need but might not be in the generated type
+export interface EnvVarGroup {
 	id: string
 	name: string
-	description?: string
-	inheritFromParent: boolean
+	description?: string | null
+	allowInheritance: boolean
+	stackId: string
+	createdAt: string
+	lastModifiedAt?: string
+	variableCount: number
 }
 
 interface StackEnvironmentVariableDto {
@@ -81,17 +90,6 @@ interface StackEnvironmentVariableDto {
 	createdAt: string
 	lastModifiedAt?: string
 	groupName?: string
-}
-
-interface StackEnvironmentVariableGroupDto {
-	id: string
-	stackId: string
-	name: string
-	description?: string
-	allowInheritance: boolean
-	createdAt: string
-	lastModifiedAt?: string
-	variableCount: number
 }
 
 export const EnvironmentVariables: React.FC<{
@@ -108,6 +106,12 @@ export const EnvironmentVariables: React.FC<{
 	// Sheet state for adding/editing variables
 	const [sheetOpen, setSheetOpen] = useState(false)
 	const [editingVariable, setEditingVariable] = useState<EnvVar | null>(null)
+
+	// State for group management
+	const [editingGroup, setEditingGroup] = useState<EnvVarGroup | null>(null)
+	const [editGroupSheetOpen, setEditGroupSheetOpen] = useState(false)
+	const [deleteGroupDialogOpen, setDeleteGroupDialogOpen] = useState(false)
+	const [groupToDelete, setGroupToDelete] = useState<EnvVarGroup | null>(null)
 
 	const environmentVarsHook = useGetEnvironmentVariablesHook(stackDetails.id, {
 		includeSecrets: showSecrets,
@@ -129,8 +133,13 @@ export const EnvironmentVariables: React.FC<{
 			).map((apiGroup) => ({
 				id: apiGroup.id,
 				name: apiGroup.name,
-				description: apiGroup.description || undefined,
-				inheritFromParent: apiGroup.allowInheritance,
+				description: apiGroup.description,
+				// Add default values for properties that might not be in the API response
+				allowInheritance: false, // Default value, replace with actual property if available
+				stackId: stackDetails.id,
+				createdAt: new Date().toISOString(),
+				lastModifiedAt: undefined,
+				variableCount: 0, // Default value, replace with actual property if available
 			}))
 			setGroups(apiGroups)
 		}
@@ -138,6 +147,7 @@ export const EnvironmentVariables: React.FC<{
 		environmentVarsHook.isLoading,
 		environmentGroupsHook.data,
 		environmentGroupsHook.isLoading,
+		stackDetails.id,
 	])
 
 	// Helper function to map API type to our variable type enum
@@ -433,7 +443,7 @@ export const EnvironmentVariables: React.FC<{
 															</Badge>
 															{groupName !== 'Ungrouped' &&
 																groups.find((g) => g.name === groupName)
-																	?.inheritFromParent && (
+																	?.allowInheritance && (
 																	<Badge variant='secondary' className='ml-2'>
 																		Inheritable
 																	</Badge>
@@ -446,7 +456,14 @@ export const EnvironmentVariables: React.FC<{
 																		className='h-8 w-8 p-0'
 																		onClick={(e) => {
 																			e.preventDefault()
-																			// TODO: Edit group
+																			// Find the group in our processed groups array
+																			const groupData = groups.find(
+																				(g) => g.name === groupName,
+																			)
+																			if (groupData) {
+																				setEditingGroup(groupData)
+																				setEditGroupSheetOpen(true)
+																			}
 																		}}
 																		title='Edit group'
 																	>
@@ -458,7 +475,14 @@ export const EnvironmentVariables: React.FC<{
 																		className='h-8 w-8 p-0 text-destructive'
 																		onClick={(e) => {
 																			e.preventDefault()
-																			// TODO: Delete group
+																			// Find the group in our processed groups array
+																			const groupData = groups.find(
+																				(g) => g.name === groupName,
+																			)
+																			if (groupData) {
+																				setGroupToDelete(groupData)
+																				setDeleteGroupDialogOpen(true)
+																			}
 																		}}
 																		title='Delete group'
 																	>
@@ -511,6 +535,27 @@ export const EnvironmentVariables: React.FC<{
 					</Tabs>
 				</div>
 			</CardContent>
+
+			{/* Group management modals */}
+			{editingGroup && (
+				<UpdateEnvironmentVariableGroupSheet
+					stackId={stackDetails.id}
+					group={editingGroup}
+					open={editGroupSheetOpen}
+					onOpenChange={setEditGroupSheetOpen}
+					onSuccess={refreshData}
+				/>
+			)}
+
+			{groupToDelete && (
+				<DeleteEnvironmentVariableGroupDialog
+					stackId={stackDetails.id}
+					group={groupToDelete}
+					open={deleteGroupDialogOpen}
+					onOpenChange={setDeleteGroupDialogOpen}
+					onSuccess={refreshData}
+				/>
+			)}
 		</Card>
 	)
 }

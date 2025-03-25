@@ -46,7 +46,12 @@ import { toast } from 'sonner'
 export type EnvVarGroup = {
 	id: string
 	name: string
-	description?: string
+	description?: string | null
+	allowInheritance?: boolean
+	stackId?: string
+	createdAt?: string
+	lastModifiedAt?: string
+	variableCount?: number
 }
 
 export interface EnvVar {
