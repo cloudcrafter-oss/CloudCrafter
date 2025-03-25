@@ -59,7 +59,8 @@ public interface IStackEnvironmentVariablesService
         string key,
         string value,
         bool? isSecret = null,
-        EnvironmentVariableType? type = null
+        EnvironmentVariableType? type = null,
+        Guid? groupId = null
     );
 
     /// <summary>

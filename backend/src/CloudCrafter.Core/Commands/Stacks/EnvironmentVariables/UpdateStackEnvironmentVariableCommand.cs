@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
+using CloudCrafter.Domain.Entities;
 using MediatR;
 
 namespace CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
@@ -29,7 +30,8 @@ public class UpdateStackEnvironmentVariableCommandHandler(
             request.Key,
             request.Value,
             request.IsSecret,
-            request.Type
+            request.Type,
+            request.GroupId
         );
 
         return result;

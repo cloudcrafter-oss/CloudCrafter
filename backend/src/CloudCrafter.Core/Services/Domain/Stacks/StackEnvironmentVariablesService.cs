@@ -209,7 +209,8 @@ public class StackEnvironmentVariablesService(
         string key,
         string value,
         bool? isSecret = null,
-        EnvironmentVariableType? type = null
+        EnvironmentVariableType? type = null,
+        Guid? groupId = null
     )
     {
         // Get the stack
@@ -231,7 +232,7 @@ public class StackEnvironmentVariablesService(
         // Update the variable
         variable.Key = key;
         variable.Value = value;
-        variable.UpdatedAt = DateTime.UtcNow;
+        variable.GroupId = groupId;
 
         if (isSecret.HasValue)
         {

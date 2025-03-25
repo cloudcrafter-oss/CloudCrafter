@@ -204,4 +204,95 @@ public class UpdateStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
 
         await AssertEnvCount(1);
     }
+
+    [Test]
+    public async Task ShouldSuccessfullyUpdateEnvironmentVariableToAGroup()
+    {
+        await RunAsAdministratorAsync();
+        await AssertEnvCount(0);
+        await AssertEnvGroupCount(0);
+
+        // Create stack
+        var stack = await CreateSampleStack();
+
+        var group = FakerInstances.StackEnvironmentVariableGroupFaker(stack).Generate();
+        await AddAsync(group);
+        await AssertEnvGroupCount(1);
+
+        var envVar = FakerInstances.StackEnvironmentVariableFaker(stack).Generate();
+
+        await AddAsync(envVar);
+        await AssertEnvCount(1);
+
+        // Update the variable
+        await SendAsync(
+            Command with
+            {
+                Id = envVar.Id,
+                StackId = stack.Id,
+                Key = "UPDATED_KEY",
+                GroupId = group.Id,
+                Value = "Updated Value",
+                IsSecret = true,
+                Type = EnvironmentVariableType.Runtime,
+            }
+        );
+
+        // Retrieve updated entity and verify changes
+        var updatedVar = FetchEntity<StackEnvironmentVariable>(x => x.Id == envVar.Id);
+
+        updatedVar.Should().NotBeNull();
+        updatedVar!.Key.Should().Be("UPDATED_KEY");
+        updatedVar!.Value.Should().Be("Updated Value");
+        updatedVar!.IsSecret.Should().BeTrue();
+        updatedVar!.Type.Should().Be(EnvironmentVariableType.Runtime);
+        updatedVar.GroupId.Should().Be(group.Id);
+
+        await AssertEnvCount(1);
+    }
+
+    [Test]
+    public async Task ShouldSuccessfullyUpdateEnvironmentVariableGroup()
+    {
+        await RunAsAdministratorAsync();
+        await AssertEnvGroupCount(0);
+
+        // Create stack
+        var stack = await CreateSampleStack();
+
+        // Create environment variable group
+        var group = new StackEnvironmentVariableGroup
+        {
+            Id = Guid.NewGuid(),
+            StackId = stack.Id,
+            Name = "Original Group Name",
+            Description = "Original description",
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+        };
+
+        await AddAsync(group);
+        await AssertEnvGroupCount(1);
+
+        // Update the group
+        var command = new UpdateStackEnvironmentVariableGroupCommand
+        {
+            Id = group.Id,
+            StackId = stack.Id,
+            Name = "Updated Group Name",
+            Description = "Updated description",
+        };
+
+        await SendAsync(command);
+
+        // Retrieve updated entity and verify changes
+        var updatedGroup = FetchEntity<StackEnvironmentVariableGroup>(x => x.Id == group.Id);
+
+        updatedGroup.Should().NotBeNull();
+        updatedGroup!.Name.Should().Be("Updated Group Name");
+        updatedGroup!.Description.Should().Be("Updated description");
+        updatedGroup!.StackId.Should().Be(stack.Id);
+
+        await AssertEnvGroupCount(1);
+    }
 }

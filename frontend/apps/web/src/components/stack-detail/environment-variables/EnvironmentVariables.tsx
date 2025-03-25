@@ -338,14 +338,6 @@ export const EnvironmentVariables: React.FC<{
 							stackId={stackDetails.id}
 							onSuccess={() => environmentGroupsHook.refetch()}
 						/>
-						<EnvironmentVariableSheet
-							open={sheetOpen}
-							onOpenChange={setSheetOpen}
-							editingVariable={editingVariable}
-							groups={groups}
-							onSuccess={handleAddOrUpdateVariable}
-							stackDetails={stackDetails}
-						/>
 						<Button onClick={() => setSheetOpen(true)}>
 							<PlusCircle className='h-4 w-4 mr-2' />
 							Add Variable
@@ -506,9 +498,10 @@ export const EnvironmentVariables: React.FC<{
 														<VariablesTable
 															variables={variables}
 															renderValue={renderVariableValue}
-															onEdit={(variable) =>
+															onEdit={(variable) => {
 																setEditingVariable(variable)
-															}
+																setSheetOpen(true)
+															}}
 															onDelete={handleDeleteVariable}
 															onToggleSecret={handleToggleSecret}
 															onCopy={handleCopyVariable}
@@ -524,7 +517,10 @@ export const EnvironmentVariables: React.FC<{
 									<VariablesTable
 										variables={getFilteredVariables()}
 										renderValue={renderVariableValue}
-										onEdit={(variable) => setEditingVariable(variable)}
+										onEdit={(variable) => {
+											setEditingVariable(variable)
+											setSheetOpen(true)
+										}}
 										onDelete={handleDeleteVariable}
 										onToggleSecret={handleToggleSecret}
 										onCopy={handleCopyVariable}
@@ -556,6 +552,35 @@ export const EnvironmentVariables: React.FC<{
 					onSuccess={refreshData}
 				/>
 			)}
+
+			{/* Environment variable sheet for adding/editing variables */}
+			<EnvironmentVariableSheet
+				open={sheetOpen || !!editingVariable}
+				onOpenChange={(open) => {
+					if (!open) {
+						setSheetOpen(false)
+						setEditingVariable(null)
+					} else {
+						setSheetOpen(true)
+					}
+				}}
+				editingVariable={editingVariable}
+				groups={groups}
+				stackDetails={stackDetails}
+				variables={(environmentVarsHook.data ?? []).map((variable) => ({
+					id: variable.id,
+					key: variable.key,
+					value: variable.value,
+					groupId: variable.groupId || undefined, // Convert null to undefined
+					variableType: variable.type,
+					description: undefined, // API doesn't seem to provide this
+					isSecret: variable.isSecret,
+					isInherited: false, // Assuming this isn't provided by the API
+					createdAt: variable.createdAt,
+					modifiedAt: variable.lastModifiedAt || variable.createdAt,
+				}))}
+				onSuccess={refreshData}
+			/>
 		</Card>
 	)
 }
