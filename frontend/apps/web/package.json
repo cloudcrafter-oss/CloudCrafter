@@ -16,6 +16,7 @@
 	"dependencies": {
 		"@auth/unstorage-adapter": "^2.4.1",
 		"@cloudcrafter/api": "workspace:*",
+		"@kubb/plugin-client": "^3.6.4",
 		"@cloudcrafter/ui": "workspace:*",
 		"@hookform/resolvers": "^3.6.0",
 		"@icons-pack/react-simple-icons": "^10.1.0",

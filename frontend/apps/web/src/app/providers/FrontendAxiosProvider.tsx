@@ -1,4 +1,5 @@
 'use client'
+import { setupGlobalInterceptors } from '@/src/setup-client'
 import { useEffect, useState } from 'react'
 
 export const FrontendAxiosProvider = () => {
@@ -7,15 +8,7 @@ export const FrontendAxiosProvider = () => {
 	useEffect(() => {
 		if (hasSetInterceptors) return
 
-		// frontendAxiosInstance.interceptors.request.use(async (request) => {
-		// 	const session = await getSession()
-
-		// 	if (session) {
-		// 		request.headers.Authorization = `Bearer ${session.t.accessToken}`
-		// 	}
-
-		// 	return request
-		// })
+		setupGlobalInterceptors()
 
 		setHasSetInterceptors(true)
 	}, [hasSetInterceptors])

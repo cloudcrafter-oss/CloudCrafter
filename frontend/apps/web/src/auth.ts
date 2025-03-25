@@ -13,6 +13,7 @@ import type { JWT } from 'next-auth/jwt'
 import type { Provider } from 'next-auth/providers'
 import Auth0 from 'next-auth/providers/auth0'
 import Credentials from 'next-auth/providers/credentials'
+import { generateBackendClient, setupGlobalInterceptors } from './setup-client'
 
 // Initialize providers array
 const providers: Provider[] = []
@@ -94,10 +95,14 @@ if (credentialsEnabled && credentialsConfig) {
 					// For testing purposes, we'll use a simple check
 					// In production, replace this with actual authentication logic
 
-					const result = await postLoginUser({
-						email: credentials.email as string,
-						password: credentials.password as string,
-					})
+					const client = generateBackendClient()
+					const result = await postLoginUser(
+						{
+							email: credentials.email as string,
+							password: credentials.password as string,
+						},
+						{ client },
+					)
 
 					return createUserObject(result)
 				} catch (error) {
@@ -109,37 +114,22 @@ if (credentialsEnabled && credentialsConfig) {
 	)
 }
 
-// async function refreshAccessToken(token: JWT): Promise<JWT> {
-// 	try {
-// 		const response = await postRefreshTokens({
-// 			refreshToken: token.refreshToken as string,
-// 		});
-// 		return {
-// 			...token,
-// 			accessToken: response.accessToken,
-// 			accessTokenExpires: Date.now() + response.expiresIn * 1000,
-// 			refreshToken: response.refreshToken, // This will be the new refresh token
-// 		};
-// 	} catch (error) {
-// 		console.log("cannot refresh tokens!");
-// 		return {
-// 			error: "RefreshAccessTokenError",
-// 		};
-// 	}
-// }
-
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
 	providers,
-	//debug: process.env.NODE_ENV !== 'production' ? true : false,
+	debug: process.env.NODE_ENV !== 'production',
 	callbacks: {
 		async jwt({ token, user, account }) {
 			if (account && user) {
 				if (account.type === 'oidc') {
-					const result = await postCreateUser({
-						name: user.name || '',
-						email: user.email || '',
-					})
+					const client = generateBackendClient()
+					const result = await postCreateUser(
+						{
+							name: user.name || '',
+							email: user.email || '',
+						},
+						{ client },
+					)
 
 					const userObject = createUserObject(result)
 					return { ...token, data: userObject }
@@ -181,17 +171,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		},
 		authorized: async ({ request, auth }) => {
 			const { pathname } = request.nextUrl
-			if (pathname === '/authjs/middleware-example') return !!auth
+			//console.error('auth is', auth)
+
+			setupGlobalInterceptors()
+			if (pathname === '/auth-debug') {
+				console.error('auth is', auth)
+				return !!auth
+			}
 
 			// check if pathname starts with /admin
 			if (pathname.startsWith('/admin')) {
+				//	console.log('auth is', auth)
 				return !!auth
 			}
 
 			if (pathname.startsWith('/api')) {
+				//console.log('auth is', auth)
 				return !!auth
 			}
 
+			//console.log('auth is', auth)
 			return true
 		},
 	},

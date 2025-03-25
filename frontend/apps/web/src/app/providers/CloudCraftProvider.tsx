@@ -7,6 +7,7 @@ import { FrontendAxiosProvider } from './FrontendAxiosProvider'
 export const CloudCraftProvider = async ({
 	children,
 }: { children: React.ReactNode }) => {
+	// updateClientAndSetupInterceptors()
 	const session = await auth()
 
 	return (
