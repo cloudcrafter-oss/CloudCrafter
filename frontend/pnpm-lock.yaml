@@ -263,6 +263,9 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
+      '@cloudcrafter/kubb-config':
+        specifier: workspace:*
+        version: link:../kubb-config
       '@cloudcrafter/typescript-config':
         specifier: workspace:*
         version: link:../config-typescript
@@ -339,6 +342,36 @@ importers:
       typescript:
         specifier: 5.1.6
         version: 5.1.6
+
+  packages/kubb-config:
+    devDependencies:
+      '@cloudcrafter/typescript-config':
+        specifier: workspace:*
+        version: link:../config-typescript
+      '@kubb/cli':
+        specifier: ^3.6.4
+        version: 3.6.4(typescript@5.8.2)
+      '@kubb/core':
+        specifier: ^3.6.4
+        version: 3.6.4
+      '@kubb/plugin-client':
+        specifier: ^3.6.4
+        version: 3.6.4(@kubb/react@3.6.4)(axios@1.7.7)
+      '@kubb/plugin-oas':
+        specifier: ^3.6.4
+        version: 3.6.4(@kubb/react@3.6.4)
+      '@kubb/plugin-react-query':
+        specifier: ^3.6.4
+        version: 3.6.4(@kubb/react@3.6.4)
+      '@kubb/plugin-ts':
+        specifier: ^3.6.4
+        version: 3.6.4(@kubb/react@3.6.4)
+      '@kubb/plugin-zod':
+        specifier: ^3.6.4
+        version: 3.6.4(@kubb/react@3.6.4)
+      '@types/node':
+        specifier: ^20.10.6
+        version: 20.17.3
 
   packages/ui:
     dependencies:
