@@ -1,6 +1,6 @@
 import { generatedData } from '@/infra/generate-data'
-import { createProject } from '@cloudcrafter/api/src/__generated__/axios-backend'
-import type { ProjectDto } from '@cloudcrafter/api/src/__generated__/types'
+import { createProject } from '@cloudcrafter/api'
+import type { ProjectDto } from '@cloudcrafter/api'
 import { test as baseTest, createAuthHeaders, expect } from './user-fixture'
 
 // Define our test fixture type with project creation functionality

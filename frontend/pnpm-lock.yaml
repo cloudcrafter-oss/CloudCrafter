@@ -214,9 +214,6 @@ importers:
       '@cloudcrafter/typescript-config':
         specifier: workspace:*
         version: link:../../packages/config-typescript
-      '@playwright/test':
-        specifier: ^1.51.1
-        version: 1.51.1
       '@types/eslint':
         specifier: ^8
         version: 8.56.12
@@ -291,10 +288,17 @@ importers:
   packages/config-typescript: {}
 
   packages/e2e-testing:
-    devDependencies:
+    dependencies:
       '@cloudcrafter/api':
         specifier: workspace:*
         version: link:../api
+      '@cloudcrafter/ui':
+        specifier: workspace:*
+        version: link:../ui
+    devDependencies:
+      '@cloudcrafter/typescript-config':
+        specifier: workspace:*
+        version: link:../config-typescript
       '@faker-js/faker':
         specifier: ^9.6.0
         version: 9.6.0

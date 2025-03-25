@@ -8,10 +8,9 @@
 		"strict": true,
 		"paths": {
 			"@ui/*": ["../../packages/ui/src/*"],
-			"@/*": ["./*"],
-			"auth": ["./auth"]
+			"@/*": ["./*"]
 		}
 	},
 	"include": ["vite.config.ts"],
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules", "src/core/__generated__"]
 }

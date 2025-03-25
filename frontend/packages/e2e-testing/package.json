@@ -10,8 +10,12 @@
 		"test:debug": "playwright test --debug",
 		"test:report": "playwright show-report"
 	},
-	"devDependencies": {
+	"dependencies": {
 		"@cloudcrafter/api": "workspace:*",
+		"@cloudcrafter/ui": "workspace:*"
+	},
+	"devDependencies": {
+		"@cloudcrafter/typescript-config": "workspace:*",
 		"@faker-js/faker": "^9.6.0",
 		"@playwright/test": "^1.51.1",
 		"@types/node": "^22.13.13",
