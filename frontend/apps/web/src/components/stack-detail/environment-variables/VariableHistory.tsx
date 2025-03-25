@@ -60,7 +60,7 @@ import {
 	User,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { VariableType } from './EnvironmentVariables'
+import { VariableType } from './EnvironmentVariableSheet'
 
 // Define the types for variable history
 enum ChangeType {
