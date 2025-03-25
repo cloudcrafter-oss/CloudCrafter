@@ -344,10 +344,7 @@ importers:
         version: 5.1.6
 
   packages/kubb-config:
-    devDependencies:
-      '@cloudcrafter/typescript-config':
-        specifier: workspace:*
-        version: link:../config-typescript
+    dependencies:
       '@kubb/cli':
         specifier: ^3.6.4
         version: 3.6.4(typescript@5.8.2)
@@ -369,6 +366,10 @@ importers:
       '@kubb/plugin-zod':
         specifier: ^3.6.4
         version: 3.6.4(@kubb/react@3.6.4)
+    devDependencies:
+      '@cloudcrafter/typescript-config':
+        specifier: workspace:*
+        version: link:../config-typescript
       '@types/node':
         specifier: ^20.10.6
         version: 20.17.3

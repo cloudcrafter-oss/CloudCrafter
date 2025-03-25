@@ -9,6 +9,8 @@ import { pluginZod } from '@kubb/plugin-zod'
 // But the client-auth does
 const cloudCrafterAuthKey = 'CloudCrafterAuth'
 
+const generalClientPath = '@cloudcrafter/client-auth/clients'
+
 export const authConfiguration: Parameters<typeof defineConfig>[0] =
 	defineConfig({
 		root: '.',
@@ -75,8 +77,9 @@ export const apiConfiguration: Parameters<typeof defineConfig>[0] =
 						pattern: cloudCrafterAuthKey,
 					},
 				],
-				importPath: '@cloudcrafter/client-auth/clients',
+				importPath: generalClientPath,
 			}),
+			pluginTs(),
 			pluginReactQuery({
 				transformers: {
 					name: (name, type) => {
