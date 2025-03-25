@@ -27,5 +27,11 @@ public class StackEnvironmentVariableConfiguration
             .WithMany(s => s.EnvironmentVariables)
             .HasForeignKey(v => v.StackId)
             .IsRequired();
+
+        builder
+            .HasOne(x => x.Group)
+            .WithMany(x => x.EnvironmentVariables)
+            .HasForeignKey(x => x.GroupId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }
