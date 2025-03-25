@@ -256,71 +256,28 @@ public class StackEnvironmentVariablesService(
         return variable.Id;
     }
 
-    public async Task<bool> DeleteEnvironmentVariable(Guid id, Guid stackId)
+    public async Task DeleteEnvironmentVariable(Guid id, Guid stackId)
     {
-        try
+        // Get the stack
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
         {
-            // Get the stack
-            var stack = await repository.GetStack(stackId);
-
-            if (stack == null)
-            {
-                logger.LogWarning("Stack with id {StackId} not found", stackId);
-                return false;
-            }
-
-            // Find the variable to delete
-            var variable = stack.EnvironmentVariables.FirstOrDefault(v => v.Id == id);
-
-            if (variable == null)
-            {
-                logger.LogWarning(
-                    "Environment variable with id {Id} not found for stack {StackId}",
-                    id,
-                    stackId
-                );
-                return false;
-            }
-
-            // Record details for history tracking
-            var key = variable.Key;
-            var value = variable.Value;
-            var isSecret = variable.IsSecret;
-
-            // Remove the variable
-            stack.EnvironmentVariables.Remove(variable);
-
-            // Add to history record before deleting
-            logger.LogInformation(
-                "Environment variable history: Stack {StackId}, Variable {Key}, Change {ChangeType}, "
-                    + "Old Value: {OldValue}, New Value: {NewValue}",
-                stackId,
-                key,
-                "Deleted",
-                isSecret ? "[HIDDEN]" : value,
-                null
-            );
-
-            await repository.SaveChangesAsync();
-
-            logger.LogInformation(
-                "Deleted environment variable {Key} from stack {StackId}",
-                key,
-                stackId
-            );
-
-            return true;
+            throw new NotFoundException("Stack", "Stack not found");
         }
-        catch (Exception ex)
+
+        // Find the variable to update
+        var variable = stack.EnvironmentVariables.FirstOrDefault(v => v.Id == id);
+
+        if (variable == null)
         {
-            logger.LogError(
-                ex,
-                "Error deleting environment variable {Id} for stack {StackId}",
-                id,
-                stackId
-            );
-            return false;
+            throw new NotFoundException("EnvironmentVariable", "Environment variable not found");
         }
+
+        // Remove the variable
+        stack.EnvironmentVariables.Remove(variable);
+
+        await repository.SaveChangesAsync();
     }
 
     public async Task<int> ApplyTemplate(

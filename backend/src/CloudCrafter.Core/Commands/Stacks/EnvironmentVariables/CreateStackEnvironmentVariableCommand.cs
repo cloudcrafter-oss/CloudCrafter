@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using CloudCrafter.Core.Common.Security;
+using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Domain.Entities;
 using MediatR;
 
@@ -16,4 +17,26 @@ public record CreateStackEnvironmentVariableCommand : IRequest<Guid>
     public required EnvironmentVariableType Type { get; init; }
     public required bool IsSecret { get; init; }
     public Guid? GroupId { get; init; }
+}
+
+public class CreateStackEnvironmentVariableCommandHandler(
+    IStackEnvironmentVariablesService environmentVariablesService
+) : IRequestHandler<CreateStackEnvironmentVariableCommand, Guid>
+{
+    public async Task<Guid> Handle(
+        CreateStackEnvironmentVariableCommand request,
+        CancellationToken cancellationToken
+    )
+    {
+        var id = await environmentVariablesService.CreateEnvironmentVariable(
+            request.StackId,
+            request.Key,
+            request.Value,
+            request.IsSecret,
+            request.Type,
+            request.GroupId
+        );
+
+        return id;
+    }
 }

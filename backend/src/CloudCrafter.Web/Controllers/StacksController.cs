@@ -142,15 +142,14 @@ public class StacksController : CloudCrafterController
 
     [HttpDelete("{stackId}/environment-variables/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IResult> DeleteEnvironmentVariable(
         ISender sender,
         [FromRoute] Guid stackId,
         [FromRoute] Guid id
     )
     {
-        var deleted = await sender.Send(new DeleteStackEnvironmentVariableCommand(stackId, id));
-        return deleted ? Results.Ok() : Results.BadRequest();
+        await sender.Send(new DeleteStackEnvironmentVariableCommand(stackId, id));
+        return Results.Ok();
     }
 
     [HttpGet("{stackId}/environment-variable-groups")]

@@ -68,7 +68,7 @@ public interface IStackEnvironmentVariablesService
     /// <param name="id">ID of the environment variable</param>
     /// <param name="stackId">ID of the stack</param>
     /// <returns>True if successfully deleted, false otherwise</returns>
-    Task<bool> DeleteEnvironmentVariable(Guid id, Guid stackId);
+    Task DeleteEnvironmentVariable(Guid id, Guid stackId);
 
     /// <summary>
     ///     Creates default variable groups for a stack
