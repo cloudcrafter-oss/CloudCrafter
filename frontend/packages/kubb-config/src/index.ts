@@ -26,11 +26,6 @@ export const authConfiguration: Parameters<typeof defineConfig>[0] =
 		},
 		plugins: [
 			pluginOas(),
-			pluginZod({
-				output: {
-					path: './zod',
-				},
-			}),
 			pluginClient({
 				output: {
 					path: './axios-backend',
@@ -43,7 +38,20 @@ export const authConfiguration: Parameters<typeof defineConfig>[0] =
 				],
 				importPath: '@cloudcrafter/client-auth/clients',
 			}),
-			pluginTs(),
+			pluginTs({
+				group: {
+					type: 'tag',
+					name({ group }) {
+						return `${group}Controller`
+					},
+				},
+				include: [
+					{
+						type: 'tag',
+						pattern: cloudCrafterAuthKey,
+					},
+				],
+			}),
 		],
 	})
 
@@ -79,7 +87,14 @@ export const apiConfiguration: Parameters<typeof defineConfig>[0] =
 				],
 				importPath: generalClientPath,
 			}),
-			pluginTs(),
+			pluginTs({
+				exclude: [
+					{
+						type: 'tag',
+						pattern: cloudCrafterAuthKey,
+					},
+				],
+			}),
 			pluginReactQuery({
 				transformers: {
 					name: (name, type) => {

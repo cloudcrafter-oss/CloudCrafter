@@ -7,7 +7,7 @@
 		"typecheck": "turbo typecheck",
 		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
 		"ui:add": "pnpm --filter @cloudcrafter/ui ui:add",
-		"generate-clients": "pnpm --filter @cloudcrafter/api generate-clients",
+		"generate-clients": "pnpm --filter @cloudcrafter/api generate-clients && pnpm --filter @cloudcrafter/client-auth generate-clients",
 		"format-and-lint": "biome check .",
 		"format-and-lint:fix": "biome check . --write",
 		"format-and-lint:hook": "biome check --write --staged --files-ignore-unknown=true --no-errors-on-unmatched  && git update-index --again",

@@ -1,5 +1,5 @@
-import type { LoginUserCommand } from './LoginUserCommand'
-import type { TokenDto } from './TokenDto'
+import type { LoginUserCommand } from '../LoginUserCommand'
+import type { TokenDto } from '../TokenDto'
 
 /**
  * @description OK

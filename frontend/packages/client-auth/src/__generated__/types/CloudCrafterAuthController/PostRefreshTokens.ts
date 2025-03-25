@@ -1,5 +1,5 @@
-import type { RefreshUserTokenCommand } from './RefreshUserTokenCommand'
-import type { TokenDto } from './TokenDto'
+import type { RefreshUserTokenCommand } from '../RefreshUserTokenCommand'
+import type { TokenDto } from '../TokenDto'
 
 /**
  * @description OK

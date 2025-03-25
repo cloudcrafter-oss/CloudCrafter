@@ -1,0 +1,1 @@
+{"required":["message","level","at"],"type":"object","properties":{"message":{"type":"string"},"level":{"enum":["Verbose","Debug","Information","Warning","Error","Fatal"],"x-readme-ref-name":"ChannelOutputLogLineLevel"},"at":{"type":"string","format":"date-time"}},"x-readme-ref-name":"DeploymentLogDto"}
