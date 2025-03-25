@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Projects;
+using CloudCrafter.Core.Commands.Projects;
 using CloudCrafter.Domain.Domain.Project;
 using CloudCrafter.Web.Infrastructure;
 using MediatR;
@@ -24,22 +24,19 @@ public class Projects : EndpointGroupBase
         [FromQuery] bool includeEnvironments = false
     )
     {
-        return await sender.Send(new GetProjectList.Query(includeEnvironments));
+        return await sender.Send(new GetProjectListQuery(includeEnvironments));
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProjectDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IResult> GetProject([FromRoute] Guid id, ISender sender)
     {
-        var project = await sender.Send(new GetProjectQuery.Query(id));
+        var project = await sender.Send(new GetProjectDetailQuery(id));
 
         return project is not null ? Results.Ok(project) : Results.NotFound();
     }
 
-    public async Task<ProjectDto> CreateProject(
-        CreateProjectCommand.Command command,
-        ISender sender
-    )
+    public async Task<ProjectDto> CreateProject(CreateProjectCommand command, ISender sender)
     {
         return await sender.Send(command);
     }
@@ -50,12 +47,12 @@ public class Projects : EndpointGroupBase
         ISender sender
     )
     {
-        return await sender.Send(new UpdateProjectCommand.Command(id, args));
+        return await sender.Send(new UpdateProjectCommand(id, args));
     }
 
     public async Task<IResult> DeleteProject([FromRoute] Guid id, ISender sender)
     {
-        await sender.Send(new DeleteProjectCommand.Command(id));
+        await sender.Send(new DeleteProjectCommand(id));
 
         return Results.Ok();
     }
@@ -69,7 +66,7 @@ public class Projects : EndpointGroupBase
     )
     {
         var details = await sender.Send(
-            new GetProjectEnvironmentEnhancedDetailsQuery.Query
+            new GetProjectEnvironmentEnhancedDetailsQuery
             {
                 ProjectId = id,
                 EnvironmentId = environmentId,

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Core.Events.DomainEvents;
@@ -200,6 +200,54 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
         return await stacks.ToListAsync();
     }
 
+    public async Task AddEnvironmentVariable(StackEnvironmentVariable variable)
+    {
+        context.StackEnvironmentVariables.Add(variable);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task<List<StackEnvironmentVariable>> GetEnvironmentVariables(Guid stackId)
+    {
+        return await context
+            .StackEnvironmentVariables.Where(v => v.StackId == stackId)
+            .ToListAsync();
+    }
+
+    public async Task AddEnvironmentVariableGroups(IList<StackEnvironmentVariableGroup> groups)
+    {
+        foreach (var group in groups)
+        {
+            context.StackEnvironmentVariableGroups.Add(group);
+        }
+
+        await context.SaveChangesAsync();
+    }
+
+    public async Task<List<StackEnvironmentVariableGroup>> GetEnvironmentVariableGroups(
+        Guid stackId
+    )
+    {
+        // We need to get groups but ensure they include their variables
+        return await context
+            .StackEnvironmentVariableGroups.Where(g => g.StackId == stackId)
+            .ToListAsync();
+    }
+
+    public Task<StackEnvironmentVariableGroup?> GetEnvironmentVariableGroup(
+        Guid stackId,
+        Guid groupId
+    )
+    {
+        return context
+            .StackEnvironmentVariableGroups.Where(x => x.StackId == stackId && x.Id == groupId)
+            .FirstOrDefaultAsync();
+    }
+
+    public void RemoveEnvironmentVariableGroup(StackEnvironmentVariableGroup group)
+    {
+        context.StackEnvironmentVariableGroups.Remove(group);
+    }
+
     public Task SaveChangesAsync()
     {
         return context.SaveChangesAsync();
@@ -229,13 +277,14 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
     {
         var stack = await context
             .Stacks.Include(x => x.Services)
-            .Include(x => x.Server)
             .Include(x => x.Environment)
-            .ThenInclude(x => x!.Project)
+            .Include(x => x.Server)
             .Include(x => x.Source)
             .ThenInclude(x => x!.GithubApp)
             .ThenInclude(x => x!.SourceProvider)
             .ThenInclude(x => x!.GithubProvider)
+            .Include(x => x.EnvironmentVariables)
+            .Include(x => x.EnvironmentVariableGroups)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (stack is null && throwExceptionOnNotFound)

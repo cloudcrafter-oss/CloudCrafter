@@ -1,4 +1,4 @@
-import { updateStackServiceCommandCommandSchema } from './updateStackServiceCommandCommandSchema'
+import { updateStackServiceCommandSchema } from './updateStackServiceCommandSchema'
 import { z } from 'zod'
 
 export const updateStackServicePathParamsSchema = z.object({
@@ -11,6 +11,6 @@ export const updateStackServicePathParamsSchema = z.object({
  */
 export const updateStackService200Schema = z.any()
 
-export const updateStackServiceMutationRequestSchema = z.lazy(() => updateStackServiceCommandCommandSchema)
+export const updateStackServiceMutationRequestSchema = z.lazy(() => updateStackServiceCommandSchema)
 
 export const updateStackServiceMutationResponseSchema = z.lazy(() => updateStackService200Schema)

@@ -1,0 +1,18 @@
+{
+	"name": "@cloudcrafter/e2e-testing",
+	"version": "0.1.0",
+	"private": true,
+	"description": "End-to-end testing package for CloudCrafter",
+	"main": "src/index.ts",
+	"scripts": {
+		"test": "playwright test",
+		"test:ui": "playwright test --ui",
+		"test:debug": "playwright test --debug",
+		"test:report": "playwright show-report"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.51.1",
+		"@types/node": "^22.13.13",
+		"typescript": "5.1.6"
+	}
+}

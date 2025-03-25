@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Projects;
+using CloudCrafter.Core.Commands.Projects;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
@@ -10,7 +10,7 @@ using static Testing;
 
 public class GetProjectListTest : BaseTestFixture
 {
-    private GetProjectList.Query Query = new(false);
+    private GetProjectListQuery Query = new(false);
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
@@ -56,7 +56,7 @@ public class GetProjectListTest : BaseTestFixture
             await AddAsync(environment);
         }
 
-        Query = new GetProjectList.Query(true);
+        Query = new GetProjectListQuery(true);
 
         var result = await SendAsync(Query);
 

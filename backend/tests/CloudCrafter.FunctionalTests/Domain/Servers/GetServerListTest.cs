@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Servers;
+using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
 using NUnit.Framework;
@@ -9,7 +9,7 @@ using static Testing;
 
 public class GetServerListTest : BaseTestFixture
 {
-    private GetServerList.Query Query = new();
+    private GetServerListQuery Query = new();
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()

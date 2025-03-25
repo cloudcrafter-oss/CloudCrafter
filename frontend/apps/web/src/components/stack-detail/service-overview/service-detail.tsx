@@ -1,6 +1,8 @@
 import { useUpdateStackServiceHook } from '@cloudcrafter/api'
-import { updateStackServiceCommandCommandSchema } from '@cloudcrafter/api'
-import type { StackServiceDto } from '@cloudcrafter/api'
+import {
+	type StackServiceDto,
+	updateStackServiceCommandSchema,
+} from '@cloudcrafter/api'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Form,
@@ -29,8 +31,8 @@ export const ServiceDetail = ({
 	toggleService: (serviceName: string) => void
 	expandedService: string | null
 }) => {
-	const form = useForm<z.infer<typeof updateStackServiceCommandCommandSchema>>({
-		resolver: zodResolver(updateStackServiceCommandCommandSchema),
+	const form = useForm<z.infer<typeof updateStackServiceCommandSchema>>({
+		resolver: zodResolver(updateStackServiceCommandSchema),
 		defaultValues: {
 			stackId: stackId,
 			stackServiceId: service.id,
@@ -57,7 +59,7 @@ export const ServiceDetail = ({
 	})
 
 	const onSubmit = async (
-		values: z.infer<typeof updateStackServiceCommandCommandSchema>,
+		values: z.infer<typeof updateStackServiceCommandSchema>,
 	) => {
 		console.log(values)
 

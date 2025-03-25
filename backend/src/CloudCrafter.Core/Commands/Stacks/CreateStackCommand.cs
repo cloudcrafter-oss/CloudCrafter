@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using CloudCrafter.Core.Common.Interfaces.Access;
 using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
@@ -7,41 +7,45 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Stacks;
 
-public static class CreateStackCommand
+[Authorize]
+public class CreateStackCommand
+    : IRequest<StackCreatedDto>,
+        IRequireServerAccess,
+        IRequireEnvironmentAccess
 {
-    [Authorize]
-    public class Command
-        : IRequest<StackCreatedDto>,
-            IRequireServerAccess,
-            IRequireEnvironmentAccess
+    [MinLength(3)]
+    public required string Name { get; init; }
+
+    [MinLength(1)]
+    public required string GitRepository { get; init; }
+
+    public required Guid EnvironmentId { get; set; }
+
+    public required Guid ServerId { get; set; }
+}
+
+internal class CreateStackCommandHandler : IRequestHandler<CreateStackCommand, StackCreatedDto>
+{
+    private readonly IStacksService _service;
+
+    public CreateStackCommandHandler(IStacksService service)
     {
-        [MinLength(3)]
-        public required string Name { get; init; }
-
-        [MinLength(1)]
-        public required string GitRepository { get; init; }
-
-        public required Guid EnvironmentId { get; set; }
-
-        public required Guid ServerId { get; set; }
+        _service = service;
     }
 
-    private class Handler(IStacksService service) : IRequestHandler<Command, StackCreatedDto>
+    public async Task<StackCreatedDto> Handle(
+        CreateStackCommand request,
+        CancellationToken cancellationToken
+    )
     {
-        public async Task<StackCreatedDto> Handle(
-            Command request,
-            CancellationToken cancellationToken
-        )
+        var args = new CreateStackArgsDto
         {
-            var args = new CreateStackArgsDto
-            {
-                Name = request.Name,
-                EnvironmentId = request.EnvironmentId,
-                ServerId = request.ServerId,
-                PublicGit = new CreateStackPublicGitRepo { GitRepository = request.GitRepository },
-            };
+            Name = request.Name,
+            EnvironmentId = request.EnvironmentId,
+            ServerId = request.ServerId,
+            PublicGit = new CreateStackPublicGitRepo { GitRepository = request.GitRepository },
+        };
 
-            return await service.CreateStack(args);
-        }
+        return await _service.CreateStack(args);
     }
 }

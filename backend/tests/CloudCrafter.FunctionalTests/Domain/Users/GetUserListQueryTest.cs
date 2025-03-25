@@ -12,7 +12,7 @@ using static Testing;
 
 public class GetUserListQueryTest : BaseTestFixture
 {
-    private GetUserList.Query _query = new GetUserList.Query(new());
+    private GetUserListQuery _query = new GetUserListQuery(new());
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
@@ -49,7 +49,7 @@ public class GetUserListQueryTest : BaseTestFixture
         // grab random user from users
         var randomUser = users[4];
 
-        var query = new GetUserList.Query(
+        var query = new GetUserListQuery(
             new()
             {
                 Filters = new List<FilterCriterea>()
@@ -73,7 +73,7 @@ public class GetUserListQueryTest : BaseTestFixture
         userFromResult.Id.Should().Be(randomUser.Id);
 
         // Now we should fetch for not equal
-        query = new GetUserList.Query(
+        query = new GetUserListQuery(
             new()
             {
                 Filters = new List<FilterCriterea>()

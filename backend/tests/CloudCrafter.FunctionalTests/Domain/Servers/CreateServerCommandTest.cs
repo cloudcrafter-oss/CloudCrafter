@@ -10,7 +10,7 @@ using static Testing;
 
 public class CreateServerCommandTest : BaseTestFixture
 {
-    private CreateServerCommand.Command Command = new("");
+    private CreateServerCommand Command = new("");
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
@@ -45,7 +45,7 @@ public class CreateServerCommandTest : BaseTestFixture
 
         (await CountAsync<Server>()).Should().Be(0);
 
-        var result = await SendAsync(new CreateServerCommand.Command("My new server"));
+        var result = await SendAsync(new CreateServerCommand("My new server"));
 
         result.Should().NotBeNull();
 

@@ -1,15 +1,20 @@
 export type { CreateProjectMutationKey } from './hooks/useCreateProjectHook'
 export type { CreateServerMutationKey } from './hooks/useCreateServerHook'
+export type { DeleteEnvironmentVariableGroupMutationKey } from './hooks/useDeleteEnvironmentVariableGroupHook'
+export type { DeleteEnvironmentVariableMutationKey } from './hooks/useDeleteEnvironmentVariableHook'
 export type { DeleteProjectMutationKey } from './hooks/useDeleteProjectHook'
 export type { DeleteProviderMutationKey } from './hooks/useDeleteProviderHook'
 export type { DeleteServerByIdMutationKey } from './hooks/useDeleteServerByIdHook'
-export type { DispatchStackDeploymentMutationKey } from './hooks/useDispatchStackDeploymentHook'
 export type { GetDeploymentLogsQueryKey } from './hooks/useGetDeploymentLogsHook'
 export type { GetDeploymentLogsSuspenseQueryKey } from './hooks/useGetDeploymentLogsSuspenseHook'
 export type { GetDeploymentsForServerQueryKey } from './hooks/useGetDeploymentsForServerHook'
 export type { GetDeploymentsForServerSuspenseQueryKey } from './hooks/useGetDeploymentsForServerSuspenseHook'
 export type { GetDeploymentsForStackQueryKey } from './hooks/useGetDeploymentsForStackHook'
 export type { GetDeploymentsForStackSuspenseQueryKey } from './hooks/useGetDeploymentsForStackSuspenseHook'
+export type { GetEnvironmentVariableGroupsQueryKey } from './hooks/useGetEnvironmentVariableGroupsHook'
+export type { GetEnvironmentVariableGroupsSuspenseQueryKey } from './hooks/useGetEnvironmentVariableGroupsSuspenseHook'
+export type { GetEnvironmentVariablesQueryKey } from './hooks/useGetEnvironmentVariablesHook'
+export type { GetEnvironmentVariablesSuspenseQueryKey } from './hooks/useGetEnvironmentVariablesSuspenseHook'
 export type { GetFilterableFieldsQueryKey } from './hooks/useGetFilterableFieldsHook'
 export type { GetFilterableFieldsSuspenseQueryKey } from './hooks/useGetFilterableFieldsSuspenseHook'
 export type { GetGitBranchesQueryKey } from './hooks/useGetGitBranchesHook'
@@ -32,13 +37,18 @@ export type { GetStackDetailQueryKey } from './hooks/useGetStackDetailHook'
 export type { GetStackDetailSuspenseQueryKey } from './hooks/useGetStackDetailSuspenseHook'
 export type { GetUsersMutationKey } from './hooks/useGetUsersHook'
 export type { PostCreateDeploymentMutationKey } from './hooks/usePostCreateDeploymentHook'
+export type { PostCreateEnvironmentVariableGroupMutationKey } from './hooks/usePostCreateEnvironmentVariableGroupHook'
+export type { PostCreateEnvironmentVariableMutationKey } from './hooks/usePostCreateEnvironmentVariableHook'
 export type { PostCreateGithubAppMutationKey } from './hooks/usePostCreateGithubAppHook'
 export type { PostCreateStackFromSourceProviderMutationKey } from './hooks/usePostCreateStackFromSourceProviderHook'
 export type { PostCreateStackMutationKey } from './hooks/usePostCreateStackHook'
 export type { PostCreateUserMutationKey } from './hooks/usePostCreateUserHook'
+export type { PostDispatchStackDeploymentMutationKey } from './hooks/usePostDispatchStackDeploymentHook'
 export type { PostLoginUserMutationKey } from './hooks/usePostLoginUserHook'
 export type { PostRotateAgentKeyMutationKey } from './hooks/usePostRotateAgentKeyHook'
 export type { PostValidateGithubRepoMutationKey } from './hooks/usePostValidateGithubRepoHook'
+export type { PutUpdateEnvironmentVariableGroupMutationKey } from './hooks/usePutUpdateEnvironmentVariableGroupHook'
+export type { PutUpdateEnvironmentVariableMutationKey } from './hooks/usePutUpdateEnvironmentVariableHook'
 export type { PutUpdateGithubProviderMutationKey } from './hooks/usePutUpdateGithubProviderHook'
 export type { TestQueryKey } from './hooks/useTestHook'
 export type { TestSuspenseQueryKey } from './hooks/useTestSuspenseHook'
@@ -47,15 +57,30 @@ export type { UpdateServerMutationKey } from './hooks/useUpdateServerHook'
 export type { UpdateStackMutationKey } from './hooks/useUpdateStackHook'
 export type { UpdateStackServiceMutationKey } from './hooks/useUpdateStackServiceHook'
 export type { ChannelOutputLogLineLevelEnum, ChannelOutputLogLineLevel } from './types/ChannelOutputLogLineLevel'
-export type { CheckValidGitRepoCommandCommand } from './types/CheckValidGitRepoCommandCommand'
+export type { CheckValidGitRepoCommand } from './types/CheckValidGitRepoCommand'
 export type { CreatedServerDto } from './types/CreatedServerDto'
-export type { CreateGithubProviderCommandCommand } from './types/CreateGithubProviderCommandCommand'
+export type { CreateGithubProviderCommand } from './types/CreateGithubProviderCommand'
 export type { CreateProject200, CreateProjectMutationRequest, CreateProjectMutationResponse, CreateProjectMutation } from './types/CreateProject'
-export type { CreateProjectCommandCommand } from './types/CreateProjectCommandCommand'
+export type { CreateProjectCommand } from './types/CreateProjectCommand'
 export type { CreateServer200, CreateServerMutationRequest, CreateServerMutationResponse, CreateServerMutation } from './types/CreateServer'
-export type { CreateServerCommandCommand } from './types/CreateServerCommandCommand'
-export type { CreateStackCommandCommand } from './types/CreateStackCommandCommand'
-export type { CreateStackFromSourceProviderCommandCommand } from './types/CreateStackFromSourceProviderCommandCommand'
+export type { CreateServerCommand } from './types/CreateServerCommand'
+export type { CreateStackCommand } from './types/CreateStackCommand'
+export type { CreateStackEnvironmentVariableCommand } from './types/CreateStackEnvironmentVariableCommand'
+export type { CreateStackEnvironmentVariableGroupCommand } from './types/CreateStackEnvironmentVariableGroupCommand'
+export type { CreateStackFromSourceProviderCommand } from './types/CreateStackFromSourceProviderCommand'
+export type { CreateUserCommand } from './types/CreateUserCommand'
+export type {
+  DeleteEnvironmentVariablePathParams,
+  DeleteEnvironmentVariable200,
+  DeleteEnvironmentVariableMutationResponse,
+  DeleteEnvironmentVariableMutation,
+} from './types/DeleteEnvironmentVariable'
+export type {
+  DeleteEnvironmentVariableGroupPathParams,
+  DeleteEnvironmentVariableGroup200,
+  DeleteEnvironmentVariableGroupMutationResponse,
+  DeleteEnvironmentVariableGroupMutation,
+} from './types/DeleteEnvironmentVariableGroup'
 export type { DeleteProjectPathParams, DeleteProject200, DeleteProjectMutationResponse, DeleteProjectMutation } from './types/DeleteProject'
 export type { DeleteProviderPathParams, DeleteProvider200, DeleteProviderMutationResponse, DeleteProviderMutation } from './types/DeleteProvider'
 export type { DeleteServerByIdPathParams, DeleteServerById200, DeleteServerByIdMutationResponse, DeleteServerByIdMutation } from './types/DeleteServerById'
@@ -63,15 +88,10 @@ export type { DeployedStackDto } from './types/DeployedStackDto'
 export type { DeploymentCreatedDetailsDto } from './types/DeploymentCreatedDetailsDto'
 export type { DeploymentLogDto } from './types/DeploymentLogDto'
 export type { DeploymentStatusDtoEnum, DeploymentStatusDto } from './types/DeploymentStatusDto'
-export type {
-  DispatchStackDeploymentPathParams,
-  DispatchStackDeployment200,
-  DispatchStackDeploymentMutationResponse,
-  DispatchStackDeploymentMutation,
-} from './types/DispatchStackDeployment'
 export type { EntityHealthDto } from './types/EntityHealthDto'
 export type { EntityHealthDtoValueEnum, EntityHealthDtoValue } from './types/EntityHealthDtoValue'
 export type { EnvironmentDto } from './types/EnvironmentDto'
+export type { EnvironmentVariableType } from './types/EnvironmentVariableType'
 export type { FilterCriterea } from './types/FilterCriterea'
 export type { FilterOperatorOptionEnum, FilterOperatorOption } from './types/FilterOperatorOption'
 export type { GetDeploymentLogsPathParams, GetDeploymentLogs200, GetDeploymentLogsQueryResponse, GetDeploymentLogsQuery } from './types/GetDeploymentLogs'
@@ -88,6 +108,19 @@ export type {
   GetDeploymentsForStackQueryResponse,
   GetDeploymentsForStackQuery,
 } from './types/GetDeploymentsForStack'
+export type {
+  GetEnvironmentVariableGroupsPathParams,
+  GetEnvironmentVariableGroups200,
+  GetEnvironmentVariableGroupsQueryResponse,
+  GetEnvironmentVariableGroupsQuery,
+} from './types/GetEnvironmentVariableGroups'
+export type {
+  GetEnvironmentVariablesPathParams,
+  GetEnvironmentVariablesQueryParams,
+  GetEnvironmentVariables200,
+  GetEnvironmentVariablesQueryResponse,
+  GetEnvironmentVariablesQuery,
+} from './types/GetEnvironmentVariables'
 export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilterableFieldsQuery } from './types/GetFilterableFields'
 export type { GetGitBranchesPathParams, GetGitBranches200, GetGitBranchesQueryResponse, GetGitBranchesQuery } from './types/GetGitBranches'
 export type { GetGitRepositoriesPathParams, GetGitRepositories200, GetGitRepositoriesQueryResponse, GetGitRepositoriesQuery } from './types/GetGitRepositories'
@@ -107,11 +140,10 @@ export type { GetStackDetailPathParams, GetStackDetail200, GetStackDetail404, Ge
 export type { GetUsers200, GetUsersMutationRequest, GetUsersMutationResponse, GetUsersMutation } from './types/GetUsers'
 export type { GitApplicationSourceDto } from './types/GitApplicationSourceDto'
 export type { GithubApplicationSourceDto } from './types/GithubApplicationSourceDto'
-export type { GithubSettings } from './types/GithubSettings'
 export type { GitProviderBranchDto } from './types/GitProviderBranchDto'
 export type { GitProviderRepositoryDto } from './types/GitProviderRepositoryDto'
-export type { GitPublicSettings } from './types/GitPublicSettings'
 export type { GitRepositoryCheckResultDto } from './types/GitRepositoryCheckResultDto'
+export type { LoginUserCommand } from './types/LoginUserCommand'
 export type { PaginatedListOfSimpleDeploymentDto } from './types/PaginatedListOfSimpleDeploymentDto'
 export type { PaginatedListOfUserDto } from './types/PaginatedListOfUserDto'
 export type { PaginatedRequestOfUserDto } from './types/PaginatedRequestOfUserDto'
@@ -121,6 +153,20 @@ export type {
   PostCreateDeploymentMutationResponse,
   PostCreateDeploymentMutation,
 } from './types/PostCreateDeployment'
+export type {
+  PostCreateEnvironmentVariablePathParams,
+  PostCreateEnvironmentVariable201,
+  PostCreateEnvironmentVariableMutationRequest,
+  PostCreateEnvironmentVariableMutationResponse,
+  PostCreateEnvironmentVariableMutation,
+} from './types/PostCreateEnvironmentVariable'
+export type {
+  PostCreateEnvironmentVariableGroupPathParams,
+  PostCreateEnvironmentVariableGroup201,
+  PostCreateEnvironmentVariableGroupMutationRequest,
+  PostCreateEnvironmentVariableGroupMutationResponse,
+  PostCreateEnvironmentVariableGroupMutation,
+} from './types/PostCreateEnvironmentVariableGroup'
 export type {
   PostCreateGithubApp201,
   PostCreateGithubApp400,
@@ -136,16 +182,19 @@ export type {
   PostCreateStackFromSourceProviderMutation,
 } from './types/PostCreateStackFromSourceProvider'
 export type { PostCreateUser200, PostCreateUserMutationRequest, PostCreateUserMutationResponse, PostCreateUserMutation } from './types/PostCreateUser'
-export type { PostCreateUserQuery } from './types/PostCreateUserQuery'
+export type {
+  PostDispatchStackDeploymentPathParams,
+  PostDispatchStackDeployment200,
+  PostDispatchStackDeploymentMutationResponse,
+  PostDispatchStackDeploymentMutation,
+} from './types/PostDispatchStackDeployment'
 export type { PostLoginUser200, PostLoginUserMutationRequest, PostLoginUserMutationResponse, PostLoginUserMutation } from './types/PostLoginUser'
-export type { PostLoginUserQuery } from './types/PostLoginUserQuery'
 export type {
   PostRefreshTokens200,
   PostRefreshTokensMutationRequest,
   PostRefreshTokensMutationResponse,
   PostRefreshTokensMutation,
 } from './types/PostRefreshTokens'
-export type { PostRefreshUserTokensQuery } from './types/PostRefreshUserTokensQuery'
 export type {
   PostRotateAgentKeyPathParams,
   PostRotateAgentKey200,
@@ -163,13 +212,29 @@ export type { ProjectDto } from './types/ProjectDto'
 export type { ProjectEnvironmentEnhancedDto } from './types/ProjectEnvironmentEnhancedDto'
 export type { ProviderTypeEnum, ProviderType } from './types/ProviderType'
 export type {
+  PutUpdateEnvironmentVariablePathParams,
+  PutUpdateEnvironmentVariable200,
+  PutUpdateEnvironmentVariable400,
+  PutUpdateEnvironmentVariableMutationRequest,
+  PutUpdateEnvironmentVariableMutationResponse,
+  PutUpdateEnvironmentVariableMutation,
+} from './types/PutUpdateEnvironmentVariable'
+export type {
+  PutUpdateEnvironmentVariableGroupPathParams,
+  PutUpdateEnvironmentVariableGroup200,
+  PutUpdateEnvironmentVariableGroup400,
+  PutUpdateEnvironmentVariableGroupMutationRequest,
+  PutUpdateEnvironmentVariableGroupMutationResponse,
+  PutUpdateEnvironmentVariableGroupMutation,
+} from './types/PutUpdateEnvironmentVariableGroup'
+export type {
   PutUpdateGithubProviderPathParams,
   PutUpdateGithubProvider200,
   PutUpdateGithubProviderMutationRequest,
   PutUpdateGithubProviderMutationResponse,
   PutUpdateGithubProviderMutation,
 } from './types/PutUpdateGithubProvider'
-export type { Request } from './types/Request'
+export type { RefreshUserTokenCommand } from './types/RefreshUserTokenCommand'
 export type { ServerDetailDto } from './types/ServerDetailDto'
 export type { ServerDto } from './types/ServerDto'
 export type { ServerPingDto } from './types/ServerPingDto'
@@ -179,6 +244,8 @@ export type { SimpleGithubProviderDto } from './types/SimpleGithubProviderDto'
 export type { SourceProviderDto } from './types/SourceProviderDto'
 export type { StackCreatedDto } from './types/StackCreatedDto'
 export type { StackDetailDto } from './types/StackDetailDto'
+export type { StackEnvironmentVariableDto } from './types/StackEnvironmentVariableDto'
+export type { StackEnvironmentVariableGroupDto } from './types/StackEnvironmentVariableGroupDto'
 export type { StackServerDto } from './types/StackServerDto'
 export type { StackServiceDto } from './types/StackServiceDto'
 export type { StackServiceHealthcheckConfigurationDto } from './types/StackServiceHealthcheckConfigurationDto'
@@ -187,6 +254,7 @@ export type { StackSourceDto } from './types/StackSourceDto'
 export type { StackSourceDtoTypeEnum, StackSourceDtoType } from './types/StackSourceDtoType'
 export type { Test200, TestQueryResponse, TestQuery } from './types/Test'
 export type { TokenDto } from './types/TokenDto'
+export type { UpdateGithubInstallationRequest } from './types/UpdateGithubInstallationRequest'
 export type {
   UpdateProjectPathParams,
   UpdateProject200,
@@ -211,7 +279,11 @@ export type {
   UpdateStackMutationResponse,
   UpdateStackMutation,
 } from './types/UpdateStack'
-export type { UpdateStackCommandCommand } from './types/UpdateStackCommandCommand'
+export type { UpdateStackCommand } from './types/UpdateStackCommand'
+export type { UpdateStackEnvironmentVariableCommand } from './types/UpdateStackEnvironmentVariableCommand'
+export type { UpdateStackEnvironmentVariableGroupCommand } from './types/UpdateStackEnvironmentVariableGroupCommand'
+export type { UpdateStackGithubSettings } from './types/UpdateStackGithubSettings'
+export type { UpdateStackGitPublicSettings } from './types/UpdateStackGitPublicSettings'
 export type {
   UpdateStackServicePathParams,
   UpdateStackService200,
@@ -219,17 +291,20 @@ export type {
   UpdateStackServiceMutationResponse,
   UpdateStackServiceMutation,
 } from './types/UpdateStackService'
-export type { UpdateStackServiceCommandCommand } from './types/UpdateStackServiceCommandCommand'
+export type { UpdateStackServiceCommand } from './types/UpdateStackServiceCommand'
 export type { UserDto } from './types/UserDto'
 export { getCreateProjectUrl, createProject } from './axios-backend/createProject'
 export { getCreateServerUrl, createServer } from './axios-backend/createServer'
+export { getDeleteEnvironmentVariableUrl, deleteEnvironmentVariable } from './axios-backend/deleteEnvironmentVariable'
+export { getDeleteEnvironmentVariableGroupUrl, deleteEnvironmentVariableGroup } from './axios-backend/deleteEnvironmentVariableGroup'
 export { getDeleteProjectUrl, deleteProject } from './axios-backend/deleteProject'
 export { getDeleteProviderUrl, deleteProvider } from './axios-backend/deleteProvider'
 export { getDeleteServerByIdUrl, deleteServerById } from './axios-backend/deleteServerById'
-export { getDispatchStackDeploymentUrl, dispatchStackDeployment } from './axios-backend/dispatchStackDeployment'
 export { getGetDeploymentLogsUrl, getDeploymentLogs } from './axios-backend/getDeploymentLogs'
 export { getGetDeploymentsForServerUrl, getDeploymentsForServer } from './axios-backend/getDeploymentsForServer'
 export { getGetDeploymentsForStackUrl, getDeploymentsForStack } from './axios-backend/getDeploymentsForStack'
+export { getGetEnvironmentVariableGroupsUrl, getEnvironmentVariableGroups } from './axios-backend/getEnvironmentVariableGroups'
+export { getGetEnvironmentVariablesUrl, getEnvironmentVariables } from './axios-backend/getEnvironmentVariables'
 export { getGetFilterableFieldsUrl, getFilterableFields } from './axios-backend/getFilterableFields'
 export { getGetGitBranchesUrl, getGitBranches } from './axios-backend/getGitBranches'
 export { getGetGitRepositoriesUrl, getGitRepositories } from './axios-backend/getGitRepositories'
@@ -242,13 +317,18 @@ export { getGetServersUrl, getServers } from './axios-backend/getServers'
 export { getGetStackDetailUrl, getStackDetail } from './axios-backend/getStackDetail'
 export { getGetUsersUrl, getUsers } from './axios-backend/getUsers'
 export { getPostCreateDeploymentUrl, postCreateDeployment } from './axios-backend/postCreateDeployment'
+export { getPostCreateEnvironmentVariableUrl, postCreateEnvironmentVariable } from './axios-backend/postCreateEnvironmentVariable'
+export { getPostCreateEnvironmentVariableGroupUrl, postCreateEnvironmentVariableGroup } from './axios-backend/postCreateEnvironmentVariableGroup'
 export { getPostCreateGithubAppUrl, postCreateGithubApp } from './axios-backend/postCreateGithubApp'
 export { getPostCreateStackUrl, postCreateStack } from './axios-backend/postCreateStack'
 export { getPostCreateStackFromSourceProviderUrl, postCreateStackFromSourceProvider } from './axios-backend/postCreateStackFromSourceProvider'
 export { getPostCreateUserUrl, postCreateUser } from './axios-backend/postCreateUser'
+export { getPostDispatchStackDeploymentUrl, postDispatchStackDeployment } from './axios-backend/postDispatchStackDeployment'
 export { getPostLoginUserUrl, postLoginUser } from './axios-backend/postLoginUser'
 export { getPostRotateAgentKeyUrl, postRotateAgentKey } from './axios-backend/postRotateAgentKey'
 export { getPostValidateGithubRepoUrl, postValidateGithubRepo } from './axios-backend/postValidateGithubRepo'
+export { getPutUpdateEnvironmentVariableUrl, putUpdateEnvironmentVariable } from './axios-backend/putUpdateEnvironmentVariable'
+export { getPutUpdateEnvironmentVariableGroupUrl, putUpdateEnvironmentVariableGroup } from './axios-backend/putUpdateEnvironmentVariableGroup'
 export { getPutUpdateGithubProviderUrl, putUpdateGithubProvider } from './axios-backend/putUpdateGithubProvider'
 export { getTestUrl, test } from './axios-backend/test'
 export { getUpdateProjectUrl, updateProject } from './axios-backend/updateProject'
@@ -257,10 +337,11 @@ export { getUpdateStackUrl, updateStack } from './axios-backend/updateStack'
 export { getUpdateStackServiceUrl, updateStackService } from './axios-backend/updateStackService'
 export { createProjectMutationKey, useCreateProjectHook } from './hooks/useCreateProjectHook'
 export { createServerMutationKey, useCreateServerHook } from './hooks/useCreateServerHook'
+export { deleteEnvironmentVariableGroupMutationKey, useDeleteEnvironmentVariableGroupHook } from './hooks/useDeleteEnvironmentVariableGroupHook'
+export { deleteEnvironmentVariableMutationKey, useDeleteEnvironmentVariableHook } from './hooks/useDeleteEnvironmentVariableHook'
 export { deleteProjectMutationKey, useDeleteProjectHook } from './hooks/useDeleteProjectHook'
 export { deleteProviderMutationKey, useDeleteProviderHook } from './hooks/useDeleteProviderHook'
 export { deleteServerByIdMutationKey, useDeleteServerByIdHook } from './hooks/useDeleteServerByIdHook'
-export { dispatchStackDeploymentMutationKey, useDispatchStackDeploymentHook } from './hooks/useDispatchStackDeploymentHook'
 export { getDeploymentLogsQueryKey, getDeploymentLogsQueryOptionsHook, useGetDeploymentLogsHook } from './hooks/useGetDeploymentLogsHook'
 export {
   getDeploymentLogsSuspenseQueryKey,
@@ -283,6 +364,26 @@ export {
   getDeploymentsForStackSuspenseQueryOptionsHook,
   useGetDeploymentsForStackSuspenseHook,
 } from './hooks/useGetDeploymentsForStackSuspenseHook'
+export {
+  getEnvironmentVariableGroupsQueryKey,
+  getEnvironmentVariableGroupsQueryOptionsHook,
+  useGetEnvironmentVariableGroupsHook,
+} from './hooks/useGetEnvironmentVariableGroupsHook'
+export {
+  getEnvironmentVariableGroupsSuspenseQueryKey,
+  getEnvironmentVariableGroupsSuspenseQueryOptionsHook,
+  useGetEnvironmentVariableGroupsSuspenseHook,
+} from './hooks/useGetEnvironmentVariableGroupsSuspenseHook'
+export {
+  getEnvironmentVariablesQueryKey,
+  getEnvironmentVariablesQueryOptionsHook,
+  useGetEnvironmentVariablesHook,
+} from './hooks/useGetEnvironmentVariablesHook'
+export {
+  getEnvironmentVariablesSuspenseQueryKey,
+  getEnvironmentVariablesSuspenseQueryOptionsHook,
+  useGetEnvironmentVariablesSuspenseHook,
+} from './hooks/useGetEnvironmentVariablesSuspenseHook'
 export { getFilterableFieldsQueryKey, getFilterableFieldsQueryOptionsHook, useGetFilterableFieldsHook } from './hooks/useGetFilterableFieldsHook'
 export {
   getFilterableFieldsSuspenseQueryKey,
@@ -321,13 +422,18 @@ export { getStackDetailQueryKey, getStackDetailQueryOptionsHook, useGetStackDeta
 export { getStackDetailSuspenseQueryKey, getStackDetailSuspenseQueryOptionsHook, useGetStackDetailSuspenseHook } from './hooks/useGetStackDetailSuspenseHook'
 export { getUsersMutationKey, useGetUsersHook } from './hooks/useGetUsersHook'
 export { postCreateDeploymentMutationKey, usePostCreateDeploymentHook } from './hooks/usePostCreateDeploymentHook'
+export { postCreateEnvironmentVariableGroupMutationKey, usePostCreateEnvironmentVariableGroupHook } from './hooks/usePostCreateEnvironmentVariableGroupHook'
+export { postCreateEnvironmentVariableMutationKey, usePostCreateEnvironmentVariableHook } from './hooks/usePostCreateEnvironmentVariableHook'
 export { postCreateGithubAppMutationKey, usePostCreateGithubAppHook } from './hooks/usePostCreateGithubAppHook'
 export { postCreateStackFromSourceProviderMutationKey, usePostCreateStackFromSourceProviderHook } from './hooks/usePostCreateStackFromSourceProviderHook'
 export { postCreateStackMutationKey, usePostCreateStackHook } from './hooks/usePostCreateStackHook'
 export { postCreateUserMutationKey, usePostCreateUserHook } from './hooks/usePostCreateUserHook'
+export { postDispatchStackDeploymentMutationKey, usePostDispatchStackDeploymentHook } from './hooks/usePostDispatchStackDeploymentHook'
 export { postLoginUserMutationKey, usePostLoginUserHook } from './hooks/usePostLoginUserHook'
 export { postRotateAgentKeyMutationKey, usePostRotateAgentKeyHook } from './hooks/usePostRotateAgentKeyHook'
 export { postValidateGithubRepoMutationKey, usePostValidateGithubRepoHook } from './hooks/usePostValidateGithubRepoHook'
+export { putUpdateEnvironmentVariableGroupMutationKey, usePutUpdateEnvironmentVariableGroupHook } from './hooks/usePutUpdateEnvironmentVariableGroupHook'
+export { putUpdateEnvironmentVariableMutationKey, usePutUpdateEnvironmentVariableHook } from './hooks/usePutUpdateEnvironmentVariableHook'
 export { putUpdateGithubProviderMutationKey, usePutUpdateGithubProviderHook } from './hooks/usePutUpdateGithubProviderHook'
 export { testQueryKey, testQueryOptionsHook, useTestHook } from './hooks/useTestHook'
 export { testSuspenseQueryKey, testSuspenseQueryOptionsHook, useTestSuspenseHook } from './hooks/useTestSuspenseHook'
@@ -344,15 +450,28 @@ export { providerTypeEnum } from './types/ProviderType'
 export { serverStatusDtoValueEnum } from './types/ServerStatusDtoValue'
 export { stackSourceDtoTypeEnum } from './types/StackSourceDtoType'
 export { channelOutputLogLineLevelSchema } from './zod/channelOutputLogLineLevelSchema'
-export { checkValidGitRepoCommandCommandSchema } from './zod/checkValidGitRepoCommandCommandSchema'
+export { checkValidGitRepoCommandSchema } from './zod/checkValidGitRepoCommandSchema'
 export { createdServerDtoSchema } from './zod/createdServerDtoSchema'
-export { createGithubProviderCommandCommandSchema } from './zod/createGithubProviderCommandCommandSchema'
-export { createProjectCommandCommandSchema } from './zod/createProjectCommandCommandSchema'
+export { createGithubProviderCommandSchema } from './zod/createGithubProviderCommandSchema'
+export { createProjectCommandSchema } from './zod/createProjectCommandSchema'
 export { createProject200Schema, createProjectMutationRequestSchema, createProjectMutationResponseSchema } from './zod/createProjectSchema'
-export { createServerCommandCommandSchema } from './zod/createServerCommandCommandSchema'
+export { createServerCommandSchema } from './zod/createServerCommandSchema'
 export { createServer200Schema, createServerMutationRequestSchema, createServerMutationResponseSchema } from './zod/createServerSchema'
-export { createStackCommandCommandSchema } from './zod/createStackCommandCommandSchema'
-export { createStackFromSourceProviderCommandCommandSchema } from './zod/createStackFromSourceProviderCommandCommandSchema'
+export { createStackCommandSchema } from './zod/createStackCommandSchema'
+export { createStackEnvironmentVariableCommandSchema } from './zod/createStackEnvironmentVariableCommandSchema'
+export { createStackEnvironmentVariableGroupCommandSchema } from './zod/createStackEnvironmentVariableGroupCommandSchema'
+export { createStackFromSourceProviderCommandSchema } from './zod/createStackFromSourceProviderCommandSchema'
+export { createUserCommandSchema } from './zod/createUserCommandSchema'
+export {
+  deleteEnvironmentVariableGroupPathParamsSchema,
+  deleteEnvironmentVariableGroup200Schema,
+  deleteEnvironmentVariableGroupMutationResponseSchema,
+} from './zod/deleteEnvironmentVariableGroupSchema'
+export {
+  deleteEnvironmentVariablePathParamsSchema,
+  deleteEnvironmentVariable200Schema,
+  deleteEnvironmentVariableMutationResponseSchema,
+} from './zod/deleteEnvironmentVariableSchema'
 export { deleteProjectPathParamsSchema, deleteProject200Schema, deleteProjectMutationResponseSchema } from './zod/deleteProjectSchema'
 export { deleteProviderPathParamsSchema, deleteProvider200Schema, deleteProviderMutationResponseSchema } from './zod/deleteProviderSchema'
 export { deleteServerByIdPathParamsSchema, deleteServerById200Schema, deleteServerByIdMutationResponseSchema } from './zod/deleteServerByIdSchema'
@@ -360,14 +479,10 @@ export { deployedStackDtoSchema } from './zod/deployedStackDtoSchema'
 export { deploymentCreatedDetailsDtoSchema } from './zod/deploymentCreatedDetailsDtoSchema'
 export { deploymentLogDtoSchema } from './zod/deploymentLogDtoSchema'
 export { deploymentStatusDtoSchema } from './zod/deploymentStatusDtoSchema'
-export {
-  dispatchStackDeploymentPathParamsSchema,
-  dispatchStackDeployment200Schema,
-  dispatchStackDeploymentMutationResponseSchema,
-} from './zod/dispatchStackDeploymentSchema'
 export { entityHealthDtoSchema } from './zod/entityHealthDtoSchema'
 export { entityHealthDtoValueSchema } from './zod/entityHealthDtoValueSchema'
 export { environmentDtoSchema } from './zod/environmentDtoSchema'
+export { environmentVariableTypeSchema } from './zod/environmentVariableTypeSchema'
 export { filterCritereaSchema } from './zod/filterCritereaSchema'
 export { filterOperatorOptionSchema } from './zod/filterOperatorOptionSchema'
 export { getDeploymentLogsPathParamsSchema, getDeploymentLogs200Schema, getDeploymentLogsQueryResponseSchema } from './zod/getDeploymentLogsSchema'
@@ -382,6 +497,17 @@ export {
   getDeploymentsForStack200Schema,
   getDeploymentsForStackQueryResponseSchema,
 } from './zod/getDeploymentsForStackSchema'
+export {
+  getEnvironmentVariableGroupsPathParamsSchema,
+  getEnvironmentVariableGroups200Schema,
+  getEnvironmentVariableGroupsQueryResponseSchema,
+} from './zod/getEnvironmentVariableGroupsSchema'
+export {
+  getEnvironmentVariablesPathParamsSchema,
+  getEnvironmentVariablesQueryParamsSchema,
+  getEnvironmentVariables200Schema,
+  getEnvironmentVariablesQueryResponseSchema,
+} from './zod/getEnvironmentVariablesSchema'
 export { getFilterableFields200Schema, getFilterableFieldsQueryResponseSchema } from './zod/getFilterableFieldsSchema'
 export { getGitBranchesPathParamsSchema, getGitBranches200Schema, getGitBranchesQueryResponseSchema } from './zod/getGitBranchesSchema'
 export { getGitRepositoriesPathParamsSchema, getGitRepositories200Schema, getGitRepositoriesQueryResponseSchema } from './zod/getGitRepositoriesSchema'
@@ -400,11 +526,10 @@ export { getStackDetailPathParamsSchema, getStackDetail200Schema, getStackDetail
 export { getUsers200Schema, getUsersMutationRequestSchema, getUsersMutationResponseSchema } from './zod/getUsersSchema'
 export { gitApplicationSourceDtoSchema } from './zod/gitApplicationSourceDtoSchema'
 export { githubApplicationSourceDtoSchema } from './zod/githubApplicationSourceDtoSchema'
-export { githubSettingsSchema } from './zod/githubSettingsSchema'
 export { gitProviderBranchDtoSchema } from './zod/gitProviderBranchDtoSchema'
 export { gitProviderRepositoryDtoSchema } from './zod/gitProviderRepositoryDtoSchema'
-export { gitPublicSettingsSchema } from './zod/gitPublicSettingsSchema'
 export { gitRepositoryCheckResultDtoSchema } from './zod/gitRepositoryCheckResultDtoSchema'
+export { loginUserCommandSchema } from './zod/loginUserCommandSchema'
 export { paginatedListOfSimpleDeploymentDtoSchema } from './zod/paginatedListOfSimpleDeploymentDtoSchema'
 export { paginatedListOfUserDtoSchema } from './zod/paginatedListOfUserDtoSchema'
 export { paginatedRequestOfUserDtoSchema } from './zod/paginatedRequestOfUserDtoSchema'
@@ -413,6 +538,18 @@ export {
   postCreateDeployment200Schema,
   postCreateDeploymentMutationResponseSchema,
 } from './zod/postCreateDeploymentSchema'
+export {
+  postCreateEnvironmentVariableGroupPathParamsSchema,
+  postCreateEnvironmentVariableGroup201Schema,
+  postCreateEnvironmentVariableGroupMutationRequestSchema,
+  postCreateEnvironmentVariableGroupMutationResponseSchema,
+} from './zod/postCreateEnvironmentVariableGroupSchema'
+export {
+  postCreateEnvironmentVariablePathParamsSchema,
+  postCreateEnvironmentVariable201Schema,
+  postCreateEnvironmentVariableMutationRequestSchema,
+  postCreateEnvironmentVariableMutationResponseSchema,
+} from './zod/postCreateEnvironmentVariableSchema'
 export {
   postCreateGithubApp201Schema,
   postCreateGithubApp400Schema,
@@ -425,12 +562,14 @@ export {
   postCreateStackFromSourceProviderMutationResponseSchema,
 } from './zod/postCreateStackFromSourceProviderSchema'
 export { postCreateStack200Schema, postCreateStackMutationRequestSchema, postCreateStackMutationResponseSchema } from './zod/postCreateStackSchema'
-export { postCreateUserQuerySchema } from './zod/postCreateUserQuerySchema'
 export { postCreateUser200Schema, postCreateUserMutationRequestSchema, postCreateUserMutationResponseSchema } from './zod/postCreateUserSchema'
-export { postLoginUserQuerySchema } from './zod/postLoginUserQuerySchema'
+export {
+  postDispatchStackDeploymentPathParamsSchema,
+  postDispatchStackDeployment200Schema,
+  postDispatchStackDeploymentMutationResponseSchema,
+} from './zod/postDispatchStackDeploymentSchema'
 export { postLoginUser200Schema, postLoginUserMutationRequestSchema, postLoginUserMutationResponseSchema } from './zod/postLoginUserSchema'
 export { postRefreshTokens200Schema, postRefreshTokensMutationRequestSchema, postRefreshTokensMutationResponseSchema } from './zod/postRefreshTokensSchema'
-export { postRefreshUserTokensQuerySchema } from './zod/postRefreshUserTokensQuerySchema'
 export { postRotateAgentKeyPathParamsSchema, postRotateAgentKey200Schema, postRotateAgentKeyMutationResponseSchema } from './zod/postRotateAgentKeySchema'
 export {
   postValidateGithubRepo200Schema,
@@ -442,12 +581,26 @@ export { projectDtoSchema } from './zod/projectDtoSchema'
 export { projectEnvironmentEnhancedDtoSchema } from './zod/projectEnvironmentEnhancedDtoSchema'
 export { providerTypeSchema } from './zod/providerTypeSchema'
 export {
+  putUpdateEnvironmentVariableGroupPathParamsSchema,
+  putUpdateEnvironmentVariableGroup200Schema,
+  putUpdateEnvironmentVariableGroup400Schema,
+  putUpdateEnvironmentVariableGroupMutationRequestSchema,
+  putUpdateEnvironmentVariableGroupMutationResponseSchema,
+} from './zod/putUpdateEnvironmentVariableGroupSchema'
+export {
+  putUpdateEnvironmentVariablePathParamsSchema,
+  putUpdateEnvironmentVariable200Schema,
+  putUpdateEnvironmentVariable400Schema,
+  putUpdateEnvironmentVariableMutationRequestSchema,
+  putUpdateEnvironmentVariableMutationResponseSchema,
+} from './zod/putUpdateEnvironmentVariableSchema'
+export {
   putUpdateGithubProviderPathParamsSchema,
   putUpdateGithubProvider200Schema,
   putUpdateGithubProviderMutationRequestSchema,
   putUpdateGithubProviderMutationResponseSchema,
 } from './zod/putUpdateGithubProviderSchema'
-export { requestSchema } from './zod/requestSchema'
+export { refreshUserTokenCommandSchema } from './zod/refreshUserTokenCommandSchema'
 export { serverDetailDtoSchema } from './zod/serverDetailDtoSchema'
 export { serverDtoSchema } from './zod/serverDtoSchema'
 export { serverPingDtoSchema } from './zod/serverPingDtoSchema'
@@ -457,6 +610,8 @@ export { simpleGithubProviderDtoSchema } from './zod/simpleGithubProviderDtoSche
 export { sourceProviderDtoSchema } from './zod/sourceProviderDtoSchema'
 export { stackCreatedDtoSchema } from './zod/stackCreatedDtoSchema'
 export { stackDetailDtoSchema } from './zod/stackDetailDtoSchema'
+export { stackEnvironmentVariableDtoSchema } from './zod/stackEnvironmentVariableDtoSchema'
+export { stackEnvironmentVariableGroupDtoSchema } from './zod/stackEnvironmentVariableGroupDtoSchema'
 export { stackServerDtoSchema } from './zod/stackServerDtoSchema'
 export { stackServiceDtoSchema } from './zod/stackServiceDtoSchema'
 export { stackServiceHealthcheckConfigurationDtoSchema } from './zod/stackServiceHealthcheckConfigurationDtoSchema'
@@ -465,6 +620,7 @@ export { stackSourceDtoSchema } from './zod/stackSourceDtoSchema'
 export { stackSourceDtoTypeSchema } from './zod/stackSourceDtoTypeSchema'
 export { test200Schema, testQueryResponseSchema } from './zod/testSchema'
 export { tokenDtoSchema } from './zod/tokenDtoSchema'
+export { updateGithubInstallationRequestSchema } from './zod/updateGithubInstallationRequestSchema'
 export { updateProjectArgsSchema } from './zod/updateProjectArgsSchema'
 export {
   updateProjectPathParamsSchema,
@@ -479,7 +635,11 @@ export {
   updateServerMutationRequestSchema,
   updateServerMutationResponseSchema,
 } from './zod/updateServerSchema'
-export { updateStackCommandCommandSchema } from './zod/updateStackCommandCommandSchema'
+export { updateStackCommandSchema } from './zod/updateStackCommandSchema'
+export { updateStackEnvironmentVariableCommandSchema } from './zod/updateStackEnvironmentVariableCommandSchema'
+export { updateStackEnvironmentVariableGroupCommandSchema } from './zod/updateStackEnvironmentVariableGroupCommandSchema'
+export { updateStackGithubSettingsSchema } from './zod/updateStackGithubSettingsSchema'
+export { updateStackGitPublicSettingsSchema } from './zod/updateStackGitPublicSettingsSchema'
 export {
   updateStackPathParamsSchema,
   updateStack200Schema,
@@ -487,7 +647,7 @@ export {
   updateStackMutationRequestSchema,
   updateStackMutationResponseSchema,
 } from './zod/updateStackSchema'
-export { updateStackServiceCommandCommandSchema } from './zod/updateStackServiceCommandCommandSchema'
+export { updateStackServiceCommandSchema } from './zod/updateStackServiceCommandSchema'
 export {
   updateStackServicePathParamsSchema,
   updateStackService200Schema,

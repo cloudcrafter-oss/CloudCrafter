@@ -3,15 +3,13 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Applications.Deployments;
 
-public static class CreateDeploymentCommand
-{
-    public record Query(Guid ApplicationId) : IApplicationCommand, IRequest<Guid>;
+public record CreateDeploymentCommand(Guid ApplicationId) : IApplicationCommand, IRequest<Guid>;
 
-    private class Handler(IDeploymentService service) : IRequestHandler<Query, Guid>
+internal class CreateDeploymentCommandHandler(IDeploymentService service)
+    : IRequestHandler<CreateDeploymentCommand, Guid>
+{
+    public Task<Guid> Handle(CreateDeploymentCommand request, CancellationToken cancellationToken)
     {
-        public Task<Guid> Handle(Query request, CancellationToken cancellationToken)
-        {
-            return service.DeployAsync(request.ApplicationId);
-        }
+        return service.DeployAsync(request.ApplicationId);
     }
 }

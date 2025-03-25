@@ -1,4 +1,4 @@
-import type { CreateGithubProviderCommandCommand } from './CreateGithubProviderCommandCommand'
+import type { CreateGithubProviderCommand } from './CreateGithubProviderCommand'
 import type { ProblemDetails } from './ProblemDetails'
 
 /**
@@ -11,7 +11,7 @@ export type PostCreateGithubApp201 = any
  */
 export type PostCreateGithubApp400 = ProblemDetails
 
-export type PostCreateGithubAppMutationRequest = CreateGithubProviderCommandCommand
+export type PostCreateGithubAppMutationRequest = CreateGithubProviderCommand
 
 export type PostCreateGithubAppMutationResponse = PostCreateGithubApp201
 

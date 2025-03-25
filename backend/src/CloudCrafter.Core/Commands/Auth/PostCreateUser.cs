@@ -4,15 +4,16 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Auth;
 
-public static class PostCreateUser
-{
-    public record Query(string Email, string Name) : IRequest<TokenDto>;
+public record CreateUserCommand(string Email, string Name) : IRequest<TokenDto>;
 
-    private class Handler(ICloudCrafterAuthService service) : IRequestHandler<Query, TokenDto>
+public class CreateUserCommandHandler(ICloudCrafterAuthService service)
+    : IRequestHandler<CreateUserCommand, TokenDto>
+{
+    public async Task<TokenDto> Handle(
+        CreateUserCommand request,
+        CancellationToken cancellationToken
+    )
     {
-        public async Task<TokenDto> Handle(Query request, CancellationToken cancellationToken)
-        {
-            return await service.CreateUserAsync(request.Email, request.Name);
-        }
+        return await service.CreateUserAsync(request.Email, request.Name);
     }
 }

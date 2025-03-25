@@ -390,6 +390,98 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.ToTable("Stacks");
                 });
 
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.StackEnvironmentVariable", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("GroupId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsSecret")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("StackId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("StackId");
+
+                    b.HasIndex("Key", "StackId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_StackEnvironmentVariable_Key_StackId");
+
+                    b.ToTable("StackEnvironmentVariables");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.StackEnvironmentVariableGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("StackId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StackId");
+
+                    b.HasIndex("Name", "StackId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_StackEnvironmentVariableGroup_Name_StackId");
+
+                    b.ToTable("StackEnvironmentVariableGroups");
+                });
+
             modelBuilder.Entity("CloudCrafter.Domain.Entities.StackService", b =>
                 {
                     b.Property<Guid>("Id")
@@ -978,6 +1070,35 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Navigation("Source");
                 });
 
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.StackEnvironmentVariable", b =>
+                {
+                    b.HasOne("CloudCrafter.Domain.Entities.StackEnvironmentVariableGroup", "Group")
+                        .WithMany("EnvironmentVariables")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("CloudCrafter.Domain.Entities.Stack", "Stack")
+                        .WithMany("EnvironmentVariables")
+                        .HasForeignKey("StackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+
+                    b.Navigation("Stack");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.StackEnvironmentVariableGroup", b =>
+                {
+                    b.HasOne("CloudCrafter.Domain.Entities.Stack", "Stack")
+                        .WithMany("EnvironmentVariableGroups")
+                        .HasForeignKey("StackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Stack");
+                });
+
             modelBuilder.Entity("CloudCrafter.Domain.Entities.StackService", b =>
                 {
                     b.HasOne("CloudCrafter.Domain.Entities.Stack", "Stack")
@@ -1167,7 +1288,16 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                 {
                     b.Navigation("Deployments");
 
+                    b.Navigation("EnvironmentVariableGroups");
+
+                    b.Navigation("EnvironmentVariables");
+
                     b.Navigation("Services");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.StackEnvironmentVariableGroup", b =>
+                {
+                    b.Navigation("EnvironmentVariables");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.User", b =>

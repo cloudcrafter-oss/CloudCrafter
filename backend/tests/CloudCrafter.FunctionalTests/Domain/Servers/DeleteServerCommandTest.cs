@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Servers;
+using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
@@ -15,7 +15,7 @@ public class DeleteServerCommandTest : BaseTestFixture
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
         Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await SendAsync(new DeleteServerCommand.Command(Guid.NewGuid()))
+            async () => await SendAsync(new DeleteServerCommand(Guid.NewGuid()))
         );
     }
 
@@ -24,7 +24,7 @@ public class DeleteServerCommandTest : BaseTestFixture
     {
         await RunAsAdministratorAsync();
 
-        await SendAsync(new DeleteServerCommand.Command(Guid.NewGuid()));
+        await SendAsync(new DeleteServerCommand(Guid.NewGuid()));
 
         (await CountAsync<Server>()).Should().Be(0);
     }
@@ -38,7 +38,7 @@ public class DeleteServerCommandTest : BaseTestFixture
         await AddAsync(server);
 
         (await CountAsync<Server>()).Should().Be(1);
-        await SendAsync(new DeleteServerCommand.Command(server.Id));
+        await SendAsync(new DeleteServerCommand(server.Id));
 
         (await CountAsync<Server>()).Should().Be(0);
     }
@@ -52,7 +52,7 @@ public class DeleteServerCommandTest : BaseTestFixture
         await AddAsync(server);
 
         (await CountAsync<Server>()).Should().Be(1);
-        await SendAsync(new DeleteServerCommand.Command(Guid.NewGuid()));
+        await SendAsync(new DeleteServerCommand(Guid.NewGuid()));
 
         (await CountAsync<Server>()).Should().Be(1);
     }
@@ -69,7 +69,7 @@ public class DeleteServerCommandTest : BaseTestFixture
         (await CountAsync<Server>()).Should().Be(1);
 
         var exception = await FluentActions
-            .Invoking(() => SendAsync(new DeleteServerCommand.Command(serverId)))
+            .Invoking(() => SendAsync(new DeleteServerCommand(serverId)))
             .Should()
             .ThrowAsync<ValidationException>();
 

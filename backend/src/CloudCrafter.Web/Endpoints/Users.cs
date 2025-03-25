@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Users;
+using CloudCrafter.Core.Commands.Users;
 using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Domain.Common.Pagination;
 using CloudCrafter.Domain.Domain.User;
@@ -23,7 +23,7 @@ public class Users : EndpointGroupBase
         [FromBody] PaginatedRequest<UserDto> paginationRequest
     )
     {
-        return await sender.Send(new GetUserList.Query(paginationRequest));
+        return await sender.Send(new GetUserListQuery(paginationRequest));
     }
 
     public List<string> Test()

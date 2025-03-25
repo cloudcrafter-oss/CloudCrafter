@@ -1,4 +1,4 @@
-import type { PostRefreshUserTokensQuery } from './PostRefreshUserTokensQuery'
+import type { RefreshUserTokenCommand } from './RefreshUserTokenCommand'
 import type { TokenDto } from './TokenDto'
 
 /**
@@ -6,7 +6,7 @@ import type { TokenDto } from './TokenDto'
  */
 export type PostRefreshTokens200 = TokenDto
 
-export type PostRefreshTokensMutationRequest = PostRefreshUserTokensQuery
+export type PostRefreshTokensMutationRequest = RefreshUserTokenCommand
 
 export type PostRefreshTokensMutationResponse = PostRefreshTokens200
 

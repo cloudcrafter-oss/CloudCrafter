@@ -1,9 +1,11 @@
-﻿using System.Text;
+using System.Text;
 using Ardalis.GuardClauses;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Auth;
+using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Repositories;
+using CloudCrafter.Core.Services.Domain.Stacks;
 using CloudCrafter.Domain.Constants;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Core.Configuration;
@@ -108,7 +110,8 @@ public static class InfrastructureServiceExtensions
             .AddScoped<IStackRepository, StackRepository>()
             .AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>()
             .AddScoped<IJwtService, JwtService>()
-            .AddScoped<IEmailSender, FakeEmailSender>();
+            .AddScoped<IEmailSender, FakeEmailSender>()
+            .AddScoped<IStackEnvironmentVariablesService, StackEnvironmentVariablesService>();
 
         return services;
     }

@@ -1,4 +1,4 @@
-﻿using Ardalis.GuardClauses;
+using Ardalis.GuardClauses;
 using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
@@ -16,7 +16,7 @@ public class RotateServerKeyCommandTest : BaseTestFixture
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
         Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await SendAsync(new RotateServerKeyCommand.Command(Guid.NewGuid()))
+            async () => await SendAsync(new RotateServerKeyCommand(Guid.NewGuid()))
         );
     }
 
@@ -26,7 +26,7 @@ public class RotateServerKeyCommandTest : BaseTestFixture
         await RunAsAdministratorAsync();
 
         Assert.ThrowsAsync<NotFoundException>(
-            async () => await SendAsync(new RotateServerKeyCommand.Command(Guid.NewGuid()))
+            async () => await SendAsync(new RotateServerKeyCommand(Guid.NewGuid()))
         );
     }
 
@@ -38,7 +38,7 @@ public class RotateServerKeyCommandTest : BaseTestFixture
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
 
-        await SendAsync(new RotateServerKeyCommand.Command(server.Id));
+        await SendAsync(new RotateServerKeyCommand(server.Id));
 
         var serverFromDb = FetchEntity<Server>(x => x.Id == server.Id);
 

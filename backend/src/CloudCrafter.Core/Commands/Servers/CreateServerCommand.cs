@@ -1,20 +1,21 @@
-﻿using CloudCrafter.Core.Common.Security;
+using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Domain.Domain.Server;
 using MediatR;
 
 namespace CloudCrafter.Core.Commands.Servers;
 
-public static class CreateServerCommand
-{
-    [Authorize]
-    public record Command(string Name) : IRequest<CreatedServerDto>;
+[Authorize]
+public record CreateServerCommand(string Name) : IRequest<CreatedServerDto>;
 
-    private class Handler(IServersService service) : IRequestHandler<Command, CreatedServerDto>
+internal class CreateServerCommandHandler(IServersService service)
+    : IRequestHandler<CreateServerCommand, CreatedServerDto>
+{
+    public Task<CreatedServerDto> Handle(
+        CreateServerCommand request,
+        CancellationToken cancellationToken
+    )
     {
-        public Task<CreatedServerDto> Handle(Command request, CancellationToken cancellationToken)
-        {
-            return service.CreateServer(request);
-        }
+        return service.CreateServer(request);
     }
 }

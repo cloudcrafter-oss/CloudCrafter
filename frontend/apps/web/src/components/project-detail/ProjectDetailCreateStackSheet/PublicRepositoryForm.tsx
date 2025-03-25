@@ -1,9 +1,9 @@
 import {
 	type StackCreatedDto,
+	createStackCommandSchema,
 	usePostCreateStackHook,
 	usePostValidateGithubRepoHook,
 } from '@cloudcrafter/api'
-import { createStackCommandCommandSchema } from '@cloudcrafter/api'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Form,
@@ -34,8 +34,8 @@ export const PublicRepositoryForm = ({
 	onStackCreated,
 }: PublicRepositoryFormProps) => {
 	const [formIsSubmitting, setFormIsSubmitting] = useState(false)
-	const form = useForm<z.infer<typeof createStackCommandCommandSchema>>({
-		resolver: zodResolver(createStackCommandCommandSchema),
+	const form = useForm<z.infer<typeof createStackCommandSchema>>({
+		resolver: zodResolver(createStackCommandSchema),
 		defaultValues: {
 			gitRepository: 'https://github.com/cloudcrafter-oss/demo-examples',
 			name: '',
@@ -47,9 +47,7 @@ export const PublicRepositoryForm = ({
 		usePostValidateGithubRepoHook()
 	const { mutateAsync: createStack } = usePostCreateStackHook()
 
-	const onSubmit = async (
-		values: z.infer<typeof createStackCommandCommandSchema>,
-	) => {
+	const onSubmit = async (values: z.infer<typeof createStackCommandSchema>) => {
 		setFormIsSubmitting(true)
 		try {
 			const isValid = await validateRepo({

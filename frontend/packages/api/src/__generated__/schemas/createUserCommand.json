@@ -1,0 +1,1 @@
+{"required":["email","name"],"type":"object","properties":{"email":{"type":"string"},"name":{"type":"string"}},"x-readme-ref-name":"CreateUserCommand"}

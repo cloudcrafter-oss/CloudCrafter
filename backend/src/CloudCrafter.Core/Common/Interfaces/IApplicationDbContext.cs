@@ -18,9 +18,10 @@ public interface IApplicationDbContext
     DbSet<StackService> StackServices { get; }
     DbSet<StackServiceType> StackServiceTypes { get; }
     DbSet<ServerConnectivityCheckJob> ServerConnectivityCheckJobs { get; }
-
     DbSet<SourceProvider> SourceProviders { get; }
     DbSet<GithubProvider> GithubProviders { get; }
+    DbSet<StackEnvironmentVariable> StackEnvironmentVariables { get; }
+    DbSet<StackEnvironmentVariableGroup> StackEnvironmentVariableGroups { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     int SaveChanges();

@@ -3,15 +3,16 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Stacks;
 
-public static class MarkStacksAsUnknownHealthAfterTimespan
-{
-    public record Command() : IRequest;
+public record MarkStacksAsUnknownHealthAfterTimespanCommand : IRequest;
 
-    public class Handler(IStacksService stacksService) : IRequestHandler<Command>
+public class MarkStacksAsUnknownHealthAfterTimespanCommandHandler(IStacksService stacksService)
+    : IRequestHandler<MarkStacksAsUnknownHealthAfterTimespanCommand>
+{
+    public Task Handle(
+        MarkStacksAsUnknownHealthAfterTimespanCommand request,
+        CancellationToken cancellationToken
+    )
     {
-        public Task Handle(Command request, CancellationToken cancellationToken)
-        {
-            return stacksService.MarkStacksUnknownAfterTimespan(TimeSpan.FromMinutes(5));
-        }
+        return stacksService.MarkStacksUnknownAfterTimespan(TimeSpan.FromMinutes(5));
     }
 }

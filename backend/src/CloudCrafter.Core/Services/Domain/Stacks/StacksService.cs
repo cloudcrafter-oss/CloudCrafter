@@ -1,8 +1,9 @@
-﻿using System.Reflection.Metadata;
+using System.Reflection.Metadata;
 using AutoMapper;
 using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Core.Common.Responses;
+using CloudCrafter.Core.Events;
 using CloudCrafter.Core.Events.DomainEvents;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Domain.Stacks.Filters;
@@ -128,7 +129,7 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
         await repository.SaveChangesAsync();
     }
 
-    public async Task<StackDetailDto?> UpdateStack(UpdateStackCommand.Command request)
+    public async Task<StackDetailDto?> UpdateStack(UpdateStackCommand request)
     {
         var stack = await repository.GetStack(request.StackId);
 

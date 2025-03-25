@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Auth;
+using CloudCrafter.Core.Commands.Auth;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -11,7 +11,7 @@ public class PostLoginUserQueryTest : BaseTestFixture
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotFound()
     {
-        var query = new PostLoginUser.Query("test@test.com", "password");
+        var query = new LoginUserCommand("test@test.com", "password");
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(query));
     }
 
@@ -21,7 +21,7 @@ public class PostLoginUserQueryTest : BaseTestFixture
         var now = DateTime.UtcNow;
         var user = await CreateAdminUser();
 
-        var query = new PostLoginUser.Query(user.Email, user.Password);
+        var query = new LoginUserCommand(user.Email, user.Password);
 
         var result = await SendAsync(query);
 

@@ -90,30 +90,30 @@ public static class DependencyInjection
                 }
             );
 
-            options.CreateSchemaReferenceId = info =>
-            {
-                var schema = OpenApiOptions.CreateDefaultSchemaReferenceId(info);
-
-                if (schema is not ("Query" or "Command"))
-                {
-                    return schema;
-                }
-
-                var type = info.Type;
-
-                var fullName = type.FullName;
-
-                if (string.IsNullOrWhiteSpace(fullName))
-                {
-                    return schema;
-                }
-
-                var parts = fullName.Split('.');
-                var lastPart = parts[^1];
-                var commandParts = lastPart.Split(['+']);
-
-                return string.Join("", commandParts);
-            };
+            // options.CreateSchemaReferenceId = info =>
+            // {
+            //     var schema = OpenApiOptions.CreateDefaultSchemaReferenceId(info);
+            //
+            //     if (schema is not ("Query" or "Command"))
+            //     {
+            //         return schema;
+            //     }
+            //
+            //     var type = info.Type;
+            //
+            //     var fullName = type.FullName;
+            //
+            //     if (string.IsNullOrWhiteSpace(fullName))
+            //     {
+            //         return schema;
+            //     }
+            //
+            //     var parts = fullName.Split('.');
+            //     var lastPart = parts[^1];
+            //     var commandParts = lastPart.Split(['+']);
+            //
+            //     return string.Join("", commandParts);
+            // };
 
             options.AddDocumentTransformer(
                 (doc, context, ct) =>

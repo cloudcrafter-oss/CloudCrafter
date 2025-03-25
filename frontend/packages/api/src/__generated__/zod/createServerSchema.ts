@@ -1,5 +1,5 @@
 import { createdServerDtoSchema } from './createdServerDtoSchema'
-import { createServerCommandCommandSchema } from './createServerCommandCommandSchema'
+import { createServerCommandSchema } from './createServerCommandSchema'
 import { z } from 'zod'
 
 /**
@@ -7,6 +7,6 @@ import { z } from 'zod'
  */
 export const createServer200Schema = z.lazy(() => createdServerDtoSchema)
 
-export const createServerMutationRequestSchema = z.lazy(() => createServerCommandCommandSchema)
+export const createServerMutationRequestSchema = z.lazy(() => createServerCommandSchema)
 
 export const createServerMutationResponseSchema = z.lazy(() => createServer200Schema)

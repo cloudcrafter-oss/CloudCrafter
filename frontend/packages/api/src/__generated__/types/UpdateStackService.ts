@@ -1,4 +1,4 @@
-import type { UpdateStackServiceCommandCommand } from './UpdateStackServiceCommandCommand'
+import type { UpdateStackServiceCommand } from './UpdateStackServiceCommand'
 
 export type UpdateStackServicePathParams = {
   /**
@@ -16,7 +16,7 @@ export type UpdateStackServicePathParams = {
  */
 export type UpdateStackService200 = any
 
-export type UpdateStackServiceMutationRequest = UpdateStackServiceCommandCommand
+export type UpdateStackServiceMutationRequest = UpdateStackServiceCommand
 
 export type UpdateStackServiceMutationResponse = UpdateStackService200
 

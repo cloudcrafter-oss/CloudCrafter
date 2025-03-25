@@ -21,6 +21,7 @@ export async function updateStack(
     url: getUpdateStackUrl(id).toString(),
     data,
     ...requestConfig,
+    headers: { 'Content-Type': 'application/*+json', ...requestConfig.headers },
   })
   return res.data
 }

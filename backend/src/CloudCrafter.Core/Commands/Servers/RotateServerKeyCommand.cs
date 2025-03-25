@@ -4,16 +4,14 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Servers;
 
-public static class RotateServerKeyCommand
-{
-    [Authorize]
-    public record Command(Guid ServerId) : IRequest;
+[Authorize]
+public record RotateServerKeyCommand(Guid ServerId) : IRequest;
 
-    private class Handler(IServersService service) : IRequestHandler<Command>
+internal class RotateServerKeyCommandHandler(IServersService service)
+    : IRequestHandler<RotateServerKeyCommand>
+{
+    public async Task Handle(RotateServerKeyCommand request, CancellationToken cancellationToken)
     {
-        public async Task Handle(Command request, CancellationToken cancellationToken)
-        {
-            await service.RotateServerKey(request.ServerId);
-        }
+        await service.RotateServerKey(request.ServerId);
     }
 }

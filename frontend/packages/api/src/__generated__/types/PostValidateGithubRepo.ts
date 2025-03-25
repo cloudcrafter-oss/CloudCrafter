@@ -1,4 +1,4 @@
-import type { CheckValidGitRepoCommandCommand } from './CheckValidGitRepoCommandCommand'
+import type { CheckValidGitRepoCommand } from './CheckValidGitRepoCommand'
 import type { GitRepositoryCheckResultDto } from './GitRepositoryCheckResultDto'
 
 /**
@@ -6,7 +6,7 @@ import type { GitRepositoryCheckResultDto } from './GitRepositoryCheckResultDto'
  */
 export type PostValidateGithubRepo200 = GitRepositoryCheckResultDto
 
-export type PostValidateGithubRepoMutationRequest = CheckValidGitRepoCommandCommand
+export type PostValidateGithubRepoMutationRequest = CheckValidGitRepoCommand
 
 export type PostValidateGithubRepoMutationResponse = PostValidateGithubRepo200
 

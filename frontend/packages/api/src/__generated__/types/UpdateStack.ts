@@ -1,5 +1,6 @@
+import type { ProblemDetails } from './ProblemDetails'
 import type { StackDetailDto } from './StackDetailDto'
-import type { UpdateStackCommandCommand } from './UpdateStackCommandCommand'
+import type { UpdateStackCommand } from './UpdateStackCommand'
 
 export type UpdateStackPathParams = {
   /**
@@ -16,9 +17,9 @@ export type UpdateStack200 = StackDetailDto
 /**
  * @description Not Found
  */
-export type UpdateStack404 = any
+export type UpdateStack404 = ProblemDetails
 
-export type UpdateStackMutationRequest = UpdateStackCommandCommand
+export type UpdateStackMutationRequest = UpdateStackCommand
 
 export type UpdateStackMutationResponse = UpdateStack200
 

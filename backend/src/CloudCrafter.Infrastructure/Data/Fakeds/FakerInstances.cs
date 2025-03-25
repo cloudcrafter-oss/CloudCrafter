@@ -41,16 +41,6 @@ public static class FakerInstances
             .RuleFor(x => x.Environments, new List<Environment>())
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
-    public static Faker<SourceProvider> SourceProviderFaker(Guid? githubProviderId = null) =>
-        new Faker<SourceProvider>()
-            .StrictMode(true)
-            .RuleFor(x => x.Id, f => Guid.NewGuid())
-            .RuleFor(x => x.Name, f => f.Person.FirstName)
-            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
-            .RuleFor(x => x.GithubProvider, f => null)
-            .RuleFor(x => x.GithubProviderId, f => githubProviderId)
-            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
-
     public static Faker<GithubProvider> GithubProviderFaker
     {
         get
@@ -87,6 +77,57 @@ public static class FakerInstances
     public static StackServiceType StackServiceAppTypeType =>
         new() { Id = StackServiceTypeConstants.App, Type = nameof(StackServiceTypeConstants.App) };
 
+    public static Faker<StackEnvironmentVariable> StackEnvironmentVariableFaker(Stack stack)
+    {
+        return new Faker<StackEnvironmentVariable>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, Guid.NewGuid)
+            .RuleFor(x => x.Key, f => f.Lorem.Word())
+            .RuleFor(x => x.Value, f => f.Lorem.Word())
+            .RuleFor(x => x.StackId, stack.Id)
+            .RuleFor(x => x.Group, f => null)
+            .RuleFor(x => x.GroupId, f => null)
+            .RuleFor(x => x.IsSecret, f => false)
+            // ReSharper disable once RedundantCast
+            .RuleFor(x => x.Stack, f => (Stack?)null)
+            .RuleFor(x => x.Type, f => EnvironmentVariableType.Both)
+            .RuleFor(x => x.CreatedBy, f => null)
+            .RuleFor(x => x.LastModifiedBy, f => null)
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    }
+
+    public static Faker<StackEnvironmentVariableGroup> StackEnvironmentVariableGroupFaker(
+        Stack stack
+    )
+    {
+        return new Faker<StackEnvironmentVariableGroup>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, Guid.NewGuid)
+            .RuleFor(x => x.CreatedBy, f => null)
+            .RuleFor(x => x.Name, f => f.Name.JobTitle())
+            .RuleFor(x => x.Description, f => f.Lorem.Sentence())
+            .RuleFor(x => x.LastModifiedBy, f => null)
+            .RuleFor(x => x.StackId, stack.Id)
+            // ReSharper disable once RedundantCast
+            .RuleFor(x => x.Stack, (Stack?)null)
+            .RuleFor(x => x.EnvironmentVariables, f => new List<StackEnvironmentVariable>())
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    }
+
+    public static Faker<SourceProvider> SourceProviderFaker(Guid? githubProviderId = null)
+    {
+        return new Faker<SourceProvider>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, f => Guid.NewGuid())
+            .RuleFor(x => x.Name, f => f.Person.FirstName)
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.GithubProvider, f => null)
+            .RuleFor(x => x.GithubProviderId, f => githubProviderId)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    }
+
     public static Faker<Deployment> DeploymentFaker(Stack Stack)
     {
         return new Faker<Deployment>()
@@ -112,6 +153,7 @@ public static class FakerInstances
             .RuleFor(x => x.Id, Guid.NewGuid)
             .RuleFor(x => x.Name, f => $"Application {f.Person.FirstName}")
             .RuleFor(x => x.ServerId, server.Id)
+            .RuleFor(x => x.EnvironmentVariables, f => new List<StackEnvironmentVariable>())
             .RuleFor(x => x.BuildPack, f => StackBuildPack.Nixpacks)
             .RuleFor(x => x.CreatedBy, (Guid?)null)
             .RuleFor(x => x.Description, f => null)
@@ -123,6 +165,10 @@ public static class FakerInstances
             .RuleFor(x => x.Source, f => null)
             .RuleFor(x => x.HealthStatus, f => new StackHealthEntity())
             .RuleFor(x => x.Services, f => new List<StackService>())
+            .RuleFor(
+                x => x.EnvironmentVariableGroups,
+                f => new List<StackEnvironmentVariableGroup>()
+            )
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
     }

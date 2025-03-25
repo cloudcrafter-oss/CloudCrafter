@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Providers.Github;
+using CloudCrafter.Core.Commands.Providers.Github;
 using CloudCrafter.Domain.Domain.Providers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +12,7 @@ public class ProvidersController : CloudCrafterController
     [HttpPost]
     public async Task<IResult> PostCreateGithubApp(
         ISender sender,
-        CreateGithubProviderCommand.Command command
+        CreateGithubProviderCommand command
     )
     {
         var created = await sender.Send(command);
@@ -35,10 +35,10 @@ public class ProvidersController : CloudCrafterController
     public async Task<IResult> PutUpdateGithubProvider(
         ISender sender,
         [FromRoute] Guid id,
-        [FromBody] UpdateGithubInstallationCommand.Request request
+        [FromBody] UpdateGithubInstallationRequest request
     )
     {
-        await sender.Send(new UpdateGithubInstallationCommand.Command(request, id));
+        await sender.Send(new UpdateGithubInstallationCommand(request, id));
 
         return Results.Ok();
     }
@@ -49,7 +49,7 @@ public class ProvidersController : CloudCrafterController
         [FromRoute] Guid id
     )
     {
-        return await sender.Send(new GetGitRepositoriesFromProviderQuery.Query(id));
+        return await sender.Send(new GetGitRepositoriesQuery(id));
     }
 
     [HttpGet("{id}/branches/{repositoryId}")]
@@ -59,15 +59,13 @@ public class ProvidersController : CloudCrafterController
         [FromRoute] string repositoryId
     )
     {
-        return await sender.Send(
-            new GetGitBranchesForProviderAndRepositoryQuery.Query(id, repositoryId)
-        );
+        return await sender.Send(new GetGitBranchesQuery(id, repositoryId));
     }
 
     [HttpDelete("{id}")]
     public async Task<IResult> DeleteProvider(ISender sender, [FromRoute] Guid id)
     {
-        await sender.Send(new DeleteProviderCommand.Command(id));
+        await sender.Send(new DeleteProviderCommand(id));
 
         return Results.Ok();
     }

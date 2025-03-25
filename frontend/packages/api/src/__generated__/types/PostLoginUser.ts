@@ -1,4 +1,4 @@
-import type { PostLoginUserQuery } from './PostLoginUserQuery'
+import type { LoginUserCommand } from './LoginUserCommand'
 import type { TokenDto } from './TokenDto'
 
 /**
@@ -6,7 +6,7 @@ import type { TokenDto } from './TokenDto'
  */
 export type PostLoginUser200 = TokenDto
 
-export type PostLoginUserMutationRequest = PostLoginUserQuery
+export type PostLoginUserMutationRequest = LoginUserCommand
 
 export type PostLoginUserMutationResponse = PostLoginUser200
 

@@ -6,18 +6,16 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Servers;
 
-public static class UpdateServerCommand
-{
-    [Authorize]
-    public record Command(Guid ServerId, UpdateServerDto UpdateDetails)
-        : IRequireServerAccess,
-            IRequest;
+[Authorize]
+public record UpdateServerCommand(Guid ServerId, UpdateServerDto UpdateDetails)
+    : IRequireServerAccess,
+        IRequest;
 
-    public class Handler(IServersService serversService) : IRequestHandler<Command>
+internal class UpdateServerCommandHandler(IServersService serversService)
+    : IRequestHandler<UpdateServerCommand>
+{
+    public Task Handle(UpdateServerCommand request, CancellationToken cancellationToken)
     {
-        public Task Handle(Command request, CancellationToken cancellationToken)
-        {
-            return serversService.UpdateServer(request.ServerId, request.UpdateDetails);
-        }
+        return serversService.UpdateServer(request.ServerId, request.UpdateDetails);
     }
 }

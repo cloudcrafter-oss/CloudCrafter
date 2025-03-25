@@ -1,15 +1,20 @@
 export type { CreateProjectMutationKey } from './useCreateProjectHook'
 export type { CreateServerMutationKey } from './useCreateServerHook'
+export type { DeleteEnvironmentVariableGroupMutationKey } from './useDeleteEnvironmentVariableGroupHook'
+export type { DeleteEnvironmentVariableMutationKey } from './useDeleteEnvironmentVariableHook'
 export type { DeleteProjectMutationKey } from './useDeleteProjectHook'
 export type { DeleteProviderMutationKey } from './useDeleteProviderHook'
 export type { DeleteServerByIdMutationKey } from './useDeleteServerByIdHook'
-export type { DispatchStackDeploymentMutationKey } from './useDispatchStackDeploymentHook'
 export type { GetDeploymentLogsQueryKey } from './useGetDeploymentLogsHook'
 export type { GetDeploymentLogsSuspenseQueryKey } from './useGetDeploymentLogsSuspenseHook'
 export type { GetDeploymentsForServerQueryKey } from './useGetDeploymentsForServerHook'
 export type { GetDeploymentsForServerSuspenseQueryKey } from './useGetDeploymentsForServerSuspenseHook'
 export type { GetDeploymentsForStackQueryKey } from './useGetDeploymentsForStackHook'
 export type { GetDeploymentsForStackSuspenseQueryKey } from './useGetDeploymentsForStackSuspenseHook'
+export type { GetEnvironmentVariableGroupsQueryKey } from './useGetEnvironmentVariableGroupsHook'
+export type { GetEnvironmentVariableGroupsSuspenseQueryKey } from './useGetEnvironmentVariableGroupsSuspenseHook'
+export type { GetEnvironmentVariablesQueryKey } from './useGetEnvironmentVariablesHook'
+export type { GetEnvironmentVariablesSuspenseQueryKey } from './useGetEnvironmentVariablesSuspenseHook'
 export type { GetFilterableFieldsQueryKey } from './useGetFilterableFieldsHook'
 export type { GetFilterableFieldsSuspenseQueryKey } from './useGetFilterableFieldsSuspenseHook'
 export type { GetGitBranchesQueryKey } from './useGetGitBranchesHook'
@@ -32,13 +37,18 @@ export type { GetStackDetailQueryKey } from './useGetStackDetailHook'
 export type { GetStackDetailSuspenseQueryKey } from './useGetStackDetailSuspenseHook'
 export type { GetUsersMutationKey } from './useGetUsersHook'
 export type { PostCreateDeploymentMutationKey } from './usePostCreateDeploymentHook'
+export type { PostCreateEnvironmentVariableGroupMutationKey } from './usePostCreateEnvironmentVariableGroupHook'
+export type { PostCreateEnvironmentVariableMutationKey } from './usePostCreateEnvironmentVariableHook'
 export type { PostCreateGithubAppMutationKey } from './usePostCreateGithubAppHook'
 export type { PostCreateStackFromSourceProviderMutationKey } from './usePostCreateStackFromSourceProviderHook'
 export type { PostCreateStackMutationKey } from './usePostCreateStackHook'
 export type { PostCreateUserMutationKey } from './usePostCreateUserHook'
+export type { PostDispatchStackDeploymentMutationKey } from './usePostDispatchStackDeploymentHook'
 export type { PostLoginUserMutationKey } from './usePostLoginUserHook'
 export type { PostRotateAgentKeyMutationKey } from './usePostRotateAgentKeyHook'
 export type { PostValidateGithubRepoMutationKey } from './usePostValidateGithubRepoHook'
+export type { PutUpdateEnvironmentVariableGroupMutationKey } from './usePutUpdateEnvironmentVariableGroupHook'
+export type { PutUpdateEnvironmentVariableMutationKey } from './usePutUpdateEnvironmentVariableHook'
 export type { PutUpdateGithubProviderMutationKey } from './usePutUpdateGithubProviderHook'
 export type { TestQueryKey } from './useTestHook'
 export type { TestSuspenseQueryKey } from './useTestSuspenseHook'
@@ -48,10 +58,11 @@ export type { UpdateStackMutationKey } from './useUpdateStackHook'
 export type { UpdateStackServiceMutationKey } from './useUpdateStackServiceHook'
 export { createProjectMutationKey, useCreateProjectHook } from './useCreateProjectHook'
 export { createServerMutationKey, useCreateServerHook } from './useCreateServerHook'
+export { deleteEnvironmentVariableGroupMutationKey, useDeleteEnvironmentVariableGroupHook } from './useDeleteEnvironmentVariableGroupHook'
+export { deleteEnvironmentVariableMutationKey, useDeleteEnvironmentVariableHook } from './useDeleteEnvironmentVariableHook'
 export { deleteProjectMutationKey, useDeleteProjectHook } from './useDeleteProjectHook'
 export { deleteProviderMutationKey, useDeleteProviderHook } from './useDeleteProviderHook'
 export { deleteServerByIdMutationKey, useDeleteServerByIdHook } from './useDeleteServerByIdHook'
-export { dispatchStackDeploymentMutationKey, useDispatchStackDeploymentHook } from './useDispatchStackDeploymentHook'
 export { getDeploymentLogsQueryKey, getDeploymentLogsQueryOptionsHook, useGetDeploymentLogsHook } from './useGetDeploymentLogsHook'
 export {
   getDeploymentLogsSuspenseQueryKey,
@@ -70,6 +81,22 @@ export {
   getDeploymentsForStackSuspenseQueryOptionsHook,
   useGetDeploymentsForStackSuspenseHook,
 } from './useGetDeploymentsForStackSuspenseHook'
+export {
+  getEnvironmentVariableGroupsQueryKey,
+  getEnvironmentVariableGroupsQueryOptionsHook,
+  useGetEnvironmentVariableGroupsHook,
+} from './useGetEnvironmentVariableGroupsHook'
+export {
+  getEnvironmentVariableGroupsSuspenseQueryKey,
+  getEnvironmentVariableGroupsSuspenseQueryOptionsHook,
+  useGetEnvironmentVariableGroupsSuspenseHook,
+} from './useGetEnvironmentVariableGroupsSuspenseHook'
+export { getEnvironmentVariablesQueryKey, getEnvironmentVariablesQueryOptionsHook, useGetEnvironmentVariablesHook } from './useGetEnvironmentVariablesHook'
+export {
+  getEnvironmentVariablesSuspenseQueryKey,
+  getEnvironmentVariablesSuspenseQueryOptionsHook,
+  useGetEnvironmentVariablesSuspenseHook,
+} from './useGetEnvironmentVariablesSuspenseHook'
 export { getFilterableFieldsQueryKey, getFilterableFieldsQueryOptionsHook, useGetFilterableFieldsHook } from './useGetFilterableFieldsHook'
 export {
   getFilterableFieldsSuspenseQueryKey,
@@ -108,13 +135,18 @@ export { getStackDetailQueryKey, getStackDetailQueryOptionsHook, useGetStackDeta
 export { getStackDetailSuspenseQueryKey, getStackDetailSuspenseQueryOptionsHook, useGetStackDetailSuspenseHook } from './useGetStackDetailSuspenseHook'
 export { getUsersMutationKey, useGetUsersHook } from './useGetUsersHook'
 export { postCreateDeploymentMutationKey, usePostCreateDeploymentHook } from './usePostCreateDeploymentHook'
+export { postCreateEnvironmentVariableGroupMutationKey, usePostCreateEnvironmentVariableGroupHook } from './usePostCreateEnvironmentVariableGroupHook'
+export { postCreateEnvironmentVariableMutationKey, usePostCreateEnvironmentVariableHook } from './usePostCreateEnvironmentVariableHook'
 export { postCreateGithubAppMutationKey, usePostCreateGithubAppHook } from './usePostCreateGithubAppHook'
 export { postCreateStackFromSourceProviderMutationKey, usePostCreateStackFromSourceProviderHook } from './usePostCreateStackFromSourceProviderHook'
 export { postCreateStackMutationKey, usePostCreateStackHook } from './usePostCreateStackHook'
 export { postCreateUserMutationKey, usePostCreateUserHook } from './usePostCreateUserHook'
+export { postDispatchStackDeploymentMutationKey, usePostDispatchStackDeploymentHook } from './usePostDispatchStackDeploymentHook'
 export { postLoginUserMutationKey, usePostLoginUserHook } from './usePostLoginUserHook'
 export { postRotateAgentKeyMutationKey, usePostRotateAgentKeyHook } from './usePostRotateAgentKeyHook'
 export { postValidateGithubRepoMutationKey, usePostValidateGithubRepoHook } from './usePostValidateGithubRepoHook'
+export { putUpdateEnvironmentVariableGroupMutationKey, usePutUpdateEnvironmentVariableGroupHook } from './usePutUpdateEnvironmentVariableGroupHook'
+export { putUpdateEnvironmentVariableMutationKey, usePutUpdateEnvironmentVariableHook } from './usePutUpdateEnvironmentVariableHook'
 export { putUpdateGithubProviderMutationKey, usePutUpdateGithubProviderHook } from './usePutUpdateGithubProviderHook'
 export { testQueryKey, testQueryOptionsHook, useTestHook } from './useTestHook'
 export { testSuspenseQueryKey, testSuspenseQueryOptionsHook, useTestSuspenseHook } from './useTestSuspenseHook'
