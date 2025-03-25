@@ -11,6 +11,8 @@
 		"test:report": "playwright show-report"
 	},
 	"devDependencies": {
+		"@cloudcrafter/api": "workspace:*",
+		"@faker-js/faker": "^9.6.0",
 		"@playwright/test": "^1.51.1",
 		"@types/node": "^22.13.13",
 		"typescript": "5.1.6"
