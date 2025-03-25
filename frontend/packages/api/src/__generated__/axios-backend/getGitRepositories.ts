@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@kubb/plugin-client/clients/axios'
 import type { GetGitRepositoriesQueryResponse, GetGitRepositoriesPathParams } from '../types/GetGitRepositories'
+import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
 
 export function getGetGitRepositoriesUrl(id: GetGitRepositoriesPathParams['id']) {
   return `/api/Providers/${id}/repositories` as const

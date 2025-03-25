@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@kubb/plugin-client/clients/axios'
 import type { GetEnvironmentVariableGroupsQueryResponse, GetEnvironmentVariableGroupsPathParams } from '../types/GetEnvironmentVariableGroups'
+import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
 
 export function getGetEnvironmentVariableGroupsUrl(stackId: GetEnvironmentVariableGroupsPathParams['stackId']) {
   return `/api/Stacks/${stackId}/environment-variable-groups` as const

@@ -1,11 +1,11 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@kubb/plugin-client/clients/axios'
 import type {
   PutUpdateEnvironmentVariableGroupMutationRequest,
   PutUpdateEnvironmentVariableGroupMutationResponse,
   PutUpdateEnvironmentVariableGroupPathParams,
   PutUpdateEnvironmentVariableGroup400,
 } from '../types/PutUpdateEnvironmentVariableGroup'
+import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
 
 export function getPutUpdateEnvironmentVariableGroupUrl(
   stackId: PutUpdateEnvironmentVariableGroupPathParams['stackId'],

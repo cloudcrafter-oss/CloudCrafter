@@ -1,10 +1,10 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@kubb/plugin-client/clients/axios'
 import type {
   GetDeploymentsForServerQueryResponse,
   GetDeploymentsForServerPathParams,
   GetDeploymentsForServerQueryParams,
 } from '../types/GetDeploymentsForServer'
+import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
 
 export function getGetDeploymentsForServerUrl(id: GetDeploymentsForServerPathParams['id']) {
   return `/api/Servers/${id}/deployments` as const

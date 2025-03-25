@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@kubb/plugin-client/clients/axios'
 import type { PostDispatchStackDeploymentMutationResponse, PostDispatchStackDeploymentPathParams } from '../types/PostDispatchStackDeployment'
+import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
 
 export function getPostDispatchStackDeploymentUrl(id: PostDispatchStackDeploymentPathParams['id']) {
   return `/api/Stacks/${id}/deploy` as const

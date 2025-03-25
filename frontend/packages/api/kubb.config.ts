@@ -34,7 +34,7 @@ export default defineConfig({
 					pattern: 'cloudCrafterAuthTest',
 				},
 			],
-			importPath: '../../backend/client.ts',
+			//importPath: '../../backend/client.ts',
 		}),
 		pluginClient({
 			output: {

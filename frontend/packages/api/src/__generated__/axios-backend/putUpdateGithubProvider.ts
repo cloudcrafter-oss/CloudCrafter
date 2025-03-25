@@ -1,10 +1,10 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@kubb/plugin-client/clients/axios'
 import type {
   PutUpdateGithubProviderMutationRequest,
   PutUpdateGithubProviderMutationResponse,
   PutUpdateGithubProviderPathParams,
 } from '../types/PutUpdateGithubProvider'
+import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
 
 export function getPutUpdateGithubProviderUrl(id: PutUpdateGithubProviderPathParams['id']) {
   return `/api/Providers/github/${id}/install` as const

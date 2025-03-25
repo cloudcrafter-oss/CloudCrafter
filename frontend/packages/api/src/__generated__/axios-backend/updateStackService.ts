@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@kubb/plugin-client/clients/axios'
 import type { UpdateStackServiceMutationRequest, UpdateStackServiceMutationResponse, UpdateStackServicePathParams } from '../types/UpdateStackService'
+import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
 
 export function getUpdateStackServiceUrl(stackId: UpdateStackServicePathParams['stackId'], stackServiceId: UpdateStackServicePathParams['stackServiceId']) {
   return `/api/Stacks/${stackId}/services/${stackServiceId}` as const

@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@kubb/plugin-client/clients/axios'
 import type { GetProjectQueryResponse, GetProjectPathParams, GetProject404 } from '../types/GetProject'
+import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
 
 export function getGetProjectUrl(id: GetProjectPathParams['id']) {
   return `/api/Projects/${id}` as const

@@ -1,10 +1,10 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@kubb/plugin-client/clients/axios'
 import type {
   GetProjectEnvironmentEnhancedQueryResponse,
   GetProjectEnvironmentEnhancedPathParams,
   GetProjectEnvironmentEnhanced404,
 } from '../types/GetProjectEnvironmentEnhanced'
+import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
 
 export function getGetProjectEnvironmentEnhancedUrl(
   id: GetProjectEnvironmentEnhancedPathParams['id'],

@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@kubb/plugin-client/clients/axios'
 import type { PostCreateUserMutationRequest, PostCreateUserMutationResponse } from '../types/PostCreateUser'
+import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
 
 export function getPostCreateUserUrl() {
   return `/api/Auth/create` as const
