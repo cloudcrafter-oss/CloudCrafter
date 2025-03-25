@@ -1,5 +1,4 @@
 import '@cloudcrafter/ui/main.css'
-import { setupGlobalInterceptors } from '@/src/setup-client'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { CloudCraftProvider } from './providers/CloudCraftProvider'
@@ -18,7 +17,7 @@ export default async function RootLayout({
 }) {
 	// Initialize global Axios interceptors at the app root
 	// This ensures they're available for all server and client components
-	setupGlobalInterceptors()
+	//setupGlobalInterceptors()
 
 	return (
 		<html lang='en'>

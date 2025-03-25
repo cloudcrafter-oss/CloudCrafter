@@ -1,6 +1,5 @@
 'use server'
 
-import { generateBackendClient } from '@/src/setup-client'
 import { actionClient } from '@/src/utils/actions/safe-action'
 import {
 	deleteProject,
@@ -12,12 +11,10 @@ import {
 } from '@cloudcrafter/api'
 import { z } from 'zod'
 
-const backendClient = generateBackendClient()
-
 export const fetchProjectDetail = actionClient
 	.schema(getProjectPathParamsSchema)
 	.action(async ({ parsedInput: { id } }) => {
-		return await getProject(id, { client: backendClient })
+		return await getProject(id)
 	})
 
 const updateSchema = z.object({
@@ -32,20 +29,17 @@ const deleteSchema = z.object({
 export const updateProjectAction = actionClient
 	.schema(updateSchema)
 	.action(async ({ parsedInput: { id, project } }) => {
-		return await updateProject(id, project, { client: backendClient })
+		return await updateProject(id, project)
 	})
 
 export const deleteProjectAction = actionClient
 	.schema(deleteSchema)
 	.action(async ({ parsedInput: { id } }) => {
-		return await deleteProject(id, { client: backendClient })
+		return await deleteProject(id)
 	})
 
 export const fetchProjectsWithEnvironments = async () => {
-	return await getProjects(
-		{
-			includeEnvironments: true,
-		},
-		{ client: backendClient },
-	)
+	return await getProjects({
+		includeEnvironments: true,
+	})
 }

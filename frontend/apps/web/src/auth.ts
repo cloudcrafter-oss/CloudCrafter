@@ -13,7 +13,6 @@ import type { JWT } from 'next-auth/jwt'
 import type { Provider } from 'next-auth/providers'
 import Auth0 from 'next-auth/providers/auth0'
 import Credentials from 'next-auth/providers/credentials'
-import { generateBackendClient, setupGlobalInterceptors } from './setup-client'
 
 // Initialize providers array
 const providers: Provider[] = []
@@ -95,14 +94,10 @@ if (credentialsEnabled && credentialsConfig) {
 					// For testing purposes, we'll use a simple check
 					// In production, replace this with actual authentication logic
 
-					const client = generateBackendClient()
-					const result = await postLoginUser(
-						{
-							email: credentials.email as string,
-							password: credentials.password as string,
-						},
-						{ client },
-					)
+					const result = await postLoginUser({
+						email: credentials.email as string,
+						password: credentials.password as string,
+					})
 
 					return createUserObject(result)
 				} catch (error) {
@@ -122,14 +117,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		async jwt({ token, user, account }) {
 			if (account && user) {
 				if (account.type === 'oidc') {
-					const client = generateBackendClient()
-					const result = await postCreateUser(
-						{
-							name: user.name || '',
-							email: user.email || '',
-						},
-						{ client },
-					)
+					const result = await postCreateUser({
+						name: user.name || '',
+						email: user.email || '',
+					})
 
 					const userObject = createUserObject(result)
 					return { ...token, data: userObject }
@@ -173,7 +164,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			const { pathname } = request.nextUrl
 			//console.error('auth is', auth)
 
-			setupGlobalInterceptors()
 			if (pathname === '/auth-debug') {
 				console.error('auth is', auth)
 				return !!auth

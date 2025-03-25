@@ -3,7 +3,6 @@ import ShowDate from '@/src/components/ShowDate'
 import { StackCard } from '@/src/components/Stacks/StackCard'
 import { ProjectDetailCreateStackSheet } from '@/src/components/project-detail/ProjectDetailCreateStackSheet'
 import { ProjectHealthStatus } from '@/src/components/project-detail/ProjectHealthStatus'
-import { generateBackendClient } from '@/src/setup-client'
 import {
 	type ProjectEnvironmentRouteParams,
 	validateProjectEnvironmentRouteParams,
@@ -52,12 +51,10 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 	const resolvedParams = await params
 	// Validate the route params
 	const routeData = validateProjectEnvironmentRouteParams(resolvedParams)
-	const client = generateBackendClient()
 
 	const projectDetails = await getProjectEnvironmentEnhanced(
 		routeData['project-uuid'],
 		routeData['environment-uuid'],
-		{ client },
 	)
 
 	const mainCard = (
