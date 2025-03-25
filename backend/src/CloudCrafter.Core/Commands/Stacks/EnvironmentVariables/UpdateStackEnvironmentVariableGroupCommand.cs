@@ -6,7 +6,7 @@ namespace CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
 
 [Authorize]
 public record UpdateStackEnvironmentVariableGroupCommand
-    : CreateStackEnvironmentVariableGroupCommand,
+    : CreateStackEnvironmentVariableGroupBaseCommand,
         IRequest
 {
     [JsonIgnore]

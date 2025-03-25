@@ -7,11 +7,7 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
 
-/// <summary>
-///     Command to create a new environment variable group for a stack
-/// </summary>
-[Authorize]
-public record CreateStackEnvironmentVariableGroupCommand : IRequest<Guid>
+public record CreateStackEnvironmentVariableGroupBaseCommand
 {
     /// <summary>
     ///     ID of the stack to create the environment variable group for
@@ -33,6 +29,14 @@ public record CreateStackEnvironmentVariableGroupCommand : IRequest<Guid>
     [MaxLength(500)]
     public string? Description { get; set; }
 }
+
+/// <summary>
+///     Command to create a new environment variable group for a stack
+/// </summary>
+[Authorize]
+public record CreateStackEnvironmentVariableGroupCommand
+    : CreateStackEnvironmentVariableGroupBaseCommand,
+        IRequest<Guid> { }
 
 public class CreateStackEnvironmentVariableGroupCommandHandler(
     IStackEnvironmentVariablesService stackEnvironmentVariablesService
