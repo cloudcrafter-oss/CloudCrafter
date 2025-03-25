@@ -1,6 +1,6 @@
-import client from '@kubb/plugin-client/clients/axios'
+import client from '@cloudcrafter/client-auth/clients'
 import type { PostLoginUserMutationRequest, PostLoginUserMutationResponse } from '../types/PostLoginUser'
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
 
 export function getPostLoginUserUrl() {
   return `/api/Auth/login` as const

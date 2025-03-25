@@ -1,6 +1,6 @@
-import client from '@kubb/plugin-client/clients/axios'
+import client from '@cloudcrafter/client-auth/clients'
 import type { GetProvidersQueryResponse, GetProvidersQueryParams } from '../types/GetProviders'
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
 
 export function getGetProvidersUrl() {
   return `/api/Providers` as const

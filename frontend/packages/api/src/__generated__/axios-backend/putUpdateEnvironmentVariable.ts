@@ -1,11 +1,11 @@
-import client from '@kubb/plugin-client/clients/axios'
+import client from '@cloudcrafter/client-auth/clients'
 import type {
   PutUpdateEnvironmentVariableMutationRequest,
   PutUpdateEnvironmentVariableMutationResponse,
   PutUpdateEnvironmentVariablePathParams,
   PutUpdateEnvironmentVariable400,
 } from '../types/PutUpdateEnvironmentVariable'
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
 
 export function getPutUpdateEnvironmentVariableUrl(
   stackId: PutUpdateEnvironmentVariablePathParams['stackId'],

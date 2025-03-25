@@ -1,10 +1,10 @@
-import client from '@kubb/plugin-client/clients/axios'
+import client from '@cloudcrafter/client-auth/clients'
 import type {
   PostCreateEnvironmentVariableGroupMutationRequest,
   PostCreateEnvironmentVariableGroupMutationResponse,
   PostCreateEnvironmentVariableGroupPathParams,
 } from '../types/PostCreateEnvironmentVariableGroup'
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
 
 export function getPostCreateEnvironmentVariableGroupUrl(stackId: PostCreateEnvironmentVariableGroupPathParams['stackId']) {
   return `/api/Stacks/${stackId}/environment-variable-groups` as const

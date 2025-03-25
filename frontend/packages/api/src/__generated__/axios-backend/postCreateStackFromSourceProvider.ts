@@ -1,9 +1,9 @@
-import client from '@kubb/plugin-client/clients/axios'
+import client from '@cloudcrafter/client-auth/clients'
 import type {
   PostCreateStackFromSourceProviderMutationRequest,
   PostCreateStackFromSourceProviderMutationResponse,
 } from '../types/PostCreateStackFromSourceProvider'
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
 
 export function getPostCreateStackFromSourceProviderUrl() {
   return `/api/Stacks/provider` as const

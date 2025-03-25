@@ -1,6 +1,6 @@
-import client from '@kubb/plugin-client/clients/axios'
+import client from '@cloudcrafter/client-auth/clients'
 import type { GetServerByIdQueryResponse, GetServerByIdPathParams } from '../types/GetServerById'
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
 
 export function getGetServerByIdUrl(id: GetServerByIdPathParams['id']) {
   return `/api/Servers/${id}` as const

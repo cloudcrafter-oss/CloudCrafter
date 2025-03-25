@@ -1,10 +1,10 @@
-import client from '@kubb/plugin-client/clients/axios'
+import client from '@cloudcrafter/client-auth/clients'
 import type {
   GetProjectEnvironmentEnhancedQueryResponse,
   GetProjectEnvironmentEnhancedPathParams,
   GetProjectEnvironmentEnhanced404,
 } from '../types/GetProjectEnvironmentEnhanced'
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
 
 export function getGetProjectEnvironmentEnhancedUrl(
   id: GetProjectEnvironmentEnhancedPathParams['id'],

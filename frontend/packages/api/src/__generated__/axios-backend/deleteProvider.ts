@@ -1,6 +1,6 @@
-import client from '@kubb/plugin-client/clients/axios'
+import client from '@cloudcrafter/client-auth/clients'
 import type { DeleteProviderMutationResponse, DeleteProviderPathParams } from '../types/DeleteProvider'
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
 
 export function getDeleteProviderUrl(id: DeleteProviderPathParams['id']) {
   return `/api/Providers/${id}` as const

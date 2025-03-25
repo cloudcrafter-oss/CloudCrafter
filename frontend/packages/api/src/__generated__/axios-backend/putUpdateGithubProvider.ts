@@ -1,10 +1,10 @@
-import client from '@kubb/plugin-client/clients/axios'
+import client from '@cloudcrafter/client-auth/clients'
 import type {
   PutUpdateGithubProviderMutationRequest,
   PutUpdateGithubProviderMutationResponse,
   PutUpdateGithubProviderPathParams,
 } from '../types/PutUpdateGithubProvider'
-import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
 
 export function getPutUpdateGithubProviderUrl(id: PutUpdateGithubProviderPathParams['id']) {
   return `/api/Providers/github/${id}/install` as const
