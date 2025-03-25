@@ -389,4 +389,75 @@ public class StackEnvironmentVariablesService(
             return new List<StackEnvironmentVariableHistoryDto>();
         }
     }
+
+    public async Task UpdateEnvironmentVariableGroup(
+        Guid id,
+        Guid stackId,
+        string name,
+        string? description
+    )
+    {
+        // Validate stack exists
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw new NotFoundException("Stack", "Stack not found");
+        }
+
+        // Get the environment variable group directly from repository
+        var existingGroup = await repository.GetEnvironmentVariableGroup(stackId, id);
+
+        if (existingGroup == null)
+        {
+            throw new NotFoundException(
+                "EnvironmentVariableGroup",
+                $"Group with id {id} not found"
+            );
+        }
+
+        // Update the group properties
+        existingGroup.Name = name;
+        existingGroup.Description = description;
+        existingGroup.UpdatedAt = DateTime.UtcNow;
+
+        // Save changes
+        try
+        {
+            await repository.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+            when (ex.InnerException is PostgresException { SqlState: "23505" })
+        {
+            throw StackValidations.Create(StackValidations.EnvironmentVariableGroupNotUnique);
+        }
+    }
+
+    public async Task DeleteEnvironmentVariableGroup(Guid id, Guid stackId)
+    {
+        // Check if stack exists
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw new NotFoundException("Stack", "Stack not found");
+        }
+
+        // Get the group directly from repository
+        var group = await repository.GetEnvironmentVariableGroup(stackId, id);
+
+        if (group == null)
+        {
+            throw new NotFoundException(
+                "EnvironmentVariableGroup",
+                $"Group with id {id} not found"
+            );
+        }
+
+        // Remove the group from the repository
+        stack.EnvironmentVariableGroups.Remove(group);
+
+        // Save changes
+        await repository.SaveChangesAsync();
+    }
 }

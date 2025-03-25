@@ -93,6 +93,23 @@ public interface IStackEnvironmentVariablesService
     Task<Guid> CreateEnvironmentVariableGroup(Guid stackId, string name, string? description);
 
     /// <summary>
+    ///     Updates an existing environment variable group
+    /// </summary>
+    /// <param name="id">ID of the environment variable group</param>
+    /// <param name="stackId">ID of the stack</param>
+    /// <param name="name">Updated name of the group</param>
+    /// <param name="description">Updated description of the group</param>
+    Task UpdateEnvironmentVariableGroup(Guid id, Guid stackId, string name, string? description);
+
+    /// <summary>
+    ///     Deletes an environment variable group
+    /// </summary>
+    /// <param name="id">ID of the environment variable group</param>
+    /// <param name="stackId">ID of the stack</param>
+    /// <returns>True if successfully deleted, false otherwise</returns>
+    Task DeleteEnvironmentVariableGroup(Guid id, Guid stackId);
+
+    /// <summary>
     ///     Applies a template of environment variables to a stack
     /// </summary>
     /// <param name="stackId">ID of the stack</param>

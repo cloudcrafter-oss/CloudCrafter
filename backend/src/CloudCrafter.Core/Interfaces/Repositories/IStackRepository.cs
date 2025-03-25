@@ -33,5 +33,12 @@ public interface IStackRepository
     Task AddEnvironmentVariableGroups(IList<StackEnvironmentVariableGroup> groups);
 
     Task<List<StackEnvironmentVariableGroup>> GetEnvironmentVariableGroups(Guid stackId);
+
+    /// <summary>
+    ///     Gets a specific environment variable group
+    /// </summary>
+    /// <param name="stackId">ID of the stack</param>
+    /// <param name="groupId">ID of the environment variable group</param>
+    /// <returns>The environment variable group, or null if not found</returns>
     Task<StackEnvironmentVariableGroup?> GetEnvironmentVariableGroup(Guid stackId, Guid groupId);
 }
