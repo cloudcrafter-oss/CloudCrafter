@@ -14,7 +14,6 @@ export type { CreateUserCommand } from './CreateUserCommand'
 export type {
   DeleteEnvironmentVariablePathParams,
   DeleteEnvironmentVariable200,
-  DeleteEnvironmentVariable400,
   DeleteEnvironmentVariableMutationResponse,
   DeleteEnvironmentVariableMutation,
 } from './DeleteEnvironmentVariable'

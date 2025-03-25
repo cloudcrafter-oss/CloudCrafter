@@ -1,10 +1,6 @@
 import client from '../../frontend/client.ts'
 import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
-import type {
-  DeleteEnvironmentVariableMutationResponse,
-  DeleteEnvironmentVariablePathParams,
-  DeleteEnvironmentVariable400,
-} from '../types/DeleteEnvironmentVariable'
+import type { DeleteEnvironmentVariableMutationResponse, DeleteEnvironmentVariablePathParams } from '../types/DeleteEnvironmentVariable'
 import type { UseMutationOptions } from '@tanstack/react-query'
 import { deleteEnvironmentVariable } from '../axios-backend/deleteEnvironmentVariable'
 import { useMutation } from '@tanstack/react-query'
@@ -20,7 +16,7 @@ export function useDeleteEnvironmentVariableHook<TContext>(
   options: {
     mutation?: UseMutationOptions<
       DeleteEnvironmentVariableMutationResponse,
-      ResponseErrorConfig<DeleteEnvironmentVariable400>,
+      ResponseErrorConfig<Error>,
       { stackId: DeleteEnvironmentVariablePathParams['stackId']; id: DeleteEnvironmentVariablePathParams['id'] },
       TContext
     >
@@ -32,7 +28,7 @@ export function useDeleteEnvironmentVariableHook<TContext>(
 
   return useMutation<
     DeleteEnvironmentVariableMutationResponse,
-    ResponseErrorConfig<DeleteEnvironmentVariable400>,
+    ResponseErrorConfig<Error>,
     { stackId: DeleteEnvironmentVariablePathParams['stackId']; id: DeleteEnvironmentVariablePathParams['id'] },
     TContext
   >({

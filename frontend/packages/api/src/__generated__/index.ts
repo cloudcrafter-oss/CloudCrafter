@@ -72,7 +72,6 @@ export type { CreateUserCommand } from './types/CreateUserCommand'
 export type {
   DeleteEnvironmentVariablePathParams,
   DeleteEnvironmentVariable200,
-  DeleteEnvironmentVariable400,
   DeleteEnvironmentVariableMutationResponse,
   DeleteEnvironmentVariableMutation,
 } from './types/DeleteEnvironmentVariable'
@@ -471,7 +470,6 @@ export {
 export {
   deleteEnvironmentVariablePathParamsSchema,
   deleteEnvironmentVariable200Schema,
-  deleteEnvironmentVariable400Schema,
   deleteEnvironmentVariableMutationResponseSchema,
 } from './zod/deleteEnvironmentVariableSchema'
 export { deleteProjectPathParamsSchema, deleteProject200Schema, deleteProjectMutationResponseSchema } from './zod/deleteProjectSchema'

@@ -19,7 +19,6 @@ export {
 export {
   deleteEnvironmentVariablePathParamsSchema,
   deleteEnvironmentVariable200Schema,
-  deleteEnvironmentVariable400Schema,
   deleteEnvironmentVariableMutationResponseSchema,
 } from './deleteEnvironmentVariableSchema'
 export { deleteProjectPathParamsSchema, deleteProject200Schema, deleteProjectMutationResponseSchema } from './deleteProjectSchema'
