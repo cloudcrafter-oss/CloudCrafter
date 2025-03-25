@@ -16,7 +16,9 @@ public class UpdateStackEnvironmentVariableCommandHandler(
             request.Id,
             request.StackId,
             request.Key,
-            request.Value
+            request.Value,
+            request.IsSecret,
+            request.Type
         );
 
         return result;

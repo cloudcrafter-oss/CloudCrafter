@@ -12,6 +12,11 @@ export { createStackEnvironmentVariableGroupCommandSchema } from './createStackE
 export { createStackFromSourceProviderCommandSchema } from './createStackFromSourceProviderCommandSchema'
 export { createUserCommandSchema } from './createUserCommandSchema'
 export {
+  deleteEnvironmentVariableGroupPathParamsSchema,
+  deleteEnvironmentVariableGroup200Schema,
+  deleteEnvironmentVariableGroupMutationResponseSchema,
+} from './deleteEnvironmentVariableGroupSchema'
+export {
   deleteEnvironmentVariablePathParamsSchema,
   deleteEnvironmentVariable200Schema,
   deleteEnvironmentVariable400Schema,
@@ -122,6 +127,13 @@ export { projectDtoSchema } from './projectDtoSchema'
 export { projectEnvironmentEnhancedDtoSchema } from './projectEnvironmentEnhancedDtoSchema'
 export { providerTypeSchema } from './providerTypeSchema'
 export {
+  putUpdateEnvironmentVariableGroupPathParamsSchema,
+  putUpdateEnvironmentVariableGroup200Schema,
+  putUpdateEnvironmentVariableGroup400Schema,
+  putUpdateEnvironmentVariableGroupMutationRequestSchema,
+  putUpdateEnvironmentVariableGroupMutationResponseSchema,
+} from './putUpdateEnvironmentVariableGroupSchema'
+export {
   putUpdateEnvironmentVariablePathParamsSchema,
   putUpdateEnvironmentVariable200Schema,
   putUpdateEnvironmentVariable400Schema,
@@ -171,6 +183,7 @@ export {
 } from './updateServerSchema'
 export { updateStackCommandSchema } from './updateStackCommandSchema'
 export { updateStackEnvironmentVariableCommandSchema } from './updateStackEnvironmentVariableCommandSchema'
+export { updateStackEnvironmentVariableGroupCommandSchema } from './updateStackEnvironmentVariableGroupCommandSchema'
 export { updateStackGithubSettingsSchema } from './updateStackGithubSettingsSchema'
 export { updateStackGitPublicSettingsSchema } from './updateStackGitPublicSettingsSchema'
 export {

@@ -154,4 +154,54 @@ public class UpdateStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
 
         await AssertEnvCount(2);
     }
+
+    [Test]
+    public async Task ShouldSuccessfullyUpdateEnvironmentVariable()
+    {
+        await RunAsAdministratorAsync();
+        await AssertEnvCount(0);
+
+        // Create stack
+        var stack = await CreateSampleStack();
+
+        // Create environment variable to update
+        var envVar = new StackEnvironmentVariable
+        {
+            Id = Guid.NewGuid(),
+            StackId = stack.Id,
+            Key = "ORIGINAL_KEY",
+            Value = "Original Value",
+            IsSecret = false,
+            Type = EnvironmentVariableType.Both,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+        };
+
+        await AddAsync(envVar);
+        await AssertEnvCount(1);
+
+        // Update the variable
+        await SendAsync(
+            Command with
+            {
+                Id = envVar.Id,
+                StackId = stack.Id,
+                Key = "UPDATED_KEY",
+                Value = "Updated Value",
+                IsSecret = true,
+                Type = EnvironmentVariableType.Runtime,
+            }
+        );
+
+        // Retrieve updated entity and verify changes
+        var updatedVar = FetchEntity<StackEnvironmentVariable>(x => x.Id == envVar.Id);
+
+        updatedVar.Should().NotBeNull();
+        updatedVar!.Key.Should().Be("UPDATED_KEY");
+        updatedVar!.Value.Should().Be("Updated Value");
+        updatedVar!.IsSecret.Should().BeTrue();
+        updatedVar!.Type.Should().Be(EnvironmentVariableType.Runtime);
+
+        await AssertEnvCount(1);
+    }
 }

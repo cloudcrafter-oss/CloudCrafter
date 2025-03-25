@@ -18,6 +18,12 @@ export type {
   DeleteEnvironmentVariableMutationResponse,
   DeleteEnvironmentVariableMutation,
 } from './DeleteEnvironmentVariable'
+export type {
+  DeleteEnvironmentVariableGroupPathParams,
+  DeleteEnvironmentVariableGroup200,
+  DeleteEnvironmentVariableGroupMutationResponse,
+  DeleteEnvironmentVariableGroupMutation,
+} from './DeleteEnvironmentVariableGroup'
 export type { DeleteProjectPathParams, DeleteProject200, DeleteProjectMutationResponse, DeleteProjectMutation } from './DeleteProject'
 export type { DeleteProviderPathParams, DeleteProvider200, DeleteProviderMutationResponse, DeleteProviderMutation } from './DeleteProvider'
 export type { DeleteServerByIdPathParams, DeleteServerById200, DeleteServerByIdMutationResponse, DeleteServerByIdMutation } from './DeleteServerById'
@@ -147,6 +153,14 @@ export type {
   PutUpdateEnvironmentVariableMutation,
 } from './PutUpdateEnvironmentVariable'
 export type {
+  PutUpdateEnvironmentVariableGroupPathParams,
+  PutUpdateEnvironmentVariableGroup200,
+  PutUpdateEnvironmentVariableGroup400,
+  PutUpdateEnvironmentVariableGroupMutationRequest,
+  PutUpdateEnvironmentVariableGroupMutationResponse,
+  PutUpdateEnvironmentVariableGroupMutation,
+} from './PutUpdateEnvironmentVariableGroup'
+export type {
   PutUpdateGithubProviderPathParams,
   PutUpdateGithubProvider200,
   PutUpdateGithubProviderMutationRequest,
@@ -194,6 +208,7 @@ export type {
 } from './UpdateStack'
 export type { UpdateStackCommand } from './UpdateStackCommand'
 export type { UpdateStackEnvironmentVariableCommand } from './UpdateStackEnvironmentVariableCommand'
+export type { UpdateStackEnvironmentVariableGroupCommand } from './UpdateStackEnvironmentVariableGroupCommand'
 export type { UpdateStackGithubSettings } from './UpdateStackGithubSettings'
 export type { UpdateStackGitPublicSettings } from './UpdateStackGitPublicSettings'
 export type {
