@@ -5,14 +5,15 @@ import NextAuth, {
 	type UserObject,
 } from 'next-auth'
 import 'next-auth/jwt'
-import { validateEnv } from '@/auth-utils/providers'
-import { authJsRefreshAccessToken } from '@/auth-utils/utils'
-import { type TokenDto, postCreateUser, postLoginUser } from '@cloudcrafter/api'
+
 import { jwtDecode } from 'jwt-decode'
 import type { JWT } from 'next-auth/jwt'
 import type { Provider } from 'next-auth/providers'
 import Auth0 from 'next-auth/providers/auth0'
 import Credentials from 'next-auth/providers/credentials'
+import { type TokenDto, postCreateUser, postLoginUser } from '../__generated__'
+import { validateEnv } from '../auth-utils/providers'
+import { authJsRefreshAccessToken } from '../auth-utils/utils'
 
 // Initialize providers array
 const providers: Provider[] = []
