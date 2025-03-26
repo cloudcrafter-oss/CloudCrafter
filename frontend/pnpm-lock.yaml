@@ -253,6 +253,9 @@ importers:
       axios:
         specifier: ^1.7.2
         version: 1.7.7
+      jwt-decode:
+        specifier: ^4.0.0
+        version: 4.0.0
       next-auth:
         specifier: 5.0.0-beta.25
         version: 5.0.0-beta.25(next@15.2.4(@playwright/test@1.51.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)

@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@cloudcrafter/client-auth/clients'
 import type { GetUsersMutationRequest, GetUsersMutationResponse } from '../types/GetUsers'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
 
 export function getGetUsersUrl() {
   return `/api/Users` as const

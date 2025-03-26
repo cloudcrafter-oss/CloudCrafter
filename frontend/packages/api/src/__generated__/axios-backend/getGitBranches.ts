@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@cloudcrafter/client-auth/clients'
 import type { GetGitBranchesQueryResponse, GetGitBranchesPathParams } from '../types/GetGitBranches'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
 
 export function getGetGitBranchesUrl(id: GetGitBranchesPathParams['id'], repositoryId: GetGitBranchesPathParams['repositoryId']) {
   return `/api/Providers/${id}/branches/${repositoryId}` as const

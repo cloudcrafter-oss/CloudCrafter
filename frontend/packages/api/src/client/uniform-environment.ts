@@ -14,7 +14,7 @@ if (!isServer && window.localStorage) {
 	}
 }
 
-export const backendEnv = backendEnvSchema.parse(
+export const clientsEnvironment = backendEnvSchema.parse(
 	isServer
 		? process.env
 		: localConfig?.backendUrl

@@ -1,10 +1,10 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@cloudcrafter/client-auth/clients'
 import type {
   GetDeploymentsForServerQueryResponse,
   GetDeploymentsForServerPathParams,
   GetDeploymentsForServerQueryParams,
 } from '../types/GetDeploymentsForServer'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
 
 export function getGetDeploymentsForServerUrl(id: GetDeploymentsForServerPathParams['id']) {
   return `/api/Servers/${id}/deployments` as const
