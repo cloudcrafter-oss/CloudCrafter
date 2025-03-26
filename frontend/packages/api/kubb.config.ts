@@ -5,6 +5,8 @@ import { pluginReactQuery } from '@kubb/plugin-react-query'
 import { pluginTs } from '@kubb/plugin-ts'
 import { pluginZod } from '@kubb/plugin-zod'
 
+const authTag = 'CloudCrafterAuthTag'
+
 export default defineConfig({
 	root: '.',
 	input: {
@@ -31,19 +33,19 @@ export default defineConfig({
 			exclude: [
 				{
 					type: 'tag',
-					pattern: 'cloudCrafterAuthTest',
+					pattern: authTag,
 				},
 			],
-			importPath: '../../backend/client.ts',
+			importPath: '@cloudcrafter/api/client',
 		}),
 		pluginClient({
 			output: {
-				path: './non-auth-axios',
+				path: './no-custom-clients',
 			},
 			include: [
 				{
 					type: 'tag',
-					pattern: 'cloudCrafterAuthTest',
+					pattern: authTag,
 				},
 			],
 		}),
@@ -58,12 +60,12 @@ export default defineConfig({
 				},
 			},
 			client: {
-				importPath: '../../frontend/client.ts',
+				importPath: '@cloudcrafter/api/client',
 			},
 			exclude: [
 				{
 					type: 'tag',
-					pattern: 'cloudCrafterAuthTest',
+					pattern: authTag,
 				},
 			],
 			output: {

@@ -1,6 +1,6 @@
-import client from '../../frontend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type { PostValidateGithubRepoMutationRequest, PostValidateGithubRepoMutationResponse } from '../types/PostValidateGithubRepo'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 import type { UseMutationOptions } from '@tanstack/react-query'
 import { postValidateGithubRepo } from '../axios-backend/postValidateGithubRepo'
 import { useMutation } from '@tanstack/react-query'

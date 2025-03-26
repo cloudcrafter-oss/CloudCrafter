@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type { DeleteServerByIdMutationResponse, DeleteServerByIdPathParams } from '../types/DeleteServerById'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getDeleteServerByIdUrl(id: DeleteServerByIdPathParams['id']) {
   return `/api/Servers/${id}` as const

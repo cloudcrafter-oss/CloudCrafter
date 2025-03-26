@@ -1,6 +1,6 @@
-import client from '../../frontend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type { GetGitRepositoriesQueryResponse, GetGitRepositoriesPathParams } from '../types/GetGitRepositories'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 import type { QueryKey, UseSuspenseQueryOptions, UseSuspenseQueryResult } from '@tanstack/react-query'
 import { getGitRepositories } from '../axios-backend/getGitRepositories'
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'

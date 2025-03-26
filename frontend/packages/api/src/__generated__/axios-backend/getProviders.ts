@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type { GetProvidersQueryResponse, GetProvidersQueryParams } from '../types/GetProviders'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getGetProvidersUrl() {
   return `/api/Providers` as const

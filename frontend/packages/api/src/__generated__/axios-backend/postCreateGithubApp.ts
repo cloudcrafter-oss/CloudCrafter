@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type { PostCreateGithubAppMutationRequest, PostCreateGithubAppMutationResponse, PostCreateGithubApp400 } from '../types/PostCreateGithubApp'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getPostCreateGithubAppUrl() {
   return `/api/Providers` as const

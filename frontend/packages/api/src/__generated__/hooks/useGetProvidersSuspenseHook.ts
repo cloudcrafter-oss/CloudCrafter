@@ -1,6 +1,6 @@
-import client from '../../frontend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type { GetProvidersQueryResponse, GetProvidersQueryParams } from '../types/GetProviders'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 import type { QueryKey, UseSuspenseQueryOptions, UseSuspenseQueryResult } from '@tanstack/react-query'
 import { getProviders } from '../axios-backend/getProviders'
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'

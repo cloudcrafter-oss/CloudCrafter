@@ -1,11 +1,11 @@
-import client from '../../frontend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type {
   PutUpdateEnvironmentVariableMutationRequest,
   PutUpdateEnvironmentVariableMutationResponse,
   PutUpdateEnvironmentVariablePathParams,
   PutUpdateEnvironmentVariable400,
 } from '../types/PutUpdateEnvironmentVariable'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 import type { UseMutationOptions } from '@tanstack/react-query'
 import { putUpdateEnvironmentVariable } from '../axios-backend/putUpdateEnvironmentVariable'
 import { useMutation } from '@tanstack/react-query'

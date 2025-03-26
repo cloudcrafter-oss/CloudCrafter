@@ -1,6 +1,6 @@
-import client from '../../frontend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type { GetUsersMutationRequest, GetUsersMutationResponse } from '../types/GetUsers'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 import type { UseMutationOptions } from '@tanstack/react-query'
 import { getUsers } from '../axios-backend/getUsers'
 import { useMutation } from '@tanstack/react-query'

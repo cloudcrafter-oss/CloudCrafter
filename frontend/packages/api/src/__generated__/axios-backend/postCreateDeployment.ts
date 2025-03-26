@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type { PostCreateDeploymentMutationResponse, PostCreateDeploymentPathParams } from '../types/PostCreateDeployment'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getPostCreateDeploymentUrl(applicationId: PostCreateDeploymentPathParams['applicationId']) {
   return `/api/Applications/${applicationId}/deployment` as const

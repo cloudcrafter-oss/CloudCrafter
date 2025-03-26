@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type { CreateProjectMutationRequest, CreateProjectMutationResponse } from '../types/CreateProject'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getCreateProjectUrl() {
   return `/api/Projects` as const

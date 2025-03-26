@@ -1,10 +1,10 @@
-import client from '../../frontend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type {
   GetEnvironmentVariablesQueryResponse,
   GetEnvironmentVariablesPathParams,
   GetEnvironmentVariablesQueryParams,
 } from '../types/GetEnvironmentVariables'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 import type { QueryKey, QueryObserverOptions, UseQueryResult } from '@tanstack/react-query'
 import { getEnvironmentVariables } from '../axios-backend/getEnvironmentVariables'
 import { queryOptions, useQuery } from '@tanstack/react-query'

@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type { PostRotateAgentKeyMutationResponse, PostRotateAgentKeyPathParams } from '../types/PostRotateAgentKey'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getPostRotateAgentKeyUrl(id: PostRotateAgentKeyPathParams['id']) {
   return `/api/Servers/${id}/rotate-key` as const

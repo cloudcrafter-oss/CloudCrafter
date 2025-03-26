@@ -1,11 +1,21 @@
 {
-	"extends": "@cloudcrafter/typescript-config/react-library.json",
+	"extends": "@cloudcrafter/typescript-config/nextjs.json",
 	"compilerOptions": {
 		"baseUrl": ".",
 		"noEmit": true,
 		"target": "ES2015",
+		"esModuleInterop": true,
+		"strict": true,
 		"lib": ["ES2015", "DOM"]
 	},
-	"include": ["src"],
+	"include": [
+		"next-env.d.ts",
+		"next.config.js",
+		"src",
+		"**/*.ts",
+		"*.ts",
+		"**/*.tsx",
+		".next/types/**/*.ts"
+	],
 	"exclude": ["node_modules", "dist"]
 }

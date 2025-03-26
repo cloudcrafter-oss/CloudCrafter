@@ -1,6 +1,6 @@
-import client from '../../frontend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type { DeleteEnvironmentVariableGroupMutationResponse, DeleteEnvironmentVariableGroupPathParams } from '../types/DeleteEnvironmentVariableGroup'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 import type { UseMutationOptions } from '@tanstack/react-query'
 import { deleteEnvironmentVariableGroup } from '../axios-backend/deleteEnvironmentVariableGroup'
 import { useMutation } from '@tanstack/react-query'

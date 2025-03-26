@@ -1,6 +1,6 @@
-import client from '../../frontend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type { GetFilterableFieldsQueryResponse } from '../types/GetFilterableFields'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 import type { QueryKey, UseSuspenseQueryOptions, UseSuspenseQueryResult } from '@tanstack/react-query'
 import { getFilterableFields } from '../axios-backend/getFilterableFields'
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'

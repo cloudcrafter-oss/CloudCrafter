@@ -1,10 +1,10 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type {
   PostCreateEnvironmentVariableMutationRequest,
   PostCreateEnvironmentVariableMutationResponse,
   PostCreateEnvironmentVariablePathParams,
 } from '../types/PostCreateEnvironmentVariable'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getPostCreateEnvironmentVariableUrl(stackId: PostCreateEnvironmentVariablePathParams['stackId']) {
   return `/api/Stacks/${stackId}/environment-variables` as const

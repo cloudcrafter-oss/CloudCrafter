@@ -1,6 +1,6 @@
-import client from '../../frontend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type { CreateProjectMutationRequest, CreateProjectMutationResponse } from '../types/CreateProject'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 import type { UseMutationOptions } from '@tanstack/react-query'
 import { createProject } from '../axios-backend/createProject'
 import { useMutation } from '@tanstack/react-query'

@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type { GetEnvironmentVariableGroupsQueryResponse, GetEnvironmentVariableGroupsPathParams } from '../types/GetEnvironmentVariableGroups'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getGetEnvironmentVariableGroupsUrl(stackId: GetEnvironmentVariableGroupsPathParams['stackId']) {
   return `/api/Stacks/${stackId}/environment-variable-groups` as const

@@ -1,6 +1,6 @@
-import client from '../../backend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../backend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type { PostCreateStackMutationRequest, PostCreateStackMutationResponse } from '../types/PostCreateStack'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getPostCreateStackUrl() {
   return `/api/Stacks` as const

@@ -10,14 +10,28 @@ public class Auth : EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
-            .MapPost(PostLoginUser, "login")
-            .MapPost(PostCreateUser, "create")
+            .MapPost(
+                PostLoginUser,
+                "login",
+                config =>
+                {
+                    config.WithTags("CloudCrafterAuthTag");
+                }
+            )
+            .MapPost(
+                PostCreateUser,
+                "create",
+                config =>
+                {
+                    config.WithTags("CloudCrafterAuthTag");
+                }
+            )
             .MapPost(
                 PostRefreshTokens,
                 "refresh",
                 config =>
                 {
-                    config.WithTags(new[] { "cloudCrafterAuthTest" });
+                    config.WithTags("CloudCrafterAuthTag");
                 }
             );
     }
