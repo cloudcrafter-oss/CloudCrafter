@@ -24,4 +24,7 @@ test('should create a new project', async ({ authenticatedUser, page }) => {
 
 	// click on "Save changes"
 	await projectListPage.form.submitButton.click()
+
+	// should see the new project in the list
+	await expect(page.getByText(newProjectName)).toBeVisible()
 })
