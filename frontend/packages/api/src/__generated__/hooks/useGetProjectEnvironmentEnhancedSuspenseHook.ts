@@ -1,10 +1,10 @@
-import client from '../../frontend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type {
   GetProjectEnvironmentEnhancedQueryResponse,
   GetProjectEnvironmentEnhancedPathParams,
   GetProjectEnvironmentEnhanced404,
 } from '../types/GetProjectEnvironmentEnhanced'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 import type { QueryKey, UseSuspenseQueryOptions, UseSuspenseQueryResult } from '@tanstack/react-query'
 import { getProjectEnvironmentEnhanced } from '../axios-backend/getProjectEnvironmentEnhanced'
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'

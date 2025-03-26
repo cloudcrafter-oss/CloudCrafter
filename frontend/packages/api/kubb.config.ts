@@ -60,7 +60,7 @@ export default defineConfig({
 				},
 			},
 			client: {
-				importPath: '../../frontend/client.ts',
+				importPath: '@cloudcrafter/api/client',
 			},
 			exclude: [
 				{

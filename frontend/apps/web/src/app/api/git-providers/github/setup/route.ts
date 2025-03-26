@@ -39,7 +39,7 @@ const githubInstall = async (
 
 	const session = await auth()
 
-	if (!session || session.error) {
+	if (!session || !session.user) {
 		return new Response('Unauthorized', { status: 401 })
 	}
 
@@ -73,7 +73,7 @@ const githubInit = async (
 
 	const session = await auth()
 
-	if (!session || session.error) {
+	if (!session || !session.user) {
 		return new Response('Unauthorized', { status: 401 })
 	}
 

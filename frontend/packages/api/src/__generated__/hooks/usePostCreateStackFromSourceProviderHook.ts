@@ -1,9 +1,9 @@
-import client from '../../frontend/client.ts'
-import type { RequestConfig, ResponseErrorConfig } from '../../frontend/client.ts'
+import client from '@cloudcrafter/api/client'
 import type {
   PostCreateStackFromSourceProviderMutationRequest,
   PostCreateStackFromSourceProviderMutationResponse,
 } from '../types/PostCreateStackFromSourceProvider'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 import type { UseMutationOptions } from '@tanstack/react-query'
 import { postCreateStackFromSourceProvider } from '../axios-backend/postCreateStackFromSourceProvider'
 import { useMutation } from '@tanstack/react-query'
