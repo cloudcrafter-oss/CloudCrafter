@@ -6,6 +6,8 @@ import type {
 	AxiosRequestConfig,
 	AxiosResponse,
 } from 'axios'
+import { getSession } from 'next-auth/react'
+import { auth } from '../authjs/auth'
 import { clientsEnvironment } from './uniform-environment'
 
 declare const AXIOS_BASE: string
@@ -62,6 +64,24 @@ export const axiosInstance = axios.create({
 	baseURL: clientsEnvironment.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL,
 })
 
+axiosInstance.interceptors.request.use(async (request) => {
+	const isServer = typeof window === 'undefined'
+	let session = null
+
+	if (isServer) {
+		// Fetch session on the server side
+		session = await auth()
+	} else {
+		// Fetch session on the client side
+		session = await getSession()
+	}
+
+	if (session) {
+		request.headers.Authorization = `Bearer ${session.tokens.access}`
+	}
+
+	return request
+})
 export const client = async <TData, TError = unknown, TVariables = unknown>(
 	config: RequestConfig<TVariables>,
 ): Promise<ResponseConfig<TData>> => {
