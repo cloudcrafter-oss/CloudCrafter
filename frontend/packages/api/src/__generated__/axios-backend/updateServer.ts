@@ -1,6 +1,6 @@
-import client from '@cloudcrafter/client-auth/clients'
+import client from '@cloudcrafter/api/client'
 import type { UpdateServerMutationRequest, UpdateServerMutationResponse, UpdateServerPathParams } from '../types/UpdateServer'
-import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getUpdateServerUrl(id: UpdateServerPathParams['id']) {
   return `/api/Servers/${id}` as const

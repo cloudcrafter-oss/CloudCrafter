@@ -1,6 +1,6 @@
-import client from '@cloudcrafter/client-auth/clients'
+import client from '@cloudcrafter/api/client'
 import type { TestQueryResponse } from '../types/Test'
-import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getTestUrl() {
   return `/api/Users/test` as const

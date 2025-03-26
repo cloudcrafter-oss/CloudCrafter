@@ -1,11 +1,11 @@
-import client from '@cloudcrafter/client-auth/clients'
+import client from '@cloudcrafter/api/client'
 import type {
   PutUpdateEnvironmentVariableGroupMutationRequest,
   PutUpdateEnvironmentVariableGroupMutationResponse,
   PutUpdateEnvironmentVariableGroupPathParams,
   PutUpdateEnvironmentVariableGroup400,
 } from '../types/PutUpdateEnvironmentVariableGroup'
-import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getPutUpdateEnvironmentVariableGroupUrl(
   stackId: PutUpdateEnvironmentVariableGroupPathParams['stackId'],

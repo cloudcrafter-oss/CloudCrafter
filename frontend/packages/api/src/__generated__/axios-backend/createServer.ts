@@ -1,6 +1,6 @@
-import client from '@cloudcrafter/client-auth/clients'
+import client from '@cloudcrafter/api/client'
 import type { CreateServerMutationRequest, CreateServerMutationResponse } from '../types/CreateServer'
-import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getCreateServerUrl() {
   return `/api/Servers` as const

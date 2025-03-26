@@ -1,6 +1,6 @@
-import client from '@cloudcrafter/client-auth/clients'
+import client from '@cloudcrafter/api/client'
 import type { DeleteEnvironmentVariableMutationResponse, DeleteEnvironmentVariablePathParams } from '../types/DeleteEnvironmentVariable'
-import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getDeleteEnvironmentVariableUrl(stackId: DeleteEnvironmentVariablePathParams['stackId'], id: DeleteEnvironmentVariablePathParams['id']) {
   return `/api/Stacks/${stackId}/environment-variables/${id}` as const

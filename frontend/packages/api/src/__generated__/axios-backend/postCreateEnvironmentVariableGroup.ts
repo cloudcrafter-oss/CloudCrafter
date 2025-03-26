@@ -1,10 +1,10 @@
-import client from '@cloudcrafter/client-auth/clients'
+import client from '@cloudcrafter/api/client'
 import type {
   PostCreateEnvironmentVariableGroupMutationRequest,
   PostCreateEnvironmentVariableGroupMutationResponse,
   PostCreateEnvironmentVariableGroupPathParams,
 } from '../types/PostCreateEnvironmentVariableGroup'
-import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getPostCreateEnvironmentVariableGroupUrl(stackId: PostCreateEnvironmentVariableGroupPathParams['stackId']) {
   return `/api/Stacks/${stackId}/environment-variable-groups` as const

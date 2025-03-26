@@ -1,6 +1,6 @@
-import client from '@cloudcrafter/client-auth/clients'
+import client from '@cloudcrafter/api/client'
 import type { GetFilterableFieldsQueryResponse } from '../types/GetFilterableFields'
-import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getGetFilterableFieldsUrl() {
   return `/api/System/get-fields` as const

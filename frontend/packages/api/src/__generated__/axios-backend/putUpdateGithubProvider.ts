@@ -1,10 +1,10 @@
-import client from '@cloudcrafter/client-auth/clients'
+import client from '@cloudcrafter/api/client'
 import type {
   PutUpdateGithubProviderMutationRequest,
   PutUpdateGithubProviderMutationResponse,
   PutUpdateGithubProviderPathParams,
 } from '../types/PutUpdateGithubProvider'
-import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getPutUpdateGithubProviderUrl(id: PutUpdateGithubProviderPathParams['id']) {
   return `/api/Providers/github/${id}/install` as const

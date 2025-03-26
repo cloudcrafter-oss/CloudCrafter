@@ -6,10 +6,7 @@
 		"target": "ES2015",
 		"esModuleInterop": true,
 		"strict": true,
-		"lib": ["ES2015", "DOM"],
-		"paths": {
-			"@/*": ["./*"]
-		}
+		"lib": ["ES2015", "DOM"]
 	},
 	"include": [
 		"next-env.d.ts",

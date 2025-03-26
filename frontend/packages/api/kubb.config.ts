@@ -36,7 +36,7 @@ export default defineConfig({
 					pattern: authTag,
 				},
 			],
-			importPath: '@cloudcrafter/client-auth/clients',
+			importPath: '@cloudcrafter/api/client',
 		}),
 		pluginClient({
 			output: {
@@ -65,7 +65,7 @@ export default defineConfig({
 			exclude: [
 				{
 					type: 'tag',
-					pattern: 'cloudCrafterAuthTest',
+					pattern: authTag,
 				},
 			],
 			output: {

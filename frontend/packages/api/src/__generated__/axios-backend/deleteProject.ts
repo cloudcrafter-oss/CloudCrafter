@@ -1,6 +1,6 @@
-import client from '@cloudcrafter/client-auth/clients'
+import client from '@cloudcrafter/api/client'
 import type { DeleteProjectMutationResponse, DeleteProjectPathParams } from '../types/DeleteProject'
-import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/client-auth/clients'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getDeleteProjectUrl(id: DeleteProjectPathParams['id']) {
   return `/api/Projects/${id}` as const

@@ -1,30 +1,34 @@
 import { jwtDecode } from 'jwt-decode'
-import type { DecodedJWT } from 'next-auth'
-import type { JWT } from 'next-auth/jwt'
-import { postRefreshTokens } from '../__generated__/no-custom-clients'
-import { clientsEnvironment } from '../client/uniform-environment'
+import type { AuthValidity, DecodedJWT, User, UserObject } from 'next-auth'
 
-export const authJsRefreshAccessToken = async (
-	nextAuthJWT: JWT,
-): Promise<JWT> => {
-	try {
-		const response = await postRefreshTokens(
-			{
-				refreshToken: nextAuthJWT.data.tokens.refresh,
-			},
-			{ baseURL: clientsEnvironment.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL },
-		)
+import type { TokenDto } from '../__generated__'
 
-		const { exp }: DecodedJWT = jwtDecode(response.accessToken)
+export const createUserObject = (result: TokenDto): User => {
+	const access: DecodedJWT = jwtDecode(result.accessToken)
 
-		nextAuthJWT.data.validity.valid_until = exp
-		nextAuthJWT.data.tokens.access = response.accessToken
-		return { ...nextAuthJWT }
-	} catch (error) {
-		console.error(error)
-		return {
-			...nextAuthJWT,
-			error: 'RefreshAccessTokenError',
-		}
+	const user: UserObject = {
+		name: access.name,
+		email: access.email,
+		id: access.id,
 	}
+
+	const date = new Date(result.refreshTokenExpires)
+
+	// Get the epoch time in milliseconds and convert to seconds
+	const epochSeconds = Math.floor(date.getTime() / 1000)
+
+	const validity: AuthValidity = {
+		valid_until: access.exp,
+		refresh_until: epochSeconds,
+	}
+
+	return {
+		id: access.jti, // User object is forced to have a string id so use refresh token id
+		tokens: {
+			access: result.accessToken,
+			refresh: result.refreshToken,
+		},
+		user: user,
+		validity: validity,
+	} as User
 }
