@@ -6,6 +6,7 @@
 		"./frontend-axios": "./src/frontend/client.ts",
 		"./authjs/auth": "./src/authjs/auth.ts",
 		"./client": "./src/client/uniform-client.ts",
+		"./uniform-environment": "./src/client/uniform-environment.ts",
 		".": "./src/index.ts"
 	},
 	"scripts": {

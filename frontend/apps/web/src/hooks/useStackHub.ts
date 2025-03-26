@@ -1,10 +1,10 @@
 import type { EntityHealthDto } from '@cloudcrafter/api'
 import type { StackDetailDto } from '@cloudcrafter/api'
+import { clientsEnvironment } from '@cloudcrafter/api/uniform-environment'
 import * as signalR from '@microsoft/signalr'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { backendEnv } from '../core/env/cloudcrafter-env'
 import { formatDate } from '../utils/date/date-utils'
 
 export const useStackHub = ({
@@ -15,7 +15,7 @@ export const useStackHub = ({
 	const [stack, setStack] = useState(initialStack)
 
 	useEffect(() => {
-		const host = backendEnv.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL
+		const host = clientsEnvironment.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL
 		const connection = new signalR.HubConnectionBuilder()
 			.withUrl(`${host}/hub/stack`, {
 				accessTokenFactory: () => {
