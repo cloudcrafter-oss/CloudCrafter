@@ -40,7 +40,7 @@ export default defineConfig({
 		}),
 		pluginClient({
 			output: {
-				path: './non-auth-axios',
+				path: './no-custom-clients',
 			},
 			include: [
 				{
