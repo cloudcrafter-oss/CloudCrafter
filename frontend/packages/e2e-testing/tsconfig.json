@@ -1,26 +1,25 @@
 {
+	"extends": "@cloudcrafter/typescript-config/nextjs.json",
 	"compilerOptions": {
-		"target": "es2015",
-		"lib": ["dom", "dom.iterable", "esnext"],
-		"allowJs": true,
-		"skipLibCheck": true,
-		"strict": true,
-		"forceConsistentCasingInFileNames": true,
-		"noEmit": true,
-		"esModuleInterop": true,
-		"module": "esnext",
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
 		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"jsx": "preserve",
-		"incremental": true,
-		"baseUrl": ".",
+		"module": "esnext",
+		"esModuleInterop": true,
 		"paths": {
-			"@/*": ["./src/*"]
-		},
-		"outDir": "./dist",
-		"types": ["node", "@playwright/test"]
+			"@/*": ["./*"],
+			"auth": ["./auth"]
+		}
 	},
-	"include": ["src/**/*.ts", "playwright.config.ts"],
-	"exclude": ["node_modules", "dist", "**/*.spec.ts"]
+	"include": [
+		"next-env.d.ts",
+		"next.config.js",
+		"**/*.ts",
+		"**/*.tsx",
+		".next/types/**/*.ts"
+	],
+	"exclude": ["node_modules"]
 }

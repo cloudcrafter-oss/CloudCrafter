@@ -10,8 +10,15 @@
 		"test:debug": "playwright test --debug",
 		"test:report": "playwright show-report"
 	},
+	"dependencies": {
+		"@cloudcrafter/api": "workspace:*",
+		"axios": "^1.7.2",
+		"jwt-decode": "^4.0.0",
+		"next-auth": "5.0.0-beta.25"
+	},
 	"devDependencies": {
 		"@playwright/test": "^1.51.1",
+		"@cloudcrafter/typescript-config": "workspace:*",
 		"@types/node": "^22.13.13",
 		"typescript": "5.1.6"
 	}

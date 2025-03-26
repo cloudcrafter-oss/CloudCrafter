@@ -1,3 +1,8 @@
+import {
+	type ProjectDto,
+	createProject,
+	postLoginUser,
+} from '@cloudcrafter/api'
 import { test as base, expect } from '@playwright/test'
 import type { APIRequestContext, BrowserContext, Page } from '@playwright/test'
 export * from '@playwright/test'
@@ -58,59 +63,28 @@ export class UserFixture {
 		await this.page.waitForURL('/admin')
 	}
 
+	getBaseUrl(): string {
+		return process.env.CLOUDCRAFTER_E2E_BACKEND_URI || ''
+	}
+
 	/**
 	 * Login via API (faster than UI login)
 	 */
 	async loginViaApi(): Promise<void> {
-		const response = await this.request.post('/api/auth/callback/credentials', {
-			data: {
+		const apiUrl = this.getBaseUrl()
+		console.log('Login via API to ', apiUrl)
+		const response = await postLoginUser(
+			{
 				email: this.email,
 				password: this.password,
-				redirect: false,
-				csrfToken: await this.getCsrfToken(),
 			},
-		})
-
-		if (!response.ok()) {
-			throw new Error(`Failed to login via API: ${response.statusText()}`)
-		}
-
-		const cookies = await response.json()
-
-		// Set cookies from response
-		if (cookies.data?.cookies) {
-			for (const cookie of cookies.data.cookies) {
-				await this.context.addCookies([cookie])
-			}
-		}
+			{
+				baseURL: apiUrl,
+			},
+		)
 
 		// Store auth token if present
-		this.authToken = cookies.data?.token
-	}
-
-	/**
-	 * Get CSRF token for authentication requests
-	 */
-	async getCsrfToken(): Promise<string> {
-		const response = await this.request.get('/api/auth/csrf')
-		const data = await response.json()
-		return data.csrfToken
-	}
-
-	/**
-	 * Create authentication headers for API requests
-	 */
-	createAuthHeaders(): Record<string, string> {
-		if (!this.authToken) {
-			throw new Error(
-				'No auth token available. You must call loginViaApi() first.',
-			)
-		}
-
-		return {
-			Authorization: `Bearer ${this.authToken}`,
-			'Content-Type': 'application/json',
-		}
+		this.authToken = response.accessToken
 	}
 
 	/**
@@ -122,6 +96,24 @@ export class UserFixture {
 
 		// Clear auth token
 		this.authToken = undefined
+	}
+
+	// Custom creators
+
+	async fixtureCreateProject(projectName: string): Promise<ProjectDto> {
+		const url = this.getBaseUrl()
+
+		const result = await createProject(
+			{ name: projectName },
+			{
+				baseURL: url,
+				headers: {
+					Authorization: `Bearer ${this.authToken}`,
+				},
+			},
+		)
+
+		return result
 	}
 }
 
@@ -140,6 +132,7 @@ export const test = base.extend<{
 
 		// Login via API
 		await user.login()
+		await user.loginViaApi()
 
 		// Make fixture available for use in tests
 		await use(user)
