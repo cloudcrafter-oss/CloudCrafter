@@ -81,6 +81,7 @@ export class ProjectFixture extends UserFixture {
 export const test = base.extend<{
 	project: ProjectDto
 	page: Page
+	projectFixture: ProjectFixture
 	request: APIRequestContext
 }>({
 	project: async ({ browser, page, request }, use) => {
@@ -98,5 +99,15 @@ export const test = base.extend<{
 
 		// Clean up projects after test
 		await projectFixture.cleanupProjects()
+	},
+
+	projectFixture: async ({ browser, page, request }, use) => {
+		// Create project fixture
+		const projectFixture = new ProjectFixture(page, request)
+
+		await projectFixture.loginViaApi()
+
+		// Make fixture available for use in tests
+		await use(projectFixture)
 	},
 })
