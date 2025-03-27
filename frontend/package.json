@@ -8,6 +8,8 @@
 		"format": "prettier --write \"**/*.{ts,tsx,md}\"",
 		"ui:add": "bun --cwd packages/ui ui:add",
 		"generate-clients": "bun --cwd packages/api generate-clients",
+		"generate-clients:e2e": "bun --cwd packages/e2e-testing generate-clients",
+		"generate-clients:all": "bun run generate-clients && bun run generate-clients:e2e",
 		"format-and-lint": "biome check .",
 		"format-and-lint:fix": "biome check . --write",
 		"format-and-lint:hook": "biome check --write --staged --files-ignore-unknown=true --no-errors-on-unmatched  && git update-index --again",

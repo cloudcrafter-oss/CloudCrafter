@@ -1,0 +1,1 @@
+{"required":["installationId"],"type":"object","properties":{"installationId":{"type":"integer","format":"int64"}},"x-readme-ref-name":"UpdateGithubInstallationRequest"}

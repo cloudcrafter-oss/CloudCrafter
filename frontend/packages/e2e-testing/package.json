@@ -9,23 +9,25 @@
 		"test": "playwright test",
 		"test:ui": "playwright test --ui",
 		"test:debug": "playwright test --debug",
-		"test:report": "playwright show-report"
+		"test:report": "playwright show-report",
+		"generate-clients": "kubb generate --config kubb.config.ts"
 	},
 	"dependencies": {
 		"@cloudcrafter/api": "workspace:*",
-		"axios": "^1.7.2",
-		"jwt-decode": "^4.0.0",
-		"next-auth": "5.0.0-beta.25",
-		"next": "^15.2.3"
+		"axios": "^1.7.2"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.51.1",
 		"@cloudcrafter/typescript-config": "workspace:*",
+		"@cloudcrafter/kubb-config": "workspace:*",
 		"@types/node": "^22.13.13",
 		"typescript": "5.1.6",
-		"next": "^15.2.3"
-	},
-	"peerDependencies": {
-		"next": "^15.2.3"
+		"@kubb/cli": "^3.7.0",
+		"@kubb/core": "^3.7.0",
+		"@kubb/plugin-client": "^3.7.0",
+		"@kubb/plugin-oas": "^3.7.0",
+		"@kubb/plugin-react-query": "^3.7.0",
+		"@kubb/plugin-ts": "^3.7.0",
+		"@kubb/plugin-zod": "^3.7.0"
 	}
 }

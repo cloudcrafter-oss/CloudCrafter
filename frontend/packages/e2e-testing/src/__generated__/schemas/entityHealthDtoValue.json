@@ -1,0 +1,1 @@
+{"enum":["Unknown","Unsupported","Degraded","Unhealthy","Healthy","HeathCheckOverdue"],"x-readme-ref-name":"EntityHealthDtoValue"}
