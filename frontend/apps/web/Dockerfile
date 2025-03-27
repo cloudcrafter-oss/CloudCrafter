@@ -1,4 +1,5 @@
 FROM oven/bun:1 AS base
+RUN bun install turbo@canary --global
 
 FROM base AS builder
 
