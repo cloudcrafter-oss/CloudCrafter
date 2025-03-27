@@ -22,8 +22,10 @@ type WizardStep = 'source' | 'details'
 
 export const ProjectDetailCreateStackSheet = ({
 	environmentId,
+	projectId,
 }: {
 	environmentId: string
+	projectId: string
 }) => {
 	const [currentStep, setCurrentStep] = useState<WizardStep>('source')
 	const [repositorySource, setRepositorySource] =
@@ -47,7 +49,12 @@ export const ProjectDetailCreateStackSheet = ({
 						Stack ID: {createdStack.id}
 					</p>
 					<Button asChild>
-						<Link href={`/admin/stacks/${createdStack.id}`}>Go to Stack</Link>
+						<Link
+							data-testid='btn-go-to-stack'
+							href={`/admin/projects/${projectId}/${environmentId}/stack/${createdStack.id}`}
+						>
+							Go to Stack
+						</Link>
 					</Button>
 				</div>
 			)
@@ -81,7 +88,7 @@ export const ProjectDetailCreateStackSheet = ({
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
-				<Button size='sm' variant='outline'>
+				<Button data-testid='btn-create-stack' size='sm' variant='outline'>
 					Add New Stack
 					<Plus className='ml-2 h-4 w-4' />
 				</Button>
