@@ -1,6 +1,6 @@
-import client from '@kubb/plugin-client/clients/axios'
+import client from '@cloudcrafter/api/client'
 import type { CreateProjectMutationRequest, CreateProjectMutationResponse } from '../types/CreateProject'
-import type { RequestConfig, ResponseErrorConfig } from'@kubb/plugin-client/clients/axios'
+import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
 
 export function getCreateProjectUrl() {
   return `/api/Projects` as const

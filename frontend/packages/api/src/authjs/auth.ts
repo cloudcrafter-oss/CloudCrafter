@@ -1,5 +1,5 @@
-import NextAuth from 'next-auth'
 import 'next-auth/jwt'
+import { getServerSession } from 'next-auth'
 
 import type { JWT } from 'next-auth/jwt'
 import type { Provider } from 'next-auth/providers'
@@ -48,12 +48,6 @@ if (credentialsEnabled && credentialsConfig) {
 						return null
 					}
 
-					// This is where you would typically validate credentials against your backend
-					// For example:
-					// const user = await validateCredentials(credentials.email, credentials.password)
-
-					// For testing purposes, we'll use a simple check
-					// In production, replace this with actual authentication logic
 					return await loginWithPassword(
 						credentials.email as string,
 						credentials.password as string,
@@ -67,10 +61,9 @@ if (credentialsEnabled && credentialsConfig) {
 	)
 }
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const authOptions = {
 	theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
 	providers,
-	//debug: process.env.NODE_ENV !== 'production' ? true : false,
 	callbacks: {
 		async jwt({ token, user, account }) {
 			if (account && user) {
@@ -81,24 +74,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 					)
 					return { ...token, data: userObject }
 				}
-
-				//console.debug('initial signin')
 				return { ...token, data: user }
 			}
 
-			// The current access token is still valid
 			if (Date.now() < token.data.validity.valid_until * 1000) {
-				//console.debug('Access token is still valid')
-				//console.debug('token: ', token.data.tokens)
 				return token
 			}
 
 			if (Date.now() < token.data.validity.refresh_until * 1000) {
-				console.debug('Access token is being refreshed')
 				return await authJsRefreshAccessToken(token)
 			}
-
-			//console.debug('Both tokens have expired')
 
 			return { error: 'RefreshTokenExpired' } as JWT
 		},
@@ -132,4 +117,29 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			return true
 		},
 	},
-})
+}
+
+export type TokenUser = {
+	name?: string | null
+	email?: string | null
+	image?: string | null
+	id: string
+}
+
+export async function getAuthSession() {
+	return getServerSession(authOptions)
+}
+
+export async function initiateSignIn(provider?: string) {
+	return {
+		error: 'Method not implemented for server-side call',
+	}
+}
+
+export async function initiateSignOut(
+	options?: Parameters<typeof signOut>[0],
+): Promise<{ url: string }> {
+	return {
+		url: '/',
+	}
+}
