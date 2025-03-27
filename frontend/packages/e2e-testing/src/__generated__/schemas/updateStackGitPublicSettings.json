@@ -1,0 +1,1 @@
+{"type":"object","properties":{"repository":{"type":"string","nullable":true},"path":{"type":"string","nullable":true},"branch":{"type":"string","nullable":true}},"default":null,"nullable":true,"x-readme-ref-name":"UpdateStackGitPublicSettings"}

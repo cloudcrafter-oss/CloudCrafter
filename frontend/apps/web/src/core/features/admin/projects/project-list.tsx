@@ -418,7 +418,11 @@ export const ProjectList = ({ projects }: { projects: ProjectDto[] }) => {
 				</div>
 				<Sheet open={open} onOpenChange={setOpen}>
 					<SheetTrigger asChild>
-						<Button variant='outline' className='w-full'>
+						<Button
+							data-testid='btn-new-project'
+							variant='outline'
+							className='w-full'
+						>
 							+ New Project
 						</Button>
 					</SheetTrigger>

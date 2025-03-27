@@ -1,0 +1,1 @@
+{"required":["repository"],"type":"object","properties":{"repository":{"type":"string"}},"x-readme-ref-name":"CheckValidGitRepoCommand"}

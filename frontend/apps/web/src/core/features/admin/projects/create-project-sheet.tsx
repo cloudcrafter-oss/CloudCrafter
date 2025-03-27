@@ -53,14 +53,16 @@ export const CreateProjectSheet = ({ onClose }: { onClose: () => void }) => {
 							<FormItem>
 								<FormLabel>Name</FormLabel>
 								<FormControl>
-									<Input {...field} />
+									<Input data-testid='input-project-name' {...field} />
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
 					{/* Add more FormField components for other fields in your schema */}
-					<Button type='submit'>Save changes</Button>
+					<Button data-testid='btn-save-project' type='submit'>
+						Save changes
+					</Button>
 				</form>
 			</Form>
 		</>

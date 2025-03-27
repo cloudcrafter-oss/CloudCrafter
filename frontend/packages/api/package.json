@@ -2,11 +2,15 @@
 	"name": "@cloudcrafter/api",
 	"version": "0.0.0",
 	"private": true,
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"type": "module",
 	"exports": {
-		"./frontend-axios": "./src/frontend/client.ts",
-		"./authjs/auth": "./src/authjs/auth.ts",
+		".": "./src/index.ts",
 		"./client": "./src/client/uniform-client.ts",
-		".": "./src/index.ts"
+		"./authjs/auth": "./src/authjs/auth.ts",
+		"./uniform-environment": "./src/client/uniform-environment.ts",
+		"./frontend-axios": "./src/frontend/client.ts"
 	},
 	"scripts": {
 		"generate-clients": "kubb generate --config kubb.config.ts",
@@ -14,6 +18,7 @@
 	},
 	"devDependencies": {
 		"@cloudcrafter/typescript-config": "workspace:*",
+		"@cloudcrafter/kubb-config": "workspace:*",
 		"@kubb/cli": "^3.7.0",
 		"@kubb/core": "^3.7.0",
 		"@kubb/plugin-client": "^3.7.0",
@@ -21,8 +26,11 @@
 		"@kubb/plugin-react-query": "^3.7.0",
 		"@kubb/plugin-ts": "^3.7.0",
 		"@kubb/plugin-zod": "^3.7.0",
-		"next-auth": "5.0.0-beta.25",
 		"@types/node": "^20.10.6"
+	},
+	"peerDependencies": {
+		"next-auth": "5.0.0-beta.25",
+		"next": "^15.2.3"
 	},
 	"dependencies": {
 		"@tanstack/react-query": "^5.49.0",

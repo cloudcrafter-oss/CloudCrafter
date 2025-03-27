@@ -3,7 +3,7 @@ import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
 import type { DeploymentLogDto } from '@cloudcrafter/api'
-import { backendEnv } from '../core/env/cloudcrafter-env'
+import { clientsEnvironment } from '@cloudcrafter/api/uniform-environment'
 
 export const useWebHub = ({ channelId }: { channelId: string }) => {
 	const { data: session } = useSession()
@@ -11,7 +11,7 @@ export const useWebHub = ({ channelId }: { channelId: string }) => {
 	const [messages, setMessages] = useState<DeploymentLogDto[]>([])
 
 	useEffect(() => {
-		const host = backendEnv.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL
+		const host = clientsEnvironment.CLOUDCRAFTER_AXIOS_BACKEND_BASEURL
 		const connection = new signalR.HubConnectionBuilder()
 			.withUrl(`${host}/hub/web`, {
 				accessTokenFactory: () => {

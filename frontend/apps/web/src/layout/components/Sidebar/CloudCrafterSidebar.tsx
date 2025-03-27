@@ -29,7 +29,6 @@ import {
 	UsersRound,
 } from 'lucide-react'
 import type * as React from 'react'
-import { useEffect } from 'react'
 import { useTheme } from '../theme-provider'
 import { CloudCrafterNav } from './CloudCrafterNav'
 import { CloudCrafterProjectSwitcher } from './CloudCrafterProjectSwitcher'
@@ -137,17 +136,6 @@ const data = {
 export function CloudCrafterSidebar({
 	...props
 }: React.ComponentProps<typeof Sidebar>) {
-	useEffect(() => {
-		// TODO: Improve this in the future
-		fetch('/api/config')
-			.then((response) => response.json())
-			.then((data) => {
-				if (localStorage) {
-					localStorage.setItem('cloudcrafter-config', JSON.stringify(data))
-				}
-			})
-	}, [])
-
 	const { theme, setTheme } = useTheme()
 	return (
 		<Sidebar collapsible='icon' {...props}>
