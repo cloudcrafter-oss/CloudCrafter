@@ -1,8 +1,8 @@
-import { expect, test } from '../../fixtures/user-fixture'
+import { expect, test } from '../../fixtures/playwright-fixture'
 import { ProjectListPage } from '../../pages/projects/projects.index'
 import { generateProjectName } from '../../utils/fake-data'
 
-test('should create a new project', async ({ authenticatedUser, page }) => {
+test('should create a new project', async ({ page }) => {
 	await page.goto('/admin/projects')
 
 	const projectListPage = ProjectListPage(page)

@@ -2,7 +2,6 @@
 	"name": "@cloudcrafter/e2e-testing",
 	"version": "0.1.0",
 	"private": true,
-	"type": "module",
 	"description": "End-to-end testing package for CloudCrafter",
 	"main": "src/index.ts",
 	"scripts": {
@@ -14,13 +13,16 @@
 	},
 	"dependencies": {
 		"@cloudcrafter/api": "workspace:*",
-		"axios": "^1.7.2"
+		"axios": "^1.7.2",
+		"dotenv": "^16.4.7",
+		"fs": "^0.0.1-security",
+		"path": "^0.12.7"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.51.1",
 		"@cloudcrafter/typescript-config": "workspace:*",
 		"@cloudcrafter/kubb-config": "workspace:*",
-		"@types/node": "^22.13.13",
+		"@types/node": "^20",
 		"typescript": "5.1.6",
 		"@kubb/cli": "^3.7.0",
 		"@kubb/core": "^3.7.0",

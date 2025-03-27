@@ -1,5 +1,7 @@
-import { test as base, expect } from '@playwright/test'
-import type { APIRequestContext, BrowserContext, Page } from '@playwright/test'
+import { expect } from '@playwright/test'
+import type { APIRequestContext, Page } from '@playwright/test'
+import { type ProjectDto, createProject, postLoginUser } from '../__generated__'
+import { env } from '../infra/test-env'
 export * from '@playwright/test'
 /**
  * Credentials used for authentication in tests
@@ -13,7 +15,6 @@ interface Credentials {
  * User fixture with authentication capabilities
  */
 export class UserFixture {
-	readonly context: BrowserContext
 	readonly page: Page
 	readonly request: APIRequestContext
 	readonly email: string
@@ -21,15 +22,13 @@ export class UserFixture {
 	authToken?: string
 
 	constructor(
-		context: BrowserContext,
 		page: Page,
 		request: APIRequestContext,
 		credentials: Credentials = {
-			email: process.env.TEST_USER_EMAIL || 'demo@cloudcrafter.app',
-			password: process.env.TEST_USER_PASSWORD || 'P@ssw0rd!123',
+			email: env.TEST_USER_EMAIL,
+			password: env.TEST_USER_PASSWORD,
 		},
 	) {
-		this.context = context
 		this.page = page
 		this.request = request
 		this.email = credentials.email
@@ -40,7 +39,6 @@ export class UserFixture {
 	 * Login via UI (credentials provider)
 	 */
 	async login(): Promise<void> {
-		await this.page.goto('/api/auth/signin')
 		await this.page.goto('/admin')
 		await expect(this.page).toHaveURL(/.*\/auth\/signin\?callbackUrl=.*/)
 
@@ -59,28 +57,27 @@ export class UserFixture {
 	}
 
 	getBaseUrl(): string {
-		return process.env.CLOUDCRAFTER_E2E_BACKEND_URI || ''
+		return env.BACKEND_URI
 	}
 
 	/**
 	 * Login via API (faster than UI login)
 	 */
-	// async loginViaApi(): Promise<void> {
-	// 	const apiUrl = this.getBaseUrl()
-	// 	console.log('Login via API to ', apiUrl)
-	// 	const response = await postLoginUser(
-	// 		{
-	// 			email: this.email,
-	// 			password: this.password,
-	// 		},
-	// 		{
-	// 			baseURL: apiUrl,
-	// 		},
-	// 	)
+	async loginViaApi(): Promise<void> {
+		const apiUrl = this.getBaseUrl()
+		const response = await postLoginUser(
+			{
+				email: this.email,
+				password: this.password,
+			},
+			{
+				baseURL: apiUrl,
+			},
+		)
 
-	// 	// Store auth token if present
-	// 	this.authToken = response.accessToken
-	// }
+		// Store auth token if present
+		this.authToken = response.accessToken
+	}
 
 	/**
 	 * Logout the current user
@@ -95,41 +92,41 @@ export class UserFixture {
 
 	// Custom creators
 
-	// async fixtureCreateProject(projectName: string): Promise<ProjectDto> {
-	// 	const url = this.getBaseUrl()
+	async fixtureCreateProject(projectName: string): Promise<ProjectDto> {
+		const url = this.getBaseUrl()
 
-	// 	const result = await createProject(
-	// 		{ name: projectName },
-	// 		{
-	// 			baseURL: url,
-	// 			headers: {
-	// 				Authorization: `Bearer ${this.authToken}`,
-	// 			},
-	// 		},
-	// 	)
+		const result = await createProject(
+			{ name: projectName },
+			{
+				baseURL: url,
+				headers: {
+					Authorization: `Bearer ${this.authToken}`,
+				},
+			},
+		)
 
-	// 	return result
-	// }
+		return result
+	}
 }
 
-/**
- * Extend Playwright's test with a user fixture
- */
-export const test = base.extend<{
-	authenticatedUser: UserFixture
-}>({
-	authenticatedUser: async ({ browser, page, request }, use) => {
-		// Create browser context with storage state isolation
-		const context = await browser.newContext()
+// /**
+//  * Extend Playwright's test with a user fixture
+//  */
+// export const test = base.extend<{
+// 	authenticatedUser: UserFixture
+// }>({
+// 	authenticatedUser: async ({ browser, page, request }, use) => {
+// 		// Create browser context with storage state isolation
+// 		const context = await browser.newContext()
 
-		// Create user fixture
-		const user = new UserFixture(context, page, request)
+// 		// Create user fixture
+// 		const user = new UserFixture(context, page, request)
 
-		// Login via API
-		await user.login()
-		//	await user.loginViaApi()
+// 		// Login via API
+// 		await user.login()
+// 		await user.loginViaApi()
 
-		// Make fixture available for use in tests
-		await use(user)
-	},
-})
+// 		// Make fixture available for use in tests
+// 		await use(user)
+// 	},
+// })
