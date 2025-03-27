@@ -58,6 +58,8 @@ jobs:
       run: cp apps/web/.env.e2e apps/web/.env
     - name: Copy playwright environment file
       run: cp packages/e2e-testing/.env.example packages/e2e-testing/.env
+    - name: Build apps
+      run: bun run build
     - name: Run Playwright tests
       run: bun test:e2e
     - uses: actions/upload-artifact@v4

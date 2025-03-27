@@ -67,7 +67,7 @@ export default defineConfig({
 	/* Run your local dev server before starting the tests */
 	webServer: {
 		// This should point to the web app's dev command
-		command: 'cd ../../apps/web && bun run dev',
+		command: 'cd ../../apps/web && bun run start',
 		url: 'http://localhost:3001',
 		reuseExistingServer: !process.env.CI,
 		stdout: 'ignore',
