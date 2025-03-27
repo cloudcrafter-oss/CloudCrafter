@@ -2,6 +2,7 @@ import type { APIRequestContext, Page } from '@playwright/test'
 import { test as base } from './playwright-fixture'
 import { UserFixture } from './user-fixture'
 export * from '@playwright/test'
+import { isAxiosError } from 'axios'
 import type { ProjectDto } from '../__generated__'
 import {
 	deleteProject as apiDeleteProject,
@@ -45,20 +46,16 @@ export class ProjectFixture extends UserFixture {
 	async cleanupProjects(): Promise<void> {
 		if (this.projects.length === 0) return
 
-		const url = this.getBaseUrl()
-
 		// Delete each project in reverse order (newest first)
 		for (const project of [...this.projects].reverse()) {
 			try {
-				// Open project actions menu
-
-				await apiDeleteProject(project.id, {
-					baseURL: url,
-					headers: {
-						Authorization: `Bearer ${this.authToken}`,
-					},
-				})
+				await apiDeleteProject(project.id, this.getApiClientConfig())
 			} catch (error) {
+				// Ignore 404 errors (project already deleted)
+				if (isAxiosError(error) && error.response?.status === 404) {
+					// Project already deleted, just continue
+					continue
+				}
 				console.error(`Failed to clean up project ${project.name}:`, error)
 			}
 		}
@@ -67,16 +64,9 @@ export class ProjectFixture extends UserFixture {
 	}
 
 	async fixtureCreateProject(projectName: string): Promise<ProjectDto> {
-		const url = this.getBaseUrl()
-
 		const result = await createProject(
 			{ name: projectName },
-			{
-				baseURL: url,
-				headers: {
-					Authorization: `Bearer ${this.authToken}`,
-				},
-			},
+			this.getApiClientConfig(),
 		)
 
 		this.projects.push(result)

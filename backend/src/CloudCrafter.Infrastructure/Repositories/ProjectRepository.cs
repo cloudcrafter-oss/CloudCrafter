@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Ardalis.GuardClauses;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using CloudCrafter.Core.Commands.Projects;
 using CloudCrafter.Core.Common.Interfaces;
@@ -16,7 +17,7 @@ public class ProjectRepository(IApplicationDbContext dbContext, IMapper mapper) 
 
     public async Task<List<ProjectDto>> GetProjects(LoadProjectOptions options)
     {
-        IQueryable<Project> projects = ProjectsQueryable;
+        var projects = ProjectsQueryable;
 
         if (options.IncludeEnvironments.GetValueOrDefault())
         {
@@ -92,7 +93,7 @@ public class ProjectRepository(IApplicationDbContext dbContext, IMapper mapper) 
 
         if (project is null)
         {
-            throw new Exception("Project not found");
+            throw new NotFoundException("Project", "Project not found");
         }
 
         dbContext.Projects.Remove(project);

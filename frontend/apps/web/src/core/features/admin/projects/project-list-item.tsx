@@ -163,6 +163,7 @@ export const ProjectListItem = ({
 									<PopoverTrigger asChild>
 										<Button
 											variant={'destructive'}
+											data-testid='btn-delete-project'
 											disabled={deleteButtonDisabled}
 										>
 											Delete
@@ -178,7 +179,11 @@ export const ProjectListItem = ({
 												>
 													Cancel
 												</Button>
-												<Button variant='destructive' onClick={handleDelete}>
+												<Button
+													variant='destructive'
+													data-testid='btn-confirm-delete'
+													onClick={handleDelete}
+												>
 													Confirm
 												</Button>
 											</div>
@@ -198,6 +203,7 @@ export const ProjectListItem = ({
 					</Sheet>
 					<button
 						type='button'
+						data-testid={`btn-edit-project-${project.id}`}
 						onClick={async () => await openProject(project.id)}
 						className='p-2 bg-muted rounded-full hover:bg-muted-foreground'
 					>

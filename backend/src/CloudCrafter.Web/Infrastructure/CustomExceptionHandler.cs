@@ -1,3 +1,4 @@
+using Ardalis.GuardClauses;
 using CloudCrafter.Core.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,11 @@ public class CustomExceptionHandler : IExceptionHandler
 
     public CustomExceptionHandler()
     {
-        _exceptionHandlers = new()
+        _exceptionHandlers = new Dictionary<Type, Func<HttpContext, Exception, Task>>
         {
             { typeof(ValidationException), HandleValidationException },
             { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
+            { typeof(NotFoundException), HandleNotFoundException },
         };
     }
 
@@ -45,6 +47,21 @@ public class CustomExceptionHandler : IExceptionHandler
             {
                 Status = StatusCodes.Status422UnprocessableEntity,
                 Type = "https://httpwg.org/specs/rfc9110.html#status.422",
+            }
+        );
+    }
+
+    private async Task HandleNotFoundException(HttpContext httpContext, Exception ex)
+    {
+        var exception = (NotFoundException)ex;
+
+        httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+
+        await httpContext.Response.WriteAsJsonAsync(
+            new ValidationProblemDetails()
+            {
+                Status = StatusCodes.Status404NotFound,
+                Type = "https://httpwg.org/specs/rfc9110.html#status.404",
             }
         );
     }

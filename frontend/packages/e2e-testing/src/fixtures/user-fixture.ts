@@ -61,6 +61,19 @@ export class UserFixture {
 	}
 
 	/**
+	 * Get API client configuration with baseURL and authorization headers
+	 * @returns Configuration object with baseURL and headers
+	 */
+	getApiClientConfig() {
+		return {
+			baseURL: this.getBaseUrl(),
+			headers: {
+				Authorization: `Bearer ${this.authToken}`,
+			},
+		}
+	}
+
+	/**
 	 * Login via API (faster than UI login)
 	 */
 	async loginViaApi(): Promise<void> {
