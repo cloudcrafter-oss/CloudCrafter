@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test'
 import type { APIRequestContext, Page } from '@playwright/test'
-import { type ProjectDto, createProject, postLoginUser } from '../__generated__'
+import { postLoginUser } from '../__generated__'
 import { env } from '../infra/test-env'
 export * from '@playwright/test'
 /**
@@ -91,22 +91,6 @@ export class UserFixture {
 	}
 
 	// Custom creators
-
-	async fixtureCreateProject(projectName: string): Promise<ProjectDto> {
-		const url = this.getBaseUrl()
-
-		const result = await createProject(
-			{ name: projectName },
-			{
-				baseURL: url,
-				headers: {
-					Authorization: `Bearer ${this.authToken}`,
-				},
-			},
-		)
-
-		return result
-	}
 }
 
 // /**

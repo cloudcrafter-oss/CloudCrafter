@@ -3,6 +3,10 @@ import { test as base } from './playwright-fixture'
 import { UserFixture } from './user-fixture'
 export * from '@playwright/test'
 import type { ProjectDto } from '../__generated__'
+import {
+	deleteProject as apiDeleteProject,
+	createProject,
+} from '../__generated__'
 import { ProjectListPage } from '../pages/projects/projects.index'
 import { generateProjectName } from '../utils/fake-data'
 
@@ -41,33 +45,43 @@ export class ProjectFixture extends UserFixture {
 	async cleanupProjects(): Promise<void> {
 		if (this.projects.length === 0) return
 
-		// Go to projects page
-		await this.page.goto('/admin/projects')
-
-		const projectListPage = ProjectListPage(this.page)
+		const url = this.getBaseUrl()
 
 		// Delete each project in reverse order (newest first)
 		for (const project of [...this.projects].reverse()) {
 			try {
 				// Open project actions menu
-				await projectListPage.openProjectActions(project.name)
 
-				// Click delete
-				await projectListPage.actions.delete.click()
-
-				// Confirm deletion
-				await projectListPage.confirmDelete.click()
-
-				// Wait for project to be removed
-				await this.page
-					.getByText(project.name)
-					.waitFor({ state: 'detached', timeout: 5000 })
+				await apiDeleteProject(project.id, {
+					baseURL: url,
+					headers: {
+						Authorization: `Bearer ${this.authToken}`,
+					},
+				})
 			} catch (error) {
 				console.error(`Failed to clean up project ${project.name}:`, error)
 			}
 		}
 
 		this.projects = []
+	}
+
+	async fixtureCreateProject(projectName: string): Promise<ProjectDto> {
+		const url = this.getBaseUrl()
+
+		const result = await createProject(
+			{ name: projectName },
+			{
+				baseURL: url,
+				headers: {
+					Authorization: `Bearer ${this.authToken}`,
+				},
+			},
+		)
+
+		this.projects.push(result)
+
+		return result
 	}
 }
 
