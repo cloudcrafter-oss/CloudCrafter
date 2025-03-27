@@ -1,8 +1,3 @@
-import {
-	type ProjectDto,
-	createProject,
-	postLoginUser,
-} from '@cloudcrafter/api'
 import { test as base, expect } from '@playwright/test'
 import type { APIRequestContext, BrowserContext, Page } from '@playwright/test'
 export * from '@playwright/test'
@@ -70,22 +65,22 @@ export class UserFixture {
 	/**
 	 * Login via API (faster than UI login)
 	 */
-	async loginViaApi(): Promise<void> {
-		const apiUrl = this.getBaseUrl()
-		console.log('Login via API to ', apiUrl)
-		const response = await postLoginUser(
-			{
-				email: this.email,
-				password: this.password,
-			},
-			{
-				baseURL: apiUrl,
-			},
-		)
+	// async loginViaApi(): Promise<void> {
+	// 	const apiUrl = this.getBaseUrl()
+	// 	console.log('Login via API to ', apiUrl)
+	// 	const response = await postLoginUser(
+	// 		{
+	// 			email: this.email,
+	// 			password: this.password,
+	// 		},
+	// 		{
+	// 			baseURL: apiUrl,
+	// 		},
+	// 	)
 
-		// Store auth token if present
-		this.authToken = response.accessToken
-	}
+	// 	// Store auth token if present
+	// 	this.authToken = response.accessToken
+	// }
 
 	/**
 	 * Logout the current user
@@ -100,21 +95,21 @@ export class UserFixture {
 
 	// Custom creators
 
-	async fixtureCreateProject(projectName: string): Promise<ProjectDto> {
-		const url = this.getBaseUrl()
+	// async fixtureCreateProject(projectName: string): Promise<ProjectDto> {
+	// 	const url = this.getBaseUrl()
 
-		const result = await createProject(
-			{ name: projectName },
-			{
-				baseURL: url,
-				headers: {
-					Authorization: `Bearer ${this.authToken}`,
-				},
-			},
-		)
+	// 	const result = await createProject(
+	// 		{ name: projectName },
+	// 		{
+	// 			baseURL: url,
+	// 			headers: {
+	// 				Authorization: `Bearer ${this.authToken}`,
+	// 			},
+	// 		},
+	// 	)
 
-		return result
-	}
+	// 	return result
+	// }
 }
 
 /**
@@ -132,7 +127,7 @@ export const test = base.extend<{
 
 		// Login via API
 		await user.login()
-		await user.loginViaApi()
+		//	await user.loginViaApi()
 
 		// Make fixture available for use in tests
 		await use(user)

@@ -1,20 +1,20 @@
 {
-   "$schema": "https://alirezanet.github.io/Husky.Net/schema.json",
-   "tasks": [
-      {
-         "name": "Run csharpier",
-         "group": "pre-commit",
-         "command": "dotnet",
-         "args": ["csharpier", "${staged}"],
-         "include": ["**/*.cs"]
-      },
-      
-      {
-         "name": "Run Biome on frontend projects",
-         "command": "pnpm",
-         "group": "pre-commit",
-         "args": ["run", "format-and-lint:hook"],
-         "cwd": "./frontend"
-      }
-   ]
+	"$schema": "https://alirezanet.github.io/Husky.Net/schema.json",
+	"tasks": [
+		{
+			"name": "Run csharpier",
+			"group": "pre-commit",
+			"command": "dotnet",
+			"args": ["csharpier", "${staged}"],
+			"include": ["**/*.cs"]
+		},
+
+		{
+			"name": "Run Biome on frontend projects",
+			"command": "bun",
+			"group": "pre-commit",
+			"args": ["run", "format-and-lint:hook"],
+			"cwd": "./frontend"
+		}
+	]
 }

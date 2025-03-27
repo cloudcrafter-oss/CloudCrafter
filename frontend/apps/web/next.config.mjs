@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	transpilePackages: ['@cloudcrafter/ui', '@cloudcrafter/api'],
+	transpilePackages: ['@cloudcrafter/ui', '@cloudcrafter/api', 'next-auth'],
 	output: 'standalone',
 	trailingSlash: false,
 	eslint: {

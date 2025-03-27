@@ -1,0 +1,11 @@
+[install]
+# Define workspace packages, similar to pnpm-workspace.yaml
+workspaces = ["apps/*", "packages/*"]
+
+[install.cache]
+# Use Bun's internal disk cache for faster installations
+dir = ".bun/install/cache"
+
+[install.lockfile]
+# Generate lockb file for Bun
+path = "bun.lockb"
