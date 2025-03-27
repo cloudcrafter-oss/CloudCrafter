@@ -13,6 +13,7 @@
 		"format-and-lint": "biome check .",
 		"format-and-lint:fix": "biome check . --write",
 		"format-and-lint:hook": "biome check --write --staged --files-ignore-unknown=true --no-errors-on-unmatched  && git update-index --again",
+		"test:install": "cd packages/e2e-testing && bun playwright install --with-deps",
 		"test:e2e": "bun --cwd packages/e2e-testing test",
 		"test:e2e:ui": "bun --cwd packages/e2e-testing test:ui",
 		"test:e2e:debug": "bun --cwd packages/e2e-testing test:debug",

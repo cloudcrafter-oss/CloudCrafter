@@ -13,3 +13,5 @@ public/dist
 .next
 
 .env
+
+.bun/
