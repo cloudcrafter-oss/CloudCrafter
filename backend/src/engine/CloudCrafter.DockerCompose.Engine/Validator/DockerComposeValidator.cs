@@ -5,11 +5,15 @@ namespace CloudCrafter.DockerCompose.Engine.Validator;
 
 public class DockerComposeValidator
 {
-    private readonly DockerComposeEditor _editor;
+    private readonly DockerComposeEditor? _editor;
 
     public DockerComposeValidator(string yamlString)
     {
-        _editor = new DockerComposeEditor(yamlString);
+        try
+        {
+            _editor = new DockerComposeEditor(yamlString);
+        }
+        catch { }
     }
 
     public DockerComposeValidator(DockerComposeEditor editor)
@@ -19,6 +23,10 @@ public class DockerComposeValidator
 
     public async Task<Result> IsValid()
     {
+        if (_editor == null)
+        {
+            return new Result() { IsValid = false, ErrorMessage = "Invalid docker compose editor" };
+        }
         // Create temporary file
         var tempPath = Path.GetTempPath();
         var tempFile = tempPath + ".yaml";
