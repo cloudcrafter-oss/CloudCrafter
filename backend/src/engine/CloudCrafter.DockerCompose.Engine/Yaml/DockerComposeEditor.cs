@@ -273,6 +273,21 @@ public class DockerComposeEditor
             return this;
         }
 
+        public ServiceEditor SetEnvironmentFilename(string environmentFilename)
+        {
+            var serviceNode = editor.GetServiceNode(serviceName);
+
+            if (serviceNode.Children.ContainsKey("env_file"))
+            {
+                var envNode = (YamlScalarNode)serviceNode["env_file"];
+                envNode.Value = environmentFilename;
+                return this;
+            }
+
+            serviceNode!.Add("env_file", environmentFilename);
+            return this;
+        }
+
         public ServiceEditor AddEnvironmentVariable(string key, string value)
         {
             var serviceNode = editor.GetServiceNode(serviceName);

@@ -146,6 +146,18 @@ public class EmptyDockerComposeEditorTest
     }
 
     [Test]
+    public Task ShouldBeAbleToSetEnvFileName()
+    {
+        var editor = new DockerComposeEditor();
+
+        editor.AddService("test").SetEnvironmentFilename(".env-pr-123");
+
+        var yaml = editor.GetYaml();
+
+        return Verify(yaml);
+    }
+
+    [Test]
     public Task ShouldBeAbleToAddNetworkWithExternalNetwork()
     {
         var editor = new DockerComposeEditor();
