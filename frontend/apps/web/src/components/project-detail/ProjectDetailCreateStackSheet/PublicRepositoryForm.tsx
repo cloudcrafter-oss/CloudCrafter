@@ -99,6 +99,7 @@ export const PublicRepositoryForm = ({
 							<FormLabel>Name</FormLabel>
 							<FormControl>
 								<Input
+									data-testid='input-stack-name'
 									disabled={formIsSubmitting}
 									{...field}
 									autoComplete='off'
@@ -120,6 +121,7 @@ export const PublicRepositoryForm = ({
 										{...field}
 										disabled={formIsSubmitting || isPending}
 										autoComplete='off'
+										data-testid='input-git-repository'
 										onBlur={(e) => {
 											field.onBlur()
 											handleValidateRepo(e.target.value)
@@ -160,7 +162,11 @@ export const PublicRepositoryForm = ({
 					<Button type='button' variant='outline' onClick={onBack}>
 						Back
 					</Button>
-					<Button type='submit' disabled={formIsSubmitting}>
+					<Button
+						data-testid='button-add-stack'
+						type='submit'
+						disabled={formIsSubmitting}
+					>
 						{formIsSubmitting && (
 							<Loader2 className='h-4 w-4 animate-spin mr-2' />
 						)}

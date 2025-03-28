@@ -269,6 +269,7 @@ export function EnvironmentVariableSheet({
 										<FormControl>
 											<Input
 												{...field}
+												data-testid='environment-variable-key'
 												placeholder='VARIABLE_NAME'
 												className='uppercase font-mono'
 												onChange={(e) =>
@@ -297,6 +298,7 @@ export function EnvironmentVariableSheet({
 											<div className='relative'>
 												<Textarea
 													{...field}
+													data-testid='environment-variable-value'
 													placeholder='Variable value'
 													className='font-mono pr-8'
 													rows={3}
@@ -328,14 +330,29 @@ export function EnvironmentVariableSheet({
 											disabled={isEditMode && editingVariable?.isInherited}
 										>
 											<FormControl>
-												<SelectTrigger>
+												<SelectTrigger data-testid='environment-variable-type-select'>
 													<SelectValue placeholder='Select variable type' />
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
-												<SelectItem value='0'>Build Time</SelectItem>
-												<SelectItem value='1'>Runtime</SelectItem>
-												<SelectItem value='2'>Both</SelectItem>
+												<SelectItem
+													data-testid='environment-variable-type-build-time'
+													value='0'
+												>
+													Build Time
+												</SelectItem>
+												<SelectItem
+													data-testid='environment-variable-type-runtime'
+													value='1'
+												>
+													Runtime
+												</SelectItem>
+												<SelectItem
+													data-testid='environment-variable-type-both'
+													value='2'
+												>
+													Both
+												</SelectItem>
 											</SelectContent>
 										</Select>
 										<FormMessage />
@@ -374,6 +391,7 @@ export function EnvironmentVariableSheet({
 										<FormControl>
 											<Textarea
 												{...field}
+												data-testid='environment-variable-description'
 												placeholder='Variable description'
 												className='font-mono'
 												rows={3}
@@ -420,7 +438,12 @@ export function EnvironmentVariableSheet({
 							/>
 
 							<SheetFooter className='pt-4'>
-								<Button type='submit' disabled={isLoading} className='ml-auto'>
+								<Button
+									data-testid='environment-variable-submit'
+									type='submit'
+									disabled={isLoading}
+									className='ml-auto'
+								>
 									{isLoading
 										? isEditMode
 											? 'Updating...'

@@ -29,7 +29,7 @@ services:
       - JwtSettings__AccessTokenValidInSeconds=600
       - JwtSettings__RefreshTokenValidInSeconds=900
       - SPECIAL_TESTHOST_PATH=/test-host/id_rsa
-      - CorsSettings__AllowedOrigins__0=http://frontend-7f000001.nip.io
+      - CorsSettings__AllowedOrigins__0=http://frontend-7f000001.nip.io:3001
 
   agent:
     container_name: agent

@@ -2,6 +2,8 @@
 	"private": true,
 	"scripts": {
 		"build": "turbo build",
+		"build:force": "turbo build --force",
+		"start": "turbo start",
 		"dev": "turbo dev",
 		"lint": "turbo lint -- --fix",
 		"typecheck": "turbo typecheck",
@@ -25,6 +27,6 @@
 		"turbo": "canary"
 	},
 	"packageManager": "bun@1.0.35",
-	"name": "with-vite",
+	"name": "cloudcrafter",
 	"workspaces": ["apps/*", "packages/*"]
 }

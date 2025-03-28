@@ -45,6 +45,7 @@ const sections = [
 	{
 		id: 'environment',
 		title: 'Environment Variables',
+		testId: 'subsection-environment-variables',
 		description: 'Manage environment variables for your stack',
 		subTabs: [
 			{
@@ -154,6 +155,7 @@ const StackConfigPage: React.FC<{ stackDetails: StackDetailDto }> = ({
 					<div key={section.id} className='w-full'>
 						<button
 							type='button'
+							data-testid={section.testId}
 							onClick={() => {
 								const newSubTabId = section.subTabs[0].id
 								setActiveSection(section.id)

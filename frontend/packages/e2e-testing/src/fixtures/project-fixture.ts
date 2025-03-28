@@ -1,10 +1,17 @@
 import type { APIRequestContext, Page } from '@playwright/test'
-import { test as base } from './playwright-fixture'
+import { test as base, expect } from './playwright-fixture'
 import { UserFixture } from './user-fixture'
 export * from '@playwright/test'
-import type { ProjectDto } from '../__generated__'
-import { ProjectListPage } from '../pages/projects/projects.index'
-import { generateProjectName } from '../utils/fake-data'
+import { isAxiosError } from 'axios'
+import type { ProjectDto, StackCreatedDto } from '../__generated__'
+import {
+	deleteProject as apiDeleteProject,
+	createProject,
+	getProjects,
+	getServers,
+	postCreateStack,
+} from '../__generated__'
+import { generateProjectName, generateStackName } from '../utils/fake-data'
 
 /**
  * Project fixture that extends UserFixture with project creation capabilities
@@ -13,62 +20,76 @@ export class ProjectFixture extends UserFixture {
 	projects: ProjectDto[] = []
 
 	/**
-	 * Delete a project via UI
-	 * @param projectName Name of the project to delete
-	 */
-	async deleteProject(projectName: string): Promise<void> {
-		// Go to projects page
-		await this.page.goto('/admin/projects')
-
-		const projectListPage = ProjectListPage(this.page)
-
-		// Open project actions menu
-		await projectListPage.openProjectActions(projectName)
-
-		// Click delete
-		await projectListPage.actions.delete.click()
-
-		// Confirm deletion
-		await projectListPage.confirmDelete.click()
-
-		// Remove from tracked projects
-		this.projects = this.projects.filter((p) => p.name !== projectName)
-	}
-
-	/**
 	 * Clean up all created projects
 	 */
 	async cleanupProjects(): Promise<void> {
 		if (this.projects.length === 0) return
 
-		// Go to projects page
-		await this.page.goto('/admin/projects')
-
-		const projectListPage = ProjectListPage(this.page)
-
 		// Delete each project in reverse order (newest first)
 		for (const project of [...this.projects].reverse()) {
 			try {
-				// Open project actions menu
-				await projectListPage.openProjectActions(project.name)
-
-				// Click delete
-				await projectListPage.actions.delete.click()
-
-				// Confirm deletion
-				await projectListPage.confirmDelete.click()
-
-				// Wait for project to be removed
-				await this.page
-					.getByText(project.name)
-					.waitFor({ state: 'detached', timeout: 5000 })
+				await apiDeleteProject(project.id, this.getApiClientConfig())
 			} catch (error) {
+				// Ignore 404 errors (project already deleted)
+				if (isAxiosError(error) && error.response?.status === 404) {
+					// Project already deleted, just continue
+					continue
+				}
 				console.error(`Failed to clean up project ${project.name}:`, error)
 			}
 		}
 
 		this.projects = []
 	}
+
+	async fixtureCreateProject(projectName: string): Promise<ProjectDto> {
+		const result = await createProject(
+			{ name: projectName },
+			this.getApiClientConfig(),
+		)
+
+		this.projects.push(result)
+
+		// fetch latest project
+		const projects = await getProjects(
+			{ includeEnvironments: true },
+			this.getApiClientConfig(),
+		)
+		const project = projects.find((p) => p.id === result.id)
+		if (!project) {
+			throw new Error(`Project ${result.name} not found after creation`)
+		}
+
+		return project
+	}
+
+	async fixtureCreateStack(project: ProjectDto): Promise<StackCreatedDto> {
+		expect(project.environments.length).toBeGreaterThan(0)
+		expect(project.environments[0].id).toBeDefined()
+
+		const client = this.getApiClientConfig()
+
+		const servers = await getServers(client)
+		expect(servers.length).toBeGreaterThan(0)
+		expect(servers[0].id).toBeDefined()
+
+		const result = await postCreateStack(
+			{
+				environmentId: project.environments[0].id,
+				name: generateStackName(),
+				gitRepository: 'https://github.com/cloudcrafter-oss/demo-examples',
+				serverId: servers[0].id,
+			},
+			client,
+		)
+
+		return result
+	}
+}
+
+export interface StackDetails {
+	stack: StackCreatedDto
+	project: ProjectDto
 }
 
 /**
@@ -77,7 +98,9 @@ export class ProjectFixture extends UserFixture {
 export const test = base.extend<{
 	project: ProjectDto
 	page: Page
+	projectFixture: ProjectFixture
 	request: APIRequestContext
+	stack: StackDetails
 }>({
 	project: async ({ browser, page, request }, use) => {
 		// Create project fixture
@@ -94,5 +117,25 @@ export const test = base.extend<{
 
 		// Clean up projects after test
 		await projectFixture.cleanupProjects()
+	},
+
+	projectFixture: async ({ browser, page, request }, use) => {
+		// Create project fixture
+		const projectFixture = new ProjectFixture(page, request)
+
+		await projectFixture.loginViaApi()
+
+		// Make fixture available for use in tests
+		await use(projectFixture)
+	},
+
+	stack: async ({ projectFixture, project }, use) => {
+		// Make fixture available for use in tests
+
+		const result: StackDetails = {
+			project,
+			stack: await projectFixture.fixtureCreateStack(project),
+		}
+		await use(result)
 	},
 })

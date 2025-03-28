@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { test as baseTest, expect } from '@playwright/test'
+import { expect } from '@playwright/test'
+import { test as baseTest } from '../fixtures/base-fixture'
 import { env } from '../infra/test-env'
 export * from '@playwright/test'
 

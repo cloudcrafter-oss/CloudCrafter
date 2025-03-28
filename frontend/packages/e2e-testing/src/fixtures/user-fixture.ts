@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test'
 import type { APIRequestContext, Page } from '@playwright/test'
-import { type ProjectDto, createProject, postLoginUser } from '../__generated__'
+import { postLoginUser } from '../__generated__'
 import { env } from '../infra/test-env'
 export * from '@playwright/test'
 /**
@@ -61,6 +61,19 @@ export class UserFixture {
 	}
 
 	/**
+	 * Get API client configuration with baseURL and authorization headers
+	 * @returns Configuration object with baseURL and headers
+	 */
+	getApiClientConfig() {
+		return {
+			baseURL: this.getBaseUrl(),
+			headers: {
+				Authorization: `Bearer ${this.authToken}`,
+			},
+		}
+	}
+
+	/**
 	 * Login via API (faster than UI login)
 	 */
 	async loginViaApi(): Promise<void> {
@@ -91,42 +104,4 @@ export class UserFixture {
 	}
 
 	// Custom creators
-
-	async fixtureCreateProject(projectName: string): Promise<ProjectDto> {
-		const url = this.getBaseUrl()
-
-		const result = await createProject(
-			{ name: projectName },
-			{
-				baseURL: url,
-				headers: {
-					Authorization: `Bearer ${this.authToken}`,
-				},
-			},
-		)
-
-		return result
-	}
 }
-
-// /**
-//  * Extend Playwright's test with a user fixture
-//  */
-// export const test = base.extend<{
-// 	authenticatedUser: UserFixture
-// }>({
-// 	authenticatedUser: async ({ browser, page, request }, use) => {
-// 		// Create browser context with storage state isolation
-// 		const context = await browser.newContext()
-
-// 		// Create user fixture
-// 		const user = new UserFixture(context, page, request)
-
-// 		// Login via API
-// 		await user.login()
-// 		await user.loginViaApi()
-
-// 		// Make fixture available for use in tests
-// 		await use(user)
-// 	},
-// })

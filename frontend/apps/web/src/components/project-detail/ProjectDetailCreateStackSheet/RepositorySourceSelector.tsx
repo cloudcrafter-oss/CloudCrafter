@@ -41,7 +41,9 @@ export const RepositorySourceSelector = ({
 					: 'Connect to a private repository'}
 			</div>
 			<div className='flex justify-end'>
-				<Button onClick={onContinue}>Continue</Button>
+				<Button data-testid='btn-continue' onClick={onContinue}>
+					Continue
+				</Button>
 			</div>
 		</div>
 	)

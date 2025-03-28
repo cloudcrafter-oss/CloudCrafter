@@ -139,6 +139,7 @@ export default async function ProjectEnvironmentPage({ params }: PageProps) {
 						<div className='flex space-x-2'>
 							<ProjectDetailCreateStackSheet
 								environmentId={routeData['environment-uuid']}
+								projectId={routeData['project-uuid']}
 							/>
 							<Button size='sm' variant='outline'>
 								<RefreshCw className='h-4 w-4 mr-1' />

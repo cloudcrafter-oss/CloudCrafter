@@ -35,17 +35,22 @@ export const ServerSelect = <T extends { serverId: string }>({
 					<FormControl>
 						<Select
 							disabled={inputDisabled}
+							data-testid='server-select'
 							onValueChange={field.onChange}
 							value={field.value}
 						>
-							<SelectTrigger>
+							<SelectTrigger data-testid='server-select-trigger'>
 								{field.value
 									? servers?.find((server) => server.id === field.value)?.name
 									: 'Select a server'}
 							</SelectTrigger>
 							<SelectContent>
 								{servers?.map((server) => (
-									<SelectItem key={server.id} value={server.id}>
+									<SelectItem
+										data-testid={`server-select-item-${server.id}`}
+										key={server.id}
+										value={server.id}
+									>
 										{server.name} ({server.ipAddress})
 									</SelectItem>
 								))}

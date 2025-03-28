@@ -338,7 +338,10 @@ export const EnvironmentVariables: React.FC<{
 							stackId={stackDetails.id}
 							onSuccess={() => environmentGroupsHook.refetch()}
 						/>
-						<Button onClick={() => setSheetOpen(true)}>
+						<Button
+							data-testid='add-variable'
+							onClick={() => setSheetOpen(true)}
+						>
 							<PlusCircle className='h-4 w-4 mr-2' />
 							Add Variable
 						</Button>
