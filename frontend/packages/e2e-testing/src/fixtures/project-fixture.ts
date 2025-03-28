@@ -112,10 +112,6 @@ export const test = base.extend<{
 
 		const project = await projectFixture.fixtureCreateProject(projectName)
 
-		page.on('console', (msg) => {
-			if (msg.type() === 'error') console.log(`Error text: "${msg.text()}"`)
-		})
-
 		// Make fixture available for use in tests
 		await use(project)
 

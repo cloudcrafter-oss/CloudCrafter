@@ -4,6 +4,11 @@ export const test = base.extend({
 	page: async ({ page }, use) => {
 		const messages: ConsoleMessage[] = []
 		page.on('console', (m: ConsoleMessage) => messages.push(m))
+
+		page.on('console', (msg) => {
+			if (msg.type() === 'error') console.log(`Error text: "${msg.text()}"`)
+		})
+
 		await use(page)
 
 		const humanFriendlyErrorMessages = messages
