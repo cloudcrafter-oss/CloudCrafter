@@ -13,6 +13,9 @@ public class DockerComposeEditor
     private static readonly Regex ServiceNameRegex =
         new(@"^[a-z0-9][a-z0-9_-]*$", RegexOptions.Compiled);
 
+    private readonly Dictionary<string, EnvironmentVariableCollection> _environmentVariables =
+        new();
+
     private readonly YamlMappingNode rootNode;
     private readonly YamlMappingNode servicesNode;
 
@@ -44,6 +47,22 @@ public class DockerComposeEditor
         rootNode = (YamlMappingNode)yaml.Documents[0].RootNode;
         servicesNode = new YamlMappingNode();
         rootNode.Add("services", servicesNode);
+    }
+
+    public void SetEnvironmentVariables(
+        string filename,
+        List<EnvironmentVariable> environmentVariables
+    )
+    {
+        _environmentVariables.Add(
+            filename,
+            new EnvironmentVariableCollection(environmentVariables)
+        );
+    }
+
+    public Dictionary<string, EnvironmentVariableCollection> GetEnvironmentVariables()
+    {
+        return _environmentVariables;
     }
 
     private bool IsValidServiceName(string serviceName)
@@ -155,7 +174,7 @@ public class DockerComposeEditor
     public Task<DockerComposeValidator.Result> IsValid()
     {
         var yaml = GetYaml();
-        var validator = new DockerComposeValidator(yaml);
+        var validator = new DockerComposeValidator(this);
 
         return validator.IsValid();
     }
