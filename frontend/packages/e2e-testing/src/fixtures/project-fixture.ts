@@ -87,7 +87,7 @@ export class ProjectFixture extends UserFixture {
 	}
 }
 
-interface StackDetails {
+export interface StackDetails {
 	stack: StackCreatedDto
 	project: ProjectDto
 }

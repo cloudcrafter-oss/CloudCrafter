@@ -13,6 +13,14 @@ export const test = base.extend({
 
 		const humanFriendlyErrorMessages = messages
 			.filter((m) => m.type() === 'error')
+			.filter(
+				(m) =>
+					!m
+						.text()
+						.includes(
+							'Failed to start the connection: Error: The connection was stopped during negotiation',
+						),
+			)
 			.map((m) => m.text())
 		expect(humanFriendlyErrorMessages).toEqual([])
 	},

@@ -22,6 +22,7 @@ export const useStackHub = ({
 					return session?.tokens?.access || ''
 				},
 			})
+
 			.withAutomaticReconnect()
 			.build()
 
@@ -50,7 +51,16 @@ export const useStackHub = ({
 			.then(() => {
 				connection.invoke('JoinChannel', stack.id)
 			})
-			.catch((err) => console.error(err))
+			.catch((err) => {
+				if (
+					err instanceof signalR.AbortError &&
+					err.message === 'The connection was stopped during negotiation.'
+				) {
+					console.log('Aborted')
+				} else {
+					console.error(err)
+				}
+			})
 
 		return () => {
 			try {
