@@ -105,25 +105,3 @@ export class UserFixture {
 
 	// Custom creators
 }
-
-// /**
-//  * Extend Playwright's test with a user fixture
-//  */
-// export const test = base.extend<{
-// 	authenticatedUser: UserFixture
-// }>({
-// 	authenticatedUser: async ({ browser, page, request }, use) => {
-// 		// Create browser context with storage state isolation
-// 		const context = await browser.newContext()
-
-// 		// Create user fixture
-// 		const user = new UserFixture(context, page, request)
-
-// 		// Login via API
-// 		await user.login()
-// 		await user.loginViaApi()
-
-// 		// Make fixture available for use in tests
-// 		await use(user)
-// 	},
-// })
