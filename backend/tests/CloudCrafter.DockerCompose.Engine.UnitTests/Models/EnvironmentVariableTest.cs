@@ -1,17 +1,11 @@
-﻿namespace CloudCrafter.DockerCompose.Engine.UnitTests.Models;
-
-using System;
-using System.IO;
-using System.Linq;
-using CloudCrafter.DockerCompose.Engine.Models;
+﻿using CloudCrafter.DockerCompose.Engine.Models;
 using FluentAssertions;
-using NUnit.Framework;
+
+namespace CloudCrafter.DockerCompose.Engine.UnitTests.Models;
 
 [TestFixture]
 public class EnvironmentVariableTests
 {
-    private const string TestEnvFile = "test.env";
-
     [SetUp]
     public void Setup()
     {
@@ -31,6 +25,8 @@ public class EnvironmentVariableTests
             File.Delete(TestEnvFile);
         }
     }
+
+    private const string TestEnvFile = "test.env";
 
     [Test]
     public void EnvFileRepresentation_SimpleValue_ShouldProduceCorrectLine()
@@ -56,7 +52,7 @@ public class EnvironmentVariableTests
     public void EnvFileRepresentation_MultilineValue_ShouldQuote()
     {
         // Arrange
-        string multilineValue =
+        var multilineValue =
             @"This is a
 multiline value
 with several lines";
@@ -77,10 +73,10 @@ with several lines";
         {
             Variables = new List<EnvironmentVariable>
             {
-                new EnvironmentVariable { Key = "DB_HOST", Value = "localhost" },
-                new EnvironmentVariable { Key = "DB_PORT", Value = "5432" },
-                new EnvironmentVariable { Key = "DB_USER", Value = "test user" },
-                new EnvironmentVariable
+                new() { Key = "DB_HOST", Value = "localhost" },
+                new() { Key = "DB_PORT", Value = "5432" },
+                new() { Key = "DB_USER", Value = "test user" },
+                new()
                 {
                     Key = "MULTILINE_CONFIG",
                     Value =
@@ -115,7 +111,7 @@ with special chars: #!@$%"
     public void EnvironmentVariable_Parse_SimpleValue_ShouldWork()
     {
         // Arrange
-        string line = "SIMPLE_KEY=simple_value";
+        var line = "SIMPLE_KEY=simple_value";
 
         // Act
         var variable = EnvironmentVariable.Parse(line);
@@ -130,7 +126,7 @@ with special chars: #!@$%"
     public void EnvironmentVariable_Parse_QuotedValue_ShouldRemoveQuotes()
     {
         // Arrange
-        string line = "QUOTED_KEY='value with spaces'";
+        var line = "QUOTED_KEY='value with spaces'";
 
         // Act
         var variable = EnvironmentVariable.Parse(line);
@@ -145,7 +141,7 @@ with special chars: #!@$%"
     public void EnvironmentVariable_Parse_CommentLine_ShouldReturnNull()
     {
         // Arrange
-        string line = "# This is a comment";
+        var line = "# This is a comment";
 
         // Act
         var variable = EnvironmentVariable.Parse(line);
@@ -158,7 +154,7 @@ with special chars: #!@$%"
     public void EnvironmentVariableCollection_FileNotFound_ShouldThrowFileNotFoundException()
     {
         // Arrange
-        string nonExistentFile = "non_existent.env";
+        var nonExistentFile = "non_existent.env";
 
         // Act & Assert
         FluentActions
@@ -176,15 +172,65 @@ with special chars: #!@$%"
         {
             Variables = new List<EnvironmentVariable>
             {
-                new EnvironmentVariable { Key = "SIMPLE_KEY", Value = "simplevalue" },
-                new EnvironmentVariable { Key = "SPACED_KEY", Value = "value with spaces" },
-                new EnvironmentVariable
+                new() { Key = "SIMPLE_KEY", Value = "simplevalue" },
+                new() { Key = "SPACED_KEY", Value = "value with spaces" },
+                new()
                 {
                     Key = "MULTILINE_CONFIG",
                     Value =
                         @"This is a
 multiline configuration
 with special chars: #!@$%",
+                },
+            },
+        };
+
+        // Act
+        var fileContents = collection.GetFileContents();
+
+        return Verify(fileContents);
+    }
+
+    [Test]
+    public Task GetFileContents_ShouldProduceCorrectFileFormat_WithGrouping()
+    {
+        var groupDatabases = new EnvironmentVariableGroup(
+            "Databases",
+            "This is a group for databases"
+        );
+        var authServices = new EnvironmentVariableGroup(
+            "Auth Services",
+            "This is a group for auth services"
+        );
+        // Arrange
+        var collection = new EnvironmentVariableCollection
+        {
+            Variables = new List<EnvironmentVariable>
+            {
+                new()
+                {
+                    Key = "DB_HOST",
+                    Value = "localhost",
+                    Group = groupDatabases,
+                },
+                new()
+                {
+                    Key = "DB_USER",
+                    Value = "test user",
+                    Group = groupDatabases,
+                },
+                new()
+                {
+                    Key = "DB_SSL",
+                    Value = "true",
+                    Group = groupDatabases,
+                },
+                new() { Key = "DUMMY", Value = "dummy" },
+                new()
+                {
+                    Key = "AUTH_DEBUG",
+                    Value = "true",
+                    Group = authServices,
                 },
             },
         };

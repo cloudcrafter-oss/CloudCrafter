@@ -20,9 +20,26 @@ public class EnvironmentVariableCollection
     {
         var sb = new StringBuilder();
 
-        foreach (var variable in Variables)
+        var groupedByGroup = Variables
+            .GroupBy(v => v.Group?.Name)
+            .OrderBy(g => g.Key == null ? 1 : 0) // Null keys last
+            .ThenBy(g => g.Key); // Then alphabetical order
+
+        foreach (var group in groupedByGroup)
         {
-            sb.AppendLine(variable.EnvFileRepresentation());
+            var groupName = group.Key ?? "Non-grouped environment variables";
+
+            sb.AppendLine($"# {groupName}");
+            var groupDescription = group.First().Group?.Description;
+            if (groupDescription != null)
+            {
+                sb.AppendLine($"# {groupDescription}");
+            }
+
+            foreach (var variable in group.OrderBy(v => v.Key))
+            {
+                sb.AppendLine(variable.EnvFileRepresentation());
+            }
         }
 
         return sb.ToString();
@@ -47,15 +64,15 @@ public class EnvironmentVariableCollection
         var fileContent = File.ReadAllText(filePath);
 
         // State for parsing
-        bool inSingleQuote = false;
-        bool inDoubleQuote = false;
-        bool escaped = false;
+        var inSingleQuote = false;
+        var inDoubleQuote = false;
+        var escaped = false;
         var currentLine = new StringBuilder();
 
         // Process the file character by character to handle multi-line variables
-        for (int i = 0; i < fileContent.Length; i++)
+        for (var i = 0; i < fileContent.Length; i++)
         {
-            char c = fileContent[i];
+            var c = fileContent[i];
             char? nextChar = i < fileContent.Length - 1 ? fileContent[i + 1] : null;
 
             // Handle escape sequences
@@ -87,7 +104,7 @@ public class EnvironmentVariableCollection
                 // If we're at a line end and not in quotes, process the line
                 else if (c == '\n' || (c == '\r' && nextChar != '\n'))
                 {
-                    string line = currentLine.ToString().Trim();
+                    var line = currentLine.ToString().Trim();
                     if (!string.IsNullOrEmpty(line) && !line.StartsWith("#"))
                     {
                         try
@@ -104,6 +121,7 @@ public class EnvironmentVariableCollection
                             Console.WriteLine($"Error parsing line: {ex.Message}");
                         }
                     }
+
                     currentLine.Clear();
                 }
                 // Skip \r in \r\n sequence
@@ -121,7 +139,7 @@ public class EnvironmentVariableCollection
         }
 
         // Process any remaining content
-        string remainingLine = currentLine.ToString().Trim();
+        var remainingLine = currentLine.ToString().Trim();
         if (!string.IsNullOrEmpty(remainingLine) && !remainingLine.StartsWith("#"))
         {
             try

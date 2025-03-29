@@ -9,6 +9,8 @@ public class EnvironmentVariable
     public required string Key { get; init; }
     public required string Value { get; init; }
 
+    public EnvironmentVariableGroup? Group { get; init; }
+
     private bool RequiresQuoting()
     {
         return Value.Contains(' ')
@@ -54,8 +56,8 @@ public class EnvironmentVariable
             throw new FormatException($"Invalid environment variable format: {line}");
         }
 
-        string key = parts[0].Trim();
-        string value = ParseValue(parts[1].Trim());
+        var key = parts[0].Trim();
+        var value = ParseValue(parts[1].Trim());
 
         return new EnvironmentVariable { Key = key, Value = value };
     }
