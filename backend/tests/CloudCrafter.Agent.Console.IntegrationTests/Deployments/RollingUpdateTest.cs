@@ -4,6 +4,8 @@ using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.Agent.Runner.IO;
 using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps.Nixpacks;
 using CloudCrafter.DockerCompose.Engine.Yaml;
 using CloudCrafter.DockerCompose.Shared.Labels;
 using CloudCrafter.Shared.Utils;
@@ -52,6 +54,7 @@ public class RollingUpdateTest : AbstractTraefikTest
             }
         );
 
+        service.SetEnvironmentFilename(".env");
         service.AddLabels(labelService);
 
         var dockerComposeBase64 = dockerComposeEditor.ToBase64();
@@ -72,168 +75,106 @@ public class RollingUpdateTest : AbstractTraefikTest
                 // In production envs, this will have the application stack guid in it
                 DockerComposeDirectory = "/tmp/cloudcrafter-data/my-application",
             },
-            EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
-            {
-                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>
-                {
-                    {
-                        "DUMMY_ENV_VAR",
-                        new DeploymentRecipeEnvironmentVariable
-                        {
-                            Name = "DUMMY_ENV_VAR",
-                            Value = dummyEnv,
-                            IsBuildVariable = true,
-                        }
-                    },
-                },
-            },
             BuildOptions = new DeploymentBuildOptions
             {
                 Steps = new List<DeploymentBuildStep>
                 {
-                    new()
-                    {
-                        Name = "Check if network exists",
-                        Description = "Check if network exists",
-                        Type = DeploymentBuildStepType.DockerValidateNetworksExists,
-                        Params = new Dictionary<string, object>
+                    new NetworkExistsDeploymentStepGenerator("cloudcrafter").Generate(),
+                    new FetchGitRepositoryDeploymentStepGenerator(
+                        new FetchGitRepositoryDeploymentStepGenerator.Args
                         {
+                            Repository = "https://github.com/cloudcrafter-oss/demo-examples.git",
+                            Commit = "HEAD",
+                        }
+                    ).Generate(),
+                    new DetermineNixpacksBuildpackBuildStepGenerator(
+                        new DetermineNixpacksBuildpackBuildStepGenerator.Args
+                        {
+                            Path = "nixpacks-node-server",
+                        }
+                    ).Generate(),
+                    new GenerateNixpacksPlanBuildStepGenerator(
+                        new GenerateNixpacksPlanBuildStepGenerator.Args
+                        {
+                            Path = "nixpacks-node-server",
+                        }
+                    ).Generate(),
+                    new AlterNixpacksBuildPlanBuildStepGenerator(
+                        new AlterNixpacksBuildPlanBuildStepGenerator.Args
+                        {
+                            AddPackages = ["iputils-ping"],
+                        }
+                    ).Generate(),
+                    new WriteEnvironmentVariablesFileToFilesystemStepGenerator(
+                        new WriteEnvironmentVariablesFileToFilesystemStepGenerator.Args
+                        {
+                            FileName = ".env",
+                            FileContents = $"DUMMY_ENV_VAR={dummyEnv}",
+                        }
+                    ).Generate(),
+                    new NixpacksWritePlanToFsBuildStepGenerator(
+                        new NixpacksWritePlanToFsBuildStepGenerator.Args
+                        {
+                            Path = "nixpxacks-node-server",
+                        }
+                    ).Generate(),
+                    new NixpacksBuildDockerImageBuildStepGenerator(
+                        new NixpacksBuildDockerImageBuildStepGenerator.Args
+                        {
+                            Path = "nixpacks-node-server",
+                            ImageRepository = mainImageRepository,
+                            ImageTag = tag,
+                            DisableBuildCache = true,
+                            BuildArgs = new Dictionary<string, object>
                             {
-                                "networks",
-                                new List<string> { "cloudcrafter" }
+                                { "BUILD_MOMENT", DateTime.UtcNow.ToString("F") },
+                                { "DUMMY_BUILD_ENV_VAR", dummyEnv },
                             },
-                        },
-                    },
-                    new()
-                    {
-                        Name = "Fetch git",
-                        Description = "Fetch the git application",
-                        Type = DeploymentBuildStepType.FetchPublicGitRepository,
-                        Params = new Dictionary<string, object>
+                        }
+                    ).Generate(),
+                    new WriteDockerComposeBuildStepGenerator(
+                        new WriteDockerComposeBuildStepGenerator.Args
                         {
-                            { "repo", "https://github.com/cloudcrafter-oss/demo-examples.git" },
-                            { "commit", "HEAD" },
-                        },
-                    },
-                    new()
-                    {
-                        Name = "Determine Buildpack",
-                        Description = "Determine the buildpack",
-                        Type = DeploymentBuildStepType.NixpacksDetermineBuildPack,
-                        Params = new Dictionary<string, object>
+                            DockerComposeFileName = "docker-compose.yml",
+                        }
+                    ).Generate(),
+                    new DockerComposeUpBuildStepGenerator(
+                        new DockerComposeUpBuildStepGenerator.Args
                         {
-                            { "path", "nixpacks-node-server" },
-                        },
-                    },
-                    new()
-                    {
-                        Name = "Generate Build plan",
-                        Description = "Generate the build plan",
-                        Type = DeploymentBuildStepType.NixpacksGeneratePlan,
-                        Params = new Dictionary<string, object>
+                            DockerComposeFile = "docker-compose.yml",
+                            StoreServiceNames = true,
+                        }
+                    ).Generate(),
+                    new ContainerHealthCheckDeploymentStepGenerator(
+                        new ContainerHealthCheckDeploymentStepGenerator.Args
                         {
-                            { "path", "nixpacks-node-server" },
-                        },
-                    },
-                    new()
-                    {
-                        Name = "Alter plan",
-                        Description = "Alter plan",
-                        Type = DeploymentBuildStepType.NixpacksAlterPlan,
-                        Params = new Dictionary<string, object>
-                        {
-                            {
-                                "packages",
-                                new List<string> { "iputils-ping" }
-                            },
-                        },
-                    },
-                    new()
-                    {
-                        Name = "Write plan to filesystem",
-                        Description = "Write plan to filesystem",
-                        Type = DeploymentBuildStepType.NixpacksWritePlanToFileSystem,
-                        Params = new Dictionary<string, object>
-                        {
-                            { "path", "nixpacks-node-server" },
-                        },
-                    },
-                    new()
-                    {
-                        Name = "Build Nixpacks docker image",
-                        Description = "Builds Nixpacks docker image",
-                        Type = DeploymentBuildStepType.NixpacksBuildDockerImage,
-                        Params = new Dictionary<string, object>
-                        {
-                            { "path", "nixpacks-node-server" },
-                            { "image", mainImageRepository },
-                            { "tag", tag },
-                            { "disableCache", true },
-                            {
-                                "env",
-                                new Dictionary<string, object>
+                            DockerComposeSettings =
+                                new ContainerHealthCheckDeploymentStepGenerator.ArgsComposeSettings
                                 {
-                                    { "BUILD_MOMENT", DateTime.UtcNow.ToString("F") },
-                                }
-                            },
-                        },
-                    },
-                    new()
-                    {
-                        Name = "Write docker compose file",
-                        Description = "Write docker compose file",
-                        Type = DeploymentBuildStepType.DockerComposeWriteToFileSystem,
-                        Params = new Dictionary<string, object>
-                        {
-                            { "dockerComposeFile", "docker-compose.yml" },
-                        },
-                    },
-                    new()
-                    {
-                        Name = "Start docker compose",
-                        Description = "Start docker compose",
-                        Type = DeploymentBuildStepType.DockerComposeUp,
-                        Params = new Dictionary<string, object>
-                        {
-                            { "dockerComposeFile", "docker-compose.yml" },
-                            { "storeServiceNames", true },
-                        },
-                    },
-                    new()
-                    {
-                        Name = "Check if container is healthy",
-                        Description = "Check if container is healthy",
-                        Type = DeploymentBuildStepType.ContainerHealthCheck,
-                        Params = new Dictionary<string, object>
-                        {
+                                    FetchServicesFromContext = true,
+                                },
+                            Services = new Dictionary<
+                                string,
+                                ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings
+                            >
                             {
-                                "dockerComposeSettings",
-                                new Dictionary<string, object>
                                 {
-                                    { "fetchServicesFromContext", true },
-                                }
-                            },
-                            {
-                                "services",
-                                new Dictionary<string, object>
-                                {
+                                    $"frontend-{tag}",
+                                    new ContainerHealthCheckDeploymentStepGenerator.ArgsHealthCheckSettings
                                     {
-                                        $"frontend-{tag}",
-                                        new Dictionary<string, object>
-                                        {
-                                            { "httpMethod", "get" },
-                                            { "httpSchema", "http" },
-                                            { "httpHost", "localhost" },
-                                            { "httpPath", "/" },
-                                            { "httpPort", 3000 },
-                                            { "expectedResponseCode", 200 },
-                                            { "retries", 4 },
-                                        }
-                                    },
-                                }
+                                        HttpMethod = "get",
+                                        HttpSchema = "http",
+                                        HttpHost = "localhost",
+                                        HttpPath = "/",
+                                        HttpPort = 3000,
+                                        ExpectedHttpStatusCode = 200,
+                                        MaxRetries = 4,
+                                        CheckForDockerHealth = null,
+                                    }
+                                },
                             },
-                        },
-                    },
+                        }
+                    ).Generate(),
                 },
             },
         };
@@ -327,10 +268,20 @@ public class RollingUpdateTest : AbstractTraefikTest
             "DUMMY_ENV_VAR: firstTag"
         );
 
+        await ShouldHaveEndpointResponse(
+            "http://frontend-rolling.127.0.0.1.sslip.io:8888/all-env",
+            "\"DUMMY_BUILD_ENV_VAR\": \"firstTag\""
+        );
+
         await _deploymentService.DeployAsync(_secondRecipe);
         await ShouldHaveEndpointResponse(
             "http://frontend-rolling.127.0.0.1.sslip.io:8888/env",
             "DUMMY_ENV_VAR: secondTag"
+        );
+
+        await ShouldHaveEndpointResponse(
+            "http://frontend-rolling.127.0.0.1.sslip.io:8888/all-env",
+            "\"DUMMY_BUILD_ENV_VAR\": \"secondTag\""
         );
     }
 }

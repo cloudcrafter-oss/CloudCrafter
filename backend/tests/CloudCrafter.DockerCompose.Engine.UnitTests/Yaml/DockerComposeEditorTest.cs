@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using CloudCrafter.DockerCompose.Engine.Exceptions;
+using CloudCrafter.DockerCompose.Engine.Models;
 using CloudCrafter.DockerCompose.Engine.Yaml;
 using FluentAssertions;
 
@@ -12,6 +13,11 @@ public class DockerComposeEditorTest
     public void Setup()
     {
         _editor = new DockerComposeEditor(yamlString);
+
+        _editor.SetEnvironmentVariables(
+            ".db-env",
+            [new EnvironmentVariable { Key = "MYSQL_ROOT_PASSWORD", Value = "example" }]
+        );
     }
 
     private readonly string yamlString =
@@ -32,6 +38,7 @@ services:
       MYSQL_ROOT_PASSWORD: example
     volumes:
       - db_data:/var/lib/mysql
+    env_file: .db-env
     networks:
       - lampnet
 

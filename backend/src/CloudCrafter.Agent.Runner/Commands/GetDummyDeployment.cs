@@ -51,10 +51,6 @@ public static class GetDummyDeployment
             {
                 Name = "My Application",
                 Application = new DeploymentRecipeApplicationInfo { Id = request.ApplicationId },
-                EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
-                {
-                    Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),
-                },
                 Destination = new DeploymentRecipeDestination
                 {
                     RootDirectory = "/tmp/cloudcrafter/" + randomString,

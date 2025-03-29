@@ -41,10 +41,10 @@ public class NixpacksBuildDockerImageHandler(IMessagePump pump, INixpacksHelper 
 
         var image = $"{parameters.Image}:{parameters.Tag}";
 
-        var buildEnvironmentVariables = context
-            .Recipe.EnvironmentVariables.Variables.Select(x => x.Value)
-            .Where(x => x.IsBuildVariable)
-            .ToDictionary(x => x.Name, x => x.Value);
+        var variables =
+            parameters.Env != null
+                ? parameters.Env.ToDictionary(x => x.Key, x => x.Value.ToString() ?? string.Empty)
+                : new Dictionary<string, string>();
 
         var result = await nixpacksHelper.BuildDockerImage(
             new NixpacksBuildDockerImageConfig
@@ -53,7 +53,7 @@ public class NixpacksBuildDockerImageHandler(IMessagePump pump, INixpacksHelper 
                 WorkDir = workDir,
                 ImageName = image,
                 DisableCache = parameters.DisableCache.GetValueOrDefault(),
-                EnvironmentVariables = buildEnvironmentVariables,
+                EnvironmentVariables = variables,
             }
         );
 

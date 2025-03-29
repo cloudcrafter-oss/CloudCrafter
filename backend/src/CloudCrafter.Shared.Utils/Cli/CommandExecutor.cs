@@ -4,10 +4,11 @@ using CliWrap;
 using CliWrap.EventStream;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using CloudCrafter.Shared.Utils.Cli.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Shared.Utils.Cli;
 
-public class CommandExecutor : ICommandExecutor
+public class CommandExecutor(ILogger<CommandExecutor>? logger = null) : ICommandExecutor
 {
     public async Task<ExecutorResult> ExecuteAsync(string command, IEnumerable<string> arguments)
     {
@@ -58,6 +59,11 @@ public class CommandExecutor : ICommandExecutor
         Action<ExecutorStreamResult>? onLog = null
     )
     {
+        logger?.LogInformation(
+            "Executing command: {Command} {Arguments}",
+            command,
+            string.Join(" ", arguments)
+        );
         try
         {
             var cmd = CliWrap.Cli.Wrap(command).WithArguments(arguments);
