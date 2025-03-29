@@ -53,6 +53,7 @@ public class RollingUpdateTest : AbstractTraefikTest
             }
         );
 
+        service.SetEnvironmentFilename(".env");
         service.AddLabels(labelService);
 
         var dockerComposeBase64 = dockerComposeEditor.ToBase64();
