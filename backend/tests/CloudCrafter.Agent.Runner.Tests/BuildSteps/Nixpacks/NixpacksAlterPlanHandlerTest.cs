@@ -7,9 +7,9 @@ using CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
 using FluentAssertions;
 using Moq;
 
-namespace CloudCrafter.Agent.Runner.Tests.BuildSteps;
+namespace CloudCrafter.Agent.Runner.Tests.BuildSteps.Nixpacks;
 
-public class NixpacksAlterPlanHandlerTest : BaseTest
+public class NixpacksAlterPlanHandlerTest : BaseStepHandlerTest<NixpacksAlterPlanHandler, NixpacksAlterPlanParams>
 {
     private DeploymentContext _context;
     private NixpacksAlterPlanHandler _handler;

@@ -8,9 +8,9 @@ using CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
 using FluentAssertions;
 using Moq;
 
-namespace CloudCrafter.Agent.Runner.Tests.BuildSteps;
+namespace CloudCrafter.Agent.Runner.Tests.BuildSteps.Nixpacks;
 
-public class NixpacksWritePlanToFileSystemHandlerTest : BaseTest
+public class NixpacksWritePlanToFileSystemHandlerTest : BaseStepHandlerTest<NixpacksWritePlanToFileSystemHandler, NixpacksWritePlanToFileSystemParams>
 {
     private Mock<IMessagePump> _mockPump;
     private Mock<IFileSystemHelper> _mockFileSystemHelper;

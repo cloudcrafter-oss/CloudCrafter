@@ -9,9 +9,9 @@ using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using Moq;
 
-namespace CloudCrafter.Agent.Runner.Tests.BuildSteps;
+namespace CloudCrafter.Agent.Runner.Tests.BuildSteps.Source;
 
-public class CheckoutPublicGitRepositoryStepHandlerTest : BaseTest
+public class CheckoutPublicGitRepositoryStepHandlerTest : BaseStepHandlerTest<CheckoutPublicGitRepositoryStepHandler, GitCheckoutParams>
 {
     private DeploymentContext _context;
     private CheckoutPublicGitRepositoryStepHandler _handler;

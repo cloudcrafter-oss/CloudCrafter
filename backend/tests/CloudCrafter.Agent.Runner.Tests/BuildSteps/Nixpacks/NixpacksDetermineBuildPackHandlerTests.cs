@@ -8,9 +8,9 @@ using CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
 using FluentAssertions;
 using Moq;
 
-namespace CloudCrafter.Agent.Runner.Tests.BuildSteps;
+namespace CloudCrafter.Agent.Runner.Tests.BuildSteps.Nixpacks;
 
-public class NixpacksDetermineBuildPackHandlerTests : BaseTest
+public class NixpacksDetermineBuildPackHandlerTests : BaseStepHandlerTest<NixpacksDetermineBuildPackHandler, NixpacksDetermineBuildPackParams>
 {
     private Mock<IMessagePump> _mockPump;
     private Mock<INixpacksHelper> _mockNixpacksHelper;

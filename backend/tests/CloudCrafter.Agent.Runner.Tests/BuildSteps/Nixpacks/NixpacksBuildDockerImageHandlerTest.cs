@@ -10,9 +10,9 @@ using CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
 using FluentAssertions;
 using Moq;
 
-namespace CloudCrafter.Agent.Runner.Tests.BuildSteps;
+namespace CloudCrafter.Agent.Runner.Tests.BuildSteps.Nixpacks;
 
-public class NixpacksBuildDockerImageHandlerTest : BaseTest
+public class NixpacksBuildDockerImageHandlerTest : BaseStepHandlerTest<NixpacksBuildDockerImageHandler, NixpacksBuildDockerImageParams>
 {
     private Mock<IMessagePump> _mockPump;
     private Mock<INixpacksHelper> _mockNixpacksHelper;
