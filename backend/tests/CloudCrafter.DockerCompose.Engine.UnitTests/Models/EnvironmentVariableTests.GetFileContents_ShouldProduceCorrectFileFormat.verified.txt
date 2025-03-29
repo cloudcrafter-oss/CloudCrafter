@@ -1,0 +1,5 @@
+﻿SIMPLE_KEY=simplevalue
+SPACED_KEY='value with spaces'
+MULTILINE_CONFIG='This is a
+multiline configuration
+with special chars: #!@$%'
