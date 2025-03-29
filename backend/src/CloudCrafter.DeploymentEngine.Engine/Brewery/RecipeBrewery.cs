@@ -8,9 +8,6 @@ public class RecipeBrewery(string Name)
 {
     private readonly List<DeploymentBuildStep> _buildSteps = new();
 
-    private readonly Dictionary<string, DeploymentRecipeEnvironmentVariable> _environmentVariables =
-        new();
-
     private DeploymentRecipeApplicationInfo? _application;
     private DeploymentRecipeDestination? _destination;
     private DeploymentRecipeDockerComposeOptions? _dockerComposeOptions;
@@ -44,23 +41,6 @@ public class RecipeBrewery(string Name)
         return this;
     }
 
-    public RecipeBrewery AddEnvironmentVariable(
-        string name,
-        string value,
-        bool isBuildVariable,
-        bool isRuntimeVariable
-    )
-    {
-        _environmentVariables[name] = new DeploymentRecipeEnvironmentVariable
-        {
-            Name = name,
-            Value = value,
-            IsBuildVariable = isBuildVariable,
-            IsRuntimeVariable = isRuntimeVariable,
-        };
-        return this;
-    }
-
     public RecipeBrewery AddBuildStep(IBuildStepGenerator generator)
     {
         _buildSteps.Add(generator.Generate());
@@ -85,10 +65,6 @@ public class RecipeBrewery(string Name)
             Application = _application,
             DockerComposeOptions = _dockerComposeOptions,
             Destination = _destination,
-            EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
-            {
-                Variables = _environmentVariables,
-            },
             BuildOptions = new DeploymentBuildOptions { Steps = _buildSteps },
         };
     }

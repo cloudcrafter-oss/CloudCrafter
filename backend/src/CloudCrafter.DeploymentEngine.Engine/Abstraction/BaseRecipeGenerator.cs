@@ -1,7 +1,9 @@
 ﻿using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.DeploymentEngine.Engine.Brewery;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps.Nixpacks;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.Strategy;
+using CloudCrafter.DockerCompose.Engine.Models;
 using CloudCrafter.DockerCompose.Engine.Yaml;
 using CloudCrafter.DockerCompose.Shared.Labels;
 using CloudCrafter.Domain.Entities;
@@ -45,6 +47,53 @@ public abstract class BaseRecipeGenerator
             new DetermineNixpacksBuildpackBuildStepGenerator.Args
             {
                 Path = pathInGitRepo ?? string.Empty,
+            }
+        );
+
+        Recipe.AddBuildStep(generator);
+    }
+
+    protected void AddWriteEnvironmentVariableFile(string envFileName)
+    {
+        var stack = Options.Stack;
+
+        var envVarGroups = stack
+            .EnvironmentVariables.Where(v =>
+                v.Type == EnvironmentVariableType.Runtime || v.Type == EnvironmentVariableType.Both
+            )
+            .GroupBy(x => x.Group)
+            .ToList();
+
+        var collection = new EnvironmentVariableCollection();
+
+        foreach (var group in envVarGroups)
+        {
+            EnvironmentVariableGroup? envGroup = null;
+
+            if (group.Key != null)
+            {
+                envGroup = new EnvironmentVariableGroup(group.Key.Name, group.Key.Description);
+            }
+
+            foreach (var envVar in group)
+            {
+                var variable = new EnvironmentVariable
+                {
+                    Key = envVar.Key,
+                    Value = envVar.Value,
+                    Group = envGroup,
+                };
+
+                collection.Variables.Add(variable);
+            }
+        }
+
+        var fileContents = collection.GetFileContents();
+        var generator = new WriteEnvironmentVariablesFileToFilesystemStepGenerator(
+            new WriteEnvironmentVariablesFileToFilesystemStepGenerator.Args
+            {
+                FileName = envFileName,
+                FileContents = fileContents,
             }
         );
 

@@ -4,8 +4,6 @@ application:
 destination:
   rootDirectory: /root
   gitCheckoutDirectory: /data/cloudcrafter/96ca27ea-518d-4e2c-83ea-c2ea08be24aa
-environmentVariables:
-  variables: {}
 buildOptions:
   steps:
   - name: Container health check

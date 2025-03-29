@@ -104,6 +104,8 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
 
         var dockerComposeFileName = "docker-compose.yml";
 
+        AddWriteEnvironmentVariableFile(".env");
+
         AddDetermineBuildpackStep(pathInGit);
 
         AddGenerateBuildPlan(pathInGit);

@@ -10,7 +10,8 @@ using Moq;
 
 namespace CloudCrafter.Agent.Runner.Tests.BuildSteps.Container;
 
-public class ContainerHealthCheckHandlerTest : BaseTest
+public class ContainerHealthCheckHandlerTest
+    : BaseStepHandlerTest<ContainerHealthCheckHandler, ContainerHealthCheckParams>
 {
     private Mock<IMessagePump> _mockPump;
     private Mock<IDockerHealthCheckHelper> _mockDockerHealthCheckHelper;

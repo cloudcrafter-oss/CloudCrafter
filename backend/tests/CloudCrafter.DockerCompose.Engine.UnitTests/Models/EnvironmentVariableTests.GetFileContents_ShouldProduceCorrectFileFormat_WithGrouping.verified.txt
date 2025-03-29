@@ -1,0 +1,10 @@
+﻿# Auth Services
+# This is a group for auth services
+AUTH_DEBUG=true
+# Databases
+# This is a group for databases
+DB_HOST=localhost
+DB_SSL=true
+DB_USER='test user'
+# Non-grouped environment variables
+DUMMY=dummy

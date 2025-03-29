@@ -18,6 +18,7 @@
       traefik.http.services.b34a6560-701d-4f0e-b024-b4b7b2155bcf.loadbalancer.server.port: 3000
     networks:
     - cloudcrafter
+    env_file: .env
     image: b34a6560-701d-4f0e-b024-b4b7b2155bcf:latest
 networks:
   cloudcrafter:

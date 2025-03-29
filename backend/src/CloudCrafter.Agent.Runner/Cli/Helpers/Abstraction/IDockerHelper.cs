@@ -17,4 +17,6 @@ public interface IDockerHelper
     Task<IList<NetworkResponse>> GetNetworks();
     Task StopContainers(List<string> containerIds);
     Task RemoveContainers(List<string> containerIds);
+
+    Task<List<string>> GetLastContainerLogs(string containerId);
 }

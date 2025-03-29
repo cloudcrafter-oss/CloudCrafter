@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using CloudCrafter.Agent.Models.Deployment.Steps.Params.Container;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
@@ -6,7 +7,6 @@ using CloudCrafter.Agent.Runner.Exceptions;
 using Docker.DotNet.Models;
 using Microsoft.Extensions.Logging;
 using Polly;
-using Polly.Retry;
 
 namespace CloudCrafter.Agent.Runner.Cli.Helpers;
 
@@ -58,37 +58,40 @@ public class DockerHealthCheckHelper(
 
         """;
 
-    private class HealthCheckOutput
-    {
-        [JsonPropertyName("response_code")]
-        public string ResponseCode { get; init; } = string.Empty;
-
-        [JsonPropertyName("response_body")]
-        public string? ResponseBody { get; init; }
-    }
-
     public async Task<bool> IsHealthyAsync(
         string containerId,
         ContainerHealthCheckParamsOptions options
     )
     {
-        var retry = Policy<bool>
-            .Handle<Exception>()
-            .OrResult(result => !result)
-            .WaitAndRetryAsync(
-                retryCount: options.Retries.GetValueOrDefault(1),
-                sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
-                onRetry: (result, timeSpan, retryCount, context) =>
-                {
-                    logger.LogWarning(
-                        "Attempt {RetryCount} failed. Waiting {TimeSpan} before next retry.",
-                        retryCount,
-                        timeSpan
-                    );
-                }
-            );
+        try
+        {
+            var retry = Policy<bool>
+                .Handle<Exception>()
+                .OrResult(result => !result)
+                .WaitAndRetryAsync(
+                    options.Retries.GetValueOrDefault(1),
+                    attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
+                    (result, timeSpan, retryCount, context) =>
+                    {
+                        logger.LogWarning(
+                            "Attempt {RetryCount} failed. Waiting {TimeSpan} before next retry.",
+                            retryCount,
+                            timeSpan
+                        );
+                    }
+                );
 
-        return await retry.ExecuteAsync(async () => await RunHealthCheck(containerId, options));
+            return await retry.ExecuteAsync(async () => await RunHealthCheck(containerId, options));
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Health check failed with exception");
+
+            var logs = await dockerHelper.GetLastContainerLogs(containerId);
+
+            logger.LogError("Container logs for {ContainerId}:\n{Logs}", containerId, logs);
+            return false;
+        }
     }
 
     private async Task<bool> RunHealthCheck(
@@ -186,7 +189,7 @@ public class DockerHealthCheckHelper(
         }
 
         var base64Command = Convert.ToBase64String(
-            System.Text.Encoding.UTF8.GetBytes(BASH_COMMAND_HELPER.Replace("\r\n", "\n"))
+            Encoding.UTF8.GetBytes(BASH_COMMAND_HELPER.Replace("\r\n", "\n"))
         );
 
         var writeBase64File = "echo '" + base64Command + "' > /tmp/health_check_base64.txt";
@@ -238,5 +241,14 @@ public class DockerHealthCheckHelper(
         }
 
         return containerIsHealthy;
+    }
+
+    private class HealthCheckOutput
+    {
+        [JsonPropertyName("response_code")]
+        public string ResponseCode { get; init; } = string.Empty;
+
+        [JsonPropertyName("response_body")]
+        public string? ResponseBody { get; init; }
     }
 }

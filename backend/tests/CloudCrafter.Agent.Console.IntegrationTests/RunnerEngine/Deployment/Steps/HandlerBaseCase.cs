@@ -29,10 +29,6 @@ public abstract class HandlerBaseCase
         {
             Name = "My Application",
             Application = new DeploymentRecipeApplicationInfo { Id = Guid.NewGuid() },
-            EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
-            {
-                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),
-            },
             Destination = new DeploymentRecipeDestination
             {
                 RootDirectory = "/tmp/cloudcrafter-testing/" + RandomGenerator.String(),

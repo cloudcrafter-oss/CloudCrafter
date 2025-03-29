@@ -10,7 +10,8 @@ using Moq;
 
 namespace CloudCrafter.Agent.Runner.Tests.BuildSteps.Network;
 
-public class NetworkExistsCheckHandlerTest : BaseTest
+public class NetworkExistsCheckHandlerTest
+    : BaseStepHandlerTest<NetworkExistsCheckHandler, NetworkExistsCheckParams>
 {
     private Mock<IMessagePump> _mockPump;
     private Mock<IDockerHelper> _mockDockerHelper;

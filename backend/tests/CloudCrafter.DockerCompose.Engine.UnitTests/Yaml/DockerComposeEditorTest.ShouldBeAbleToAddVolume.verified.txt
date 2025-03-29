@@ -15,6 +15,7 @@ services:
       MYSQL_ROOT_PASSWORD: example
     volumes:
     - db_data:/var/lib/mysql
+    env_file: .db-env
     networks:
     - lampnet
 volumes:

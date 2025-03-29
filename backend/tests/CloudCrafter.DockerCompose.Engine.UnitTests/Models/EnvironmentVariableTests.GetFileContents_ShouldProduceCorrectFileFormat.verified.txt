@@ -1,0 +1,6 @@
+﻿# Non-grouped environment variables
+MULTILINE_CONFIG='This is a
+multiline configuration
+with special chars: #!@$%'
+SIMPLE_KEY=simplevalue
+SPACED_KEY='value with spaces'

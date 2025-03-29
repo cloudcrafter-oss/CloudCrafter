@@ -12,7 +12,11 @@ using Moq;
 
 namespace CloudCrafter.Agent.Runner.Tests.BuildSteps.DockerCompose;
 
-public class DockerComposeWriteToFileSystemHandlerTest : BaseTest
+public class DockerComposeWriteToFileSystemHandlerTest
+    : BaseStepHandlerTest<
+        DockerComposeWriteToFileSystemHandler,
+        DockerComposeWriteToFileSystemParams
+    >
 {
     private Mock<IMessagePump> _mockPump;
     private Mock<IFileSystemHelper> _mockFileSystemHelper;

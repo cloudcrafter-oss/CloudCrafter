@@ -85,7 +85,7 @@ jobs:
         TESTS_GITHUB_APP_PRIVATE_KEY: ${{ secrets.TESTS_GITHUB_APP_PRIVATE_KEY }}
       run: |
         project_name=$(basename ${{ matrix.test-project }})
-        dotnet test ${{ matrix.test-project }} --verbosity normal --logger trx --results-directory ./test-results --collect:"XPlat Code Coverage;Format=opencover" /p:DefineConstants="IN_TESTS"
+        dotnet test ${{ matrix.test-project }} --logger trx --results-directory ./test-results --collect:"XPlat Code Coverage;Format=opencover" /p:DefineConstants="IN_TESTS"
     - name: Sanitize project name
       id: sanitize
       run: |
