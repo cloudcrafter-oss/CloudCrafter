@@ -49,7 +49,6 @@ public class CheckoutGitRepositoryFromProviderStepHandlerTest
         {
             Name = baseRecipe.Name,
             Application = baseRecipe.Application,
-            EnvironmentVariables = baseRecipe.EnvironmentVariables,
             BuildOptions = baseRecipe.BuildOptions,
             Destination = new DeploymentRecipeDestination
             {

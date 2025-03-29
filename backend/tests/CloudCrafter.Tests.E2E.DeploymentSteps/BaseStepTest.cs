@@ -56,10 +56,6 @@ public abstract class BaseStepTest
                 RootDirectory = "/root",
                 GitCheckoutDirectory = $"/data/cloudcrafter/{guid}",
             },
-            EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
-            {
-                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),
-            },
             BuildOptions = new DeploymentBuildOptions { Steps = [step] },
         };
 

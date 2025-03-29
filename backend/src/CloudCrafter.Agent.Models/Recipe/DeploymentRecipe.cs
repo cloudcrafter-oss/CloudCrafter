@@ -6,21 +6,7 @@ public class DeploymentRecipe
     public required DeploymentRecipeApplicationInfo Application { get; init; }
     public DeploymentRecipeDockerComposeOptions? DockerComposeOptions { get; set; }
     public required DeploymentRecipeDestination Destination { get; init; }
-    public required DeploymentRecipeEnvironmentVariableConfig EnvironmentVariables { get; init; }
     public required DeploymentBuildOptions BuildOptions { get; init; }
-}
-
-public class DeploymentRecipeEnvironmentVariableConfig
-{
-    public required Dictionary<string, DeploymentRecipeEnvironmentVariable> Variables { get; init; }
-}
-
-public class DeploymentRecipeEnvironmentVariable
-{
-    public required string Name { get; init; }
-    public required string Value { get; init; }
-    public bool IsBuildVariable { get; init; }
-    public bool IsRuntimeVariable { get; init; }
 }
 
 public class DeploymentRecipeApplicationInfo

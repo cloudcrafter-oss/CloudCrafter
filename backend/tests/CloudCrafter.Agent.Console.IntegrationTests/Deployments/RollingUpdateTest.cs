@@ -72,21 +72,6 @@ public class RollingUpdateTest : AbstractTraefikTest
                 // In production envs, this will have the application stack guid in it
                 DockerComposeDirectory = "/tmp/cloudcrafter-data/my-application",
             },
-            EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
-            {
-                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>
-                {
-                    {
-                        "DUMMY_ENV_VAR",
-                        new DeploymentRecipeEnvironmentVariable
-                        {
-                            Name = "DUMMY_ENV_VAR",
-                            Value = dummyEnv,
-                            IsBuildVariable = true,
-                        }
-                    },
-                },
-            },
             BuildOptions = new DeploymentBuildOptions
             {
                 Steps = new List<DeploymentBuildStep>
