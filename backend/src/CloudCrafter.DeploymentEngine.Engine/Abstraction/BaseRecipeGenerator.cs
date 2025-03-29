@@ -51,6 +51,19 @@ public abstract class BaseRecipeGenerator
         Recipe.AddBuildStep(generator);
     }
 
+    protected void AddWriteEnvironmentVariableFile(string envFileName, string contents)
+    {
+        var generator = new WriteEnvironmentVariablesFileToFilesystemStepGenerator(
+            new WriteEnvironmentVariablesFileToFilesystemStepGenerator.Args
+            {
+                FileName = envFileName,
+                FileContents = contents,
+            }
+        );
+
+        Recipe.AddBuildStep(generator);
+    }
+
     protected void AddGenerateBuildPlan(string? pathInGitRepo)
     {
         var generator = new GenerateNixpacksPlanBuildStepGenerator(

@@ -68,4 +68,5 @@ public enum DeploymentBuildStepType
     ContainerHealthCheck,
     StopContainers,
     RunPlainCommand,
+    WriteEnvironmentVariablesFileToFilesystem,
 }
