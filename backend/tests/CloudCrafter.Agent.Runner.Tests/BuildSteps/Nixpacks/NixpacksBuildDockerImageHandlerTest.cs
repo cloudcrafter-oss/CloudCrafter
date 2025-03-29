@@ -12,7 +12,8 @@ using Moq;
 
 namespace CloudCrafter.Agent.Runner.Tests.BuildSteps.Nixpacks;
 
-public class NixpacksBuildDockerImageHandlerTest : BaseStepHandlerTest<NixpacksBuildDockerImageHandler, NixpacksBuildDockerImageParams>
+public class NixpacksBuildDockerImageHandlerTest
+    : BaseStepHandlerTest<NixpacksBuildDockerImageHandler, NixpacksBuildDockerImageParams>
 {
     private Mock<IMessagePump> _mockPump;
     private Mock<INixpacksHelper> _mockNixpacksHelper;
@@ -96,6 +97,57 @@ public class NixpacksBuildDockerImageHandlerTest : BaseStepHandlerTest<NixpacksB
         act.Should()
             .ThrowAsync<DeploymentException>()
             .WithMessage("Nixpacks plan not found - cannot build Docker image.");
+    }
+
+    [Test]
+    public async Task ExecuteAsync_ShouldBuildDockerImage_WhenValidParametersWithEnvVars()
+    {
+        // Arrange
+        var parameters = new NixpacksBuildDockerImageParams
+        {
+            Path = "testPath",
+            Image = "testImage",
+            Tag = "testTag",
+            DisableCache = false,
+            Env = new()
+            {
+                { "A_NUMBER", 1 },
+                { "A_BOOLEAN", true },
+                { "A_STRING", "test" },
+                { "A_EMPTY_STRING", string.Empty },
+            },
+        };
+
+        _context.SetRecipeResult(RecipeResultKeys.NixpacksTomlLocation, "testPlanPath");
+
+        var workingDirectory = _context.GetGitDirectory();
+        // Act
+        await _handler.ExecuteAsync(parameters, _context);
+
+        // Assert
+        _mockNixpacksHelper.Verify(
+            x =>
+                x.BuildDockerImage(
+                    It.Is<NixpacksBuildDockerImageConfig>(p =>
+                        p.PlanPath == "testPlanPath"
+                        && p.WorkDir == $"{workingDirectory}/git/testPath"
+                        && p.ImageName == "testImage:testTag"
+                        && p.DisableCache == false
+                        && p.EnvironmentVariables.Count == 4
+                        && p.EnvironmentVariables["A_NUMBER"].ToString() == "1"
+                        && p.EnvironmentVariables["A_BOOLEAN"].ToString() == "True"
+                        && p.EnvironmentVariables["A_STRING"] == "test"
+                        && p.EnvironmentVariables["A_EMPTY_STRING"] == string.Empty
+                    )
+                ),
+            Times.Once
+        );
+
+        _mockLogger.Verify(x => x.LogInfo("Building Docker image via Nixpacks"), Times.Once);
+        _mockLogger.Verify(
+            x => x.LogInfo("Successfully built Docker image: testImage:testTag"),
+            Times.Once
+        );
     }
 
     [Test]
