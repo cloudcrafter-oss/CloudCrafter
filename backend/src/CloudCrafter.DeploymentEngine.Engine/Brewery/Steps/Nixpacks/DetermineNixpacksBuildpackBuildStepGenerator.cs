@@ -1,7 +1,7 @@
 ﻿using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 
-namespace CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
+namespace CloudCrafter.DeploymentEngine.Engine.Brewery.Steps.Nixpacks;
 
 public class DetermineNixpacksBuildpackBuildStepGenerator(
     DetermineNixpacksBuildpackBuildStepGenerator.Args options
@@ -14,7 +14,7 @@ public class DetermineNixpacksBuildpackBuildStepGenerator(
             Name = "Determine Nixpacks buildpack",
             Description = "Determines the Nixpacks buildpack to use for the application",
             Type = DeploymentBuildStepType.NixpacksDetermineBuildPack,
-            Params = new Dictionary<string, object> { { "path", options.Path } },
+            Params = new Dictionary<string, object> { { "path", options.Path } }
         };
     }
 

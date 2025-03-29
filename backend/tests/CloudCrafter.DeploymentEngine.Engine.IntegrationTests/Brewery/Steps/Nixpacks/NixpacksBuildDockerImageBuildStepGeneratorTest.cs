@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using CloudCrafter.Agent.Models.Deployment.Steps.Params;
-using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps.Nixpacks;
 using FluentAssertions;
 
-namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
+namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps.Nixpacks;
 
 public class NixpacksBuildDockerImageBuildStepGeneratorTest
     : BaseParameterConversionTest<NixpacksBuildDockerImageParams>
@@ -18,7 +18,7 @@ public class NixpacksBuildDockerImageBuildStepGeneratorTest
             BuildArgs = new Dictionary<string, object> { { "ARG_1", 1 } },
             ImageRepository = "image",
             ImageTag = "latest",
-            DisableBuildCache = true,
+            DisableBuildCache = true
         };
         var generator = new NixpacksBuildDockerImageBuildStepGenerator(options);
 

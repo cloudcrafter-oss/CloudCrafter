@@ -26,7 +26,7 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
                 dockerFilter.Filters = new Dictionary<string, IDictionary<string, bool>>();
             }
 
-            var labelFilter = new Dictionary<string, bool>()
+            var labelFilter = new Dictionary<string, bool>
             {
                 { CloudCrafterLabelKeys.CloudCrafterManaged, true },
             };
@@ -48,12 +48,12 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
 
         foreach (var container in containers)
         {
-            bool allLabelsMatch = true;
+            var allLabelsMatch = true;
             foreach (var labelFilter in filter.LabelFilters)
             {
                 if (
                     !container.Labels.TryGetValue(labelFilter.Key, out var value)
-                    || (value == labelFilter.Value) != labelFilter.ShouldMatch
+                    || value == labelFilter.Value != labelFilter.ShouldMatch
                 )
                 {
                     allLabelsMatch = false;
@@ -104,6 +104,42 @@ public class DockerHelper(IDockerClientProvider provider) : IDockerHelper
                 new ContainerRemoveParameters()
             );
         }
+    }
+
+    public async Task<List<string>> GetLastContainerLogs(string containerId)
+    {
+        var logs = await _client.Containers.GetContainerLogsAsync(
+            containerId,
+            true,
+            new ContainerLogsParameters
+            {
+                Tail = "20",
+                ShowStderr = true,
+                ShowStdout = true,
+            }
+        );
+
+        var logLines = new List<string>();
+        var buffer = new byte[8192];
+
+        while (true)
+        {
+            var result = await logs.ReadOutputAsync(
+                buffer,
+                0,
+                buffer.Length,
+                CancellationToken.None
+            );
+            if (result.EOF)
+            {
+                break;
+            }
+
+            var content = Encoding.UTF8.GetString(buffer, 0, result.Count);
+            logLines.Add(content);
+        }
+
+        return logLines;
     }
 
     public async Task<DockerHelperResponseResult> RunCommandInContainer(

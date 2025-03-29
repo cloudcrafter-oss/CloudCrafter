@@ -1,8 +1,8 @@
 ﻿using CloudCrafter.Agent.Models.Recipe;
-using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps.Nixpacks;
 using FluentAssertions;
 
-namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery.Steps;
+namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery.Steps.Nixpacks;
 
 public class AlterNixpacksBuildPlanBuildStepGeneratorTest
     : StepBaseTest<AlterNixpacksBuildPlanBuildStepGenerator>
@@ -13,7 +13,7 @@ public class AlterNixpacksBuildPlanBuildStepGeneratorTest
         // Arrange
         var options = new AlterNixpacksBuildPlanBuildStepGenerator.Args
         {
-            AddPackages = new List<string> { "package1", "package2" },
+            AddPackages = new List<string> { "package1", "package2" }
         };
         var generator = new AlterNixpacksBuildPlanBuildStepGenerator(options);
 

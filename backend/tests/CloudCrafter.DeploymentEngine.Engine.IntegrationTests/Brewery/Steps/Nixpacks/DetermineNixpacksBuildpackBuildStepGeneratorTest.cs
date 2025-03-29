@@ -1,8 +1,8 @@
 ﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params;
-using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps.Nixpacks;
 using FluentAssertions;
 
-namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps;
+namespace CloudCrafter.DeploymentEngine.Engine.IntegrationTests.Brewery.Steps.Nixpacks;
 
 public class DetermineNixpacksBuildpackBuildStepGeneratorTest
     : BaseParameterConversionTest<NixpacksDetermineBuildPackParams>

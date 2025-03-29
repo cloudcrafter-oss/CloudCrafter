@@ -1,8 +1,9 @@
 ﻿using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps.Nixpacks;
 using FluentAssertions;
 
-namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery.Steps;
+namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery.Steps.Nixpacks;
 
 public class GenerateNixpacksPlanBuildStepGeneratorTest
     : StepBaseTest<GenerateNixpacksPlanBuildStepGenerator>

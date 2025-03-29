@@ -1,20 +1,20 @@
 ﻿using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 
-namespace CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
+namespace CloudCrafter.DeploymentEngine.Engine.Brewery.Steps.Nixpacks;
 
-public class GenerateNixpacksPlanBuildStepGenerator(
-    GenerateNixpacksPlanBuildStepGenerator.Args options
+public class NixpacksWritePlanToFsBuildStepGenerator(
+    NixpacksWritePlanToFsBuildStepGenerator.Args options
 ) : IBuildStepGenerator
 {
     public DeploymentBuildStep Generate()
     {
         return new DeploymentBuildStep
         {
-            Name = "Generate Nixpacks plan",
-            Description = "Generates the Nixpacks plan for the application",
-            Type = DeploymentBuildStepType.NixpacksGeneratePlan,
-            Params = new Dictionary<string, object> { { "path", options.Path } },
+            Name = "Write Nixpacks plan to filesystem",
+            Description = "Writes the Nixpacks plan to the filesystem",
+            Type = DeploymentBuildStepType.NixpacksWritePlanToFileSystem,
+            Params = new Dictionary<string, object> { { "path", options.Path } }
         };
     }
 

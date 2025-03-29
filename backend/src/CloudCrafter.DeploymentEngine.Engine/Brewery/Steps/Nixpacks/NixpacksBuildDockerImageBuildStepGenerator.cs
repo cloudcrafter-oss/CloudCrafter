@@ -1,7 +1,7 @@
 ﻿using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.DeploymentEngine.Engine.Abstraction;
 
-namespace CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
+namespace CloudCrafter.DeploymentEngine.Engine.Brewery.Steps.Nixpacks;
 
 public class NixpacksBuildDockerImageBuildStepGenerator(
     NixpacksBuildDockerImageBuildStepGenerator.Args options
@@ -20,8 +20,8 @@ public class NixpacksBuildDockerImageBuildStepGenerator(
                 { "image", options.ImageRepository },
                 { "tag", options.ImageTag },
                 { "disableCache", options.DisableBuildCache },
-                { "env", options.BuildArgs },
-            },
+                { "env", options.BuildArgs }
+            }
         };
     }
 

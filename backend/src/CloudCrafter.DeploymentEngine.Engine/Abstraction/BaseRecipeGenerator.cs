@@ -1,6 +1,7 @@
 ﻿using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.DeploymentEngine.Engine.Brewery;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps.Nixpacks;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.Strategy;
 using CloudCrafter.DockerCompose.Engine.Models;
 using CloudCrafter.DockerCompose.Engine.Yaml;
