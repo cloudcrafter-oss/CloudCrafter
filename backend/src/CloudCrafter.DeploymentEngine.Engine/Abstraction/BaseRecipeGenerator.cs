@@ -136,6 +136,15 @@ public abstract class BaseRecipeGenerator
         string? pathInGitRepo
     )
     {
+        var stack = Options.Stack;
+
+        var buildEnvVars = stack
+            .EnvironmentVariables.Where(v =>
+                v.Type == EnvironmentVariableType.BuildTime
+                || v.Type == EnvironmentVariableType.Both
+            )
+            .ToDictionary(x => x.Key, x => (object)x.Value);
+
         var generator = new NixpacksBuildDockerImageBuildStepGenerator(
             new NixpacksBuildDockerImageBuildStepGenerator.Args
             {
@@ -143,7 +152,7 @@ public abstract class BaseRecipeGenerator
                 ImageRepository = imageRepository,
                 ImageTag = imageTag,
                 DisableBuildCache = true,
-                BuildArgs = new Dictionary<string, object>(),
+                BuildArgs = buildEnvVars,
             }
         );
 
