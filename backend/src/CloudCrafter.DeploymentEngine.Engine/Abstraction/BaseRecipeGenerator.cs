@@ -87,11 +87,12 @@ public abstract class BaseRecipeGenerator
             }
         }
 
+        var fileContents = collection.GetFileContents();
         var generator = new WriteEnvironmentVariablesFileToFilesystemStepGenerator(
             new WriteEnvironmentVariablesFileToFilesystemStepGenerator.Args
             {
                 FileName = envFileName,
-                FileContents = "",
+                FileContents = fileContents,
             }
         );
 
