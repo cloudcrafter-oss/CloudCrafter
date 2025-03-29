@@ -128,6 +128,7 @@ public class RollingUpdateTest : AbstractTraefikTest
                             BuildArgs = new Dictionary<string, object>
                             {
                                 { "BUILD_MOMENT", DateTime.UtcNow.ToString("F") },
+                                { "DUMMY_BUILD_ENV_VAR", dummyEnv },
                             },
                         }
                     ).Generate(),
@@ -267,10 +268,20 @@ public class RollingUpdateTest : AbstractTraefikTest
             "DUMMY_ENV_VAR: firstTag"
         );
 
+        await ShouldHaveEndpointResponse(
+            "http://frontend-rolling.127.0.0.1.sslip.io:8888/all-env",
+            "\"DUMMY_BUILD_ENV_VAR\": \"firstTag\""
+        );
+
         await _deploymentService.DeployAsync(_secondRecipe);
         await ShouldHaveEndpointResponse(
             "http://frontend-rolling.127.0.0.1.sslip.io:8888/env",
             "DUMMY_ENV_VAR: secondTag"
+        );
+
+        await ShouldHaveEndpointResponse(
+            "http://frontend-rolling.127.0.0.1.sslip.io:8888/all-env",
+            "\"DUMMY_BUILD_ENV_VAR\": \"secondTag\""
         );
     }
 }
