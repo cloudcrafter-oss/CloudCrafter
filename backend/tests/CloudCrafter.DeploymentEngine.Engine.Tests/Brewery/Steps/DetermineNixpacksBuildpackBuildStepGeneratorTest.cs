@@ -5,6 +5,7 @@ using FluentAssertions;
 namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery.Steps;
 
 public class DetermineNixpacksBuildpackBuildStepGeneratorTest
+    : StepBaseTest<DetermineNixpacksBuildpackBuildStepGenerator>
 {
     [Test]
     public void ShouldBeAbleToGenerateBuildStep()

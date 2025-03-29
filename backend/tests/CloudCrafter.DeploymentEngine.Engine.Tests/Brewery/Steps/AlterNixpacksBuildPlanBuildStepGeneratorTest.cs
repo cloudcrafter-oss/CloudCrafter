@@ -5,6 +5,7 @@ using FluentAssertions;
 namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery.Steps;
 
 public class AlterNixpacksBuildPlanBuildStepGeneratorTest
+    : StepBaseTest<AlterNixpacksBuildPlanBuildStepGenerator>
 {
     [Test]
     public void ShouldGenerateBuildStep()

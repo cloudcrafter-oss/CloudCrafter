@@ -5,6 +5,7 @@ using FluentAssertions;
 namespace CloudCrafter.DeploymentEngine.Engine.Tests.Brewery.Steps;
 
 public class NixpacksBuildDockerImageBuildStepGeneratorTest
+    : StepBaseTest<NixpacksBuildDockerImageBuildStepGenerator>
 {
     [Test]
     [TestCase(true)]
