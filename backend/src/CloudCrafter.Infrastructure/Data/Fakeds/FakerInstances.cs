@@ -90,7 +90,7 @@ public static class FakerInstances
             .RuleFor(x => x.IsSecret, f => false)
             // ReSharper disable once RedundantCast
             .RuleFor(x => x.Stack, f => (Stack?)null)
-            .RuleFor(x => x.Type, f => EnvironmentVariableType.Both)
+            .RuleFor(x => x.Type, f => f.PickRandom<EnvironmentVariableType>())
             .RuleFor(x => x.CreatedBy, f => null)
             .RuleFor(x => x.LastModifiedBy, f => null)
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
