@@ -14,7 +14,11 @@ public class WriteEnvironmentVariablesFileToFilesystemStepGenerator(
             Name = "Write environment variables file to filesystem",
             Description = "Writes the environment variables file to the filesystem",
             Type = DeploymentBuildStepType.WriteEnvironmentVariablesFileToFilesystem,
-            Params = new Dictionary<string, object> { { "fileName", options.FileName } },
+            Params = new Dictionary<string, object>
+            {
+                { "fileName", options.FileName },
+                { "fileContents", options.FileContents },
+            },
         };
     }
 
