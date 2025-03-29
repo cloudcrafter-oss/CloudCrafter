@@ -46,6 +46,7 @@ public class SimpleAppDockerComposeGenerator(BaseDockerComposeGenerator.Args arg
 
         service.AddLabels(labelService);
         service.AddNetwork(network);
+        service.SetEnvironmentFilename(".env");
         var name = service.ServiceName();
 
         service.SetImage(stackService.Id.ToString(), "latest");
