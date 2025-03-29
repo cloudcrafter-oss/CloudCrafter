@@ -135,6 +135,17 @@ public class RollingUpdateTest : AbstractTraefikTest
                     },
                     new()
                     {
+                        Name = "Write contents to filesysytem",
+                        Description = "Write contents to filesystem",
+                        Type = DeploymentBuildStepType.WriteEnvironmentVariablesFileToFilesystem,
+                        Params = new()
+                        {
+                            { "fileContents", $"DUMMY_ENV_VAR={dummyEnv}" },
+                            { "fileName", ".env" },
+                        },
+                    },
+                    new()
+                    {
                         Name = "Write plan to filesystem",
                         Description = "Write plan to filesystem",
                         Type = DeploymentBuildStepType.NixpacksWritePlanToFileSystem,
