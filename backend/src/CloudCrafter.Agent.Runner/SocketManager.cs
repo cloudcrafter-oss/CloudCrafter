@@ -1,8 +1,9 @@
-﻿using CloudCrafter.Agent.Models.Configs;
+using CloudCrafter.Agent.Models.Configs;
 using CloudCrafter.Agent.Models.SignalR;
 using CloudCrafter.Agent.Runner.MediatR.SignalR;
 using CloudCrafter.Agent.Runner.SignalR.Providers;
 using MediatR;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -15,18 +16,21 @@ public class SocketManager
     private readonly ISender _sender;
 
     private readonly IHubWrapper _wrapper;
+    private readonly IHostApplicationLifetime _applicationLifetime;
 
     public SocketManager(
         ILogger<SocketManager> logger,
         ISender sender,
         IOptions<AgentConfig> config,
-        IHubWrapper hubWrapper
+        IHubWrapper hubWrapper,
+        IHostApplicationLifetime applicationLifetime
     )
     {
         _logger = logger;
         _agentConfig = config.Value;
         _sender = sender;
         _wrapper = hubWrapper;
+        _applicationLifetime = applicationLifetime;
         AttachMessageHandlers();
     }
 
@@ -51,7 +55,7 @@ public class SocketManager
             async message =>
             {
                 await _sender.Send(
-                    new AgentHubDeployRecipeMessageHandler.Command(
+                    new AgentHubDeployRecipeCommand(
                         message,
                         _wrapper.TypedHubConnection,
                         message.MessageId
@@ -107,8 +111,15 @@ public class SocketManager
 
         _logger.LogInformation("Connected to the CloudCrafter servers. Listening for messages...");
 
-        // TODO: Is there a better way for this? We dont want the task to return actually,
-        // because that will cause the console application to quit.
-        await Task.Delay(Timeout.Infinite);
+        try
+        {
+            // Wait until the application is stopping
+            await Task.Delay(Timeout.Infinite, _applicationLifetime.ApplicationStopping);
+        }
+        catch (TaskCanceledException)
+        {
+            // This is expected when the token is canceled
+            _logger.LogInformation("Application shutdown requested, exiting...");
+        }
     }
 }

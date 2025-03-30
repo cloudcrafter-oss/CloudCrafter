@@ -1,12 +1,15 @@
 'use client'
 
 import { SourceSettings } from '@/src/components/stack-detail/source-settings'
-import type { StackDetailDto } from '@/src/core/__generated__'
 import { useStackHub } from '@/src/hooks/useStackHub'
-import { cn } from '@ui/lib/utils'
+import type { StackDetailDto } from '@cloudcrafter/api'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { DummyInfoTab } from '../DummyInfoTab'
+import { EnvironmentVariables } from '../environment-variables/EnvironmentVariables'
+import { VariableHistory } from '../environment-variables/VariableHistory'
+import { VariableTemplates } from '../environment-variables/VariableTemplates'
 import { BasicInfo } from '../general-settings/BasicInfo'
 import { ServiceOverview } from '../service-overview'
 
@@ -36,6 +39,30 @@ const sections = [
 				id: 'advanced',
 				title: 'Advanced Settings',
 				component: DummyInfoTab as React.ComponentType<BaseComponentProps>,
+			},
+		],
+	},
+	{
+		id: 'environment',
+		title: 'Environment Variables',
+		testId: 'subsection-environment-variables',
+		description: 'Manage environment variables for your stack',
+		subTabs: [
+			{
+				id: 'variables',
+				title: 'Variables',
+				component:
+					EnvironmentVariables as React.ComponentType<BaseComponentProps>,
+			},
+			{
+				id: 'templates',
+				title: 'Templates',
+				component: VariableTemplates as React.ComponentType<BaseComponentProps>,
+			},
+			{
+				id: 'history',
+				title: 'History',
+				component: VariableHistory as React.ComponentType<BaseComponentProps>,
 			},
 		],
 	},
@@ -128,6 +155,7 @@ const StackConfigPage: React.FC<{ stackDetails: StackDetailDto }> = ({
 					<div key={section.id} className='w-full'>
 						<button
 							type='button'
+							data-testid={section.testId}
 							onClick={() => {
 								const newSubTabId = section.subTabs[0].id
 								setActiveSection(section.id)

@@ -70,6 +70,15 @@ public class NixpacksHelper(
             baseCommand.Add("--no-cache");
         }
 
+        if (config.EnvironmentVariables.Count != 0)
+        {
+            foreach (var env in config.EnvironmentVariables)
+            {
+                baseCommand.Add("--env");
+                baseCommand.Add($"{env.Key}={env.Value}");
+            }
+        }
+
         baseCommand.AddRange([config.WorkDir]);
 
         var result = await executor.ExecuteWithStreamAsync(
@@ -77,7 +86,12 @@ public class NixpacksHelper(
             baseCommand,
             streamResult =>
             {
-                // TODO: Save this somewhere
+                if (streamResult.IsStdErr)
+                {
+                    logger.LogCritical(streamResult.Log);
+                    return;
+                }
+
                 logger.LogInformation(streamResult.Log);
             }
         );

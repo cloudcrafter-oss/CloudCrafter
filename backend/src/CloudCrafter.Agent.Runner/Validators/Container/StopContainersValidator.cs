@@ -41,9 +41,3 @@ public class StopContainersValidator : AbstractValidator<StopContainersParams>
         );
     }
 }
-
-[DeploymentStep(DeploymentBuildStepType.StopContainers)]
-public class StopContainersConfig : IDeploymentStepConfig<StopContainersParams>
-{
-    public IValidator<StopContainersParams> Validator => new StopContainersValidator();
-}

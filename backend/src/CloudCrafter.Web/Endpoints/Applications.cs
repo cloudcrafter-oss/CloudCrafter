@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Applications.Deployments;
+using CloudCrafter.Core.Commands.Applications.Deployments;
 using CloudCrafter.Web.Infrastructure;
 using MediatR;
 
@@ -13,6 +13,6 @@ public class Applications : EndpointGroupBase
 
     public Task PostCreateDeployment(ISender sender, Guid applicationId)
     {
-        return sender.Send(new CreateDeploymentCommand.Query(applicationId));
+        return sender.Send(new CreateDeploymentCommand(applicationId));
     }
 }

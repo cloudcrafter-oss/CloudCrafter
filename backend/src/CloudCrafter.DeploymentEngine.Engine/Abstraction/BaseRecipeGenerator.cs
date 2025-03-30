@@ -1,7 +1,11 @@
 ﻿using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.DeploymentEngine.Engine.Brewery;
 using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Steps.Nixpacks;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Strategy;
+using CloudCrafter.DockerCompose.Engine.Models;
 using CloudCrafter.DockerCompose.Engine.Yaml;
+using CloudCrafter.DockerCompose.Shared.Labels;
 using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.DeploymentEngine.Engine.Abstraction;
@@ -49,6 +53,53 @@ public abstract class BaseRecipeGenerator
         Recipe.AddBuildStep(generator);
     }
 
+    protected void AddWriteEnvironmentVariableFile(string envFileName)
+    {
+        var stack = Options.Stack;
+
+        var envVarGroups = stack
+            .EnvironmentVariables.Where(v =>
+                v.Type == EnvironmentVariableType.Runtime || v.Type == EnvironmentVariableType.Both
+            )
+            .GroupBy(x => x.Group)
+            .ToList();
+
+        var collection = new EnvironmentVariableCollection();
+
+        foreach (var group in envVarGroups)
+        {
+            EnvironmentVariableGroup? envGroup = null;
+
+            if (group.Key != null)
+            {
+                envGroup = new EnvironmentVariableGroup(group.Key.Name, group.Key.Description);
+            }
+
+            foreach (var envVar in group)
+            {
+                var variable = new EnvironmentVariable
+                {
+                    Key = envVar.Key,
+                    Value = envVar.Value,
+                    Group = envGroup,
+                };
+
+                collection.Variables.Add(variable);
+            }
+        }
+
+        var fileContents = collection.GetFileContents();
+        var generator = new WriteEnvironmentVariablesFileToFilesystemStepGenerator(
+            new WriteEnvironmentVariablesFileToFilesystemStepGenerator.Args
+            {
+                FileName = envFileName,
+                FileContents = fileContents,
+            }
+        );
+
+        Recipe.AddBuildStep(generator);
+    }
+
     protected void AddGenerateBuildPlan(string? pathInGitRepo)
     {
         var generator = new GenerateNixpacksPlanBuildStepGenerator(
@@ -85,6 +136,15 @@ public abstract class BaseRecipeGenerator
         string? pathInGitRepo
     )
     {
+        var stack = Options.Stack;
+
+        var buildEnvVars = stack
+            .EnvironmentVariables.Where(v =>
+                v.Type == EnvironmentVariableType.BuildTime
+                || v.Type == EnvironmentVariableType.Both
+            )
+            .ToDictionary(x => x.Key, x => (object)x.Value);
+
         var generator = new NixpacksBuildDockerImageBuildStepGenerator(
             new NixpacksBuildDockerImageBuildStepGenerator.Args
             {
@@ -92,7 +152,7 @@ public abstract class BaseRecipeGenerator
                 ImageRepository = imageRepository,
                 ImageTag = imageTag,
                 DisableBuildCache = true,
-                BuildArgs = new Dictionary<string, object>(),
+                BuildArgs = buildEnvVars,
             }
         );
 
@@ -124,6 +184,30 @@ public abstract class BaseRecipeGenerator
         Recipe.AddBuildStep(generator);
     }
 
+    protected void AddStopPreviousContainers(Guid stackId, Guid currentDeploymentId)
+    {
+        var managedLabel = LabelFactory.GenerateManagedLabel();
+        var deploymentLabel = LabelFactory.GenerateDeploymentLabel(currentDeploymentId);
+        var stackIdLabel = LabelFactory.GenerateStackLabel(stackId);
+
+        var (labelKey, labelValue) = deploymentLabel.ToDockerComposeLabel();
+        var deploymentLabelNotEqual = $"{labelKey}!={labelValue}";
+        var options = new StopContainersBuildStepGenerator.Args
+        {
+            LabelFilters =
+            [
+                managedLabel.ToLabelString(),
+                stackIdLabel.ToLabelString(),
+                deploymentLabelNotEqual,
+            ],
+            OnlyCloudCrafterContainers = true,
+        };
+
+        var generator = new StopContainersBuildStepGenerator(options);
+
+        Recipe.AddBuildStep(generator);
+    }
+
     protected void AddCheckContainerHealthCheckStep(
         ContainerHealthCheckDeploymentStepGenerator.Args args
     )
@@ -145,6 +229,25 @@ public abstract class BaseRecipeGenerator
         Recipe.AddBuildStep(generator);
     }
 
+    protected void AddFetchGitRepositoryFromGithubAppStep(
+        ApplicationSourceGithubApp app,
+        string accessToken,
+        GitSourceLocationDto sourceLocation
+    )
+    {
+        var fullPath = $"https://x-access-token:{accessToken}@github.com/{sourceLocation.FullPath}";
+        var generator = new FetchGitRepositoryFromGithubAppDeploymentStepGenerator(
+            new FetchGitRepositoryFromGithubAppDeploymentStepGenerator.Args
+            {
+                FullPathWithToken = fullPath,
+                ProviderPath = sourceLocation.FullPath,
+                Path = app.Path,
+                Branch = app.Branch,
+            }
+        );
+        Recipe.AddBuildStep(generator);
+    }
+
     public abstract BaseDockerComposeGenerator CreateDockerComposeGenerator();
 
     public abstract Task<GeneratedResult> Generate();
@@ -153,6 +256,7 @@ public abstract class BaseRecipeGenerator
     {
         public required Stack Stack { get; init; }
         public required Guid DeploymentId { get; init; }
+        public required ISourceProviderHelper ProviderHelperProvider { get; init; }
     }
 
     public class GeneratedResult

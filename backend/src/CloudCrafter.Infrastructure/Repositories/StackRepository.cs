@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Core.Events.DomainEvents;
@@ -21,9 +21,41 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
 {
     public async Task<Stack> CreateStack(CreateStackArgsDto args)
     {
-        if (string.IsNullOrWhiteSpace(args.GitRepository))
+        if (!args.IsGithubApp() && !args.IsPublicGitRepo())
         {
-            throw new ArgumentOutOfRangeException("Not supported yet");
+            throw new ArgumentOutOfRangeException("Provided configuration not supported");
+        }
+
+        ApplicationSource? source = null;
+
+        if (args.IsPublicGitRepo())
+        {
+            source = new ApplicationSource
+            {
+                Type = ApplicationSourceType.Git,
+                Git = new ApplicationSourceGit { Repository = args.PublicGit!.GitRepository },
+            };
+        }
+
+        if (args.IsGithubApp())
+        {
+            source = new ApplicationSource
+            {
+                Type = ApplicationSourceType.GithubApp,
+                GithubApp = new ApplicationSourceGithubApp
+                {
+                    Branch = args.GithubApp!.Branch,
+                    RepositoryId = args.GithubApp!.RepositoryId,
+                    SourceProviderId = args.GithubApp.ProviderId,
+                    Repository = args.GithubApp.Repository,
+                    Path = args.GithubApp.Path,
+                },
+            };
+        }
+
+        if (source == null)
+        {
+            throw new ArgumentOutOfRangeException("Provided configuration not supported");
         }
 
         var stack = new Stack
@@ -33,16 +65,16 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
             EnvironmentId = args.EnvironmentId,
             ServerId = args.ServerId,
             Description = null,
-            // TODO: Handle source different
-            Source = new ApplicationSource
-            {
-                Type = ApplicationSourceType.Git, Git = new ApplicationSourceGit { Repository = args.GitRepository }
-            },
+            Source = source,
             // TODO: Allow multiple options
             BuildPack = StackBuildPack.Nixpacks,
-            HealthStatus = new StackHealthEntity { StatusAt = null, Value = EntityHealthStatusValue.Unknown },
+            HealthStatus = new StackHealthEntity
+            {
+                StatusAt = null,
+                Value = EntityHealthStatusValue.Unknown,
+            },
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
         };
 
         context.Stacks.Add(stack);
@@ -78,7 +110,7 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
             HttpConfiguration = null,
             HealthcheckConfiguration = new EntityHealthcheckConfiguration(),
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
         };
 
         context.StackServices.Add(stackService);
@@ -104,7 +136,7 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
             State = DeploymentState.Created,
             RecipeYaml = null,
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
         };
 
         context.Deployments.Add(deployment);
@@ -126,16 +158,20 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
         return GetDeploymentQuery(filter).ToListAsync();
     }
 
-    public async Task<PaginatedList<SimpleDeploymentDto>> GetDeploymentsPaginated(DeploymentsFilter filter,
-        BasePaginationRequest paginatedRequest)
+    public async Task<PaginatedList<SimpleDeploymentDto>> GetDeploymentsPaginated(
+        DeploymentsFilter filter,
+        BasePaginationRequest paginatedRequest
+    )
     {
         var deployments = GetDeploymentQuery(filter);
 
-        var result = await deployments.ToPaginatedListAsync<Deployment, SimpleDeploymentDto>(paginatedRequest, mapper);
+        var result = await deployments.ToPaginatedListAsync<Deployment, SimpleDeploymentDto>(
+            paginatedRequest,
+            mapper
+        );
 
         return result;
     }
-
 
     public async Task<List<Stack>> FilterStacks(StackFilter filter)
     {
@@ -143,23 +179,73 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
 
         if (filter.HealthCheckAgeOlderThan.HasValue)
         {
-            stacks = from zz in stacks
+            stacks =
+                from zz in stacks
                 where
                     !zz.HealthStatus.StatusAt.HasValue
                     || zz.HealthStatus.StatusAt.Value
-                    < DateTime.UtcNow - filter.HealthCheckAgeOlderThan.Value
+                        < DateTime.UtcNow - filter.HealthCheckAgeOlderThan.Value
                 select zz;
 
-            stacks = from zz in stacks
+            stacks =
+                from zz in stacks
                 from service in zz.Services
                 where
                     !service.HealthStatus.StatusAt.HasValue
                     || service.HealthStatus.StatusAt.Value
-                    < DateTime.UtcNow - filter.HealthCheckAgeOlderThan.Value
+                        < DateTime.UtcNow - filter.HealthCheckAgeOlderThan.Value
                 select zz;
         }
 
         return await stacks.ToListAsync();
+    }
+
+    public async Task AddEnvironmentVariable(StackEnvironmentVariable variable)
+    {
+        context.StackEnvironmentVariables.Add(variable);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task<List<StackEnvironmentVariable>> GetEnvironmentVariables(Guid stackId)
+    {
+        return await context
+            .StackEnvironmentVariables.Where(v => v.StackId == stackId)
+            .ToListAsync();
+    }
+
+    public async Task AddEnvironmentVariableGroups(IList<StackEnvironmentVariableGroup> groups)
+    {
+        foreach (var group in groups)
+        {
+            context.StackEnvironmentVariableGroups.Add(group);
+        }
+
+        await context.SaveChangesAsync();
+    }
+
+    public async Task<List<StackEnvironmentVariableGroup>> GetEnvironmentVariableGroups(
+        Guid stackId
+    )
+    {
+        // We need to get groups but ensure they include their variables
+        return await context
+            .StackEnvironmentVariableGroups.Where(g => g.StackId == stackId)
+            .ToListAsync();
+    }
+
+    public Task<StackEnvironmentVariableGroup?> GetEnvironmentVariableGroup(
+        Guid stackId,
+        Guid groupId
+    )
+    {
+        return context
+            .StackEnvironmentVariableGroups.Where(x => x.StackId == stackId && x.Id == groupId)
+            .FirstOrDefaultAsync();
+    }
+
+    public void RemoveEnvironmentVariableGroup(StackEnvironmentVariableGroup group)
+    {
+        context.StackEnvironmentVariableGroups.Remove(group);
     }
 
     public Task SaveChangesAsync()
@@ -173,14 +259,13 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
 
         if (filter.StackId.HasValue)
         {
-            deployments = from zz in deployments
-                where zz.StackId == filter.StackId.Value
-                select zz;
+            deployments = from zz in deployments where zz.StackId == filter.StackId.Value select zz;
         }
 
         if (filter.ServerId.HasValue)
         {
-            deployments = from zz in deployments
+            deployments =
+                from zz in deployments
                 where zz.Stack != null && zz.Stack.ServerId == filter.ServerId
                 select zz;
         }
@@ -188,14 +273,18 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
         return deployments.OrderByDescending(x => x.CreatedAt);
     }
 
-
     private async Task<Stack?> GetStackInternal(Guid id, bool throwExceptionOnNotFound = true)
     {
         var stack = await context
             .Stacks.Include(x => x.Services)
-            .Include(x => x.Server)
             .Include(x => x.Environment)
-            .ThenInclude(x => x!.Project)
+            .Include(x => x.Server)
+            .Include(x => x.Source)
+            .ThenInclude(x => x!.GithubApp)
+            .ThenInclude(x => x!.SourceProvider)
+            .ThenInclude(x => x!.GithubProvider)
+            .Include(x => x.EnvironmentVariables)
+            .Include(x => x.EnvironmentVariableGroups)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (stack is null && throwExceptionOnNotFound)

@@ -10,7 +10,7 @@ using static Testing;
 
 public class CreateProjectCommandTest : BaseTestFixture
 {
-    private CreateProjectCommand.Command Command = new("Dummy");
+    private CreateProjectCommand Command = new("Dummy");
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()

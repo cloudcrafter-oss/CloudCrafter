@@ -21,6 +21,7 @@ public class SimpleAppDockerComposeGenerator(BaseDockerComposeGenerator.Args arg
         }
 
         var editor = new DockerComposeEditor();
+        editor.SetEnvironmentVariables(".env", new());
 
         var network = editor.AddNetwork("cloudcrafter");
         network.SetIsExternalNetwork();
@@ -46,6 +47,7 @@ public class SimpleAppDockerComposeGenerator(BaseDockerComposeGenerator.Args arg
 
         service.AddLabels(labelService);
         service.AddNetwork(network);
+        service.SetEnvironmentFilename(".env");
         var name = service.ServiceName();
 
         service.SetImage(stackService.Id.ToString(), "latest");

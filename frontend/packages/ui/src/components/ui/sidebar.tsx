@@ -4,19 +4,19 @@ import { type VariantProps, cva } from 'class-variance-authority'
 import { PanelLeft } from 'lucide-react'
 import * as React from 'react'
 
-import { Button } from '@ui/components/ui/button'
-import { Input } from '@ui/components/ui/input'
-import { Separator } from '@ui/components/ui/separator'
-import { Sheet, SheetContent } from '@ui/components/ui/sheet'
-import { Skeleton } from '@ui/components/ui/skeleton'
+import { Button } from '@cloudcrafter/ui/components/button'
+import { Input } from '@cloudcrafter/ui/components/input'
+import { Separator } from '@cloudcrafter/ui/components/separator'
+import { Sheet, SheetContent } from '@cloudcrafter/ui/components/sheet'
+import { Skeleton } from '@cloudcrafter/ui/components/skeleton'
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
-} from '@ui/components/ui/tooltip'
-import { useIsMobile } from '@ui/hooks/use-mobile'
-import { cn } from '@ui/lib/utils'
+} from '@cloudcrafter/ui/components/tooltip'
+import { cn } from '@cloudcrafter/ui/lib/utils'
+import { useIsMobile } from '../../hooks/use-mobile'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7

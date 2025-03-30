@@ -25,7 +25,7 @@ public class AgentLoggingBehaviour<TRequest, TResponse>(ILogger<TRequest> logger
 
         using (LogContext.PushProperty("ChannelId", guidScope))
         {
-            logger.LogInformation(
+            logger.LogDebug(
                 "Starting request {RequestType} for channel {ChannelId}",
                 typeof(TRequest).Name,
                 guidScope

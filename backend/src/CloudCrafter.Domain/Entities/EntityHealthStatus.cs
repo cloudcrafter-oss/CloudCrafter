@@ -10,6 +10,11 @@ public class EntityHealthStatus
         Value = value;
         StatusAt = DateTime.UtcNow;
     }
+
+    public void SetStatusWithoutDate(EntityHealthStatusValue value)
+    {
+        Value = value;
+    }
 }
 
 public enum EntityHealthStatusValue

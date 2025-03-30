@@ -1,9 +1,15 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.SignalR;
 
-public class ConnectedServerManager(IDistributedCache cache, ILogger<ConnectedServerManager> logger)
+public class ConnectedServerManager(
+    IDistributedCache cache,
+    IServiceProvider sp,
+    ILogger<ConnectedServerManager> logger
+)
 {
     public async Task<Guid?> GetServerIdForConnectionId(string connectionId)
     {
@@ -63,5 +69,22 @@ public class ConnectedServerManager(IDistributedCache cache, ILogger<ConnectedSe
             connectionId,
             serverId
         );
+    }
+
+    public async Task DisconnectAgent(Guid serverId)
+    {
+        var connectionId = await GetConnectionIdForServer(serverId);
+        if (string.IsNullOrWhiteSpace(connectionId))
+        {
+            return;
+        }
+
+        var hubLifetimeManager = sp.GetRequiredService<HubLifetimeManager<AgentHub>>();
+
+        if (hubLifetimeManager is CloudCrafterHubLifetimeManager<AgentHub> manager)
+        {
+            await manager.RequestDisconnect(connectionId);
+            logger.LogCritical("Requested to disconnect agent {ServerId}", serverId);
+        }
     }
 }

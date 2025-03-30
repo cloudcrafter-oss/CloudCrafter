@@ -1,11 +1,18 @@
-﻿using CloudCrafter.Core.Interfaces.Domain.Utils;
+﻿using CloudCrafter.Core.Interfaces.Domain.Providers;
+using CloudCrafter.Core.Interfaces.Domain.Utils;
+using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Utils;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Services.Domain.Utils;
 
-public class GitService(ILogger<GitService> logger, ICommandExecutor executor) : IGitService
+public class GitService(
+    ILogger<GitService> logger,
+    ICommandExecutor executor,
+    IStackRepository stackRepository,
+    ISourceProviderProxy sourceProviderProxy
+) : IGitService
 {
     public async Task<GitRepositoryCheckResultDto> ValidateRepository(
         string repository,
@@ -23,6 +30,33 @@ public class GitService(ILogger<GitService> logger, ICommandExecutor executor) :
         var pathExists = await CheckoutAndCheckIfPathExists(repository, path, branch);
 
         return new GitRepositoryCheckResultDto { IsValid = isValid && pathExists };
+    }
+
+    public async Task<GitRepositoryCheckResultDto> ValidateSourceProviderBranch(
+        Guid stackId,
+        string branchName
+    )
+    {
+        var stack = await stackRepository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            return new GitRepositoryCheckResultDto { IsValid = false };
+        }
+
+        if (stack.Source == null || stack.Source.GithubApp == null)
+        {
+            return new GitRepositoryCheckResultDto { IsValid = false };
+        }
+
+        var branches = await sourceProviderProxy.GetBranches(
+            stack.Source.GithubApp.SourceProvider,
+            stack.Source.GithubApp.RepositoryId
+        );
+
+        var hasBranch = branches.FirstOrDefault(x => x.Name == branchName) != null;
+
+        return new GitRepositoryCheckResultDto { IsValid = hasBranch };
     }
 
     private async Task<bool> CheckoutAndCheckIfPathExists(

@@ -1,37 +1,48 @@
-import type { StackDetailDto } from '@/src/core/__generated__'
-import { EntityHealthBadge } from '../../badges/EntityHealthBadge'
+import type { StackDetailDto } from '@cloudcrafter/api'
+import { useState } from 'react'
+import { ServiceDetail } from './service-detail'
 
 export const ServiceOverview = ({
 	stackDetails,
 }: { stackDetails: StackDetailDto }) => {
-	const { services } = stackDetails
+	const services = stackDetails?.services ?? []
+
+	const [expandedService, setExpandedService] = useState<string | null>(
+		services[0]?.name ?? null,
+	)
+
+	const toggleService = (serviceName: string) => {
+		setExpandedService(expandedService === serviceName ? null : serviceName)
+	}
+
+	if (!services.length) {
+		return (
+			<div className='space-y-4'>
+				<h2 className='text-2xl font-semibold tracking-tight'>
+					Service Overview
+				</h2>
+				<p className='text-muted-foreground'>No services found.</p>
+			</div>
+		)
+	}
 
 	return (
-		<div className='service-overview'>
-			<h2 className='text-xl font-bold mb-4 dark:text-white'>
+		<div className='space-y-6'>
+			<h2 className='text-2xl font-semibold tracking-tight'>
 				Service Overview
 			</h2>
-			<ul className='space-y-2'>
+
+			<div className='space-y-2'>
 				{services.map((service) => (
-					<li
-						key={service.name}
-						className='bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow'
-					>
-						<div className='flex justify-between items-center'>
-							<h3 className='text-lg font-semibold dark:text-white'>
-								{service.name}
-							</h3>
-							<EntityHealthBadge
-								status={service.health.value}
-								statusAt={service.health.statusAt}
-							/>
-						</div>
-						<p className='text-sm text-gray-600 dark:text-gray-300'>
-							{service.description}
-						</p>
-					</li>
+					<ServiceDetail
+						stackId={stackDetails.id}
+						key={service.id}
+						service={service}
+						toggleService={toggleService}
+						expandedService={expandedService}
+					/>
 				))}
-			</ul>
+			</div>
 		</div>
 	)
 }

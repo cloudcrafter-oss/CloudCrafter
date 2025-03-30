@@ -1,8 +1,6 @@
 import type { Option } from '@/src/components/datatable/types'
-import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons'
-import type { Column } from '@tanstack/react-table'
-import { Badge } from '@ui/components/ui/badge.tsx'
-import { Button } from '@ui/components/ui/button.tsx'
+import { Badge } from '@cloudcrafter/ui/components/badge'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Command,
 	CommandEmpty,
@@ -11,14 +9,16 @@ import {
 	CommandItem,
 	CommandList,
 	CommandSeparator,
-} from '@ui/components/ui/command.tsx'
+} from '@cloudcrafter/ui/components/command'
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from '@ui/components/ui/popover.tsx'
-import { Separator } from '@ui/components/ui/separator.tsx'
-import { cn } from '@ui/lib/utils.ts'
+} from '@cloudcrafter/ui/components/popover'
+import { Separator } from '@cloudcrafter/ui/components/separator'
+import { cn } from '@cloudcrafter/ui/lib/utils'
+import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons'
+import type { Column } from '@tanstack/react-table'
 
 interface DataTableFacetedFilterProps<TData, TValue> {
 	column?: Column<TData, TValue>

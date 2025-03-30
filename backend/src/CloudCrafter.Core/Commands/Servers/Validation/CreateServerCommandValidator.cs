@@ -1,8 +1,8 @@
-﻿using FluentValidation;
+using FluentValidation;
 
 namespace CloudCrafter.Core.Commands.Servers.Validation;
 
-public class CreateServerCommandValidator : AbstractValidator<CreateServerCommand.Command>
+public class CreateServerCommandValidator : AbstractValidator<CreateServerCommand>
 {
     public CreateServerCommandValidator()
     {

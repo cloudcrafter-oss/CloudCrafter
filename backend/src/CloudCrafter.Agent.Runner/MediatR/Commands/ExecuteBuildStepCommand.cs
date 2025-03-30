@@ -1,12 +1,7 @@
-﻿using System.Reflection;
-using System.Text.Json;
-using CloudCrafter.Agent.Models;
-using CloudCrafter.Agent.Models.Deployment.Steps;
+﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
 using CloudCrafter.Agent.Runner.Factories;
-using CloudCrafter.Agent.Runner.RunnerEngine.Deployment;
-using FluentValidation;
 using MediatR;
 
 namespace CloudCrafter.Agent.Runner.MediatR.Commands;
@@ -15,15 +10,21 @@ public static class ExecuteBuildStepCommand
 {
     public record Query(DeploymentBuildStep Step, DeploymentContext Context) : IRequest;
 
-    private class Handler(DeploymentStepSerializerFactory serializerFactory)
-        : IRequestHandler<Query>
+    private class Handler : IRequestHandler<Query>
     {
+        private readonly DeploymentStepSerializerFactory _serializerFactory;
+
+        public Handler(DeploymentStepSerializerFactory serializerFactory)
+        {
+            _serializerFactory = serializerFactory;
+        }
+
         public async Task Handle(Query request, CancellationToken cancellationToken)
         {
-            var paramType = serializerFactory.GetParamType(request.Step.Type);
+            var paramType = _serializerFactory.GetParamType(request.Step.Type);
             var method = typeof(Handler).GetMethod(
                 nameof(ExecuteStepInternal),
-                BindingFlags.NonPublic | BindingFlags.Instance
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance
             );
 
             if (method == null)
@@ -32,7 +33,6 @@ public static class ExecuteBuildStepCommand
             }
 
             var genericMethod = method.MakeGenericMethod(paramType);
-
             await (Task)genericMethod.Invoke(this, new object[] { request.Step, request.Context })!;
         }
 
@@ -40,14 +40,14 @@ public static class ExecuteBuildStepCommand
             DeploymentBuildStep step,
             DeploymentContext context
         )
+            where TParams : BaseParams
         {
-            var config = serializerFactory.GetConfig<TParams>(step);
-            var handler = serializerFactory.CreateHandler<TParams>(step);
-
-            var paramObject = serializerFactory.ConvertAndValidateParams(
+            var handler = _serializerFactory.GetHandler<TParams>(step);
+            var paramObject = _serializerFactory.ConvertAndValidateParams(
                 step.Params,
-                config.Validator
+                handler.Validator
             );
+
             if (context.IsDryRun)
             {
                 await handler.DryRun(paramObject, context);

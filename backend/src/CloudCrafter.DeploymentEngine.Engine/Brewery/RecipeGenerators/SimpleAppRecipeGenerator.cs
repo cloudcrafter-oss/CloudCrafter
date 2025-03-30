@@ -40,7 +40,7 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
             .SetDockerComposeOptions(dockerComposeEditor, dockerComposeLocation)
             .SetDestination(dockerComposeLocation, gitCheckoutDirectory);
 
-        AddSteps(dockerComposeEditor);
+        await AddSteps(dockerComposeEditor);
 
         var recipe = Recipe.Build();
 
@@ -51,18 +51,44 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
         };
     }
 
-    private void AddSteps(DockerComposeEditor dockerComposeEditor)
+    private async Task AddSteps(DockerComposeEditor dockerComposeEditor)
     {
         AddNetworkExistsStep("cloudcrafter");
 
-        if (!string.IsNullOrWhiteSpace(Options.Stack.Source?.Git?.Repository))
+        var isPublicApp = !string.IsNullOrWhiteSpace(Options.Stack.Source?.Git?.Repository);
+        var isGithubApp = Options.Stack.Source?.GithubApp != null;
+
+        if (!isPublicApp && !isGithubApp)
         {
-            // TODO: It should never be possible that it is null or empty in this case.
-            // Maybe we should throw an exception if it happens.
+            throw new InvalidOperationException(
+                "SimpleAppRecipeGenerator can only be used with stacks that have a public git repository and a github app configured."
+            );
+        }
+
+        string? pathInGit = null;
+        if (isPublicApp)
+        {
             AddFetchGitRepositoryStep(
-                Options.Stack.Source.Git.Repository,
+                Options.Stack.Source!.Git!.Repository,
                 "HEAD" // TODO: change
             );
+
+            pathInGit = Options.Stack.Source!.Git!.Path;
+        }
+
+        if (isGithubApp)
+        {
+            var token = await Options.ProviderHelperProvider.GetProviderAccessTokenAsync(
+                Options.Stack.Source!.GithubApp!.SourceProvider
+            );
+
+            var dto = await Options.ProviderHelperProvider.GetSourceLocation(
+                Options.Stack.Source!.GithubApp!.SourceProvider,
+                Options.Stack.Source!
+            );
+            AddFetchGitRepositoryFromGithubAppStep(Options.Stack.Source!.GithubApp!, token, dto);
+
+            pathInGit = Options.Stack.Source!.GithubApp!.Path;
         }
 
         var firstService = Options.Stack.Services.First();
@@ -78,17 +104,20 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
 
         var dockerComposeFileName = "docker-compose.yml";
 
-        AddDetermineBuildpackStep(Options.Stack.Source?.Git?.Path);
-        AddGenerateBuildPlan(Options.Stack.Source?.Git?.Path);
+        AddWriteEnvironmentVariableFile(".env");
+
+        AddDetermineBuildpackStep(pathInGit);
+
+        AddGenerateBuildPlan(pathInGit);
+
         AlterNixpacksPlan(["iputils-ping", "curl"]);
-        AddWritePlanToFilesystemStep(Options.Stack.Source?.Git?.Path);
-        AddBuildNixpacksDockerImageStep(
-            firstService.Id.ToString(),
-            "latest",
-            Options.Stack.Source?.Git?.Path
-        );
+        AddWritePlanToFilesystemStep(pathInGit);
+        AddBuildNixpacksDockerImageStep(firstService.Id.ToString(), "latest", pathInGit);
         AddWriteDockerComposeFileStep(dockerComposeFileName);
         AddStartDockerComposeStep(dockerComposeFileName);
+
+        // TODO: Check for allowing rolling restart
+        AddStopPreviousContainers(Options.Stack.Id, Options.DeploymentId);
 
         var healthCheckConfiguration = firstService.HealthcheckConfiguration;
         var hasValidHealthConfiguration = healthCheckConfiguration.ConfigurationValid();

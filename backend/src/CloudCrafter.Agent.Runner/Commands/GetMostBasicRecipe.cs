@@ -30,10 +30,6 @@ public static class GetMostBasicRecipe
             {
                 Name = "Most basic recipe",
                 Application = new DeploymentRecipeApplicationInfo { Id = Guid.NewGuid() },
-                EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
-                {
-                    Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),
-                },
                 Destination = new DeploymentRecipeDestination
                 {
                     RootDirectory = "/tmp/cloudcrafter",

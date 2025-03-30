@@ -51,10 +51,6 @@ public static class GetDummyDeployment
             {
                 Name = "My Application",
                 Application = new DeploymentRecipeApplicationInfo { Id = request.ApplicationId },
-                EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
-                {
-                    Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),
-                },
                 Destination = new DeploymentRecipeDestination
                 {
                     RootDirectory = "/tmp/cloudcrafter/" + randomString,
@@ -87,7 +83,7 @@ public static class GetDummyDeployment
                         {
                             Name = "Fetch git",
                             Description = "Fetch the git application",
-                            Type = DeploymentBuildStepType.FetchGitRepository,
+                            Type = DeploymentBuildStepType.FetchPublicGitRepository,
                             Params = new Dictionary<string, object>
                             {
                                 { "repo", "https://github.com/cloudcrafter-oss/demo-examples.git" },

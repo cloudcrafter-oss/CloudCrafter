@@ -1,8 +1,8 @@
-import type { EntityHealthDtoValue } from '@/src/core/__generated__'
-import { Badge } from '@ui/components/ui/badge'
-import { TooltipContent } from '@ui/components/ui/tooltip'
-import { Tooltip, TooltipTrigger } from '@ui/components/ui/tooltip'
-import { TooltipProvider } from '@ui/components/ui/tooltip'
+import type { EntityHealthDtoValue } from '@cloudcrafter/api'
+import { Badge } from '@cloudcrafter/ui/components/badge'
+import { TooltipContent } from '@cloudcrafter/ui/components/tooltip'
+import { Tooltip, TooltipTrigger } from '@cloudcrafter/ui/components/tooltip'
+import { TooltipProvider } from '@cloudcrafter/ui/components/tooltip'
 import ShowDate from '../ShowDate'
 
 export const EntityHealthBadge = ({

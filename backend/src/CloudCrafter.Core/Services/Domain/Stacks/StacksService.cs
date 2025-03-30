@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+using System.Reflection.Metadata;
+using AutoMapper;
 using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Core.Common.Responses;
+using CloudCrafter.Core.Events;
 using CloudCrafter.Core.Events.DomainEvents;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Domain.Stacks.Filters;
@@ -60,8 +62,10 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
         return mapper.Map<List<SimpleDeploymentDto>>(deployments);
     }
 
-    public Task<PaginatedList<SimpleDeploymentDto>> GetDeploymentsPaginated(DeploymentsFilter filter,
-        BasePaginationRequest paginatedRequest)
+    public Task<PaginatedList<SimpleDeploymentDto>> GetDeploymentsPaginated(
+        DeploymentsFilter filter,
+        BasePaginationRequest paginatedRequest
+    )
     {
         return repository.GetDeploymentsPaginated(filter, paginatedRequest);
     }
@@ -103,7 +107,7 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
                 // TODO: Move this to Unit of Work
                 var stackServiceEntity = await repository.GetService(stackServiceId);
 
-                if (stackServiceEntity?.Stack.ServerId != serverId)
+                if (stackServiceEntity?.Stack?.ServerId != serverId)
                 {
                     continue;
                 }
@@ -112,11 +116,11 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
 
                 stackServiceEntity?.HealthStatus.SetStatus(
                     stackService.Value.Status == ContainerHealthCheckStackInfoHealthStatus.Healthy
-                        ? EntityHealthStatusValue.Healthy
+                            ? EntityHealthStatusValue.Healthy
                         : stackService.Value.Status
-                          == ContainerHealthCheckStackInfoHealthStatus.Unhealthy
+                        == ContainerHealthCheckStackInfoHealthStatus.Unhealthy
                             ? EntityHealthStatusValue.Unhealthy
-                            : EntityHealthStatusValue.Degraded,
+                        : EntityHealthStatusValue.Degraded,
                     isRunning
                 );
             }
@@ -125,7 +129,7 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
         await repository.SaveChangesAsync();
     }
 
-    public async Task<StackDetailDto?> UpdateStack(UpdateStackCommand.Command request)
+    public async Task<StackDetailDto?> UpdateStack(UpdateStackCommand request)
     {
         var stack = await repository.GetStack(request.StackId);
 
@@ -148,19 +152,32 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
         {
             // Update git related settings
 
-            if (!string.IsNullOrWhiteSpace(request.GitSettings?.GitRepository))
+            if (!string.IsNullOrWhiteSpace(request.GitPublicSettings?.Repository))
             {
-                stack.Source.Git.Repository = request.GitSettings.GitRepository;
+                stack.Source.Git.Repository = request.GitPublicSettings.Repository;
             }
 
-            if (!string.IsNullOrWhiteSpace(request.GitSettings?.GitBranch))
+            if (!string.IsNullOrWhiteSpace(request.GitPublicSettings?.Branch))
             {
-                stack.Source.Git.Branch = request.GitSettings.GitBranch;
+                stack.Source.Git.Branch = request.GitPublicSettings.Branch;
             }
 
-            if (!string.IsNullOrWhiteSpace(request.GitSettings?.GitPath))
+            if (!string.IsNullOrWhiteSpace(request.GitPublicSettings?.Path))
             {
-                stack.Source.Git.Path = request.GitSettings.GitPath;
+                stack.Source.Git.Path = request.GitPublicSettings.Path;
+            }
+        }
+
+        if (stack.Source?.GithubApp != null)
+        {
+            if (!string.IsNullOrWhiteSpace(request.GithubSettings?.Branch))
+            {
+                stack.Source.GithubApp.Branch = request.GithubSettings.Branch;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.GithubSettings?.Path))
+            {
+                stack.Source.GithubApp.Path = request.GithubSettings.Path;
             }
         }
 
@@ -179,7 +196,7 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
 
         foreach (var stack in stacks)
         {
-            stack.HealthStatus.SetStatus(EntityHealthStatusValue.HealthCheckOverdue);
+            stack.HealthStatus.SetStatusWithoutDate(EntityHealthStatusValue.HealthCheckOverdue);
 
             foreach (var service in stack.Services)
             {
@@ -188,7 +205,9 @@ public class StacksService(IStackRepository repository, IMapper mapper) : IStack
                     || service.HealthStatus.StatusAt.Value < DateTime.UtcNow - maxHealthCheckAge
                 )
                 {
-                    service.HealthStatus.SetStatus(EntityHealthStatusValue.HealthCheckOverdue);
+                    service.HealthStatus.SetStatusWithoutDate(
+                        EntityHealthStatusValue.HealthCheckOverdue
+                    );
                 }
             }
         }

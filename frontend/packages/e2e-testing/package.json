@@ -1,0 +1,35 @@
+{
+	"name": "@cloudcrafter/e2e-testing",
+	"version": "0.1.0",
+	"private": true,
+	"description": "End-to-end testing package for CloudCrafter",
+	"main": "src/index.ts",
+	"scripts": {
+		"test": "playwright test",
+		"test:ui": "playwright test --ui",
+		"test:debug": "playwright test --debug",
+		"test:report": "playwright show-report",
+		"generate-clients": "kubb generate --config kubb.config.ts"
+	},
+	"dependencies": {
+		"@cloudcrafter/api": "workspace:*",
+		"axios": "^1.7.2",
+		"dotenv": "^16.4.7",
+		"fs": "^0.0.1-security",
+		"path": "^0.12.7"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.51.1",
+		"@cloudcrafter/typescript-config": "workspace:*",
+		"@cloudcrafter/kubb-config": "workspace:*",
+		"@types/node": "^20",
+		"typescript": "5.1.6",
+		"@kubb/cli": "^3.7.0",
+		"@kubb/core": "^3.7.0",
+		"@kubb/plugin-client": "^3.7.0",
+		"@kubb/plugin-oas": "^3.7.0",
+		"@kubb/plugin-react-query": "^3.7.0",
+		"@kubb/plugin-ts": "^3.7.0",
+		"@kubb/plugin-zod": "^3.7.0"
+	}
+}

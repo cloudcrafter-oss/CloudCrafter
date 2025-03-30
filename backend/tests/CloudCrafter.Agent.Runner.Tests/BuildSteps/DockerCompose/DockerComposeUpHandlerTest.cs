@@ -11,7 +11,8 @@ using Moq;
 
 namespace CloudCrafter.Agent.Runner.Tests.BuildSteps.DockerCompose;
 
-public class DockerComposeUpHandlerTest : BaseTest
+public class DockerComposeUpHandlerTest
+    : BaseStepHandlerTest<DockerComposeUpHandler, DockerComposeUpParams>
 {
     private DeploymentContext _context;
     private DockerComposeUpHandler _handler;

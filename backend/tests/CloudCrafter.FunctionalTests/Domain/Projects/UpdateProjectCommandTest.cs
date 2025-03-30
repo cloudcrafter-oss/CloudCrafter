@@ -14,9 +14,7 @@ public class UpdateProjectCommandTest : BaseTestFixture
     {
         Assert.ThrowsAsync<UnauthorizedAccessException>(
             async () =>
-                await SendAsync(
-                    new UpdateProjectCommand.Command(Guid.NewGuid(), new UpdateProjectArgs())
-                )
+                await SendAsync(new UpdateProjectCommand(Guid.NewGuid(), new UpdateProjectArgs()))
         );
     }
 
@@ -29,7 +27,7 @@ public class UpdateProjectCommandTest : BaseTestFixture
         await AddAsync(project);
 
         var args = new UpdateProjectArgs { Name = "New Name" };
-        var result = await SendAsync(new UpdateProjectCommand.Command(project.Id, args));
+        var result = await SendAsync(new UpdateProjectCommand(project.Id, args));
 
         result.Name.Should().Be("New Name");
         result.Description.Should().Be(project.Description);
@@ -44,7 +42,7 @@ public class UpdateProjectCommandTest : BaseTestFixture
         await AddAsync(project);
 
         var args = new UpdateProjectArgs { Description = "New Description" };
-        var result = await SendAsync(new UpdateProjectCommand.Command(project.Id, args));
+        var result = await SendAsync(new UpdateProjectCommand(project.Id, args));
 
         result.Name.Should().Be(project.Name);
         result.Description.Should().Be("New Description");

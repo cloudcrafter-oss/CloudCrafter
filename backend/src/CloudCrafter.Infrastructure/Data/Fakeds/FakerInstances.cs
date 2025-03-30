@@ -24,6 +24,8 @@ public static class FakerInstances
             .RuleFor(x => x.IpAddress, f => f.Internet.Ip())
             .RuleFor(x => x.DockerDataDirectoryMount, "/data/random/dir")
             .RuleFor(x => x.Stacks, [])
+            .RuleFor(x => x.CreatedBy, f => null)
+            .RuleFor(x => x.LastModifiedBy, f => null)
             .RuleFor(x => x.PingHealthData, new ServerPingData())
             .RuleFor(x => x.AgentSecretKey, f => f.Internet.Password())
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
@@ -39,20 +41,31 @@ public static class FakerInstances
             .RuleFor(x => x.Environments, new List<Environment>())
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
-    public static Faker<GithubProvider> GithubProviderFaker =>
-        new Faker<GithubProvider>()
-            .StrictMode(true)
-            .RuleFor(x => x.Id, Guid.NewGuid)
-            .RuleFor(x => x.Name, f => f.Person.FullName)
-            .RuleFor(x => x.AppName, f => f.Person.FullName)
-            .RuleFor(x => x.IsValid, f => null)
-            .RuleFor(x => x.AppId, f => f.Random.Long())
-            .RuleFor(x => x.AppClientId, f => f.Random.Guid().ToString())
-            .RuleFor(x => x.AppClientSecret, f => f.Random.Guid().ToString())
-            .RuleFor(x => x.AppWebhookSecret, f => f.Random.Guid().ToString())
-            .RuleFor(x => x.AppPrivateKey, f => f.Random.Guid().ToString())
-            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
-            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    public static Faker<GithubProvider> GithubProviderFaker
+    {
+        get
+        {
+            var githubProviderId = Guid.NewGuid();
+            var provider = SourceProviderFaker(githubProviderId).Generate();
+
+            return new Faker<GithubProvider>()
+                .StrictMode(true)
+                .RuleFor(x => x.Id, githubProviderId)
+                .RuleFor(x => x.AppName, f => f.Person.FullName)
+                .RuleFor(x => x.IsValid, f => null)
+                .RuleFor(x => x.AppId, f => f.Random.Long())
+                .RuleFor(x => x.AppClientId, f => f.Random.Guid().ToString())
+                .RuleFor(x => x.AppClientSecret, f => f.Random.Guid().ToString())
+                .RuleFor(x => x.AppWebhookSecret, f => f.Random.Guid().ToString())
+                .RuleFor(x => x.AppPrivateKey, f => f.Random.Guid().ToString())
+                .RuleFor(x => x.InstallationId, f => null)
+                .RuleFor(x => x.AppUrl, f => f.Internet.Url())
+                .RuleFor(x => x.SourceProvider, f => provider)
+                .RuleFor(x => x.SourceProviderId, f => provider.Id)
+                .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+                .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+        }
+    }
 
     public static Faker<EntityStackServiceHealthStatus> EntityHealthStatusFaker =>
         new Faker<EntityStackServiceHealthStatus>()
@@ -63,6 +76,57 @@ public static class FakerInstances
 
     public static StackServiceType StackServiceAppTypeType =>
         new() { Id = StackServiceTypeConstants.App, Type = nameof(StackServiceTypeConstants.App) };
+
+    public static Faker<StackEnvironmentVariable> StackEnvironmentVariableFaker(Stack stack)
+    {
+        return new Faker<StackEnvironmentVariable>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, Guid.NewGuid)
+            .RuleFor(x => x.Key, f => f.Lorem.Word())
+            .RuleFor(x => x.Value, f => f.Lorem.Word())
+            .RuleFor(x => x.StackId, stack.Id)
+            .RuleFor(x => x.Group, f => null)
+            .RuleFor(x => x.GroupId, f => null)
+            .RuleFor(x => x.IsSecret, f => false)
+            // ReSharper disable once RedundantCast
+            .RuleFor(x => x.Stack, f => (Stack?)null)
+            .RuleFor(x => x.Type, f => f.PickRandom<EnvironmentVariableType>())
+            .RuleFor(x => x.CreatedBy, f => null)
+            .RuleFor(x => x.LastModifiedBy, f => null)
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    }
+
+    public static Faker<StackEnvironmentVariableGroup> StackEnvironmentVariableGroupFaker(
+        Stack stack
+    )
+    {
+        return new Faker<StackEnvironmentVariableGroup>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, Guid.NewGuid)
+            .RuleFor(x => x.CreatedBy, f => null)
+            .RuleFor(x => x.Name, f => f.Name.JobTitle())
+            .RuleFor(x => x.Description, f => f.Lorem.Sentence())
+            .RuleFor(x => x.LastModifiedBy, f => null)
+            .RuleFor(x => x.StackId, stack.Id)
+            // ReSharper disable once RedundantCast
+            .RuleFor(x => x.Stack, (Stack?)null)
+            .RuleFor(x => x.EnvironmentVariables, f => new List<StackEnvironmentVariable>())
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    }
+
+    public static Faker<SourceProvider> SourceProviderFaker(Guid? githubProviderId = null)
+    {
+        return new Faker<SourceProvider>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, f => Guid.NewGuid())
+            .RuleFor(x => x.Name, f => f.Person.FirstName)
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.GithubProvider, f => null)
+            .RuleFor(x => x.GithubProviderId, f => githubProviderId)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    }
 
     public static Faker<Deployment> DeploymentFaker(Stack Stack)
     {
@@ -89,6 +153,7 @@ public static class FakerInstances
             .RuleFor(x => x.Id, Guid.NewGuid)
             .RuleFor(x => x.Name, f => $"Application {f.Person.FirstName}")
             .RuleFor(x => x.ServerId, server.Id)
+            .RuleFor(x => x.EnvironmentVariables, f => new List<StackEnvironmentVariable>())
             .RuleFor(x => x.BuildPack, f => StackBuildPack.Nixpacks)
             .RuleFor(x => x.CreatedBy, (Guid?)null)
             .RuleFor(x => x.Description, f => null)
@@ -100,6 +165,10 @@ public static class FakerInstances
             .RuleFor(x => x.Source, f => null)
             .RuleFor(x => x.HealthStatus, f => new StackHealthEntity())
             .RuleFor(x => x.Services, f => new List<StackService>())
+            .RuleFor(
+                x => x.EnvironmentVariableGroups,
+                f => new List<StackEnvironmentVariableGroup>()
+            )
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
     }

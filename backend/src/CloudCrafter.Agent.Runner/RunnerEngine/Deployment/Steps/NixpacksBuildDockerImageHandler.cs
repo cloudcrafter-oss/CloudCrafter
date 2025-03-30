@@ -1,24 +1,29 @@
-﻿using CloudCrafter.Agent.Models.Configs;
-using CloudCrafter.Agent.Models.Deployment;
-using CloudCrafter.Agent.Models.Deployment.Steps;
-using CloudCrafter.Agent.Models.Deployment.Steps.Params;
+﻿using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.Exceptions;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
 using CloudCrafter.Agent.Runner.Cli.Helpers.Abstraction;
 using CloudCrafter.Agent.Runner.DeploymentLogPump;
+using CloudCrafter.Agent.Runner.Factories;
+using CloudCrafter.Agent.Runner.Validators;
+using FluentValidation;
+using NixpacksBuildDockerImageConfig = CloudCrafter.Agent.Models.Configs.NixpacksBuildDockerImageConfig;
 
 namespace CloudCrafter.Agent.Runner.RunnerEngine.Deployment.Steps;
 
-[DeploymentStep(DeploymentBuildStepType.NixpacksBuildDockerImage)]
-// ReSharper disable once UnusedType.Global
 public class NixpacksBuildDockerImageHandler(IMessagePump pump, INixpacksHelper nixpacksHelper)
-    : IDeploymentStepHandler<NixpacksBuildDockerImageParams>
+    : BaseDeploymentStep<NixpacksBuildDockerImageParams>
 {
     private readonly IDeploymentLogger _logger =
         pump.CreateLogger<NixpacksBuildDockerImageHandler>();
 
-    public async Task ExecuteAsync(
+    public override DeploymentBuildStepType Type =>
+        DeploymentBuildStepType.NixpacksBuildDockerImage;
+
+    public override IValidator<NixpacksBuildDockerImageParams> Validator =>
+        new NixpacksBuildDockerImageValidator();
+
+    public override async Task ExecuteAsync(
         NixpacksBuildDockerImageParams parameters,
         DeploymentContext context
     )
@@ -36,10 +41,10 @@ public class NixpacksBuildDockerImageHandler(IMessagePump pump, INixpacksHelper 
 
         var image = $"{parameters.Image}:{parameters.Tag}";
 
-        var buildEnvironmentVariables = context
-            .Recipe.EnvironmentVariables.Variables.Select(x => x.Value)
-            .Where(x => x.IsBuildVariable)
-            .ToDictionary(x => x.Name, x => x.Value);
+        var variables =
+            parameters.Env != null
+                ? parameters.Env.ToDictionary(x => x.Key, x => x.Value.ToString() ?? string.Empty)
+                : new Dictionary<string, string>();
 
         var result = await nixpacksHelper.BuildDockerImage(
             new NixpacksBuildDockerImageConfig
@@ -48,14 +53,17 @@ public class NixpacksBuildDockerImageHandler(IMessagePump pump, INixpacksHelper 
                 WorkDir = workDir,
                 ImageName = image,
                 DisableCache = parameters.DisableCache.GetValueOrDefault(),
-                EnvironmentVariables = buildEnvironmentVariables,
+                EnvironmentVariables = variables,
             }
         );
 
         _logger.LogInfo($"Successfully built Docker image: {image}");
     }
 
-    public Task DryRun(NixpacksBuildDockerImageParams parameters, DeploymentContext context)
+    public override Task DryRun(
+        NixpacksBuildDockerImageParams parameters,
+        DeploymentContext context
+    )
     {
         _logger.LogInfo("Building Docker image via Nixpacks");
 

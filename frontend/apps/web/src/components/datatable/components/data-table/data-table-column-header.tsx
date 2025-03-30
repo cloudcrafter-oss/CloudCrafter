@@ -1,3 +1,12 @@
+import { Button } from '@cloudcrafter/ui/components/button'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@cloudcrafter/ui/components/dropdown-menu'
+import { cn } from '@cloudcrafter/ui/lib/utils'
 import {
 	ArrowDownIcon,
 	ArrowUpIcon,
@@ -5,15 +14,6 @@ import {
 	EyeNoneIcon,
 } from '@radix-ui/react-icons'
 import type { Column } from '@tanstack/react-table'
-import { Button } from '@ui/components/ui/button.tsx'
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from '@ui/components/ui/dropdown-menu.tsx'
-import { cn } from '@ui/lib/utils.ts'
 import type React from 'react'
 
 interface DataTableColumnHeaderProps<TData, TValue>

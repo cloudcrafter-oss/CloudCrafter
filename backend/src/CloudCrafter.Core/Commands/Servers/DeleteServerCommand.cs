@@ -4,16 +4,14 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Servers;
 
-public static class DeleteServerCommand
-{
-    [Authorize]
-    public record Command(Guid ServerId) : IRequest;
+[Authorize]
+public record DeleteServerCommand(Guid ServerId) : IRequest;
 
-    private class Handler(IServersService service) : IRequestHandler<Command>
+internal class DeleteServerCommandHandler(IServersService service)
+    : IRequestHandler<DeleteServerCommand>
+{
+    public async Task Handle(DeleteServerCommand request, CancellationToken cancellationToken)
     {
-        public async Task Handle(Command request, CancellationToken cancellationToken)
-        {
-            await service.DeleteServer(request.ServerId);
-        }
+        await service.DeleteServer(request.ServerId);
     }
 }

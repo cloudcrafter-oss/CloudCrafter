@@ -1,9 +1,9 @@
-import type { AvatarProps } from '@radix-ui/react-avatar'
 import {
 	Avatar,
 	AvatarFallback,
 	AvatarImage,
-} from '@ui/components/ui/avatar.tsx'
+} from '@cloudcrafter/ui/components/avatar'
+import type { AvatarProps } from '@radix-ui/react-avatar'
 import { User as UserIcon } from 'lucide-react'
 import type { User } from 'next-auth'
 

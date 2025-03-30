@@ -14,11 +14,3 @@ public class NixpacksDetermineBuildPackValidator
         RuleFor(x => x.Path).NotNull();
     }
 }
-
-[DeploymentStep(DeploymentBuildStepType.NixpacksDetermineBuildPack)]
-public class NixpacksDetermineBuildPackConfig
-    : IDeploymentStepConfig<NixpacksDetermineBuildPackParams>
-{
-    public IValidator<NixpacksDetermineBuildPackParams> Validator =>
-        new NixpacksDetermineBuildPackValidator();
-}

@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Agent.SignalR;
+using CloudCrafter.Agent.SignalR;
 using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Commands.SignalR;
 using CloudCrafter.Core.Interfaces.Domain.Applications.Deployments;
@@ -30,7 +30,7 @@ public class AgentHub(
 
         logger.LogCritical("Received HealthCheckCommand from server {ServerId}", serverId);
 
-        await sender.Send(new ServerHealthCheckCommand.Command(serverId, args));
+        await sender.Send(new ServerHealthCheckCommand(serverId, args));
     }
 
     public async Task DeploymentOutput(DeploymentOutputArgs args)

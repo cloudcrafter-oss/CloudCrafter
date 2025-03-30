@@ -35,12 +35,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\CloudCrafter.Agent.Console\CloudCrafter.Agent.Console.csproj"/>
+    <ProjectReference Include="..\..\src\CloudCrafter.DeploymentEngine.Engine\CloudCrafter.DeploymentEngine.Engine.csproj" />
     <ProjectReference Include="..\..\src\engine\CloudCrafter.DockerCompose.Engine\CloudCrafter.DockerCompose.Engine.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Client\"/>
-    <Folder Include="StepsParsing\"/>
   </ItemGroup>
 
   <ItemGroup>

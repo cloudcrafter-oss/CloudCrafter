@@ -1,0 +1,3 @@
+﻿services:
+  test:
+    env_file: .env-pr-123

@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.Core;
 using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Core.Events;
 using CloudCrafter.Core.Interfaces;
 using CloudCrafter.Infrastructure;
 using CloudCrafter.Infrastructure.Logging;
@@ -66,6 +67,7 @@ public class Program
                     services.AddCloudCrafterConfiguration();
                     services.AddCloudCrafterLogging(hostContext.Configuration);
                     services.AddInfrastructureServices(hostContext.Configuration);
+                    services.AddDomainEvents(typeof(IDomainEvent).Assembly);
                     services.AddJobInfrastructure(
                         hostContext.Configuration,
                         true,

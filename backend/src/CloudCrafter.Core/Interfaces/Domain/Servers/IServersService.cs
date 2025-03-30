@@ -1,4 +1,4 @@
-﻿using CloudCrafter.Core.Commands.Servers;
+using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Domain.Domain.Server;
 
 namespace CloudCrafter.Core.Interfaces.Domain.Servers;
@@ -9,7 +9,10 @@ public interface IServersService
     Task<ServerDetailDto?> GetServer(Guid id);
 
     Task<bool> IsValidAgent(Guid serverId, string serverKey);
-    Task<CreatedServerDto> CreateServer(CreateServerCommand.Command request);
+    Task<CreatedServerDto> CreateServer(CreateServerCommand request);
     Task MarkServersStateAsUnknownAfterTimespan(TimeSpan fromMinutes);
     Task DeleteServer(Guid id);
+    Task RotateServerKey(Guid id);
+    Task SaveChangesAsync();
+    Task UpdateServer(Guid id, UpdateServerDto updateDto);
 }

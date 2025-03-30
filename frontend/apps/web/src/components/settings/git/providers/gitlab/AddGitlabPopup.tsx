@@ -3,7 +3,7 @@ import {
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
-} from '@ui/components/ui/dialog'
+} from '@cloudcrafter/ui/components/dialog'
 
 export const GitlabPopup: React.FC<{
 	isOpen: boolean

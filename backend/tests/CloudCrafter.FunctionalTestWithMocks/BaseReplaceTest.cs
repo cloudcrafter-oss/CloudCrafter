@@ -146,6 +146,14 @@ public abstract class BaseReplaceTest
         return await context.Set<TEntity>().FirstOrDefaultAsync(predicate);
     }
 
+    public T GetService<T>()
+        where T : class
+    {
+        var scope = _scopeFactory.CreateScope();
+
+        return scope.ServiceProvider.GetRequiredService<T>();
+    }
+
     public async Task<Stack> CreateSampleStack()
     {
         var server = FakerInstances.ServerFaker.Generate();

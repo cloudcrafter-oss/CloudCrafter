@@ -76,16 +76,23 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
+      env:
+        TESTS_GITHUB_APP_APP_ID: ${{ secrets.TESTS_GITHUB_APP_APP_ID }}
+        TESTS_GITHUB_APP_CLIENT_ID: ${{ secrets.TESTS_GITHUB_APP_CLIENT_ID }}
+        TESTS_GITHUB_APP_CLIENT_SECRET: ${{ secrets.TESTS_GITHUB_APP_CLIENT_SECRET }}
+        TESTS_GITHUB_APP_WEBHOOK_SECRET: ${{ secrets.TESTS_GITHUB_APP_WEBHOOK_SECRET }}
+        TESTS_GITHUB_APP_URL: ${{ secrets.TESTS_GITHUB_APP_URL }}
+        TESTS_GITHUB_APP_PRIVATE_KEY: ${{ secrets.TESTS_GITHUB_APP_PRIVATE_KEY }}
       run: |
         project_name=$(basename ${{ matrix.test-project }})
-        dotnet test ${{ matrix.test-project }} --verbosity normal --logger trx --results-directory ./test-results --collect:"XPlat Code Coverage;Format=opencover" /p:DefineConstants="IN_TESTS"
+        dotnet test ${{ matrix.test-project }} --logger trx --results-directory ./test-results --collect:"XPlat Code Coverage;Format=opencover" /p:DefineConstants="IN_TESTS"
     - name: Sanitize project name
       id: sanitize
       run: |
         sanitized=$(echo "${{ matrix.test-project }}" | sed 's/[^a-zA-Z0-9-]//g')
         echo "sanitized=$sanitized" >> $GITHUB_OUTPUT
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test-results-${{ steps.sanitize.outputs.sanitized }}

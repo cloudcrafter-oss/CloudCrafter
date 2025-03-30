@@ -1,9 +1,9 @@
 'use client'
 
-import { DataTableColumnHeader } from '@/src/components/datatable/components/data-table/data-table-column-header.tsx'
-import type { UserDto } from '@/src/core/__generated__'
+import { DataTableColumnHeader } from '@/src/components/datatable/components/data-table/data-table-column-header'
+import type { UserDto } from '@cloudcrafter/api'
+import { Checkbox } from '@cloudcrafter/ui/components/checkbox'
 import type { ColumnDef } from '@tanstack/react-table'
-import { Checkbox } from '@ui/components/ui/checkbox.tsx'
 
 export function getColumns(): ColumnDef<UserDto>[] {
 	return [

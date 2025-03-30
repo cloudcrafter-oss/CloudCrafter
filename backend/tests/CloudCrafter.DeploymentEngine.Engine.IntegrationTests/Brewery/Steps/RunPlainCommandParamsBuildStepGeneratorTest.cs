@@ -22,8 +22,8 @@ public class RunPlainCommandParamsBuildStepGeneratorTest
         var buildStep = generator.Generate();
 
         // Assert
-        var result = Serializer.GetConfig<RunPlainCommandParams>(buildStep);
-        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, result.Validator);
+        var handler = Serializer.GetHandler<RunPlainCommandParams>(buildStep);
+        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, handler.Validator);
 
         paramObject.AllowFailure.Should().Be(true);
         paramObject.Command.Should().Be("echo 'Hello, World!'");

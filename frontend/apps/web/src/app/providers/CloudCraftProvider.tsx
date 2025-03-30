@@ -1,7 +1,8 @@
-import { QueryProvider } from '@/src/app/providers/QueryProvider.tsx'
-import { auth } from '@/src/auth.ts'
+import { QueryProvider } from '@/src/app/providers/QueryProvider'
+import { auth } from '@/src/auth'
 import { SessionProvider } from 'next-auth/react'
 import type React from 'react'
+import { FrontendAxiosProvider } from './FrontendAxiosProvider'
 
 export const CloudCraftProvider = async ({
 	children,
@@ -10,7 +11,8 @@ export const CloudCraftProvider = async ({
 
 	return (
 		<>
-			<SessionProvider basePath={'/auth'} session={session}>
+			<SessionProvider basePath={'/api/auth'} session={session}>
+				<FrontendAxiosProvider />
 				<QueryProvider>{children}</QueryProvider>
 			</SessionProvider>
 		</>

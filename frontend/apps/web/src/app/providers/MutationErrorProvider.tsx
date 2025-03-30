@@ -1,9 +1,5 @@
 import { Http422ErrorSchema } from '@/src/core/backend/zod/http422error'
 import {
-	type MutationCacheNotifyEvent,
-	useQueryClient,
-} from '@tanstack/react-query'
-import {
 	AlertDialog,
 	AlertDialogAction,
 	AlertDialogContent,
@@ -11,8 +7,13 @@ import {
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
-} from '@ui/components/ui/alert-dialog'
-import { cn } from '@ui/lib/utils'
+} from '@cloudcrafter/ui/components/alert-dialog'
+import {
+	type MutationCacheNotifyEvent,
+	useQueryClient,
+} from '@tanstack/react-query'
+
+import { cn } from '@cloudcrafter/ui/lib/utils'
 import { AxiosError } from 'axios'
 import { AlertCircle } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'

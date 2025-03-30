@@ -1,0 +1,2912 @@
+{
+	"openapi": "3.0.1",
+	"info": {
+		"title": "CloudCrafter API",
+		"version": "v1"
+	},
+	"paths": {
+		"/api/Applications/{applicationId}/deployment": {
+			"post": {
+				"tags": ["Applications"],
+				"operationId": "PostCreateDeployment",
+				"parameters": [
+					{
+						"name": "applicationId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/Auth/login": {
+			"post": {
+				"tags": ["CloudCrafterAuthTag"],
+				"operationId": "PostLoginUser",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginUserCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TokenDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Auth/create": {
+			"post": {
+				"tags": ["CloudCrafterAuthTag"],
+				"operationId": "PostCreateUser",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateUserCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TokenDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Auth/refresh": {
+			"post": {
+				"tags": ["CloudCrafterAuthTag"],
+				"operationId": "PostRefreshTokens",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RefreshUserTokenCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TokenDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Projects": {
+			"get": {
+				"tags": ["Projects"],
+				"operationId": "GetProjects",
+				"parameters": [
+					{
+						"name": "includeEnvironments",
+						"in": "query",
+						"schema": {
+							"type": "boolean",
+							"default": false
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/ProjectDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Projects"],
+				"operationId": "CreateProject",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateProjectCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProjectDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Projects/{id}": {
+			"get": {
+				"tags": ["Projects"],
+				"operationId": "GetProject",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProjectDto"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				}
+			},
+			"post": {
+				"tags": ["Projects"],
+				"operationId": "UpdateProject",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateProjectArgs"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProjectDto"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Projects"],
+				"operationId": "DeleteProject",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/Projects/{id}/{environmentId}": {
+			"get": {
+				"tags": ["Projects"],
+				"operationId": "GetProjectEnvironmentEnhanced",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "environmentId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProjectEnvironmentEnhancedDto"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				}
+			}
+		},
+		"/api/System/get-fields": {
+			"get": {
+				"tags": ["System"],
+				"operationId": "GetFilterableFields",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"additionalProperties": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Users": {
+			"post": {
+				"tags": ["Users"],
+				"operationId": "GetUsers",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PaginatedRequestOfUserDto"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfUserDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Users/test": {
+			"get": {
+				"tags": ["Users"],
+				"operationId": "Test",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Utils/validate-git-repository": {
+			"post": {
+				"tags": ["Utils"],
+				"operationId": "PostValidateGithubRepo",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CheckValidGitRepoCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GitRepositoryCheckResultDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Providers": {
+			"post": {
+				"tags": ["Providers"],
+				"operationId": "PostCreateGithubApp",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateGithubProviderCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateGithubProviderCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateGithubProviderCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Created"
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"tags": ["Providers"],
+				"operationId": "GetProviders",
+				"parameters": [
+					{
+						"name": "IsActive",
+						"in": "query",
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SourceProviderDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SourceProviderDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SourceProviderDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Providers/github/{id}/install": {
+			"put": {
+				"tags": ["Providers"],
+				"operationId": "PutUpdateGithubProvider",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateGithubInstallationRequest"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateGithubInstallationRequest"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateGithubInstallationRequest"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/Providers/{id}/repositories": {
+			"get": {
+				"tags": ["Providers"],
+				"operationId": "GetGitRepositories",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/GitProviderRepositoryDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/GitProviderRepositoryDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/GitProviderRepositoryDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Providers/{id}/branches/{repositoryId}": {
+			"get": {
+				"tags": ["Providers"],
+				"operationId": "GetGitBranches",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "repositoryId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/GitProviderBranchDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/GitProviderBranchDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/GitProviderBranchDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Providers/{id}": {
+			"delete": {
+				"tags": ["Providers"],
+				"operationId": "DeleteProvider",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/Servers": {
+			"get": {
+				"tags": ["Servers"],
+				"operationId": "GetServers",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/ServerDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/ServerDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/ServerDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Servers"],
+				"operationId": "CreateServer",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateServerCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateServerCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateServerCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/CreatedServerDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CreatedServerDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CreatedServerDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Servers/{id}": {
+			"get": {
+				"tags": ["Servers"],
+				"operationId": "GetServerById",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/ServerDetailDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ServerDetailDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ServerDetailDto"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Servers"],
+				"operationId": "DeleteServerById",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			},
+			"patch": {
+				"tags": ["Servers"],
+				"operationId": "UpdateServer",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateServerDto"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateServerDto"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateServerDto"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/Servers/{id}/rotate-key": {
+			"post": {
+				"tags": ["Servers"],
+				"operationId": "PostRotateAgentKey",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/Servers/{id}/deployments": {
+			"get": {
+				"tags": ["Servers"],
+				"operationId": "GetDeploymentsForServer",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "Page",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					},
+					{
+						"name": "PageSize",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfSimpleDeploymentDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfSimpleDeploymentDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfSimpleDeploymentDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Stacks": {
+			"post": {
+				"tags": ["Stacks"],
+				"operationId": "PostCreateStack",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateStackCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateStackCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateStackCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/StackCreatedDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/StackCreatedDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/StackCreatedDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Stacks/provider": {
+			"post": {
+				"tags": ["Stacks"],
+				"operationId": "PostCreateStackFromSourceProvider",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateStackFromSourceProviderCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateStackFromSourceProviderCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateStackFromSourceProviderCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/StackCreatedDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/StackCreatedDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/StackCreatedDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Stacks/{id}": {
+			"get": {
+				"tags": ["Stacks"],
+				"operationId": "GetStackDetail",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/StackDetailDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/StackDetailDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/StackDetailDto"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["Stacks"],
+				"operationId": "UpdateStack",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateStackCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateStackCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateStackCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/StackDetailDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/StackDetailDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/StackDetailDto"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Stacks/{id}/deploy": {
+			"post": {
+				"tags": ["Stacks"],
+				"operationId": "PostDispatchStackDeployment",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/DeploymentCreatedDetailsDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DeploymentCreatedDetailsDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DeploymentCreatedDetailsDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Stacks/{id}/deployments": {
+			"get": {
+				"tags": ["Stacks"],
+				"operationId": "GetDeploymentsForStack",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleDeploymentDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleDeploymentDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleDeploymentDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Stacks/deployments/{deploymentId}/logs": {
+			"get": {
+				"tags": ["Stacks"],
+				"operationId": "GetDeploymentLogs",
+				"parameters": [
+					{
+						"name": "deploymentId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/DeploymentLogDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/DeploymentLogDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/DeploymentLogDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Stacks/{stackId}/services/{stackServiceId}": {
+			"patch": {
+				"tags": ["Stacks"],
+				"operationId": "UpdateStackService",
+				"parameters": [
+					{
+						"name": "stackId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "stackServiceId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateStackServiceCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateStackServiceCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateStackServiceCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/Stacks/{stackId}/environment-variables": {
+			"get": {
+				"tags": ["Stacks"],
+				"operationId": "GetEnvironmentVariables",
+				"parameters": [
+					{
+						"name": "stackId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "includeSecrets",
+						"in": "query",
+						"schema": {
+							"type": "boolean",
+							"default": false
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/StackEnvironmentVariableDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/StackEnvironmentVariableDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/StackEnvironmentVariableDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Stacks"],
+				"operationId": "PostCreateEnvironmentVariable",
+				"parameters": [
+					{
+						"name": "stackId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateStackEnvironmentVariableCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateStackEnvironmentVariableCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateStackEnvironmentVariableCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Created"
+					}
+				}
+			}
+		},
+		"/api/Stacks/{stackId}/environment-variables/{id}": {
+			"put": {
+				"tags": ["Stacks"],
+				"operationId": "PutUpdateEnvironmentVariable",
+				"parameters": [
+					{
+						"name": "stackId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateStackEnvironmentVariableCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateStackEnvironmentVariableCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateStackEnvironmentVariableCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Stacks"],
+				"operationId": "DeleteEnvironmentVariable",
+				"parameters": [
+					{
+						"name": "stackId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/Stacks/{stackId}/environment-variable-groups": {
+			"get": {
+				"tags": ["Stacks"],
+				"operationId": "GetEnvironmentVariableGroups",
+				"parameters": [
+					{
+						"name": "stackId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/StackEnvironmentVariableGroupDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/StackEnvironmentVariableGroupDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/StackEnvironmentVariableGroupDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Stacks"],
+				"operationId": "PostCreateEnvironmentVariableGroup",
+				"parameters": [
+					{
+						"name": "stackId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateStackEnvironmentVariableGroupCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateStackEnvironmentVariableGroupCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateStackEnvironmentVariableGroupCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Created"
+					}
+				}
+			}
+		},
+		"/api/Stacks/{stackId}/environment-variable-groups/{id}": {
+			"put": {
+				"tags": ["Stacks"],
+				"operationId": "PutUpdateEnvironmentVariableGroup",
+				"parameters": [
+					{
+						"name": "stackId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateStackEnvironmentVariableGroupCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateStackEnvironmentVariableGroupCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateStackEnvironmentVariableGroupCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Stacks"],
+				"operationId": "DeleteEnvironmentVariableGroup",
+				"parameters": [
+					{
+						"name": "stackId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"ChannelOutputLogLineLevel": {
+				"enum": ["Verbose", "Debug", "Information", "Warning", "Error", "Fatal"]
+			},
+			"CheckValidGitRepoCommand": {
+				"required": ["repository"],
+				"type": "object",
+				"properties": {
+					"repository": {
+						"type": "string"
+					}
+				}
+			},
+			"CreateGithubProviderCommand": {
+				"required": ["code"],
+				"type": "object",
+				"properties": {
+					"code": {
+						"type": "string"
+					}
+				}
+			},
+			"CreateProjectCommand": {
+				"required": ["name"],
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				}
+			},
+			"CreateServerCommand": {
+				"required": ["name"],
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				}
+			},
+			"CreateStackCommand": {
+				"required": ["name", "gitRepository", "environmentId", "serverId"],
+				"type": "object",
+				"properties": {
+					"name": {
+						"minLength": 3,
+						"type": "string"
+					},
+					"gitRepository": {
+						"minLength": 1,
+						"type": "string"
+					},
+					"environmentId": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"serverId": {
+						"type": "string",
+						"format": "uuid"
+					}
+				}
+			},
+			"CreateStackEnvironmentVariableCommand": {
+				"required": ["key", "value", "type", "isSecret"],
+				"type": "object",
+				"properties": {
+					"key": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					},
+					"type": {
+						"$ref": "#/components/schemas/EnvironmentVariableType"
+					},
+					"isSecret": {
+						"type": "boolean"
+					},
+					"groupId": {
+						"type": "string",
+						"format": "uuid",
+						"nullable": true
+					}
+				}
+			},
+			"CreateStackEnvironmentVariableGroupCommand": {
+				"required": ["name"],
+				"type": "object",
+				"properties": {
+					"name": {
+						"maxLength": 100,
+						"minLength": 1,
+						"type": "string"
+					},
+					"description": {
+						"maxLength": 500,
+						"type": "string",
+						"nullable": true
+					}
+				}
+			},
+			"CreateStackFromSourceProviderCommand": {
+				"required": [
+					"name",
+					"providerId",
+					"repositoryId",
+					"branch",
+					"path",
+					"repository",
+					"environmentId",
+					"serverId"
+				],
+				"type": "object",
+				"properties": {
+					"name": {
+						"minLength": 3,
+						"type": "string"
+					},
+					"providerId": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"repositoryId": {
+						"minLength": 1,
+						"type": "string"
+					},
+					"branch": {
+						"minLength": 1,
+						"type": "string"
+					},
+					"path": {
+						"type": "string"
+					},
+					"repository": {
+						"type": "string"
+					},
+					"environmentId": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"serverId": {
+						"type": "string",
+						"format": "uuid"
+					}
+				}
+			},
+			"CreateUserCommand": {
+				"required": ["email", "name"],
+				"type": "object",
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				}
+			},
+			"CreatedServerDto": {
+				"required": ["id"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					}
+				}
+			},
+			"DeployedStackDto": {
+				"required": ["stackId", "name", "health"],
+				"type": "object",
+				"properties": {
+					"stackId": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					},
+					"health": {
+						"$ref": "#/components/schemas/EntityHealthDto"
+					}
+				}
+			},
+			"DeploymentCreatedDetailsDto": {
+				"required": ["deploymentId"],
+				"type": "object",
+				"properties": {
+					"deploymentId": {
+						"type": "string",
+						"format": "uuid"
+					}
+				}
+			},
+			"DeploymentLogDto": {
+				"required": ["message", "level", "at"],
+				"type": "object",
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"level": {
+						"$ref": "#/components/schemas/ChannelOutputLogLineLevel"
+					},
+					"at": {
+						"type": "string",
+						"format": "date-time"
+					}
+				}
+			},
+			"DeploymentStatusDto": {
+				"enum": ["Created", "Running", "Failed", "Succeeded"]
+			},
+			"EntityHealthDto": {
+				"required": ["value"],
+				"type": "object",
+				"properties": {
+					"statusAt": {
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
+					},
+					"value": {
+						"$ref": "#/components/schemas/EntityHealthDtoValue"
+					}
+				}
+			},
+			"EntityHealthDtoValue": {
+				"enum": [
+					"Unknown",
+					"Unsupported",
+					"Degraded",
+					"Unhealthy",
+					"Healthy",
+					"HeathCheckOverdue"
+				]
+			},
+			"EnvironmentDto": {
+				"required": ["id", "name"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					}
+				}
+			},
+			"EnvironmentVariableType": {
+				"type": "integer"
+			},
+			"FilterCriterea": {
+				"required": ["propertyName", "operator"],
+				"type": "object",
+				"properties": {
+					"propertyName": {
+						"type": "string"
+					},
+					"operator": {
+						"$ref": "#/components/schemas/FilterOperatorOption"
+					},
+					"value": {
+						"type": "string",
+						"nullable": true
+					}
+				}
+			},
+			"FilterOperatorOption": {
+				"enum": [
+					"Equal",
+					"NotEqual",
+					"GreaterThan",
+					"GreaterThanOrEqual",
+					"LessThan",
+					"LessThanOrEqual",
+					"Contains"
+				]
+			},
+			"GitApplicationSourceDto": {
+				"required": ["repository"],
+				"type": "object",
+				"properties": {
+					"repository": {
+						"type": "string"
+					},
+					"path": {
+						"type": "string",
+						"nullable": true
+					},
+					"branch": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"nullable": true
+			},
+			"GitProviderBranchDto": {
+				"required": ["name"],
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				}
+			},
+			"GitProviderRepositoryDto": {
+				"required": ["fullName", "id"],
+				"type": "object",
+				"properties": {
+					"fullName": {
+						"type": "string"
+					},
+					"id": {
+						"type": "integer",
+						"format": "int64"
+					}
+				}
+			},
+			"GitRepositoryCheckResultDto": {
+				"required": ["isValid"],
+				"type": "object",
+				"properties": {
+					"isValid": {
+						"type": "boolean"
+					}
+				}
+			},
+			"GithubApplicationSourceDto": {
+				"required": ["repositoryId", "branch", "repository", "path"],
+				"type": "object",
+				"properties": {
+					"repositoryId": {
+						"type": "string"
+					},
+					"branch": {
+						"type": "string"
+					},
+					"repository": {
+						"type": "string"
+					},
+					"path": {
+						"type": "string"
+					}
+				},
+				"nullable": true
+			},
+			"LoginUserCommand": {
+				"required": ["email", "password"],
+				"type": "object",
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				}
+			},
+			"PaginatedListOfSimpleDeploymentDto": {
+				"required": ["page", "totalPages", "totalItems", "result"],
+				"type": "object",
+				"properties": {
+					"page": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"totalPages": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"totalItems": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"result": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/SimpleDeploymentDto"
+						}
+					}
+				}
+			},
+			"PaginatedListOfUserDto": {
+				"required": ["page", "totalPages", "totalItems", "result"],
+				"type": "object",
+				"properties": {
+					"page": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"totalPages": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"totalItems": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"result": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/UserDto"
+						}
+					}
+				}
+			},
+			"PaginatedRequestOfUserDto": {
+				"required": ["filters", "page", "pageSize"],
+				"type": "object",
+				"properties": {
+					"filters": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/FilterCriterea"
+						}
+					},
+					"page": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"pageSize": {
+						"type": "integer",
+						"format": "int32"
+					}
+				}
+			},
+			"ProblemDetails": {
+				"type": "object",
+				"properties": {
+					"type": {
+						"type": "string",
+						"nullable": true
+					},
+					"title": {
+						"type": "string",
+						"nullable": true
+					},
+					"status": {
+						"type": "integer",
+						"format": "int32",
+						"nullable": true
+					},
+					"detail": {
+						"type": "string",
+						"nullable": true
+					},
+					"instance": {
+						"type": "string",
+						"nullable": true
+					}
+				}
+			},
+			"ProjectDto": {
+				"required": [
+					"id",
+					"name",
+					"description",
+					"createdAt",
+					"updatedAt",
+					"environments"
+				],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string",
+						"nullable": true
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"environments": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/EnvironmentDto"
+						}
+					}
+				}
+			},
+			"ProjectEnvironmentEnhancedDto": {
+				"required": [
+					"environmentCreatedAt",
+					"deployedStackCount",
+					"lastDeploymentAt",
+					"environmentName",
+					"projectName",
+					"deployedStacks"
+				],
+				"type": "object",
+				"properties": {
+					"environmentCreatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"deployedStackCount": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"lastDeploymentAt": {
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
+					},
+					"environmentName": {
+						"type": "string"
+					},
+					"projectName": {
+						"type": "string"
+					},
+					"deployedStacks": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/DeployedStackDto"
+						}
+					}
+				}
+			},
+			"ProviderType": {
+				"enum": ["Unknown", "Github"]
+			},
+			"RefreshUserTokenCommand": {
+				"required": ["refreshToken"],
+				"type": "object",
+				"properties": {
+					"refreshToken": {
+						"type": "string"
+					}
+				}
+			},
+			"ServerDetailDto": {
+				"required": ["id", "name", "ipAddress"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					},
+					"ipAddress": {
+						"type": "string"
+					},
+					"agentKey": {
+						"type": "string",
+						"nullable": true
+					}
+				}
+			},
+			"ServerDto": {
+				"required": ["id", "name", "ipAddress", "pingData"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					},
+					"ipAddress": {
+						"type": "string"
+					},
+					"pingData": {
+						"$ref": "#/components/schemas/ServerPingDto"
+					}
+				}
+			},
+			"ServerPingDto": {
+				"required": ["status"],
+				"type": "object",
+				"properties": {
+					"lastPingReceivedAt": {
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
+					},
+					"osInfo": {
+						"type": "string",
+						"nullable": true
+					},
+					"dockerVersion": {
+						"type": "string",
+						"nullable": true
+					},
+					"cpuUsagePercentage": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"totalCpuCount": {
+						"type": "integer",
+						"format": "int32",
+						"nullable": true
+					},
+					"memoryUsagePercentage": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"totalMemoryBytes": {
+						"type": "integer",
+						"format": "int64",
+						"nullable": true
+					},
+					"status": {
+						"$ref": "#/components/schemas/ServerStatusDtoValue"
+					}
+				}
+			},
+			"ServerStatusDtoValue": {
+				"enum": ["Unknown", "Connected", "Disconnected"]
+			},
+			"SimpleDeploymentDto": {
+				"required": [
+					"createdAt",
+					"updatedAt",
+					"id",
+					"state",
+					"stackId",
+					"stackName",
+					"projectId",
+					"environmentId"
+				],
+				"type": "object",
+				"properties": {
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"state": {
+						"$ref": "#/components/schemas/DeploymentStatusDto"
+					},
+					"stackId": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"stackName": {
+						"type": "string"
+					},
+					"projectId": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"environmentId": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"description": {
+						"type": "string",
+						"nullable": true
+					}
+				}
+			},
+			"SimpleGithubProviderDto": {
+				"required": [
+					"id",
+					"name",
+					"isConnected",
+					"hasInstallation",
+					"createdAt",
+					"appUrl"
+				],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					},
+					"isConnected": {
+						"type": "boolean",
+						"nullable": true
+					},
+					"hasInstallation": {
+						"type": "boolean"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"appUrl": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"nullable": true
+			},
+			"SourceProviderDto": {
+				"required": ["id", "name", "type"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					},
+					"github": {
+						"$ref": "#/components/schemas/SimpleGithubProviderDto"
+					},
+					"type": {
+						"$ref": "#/components/schemas/ProviderType"
+					}
+				}
+			},
+			"StackCreatedDto": {
+				"required": ["id"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					}
+				}
+			},
+			"StackDetailDto": {
+				"required": [
+					"id",
+					"name",
+					"description",
+					"source",
+					"destination",
+					"health",
+					"services"
+				],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string",
+						"nullable": true
+					},
+					"services": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/StackServiceDto"
+						}
+					},
+					"source": {
+						"$ref": "#/components/schemas/StackSourceDto"
+					},
+					"destination": {
+						"$ref": "#/components/schemas/StackServerDto"
+					},
+					"health": {
+						"$ref": "#/components/schemas/EntityHealthDto"
+					}
+				}
+			},
+			"StackEnvironmentVariableDto": {
+				"required": [
+					"id",
+					"stackId",
+					"groupId",
+					"key",
+					"value",
+					"isSecret",
+					"type",
+					"createdAt"
+				],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"stackId": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"groupId": {
+						"type": "string",
+						"format": "uuid",
+						"nullable": true
+					},
+					"key": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					},
+					"isSecret": {
+						"type": "boolean"
+					},
+					"type": {
+						"$ref": "#/components/schemas/EnvironmentVariableType"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"lastModifiedAt": {
+						"type": "string",
+						"format": "date-time",
+						"nullable": true
+					},
+					"groupName": {
+						"type": "string",
+						"nullable": true
+					}
+				}
+			},
+			"StackEnvironmentVariableGroupDto": {
+				"required": ["id", "name"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string",
+						"nullable": true
+					}
+				}
+			},
+			"StackServerDto": {
+				"required": ["name", "ipAddress"],
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"ipAddress": {
+						"type": "string"
+					}
+				}
+			},
+			"StackServiceDto": {
+				"required": [
+					"id",
+					"name",
+					"description",
+					"httpConfiguration",
+					"healthcheckConfiguration",
+					"health"
+				],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string",
+						"nullable": true
+					},
+					"httpConfiguration": {
+						"$ref": "#/components/schemas/StackServiceHttpConfigurationDto"
+					},
+					"healthcheckConfiguration": {
+						"$ref": "#/components/schemas/StackServiceHealthcheckConfigurationDto"
+					},
+					"health": {
+						"$ref": "#/components/schemas/EntityHealthDto"
+					}
+				}
+			},
+			"StackServiceHealthcheckConfigurationDto": {
+				"required": ["httpPort"],
+				"type": "object",
+				"properties": {
+					"httpPort": {
+						"type": "integer",
+						"format": "int32",
+						"nullable": true
+					}
+				}
+			},
+			"StackServiceHttpConfigurationDto": {
+				"required": ["domainName", "containerHttpPort"],
+				"type": "object",
+				"properties": {
+					"domainName": {
+						"type": "string",
+						"nullable": true
+					},
+					"containerHttpPort": {
+						"type": "integer",
+						"format": "int32",
+						"nullable": true
+					}
+				},
+				"nullable": true
+			},
+			"StackSourceDto": {
+				"required": ["type", "git", "githubApp"],
+				"type": "object",
+				"properties": {
+					"type": {
+						"$ref": "#/components/schemas/StackSourceDtoType"
+					},
+					"git": {
+						"$ref": "#/components/schemas/GitApplicationSourceDto"
+					},
+					"githubApp": {
+						"$ref": "#/components/schemas/GithubApplicationSourceDto"
+					}
+				},
+				"nullable": true
+			},
+			"StackSourceDtoType": {
+				"enum": ["Git", "GithubApp"]
+			},
+			"TokenDto": {
+				"required": [
+					"accessToken",
+					"refreshToken",
+					"refreshTokenExpires",
+					"refreshTokenExpiresIn"
+				],
+				"type": "object",
+				"properties": {
+					"accessToken": {
+						"type": "string"
+					},
+					"refreshToken": {
+						"type": "string"
+					},
+					"refreshTokenExpires": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"refreshTokenExpiresIn": {
+						"type": "integer",
+						"format": "int32"
+					}
+				}
+			},
+			"UpdateGithubInstallationRequest": {
+				"required": ["installationId"],
+				"type": "object",
+				"properties": {
+					"installationId": {
+						"type": "integer",
+						"format": "int64"
+					}
+				}
+			},
+			"UpdateProjectArgs": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string",
+						"nullable": true
+					},
+					"description": {
+						"type": "string",
+						"nullable": true
+					}
+				}
+			},
+			"UpdateServerDto": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string",
+						"nullable": true
+					}
+				}
+			},
+			"UpdateStackCommand": {
+				"required": ["stackId"],
+				"type": "object",
+				"properties": {
+					"stackId": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string",
+						"default": null,
+						"nullable": true
+					},
+					"description": {
+						"type": "string",
+						"default": null,
+						"nullable": true
+					},
+					"gitPublicSettings": {
+						"$ref": "#/components/schemas/UpdateStackGitPublicSettings"
+					},
+					"githubSettings": {
+						"$ref": "#/components/schemas/UpdateStackGithubSettings"
+					}
+				}
+			},
+			"UpdateStackEnvironmentVariableCommand": {
+				"required": ["key", "value", "type", "isSecret"],
+				"type": "object",
+				"properties": {
+					"key": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					},
+					"type": {
+						"$ref": "#/components/schemas/EnvironmentVariableType"
+					},
+					"isSecret": {
+						"type": "boolean"
+					},
+					"groupId": {
+						"type": "string",
+						"format": "uuid",
+						"nullable": true
+					}
+				}
+			},
+			"UpdateStackEnvironmentVariableGroupCommand": {
+				"required": ["name"],
+				"type": "object",
+				"properties": {
+					"name": {
+						"maxLength": 100,
+						"minLength": 1,
+						"type": "string"
+					},
+					"description": {
+						"maxLength": 500,
+						"type": "string",
+						"nullable": true
+					}
+				}
+			},
+			"UpdateStackGitPublicSettings": {
+				"type": "object",
+				"properties": {
+					"repository": {
+						"type": "string",
+						"nullable": true
+					},
+					"path": {
+						"type": "string",
+						"nullable": true
+					},
+					"branch": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"default": null,
+				"nullable": true
+			},
+			"UpdateStackGithubSettings": {
+				"type": "object",
+				"properties": {
+					"branch": {
+						"type": "string",
+						"nullable": true
+					},
+					"path": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"default": null,
+				"nullable": true
+			},
+			"UpdateStackServiceCommand": {
+				"required": ["stackId", "stackServiceId"],
+				"type": "object",
+				"properties": {
+					"stackId": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"stackServiceId": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string",
+						"default": null,
+						"nullable": true
+					},
+					"domainName": {
+						"type": "string",
+						"default": null,
+						"nullable": true
+					},
+					"containerPortExposes": {
+						"type": "integer",
+						"format": "int32",
+						"default": null,
+						"nullable": true
+					},
+					"containerHealthCheckPort": {
+						"type": "integer",
+						"format": "int32",
+						"default": null,
+						"nullable": true
+					}
+				}
+			},
+			"UserDto": {
+				"required": ["id", "email", "createdAt", "fullName"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"email": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"fullName": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	},
+	"tags": [
+		{
+			"name": "Applications"
+		},
+		{
+			"name": "CloudCrafterAuthTag"
+		},
+		{
+			"name": "Projects"
+		},
+		{
+			"name": "System"
+		},
+		{
+			"name": "Users"
+		},
+		{
+			"name": "Utils"
+		},
+		{
+			"name": "Providers"
+		},
+		{
+			"name": "Servers"
+		},
+		{
+			"name": "Stacks"
+		}
+	]
+}

@@ -1,26 +1,25 @@
 import StackConfigPage from '@/src/components/stack-detail/StackConfigPage'
 import { DeploymentList } from '@/src/components/stack-detail/deployments/deployment-list'
 import {
-	getDeploymentsForStack,
-	getStackDetail,
-} from '@/src/core/__generated__'
-import {
 	type StackRouteParams,
 	validateStackRouteParams,
 } from '@/src/utils/routes/schemas'
+import { getDeploymentsForStack, getStackDetail } from '@cloudcrafter/api'
+
 import {
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
-} from '@ui/components/ui/tabs'
+} from '@cloudcrafter/ui/components/tabs'
 
 interface PageProps {
-	params: StackRouteParams
+	params: Promise<StackRouteParams>
 }
 
 export default async function StackPage({ params }: PageProps) {
-	const routeData = validateStackRouteParams(params)
+	const resolvedParams = await params
+	const routeData = validateStackRouteParams(resolvedParams)
 
 	const stackDetails = await getStackDetail(routeData['stack-uuid'])
 	const deployments = await getDeploymentsForStack(routeData['stack-uuid'])

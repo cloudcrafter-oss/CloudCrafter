@@ -28,7 +28,7 @@ public class MarkServersAsUnknownAfterTimespanTest : BaseTestFixture
         await AddAsync(server);
 
         // Act
-        await SendAsync(new MarkServersAsUnknownAfterTimespan.Command());
+        await SendAsync(new MarkServersAsUnknownAfterTimespanCommand());
 
         // Assert
         var serverAfter = FetchEntity<Server>(f => f.Id == server!.Id)!;
@@ -54,7 +54,7 @@ public class MarkServersAsUnknownAfterTimespanTest : BaseTestFixture
         await AddAsync(server);
 
         // Act
-        await SendAsync(new MarkServersAsUnknownAfterTimespan.Command());
+        await SendAsync(new MarkServersAsUnknownAfterTimespanCommand());
 
         // Assert
         var serverAfter = FetchEntity<Server>(f => f.Id == server!.Id)!;

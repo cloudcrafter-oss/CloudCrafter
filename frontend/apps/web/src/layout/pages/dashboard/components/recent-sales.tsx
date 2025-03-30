@@ -2,7 +2,7 @@ import {
 	Avatar,
 	AvatarFallback,
 	AvatarImage,
-} from '@ui/components/ui/avatar.tsx'
+} from '@cloudcrafter/ui/components/avatar'
 
 export function RecentSales() {
 	return (

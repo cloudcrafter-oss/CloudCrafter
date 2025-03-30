@@ -6,7 +6,7 @@ import {
 	BreadcrumbLink,
 	BreadcrumbList,
 	BreadcrumbSeparator,
-} from '@ui/components/ui/breadcrumb.tsx'
+} from '@cloudcrafter/ui/components/breadcrumb'
 
 export const CloudcrafterBreadcrumbs = async () => {
 	const breadcrumbs = await getBreadcrumbs()

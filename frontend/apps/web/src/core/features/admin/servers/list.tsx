@@ -1,20 +1,13 @@
 'use client'
-import {
-	createServerCommandCommandSchema,
-	getServersQueryKey,
-	useCreateServerHook,
-	useGetServersHook,
-} from '@/src/core/__generated__'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@ui/components/ui/button'
-import { Input } from '@ui/components/ui/input'
+import { Button } from '@cloudcrafter/ui/components/button'
+import { Input } from '@cloudcrafter/ui/components/input'
 import {
 	Sheet,
 	SheetContent,
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
-} from '@ui/components/ui/sheet'
+} from '@cloudcrafter/ui/components/sheet'
 import {
 	Table,
 	TableBody,
@@ -22,15 +15,23 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from '@ui/components/ui/table'
+} from '@cloudcrafter/ui/components/table'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { CircleIcon } from 'lucide-react'
 import { PlusIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import type { serverStatusDtoValueSchema } from '@/src/core/__generated__/zod/serverStatusDtoValueSchema'
-import { useQueryClient } from '@tanstack/react-query'
+import {
+	getServersQueryKey,
+	useCreateServerHook,
+	useGetServersHook,
+} from '@cloudcrafter/api'
+import {
+	createServerCommandSchema,
+	type serverStatusDtoValueSchema,
+} from '@cloudcrafter/api'
 import {
 	Form,
 	FormControl,
@@ -38,13 +39,14 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@ui/components/ui/form'
+} from '@cloudcrafter/ui/components/form'
+import { useQueryClient } from '@tanstack/react-query'
 import { formatDistanceToNow } from 'date-fns'
 import type { z } from 'zod'
 
 const StateMap: Record<
 	z.infer<typeof serverStatusDtoValueSchema>,
-	JSX.Element
+	React.ReactNode
 > = {
 	Connected: (
 		<div className='flex items-center gap-2 text-sm text-muted-foreground'>
@@ -66,7 +68,7 @@ const StateMap: Record<
 	),
 }
 
-const formSchema = createServerCommandCommandSchema
+const formSchema = createServerCommandSchema
 
 export const ServersList = () => {
 	const [open, setOpen] = useState(false)
@@ -75,7 +77,7 @@ export const ServersList = () => {
 
 	const { data: servers } = useGetServersHook()
 
-	const form = useForm<z.infer<typeof createServerCommandCommandSchema>>({
+	const form = useForm<z.infer<typeof createServerCommandSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: '',

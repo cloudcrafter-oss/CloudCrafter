@@ -26,6 +26,8 @@ using CloudCrafter.Core.Services.Domain.Applications.Deployments;
 using CloudCrafter.Core.Services.Domain.Environments;
 using CloudCrafter.Core.Services.Domain.Projects;
 using CloudCrafter.Core.Services.Domain.Providers;
+using CloudCrafter.Core.Services.Domain.Providers.Github;
+using CloudCrafter.Core.Services.Domain.Providers.Proxy;
 using CloudCrafter.Core.Services.Domain.Servers;
 using CloudCrafter.Core.Services.Domain.Stacks;
 using CloudCrafter.Core.Services.Domain.Users;
@@ -33,6 +35,7 @@ using CloudCrafter.Core.Services.Domain.Utils;
 using CloudCrafter.Core.SignalR;
 using CloudCrafter.Core.SignalR.HubActions;
 using CloudCrafter.Core.SignalR.Tracking;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Strategy;
 using CloudCrafter.Domain;
 using CloudCrafter.Shared.Utils.Cli;
 using CloudCrafter.Shared.Utils.Cli.Abstraction;
@@ -40,6 +43,8 @@ using FluentValidation;
 using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
@@ -186,7 +191,7 @@ public static class ApplicationServiceExtensions
 
         services
             .AddSignalR()
-            .AddStackExchangeRedis(
+            .AddStackExchangeRedisCloudCrafter(
                 connectionString,
                 opt =>
                 {
@@ -200,11 +205,56 @@ public static class ApplicationServiceExtensions
             options.InstanceName = "CloudCrafter-Cache";
         });
 
+        services.AddSingleton<ISubscriber>(cfg =>
+        {
+            var multiplexer = ConnectionMultiplexer.Connect(connectionString);
+            return multiplexer.GetSubscriber();
+        });
+
         services.AddSingleton<IDistributedLockService>(sp => new DistributedLockService(
             connectionString
         ));
 
+        // Source Providers
         services.AddSingleton<IGithubClientProvider, GithubClientProvider>();
+        services.AddTransient<GithubBackendClientProvider>();
+        services.AddTransient<ISourceProviderProxy, SourceProviderProxy>();
+        services.AddKeyedScoped<ISourceProviderService, GithubSourceProviderService>("github");
+        services.AddTransient<ISourceProviderHelper, SourceProviderHelperService>();
+
         return services;
+    }
+}
+
+public static class Extensions
+{
+    public static ISignalRServerBuilder AddStackExchangeRedisCloudCrafter(
+        this ISignalRServerBuilder signalrBuilder,
+        string redisConnectionString,
+        Action<RedisOptions> configure
+    )
+    {
+        return AddStackExchangeRedisCloudCrafter(
+            signalrBuilder,
+            o =>
+            {
+                o.Configuration = ConfigurationOptions.Parse(redisConnectionString);
+                configure(o);
+            }
+        );
+    }
+
+    public static ISignalRServerBuilder AddStackExchangeRedisCloudCrafter(
+        this ISignalRServerBuilder signalrBuilder,
+        Action<RedisOptions> configure
+    )
+    {
+        signalrBuilder.Services.Configure(configure);
+        signalrBuilder.Services.AddSingleton(
+            typeof(HubLifetimeManager<>),
+            typeof(CloudCrafterHubLifetimeManager<>)
+        );
+
+        return signalrBuilder;
     }
 }

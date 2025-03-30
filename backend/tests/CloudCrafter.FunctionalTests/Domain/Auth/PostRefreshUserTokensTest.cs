@@ -13,7 +13,7 @@ public class PostRefreshUserTokensTest : BaseTestFixture
     public async Task ShouldThrowExceptionWhenTokenIsNotFound()
     {
         (await CountAsync<UserRefreshToken>()).Should().Be(0);
-        var query = new PostRefreshUserTokens.Query("dont-bother-this-doesnt-exist-anyway");
+        var query = new RefreshUserTokenCommand("dont-bother-this-doesnt-exist-anyway");
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(query));
     }
 
@@ -24,11 +24,11 @@ public class PostRefreshUserTokensTest : BaseTestFixture
 
         var user = await CreateAdminUser();
 
-        var query = new PostLoginUser.Query(user.Email, user.Password);
+        var query = new LoginUserCommand(user.Email, user.Password);
 
         var createUserResult = await SendAsync(query);
 
-        var refreshQuery = new PostRefreshUserTokens.Query(createUserResult.RefreshToken);
+        var refreshQuery = new RefreshUserTokenCommand(createUserResult.RefreshToken);
         var result = await SendAsync(refreshQuery);
 
         (await CountAsync<UserRefreshToken>()).Should().Be(2);
@@ -43,20 +43,19 @@ public class PostRefreshUserTokensTest : BaseTestFixture
 
         var user = await CreateAdminUser();
 
-        var query = new PostLoginUser.Query(user.Email, user.Password);
+        var query = new LoginUserCommand(user.Email, user.Password);
 
         var createUserResult = await SendAsync(query);
 
-        var refreshQuery = new PostRefreshUserTokens.Query(createUserResult.RefreshToken);
+        var refreshQuery = new RefreshUserTokenCommand(createUserResult.RefreshToken);
         var result = await SendAsync(refreshQuery);
 
         Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () =>
-                await SendAsync(new PostRefreshUserTokens.Query(createUserResult.RefreshToken))
+            async () => await SendAsync(new RefreshUserTokenCommand(createUserResult.RefreshToken))
         );
 
         // Assert that new one still works
-        var newTokenResult = await SendAsync(new PostRefreshUserTokens.Query(result.RefreshToken));
+        var newTokenResult = await SendAsync(new RefreshUserTokenCommand(result.RefreshToken));
         newTokenResult.RefreshToken.Length.Should().BeGreaterThan(10);
         newTokenResult.AccessToken.Length.Should().BeGreaterThan(10);
 

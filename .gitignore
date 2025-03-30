@@ -49,3 +49,5 @@ appsettings.Development.json
 *.received.*
 
 .env
+frontend/apps/web/test-results/*
+frontend/apps/web/playwright-report/*

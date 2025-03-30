@@ -4,16 +4,14 @@ using MediatR;
 
 namespace CloudCrafter.Core.Commands.Projects;
 
-public static class DeleteProjectCommand
-{
-    [Authorize]
-    public record Command(Guid Id) : IRequest;
+[Authorize]
+public record DeleteProjectCommand(Guid Id) : IRequest;
 
-    private class Handler(IProjectsService service) : IRequestHandler<Command>
+internal class DeleteProjectCommandHandler(IProjectsService service)
+    : IRequestHandler<DeleteProjectCommand>
+{
+    public Task Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
     {
-        public Task Handle(Command request, CancellationToken cancellationToken)
-        {
-            return service.DeleteProject(request.Id);
-        }
+        return service.DeleteProject(request.Id);
     }
 }

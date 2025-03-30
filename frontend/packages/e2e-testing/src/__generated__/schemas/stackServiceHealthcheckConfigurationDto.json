@@ -1,0 +1,1 @@
+{"required":["httpPort"],"type":"object","properties":{"httpPort":{"type":"integer","format":"int32","nullable":true}},"x-readme-ref-name":"StackServiceHealthcheckConfigurationDto"}

@@ -84,6 +84,26 @@ public class Testing
         return query.FirstOrDefault(expression);
     }
 
+    public static List<T> FetchEntityList<T>(
+        Expression<Func<T, bool>> expression,
+        Func<IQueryable<T>, IQueryable<T>>? includeFunc = null
+    )
+        where T : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        IQueryable<T> query = context.Set<T>();
+
+        if (includeFunc != null)
+        {
+            query = includeFunc(query);
+        }
+
+        return query.Where(expression).ToList();
+    }
+
     public static async Task<UsernamePasswordDto> CreateAdminUser()
     {
         using var scope = _scopeFactory.CreateScope();

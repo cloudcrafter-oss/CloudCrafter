@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Ardalis.SharedKernel;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.ContributorAggregate;
@@ -42,7 +42,13 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     public DbSet<StackService> StackServices => Set<StackService>();
     public DbSet<StackServiceType> StackServiceTypes => Set<StackServiceType>();
 
+    public DbSet<SourceProvider> SourceProviders => Set<SourceProvider>();
     public DbSet<GithubProvider> GithubProviders => Set<GithubProvider>();
+    public DbSet<StackEnvironmentVariable> StackEnvironmentVariables =>
+        Set<StackEnvironmentVariable>();
+
+    public DbSet<StackEnvironmentVariableGroup> StackEnvironmentVariableGroups =>
+        Set<StackEnvironmentVariableGroup>();
 
     public DbSet<ServerConnectivityCheckJob> ServerConnectivityCheckJobs =>
         Set<ServerConnectivityCheckJob>();

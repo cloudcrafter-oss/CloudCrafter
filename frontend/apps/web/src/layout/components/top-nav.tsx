@@ -1,4 +1,4 @@
-import { CloudcrafterBreadcrumbs } from '@/src/layout/components/breadcrumbs.tsx'
+import { CloudcrafterBreadcrumbs } from '@/src/layout/components/breadcrumbs'
 
 export function TopNav() {
 	return (

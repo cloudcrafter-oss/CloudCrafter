@@ -5,23 +5,27 @@ using CloudCrafter.Core.Services.Domain.Providers.Github;
 using CloudCrafter.Domain.Entities;
 using GitHubJwt;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Services.Domain.Providers;
 
 public class ProviderValidationService(
     IApplicationDbContext context,
+    ILogger<ProviderValidationService> logger,
     IGithubClientProvider clientProvider
 ) : IProviderValidationService
 {
     public async Task ValidateAll()
     {
         var githubProviders = await context
-            .GithubProviders.OrderByDescending(x => x.CreatedAt)
+            .SourceProviders.Include(x => x.GithubProvider)
+            .Where(x => x.GithubProvider != null && x.GithubProvider.IsValid != false)
+            .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();
 
-        foreach (var githubProvider in githubProviders)
+        foreach (var sourceProvider in githubProviders)
         {
-            await ValidateGithubProvider(githubProvider);
+            await ValidateGithubProvider(sourceProvider.GithubProvider!);
         }
 
         await context.SaveChangesAsync();
@@ -58,8 +62,9 @@ public class ProviderValidationService(
 
             provider.IsValid = result != null;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogCritical(ex, "Failed to validate Github provider");
             provider.IsValid = false;
         }
     }

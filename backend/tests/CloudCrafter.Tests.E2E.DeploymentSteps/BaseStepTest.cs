@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Agent.Console;
+using CloudCrafter.Agent.Models.Deployment.Steps.Params;
 using CloudCrafter.Agent.Models.IO;
 using CloudCrafter.Agent.Models.Recipe;
 using CloudCrafter.Agent.Models.Runner;
@@ -36,15 +37,11 @@ public abstract class BaseStepTest
     }
 
     protected TParams Validate<TParams>(DeploymentBuildStep step)
+        where TParams : BaseParams
     {
         var serializerFactory = GetFactory();
-        var config = serializerFactory.GetConfig<TParams>(step);
-        var handler = serializerFactory.CreateHandler<TParams>(step);
-
-        // TODO: This is copied from ExecuteBuildStepCommand, probably best to extract this to somewhere
-        var paramObject = serializerFactory.ConvertAndValidateParams(step.Params, config.Validator);
-
-        return paramObject;
+        var handler = serializerFactory.GetHandler<TParams>(step);
+        return serializerFactory.ConvertAndValidateParams(step.Params, handler.Validator);
     }
 
     protected DeploymentRecipe GetRecipeWithStep(DeploymentBuildStep step)
@@ -59,10 +56,6 @@ public abstract class BaseStepTest
                 RootDirectory = "/root",
                 GitCheckoutDirectory = $"/data/cloudcrafter/{guid}",
             },
-            EnvironmentVariables = new DeploymentRecipeEnvironmentVariableConfig
-            {
-                Variables = new Dictionary<string, DeploymentRecipeEnvironmentVariable>(),
-            },
             BuildOptions = new DeploymentBuildOptions { Steps = [step] },
         };
 
@@ -72,14 +65,12 @@ public abstract class BaseStepTest
     protected string GetYaml(DeploymentRecipe recipe)
     {
         var yamlWriter = new YamlRecipeWriter(recipe);
-
         return yamlWriter.WriteString();
     }
 
     protected DeploymentRecipe GetFromYaml(string yaml)
     {
         var yamlReader = new YamlRecipeReader();
-
         return yamlReader.FromString(yaml);
     }
 }

@@ -1,9 +1,9 @@
 {
-	"extends": "@repo/typescript-config/react-library.json",
+	"extends": "@cloudcrafter/typescript-config/react-library.json",
 	"compilerOptions": {
 		"baseUrl": ".",
 		"paths": {
-			"@ui/*": ["./src/*"]
+			"@cloudcrafter/ui/*": ["./src/*"]
 		}
 	},
 	"include": ["src"],

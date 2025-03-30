@@ -1,25 +1,25 @@
 'use client'
+
 import {
-	type StackDetailDto,
-	updateStackMutationRequestSchema,
-	useDispatchStackDeploymentHook,
+	usePostDispatchStackDeploymentHook,
 	useUpdateStackHook,
-} from '@/src/core/__generated__'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button } from '@ui/components/ui/button'
+} from '@cloudcrafter/api'
+import type { StackDetailDto } from '@cloudcrafter/api'
+import { updateStackMutationRequestSchema } from '@cloudcrafter/api'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from '@ui/components/ui/card'
+} from '@cloudcrafter/ui/components/card'
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from '@ui/components/ui/dropdown-menu'
+} from '@cloudcrafter/ui/components/dropdown-menu'
 import {
 	Form,
 	FormControl,
@@ -27,11 +27,12 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from '@ui/components/ui/form'
-import { Input } from '@ui/components/ui/input'
-import { Label } from '@ui/components/ui/label'
-import { Switch } from '@ui/components/ui/switch'
-import { Textarea } from '@ui/components/ui/textarea'
+} from '@cloudcrafter/ui/components/form'
+import { Input } from '@cloudcrafter/ui/components/input'
+import { Label } from '@cloudcrafter/ui/components/label'
+import { Switch } from '@cloudcrafter/ui/components/switch'
+import { Textarea } from '@cloudcrafter/ui/components/textarea'
+import { zodResolver } from '@hookform/resolvers/zod'
 import {
 	FileText,
 	MoreVertical,
@@ -51,7 +52,7 @@ export const BasicInfo = ({
 }: { stackDetails: StackDetailDto }) => {
 	const [isEditing, setIsEditing] = useState(false)
 
-	const { mutateAsync } = useDispatchStackDeploymentHook()
+	const { mutateAsync } = usePostDispatchStackDeploymentHook()
 	const handleDeploy = async () => {
 		const deploymentCreatedDto = await mutateAsync({ id: stackDetails.id })
 		setLogChannelId(deploymentCreatedDto.deploymentId)

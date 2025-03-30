@@ -22,8 +22,8 @@ public class FetchGitRepositoryDeploymentStepGeneratorTest
         var buildStep = generator.Generate();
 
         // Assert
-        var result = Serializer.GetConfig<GitCheckoutParams>(buildStep);
-        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, result.Validator);
+        var handler = Serializer.GetHandler<GitCheckoutParams>(buildStep);
+        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, handler.Validator);
 
         paramObject.Commit.Should().Be("HEAD");
         paramObject.Repo.Should().Be("some-repository.git");

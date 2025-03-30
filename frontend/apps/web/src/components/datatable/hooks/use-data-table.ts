@@ -4,6 +4,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import * as React from 'react'
 
 import type { DataTableFilterField } from '@/src/components/datatable/types'
+import { useDebounce } from '@cloudcrafter/ui/hooks/use-debounce'
 import {
 	type ColumnDef,
 	type ColumnFiltersState,
@@ -18,7 +19,6 @@ import {
 	getSortedRowModel,
 	useReactTable,
 } from '@tanstack/react-table'
-import { useDebounce } from '@ui/hooks/use-debounce.ts'
 import { z } from 'zod'
 
 interface UseDataTableProps<TData, TValue> {
@@ -283,9 +283,8 @@ export function useDataTable<TData, TValue>({
 				Object.assign(newParamsObject, { [column.id]: column.value.join('.') })
 			}
 		}
-
 		// Remove deleted values
-		for (const key of searchParams.keys()) {
+		for (const key of Array.from(searchParams.keys())) {
 			if (
 				(searchableColumns.find((column) => column.value === key) &&
 					!debouncedSearchableColumnFilters.find(

@@ -17,8 +17,8 @@ public class NetworkExistsDeploymentStepGeneratorTest
         var buildStep = generator.Generate();
 
         // Assert
-        var result = Serializer.GetConfig<NetworkExistsCheckParams>(buildStep);
-        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, result.Validator);
+        var handler = Serializer.GetHandler<NetworkExistsCheckParams>(buildStep);
+        var paramObject = Serializer.ConvertAndValidateParams(buildStep.Params, handler.Validator);
 
         paramObject.Networks.Count.Should().Be(1);
         paramObject.Networks.Should().BeEquivalentTo("my-network");

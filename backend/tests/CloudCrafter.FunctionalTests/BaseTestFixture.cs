@@ -15,7 +15,7 @@ public abstract class BaseTestFixture
         await ResetState();
     }
 
-    public async Task<Stack> CreateSampleStack()
+    public async Task<Stack> CreateSampleStack(Action<Stack>? customizeStack = null)
     {
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
@@ -26,11 +26,18 @@ public abstract class BaseTestFixture
         var environment = FakerInstances.EnvironmentFaker(project).Generate();
         await AddAsync(environment);
 
-        var stack = FakerInstances
+        var stackFaker = FakerInstances
             .StackFaker(environment.Id)
             .RuleFor(x => x.ServerId, server.Id)
-            .RuleFor(x => x.Server, f => null)
-            .Generate();
+            .RuleFor(x => x.Server, f => null);
+
+        var stack = stackFaker.Generate();
+
+        if (customizeStack != null)
+        {
+            customizeStack(stack);
+        }
+
         await AddAsync(stack);
 
         return stack;

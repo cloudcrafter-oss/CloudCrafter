@@ -1,13 +1,7 @@
 'use client'
 
 import type { DataTableFilterOption } from '@/src/components/datatable/types'
-import {
-	CaretSortIcon,
-	ChevronDownIcon,
-	PlusIcon,
-	TextIcon,
-} from '@radix-ui/react-icons'
-import { Button } from '@ui/components/ui/button.tsx'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Command,
 	CommandEmpty,
@@ -16,12 +10,18 @@ import {
 	CommandItem,
 	CommandList,
 	CommandSeparator,
-} from '@ui/components/ui/command.tsx'
+} from '@cloudcrafter/ui/components/command'
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from '@ui/components/ui/popover.tsx'
+} from '@cloudcrafter/ui/components/popover'
+import {
+	CaretSortIcon,
+	ChevronDownIcon,
+	PlusIcon,
+	TextIcon,
+} from '@radix-ui/react-icons'
 import * as React from 'react'
 
 interface DataTableFilterComboboxProps<TData> {

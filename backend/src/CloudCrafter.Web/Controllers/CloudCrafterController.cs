@@ -4,7 +4,4 @@ namespace CloudCrafter.Web.Controllers;
 
 [ApiController]
 [Route("/api/[controller]")]
-public abstract class CloudCrafterController
-{
-    
-}
+public abstract class CloudCrafterController : ControllerBase { }

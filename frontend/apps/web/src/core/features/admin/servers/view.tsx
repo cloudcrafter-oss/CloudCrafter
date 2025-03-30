@@ -1,12 +1,10 @@
 'use client'
 import { DeploymentStatusBadge } from '@/src/components/stack-detail/deployments/deployment-list'
-import {
-	type ServerDetailDto,
-	getServersQueryKey,
-	useDeleteServerByIdHook,
-	useGetDeploymentsForServerHook,
-} from '@/src/core/__generated__'
-import { useQueryClient } from '@tanstack/react-query'
+import { useDeleteServerByIdHook } from '@cloudcrafter/api'
+import { useGetDeploymentsForServerHook } from '@cloudcrafter/api'
+import { getServersQueryKey } from '@cloudcrafter/api'
+import { usePostRotateAgentKeyHook } from '@cloudcrafter/api'
+import type { ServerDetailDto } from '@cloudcrafter/api'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -17,8 +15,8 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 	AlertDialogTrigger,
-} from '@ui/components/ui/alert-dialog'
-import { Button } from '@ui/components/ui/button.tsx'
+} from '@cloudcrafter/ui/components/alert-dialog'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Card,
 	CardContent,
@@ -26,9 +24,10 @@ import {
 	CardFooter,
 	CardHeader,
 	CardTitle,
-} from '@ui/components/ui/card.tsx'
-import { Input } from '@ui/components/ui/input.tsx'
-import { Label } from '@ui/components/ui/label.tsx'
+} from '@cloudcrafter/ui/components/card'
+import { Input } from '@cloudcrafter/ui/components/input'
+import { Label } from '@cloudcrafter/ui/components/label'
+import { useQueryClient } from '@tanstack/react-query'
 import { formatDistanceToNow } from 'date-fns'
 import { CopyIcon, PackageIcon, RefreshCwIcon, TrashIcon } from 'lucide-react'
 import Link from 'next/link'
@@ -55,8 +54,21 @@ export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
 		},
 	})
 
+	const rotateAgentKey = usePostRotateAgentKeyHook({
+		mutation: {
+			onSuccess: () => {
+				toast.success('Agent key rotated successfully')
+				router.refresh()
+			},
+		},
+	})
+
 	const handleDeleteServer = () => {
 		deleteServer.mutate({ id: server.id })
+	}
+
+	const handleRotateAgentKey = () => {
+		rotateAgentKey.mutate({ id: server.id })
 	}
 
 	return (
@@ -114,15 +126,30 @@ export const ViewServerDetail = ({ server }: { server: ServerDetailDto }) => {
 								>
 									<CopyIcon className='h-4 w-4' />
 								</Button>
-								<Button
-									variant='outline'
-									size='icon'
-									onClick={() => {
-										// TODO: Add refresh functionality
-									}}
-								>
-									<RefreshCwIcon className='h-4 w-4' />
-								</Button>
+								<AlertDialog>
+									<AlertDialogTrigger asChild>
+										<Button variant='outline' size='icon'>
+											<RefreshCwIcon className='h-4 w-4' />
+										</Button>
+									</AlertDialogTrigger>
+									<AlertDialogContent>
+										<AlertDialogHeader>
+											<AlertDialogTitle>Rotate Agent Key?</AlertDialogTitle>
+											<AlertDialogDescription>
+												This will generate a new agent key. The old key will no
+												longer work. Any connected agents will need to be
+												updated with the new key. These will be disconnected
+												automatically.
+											</AlertDialogDescription>
+										</AlertDialogHeader>
+										<AlertDialogFooter>
+											<AlertDialogCancel>Cancel</AlertDialogCancel>
+											<AlertDialogAction onClick={handleRotateAgentKey}>
+												Rotate Key
+											</AlertDialogAction>
+										</AlertDialogFooter>
+									</AlertDialogContent>
+								</AlertDialog>
 							</div>
 						</div>
 					</CardContent>

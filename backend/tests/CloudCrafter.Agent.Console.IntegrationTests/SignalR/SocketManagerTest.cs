@@ -4,6 +4,7 @@ using CloudCrafter.Agent.Runner;
 using CloudCrafter.Agent.Runner.MediatR.SignalR;
 using CloudCrafter.Agent.Runner.SignalR.Providers;
 using MediatR;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -15,6 +16,7 @@ public class SocketManagerTest
     private Mock<ILogger<SocketManager>> _loggerMock;
     private Mock<ISender> _senderMock;
     private Mock<IOptions<AgentConfig>> _configMock;
+    private Mock<IHostApplicationLifetime> _applicationLifetimeMock;
     private HubWrapperMockSetup _hubWrapper;
     private SocketManager _socketManager;
 
@@ -24,6 +26,7 @@ public class SocketManagerTest
         _loggerMock = new Mock<ILogger<SocketManager>>();
         _senderMock = new Mock<ISender>();
         _configMock = new Mock<IOptions<AgentConfig>>();
+        _applicationLifetimeMock = new Mock<IHostApplicationLifetime>();
         _hubWrapper = new();
 
         _configMock
@@ -41,7 +44,8 @@ public class SocketManagerTest
             _loggerMock.Object,
             _senderMock.Object,
             _configMock.Object,
-            _hubWrapper.Object
+            _hubWrapper.Object,
+            _applicationLifetimeMock.Object
         );
     }
 
