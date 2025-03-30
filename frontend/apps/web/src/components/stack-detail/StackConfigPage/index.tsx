@@ -7,6 +7,7 @@ import { cn } from '@cloudcrafter/ui/lib/utils'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { DummyInfoTab } from '../DummyInfoTab'
+import { DockerStorage } from '../docker-storage/DockerStorage'
 import { EnvironmentVariables } from '../environment-variables/EnvironmentVariables'
 import { VariableHistory } from '../environment-variables/VariableHistory'
 import { VariableTemplates } from '../environment-variables/VariableTemplates'
@@ -75,6 +76,11 @@ const sections = [
 				id: 'overview',
 				title: 'Overview',
 				component: ServiceOverview as React.ComponentType<BaseComponentProps>,
+			},
+			{
+				id: 'storage',
+				title: 'Docker Storage',
+				component: DockerStorage as React.ComponentType<BaseComponentProps>,
 			},
 		],
 	},
