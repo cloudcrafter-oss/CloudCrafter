@@ -2,9 +2,9 @@
 import { Github, Menu, X } from 'lucide-react'
 import Image from 'next/image'
 
+import CloudCrafterLogo from '@/assets/logo.png'
+import Screenshot from '@/assets/screenshot.webp'
 import { useState } from 'react'
-import CloudCrafterLogo from '../assets/logo.png'
-import Screenshot from '../assets/screenshot.webp'
 
 const menuItems = [
 	{
