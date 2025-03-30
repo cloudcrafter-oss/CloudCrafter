@@ -6,14 +6,18 @@ import {
 	DocsPage,
 	DocsTitle,
 } from 'fumadocs-ui/page'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 
 export default async function Page(props: {
 	params: Promise<{ slug?: string[] }>
 }) {
 	const params = await props.params
 	const page = source.getPage(params.slug)
-	if (!page) notFound()
+
+	if (!page) {
+		// redirect with 302 to /docs/cloudcrafter
+		redirect('/docs/cloudcrafter')
+	}
 
 	const MDXContent = page.data.body
 
