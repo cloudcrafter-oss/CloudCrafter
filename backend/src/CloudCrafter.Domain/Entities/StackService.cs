@@ -10,6 +10,7 @@ public class StackService : BaseAuditableEntity
     public Stack? Stack { get; set; } = null!;
     public required EntityHttpConfiguration? HttpConfiguration { get; set; }
     public required EntityHealthcheckConfiguration HealthcheckConfiguration { get; set; } = new();
+    public List<StackServiceVolume> Volumes { get; set; } = new();
     public StackServiceType Type { get; set; } = null!;
 
     public required string Name { get; set; }
