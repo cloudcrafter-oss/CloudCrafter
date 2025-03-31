@@ -36,12 +36,16 @@ export default async function StackPage({ params }: PageProps) {
 
 	return (
 		<div className='flex h-full flex-col'>
-			<div className='flex-1 space-y-4 p-8 pt-6 flex flex-row'>
+			<div className='flex-1 p-2 sm:p-8 sm:pt-6'>
 				<div className='flex-1 space-y-4'>
 					<Tabs defaultValue='configuration' className='space-y-4'>
-						<TabsList>
+						<TabsList className='w-full justify-start overflow-x-auto'>
 							{tabs.map((tab) => (
-								<TabsTrigger key={tab.key} value={tab.key}>
+								<TabsTrigger
+									key={tab.key}
+									value={tab.key}
+									className='text-sm sm:text-base px-3 sm:px-4'
+								>
 									{tab.name}
 								</TabsTrigger>
 							))}
@@ -51,7 +55,9 @@ export default async function StackPage({ params }: PageProps) {
 						</TabsContent>
 						<TabsContent value='deployments' className='space-y-4'>
 							<div className='space-y-4'>
-								<h2 className='text-2xl font-bold'>Deployments</h2>
+								<h2 className='text-xl sm:text-2xl font-bold px-2 sm:px-0'>
+									Deployments
+								</h2>
 								<ul className='divide-y divide-gray-200'>
 									<DeploymentList deployments={deployments} />
 								</ul>

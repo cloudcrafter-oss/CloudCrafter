@@ -4,6 +4,7 @@ import { SourceSettings } from '@/src/components/stack-detail/source-settings'
 import { useStackHub } from '@/src/hooks/useStackHub'
 import type { StackDetailDto } from '@cloudcrafter/api'
 import { cn } from '@cloudcrafter/ui/lib/utils'
+import { Menu, X } from 'lucide-react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { DummyInfoTab } from '../DummyInfoTab'
@@ -122,6 +123,7 @@ const StackConfigPage: React.FC<{ stackDetails: StackDetailDto }> = ({
 }) => {
 	const [activeSection, setActiveSection] = useState(sections[0].id)
 	const [activeSubTab, setActiveSubTab] = useState(sections[0].subTabs[0].id)
+	const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
 	const { stack } = useStackHub({ initialStack: stackDetails })
 
@@ -154,58 +156,89 @@ const StackConfigPage: React.FC<{ stackDetails: StackDetailDto }> = ({
 	}
 
 	return (
-		<div className='flex h-screen'>
+		<div className='flex flex-col md:flex-row h-full'>
+			{/* Mobile Menu Button */}
+			<button
+				type='button'
+				className='md:hidden flex items-center gap-2 p-4 text-sm font-medium'
+				onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+			>
+				<Menu className='h-5 w-5' />
+				{sections.find((s) => s.id === activeSection)?.title || 'Menu'}
+			</button>
+
 			{/* Sidebar */}
-			<div className='w-64 h-full bg-slate-100 dark:bg-slate-800 flex flex-col items-start justify-start p-6 space-y-4 border-r'>
-				{sections.map((section) => (
-					<div key={section.id} className='w-full'>
-						<button
-							type='button'
-							data-testid={section.testId}
-							onClick={() => {
-								const newSubTabId = section.subTabs[0].id
-								setActiveSection(section.id)
-								setActiveSubTab(newSubTabId)
-								updateHash(section.id, newSubTabId)
-							}}
-							className={cn(
-								'w-full justify-start text-left px-4 py-2 rounded-md transition-colors',
-								'hover:bg-slate-200 dark:hover:bg-slate-700',
-								activeSection === section.id
-									? 'bg-primary text-primary-foreground font-semibold'
-									: 'text-slate-700 dark:text-slate-300',
-							)}
-						>
-							{section.title}
-						</button>
-						<div className='ml-4 mt-2 space-y-2'>
-							{section.subTabs.map((subTab) => (
-								<button
-									type='button'
-									key={subTab.id}
-									onClick={() => {
-										setActiveSubTab(subTab.id)
-										updateHash(section.id, subTab.id)
-									}}
-									className={cn(
-										'w-full justify-start text-left px-4 py-1 rounded-md transition-colors text-sm',
-										'hover:bg-slate-200 dark:hover:bg-slate-700',
-										activeSection === section.id && activeSubTab === subTab.id
-											? 'bg-secondary text-secondary-foreground font-medium'
-											: 'text-slate-600 dark:text-slate-400',
-										activeSection !== section.id && 'hidden',
-									)}
-								>
-									{subTab.title}
-								</button>
-							))}
+			<div
+				className={cn(
+					'fixed inset-0 z-50 bg-background md:static md:block',
+					'transition-transform duration-200 ease-in-out',
+					isSidebarOpen
+						? 'translate-x-0'
+						: '-translate-x-full md:translate-x-0',
+				)}
+			>
+				<div className='relative h-full w-64 bg-slate-100 dark:bg-slate-800 flex flex-col items-start justify-start p-4 space-y-2 border-r'>
+					{/* Close button for mobile */}
+					<button
+						type='button'
+						className='md:hidden absolute top-4 right-4'
+						onClick={() => setIsSidebarOpen(false)}
+					>
+						<X className='h-5 w-5' />
+					</button>
+
+					{sections.map((section) => (
+						<div key={section.id} className='w-full'>
+							<button
+								type='button'
+								data-testid={section.testId}
+								onClick={() => {
+									const newSubTabId = section.subTabs[0].id
+									setActiveSection(section.id)
+									setActiveSubTab(newSubTabId)
+									updateHash(section.id, newSubTabId)
+									setIsSidebarOpen(false)
+								}}
+								className={cn(
+									'w-full justify-start text-left px-3 py-2 rounded-md transition-colors text-sm',
+									'hover:bg-slate-200 dark:hover:bg-slate-700',
+									activeSection === section.id
+										? 'bg-primary text-primary-foreground font-semibold'
+										: 'text-slate-700 dark:text-slate-300',
+								)}
+							>
+								{section.title}
+							</button>
+							<div className='ml-3 mt-1 space-y-1'>
+								{section.subTabs.map((subTab) => (
+									<button
+										type='button'
+										key={subTab.id}
+										onClick={() => {
+											setActiveSubTab(subTab.id)
+											updateHash(section.id, subTab.id)
+											setIsSidebarOpen(false)
+										}}
+										className={cn(
+											'w-full justify-start text-left px-3 py-1.5 rounded-md transition-colors text-sm',
+											'hover:bg-slate-200 dark:hover:bg-slate-700',
+											activeSection === section.id && activeSubTab === subTab.id
+												? 'bg-secondary text-secondary-foreground font-medium'
+												: 'text-slate-600 dark:text-slate-400',
+											activeSection !== section.id && 'hidden',
+										)}
+									>
+										{subTab.title}
+									</button>
+								))}
+							</div>
 						</div>
-					</div>
-				))}
+					))}
+				</div>
 			</div>
 
 			{/* Content Area */}
-			<div className='flex-1 p-8 overflow-auto'>
+			<div className='flex-1 p-4 overflow-auto'>
 				{sections.map((section) =>
 					section.subTabs.map(
 						(subTab) =>
