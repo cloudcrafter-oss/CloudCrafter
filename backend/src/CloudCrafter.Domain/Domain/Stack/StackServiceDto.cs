@@ -13,6 +13,7 @@ public class StackServiceDto
     public required StackServiceHttpConfigurationDto? HttpConfiguration { get; init; }
     public required StackServiceHealthcheckConfigurationDto HealthcheckConfiguration { get; init; }
     public required EntityHealthDto Health { get; init; }
+    public List<StackServiceVolumeDto> Volumes { get; init; } = new();
 
     private class Mapping : Profile
     {
@@ -20,6 +21,23 @@ public class StackServiceDto
         {
             CreateMap<StackService, StackServiceDto>()
                 .ForMember(x => x.Health, opt => opt.MapFrom(src => src.HealthStatus));
+        }
+    }
+}
+
+public class StackServiceVolumeDto
+{
+    public required Guid Id { get; init; }
+    public required string Name { get; init; }
+    public required string? SourcePath { get; init; }
+    public required string DestinationPath { get; init; }
+    public required StackServiceVolumeType Type { get; init; }
+
+    private class Mapping : Profile
+    {
+        public Mapping()
+        {
+            CreateMap<StackServiceVolume, StackServiceVolumeDto>();
         }
     }
 }
