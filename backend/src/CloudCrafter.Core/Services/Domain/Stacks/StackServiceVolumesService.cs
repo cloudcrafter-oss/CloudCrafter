@@ -1,11 +1,14 @@
 ﻿using Ardalis.GuardClauses;
+using AutoMapper;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Repositories;
+using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.Core.Services.Domain.Stacks;
 
-public class StackServiceVolumesService(IStackRepository repository) : IStackServiceVolumesService
+public class StackServiceVolumesService(IStackRepository repository, IMapper mapper)
+    : IStackServiceVolumesService
 {
     public async Task<Guid> CreateOrUpdateStackServiceVolume(
         Guid stackId,
@@ -23,6 +26,7 @@ public class StackServiceVolumesService(IStackRepository repository) : IStackSer
         {
             throw new NotFoundException("StackService", "Stack service not found");
         }
+
         // Check if volume exists directly using volumeId if provided
         StackServiceVolume? existingVolume = null;
 
@@ -72,6 +76,20 @@ public class StackServiceVolumesService(IStackRepository repository) : IStackSer
 
         await repository.SaveChangesAsync();
         return existingVolume.Id;
+    }
+
+    public async Task<List<StackServiceVolumeDto>> GetVolumes(Guid stackId, Guid stackServiceId)
+    {
+        var stackServiceExists = await repository.StackServiceExists(stackId, stackServiceId);
+
+        if (!stackServiceExists)
+        {
+            throw new NotFoundException("StackService", "Stack service not found");
+        }
+
+        var volumes = await repository.GetServiceVolumes(stackId, stackServiceId);
+
+        return mapper.Map<List<StackServiceVolumeDto>>(volumes);
     }
 
     public async Task<StackServiceVolume> GetServiceVolume(

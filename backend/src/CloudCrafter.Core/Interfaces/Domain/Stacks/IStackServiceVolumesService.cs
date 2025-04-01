@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Domain.Entities;
+﻿using CloudCrafter.Domain.Domain.Stack;
+using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.Core.Interfaces.Domain.Stacks;
 
@@ -13,4 +14,6 @@ public interface IStackServiceVolumesService
         string? requestSource,
         string requestTarget
     );
+
+    Task<List<StackServiceVolumeDto>> GetVolumes(Guid stackId, Guid stackServiceId);
 }

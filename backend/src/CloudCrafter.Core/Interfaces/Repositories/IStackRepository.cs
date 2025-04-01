@@ -62,5 +62,7 @@ public interface IStackRepository
     /// </summary>
     /// <param name="volume">The volume to add</param>
     void AddStackServiceVolume(StackServiceVolume volume);
+
     Task<bool> StackServiceExists(Guid stackId, Guid stackServiceId);
+    Task<List<StackServiceVolume>> GetServiceVolumes(Guid stackId, Guid stackServiceId);
 }

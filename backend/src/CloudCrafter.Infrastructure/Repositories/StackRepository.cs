@@ -271,6 +271,15 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
             .AnyAsync();
     }
 
+    public Task<List<StackServiceVolume>> GetServiceVolumes(Guid stackId, Guid stackServiceId)
+    {
+        return context
+            .StackServiceVolumes.Where(x =>
+                x.StackServiceId == stackServiceId && x.StackService.StackId == stackId
+            )
+            .ToListAsync();
+    }
+
     public Task SaveChangesAsync()
     {
         return context.SaveChangesAsync();
