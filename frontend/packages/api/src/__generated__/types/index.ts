@@ -10,6 +10,7 @@ export type { CreateStackCommand } from './CreateStackCommand'
 export type { CreateStackEnvironmentVariableCommand } from './CreateStackEnvironmentVariableCommand'
 export type { CreateStackEnvironmentVariableGroupCommand } from './CreateStackEnvironmentVariableGroupCommand'
 export type { CreateStackFromSourceProviderCommand } from './CreateStackFromSourceProviderCommand'
+export type { CreateStackServiceVolumeCommand } from './CreateStackServiceVolumeCommand'
 export type { CreateUserCommand } from './CreateUserCommand'
 export type {
   DeleteEnvironmentVariablePathParams,
@@ -26,6 +27,12 @@ export type {
 export type { DeleteProjectPathParams, DeleteProject200, DeleteProjectMutationResponse, DeleteProjectMutation } from './DeleteProject'
 export type { DeleteProviderPathParams, DeleteProvider200, DeleteProviderMutationResponse, DeleteProviderMutation } from './DeleteProvider'
 export type { DeleteServerByIdPathParams, DeleteServerById200, DeleteServerByIdMutationResponse, DeleteServerByIdMutation } from './DeleteServerById'
+export type {
+  DeleteStackServiceVolumePathParams,
+  DeleteStackServiceVolume200,
+  DeleteStackServiceVolumeMutationResponse,
+  DeleteStackServiceVolumeMutation,
+} from './DeleteStackServiceVolume'
 export type { DeployedStackDto } from './DeployedStackDto'
 export type { DeploymentCreatedDetailsDto } from './DeploymentCreatedDetailsDto'
 export type { DeploymentLogDto } from './DeploymentLogDto'
@@ -79,6 +86,12 @@ export type { GetProvidersQueryParams, GetProviders200, GetProvidersQueryRespons
 export type { GetServerByIdPathParams, GetServerById200, GetServerByIdQueryResponse, GetServerByIdQuery } from './GetServerById'
 export type { GetServers200, GetServersQueryResponse, GetServersQuery } from './GetServers'
 export type { GetStackDetailPathParams, GetStackDetail200, GetStackDetail404, GetStackDetailQueryResponse, GetStackDetailQuery } from './GetStackDetail'
+export type {
+  GetStackServiceVolumesPathParams,
+  GetStackServiceVolumes200,
+  GetStackServiceVolumesQueryResponse,
+  GetStackServiceVolumesQuery,
+} from './GetStackServiceVolumes'
 export type { GetUsers200, GetUsersMutationRequest, GetUsersMutationResponse, GetUsersMutation } from './GetUsers'
 export type { GitApplicationSourceDto } from './GitApplicationSourceDto'
 export type { GithubApplicationSourceDto } from './GithubApplicationSourceDto'
@@ -123,6 +136,13 @@ export type {
   PostCreateStackFromSourceProviderMutationResponse,
   PostCreateStackFromSourceProviderMutation,
 } from './PostCreateStackFromSourceProvider'
+export type {
+  PostCreateStackServiceVolumePathParams,
+  PostCreateStackServiceVolume201,
+  PostCreateStackServiceVolumeMutationRequest,
+  PostCreateStackServiceVolumeMutationResponse,
+  PostCreateStackServiceVolumeMutation,
+} from './PostCreateStackServiceVolume'
 export type { PostCreateUser200, PostCreateUserMutationRequest, PostCreateUserMutationResponse, PostCreateUserMutation } from './PostCreateUser'
 export type {
   PostDispatchStackDeploymentPathParams,
@@ -166,6 +186,14 @@ export type {
   PutUpdateGithubProviderMutationResponse,
   PutUpdateGithubProviderMutation,
 } from './PutUpdateGithubProvider'
+export type {
+  PutUpdateStackServiceVolumePathParams,
+  PutUpdateStackServiceVolume200,
+  PutUpdateStackServiceVolume400,
+  PutUpdateStackServiceVolumeMutationRequest,
+  PutUpdateStackServiceVolumeMutationResponse,
+  PutUpdateStackServiceVolumeMutation,
+} from './PutUpdateStackServiceVolume'
 export type { RefreshUserTokenCommand } from './RefreshUserTokenCommand'
 export type { ServerDetailDto } from './ServerDetailDto'
 export type { ServerDto } from './ServerDto'
@@ -182,6 +210,8 @@ export type { StackServerDto } from './StackServerDto'
 export type { StackServiceDto } from './StackServiceDto'
 export type { StackServiceHealthcheckConfigurationDto } from './StackServiceHealthcheckConfigurationDto'
 export type { StackServiceHttpConfigurationDto } from './StackServiceHttpConfigurationDto'
+export type { StackServiceVolumeDto } from './StackServiceVolumeDto'
+export type { StackServiceVolumeType } from './StackServiceVolumeType'
 export type { StackSourceDto } from './StackSourceDto'
 export type { StackSourceDtoTypeEnum, StackSourceDtoType } from './StackSourceDtoType'
 export type { Test200, TestQueryResponse, TestQuery } from './Test'
@@ -218,6 +248,7 @@ export type {
   UpdateStackServiceMutation,
 } from './UpdateStackService'
 export type { UpdateStackServiceCommand } from './UpdateStackServiceCommand'
+export type { UpdateStackServiceVolumeCommand } from './UpdateStackServiceVolumeCommand'
 export type { UserDto } from './UserDto'
 export { channelOutputLogLineLevelEnum } from './ChannelOutputLogLineLevel'
 export { deploymentStatusDtoEnum } from './DeploymentStatusDto'

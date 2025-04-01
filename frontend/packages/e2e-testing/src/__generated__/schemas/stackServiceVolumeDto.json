@@ -1,0 +1,1 @@
+{"required":["id","name","sourcePath","destinationPath","type"],"type":"object","properties":{"id":{"type":"string","format":"uuid"},"name":{"type":"string"},"sourcePath":{"type":"string","nullable":true},"destinationPath":{"type":"string"},"type":{"type":"integer","x-readme-ref-name":"StackServiceVolumeType"}},"x-readme-ref-name":"StackServiceVolumeDto"}
