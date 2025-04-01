@@ -186,6 +186,7 @@ public static class FakerInstances
             .RuleFor(x => x.StackServiceTypeId, StackServiceTypeConstants.App)
             .RuleFor(x => x.Stack, stack)
             .RuleFor(x => x.HttpConfiguration, (EntityHttpConfiguration?)null)
+            .RuleFor(x => x.Volumes, new List<StackServiceVolume>())
             .RuleFor(x => x.CreatedBy, (Guid?)null)
             .RuleFor(x => x.LastModifiedBy, (Guid?)null)
             .RuleFor(x => x.Name, f => f.Person.FullName)
