@@ -173,6 +173,23 @@ public static class FakerInstances
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
     }
 
+    public static Faker<StackServiceVolume> StackServiceVolumeFaker(Guid stackServiceId)
+    {
+        return new Faker<StackServiceVolume>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, Guid.NewGuid)
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.StackServiceId, stackServiceId)
+            .RuleFor(x => x.StackService, (StackService?)null)
+            .RuleFor(x => x.CreatedBy, (Guid?)null)
+            .RuleFor(x => x.LastModifiedBy, (Guid?)null)
+            .RuleFor(x => x.Name, f => f.Person.FullName)
+            .RuleFor(x => x.SourcePath, f => f.Internet.UrlRootedPath())
+            .RuleFor(x => x.DestinationPath, f => f.Internet.UrlRootedPath())
+            .RuleFor(x => x.Type, f => f.PickRandom<StackServiceVolumeType>());
+    }
+
     public static Faker<StackService> StackServiceFaker(Stack stack)
     {
         return new Faker<StackService>()
