@@ -1,4 +1,5 @@
 using CloudCrafter.Core.Common.Security;
+using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Domain.Entities;
 using MediatR;
 
@@ -13,4 +14,27 @@ public record CreateStackServiceVolumeCommand : IRequest<Guid>
     public required StackServiceVolumeType Type { get; init; }
     public required string? Source { get; init; }
     public required string Target { get; init; }
+}
+
+public class CreateStackServiceVolumeCommandHandler(
+    IStackServiceVolumesService stackServiceVolumesService
+) : IRequestHandler<CreateStackServiceVolumeCommand, Guid>
+{
+    public async Task<Guid> Handle(
+        CreateStackServiceVolumeCommand request,
+        CancellationToken cancellationToken
+    )
+    {
+        var id = await stackServiceVolumesService.CreateOrUpdateStackServiceVolume(
+            request.StackId,
+            request.StackServiceId,
+            null,
+            request.Name,
+            request.Type,
+            request.Source,
+            request.Target
+        );
+
+        return id;
+    }
 }

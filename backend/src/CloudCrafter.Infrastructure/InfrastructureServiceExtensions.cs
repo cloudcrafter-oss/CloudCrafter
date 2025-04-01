@@ -111,7 +111,8 @@ public static class InfrastructureServiceExtensions
             .AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>()
             .AddScoped<IJwtService, JwtService>()
             .AddScoped<IEmailSender, FakeEmailSender>()
-            .AddScoped<IStackEnvironmentVariablesService, StackEnvironmentVariablesService>();
+            .AddScoped<IStackEnvironmentVariablesService, StackEnvironmentVariablesService>()
+            .AddScoped<IStackServiceVolumesService, StackServiceVolumesService>();
 
         return services;
     }
