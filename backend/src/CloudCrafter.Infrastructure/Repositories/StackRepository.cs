@@ -264,6 +264,13 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
         context.StackServiceVolumes.Add(volume);
     }
 
+    public Task<bool> StackServiceExists(Guid stackId, Guid stackServiceId)
+    {
+        return context
+            .StackServices.Where(x => x.Id == stackServiceId && x.StackId == stackId)
+            .AnyAsync();
+    }
+
     public Task SaveChangesAsync()
     {
         return context.SaveChangesAsync();

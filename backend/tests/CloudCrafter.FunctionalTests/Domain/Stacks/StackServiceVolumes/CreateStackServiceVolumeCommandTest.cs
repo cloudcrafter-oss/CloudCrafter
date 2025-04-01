@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Core.Commands.Stacks.Volumes;
+﻿using Ardalis.GuardClauses;
+using CloudCrafter.Core.Commands.Stacks.Volumes;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using FluentAssertions;
@@ -51,6 +52,31 @@ public class CreateStackServiceVolumeCommandTest : BaseStackServiceVolumeTest
         exception!.Errors.Should().ContainKey("Source").And.HaveCount(1);
         exception!.Errors["Source"].Should().Contain("Source can only be used with LocalVolumes");
 
+        await AssertVolumeCount(0);
+    }
+
+    [Test]
+    public async Task ShouldNotBeAbleToCreateVolumeOnNonExistingService()
+    {
+        await AssertVolumeCount(0);
+        await RunAsAdministratorAsync();
+
+        var stackService = await GenerateStackService();
+
+        Command = Command with
+        {
+            StackId = stackService.StackId,
+            StackServiceId = Guid.NewGuid(),
+            Source = "dummy",
+            Target = "/dummy",
+            Type = StackServiceVolumeType.LocalMount,
+        };
+
+        var exception = Assert.ThrowsAsync<NotFoundException>(async () => await SendAsync(Command));
+        exception.Should().NotBeNull();
+        exception
+            .Message.Should()
+            .Be("Queried object Stack service not found was not found, Key: StackService");
         await AssertVolumeCount(0);
     }
 

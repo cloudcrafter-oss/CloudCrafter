@@ -17,6 +17,12 @@ public class StackServiceVolumesService(IStackRepository repository) : IStackSer
         string requestTarget
     )
     {
+        var stackServiceExists = await repository.StackServiceExists(stackId, stackServiceId);
+
+        if (!stackServiceExists)
+        {
+            throw new NotFoundException("StackService", "Stack service not found");
+        }
         // Check if volume exists directly using volumeId if provided
         StackServiceVolume? existingVolume = null;
 
