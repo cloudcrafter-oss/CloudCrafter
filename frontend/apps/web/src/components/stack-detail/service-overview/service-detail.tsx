@@ -300,7 +300,17 @@ export const ServiceDetail = ({
 								</div>
 							</TabsContent>
 
-							<VolumeList initialVolumes={mockVolumes} />
+							<TabsContent
+								value='storage'
+								className='mt-0 space-y-4 sm:space-y-6'
+							>
+								<div>
+									<h3 className='text-lg sm:text-xl font-semibold mb-4 sm:mb-6'>
+										Storage Configuration
+									</h3>
+									<VolumeList stackId={stackId} stackServiceId={service.id} />
+								</div>
+							</TabsContent>
 						</div>
 					</Tabs>
 

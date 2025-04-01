@@ -1,3 +1,7 @@
+import {
+	type StackServiceVolumeDto,
+	useGetStackServiceVolumesHook,
+} from '@cloudcrafter/api'
 import { Button } from '@cloudcrafter/ui/components/button'
 import { TabsContent } from '@cloudcrafter/ui/components/tabs'
 import { HardDrive, Plus, Trash2 } from 'lucide-react'
@@ -6,64 +10,64 @@ import { toast } from 'sonner'
 import { DeleteAlert } from './delete-alert'
 import { VolumeSheet } from './volume-sheet'
 
-interface Volume {
-	id: string
-	name: string
-	path: string
-	size: string
-	type: 'local' | 'nfs'
-}
-
 interface VolumeListProps {
-	initialVolumes?: Volume[]
+	stackId: string
+	stackServiceId: string
 }
 
-export const VolumeList = ({ initialVolumes = [] }: VolumeListProps) => {
-	const [volumes, setVolumes] = useState<Volume[]>(initialVolumes)
+export const VolumeList = ({ stackId, stackServiceId }: VolumeListProps) => {
 	const [isVolumeSheetOpen, setIsVolumeSheetOpen] = useState(false)
-	const [editingVolume, setEditingVolume] = useState<Volume | null>(null)
-	const [deletingVolume, setDeletingVolume] = useState<Volume | null>(null)
+	const [editingVolume, setEditingVolume] =
+		useState<StackServiceVolumeDto | null>(null)
+	const [deletingVolume, setDeletingVolume] =
+		useState<StackServiceVolumeDto | null>(null)
+
+	const { data: volumes = [], isLoading } = useGetStackServiceVolumesHook(
+		stackId,
+		stackServiceId,
+	)
 
 	const handleAddVolume = () => {
 		setEditingVolume(null)
 		setIsVolumeSheetOpen(true)
 	}
 
-	const handleEditVolume = (volume: Volume) => {
+	const handleEditVolume = (volume: StackServiceVolumeDto) => {
 		setEditingVolume(volume)
 		setIsVolumeSheetOpen(true)
 	}
 
-	const handleDeleteVolume = (volume: Volume) => {
+	const handleDeleteVolume = (volume: StackServiceVolumeDto) => {
 		setDeletingVolume(volume)
 	}
 
 	const confirmDeleteVolume = () => {
 		if (deletingVolume) {
-			setVolumes(volumes.filter((v) => v.id !== deletingVolume.id))
+			// TODO: Implement delete mutation
 			toast.success('Volume deleted successfully')
 			setDeletingVolume(null)
 		}
 	}
 
-	const handleSaveVolume = (values: Omit<Volume, 'id' | 'size'>) => {
+	const handleSaveVolume = (values: Omit<StackServiceVolumeDto, 'id'>) => {
 		if (editingVolume) {
-			setVolumes(
-				volumes.map((v) =>
-					v.id === editingVolume.id ? { ...v, ...values, size: v.size } : v,
-				),
-			)
+			// TODO: Implement update mutation
 			toast.success('Volume updated successfully')
 		} else {
-			const newVolume: Volume = {
-				id: `vol${volumes.length + 1}`,
-				...values,
-				size: '0 B',
-			}
-			setVolumes([...volumes, newVolume])
+			// TODO: Implement create mutation
 			toast.success('Volume added successfully')
 		}
 		setIsVolumeSheetOpen(false)
+	}
+
+	if (isLoading) {
+		return (
+			<TabsContent value='storage' className='mt-0'>
+				<div className='text-center py-6 sm:py-8 bg-secondary/50 rounded-lg border'>
+					<p className='text-sm sm:text-base font-medium'>Loading volumes...</p>
+				</div>
+			</TabsContent>
+		)
 	}
 
 	return (
@@ -106,14 +110,11 @@ export const VolumeList = ({ initialVolumes = [] }: VolumeListProps) => {
 										{volume.name}
 									</h4>
 									<p className='text-xs sm:text-sm text-muted-foreground'>
-										{volume.path}
+										{volume.destinationPath}
 									</p>
 									<div className='flex items-center gap-2 mt-1'>
 										<span className='inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-900/20 px-1.5 sm:px-2 py-0.5 text-xs font-medium text-blue-800 dark:text-blue-300 ring-1 ring-inset ring-blue-600/10'>
-											{volume.type}
-										</span>
-										<span className='text-xs text-muted-foreground'>
-											{volume.size}
+											{volume.type === 0 ? 'Local Mount' : 'Docker Volume'}
 										</span>
 									</div>
 								</div>

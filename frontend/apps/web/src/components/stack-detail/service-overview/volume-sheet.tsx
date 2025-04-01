@@ -1,3 +1,4 @@
+import type { StackServiceVolumeDto } from '@cloudcrafter/api'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Form,
@@ -22,21 +23,24 @@ import {
 	SheetHeader,
 	SheetTitle,
 } from '@cloudcrafter/ui/components/sheet'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-interface Volume {
-	id: string
-	name: string
-	path: string
-	size: string
-	type: 'local' | 'nfs'
-}
+const volumeFormSchema = z.object({
+	name: z.string().min(1, 'Name is required'),
+	sourcePath: z.string().nullable(),
+	destinationPath: z.string().min(1, 'Destination path is required'),
+	type: z.number().int(),
+})
+
+type VolumeFormData = z.infer<typeof volumeFormSchema>
 
 interface VolumeSheetProps {
 	open: boolean
 	onOpenChange: (open: boolean) => void
-	editingVolume: Volume | null
-	onSubmit: (values: Omit<Volume, 'id' | 'size'>) => void
+	editingVolume: StackServiceVolumeDto | null
+	onSubmit: (values: VolumeFormData) => void
 }
 
 export const VolumeSheet = ({
@@ -45,11 +49,13 @@ export const VolumeSheet = ({
 	editingVolume,
 	onSubmit,
 }: VolumeSheetProps) => {
-	const volumeForm = useForm<Omit<Volume, 'id' | 'size'>>({
+	const volumeForm = useForm<VolumeFormData>({
+		resolver: zodResolver(volumeFormSchema),
 		defaultValues: {
 			name: editingVolume?.name ?? '',
-			path: editingVolume?.path ?? '',
-			type: editingVolume?.type ?? 'local',
+			sourcePath: editingVolume?.sourcePath ?? '',
+			destinationPath: editingVolume?.destinationPath ?? '',
+			type: editingVolume?.type ?? 0, // LocalMount
 		},
 	})
 
@@ -94,8 +100,8 @@ export const VolumeSheet = ({
 									<FormItem>
 										<FormLabel>Volume Type</FormLabel>
 										<Select
-											onValueChange={field.onChange}
-											defaultValue={field.value}
+											onValueChange={(value) => field.onChange(Number(value))}
+											defaultValue={field.value.toString()}
 										>
 											<FormControl>
 												<SelectTrigger>
@@ -103,8 +109,8 @@ export const VolumeSheet = ({
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
-												<SelectItem value='local'>Local Mount</SelectItem>
-												<SelectItem value='nfs'>NFS Share</SelectItem>
+												<SelectItem value='0'>Local Mount</SelectItem>
+												<SelectItem value='1'>Docker Volume</SelectItem>
 											</SelectContent>
 										</Select>
 										<FormMessage />
@@ -114,14 +120,32 @@ export const VolumeSheet = ({
 
 							<FormField
 								control={volumeForm.control}
-								name='path'
+								name='sourcePath'
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Mount Path</FormLabel>
+										<FormLabel>Source Path</FormLabel>
 										<FormControl>
 											<Input
 												{...field}
-												placeholder='Enter mount path (e.g. /var/lib/data)'
+												value={field.value ?? ''}
+												placeholder='Enter source path (e.g. /data)'
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={volumeForm.control}
+								name='destinationPath'
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Destination Path</FormLabel>
+										<FormControl>
+											<Input
+												{...field}
+												placeholder='Enter destination path (e.g. /var/lib/data)'
 											/>
 										</FormControl>
 										<FormMessage />
