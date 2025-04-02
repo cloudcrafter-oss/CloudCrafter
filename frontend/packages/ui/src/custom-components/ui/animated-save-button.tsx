@@ -1,41 +1,64 @@
 'use client'
 
 import { Button } from '@cloudcrafter/ui/components/button'
+import type { UseMutationResult } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CheckCircle, Loader2, Save } from 'lucide-react'
-import { useState } from 'react'
-
+import { useEffect, useState } from 'react'
 type SaveButtonProps = {
-	onSave?: () => Promise<void>
+	// biome-ignore lint/suspicious/noExplicitAny: we dont know which types we can expect here, so we do any
+	mutation: UseMutationResult<any, Error, any>
 	className?: string
 }
 
-export function AnimatedSaveButton({ onSave, className }: SaveButtonProps) {
+export function AnimatedSaveButton({ mutation, className }: SaveButtonProps) {
 	const [state, setState] = useState<'idle' | 'saving' | 'success'>('idle')
 
-	const handleSave = async () => {
-		if (state !== 'idle') return
-
-		setState('saving')
-		try {
-			if (onSave) {
-				await onSave()
+	// Handle mutation state changes
+	useEffect(() => {
+		if (mutation) {
+			if (mutation.isPending) {
+				setState('saving')
+			} else if (mutation.isSuccess) {
+				setState('success')
+				// Reset to idle after showing success
+				const timer = setTimeout(() => {
+					setState('idle')
+					mutation.reset()
+				}, 2000)
+				return () => clearTimeout(timer)
 			}
-			setState('success')
-
-			// Reset to idle after showing success
-			setTimeout(() => {
-				setState('idle')
-			}, 2000)
-		} catch (error) {
-			setState('idle')
-			console.error('Error saving:', error)
 		}
-	}
+	}, [mutation.isPending, mutation.isSuccess, mutation, mutation.reset])
+
+	// const handleSave = async () => {
+	//     if (state !== 'idle') return
+
+	//     if (mutation) {
+	//         mutation.mutate(mutationData)
+	//         return
+	//     }
+
+	//     setState('saving')
+	//     try {
+	//         if (onSave) {
+	//             await onSave()
+	//         }
+	//         setState('success')
+
+	//         // Reset to idle after showing success
+	//         setTimeout(() => {
+	//             setState('idle')
+	//         }, 2000)
+	//     } catch (error) {
+	//         setState('idle')
+	//         console.error('Error saving:', error)
+	//     }
+	// }
 
 	return (
 		<Button
-			onClick={handleSave}
+			type='submit'
 			className={`relative ${className}`}
 			disabled={state !== 'idle'}
 			variant={state === 'success' ? 'default' : 'default'}

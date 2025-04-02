@@ -183,12 +183,7 @@ export const DockerConfigurationCard = ({
 						/>
 					</CardContent>
 					<CardFooter className='border-t border-border/50 px-6 py-6'>
-						<SubmitButton
-							isPending={serverMutation.isPending}
-							isSuccess={serverMutation.isSuccess}
-							onReset={() => serverMutation.reset()}
-						/>
-						<AnimatedSaveButton />
+						<AnimatedSaveButton mutation={serverMutation} />
 					</CardFooter>
 				</form>
 			</Form>
