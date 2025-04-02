@@ -1,6 +1,7 @@
 import type { StackServiceVolumeDto } from '@cloudcrafter/api'
 import {
 	createStackServiceVolumeCommandSchema,
+	stackServiceVolumeTypeDtoEnum,
 	updateStackServiceVolumeCommandSchema,
 } from '@cloudcrafter/api'
 import {
@@ -44,6 +45,7 @@ interface VolumeSheetProps {
 	editingVolume: StackServiceVolumeDto | null
 	stackId: string
 	stackServiceId: string
+	onSuccess?: () => void
 }
 
 export const VolumeSheet = ({
@@ -52,12 +54,14 @@ export const VolumeSheet = ({
 	editingVolume,
 	stackId,
 	stackServiceId,
+	onSuccess,
 }: VolumeSheetProps) => {
 	const createVolume = usePostCreateStackServiceVolumeHook({
 		mutation: {
 			onSuccess: () => {
 				toast.success('Volume created successfully')
 				onOpenChange(false)
+				onSuccess?.()
 			},
 			onError: (error) => {
 				toast.error(`Failed to create volume: ${error.message}`)
@@ -70,6 +74,7 @@ export const VolumeSheet = ({
 			onSuccess: () => {
 				toast.success('Volume updated successfully')
 				onOpenChange(false)
+				onSuccess?.()
 			},
 			onError: (error) => {
 				toast.error(`Failed to update volume: ${error.message}`)
@@ -84,10 +89,12 @@ export const VolumeSheet = ({
 				: createStackServiceVolumeCommandSchema,
 		),
 		defaultValues: {
+			stackId,
+			stackServiceId,
 			name: editingVolume?.name ?? '',
-			source: editingVolume?.sourcePath ?? '',
+			source: editingVolume?.sourcePath ?? null,
 			target: editingVolume?.destinationPath ?? '',
-			type: editingVolume?.type ?? 0, // LocalMount
+			type: editingVolume?.type ?? stackServiceVolumeTypeDtoEnum.LocalMount,
 		},
 	})
 
@@ -131,14 +138,12 @@ export const VolumeSheet = ({
 				<div className='mt-6'>
 					<Form {...volumeForm}>
 						<form
-							onSubmit={() => {
-								volumeForm.handleSubmit(onSubmit)
-							}}
+							onSubmit={volumeForm.handleSubmit(onSubmit)}
 							className='space-y-4'
 						>
 							<FormField
 								control={volumeForm.control}
-								name='name'
+								name={'name' satisfies keyof VolumeFormData}
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Volume Name</FormLabel>
@@ -152,13 +157,14 @@ export const VolumeSheet = ({
 
 							<FormField
 								control={volumeForm.control}
-								name='type'
+								name={'type' satisfies keyof VolumeFormData}
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Volume Type</FormLabel>
 										<Select
-											onValueChange={(value) => field.onChange(Number(value))}
-											defaultValue={field.value.toString()}
+											onValueChange={field.onChange}
+											value={field.value}
+											defaultValue={field.value}
 										>
 											<FormControl>
 												<SelectTrigger>
@@ -166,8 +172,16 @@ export const VolumeSheet = ({
 												</SelectTrigger>
 											</FormControl>
 											<SelectContent>
-												<SelectItem value='0'>Local Mount</SelectItem>
-												<SelectItem value='1'>Docker Volume</SelectItem>
+												<SelectItem
+													value={stackServiceVolumeTypeDtoEnum.LocalMount}
+												>
+													Local Mount
+												</SelectItem>
+												<SelectItem
+													value={stackServiceVolumeTypeDtoEnum.DockerVolume}
+												>
+													Docker Volume
+												</SelectItem>
 											</SelectContent>
 										</Select>
 										<FormMessage />
@@ -175,10 +189,11 @@ export const VolumeSheet = ({
 								)}
 							/>
 
-							{volumeForm.watch('type') === 0 && (
+							{volumeForm.watch('type') ===
+								stackServiceVolumeTypeDtoEnum.LocalMount && (
 								<FormField
 									control={volumeForm.control}
-									name='source'
+									name={'source' satisfies keyof VolumeFormData}
 									render={({ field }) => (
 										<FormItem>
 											<FormLabel>Source Path</FormLabel>
@@ -197,7 +212,7 @@ export const VolumeSheet = ({
 
 							<FormField
 								control={volumeForm.control}
-								name='target'
+								name={'target' satisfies keyof VolumeFormData}
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Destination Path</FormLabel>
@@ -212,23 +227,46 @@ export const VolumeSheet = ({
 								)}
 							/>
 
-							<div className='flex flex-col-reverse sm:flex-row justify-end gap-2 pt-4'>
-								<Button
-									type='button'
-									variant='ghost'
-									onClick={() => {
-										onOpenChange(false)
-										volumeForm.reset()
-									}}
-								>
-									Cancel
-								</Button>
-								<Button
-									type='submit'
-									disabled={createVolume.isPending || updateVolume.isPending}
-								>
-									{editingVolume ? 'Save Changes' : 'Add Volume'}
-								</Button>
+							<div className='flex flex-col gap-4 pt-4'>
+								{Object.keys(volumeForm.formState.errors).length > 0 && (
+									<div className='rounded-md bg-red-50 dark:bg-red-900/10 p-3'>
+										<div className='text-sm text-red-500'>
+											{Object.entries(volumeForm.formState.errors).map(
+												([key, error]) => (
+													<p key={key}>
+														{key}: {error?.message}
+													</p>
+												),
+											)}
+										</div>
+									</div>
+								)}
+
+								<div className='flex flex-col-reverse sm:flex-row justify-end gap-2'>
+									{(createVolume.error || updateVolume.error) && (
+										<p className='text-sm text-red-500 mb-2'>
+											{createVolume.error?.message ||
+												updateVolume.error?.message ||
+												'An error occurred'}
+										</p>
+									)}
+									<Button
+										type='button'
+										variant='ghost'
+										onClick={() => {
+											onOpenChange(false)
+											volumeForm.reset()
+										}}
+									>
+										Cancel
+									</Button>
+									<Button
+										type='submit'
+										disabled={createVolume.isPending || updateVolume.isPending}
+									>
+										{editingVolume ? 'Save Changes' : 'Add Volume'}
+									</Button>
+								</div>
 							</div>
 						</form>
 					</Form>

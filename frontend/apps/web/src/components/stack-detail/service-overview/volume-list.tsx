@@ -1,5 +1,6 @@
 import {
 	type StackServiceVolumeDto,
+	stackServiceVolumeTypeDtoEnum,
 	useGetStackServiceVolumesHook,
 } from '@cloudcrafter/api'
 import { Button } from '@cloudcrafter/ui/components/button'
@@ -22,10 +23,11 @@ export const VolumeList = ({ stackId, stackServiceId }: VolumeListProps) => {
 	const [deletingVolume, setDeletingVolume] =
 		useState<StackServiceVolumeDto | null>(null)
 
-	const { data: volumes = [], isLoading } = useGetStackServiceVolumesHook(
-		stackId,
-		stackServiceId,
-	)
+	const {
+		data: volumes = [],
+		isLoading,
+		refetch: refetchVolumes,
+	} = useGetStackServiceVolumesHook(stackId, stackServiceId)
 
 	const handleAddVolume = () => {
 		setEditingVolume(null)
@@ -99,11 +101,22 @@ export const VolumeList = ({ stackId, stackServiceId }: VolumeListProps) => {
 										{volume.name}
 									</h4>
 									<p className='text-xs sm:text-sm text-muted-foreground'>
-										{volume.destinationPath}
+										{volume.type ===
+										stackServiceVolumeTypeDtoEnum.LocalMount ? (
+											<>
+												Source: {volume.sourcePath}
+												<br />
+												Destination: {volume.destinationPath}
+											</>
+										) : (
+											<>Docker Volume: {volume.destinationPath}</>
+										)}
 									</p>
 									<div className='flex items-center gap-2 mt-1'>
 										<span className='inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-900/20 px-1.5 sm:px-2 py-0.5 text-xs font-medium text-blue-800 dark:text-blue-300 ring-1 ring-inset ring-blue-600/10'>
-											{volume.type === 0 ? 'Local Mount' : 'Docker Volume'}
+											{volume.type === stackServiceVolumeTypeDtoEnum.LocalMount
+												? 'Local Mount'
+												: 'Docker Volume'}
 										</span>
 									</div>
 								</div>
@@ -148,6 +161,7 @@ export const VolumeList = ({ stackId, stackServiceId }: VolumeListProps) => {
 				open={isVolumeSheetOpen}
 				onOpenChange={setIsVolumeSheetOpen}
 				editingVolume={editingVolume}
+				onSuccess={refetchVolumes}
 			/>
 
 			<DeleteAlert
