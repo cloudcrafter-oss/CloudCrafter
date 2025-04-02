@@ -49,17 +49,6 @@ export const VolumeList = ({ stackId, stackServiceId }: VolumeListProps) => {
 		}
 	}
 
-	const handleSaveVolume = (values: Omit<StackServiceVolumeDto, 'id'>) => {
-		if (editingVolume) {
-			// TODO: Implement update mutation
-			toast.success('Volume updated successfully')
-		} else {
-			// TODO: Implement create mutation
-			toast.success('Volume added successfully')
-		}
-		setIsVolumeSheetOpen(false)
-	}
-
 	if (isLoading) {
 		return (
 			<TabsContent value='storage' className='mt-0'>
@@ -154,10 +143,11 @@ export const VolumeList = ({ stackId, stackServiceId }: VolumeListProps) => {
 			</div>
 
 			<VolumeSheet
+				stackId={stackId}
+				stackServiceId={stackServiceId}
 				open={isVolumeSheetOpen}
 				onOpenChange={setIsVolumeSheetOpen}
 				editingVolume={editingVolume}
-				onSubmit={handleSaveVolume}
 			/>
 
 			<DeleteAlert

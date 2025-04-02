@@ -44,7 +44,6 @@ interface VolumeSheetProps {
 	editingVolume: StackServiceVolumeDto | null
 	stackId: string
 	stackServiceId: string
-	onSuccess?: () => void
 }
 
 export const VolumeSheet = ({
@@ -53,13 +52,11 @@ export const VolumeSheet = ({
 	editingVolume,
 	stackId,
 	stackServiceId,
-	onSuccess,
 }: VolumeSheetProps) => {
 	const createVolume = usePostCreateStackServiceVolumeHook({
 		mutation: {
 			onSuccess: () => {
 				toast.success('Volume created successfully')
-				onSuccess?.()
 				onOpenChange(false)
 			},
 			onError: (error) => {
@@ -72,7 +69,6 @@ export const VolumeSheet = ({
 		mutation: {
 			onSuccess: () => {
 				toast.success('Volume updated successfully')
-				onSuccess?.()
 				onOpenChange(false)
 			},
 			onError: (error) => {
