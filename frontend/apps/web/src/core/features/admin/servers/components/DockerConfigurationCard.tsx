@@ -3,7 +3,6 @@ import {
 	updateServerDtoSchema,
 	useUpdateServerHook,
 } from '@cloudcrafter/api'
-import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Card,
 	CardContent,
@@ -23,14 +22,8 @@ import {
 import { Input } from '@cloudcrafter/ui/components/input'
 import { AnimatedSaveButton } from '@cloudcrafter/ui/custom-components/animated-save-button'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-	CheckIcon,
-	ContainerIcon,
-	Loader2Icon,
-	RefreshCwIcon,
-} from 'lucide-react'
+import { ContainerIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -47,67 +40,6 @@ const schema = updateServerDtoSchema
 		message: 'Docker network name is required',
 		path: ['dockerNetwork'],
 	})
-
-interface SubmitButtonProps {
-	isPending: boolean
-	isSuccess: boolean
-	onReset: () => void
-}
-
-const SubmitButton = ({ isPending, isSuccess, onReset }: SubmitButtonProps) => {
-	useEffect(() => {
-		if (isSuccess) {
-			const timer = setTimeout(() => {
-				onReset()
-			}, 2000)
-			return () => clearTimeout(timer)
-		}
-	}, [isSuccess, onReset])
-
-	return (
-		<Button
-			type='submit'
-			className='gap-2 px-8'
-			variant='default'
-			disabled={isPending}
-		>
-			<div className='relative h-4 w-4'>
-				<div
-					className={`absolute inset-0 transition-opacity duration-200 ${isPending ? 'opacity-100' : 'opacity-0'}`}
-				>
-					<Loader2Icon className='h-4 w-4 animate-spin' />
-				</div>
-				<div
-					className={`absolute inset-0 transition-opacity duration-200 ${isSuccess ? 'opacity-100' : 'opacity-0'}`}
-				>
-					<CheckIcon className='h-4 w-4' />
-				</div>
-				<div
-					className={`absolute inset-0 transition-opacity duration-200 ${!isPending && !isSuccess ? 'opacity-100' : 'opacity-0'}`}
-				>
-					<RefreshCwIcon className='h-4 w-4' />
-				</div>
-			</div>
-			<div className='relative w-24 flex items-center justify-center'>
-				<div
-					className={`absolute transition-opacity duration-200 ${isPending ? 'opacity-100' : 'opacity-0'}`}
-				>
-					Saving...
-				</div>
-				<div
-					className={`absolute transition-opacity duration-200 ${isSuccess ? 'opacity-100' : 'opacity-0'}`}
-				>
-					Saved
-				</div>
-				<div
-					className={`absolute transition-opacity duration-200 ${!isPending && !isSuccess ? 'opacity-100' : 'opacity-0'}`}
-				>
-					Save Changes
-				</div>
-			</div>
-		</Button>
-	)
-}
 
 export const DockerConfigurationCard = ({
 	server,

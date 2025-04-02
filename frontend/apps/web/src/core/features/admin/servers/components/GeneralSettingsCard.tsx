@@ -2,7 +2,9 @@
 
 import {
 	type ServerDetailDto,
+	updateServerDtoSchema,
 	usePostRotateAgentKeyHook,
+	useUpdateServerHook,
 } from '@cloudcrafter/api'
 import {
 	AlertDialog,
@@ -24,19 +26,47 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@cloudcrafter/ui/components/card'
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '@cloudcrafter/ui/components/form'
 import { Input } from '@cloudcrafter/ui/components/input'
 import { Label } from '@cloudcrafter/ui/components/label'
+import { AnimatedSaveButton } from '@cloudcrafter/ui/custom-components/animated-save-button'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { CircleIcon, CopyIcon, RefreshCwIcon, ServerIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import type { z } from 'zod'
 
 interface GeneralSettingsCardProps {
 	server: ServerDetailDto
 }
 
+const schema = updateServerDtoSchema
+	.pick({ name: true })
+	.required()
+	.refine((data) => data.name && data.name.length >= 1, {
+		message: 'Server name is required',
+		path: ['name'],
+	})
+
 export const GeneralSettingsCard = ({ server }: GeneralSettingsCardProps) => {
 	const router = useRouter()
 
+	const serverMutation = useUpdateServerHook({
+		mutation: {
+			onSuccess: () => {
+				toast.success('Server updated successfully')
+				router.refresh()
+			},
+		},
+	})
 	const rotateAgentKey = usePostRotateAgentKeyHook({
 		mutation: {
 			onSuccess: () => {
@@ -48,6 +78,22 @@ export const GeneralSettingsCard = ({ server }: GeneralSettingsCardProps) => {
 
 	const handleRotateAgentKey = () => {
 		rotateAgentKey.mutate({ id: server.id })
+	}
+
+	const serverBasicForm = useForm<z.infer<typeof schema>>({
+		resolver: zodResolver(schema),
+		defaultValues: {
+			name: server.name,
+		},
+	})
+
+	const onSubmit = (data: z.infer<typeof schema>) => {
+		serverMutation.mutate({
+			id: server.id,
+			data: {
+				name: data.name,
+			},
+		})
 	}
 
 	return (
@@ -77,109 +123,125 @@ export const GeneralSettingsCard = ({ server }: GeneralSettingsCardProps) => {
 					)}
 				</div>
 			</CardHeader>
+			<Form {...serverBasicForm}>
+				<form
+					onSubmit={serverBasicForm.handleSubmit(onSubmit)}
+					className='flex flex-col gap-4'
+				>
+					<CardContent className='grid gap-6'>
+						<FormField
+							control={serverBasicForm.control}
+							name='name'
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Server Name</FormLabel>
+									<FormControl>
+										<Input
+											{...field}
+											value={field.value || ''}
+											className='bg-muted/50 border-border/50 focus-visible:ring-primary/20'
+											placeholder='Enter server name'
+										/>
+									</FormControl>
+									<p className='text-sm text-muted-foreground/80'>
+										The name of the server. This will be used to identify the
+										server in the UI.
+									</p>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
 
-			<CardContent className='grid gap-6'>
-				<div className='grid gap-2'>
-					<Label htmlFor='name' className='text-sm font-medium'>
-						Name
-					</Label>
-					<Input
-						id='name'
-						name='name'
-						defaultValue={server.name}
-						className='bg-muted/50 border-border/50 focus-visible:ring-primary/20'
-					/>
-				</div>
-				<div className='grid gap-2'>
-					<Label htmlFor='id' className='text-sm font-medium'>
-						ID
-					</Label>
-					<div className='flex gap-2'>
-						<Input
-							readOnly
-							id='id'
-							defaultValue={server.id}
-							className='flex-1 font-mono text-sm bg-muted/50 border-border/50'
-						/>
-						<Button
-							variant='outline'
-							size='icon'
-							onClick={() => {
-								if (navigator.clipboard) {
-									navigator.clipboard.writeText(server.id)
-									toast.success('Copied Agent ID to clipboard')
-								} else {
-									toast.error(
-										'Could not copy Agent ID to clipboard - copy it manually',
-									)
-								}
-							}}
-							className='border-border/50 hover:bg-muted/50'
-						>
-							<CopyIcon className='h-4 w-4' />
-						</Button>
-					</div>
-				</div>
-				<div className='grid gap-2'>
-					<Label htmlFor='agentKey' className='text-sm font-medium'>
-						Agent Key
-					</Label>
-					<div className='flex gap-2'>
-						<Input
-							readOnly
-							id='agentKey'
-							value={server.agentKey ?? ''}
-							className='flex-1 font-mono text-sm bg-muted/50 border-border/50'
-						/>
-						<Button
-							variant='outline'
-							size='icon'
-							onClick={() => {
-								if (navigator.clipboard) {
-									navigator.clipboard.writeText(server.agentKey ?? '')
-									toast.success('Copied Agent Key to clipboard')
-								} else {
-									toast.error(
-										'Could not copy Agent Key to clipboard - copy it manually',
-									)
-								}
-							}}
-							className='border-border/50 hover:bg-muted/50'
-						>
-							<CopyIcon className='h-4 w-4' />
-						</Button>
-						<AlertDialog>
-							<AlertDialogTrigger asChild>
-								<Button variant='outline' size='icon'>
-									<RefreshCwIcon className='h-4 w-4' />
+						<div className='grid gap-2'>
+							<Label htmlFor='id' className='text-sm font-medium'>
+								ID
+							</Label>
+							<div className='flex gap-2'>
+								<Input
+									readOnly
+									id='id'
+									defaultValue={server.id}
+									className='flex-1 font-mono text-sm bg-muted/50 border-border/50'
+								/>
+								<Button
+									variant='outline'
+									size='icon'
+									onClick={() => {
+										if (navigator.clipboard) {
+											navigator.clipboard.writeText(server.id)
+											toast.success('Copied Agent ID to clipboard')
+										} else {
+											toast.error(
+												'Could not copy Agent ID to clipboard - copy it manually',
+											)
+										}
+									}}
+									className='border-border/50 hover:bg-muted/50'
+								>
+									<CopyIcon className='h-4 w-4' />
 								</Button>
-							</AlertDialogTrigger>
-							<AlertDialogContent>
-								<AlertDialogHeader>
-									<AlertDialogTitle>Rotate Agent Key?</AlertDialogTitle>
-									<AlertDialogDescription>
-										This will generate a new agent key. The old key will no
-										longer work. Any connected agents will need to be updated
-										with the new key. These will be disconnected automatically.
-									</AlertDialogDescription>
-								</AlertDialogHeader>
-								<AlertDialogFooter>
-									<AlertDialogCancel>Cancel</AlertDialogCancel>
-									<AlertDialogAction onClick={handleRotateAgentKey}>
-										Rotate Key
-									</AlertDialogAction>
-								</AlertDialogFooter>
-							</AlertDialogContent>
-						</AlertDialog>
-					</div>
-				</div>
-			</CardContent>
-			<CardFooter className='border-t border-border/50 px-6 py-6'>
-				<Button type='submit' className='gap-2 px-8' variant='default'>
-					<RefreshCwIcon className='h-4 w-4' />
-					Save Changes
-				</Button>
-			</CardFooter>
+							</div>
+						</div>
+						<div className='grid gap-2'>
+							<Label htmlFor='agentKey' className='text-sm font-medium'>
+								Agent Key
+							</Label>
+							<div className='flex gap-2'>
+								<Input
+									readOnly
+									id='agentKey'
+									value={server.agentKey ?? ''}
+									className='flex-1 font-mono text-sm bg-muted/50 border-border/50'
+								/>
+								<Button
+									variant='outline'
+									size='icon'
+									onClick={() => {
+										if (navigator.clipboard) {
+											navigator.clipboard.writeText(server.agentKey ?? '')
+											toast.success('Copied Agent Key to clipboard')
+										} else {
+											toast.error(
+												'Could not copy Agent Key to clipboard - copy it manually',
+											)
+										}
+									}}
+									className='border-border/50 hover:bg-muted/50'
+								>
+									<CopyIcon className='h-4 w-4' />
+								</Button>
+								<AlertDialog>
+									<AlertDialogTrigger asChild>
+										<Button variant='outline' size='icon'>
+											<RefreshCwIcon className='h-4 w-4' />
+										</Button>
+									</AlertDialogTrigger>
+									<AlertDialogContent>
+										<AlertDialogHeader>
+											<AlertDialogTitle>Rotate Agent Key?</AlertDialogTitle>
+											<AlertDialogDescription>
+												This will generate a new agent key. The old key will no
+												longer work. Any connected agents will need to be
+												updated with the new key. These will be disconnected
+												automatically.
+											</AlertDialogDescription>
+										</AlertDialogHeader>
+										<AlertDialogFooter>
+											<AlertDialogCancel>Cancel</AlertDialogCancel>
+											<AlertDialogAction onClick={handleRotateAgentKey}>
+												Rotate Key
+											</AlertDialogAction>
+										</AlertDialogFooter>
+									</AlertDialogContent>
+								</AlertDialog>
+							</div>
+						</div>
+					</CardContent>
+					<CardFooter className='border-t border-border/50 px-6 py-6'>
+						<AnimatedSaveButton mutation={serverMutation} />
+					</CardFooter>
+				</form>
+			</Form>
 		</Card>
 	)
 }
