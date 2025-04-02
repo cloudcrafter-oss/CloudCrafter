@@ -146,9 +146,14 @@ public static class FakerInstances
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
     }
 
-    public static Faker<Stack> StackFaker(Guid environmentId)
+    public static Faker<Stack> StackFaker(
+        Guid environmentId,
+        Action<Faker<Server>>? additionalServerActions = null
+    )
     {
-        var server = ServerFaker.Generate();
+        var serverFaker = ServerFaker;
+        additionalServerActions?.Invoke(serverFaker);
+        var server = serverFaker.Generate();
         return new Faker<Stack>()
             .StrictMode(true)
             .RuleFor(x => x.Id, Guid.NewGuid)

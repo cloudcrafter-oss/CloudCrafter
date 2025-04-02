@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Domain.Entities;
+﻿using Bogus;
+using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using Environment = System.Environment;
 
@@ -38,8 +39,15 @@ public static class EntityFaker
             };
         }
 
+        Action<Faker<Server>>? additionalServerActions = null;
+
+        if (args.DockerNetworkName is not null)
+        {
+            additionalServerActions = f => f.RuleFor(x => x.DockerNetwork, args.DockerNetworkName);
+        }
+
         var stack = FakerInstances
-            .StackFaker(args.EnvironmentId)
+            .StackFaker(args.EnvironmentId, additionalServerActions)
             .RuleFor(x => x.Id, args.StackId)
             .RuleFor(x => x.Source, source)
             .RuleFor(x => x.Name, args.StackName)
@@ -145,6 +153,7 @@ public static class EntityFaker
         public required string StackName { get; init; }
 
         public required string DomainName { get; init; }
+        public string? DockerNetworkName { get; init; }
 
         public required string StackServiceName { get; init; }
         public required SourceProvider? SourceProvider { get; init; }

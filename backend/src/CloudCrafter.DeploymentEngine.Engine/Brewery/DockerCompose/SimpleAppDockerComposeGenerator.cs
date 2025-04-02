@@ -23,7 +23,8 @@ public class SimpleAppDockerComposeGenerator(BaseDockerComposeGenerator.Args arg
         var editor = new DockerComposeEditor();
         editor.SetEnvironmentVariables(".env", new());
 
-        var network = editor.AddNetwork("cloudcrafter");
+        var networkName = Options.Stack.Server?.DockerNetwork ?? "cloudcrafter";
+        var network = editor.AddNetwork(networkName);
         network.SetIsExternalNetwork();
 
         AddAppService(firstService, editor, network);
