@@ -63,7 +63,9 @@ services:
   agent:
     image: ghcr.io/cloudcrafter-oss/cloudcrafter-agent:beta
     depends_on:
-      - backend 
+      - backend
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - CLOUDCRAFTER_Agent__ServerId=${CLOUDCRAFTER_AGENT_ID}
       - CLOUDCRAFTER_Agent__AgentKey=${CLOUDCRAFTER_AGENT_KEY}
