@@ -18,7 +18,6 @@ interface DockerConfigurationCardProps {
 
 export const DockerConfigurationCard = ({
 	server,
-	onSubmit,
 }: DockerConfigurationCardProps) => {
 	return (
 		<Card className='bg-card/50 backdrop-blur-sm border-border/50'>
@@ -35,32 +34,31 @@ export const DockerConfigurationCard = ({
 					</div>
 				</div>
 			</CardHeader>
-			<form onSubmit={onSubmit}>
-				<CardContent className='grid gap-6'>
-					<div className='grid gap-2'>
-						<Label htmlFor='dockerNetwork' className='text-sm font-medium'>
-							Docker Network Name
-						</Label>
-						<Input
-							id='dockerNetwork'
-							name='dockerNetwork'
-							defaultValue={server.dockerNetworkName ?? ''}
-							placeholder='Leave empty to use default network'
-							className='bg-muted/50 border-border/50 focus-visible:ring-primary/20'
-						/>
-						<p className='text-sm text-muted-foreground/80'>
-							The name of the Docker network to use for container communication.
-							Leave empty to use the default network.
-						</p>
-					</div>
-				</CardContent>
-				<CardFooter className='border-t border-border/50 px-6 py-6'>
-					<Button type='submit' className='gap-2 px-8' variant='default'>
-						<RefreshCwIcon className='h-4 w-4' />
-						Save Changes
-					</Button>
-				</CardFooter>
-			</form>
+
+			<CardContent className='grid gap-6'>
+				<div className='grid gap-2'>
+					<Label htmlFor='dockerNetwork' className='text-sm font-medium'>
+						Docker Network Name
+					</Label>
+					<Input
+						id='dockerNetwork'
+						name='dockerNetwork'
+						defaultValue={server.dockerNetworkName ?? ''}
+						placeholder='Leave empty to use default network'
+						className='bg-muted/50 border-border/50 focus-visible:ring-primary/20'
+					/>
+					<p className='text-sm text-muted-foreground/80'>
+						The name of the Docker network to use for container communication.
+						Leave empty to use the default network.
+					</p>
+				</div>
+			</CardContent>
+			<CardFooter className='border-t border-border/50 px-6 py-6'>
+				<Button type='submit' className='gap-2 px-8' variant='default'>
+					<RefreshCwIcon className='h-4 w-4' />
+					Save Changes
+				</Button>
+			</CardFooter>
 		</Card>
 	)
 }
