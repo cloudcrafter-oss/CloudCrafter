@@ -2528,7 +2528,7 @@
 				}
 			},
 			"ServerDetailDto": {
-				"required": ["id", "name", "ipAddress"],
+				"required": ["id", "name", "ipAddress", "dockerNetworkName"],
 				"type": "object",
 				"properties": {
 					"id": {
@@ -2546,8 +2546,7 @@
 						"nullable": true
 					},
 					"dockerNetworkName": {
-						"type": "string",
-						"nullable": true
+						"type": "string"
 					}
 				}
 			},

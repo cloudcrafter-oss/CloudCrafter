@@ -18,5 +18,5 @@ export type ServerDetailDto = {
   /**
    * @type string
    */
-  dockerNetworkName?: string | null
+  dockerNetworkName: string
 }
