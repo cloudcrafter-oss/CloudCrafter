@@ -95,6 +95,7 @@ public static class EntityFaker
                 EnvironmentId = environmentId,
                 StackId = stackId,
                 StackServiceId = stackServiceId,
+                DockerNetworkName = "cloudcrafter",
                 StackName = "My Custom Stack 123",
                 StackServiceName = "My Custom Service : 123",
                 SourceProvider = new SourceProvider
@@ -153,7 +154,7 @@ public static class EntityFaker
         public required string StackName { get; init; }
 
         public required string DomainName { get; init; }
-        public string? DockerNetworkName { get; init; }
+        public required string DockerNetworkName { get; init; }
 
         public required string StackServiceName { get; init; }
         public required SourceProvider? SourceProvider { get; init; }

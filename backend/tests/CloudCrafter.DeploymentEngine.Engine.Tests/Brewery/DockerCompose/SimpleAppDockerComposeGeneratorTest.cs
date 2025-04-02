@@ -20,6 +20,7 @@ public class SimpleAppDockerComposeGeneratorTest
             new EntityFaker.GenerateBasicAppArgs
             {
                 DomainName = "my-custom-domain.com",
+                DockerNetworkName = "cloudcrafter",
                 EnvironmentId = environmentId,
                 StackId = stackId,
                 StackServiceId = stackServiceId,

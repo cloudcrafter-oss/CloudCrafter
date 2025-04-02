@@ -25,6 +25,7 @@ public class SimpleAppRecipeGeneratorTest
             {
                 DomainName = "my-custom-domain.com",
                 EnvironmentId = environmentId,
+                DockerNetworkName = "cloudcrafter",
                 StackId = stackId,
                 StackServiceId = stackServiceId,
                 StackName = "My Custom Stack 123",
@@ -118,6 +119,7 @@ public class SimpleAppRecipeGeneratorTest
                 EnvironmentId = environmentId,
                 StackId = stackId,
                 StackServiceId = stackServiceId,
+                DockerNetworkName = "cloudcrafter",
                 StackName = "My Custom Stack 123",
                 StackServiceName = "My Custom Service : 123",
                 SourceProvider = null,
@@ -180,6 +182,7 @@ public class SimpleAppRecipeGeneratorTest
                 EnvironmentId = environmentId,
                 StackId = stackId,
                 StackServiceId = stackServiceId,
+                DockerNetworkName = "cloudcrafter",
                 StackName = "My Custom Stack 123",
                 StackServiceName = "My Custom Service : 123",
                 SourceProvider = new SourceProvider
@@ -256,6 +259,7 @@ public class SimpleAppRecipeGeneratorTest
             {
                 DomainName = "my-custom-domain.com",
                 EnvironmentId = environmentId,
+                DockerNetworkName = "cloudcrafter",
                 StackId = stackId,
                 StackServiceId = stackServiceId,
                 StackName = "My Custom Stack 123",
