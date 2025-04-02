@@ -10,6 +10,7 @@ export type CreateStackServiceVolumeCommand = {
    */
   stackServiceId: string
   /**
+   * @minLength 1
    * @type string
    */
   name: string
@@ -22,6 +23,7 @@ export type CreateStackServiceVolumeCommand = {
    */
   source: string | null
   /**
+   * @minLength 1
    * @type string
    */
   target: string

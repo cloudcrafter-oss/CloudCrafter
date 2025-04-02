@@ -15,4 +15,8 @@ export type ServerDetailDto = {
    * @type string
    */
   agentKey?: string | null
+  /**
+   * @type string
+   */
+  dockerNetworkName?: string | null
 }

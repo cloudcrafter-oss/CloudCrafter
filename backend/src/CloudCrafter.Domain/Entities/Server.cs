@@ -22,6 +22,8 @@ public class Server : BaseAuditableEntity
     /// </summary>
     public string DockerDataDirectoryMount { get; set; } = string.Empty;
 
+    public string? DockerNetwork { get; set; }
+
     // TODO: Remove this property
     public required int SshPort { get; set; } = 22;
 

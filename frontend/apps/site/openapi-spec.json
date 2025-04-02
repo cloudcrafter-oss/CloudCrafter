@@ -2115,6 +2115,7 @@
 						"format": "uuid"
 					},
 					"name": {
+						"minLength": 1,
 						"type": "string"
 					},
 					"type": {
@@ -2125,6 +2126,7 @@
 						"nullable": true
 					},
 					"target": {
+						"minLength": 1,
 						"type": "string"
 					}
 				}
@@ -2540,6 +2542,10 @@
 						"type": "string"
 					},
 					"agentKey": {
+						"type": "string",
+						"nullable": true
+					},
+					"dockerNetworkName": {
 						"type": "string",
 						"nullable": true
 					}
@@ -3011,6 +3017,10 @@
 					"name": {
 						"type": "string",
 						"nullable": true
+					},
+					"dockerNetwork": {
+						"type": "string",
+						"nullable": true
 					}
 				}
 			},
@@ -3174,6 +3184,7 @@
 						"format": "uuid"
 					},
 					"name": {
+						"minLength": 1,
 						"type": "string"
 					},
 					"type": {
@@ -3184,6 +3195,7 @@
 						"nullable": true
 					},
 					"target": {
+						"minLength": 1,
 						"type": "string"
 					}
 				}

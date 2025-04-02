@@ -5,4 +5,5 @@ export const serverDetailDtoSchema = z.object({
   name: z.string(),
   ipAddress: z.string(),
   agentKey: z.string().nullable().nullish(),
+  dockerNetworkName: z.string().nullable().nullish(),
 })

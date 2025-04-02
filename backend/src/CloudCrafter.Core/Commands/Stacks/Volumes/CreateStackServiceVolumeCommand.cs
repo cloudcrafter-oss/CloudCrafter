@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Domain.Entities;
@@ -10,9 +11,17 @@ public record CreateStackServiceVolumeCommand : IRequest<Guid>
 {
     public Guid StackId { get; set; }
     public Guid StackServiceId { get; set; }
+
+    [Required]
+    [MinLength(1)]
     public required string Name { get; init; }
+
+    [Required]
     public required StackServiceVolumeType Type { get; init; }
     public required string? Source { get; init; }
+
+    [Required]
+    [MinLength(1)]
     public required string Target { get; init; }
 }
 

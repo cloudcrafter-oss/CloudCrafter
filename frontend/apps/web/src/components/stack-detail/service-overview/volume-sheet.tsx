@@ -1,4 +1,12 @@
 import type { StackServiceVolumeDto } from '@cloudcrafter/api'
+import {
+	createStackServiceVolumeCommandSchema,
+	updateStackServiceVolumeCommandSchema,
+} from '@cloudcrafter/api'
+import {
+	usePostCreateStackServiceVolumeHook,
+	usePutUpdateStackServiceVolumeHook,
+} from '@cloudcrafter/api'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Form,
@@ -25,39 +33,90 @@ import {
 } from '@cloudcrafter/ui/components/sheet'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { toast } from 'sonner'
+import type { z } from 'zod'
 
-const volumeFormSchema = z.object({
-	name: z.string().min(1, 'Name is required'),
-	sourcePath: z.string().nullable(),
-	destinationPath: z.string().min(1, 'Destination path is required'),
-	type: z.number().int(),
-})
-
-type VolumeFormData = z.infer<typeof volumeFormSchema>
+type VolumeFormData = z.infer<typeof createStackServiceVolumeCommandSchema>
 
 interface VolumeSheetProps {
 	open: boolean
 	onOpenChange: (open: boolean) => void
 	editingVolume: StackServiceVolumeDto | null
-	onSubmit: (values: VolumeFormData) => void
+	stackId: string
+	stackServiceId: string
+	onSuccess?: () => void
 }
 
 export const VolumeSheet = ({
 	open,
 	onOpenChange,
 	editingVolume,
-	onSubmit,
+	stackId,
+	stackServiceId,
+	onSuccess,
 }: VolumeSheetProps) => {
+	const createVolume = usePostCreateStackServiceVolumeHook({
+		mutation: {
+			onSuccess: () => {
+				toast.success('Volume created successfully')
+				onSuccess?.()
+				onOpenChange(false)
+			},
+			onError: (error) => {
+				toast.error(`Failed to create volume: ${error.message}`)
+			},
+		},
+	})
+
+	const updateVolume = usePutUpdateStackServiceVolumeHook({
+		mutation: {
+			onSuccess: () => {
+				toast.success('Volume updated successfully')
+				onSuccess?.()
+				onOpenChange(false)
+			},
+			onError: (error) => {
+				toast.error(`Failed to update volume: ${error.message}`)
+			},
+		},
+	})
+
 	const volumeForm = useForm<VolumeFormData>({
-		resolver: zodResolver(volumeFormSchema),
+		resolver: zodResolver(
+			editingVolume
+				? updateStackServiceVolumeCommandSchema
+				: createStackServiceVolumeCommandSchema,
+		),
 		defaultValues: {
 			name: editingVolume?.name ?? '',
-			sourcePath: editingVolume?.sourcePath ?? '',
-			destinationPath: editingVolume?.destinationPath ?? '',
+			source: editingVolume?.sourcePath ?? '',
+			target: editingVolume?.destinationPath ?? '',
 			type: editingVolume?.type ?? 0, // LocalMount
 		},
 	})
+
+	const onSubmit = (values: VolumeFormData) => {
+		console.log('Form submitted with values:', values)
+		if (editingVolume) {
+			console.log('Updating volume:', editingVolume.id)
+			updateVolume.mutate({
+				stackId,
+				stackServiceId,
+				id: editingVolume.id,
+				data: {
+					...values,
+					id: editingVolume.id,
+				},
+			})
+		} else {
+			console.log('Creating new volume')
+			createVolume.mutate({
+				stackId,
+				stackServiceId,
+				data: values,
+			})
+		}
+	}
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
@@ -76,7 +135,9 @@ export const VolumeSheet = ({
 				<div className='mt-6'>
 					<Form {...volumeForm}>
 						<form
-							onSubmit={volumeForm.handleSubmit(onSubmit)}
+							onSubmit={() => {
+								volumeForm.handleSubmit(onSubmit)
+							}}
 							className='space-y-4'
 						>
 							<FormField
@@ -118,27 +179,29 @@ export const VolumeSheet = ({
 								)}
 							/>
 
-							<FormField
-								control={volumeForm.control}
-								name='sourcePath'
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Source Path</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												value={field.value ?? ''}
-												placeholder='Enter source path (e.g. /data)'
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+							{volumeForm.watch('type') === 0 && (
+								<FormField
+									control={volumeForm.control}
+									name='source'
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Source Path</FormLabel>
+											<FormControl>
+												<Input
+													{...field}
+													value={field.value ?? ''}
+													placeholder='Enter source path (e.g. /data)'
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							)}
 
 							<FormField
 								control={volumeForm.control}
-								name='destinationPath'
+								name='target'
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Destination Path</FormLabel>
@@ -164,7 +227,10 @@ export const VolumeSheet = ({
 								>
 									Cancel
 								</Button>
-								<Button type='submit'>
+								<Button
+									type='submit'
+									disabled={createVolume.isPending || updateVolume.isPending}
+								>
 									{editingVolume ? 'Save Changes' : 'Add Volume'}
 								</Button>
 							</div>

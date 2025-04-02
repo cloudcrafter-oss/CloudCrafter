@@ -89,6 +89,11 @@ public class ServersService(IServerRepository repository, IMapper mapper) : ISer
             server.Name = updateDto.Name;
         }
 
+        if (updateDto.DockerNetwork is not null)
+        {
+            server.DockerNetwork = updateDto.DockerNetwork;
+        }
+
         await repository.SaveChangesAsync();
     }
 }

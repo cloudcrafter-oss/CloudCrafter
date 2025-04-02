@@ -14,6 +14,7 @@ export type UpdateStackServiceVolumeCommand = {
    */
   stackServiceId: string
   /**
+   * @minLength 1
    * @type string
    */
   name: string
@@ -26,6 +27,7 @@ export type UpdateStackServiceVolumeCommand = {
    */
   source: string | null
   /**
+   * @minLength 1
    * @type string
    */
   target: string
