@@ -2119,7 +2119,7 @@
 						"type": "string"
 					},
 					"type": {
-						"$ref": "#/components/schemas/StackServiceVolumeType"
+						"$ref": "#/components/schemas/StackServiceVolumeTypeDto"
 					},
 					"source": {
 						"type": "string",
@@ -2936,12 +2936,12 @@
 						"type": "string"
 					},
 					"type": {
-						"$ref": "#/components/schemas/StackServiceVolumeType"
+						"$ref": "#/components/schemas/StackServiceVolumeTypeDto"
 					}
 				}
 			},
-			"StackServiceVolumeType": {
-				"type": "integer"
+			"StackServiceVolumeTypeDto": {
+				"enum": ["LocalMount", "DockerVolume"]
 			},
 			"StackSourceDto": {
 				"required": ["type", "git", "githubApp"],
@@ -3187,7 +3187,7 @@
 						"type": "string"
 					},
 					"type": {
-						"$ref": "#/components/schemas/StackServiceVolumeType"
+						"$ref": "#/components/schemas/StackServiceVolumeTypeDto"
 					},
 					"source": {
 						"type": "string",

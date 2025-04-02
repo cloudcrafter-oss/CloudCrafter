@@ -1,6 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using CloudCrafter.Core.Commands.Stacks.Volumes;
 using CloudCrafter.Core.Exceptions;
+using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Entities;
 using FluentAssertions;
 using NUnit.Framework;
@@ -17,7 +18,7 @@ public class CreateStackServiceVolumeCommandTest : BaseStackServiceVolumeTest
             StackId = Guid.NewGuid(),
             StackServiceId = Guid.NewGuid(),
             Name = "dummy",
-            Type = StackServiceVolumeType.DockerVolume,
+            Type = StackServiceVolumeTypeDto.DockerVolume,
             Source = null,
             Target = "/dummy",
         };
@@ -42,7 +43,7 @@ public class CreateStackServiceVolumeCommandTest : BaseStackServiceVolumeTest
             StackServiceId = stackService.Id,
             Source = "dummy",
             Target = "/dummy",
-            Type = StackServiceVolumeType.DockerVolume,
+            Type = StackServiceVolumeTypeDto.DockerVolume,
         };
 
         var exception = Assert.ThrowsAsync<ValidationException>(
@@ -69,7 +70,7 @@ public class CreateStackServiceVolumeCommandTest : BaseStackServiceVolumeTest
             StackServiceId = Guid.NewGuid(),
             Source = "dummy",
             Target = "/dummy",
-            Type = StackServiceVolumeType.LocalMount,
+            Type = StackServiceVolumeTypeDto.LocalMount,
         };
 
         var exception = Assert.ThrowsAsync<NotFoundException>(async () => await SendAsync(Command));
@@ -94,7 +95,7 @@ public class CreateStackServiceVolumeCommandTest : BaseStackServiceVolumeTest
             StackServiceId = stackService.Id,
             Source = null,
             Target = "/dummy",
-            Type = StackServiceVolumeType.DockerVolume,
+            Type = StackServiceVolumeTypeDto.DockerVolume,
         };
 
         var result = await SendAsync(Command);

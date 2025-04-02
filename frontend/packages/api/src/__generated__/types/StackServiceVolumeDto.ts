@@ -1,4 +1,4 @@
-import type { StackServiceVolumeType } from './StackServiceVolumeType'
+import type { StackServiceVolumeTypeDto } from './StackServiceVolumeTypeDto'
 
 export type StackServiceVolumeDto = {
   /**
@@ -17,8 +17,5 @@ export type StackServiceVolumeDto = {
    * @type string
    */
   destinationPath: string
-  /**
-   * @type integer
-   */
-  type: StackServiceVolumeType
+  type: StackServiceVolumeTypeDto
 }

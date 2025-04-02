@@ -1,4 +1,4 @@
-import type { StackServiceVolumeType } from './StackServiceVolumeType'
+import type { StackServiceVolumeTypeDto } from './StackServiceVolumeTypeDto'
 
 export type CreateStackServiceVolumeCommand = {
   /**
@@ -14,10 +14,7 @@ export type CreateStackServiceVolumeCommand = {
    * @type string
    */
   name: string
-  /**
-   * @type integer
-   */
-  type: StackServiceVolumeType
+  type: StackServiceVolumeTypeDto
   /**
    * @type string
    */

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Text.Json.Serialization;
+using AutoMapper;
 using CloudCrafter.Domain.Domain.Health;
 using CloudCrafter.Domain.Entities;
 
@@ -31,7 +32,7 @@ public class StackServiceVolumeDto
     public required string Name { get; init; }
     public required string? SourcePath { get; init; }
     public required string DestinationPath { get; init; }
-    public required StackServiceVolumeType Type { get; init; }
+    public required StackServiceVolumeTypeDto Type { get; init; }
 
     private class Mapping : Profile
     {
@@ -40,6 +41,13 @@ public class StackServiceVolumeDto
             CreateMap<StackServiceVolume, StackServiceVolumeDto>();
         }
     }
+}
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum StackServiceVolumeTypeDto
+{
+    LocalMount,
+    DockerVolume,
 }
 
 public class StackServiceHttpConfigurationDto

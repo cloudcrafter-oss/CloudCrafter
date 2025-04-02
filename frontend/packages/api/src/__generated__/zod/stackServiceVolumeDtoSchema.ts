@@ -1,4 +1,4 @@
-import { stackServiceVolumeTypeSchema } from './stackServiceVolumeTypeSchema'
+import { stackServiceVolumeTypeDtoSchema } from './stackServiceVolumeTypeDtoSchema'
 import { z } from 'zod'
 
 export const stackServiceVolumeDtoSchema = z.object({
@@ -6,5 +6,5 @@ export const stackServiceVolumeDtoSchema = z.object({
   name: z.string(),
   sourcePath: z.string().nullable(),
   destinationPath: z.string(),
-  type: z.lazy(() => stackServiceVolumeTypeSchema),
+  type: z.lazy(() => stackServiceVolumeTypeDtoSchema),
 })

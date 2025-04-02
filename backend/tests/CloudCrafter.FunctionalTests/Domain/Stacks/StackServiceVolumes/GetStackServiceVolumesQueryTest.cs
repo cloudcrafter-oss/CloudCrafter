@@ -66,7 +66,7 @@ public class GetStackServiceVolumesQueryTest : BaseStackServiceVolumeTest
     {
         dto.Id.Should().Be(volume.Id);
         dto.Name.Should().Be(volume.Name);
-        dto.Type.Should().Be(volume.Type);
+        ((int)dto.Type).Should().Be((int)volume.Type);
         dto.SourcePath.Should().Be(volume.SourcePath);
         dto.DestinationPath.Should().Be(volume.DestinationPath);
     }
