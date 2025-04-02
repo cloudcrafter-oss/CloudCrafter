@@ -24,7 +24,7 @@ public static class FakerInstances
             .RuleFor(x => x.IpAddress, f => f.Internet.Ip())
             .RuleFor(x => x.DockerDataDirectoryMount, "/data/random/dir")
             .RuleFor(x => x.Stacks, [])
-            .RuleFor(x => x.DockerNetwork, f => null)
+            .RuleFor(x => x.DockerNetwork, f => f.Internet.DomainWord())
             .RuleFor(x => x.CreatedBy, f => null)
             .RuleFor(x => x.LastModifiedBy, f => null)
             .RuleFor(x => x.PingHealthData, new ServerPingData())

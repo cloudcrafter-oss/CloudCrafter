@@ -90,6 +90,7 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
             UpdatedAt = DateTime.UtcNow,
             DockerDataDirectoryMount = "",
             IpAddress = "",
+            DockerNetwork = "cloudcrafter",
             PingHealthData = new ServerPingData(),
             SshPort = 22,
         };

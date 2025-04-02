@@ -10,7 +10,7 @@ public class ServerDetailDto
 
     public string? AgentKey { get; set; }
 
-    public string? DockerNetworkName { get; set; }
+    public required string DockerNetworkName { get; set; }
 
     private class Mapping : Profile
     {
