@@ -61,7 +61,16 @@ export function AnimatedSaveButton({ mutation, className }: SaveButtonProps) {
 			type='submit'
 			className={`relative ${className}`}
 			disabled={state !== 'idle'}
-			variant={state === 'success' ? 'default' : 'default'}
+			variant='default'
+			style={
+				state === 'success'
+					? {
+							backgroundColor: 'rgb(22 163 74)',
+							color: 'white',
+							borderColor: 'rgb(22 163 74)',
+						}
+					: undefined
+			}
 		>
 			<span className='flex items-center gap-2'>
 				<AnimatePresence mode='wait'>
@@ -96,7 +105,7 @@ export function AnimatedSaveButton({ mutation, className }: SaveButtonProps) {
 					{state === 'success' && (
 						<motion.span
 							key='success'
-							className='flex items-center gap-2 text-green-50'
+							className='flex items-center gap-2'
 							initial={{ opacity: 0, scale: 0.9 }}
 							animate={{
 								opacity: 1,
