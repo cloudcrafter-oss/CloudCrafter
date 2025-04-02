@@ -47,6 +47,7 @@
 		"clsx": "^2.1.0",
 		"cmdk": "^1.0.0",
 		"date-fns": "^3.6.0",
+		"framer-motion": "^12.6.3",
 		"lucide-react": "^0.453.0",
 		"next-themes": "^0.3.0",
 		"react-day-picker": "^8.10.1",
@@ -62,6 +63,7 @@
 		"./tailwind.config": "./tailwind.config.js",
 		"./lib/*": "./src/lib/*.ts",
 		"./hooks/*": "./src/hooks/*.ts",
-		"./components/*": "./src/components/ui/*.tsx"
+		"./components/*": "./src/components/ui/*.tsx",
+		"./custom-components/*": "./src/custom-components/ui/*.tsx"
 	}
 }
