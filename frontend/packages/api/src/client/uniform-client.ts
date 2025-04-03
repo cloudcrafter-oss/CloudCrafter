@@ -89,7 +89,7 @@ axiosInstance.interceptors.response.use(
 	async (error: AxiosError) => {
 		if (error.response?.status === 401 && typeof window !== 'undefined') {
 			// Only handle 401s on client side
-			await signOut({ redirect: true, callbackUrl: '/api/auth/signin' })
+			await signOut({ redirect: true, callbackUrl: '/admin' })
 			return
 		}
 		throw error

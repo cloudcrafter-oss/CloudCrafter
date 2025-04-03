@@ -92,19 +92,31 @@ public class StackServiceVolumesService(IStackRepository repository, IMapper map
         return mapper.Map<List<StackServiceVolumeDto>>(volumes);
     }
 
-    public async Task<StackServiceVolume> GetServiceVolume(
+    public async Task DeleteStackServiceVolume(
         Guid stackId,
-        Guid serviceId,
-        Guid volumeId
+        Guid stackServiceId,
+        Guid stackServiceVolumeId
     )
     {
-        var volume = await repository.GetServiceVolume(stackId, serviceId, volumeId);
+        var stackServiceExists = await repository.StackServiceExists(stackId, stackServiceId);
+
+        if (!stackServiceExists)
+        {
+            throw new NotFoundException("StackService", "Stack service not found");
+        }
+
+        var volume = await repository.GetServiceVolume(
+            stackId,
+            stackServiceId,
+            stackServiceVolumeId
+        );
 
         if (volume == null)
         {
             throw new NotFoundException("StackServiceVolume", "Volume not found");
         }
 
-        return volume;
+        repository.DeleteStackServiceVolume(volume);
+        await repository.SaveChangesAsync();
     }
 }

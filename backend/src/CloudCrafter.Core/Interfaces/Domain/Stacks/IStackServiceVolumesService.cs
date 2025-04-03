@@ -16,4 +16,9 @@ public interface IStackServiceVolumesService
     );
 
     Task<List<StackServiceVolumeDto>> GetVolumes(Guid stackId, Guid stackServiceId);
+    Task DeleteStackServiceVolume(
+        Guid requestStackId,
+        Guid requestStackServiceId,
+        Guid requestStackServiceVolumeId
+    );
 }

@@ -280,6 +280,11 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
             .ToListAsync();
     }
 
+    public void DeleteStackServiceVolume(StackServiceVolume volume)
+    {
+        context.StackServiceVolumes.Remove(volume);
+    }
+
     public Task SaveChangesAsync()
     {
         return context.SaveChangesAsync();

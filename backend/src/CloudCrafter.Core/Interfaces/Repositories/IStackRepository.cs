@@ -65,4 +65,5 @@ public interface IStackRepository
 
     Task<bool> StackServiceExists(Guid stackId, Guid stackServiceId);
     Task<List<StackServiceVolume>> GetServiceVolumes(Guid stackId, Guid stackServiceId);
+    void DeleteStackServiceVolume(StackServiceVolume volume);
 }

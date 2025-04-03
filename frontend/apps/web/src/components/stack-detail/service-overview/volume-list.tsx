@@ -1,6 +1,7 @@
 import {
 	type StackServiceVolumeDto,
 	stackServiceVolumeTypeDtoEnum,
+	useDeleteStackServiceVolumeHook,
 	useGetStackServiceVolumesHook,
 } from '@cloudcrafter/api'
 import { Button } from '@cloudcrafter/ui/components/button'
@@ -29,6 +30,8 @@ export const VolumeList = ({ stackId, stackServiceId }: VolumeListProps) => {
 		refetch: refetchVolumes,
 	} = useGetStackServiceVolumesHook(stackId, stackServiceId)
 
+	const deleteVolume = useDeleteStackServiceVolumeHook()
+
 	const handleAddVolume = () => {
 		setEditingVolume(null)
 		setIsVolumeSheetOpen(true)
@@ -43,11 +46,23 @@ export const VolumeList = ({ stackId, stackServiceId }: VolumeListProps) => {
 		setDeletingVolume(volume)
 	}
 
+	const deleteMutation = useDeleteStackServiceVolumeHook({
+		mutation: {
+			onSuccess: () => {
+				toast.success('Volume deleted successfully')
+				refetchVolumes()
+				setDeletingVolume(null)
+			},
+		},
+	})
+
 	const confirmDeleteVolume = () => {
 		if (deletingVolume) {
-			// TODO: Implement delete mutation
-			toast.success('Volume deleted successfully')
-			setDeletingVolume(null)
+			deleteMutation.mutate({
+				stackId,
+				stackServiceId,
+				id: deletingVolume.id,
+			})
 		}
 	}
 
