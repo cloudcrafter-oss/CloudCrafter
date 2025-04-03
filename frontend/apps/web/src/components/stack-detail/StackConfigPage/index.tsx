@@ -71,6 +71,7 @@ const sections = [
 	{
 		id: 'services',
 		title: 'Services',
+		testId: 'subsection-services',
 		description: 'Manage your services',
 		subTabs: [
 			{

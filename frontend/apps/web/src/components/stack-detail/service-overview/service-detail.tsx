@@ -81,7 +81,11 @@ export const ServiceDetail = ({
 	}
 
 	return (
-		<div key={service.id} className='bg-card rounded-lg border'>
+		<div
+			key={service.id}
+			data-testid={`container-service-${service.id}`}
+			className='bg-card rounded-lg border'
+		>
 			<div className='p-3 sm:p-4'>
 				<Button
 					variant='ghost'
@@ -121,6 +125,7 @@ export const ServiceDetail = ({
 							<TabsList className='h-12 w-full justify-start p-0 bg-transparent gap-2 sm:gap-6 px-3 sm:px-0'>
 								<TabsTrigger
 									value='general'
+									data-testid='tab-general'
 									className='flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-3 text-xs sm:text-sm font-medium relative text-muted-foreground hover:text-foreground data-[state=active]:text-foreground data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:right-0 data-[state=active]:after:h-0.5 data-[state=active]:after:bg-foreground'
 								>
 									<Globe className='h-3.5 w-3.5 sm:h-4 sm:w-4' />
@@ -128,6 +133,7 @@ export const ServiceDetail = ({
 								</TabsTrigger>
 								<TabsTrigger
 									value='network'
+									data-testid='tab-network'
 									className='flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-3 text-xs sm:text-sm font-medium relative text-muted-foreground hover:text-foreground data-[state=active]:text-foreground data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:right-0 data-[state=active]:after:h-0.5 data-[state=active]:after:bg-foreground'
 								>
 									<Network className='h-3.5 w-3.5 sm:h-4 sm:w-4' />
@@ -135,6 +141,7 @@ export const ServiceDetail = ({
 								</TabsTrigger>
 								<TabsTrigger
 									value='storage'
+									data-testid='tab-storage'
 									className='flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-3 text-xs sm:text-sm font-medium relative text-muted-foreground hover:text-foreground data-[state=active]:text-foreground data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:right-0 data-[state=active]:after:h-0.5 data-[state=active]:after:bg-foreground'
 								>
 									<HardDrive className='h-3.5 w-3.5 sm:h-4 sm:w-4' />
@@ -277,6 +284,7 @@ export const ServiceDetail = ({
 
 							<TabsContent
 								value='storage'
+								data-testid='content-storage'
 								className='mt-0 space-y-4 sm:space-y-6'
 							>
 								<VolumeList stackId={stackId} stackServiceId={service.id} />

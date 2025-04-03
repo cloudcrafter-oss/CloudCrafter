@@ -28,6 +28,28 @@ export const StackDetailPage = (page: Page) => {
 			},
 		},
 
+		services: {
+			button: page.getByTestId('subsection-services'),
+
+			container: (serviceId: string) => {
+				const containerLocator = page.getByTestId(
+					`container-service-${serviceId}`,
+				)
+				return {
+					locator: containerLocator,
+					tab: {
+						general: containerLocator.getByTestId('tab-general'),
+						network: containerLocator.getByTestId('tab-network'),
+						storage: {
+							locator: containerLocator.getByTestId('tab-storage'),
+							content: {
+								locator: containerLocator.getByTestId('content-storage'),
+							},
+						},
+					},
+				}
+			},
+		},
 		url: (stack: StackDetails) =>
 			`/admin/projects/${stack.project.id}/${stack.project.environments[0].id}/stack/${stack.stack.id}`,
 	}
