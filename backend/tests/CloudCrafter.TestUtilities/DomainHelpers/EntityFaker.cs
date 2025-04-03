@@ -68,6 +68,26 @@ public static class EntityFaker
             .RuleFor(x => x.Name, args.StackServiceName)
             .Generate();
 
+        if (args.Volumes != null)
+        {
+            foreach (var volume in args.Volumes)
+            {
+                var generatedVolume = FakerInstances
+                    .StackServiceVolumeFaker(stackService.Id)
+                    .RuleFor(
+                        x => x.Type,
+                        volume.IsDockerVolume
+                            ? StackServiceVolumeType.DockerVolume
+                            : StackServiceVolumeType.LocalMount
+                    )
+                    .RuleFor(x => x.Name, volume.Name)
+                    .RuleFor(x => x.SourcePath, volume.IsDockerVolume ? null : volume.Source)
+                    .RuleFor(x => x.DestinationPath, volume.Target)
+                    .Generate();
+                stackService.Volumes.Add(generatedVolume);
+            }
+        }
+
         stack.Services.Add(stackService);
 
         return stack;
@@ -177,5 +197,15 @@ public static class EntityFaker
             };
 
         public int? ContainerHttpPort { get; set; }
+
+        public List<BasicAppVolume>? Volumes { get; set; }
+    }
+
+    public class BasicAppVolume
+    {
+        public required string Name { get; init; }
+        public required bool IsDockerVolume { get; init; }
+        public required string? Source { get; init; }
+        public required string Target { get; init; }
     }
 }

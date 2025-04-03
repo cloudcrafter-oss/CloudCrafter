@@ -22,6 +22,7 @@ public class DockerComposeEditor
     private readonly SlugHelper SlugHelper = new();
     private readonly YamlStream yaml;
     private YamlMappingNode? networksNode;
+    private YamlMappingNode? volumesNode;
 
     public DockerComposeEditor(string yamlString)
     {
@@ -37,6 +38,11 @@ public class DockerComposeEditor
         if (rootNode.Children.ContainsKey("networks"))
         {
             networksNode = (YamlMappingNode)rootNode["networks"];
+        }
+
+        if (rootNode.Children.ContainsKey("volumes"))
+        {
+            volumesNode = (YamlMappingNode)rootNode["volumes"];
         }
     }
 
@@ -142,6 +148,31 @@ public class DockerComposeEditor
         return new NetworkEditor(this, networkName);
     }
 
+    public VolumeEditor AddVolume(string volumeName)
+    {
+        if (volumesNode == null)
+        {
+            volumesNode = new YamlMappingNode();
+            rootNode.Add("volumes", volumesNode);
+        }
+
+        if (volumesNode.Children.ContainsKey(volumeName))
+        {
+            throw new VolumeAlreadyExistsException(volumeName);
+        }
+
+        var volumeNode = new YamlMappingNode();
+        volumesNode.Add(volumeName, volumeNode);
+
+        return new VolumeEditor(this, volumeName);
+    }
+
+    public VolumeEditor Volume(string volumeName)
+    {
+        var volumeNode = GetVolumeNode(volumeName);
+        return new VolumeEditor(this, volumeName);
+    }
+
     public string ToBase64()
     {
         var yaml = GetYaml();
@@ -205,6 +236,23 @@ public class DockerComposeEditor
         catch (KeyNotFoundException)
         {
             throw new InvalidNetworkException(networkName);
+        }
+    }
+
+    private YamlMappingNode GetVolumeNode(string volumeName)
+    {
+        try
+        {
+            if (volumesNode == null)
+            {
+                throw new DockerComposeInvalidStateException("Volumes are not created or defined");
+            }
+
+            return (YamlMappingNode)volumesNode[volumeName];
+        }
+        catch (KeyNotFoundException)
+        {
+            throw new InvalidVolumeException(volumeName);
         }
     }
 
@@ -406,6 +454,58 @@ public class DockerComposeEditor
             }
 
             serviceNode.Add("healthcheck", healthcheckNode);
+            return this;
+        }
+    }
+
+    public class VolumeEditor
+    {
+        private readonly DockerComposeEditor editor;
+        private readonly string volumeName;
+
+        public VolumeEditor(DockerComposeEditor editor, string volumeName)
+        {
+            this.editor = editor;
+            this.volumeName = volumeName;
+        }
+
+        public string VolumeName()
+        {
+            return volumeName;
+        }
+
+        public VolumeEditor SetDriver(string driver)
+        {
+            var volumeNode = editor.GetVolumeNode(volumeName);
+            volumeNode.Add("driver", driver);
+            return this;
+        }
+
+        public VolumeEditor SetDriverOpt(string key, string value)
+        {
+            var volumeNode = editor.GetVolumeNode(volumeName);
+
+            if (!volumeNode.Children.ContainsKey("driver_opts"))
+            {
+                volumeNode.Add("driver_opts", new YamlMappingNode());
+            }
+
+            var driverOptsNode = (YamlMappingNode)volumeNode["driver_opts"];
+            driverOptsNode.Add(key, value);
+            return this;
+        }
+
+        public VolumeEditor SetExternal(bool isExternal)
+        {
+            var volumeNode = editor.GetVolumeNode(volumeName);
+            volumeNode.Add("external", isExternal.ToString().ToLower());
+            return this;
+        }
+
+        public VolumeEditor SetName(string name)
+        {
+            var volumeNode = editor.GetVolumeNode(volumeName);
+            volumeNode.Add("name", name);
             return this;
         }
     }

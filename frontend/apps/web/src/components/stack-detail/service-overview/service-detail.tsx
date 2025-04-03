@@ -28,31 +28,6 @@ import { toast } from 'sonner'
 import type { z } from 'zod'
 import { VolumeList } from './volume-list'
 
-// Mock data for demonstration
-const mockVolumes = [
-	{
-		id: 'vol1',
-		name: 'db-data',
-		path: '/var/lib/postgresql/data',
-		size: '1.2 GB',
-		type: 'local' as const,
-	},
-	{
-		id: 'vol2',
-		name: 'app-logs',
-		path: '/var/log/app',
-		size: '450 MB',
-		type: 'local' as const,
-	},
-	{
-		id: 'vol3',
-		name: 'redis-data',
-		path: '/data',
-		size: '250 MB',
-		type: 'local' as const,
-	},
-]
-
 export const ServiceDetail = ({
 	stackId,
 	service,
@@ -304,12 +279,7 @@ export const ServiceDetail = ({
 								value='storage'
 								className='mt-0 space-y-4 sm:space-y-6'
 							>
-								<div>
-									<h3 className='text-lg sm:text-xl font-semibold mb-4 sm:mb-6'>
-										Storage Configuration
-									</h3>
-									<VolumeList stackId={stackId} stackServiceId={service.id} />
-								</div>
+								<VolumeList stackId={stackId} stackServiceId={service.id} />
 							</TabsContent>
 						</div>
 					</Tabs>

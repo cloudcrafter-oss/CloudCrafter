@@ -183,6 +183,39 @@ networks:
     }
 
     [Test]
+    public async Task ShouldBeAbleToAddAVolumeButThisVolumeDoesNotExists()
+    {
+        var service = _editor.Service("web")!;
+        service.AddVolume("my-volume", "/var/www/html/cache");
+
+        var yaml = _editor.GetYaml();
+
+        var isValid = await _editor.IsValid();
+
+        isValid.IsValid.Should().BeFalse();
+
+        await Verify(yaml);
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToAddAVolume()
+    {
+        var service = _editor.Service("web")!;
+        service.AddVolume("my-volume", "/var/www/html/cache");
+
+        var volume = _editor.AddVolume("my-volume");
+        volume.SetDriver("local");
+
+        var yaml = _editor.GetYaml();
+
+        var isValid = await _editor.IsValid();
+
+        isValid.IsValid.Should().BeTrue();
+
+        await Verify(yaml);
+    }
+
+    [Test]
     public void ShouldBeAbleToListServices()
     {
         var services = _editor.Services();
