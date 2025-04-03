@@ -80,6 +80,7 @@ public static class EntityFaker
                             ? StackServiceVolumeType.DockerVolume
                             : StackServiceVolumeType.LocalMount
                     )
+                    .RuleFor(x => x.Id, volume.Id)
                     .RuleFor(x => x.Name, volume.Name)
                     .RuleFor(x => x.SourcePath, volume.IsDockerVolume ? null : volume.Source)
                     .RuleFor(x => x.DestinationPath, volume.Target)
@@ -203,6 +204,7 @@ public static class EntityFaker
 
     public class BasicAppVolume
     {
+        public required Guid Id { get; init; }
         public required string Name { get; init; }
         public required bool IsDockerVolume { get; init; }
         public required string? Source { get; init; }

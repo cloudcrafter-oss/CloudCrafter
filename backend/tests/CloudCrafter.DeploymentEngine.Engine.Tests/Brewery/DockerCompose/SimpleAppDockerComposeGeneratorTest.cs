@@ -69,6 +69,7 @@ public class SimpleAppDockerComposeGeneratorTest
                 [
                     new EntityFaker.BasicAppVolume
                     {
+                        Id = environmentId,
                         Name = "My Docker Volume",
                         IsDockerVolume = true,
                         Target = "/var/lib/mysql",
@@ -76,6 +77,7 @@ public class SimpleAppDockerComposeGeneratorTest
                     },
                     new EntityFaker.BasicAppVolume
                     {
+                        Id = stackId,
                         Name = "My Local Volume",
                         IsDockerVolume = false,
                         Target = "/var/lib/mysql",

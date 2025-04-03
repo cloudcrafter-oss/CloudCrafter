@@ -21,11 +21,11 @@
     env_file: .env
     image: b34a6560-701d-4f0e-b024-b4b7b2155bcf:latest
     volumes:
-    - volume-15e60c2e-06eb-4b48-871e-52617f5e7699:/var/lib/mysql
+    - volume-f41d5c09-2fa1-459a-ae09-9eda843135df:/var/lib/mysql
     - /data/var/lib/mysql:/var/lib/mysql
 networks:
   cloudcrafter:
     external: true
 volumes:
-  volume-15e60c2e-06eb-4b48-871e-52617f5e7699:
+  volume-f41d5c09-2fa1-459a-ae09-9eda843135df:
     driver: local
