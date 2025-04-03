@@ -62,15 +62,16 @@ public class AddVolumesAction : BaseAction
 
     private string GenerateDockerVolumeName(StackServiceVolume volume)
     {
-        var helper = new SlugHelper();
-        var slugified = helper.GenerateSlug(volume.Name).ToLower();
-
-        // Ensure it starts with a letter or number (prepend 's' if it doesn't)
-        if (!char.IsLetterOrDigit(slugified[0]))
-        {
-            slugified = "s" + slugified;
-        }
-
-        return slugified;
+        return $"volume-{volume.Id}";
+        // var helper = new SlugHelper();
+        // var slugified = helper.GenerateSlug(volume.Name).ToLower();
+        //
+        // // Ensure it starts with a letter or number (prepend 's' if it doesn't)
+        // if (!char.IsLetterOrDigit(slugified[0]))
+        // {
+        //     slugified = "s" + slugified;
+        // }
+        //
+        // return slugified;
     }
 }
