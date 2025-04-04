@@ -91,6 +91,7 @@ export const VolumeList = ({ stackId, stackServiceId }: VolumeListProps) => {
 					<Button
 						variant='outline'
 						size='sm'
+						data-testid='btn-add-volume'
 						onClick={handleAddVolume}
 						className='w-full sm:w-auto'
 					>

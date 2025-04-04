@@ -123,7 +123,11 @@ export const VolumeSheet = ({
 
 	return (
 		<Sheet open={open} onOpenChange={onOpenChange}>
-			<SheetContent side='right' className='sm:max-w-xl w-full'>
+			<SheetContent
+				data-testid='modal-volume'
+				side='right'
+				className='sm:max-w-xl w-full'
+			>
 				<SheetHeader>
 					<SheetTitle>
 						{editingVolume ? 'Edit Volume' : 'Add Volume'}
@@ -148,7 +152,11 @@ export const VolumeSheet = ({
 									<FormItem>
 										<FormLabel>Volume Name</FormLabel>
 										<FormControl>
-											<Input {...field} placeholder='Enter volume name' />
+											<Input
+												{...field}
+												data-testid='volume-name'
+												placeholder='Enter volume name'
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -200,6 +208,7 @@ export const VolumeSheet = ({
 											<FormControl>
 												<Input
 													{...field}
+													data-testid='volume-source'
 													value={field.value ?? ''}
 													placeholder='Enter source path (e.g. /data)'
 												/>
@@ -219,6 +228,7 @@ export const VolumeSheet = ({
 										<FormControl>
 											<Input
 												{...field}
+												data-testid='volume-target'
 												placeholder='Enter destination path (e.g. /var/lib/data)'
 											/>
 										</FormControl>
@@ -262,6 +272,7 @@ export const VolumeSheet = ({
 									</Button>
 									<Button
 										type='submit'
+										data-testid='volume-submit'
 										disabled={createVolume.isPending || updateVolume.isPending}
 									>
 										{editingVolume ? 'Save Changes' : 'Add Volume'}

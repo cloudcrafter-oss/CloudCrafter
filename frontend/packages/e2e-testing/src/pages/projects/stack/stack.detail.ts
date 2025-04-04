@@ -44,6 +44,16 @@ export const StackDetailPage = (page: Page) => {
 							locator: containerLocator.getByTestId('tab-storage'),
 							content: {
 								locator: containerLocator.getByTestId('content-storage'),
+								addVolumeButton: containerLocator.getByTestId('btn-add-volume'),
+								modal: {
+									locator: page.getByTestId('modal-volume'),
+									form: {
+										name: page.getByTestId('volume-name'),
+										source: page.getByTestId('volume-source'),
+										target: page.getByTestId('volume-target'),
+										submit: page.getByTestId('volume-submit'),
+									},
+								},
 							},
 						},
 					},
