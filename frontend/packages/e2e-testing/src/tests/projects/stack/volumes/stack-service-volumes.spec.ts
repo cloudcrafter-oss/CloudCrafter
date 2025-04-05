@@ -95,5 +95,5 @@ test('should be able to add a volume to a service', async ({
 	// Submit the form
 	await serviceContainer.tab.storage.content.modal.form.submit.click()
 
-	await expect(page.getByText('Volume added successfully')).toBeVisible()
+	await expect(page.getByText('Volume created successfully')).toBeVisible()
 })
