@@ -248,7 +248,26 @@ public class DockerComposeEditor
                 throw new DockerComposeInvalidStateException("Volumes are not created or defined");
             }
 
-            return (YamlMappingNode)volumesNode[volumeName];
+            var node = volumesNode[volumeName]; // Get the node
+
+            if (node is YamlMappingNode mappingNode)
+            {
+                return mappingNode; // Already a mapping, return it
+            }
+
+            // If it's a scalar (e.g., null or just the key name), treat as default.
+            // Replace it with an empty mapping node for consistency and future edits.
+            if (node is YamlScalarNode)
+            {
+                var newMappingNode = new YamlMappingNode();
+                volumesNode.Children[new YamlScalarNode(volumeName)] = newMappingNode; // Replace node in the document
+                return newMappingNode;
+            }
+
+            // Handle unexpected node types if necessary
+            throw new DockerComposeInvalidStateException(
+                $"Unexpected node type '{node.GetType().Name}' for volume '{volumeName}'. Expected YamlMappingNode or YamlScalarNode."
+            );
         }
         catch (KeyNotFoundException)
         {
