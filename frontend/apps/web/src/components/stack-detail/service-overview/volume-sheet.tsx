@@ -33,6 +33,7 @@ import {
 	SheetTitle,
 } from '@cloudcrafter/ui/components/sheet'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
@@ -97,6 +98,20 @@ export const VolumeSheet = ({
 			type: editingVolume?.type ?? stackServiceVolumeTypeDtoEnum.LocalMount,
 		},
 	})
+
+	useEffect(() => {
+		if (open) {
+			volumeForm.reset({
+				stackId,
+				stackServiceId,
+				...editingVolume,
+				name: editingVolume?.name ?? '',
+				source: editingVolume?.sourcePath ?? null,
+				target: editingVolume?.destinationPath ?? '',
+				type: editingVolume?.type ?? stackServiceVolumeTypeDtoEnum.LocalMount,
+			})
+		}
+	}, [open, editingVolume, volumeForm, stackId, stackServiceId]) // Add form reset dep
 
 	const onSubmit = (values: VolumeFormData) => {
 		console.log('Form submitted with values:', values)

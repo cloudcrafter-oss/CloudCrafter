@@ -141,6 +141,7 @@ export const VolumeList = ({ stackId, stackServiceId }: VolumeListProps) => {
 								<Button
 									variant='ghost'
 									size='sm'
+									data-testid={`btn-edit-volume-${volume.id}`}
 									onClick={() => handleEditVolume(volume)}
 									className='flex-1 sm:flex-none'
 								>
@@ -149,6 +150,7 @@ export const VolumeList = ({ stackId, stackServiceId }: VolumeListProps) => {
 								<Button
 									variant='ghost'
 									size='sm'
+									data-testid={`btn-delete-volume-${volume.id}`}
 									className='text-destructive hover:text-destructive flex-1 sm:flex-none'
 									onClick={() => handleDeleteVolume(volume)}
 								>

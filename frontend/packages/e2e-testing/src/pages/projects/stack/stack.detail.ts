@@ -54,6 +54,10 @@ export const StackDetailPage = (page: Page) => {
 										submit: page.getByTestId('volume-submit'),
 									},
 								},
+								editButton: (volumeId: string) =>
+									page.getByTestId(`btn-edit-volume-${volumeId}`),
+								deleteButton: (volumeId: string) =>
+									page.getByTestId(`btn-delete-volume-${volumeId}`),
 							},
 						},
 					},
