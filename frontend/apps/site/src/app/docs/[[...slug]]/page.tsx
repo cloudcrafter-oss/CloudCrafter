@@ -1,3 +1,4 @@
+import { FeatureTable } from '@/components/docs/feature-table/feature-table'
 import { openapi, source } from '@/lib/source'
 import defaultMdxComponents, { createRelativeLink } from 'fumadocs-ui/mdx'
 import {
@@ -31,6 +32,7 @@ export default async function Page(props: {
 						...defaultMdxComponents,
 						// this allows you to link to other pages with relative file paths
 						a: createRelativeLink(source, page),
+						FeatureTable: FeatureTable,
 						// you can add other MDX components here
 						APIPage: openapi.APIPage,
 					}}
