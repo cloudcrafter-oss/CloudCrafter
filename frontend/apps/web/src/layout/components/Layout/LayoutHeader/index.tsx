@@ -6,11 +6,21 @@ import { Button } from '@cloudcrafter/ui/components/button'
 import { cn } from '@cloudcrafter/ui/lib/utils'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import type React from 'react'
 
-export const LayoutHeader = () => {
+interface LayoutHeaderProps {
+	className?: string
+}
+
+export const LayoutHeader: React.FC<LayoutHeaderProps> = ({ className }) => {
 	const { data: sessionData } = useSession()
 	return (
-		<div className='supports-backdrop-blur:bg-background/60 fixed left-0 right-0 top-0 z-20 border-b bg-background/95 backdrop-blur'>
+		<div
+			className={cn(
+				'supports-backdrop-blur:bg-background/60 fixed left-0 right-0 top-0 z-20 border-b bg-background/95 backdrop-blur',
+				className,
+			)}
+		>
 			<nav className='flex h-16 items-center justify-between px-4'>
 				<Link
 					href={'/admin'}

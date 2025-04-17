@@ -1,6 +1,7 @@
 import { entityHealthDtoSchema } from './entityHealthDtoSchema'
 import { stackServiceHealthcheckConfigurationDtoSchema } from './stackServiceHealthcheckConfigurationDtoSchema'
 import { stackServiceHttpConfigurationDtoSchema } from './stackServiceHttpConfigurationDtoSchema'
+import { stackServiceVolumeDtoSchema } from './stackServiceVolumeDtoSchema'
 import { z } from 'zod'
 
 export const stackServiceDtoSchema = z.object({
@@ -10,4 +11,5 @@ export const stackServiceDtoSchema = z.object({
   httpConfiguration: z.lazy(() => stackServiceHttpConfigurationDtoSchema).nullable(),
   healthcheckConfiguration: z.lazy(() => stackServiceHealthcheckConfigurationDtoSchema),
   health: z.lazy(() => entityHealthDtoSchema),
+  volumes: z.array(z.lazy(() => stackServiceVolumeDtoSchema)),
 })

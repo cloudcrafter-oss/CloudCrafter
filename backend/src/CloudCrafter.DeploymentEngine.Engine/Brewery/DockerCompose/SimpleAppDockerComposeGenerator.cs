@@ -1,4 +1,6 @@
 ﻿using CloudCrafter.DeploymentEngine.Engine.Abstraction;
+using CloudCrafter.DeploymentEngine.Engine.Brewery.Actions;
+using CloudCrafter.DockerCompose.Engine.Models;
 using CloudCrafter.DockerCompose.Engine.Yaml;
 using CloudCrafter.Domain.Entities;
 
@@ -21,9 +23,10 @@ public class SimpleAppDockerComposeGenerator(BaseDockerComposeGenerator.Args arg
         }
 
         var editor = new DockerComposeEditor();
-        editor.SetEnvironmentVariables(".env", new());
+        editor.SetEnvironmentVariables(".env", new List<EnvironmentVariable>());
 
-        var network = editor.AddNetwork("cloudcrafter");
+        var networkName = Options.Stack.Server?.DockerNetwork ?? "cloudcrafter";
+        var network = editor.AddNetwork(networkName);
         network.SetIsExternalNetwork();
 
         AddAppService(firstService, editor, network);
@@ -48,9 +51,10 @@ public class SimpleAppDockerComposeGenerator(BaseDockerComposeGenerator.Args arg
         service.AddLabels(labelService);
         service.AddNetwork(network);
         service.SetEnvironmentFilename(".env");
-        var name = service.ServiceName();
-
         service.SetImage(stackService.Id.ToString(), "latest");
+
+        var volumesAction = new AddVolumesAction();
+        volumesAction.Execute(this, editor, service, stackService);
     }
 
     public override void ValidateGenerator()

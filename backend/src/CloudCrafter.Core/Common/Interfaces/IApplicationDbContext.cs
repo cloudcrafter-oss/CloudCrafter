@@ -17,6 +17,7 @@ public interface IApplicationDbContext
     DbSet<BackgroundJob> Jobs { get; }
     DbSet<StackService> StackServices { get; }
     DbSet<StackServiceType> StackServiceTypes { get; }
+    DbSet<StackServiceVolume> StackServiceVolumes { get; }
     DbSet<ServerConnectivityCheckJob> ServerConnectivityCheckJobs { get; }
     DbSet<SourceProvider> SourceProviders { get; }
     DbSet<GithubProvider> GithubProviders { get; }

@@ -1,6 +1,7 @@
 import type { EntityHealthDto } from './EntityHealthDto'
 import type { StackServiceHealthcheckConfigurationDto } from './StackServiceHealthcheckConfigurationDto'
 import type { StackServiceHttpConfigurationDto } from './StackServiceHttpConfigurationDto'
+import type { StackServiceVolumeDto } from './StackServiceVolumeDto'
 
 export type StackServiceDto = {
   /**
@@ -27,4 +28,8 @@ export type StackServiceDto = {
    * @type object
    */
   health: EntityHealthDto
+  /**
+   * @type array
+   */
+  volumes: StackServiceVolumeDto[]
 }

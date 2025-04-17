@@ -24,6 +24,7 @@ public static class FakerInstances
             .RuleFor(x => x.IpAddress, f => f.Internet.Ip())
             .RuleFor(x => x.DockerDataDirectoryMount, "/data/random/dir")
             .RuleFor(x => x.Stacks, [])
+            .RuleFor(x => x.DockerNetwork, f => f.Internet.DomainWord())
             .RuleFor(x => x.CreatedBy, f => null)
             .RuleFor(x => x.LastModifiedBy, f => null)
             .RuleFor(x => x.PingHealthData, new ServerPingData())
@@ -145,9 +146,14 @@ public static class FakerInstances
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
     }
 
-    public static Faker<Stack> StackFaker(Guid environmentId)
+    public static Faker<Stack> StackFaker(
+        Guid environmentId,
+        Action<Faker<Server>>? additionalServerActions = null
+    )
     {
-        var server = ServerFaker.Generate();
+        var serverFaker = ServerFaker;
+        additionalServerActions?.Invoke(serverFaker);
+        var server = serverFaker.Generate();
         return new Faker<Stack>()
             .StrictMode(true)
             .RuleFor(x => x.Id, Guid.NewGuid)
@@ -173,6 +179,23 @@ public static class FakerInstances
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
     }
 
+    public static Faker<StackServiceVolume> StackServiceVolumeFaker(Guid stackServiceId)
+    {
+        return new Faker<StackServiceVolume>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, Guid.NewGuid)
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.StackServiceId, stackServiceId)
+            .RuleFor(x => x.StackService, (StackService?)null)
+            .RuleFor(x => x.CreatedBy, (Guid?)null)
+            .RuleFor(x => x.LastModifiedBy, (Guid?)null)
+            .RuleFor(x => x.Name, f => f.Person.FullName)
+            .RuleFor(x => x.SourcePath, f => f.Internet.UrlRootedPath())
+            .RuleFor(x => x.DestinationPath, f => f.Internet.UrlRootedPath())
+            .RuleFor(x => x.Type, f => f.PickRandom<StackServiceVolumeType>());
+    }
+
     public static Faker<StackService> StackServiceFaker(Stack stack)
     {
         return new Faker<StackService>()
@@ -186,6 +209,7 @@ public static class FakerInstances
             .RuleFor(x => x.StackServiceTypeId, StackServiceTypeConstants.App)
             .RuleFor(x => x.Stack, stack)
             .RuleFor(x => x.HttpConfiguration, (EntityHttpConfiguration?)null)
+            .RuleFor(x => x.Volumes, new List<StackServiceVolume>())
             .RuleFor(x => x.CreatedBy, (Guid?)null)
             .RuleFor(x => x.LastModifiedBy, (Guid?)null)
             .RuleFor(x => x.Name, f => f.Person.FullName)

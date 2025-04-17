@@ -40,6 +40,7 @@ public class SimpleAppRecipeWithGithubAppTest
                 EnvironmentId = environmentId,
                 StackId = stackId,
                 StackServiceId = stackServiceId,
+                DockerNetworkName = "cloudcrafter",
                 StackName = "My Custom Stack 123",
                 StackServiceName = "My Custom Service : 123",
                 SourceProvider = new SourceProvider

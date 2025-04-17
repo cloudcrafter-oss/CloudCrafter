@@ -34,7 +34,9 @@ public class GetServerDetailQueryTest : BaseTestFixture
         await RunAsAdministratorAsync();
 
         (await CountAsync<Server>()).Should().Be(0);
-        var server = FakerInstances.ServerFaker.Generate();
+        var server = FakerInstances
+            .ServerFaker.RuleFor(x => x.DockerNetwork, "my-custom-network")
+            .Generate();
 
         await AddAsync(server);
 
@@ -43,5 +45,6 @@ public class GetServerDetailQueryTest : BaseTestFixture
         result.Should().NotBeNull();
         result!.Id.Should().NotBe(Guid.Empty);
         result.AgentKey.Should().NotBeEmpty();
+        result.DockerNetworkName.Should().Be("my-custom-network");
     }
 }

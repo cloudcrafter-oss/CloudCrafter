@@ -28,6 +28,42 @@ export const StackDetailPage = (page: Page) => {
 			},
 		},
 
+		services: {
+			button: page.getByTestId('subsection-services'),
+
+			container: (serviceId: string) => {
+				const containerLocator = page.getByTestId(
+					`container-service-${serviceId}`,
+				)
+				return {
+					locator: containerLocator,
+					tab: {
+						general: containerLocator.getByTestId('tab-general'),
+						network: containerLocator.getByTestId('tab-network'),
+						storage: {
+							locator: containerLocator.getByTestId('tab-storage'),
+							content: {
+								locator: containerLocator.getByTestId('content-storage'),
+								addVolumeButton: containerLocator.getByTestId('btn-add-volume'),
+								modal: {
+									locator: page.getByTestId('modal-volume'),
+									form: {
+										name: page.getByTestId('volume-name'),
+										source: page.getByTestId('volume-source'),
+										target: page.getByTestId('volume-target'),
+										submit: page.getByTestId('volume-submit'),
+									},
+								},
+								editButton: (volumeId: string) =>
+									page.getByTestId(`btn-edit-volume-${volumeId}`),
+								deleteButton: (volumeId: string) =>
+									page.getByTestId(`btn-delete-volume-${volumeId}`),
+							},
+						},
+					},
+				}
+			},
+		},
 		url: (stack: StackDetails) =>
 			`/admin/projects/${stack.project.id}/${stack.project.environments[0].id}/stack/${stack.stack.id}`,
 	}

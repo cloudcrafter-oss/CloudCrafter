@@ -301,6 +301,10 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("DockerNetwork")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("IpAddress")
                         .IsRequired()
                         .HasColumnType("text");
@@ -542,6 +546,48 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                             Id = new Guid("6257aa7c-09f0-42c0-8417-3d0ca0ead213"),
                             Type = "App"
                         });
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.StackServiceVolume", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("DestinationPath")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SourcePath")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("StackServiceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StackServiceId");
+
+                    b.ToTable("StackServiceVolumes");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.User", b =>
@@ -1204,6 +1250,17 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Navigation("Type");
                 });
 
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.StackServiceVolume", b =>
+                {
+                    b.HasOne("CloudCrafter.Domain.Entities.StackService", "StackService")
+                        .WithMany("Volumes")
+                        .HasForeignKey("StackServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StackService");
+                });
+
             modelBuilder.Entity("CloudCrafter.Domain.Entities.UserRefreshToken", b =>
                 {
                     b.HasOne("CloudCrafter.Domain.Entities.User", null)
@@ -1298,6 +1355,11 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
             modelBuilder.Entity("CloudCrafter.Domain.Entities.StackEnvironmentVariableGroup", b =>
                 {
                     b.Navigation("EnvironmentVariables");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.StackService", b =>
+                {
+                    b.Navigation("Volumes");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.User", b =>

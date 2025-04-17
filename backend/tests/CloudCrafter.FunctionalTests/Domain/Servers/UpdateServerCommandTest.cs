@@ -3,6 +3,7 @@ using CloudCrafter.Domain.Domain.Server;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
+using Npgsql;
 using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Servers;
@@ -51,6 +52,29 @@ public class UpdateServerCommandTest : BaseTestFixture
     }
 
     [Test]
+    public async Task ShouldBeAbleToPatchDockerNetwork()
+    {
+        await RunAsAdministratorAsync();
+
+        var server = FakerInstances.ServerFaker.Generate();
+        await AddAsync(server);
+
+        var command = new UpdateServerCommand(
+            server.Id,
+            new UpdateServerDto { DockerNetwork = "another-network" }
+        );
+        server.DockerNetwork.Should().NotBe(command.UpdateDetails.DockerNetwork);
+
+        await SendAsync(command);
+
+        var updatedServer = await FindAsync<Server>(server.Id);
+
+        updatedServer.Should().NotBeNull();
+        updatedServer!.DockerNetwork.Should().Be(command.UpdateDetails.DockerNetwork);
+        updatedServer.Name.Should().Be(server.Name);
+    }
+
+    [Test]
     public async Task? ShouldBeAbleToPatchNothing()
     {
         await RunAsAdministratorAsync();
@@ -67,5 +91,6 @@ public class UpdateServerCommandTest : BaseTestFixture
 
         updatedServer.Should().NotBeNull();
         updatedServer!.Name.Should().Be(server.Name);
+        updatedServer.DockerNetwork.Should().Be(server.DockerNetwork);
     }
 }

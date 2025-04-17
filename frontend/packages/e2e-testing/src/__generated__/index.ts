@@ -10,6 +10,7 @@ export type { CreateStackCommand } from './types/CreateStackCommand'
 export type { CreateStackEnvironmentVariableCommand } from './types/CreateStackEnvironmentVariableCommand'
 export type { CreateStackEnvironmentVariableGroupCommand } from './types/CreateStackEnvironmentVariableGroupCommand'
 export type { CreateStackFromSourceProviderCommand } from './types/CreateStackFromSourceProviderCommand'
+export type { CreateStackServiceVolumeCommand } from './types/CreateStackServiceVolumeCommand'
 export type { CreateUserCommand } from './types/CreateUserCommand'
 export type {
   DeleteEnvironmentVariablePathParams,
@@ -26,6 +27,12 @@ export type {
 export type { DeleteProjectPathParams, DeleteProject200, DeleteProjectMutationResponse, DeleteProjectMutation } from './types/DeleteProject'
 export type { DeleteProviderPathParams, DeleteProvider200, DeleteProviderMutationResponse, DeleteProviderMutation } from './types/DeleteProvider'
 export type { DeleteServerByIdPathParams, DeleteServerById200, DeleteServerByIdMutationResponse, DeleteServerByIdMutation } from './types/DeleteServerById'
+export type {
+  DeleteStackServiceVolumePathParams,
+  DeleteStackServiceVolume200,
+  DeleteStackServiceVolumeMutationResponse,
+  DeleteStackServiceVolumeMutation,
+} from './types/DeleteStackServiceVolume'
 export type { DeployedStackDto } from './types/DeployedStackDto'
 export type { DeploymentCreatedDetailsDto } from './types/DeploymentCreatedDetailsDto'
 export type { DeploymentLogDto } from './types/DeploymentLogDto'
@@ -79,6 +86,12 @@ export type { GetProvidersQueryParams, GetProviders200, GetProvidersQueryRespons
 export type { GetServerByIdPathParams, GetServerById200, GetServerByIdQueryResponse, GetServerByIdQuery } from './types/GetServerById'
 export type { GetServers200, GetServersQueryResponse, GetServersQuery } from './types/GetServers'
 export type { GetStackDetailPathParams, GetStackDetail200, GetStackDetail404, GetStackDetailQueryResponse, GetStackDetailQuery } from './types/GetStackDetail'
+export type {
+  GetStackServiceVolumesPathParams,
+  GetStackServiceVolumes200,
+  GetStackServiceVolumesQueryResponse,
+  GetStackServiceVolumesQuery,
+} from './types/GetStackServiceVolumes'
 export type { GetUsers200, GetUsersMutationRequest, GetUsersMutationResponse, GetUsersMutation } from './types/GetUsers'
 export type { GitApplicationSourceDto } from './types/GitApplicationSourceDto'
 export type { GithubApplicationSourceDto } from './types/GithubApplicationSourceDto'
@@ -123,6 +136,13 @@ export type {
   PostCreateStackFromSourceProviderMutationResponse,
   PostCreateStackFromSourceProviderMutation,
 } from './types/PostCreateStackFromSourceProvider'
+export type {
+  PostCreateStackServiceVolumePathParams,
+  PostCreateStackServiceVolume201,
+  PostCreateStackServiceVolumeMutationRequest,
+  PostCreateStackServiceVolumeMutationResponse,
+  PostCreateStackServiceVolumeMutation,
+} from './types/PostCreateStackServiceVolume'
 export type { PostCreateUser200, PostCreateUserMutationRequest, PostCreateUserMutationResponse, PostCreateUserMutation } from './types/PostCreateUser'
 export type {
   PostDispatchStackDeploymentPathParams,
@@ -176,6 +196,14 @@ export type {
   PutUpdateGithubProviderMutationResponse,
   PutUpdateGithubProviderMutation,
 } from './types/PutUpdateGithubProvider'
+export type {
+  PutUpdateStackServiceVolumePathParams,
+  PutUpdateStackServiceVolume200,
+  PutUpdateStackServiceVolume400,
+  PutUpdateStackServiceVolumeMutationRequest,
+  PutUpdateStackServiceVolumeMutationResponse,
+  PutUpdateStackServiceVolumeMutation,
+} from './types/PutUpdateStackServiceVolume'
 export type { RefreshUserTokenCommand } from './types/RefreshUserTokenCommand'
 export type { ServerDetailDto } from './types/ServerDetailDto'
 export type { ServerDto } from './types/ServerDto'
@@ -192,6 +220,8 @@ export type { StackServerDto } from './types/StackServerDto'
 export type { StackServiceDto } from './types/StackServiceDto'
 export type { StackServiceHealthcheckConfigurationDto } from './types/StackServiceHealthcheckConfigurationDto'
 export type { StackServiceHttpConfigurationDto } from './types/StackServiceHttpConfigurationDto'
+export type { StackServiceVolumeDto } from './types/StackServiceVolumeDto'
+export type { StackServiceVolumeTypeDtoEnum, StackServiceVolumeTypeDto } from './types/StackServiceVolumeTypeDto'
 export type { StackSourceDto } from './types/StackSourceDto'
 export type { StackSourceDtoTypeEnum, StackSourceDtoType } from './types/StackSourceDtoType'
 export type { Test200, TestQueryResponse, TestQuery } from './types/Test'
@@ -234,6 +264,7 @@ export type {
   UpdateStackServiceMutation,
 } from './types/UpdateStackService'
 export type { UpdateStackServiceCommand } from './types/UpdateStackServiceCommand'
+export type { UpdateStackServiceVolumeCommand } from './types/UpdateStackServiceVolumeCommand'
 export type { UserDto } from './types/UserDto'
 export { getCreateProjectUrl, createProject } from './e2e-backend/createProject'
 export { getCreateServerUrl, createServer } from './e2e-backend/createServer'
@@ -242,6 +273,7 @@ export { getDeleteEnvironmentVariableGroupUrl, deleteEnvironmentVariableGroup } 
 export { getDeleteProjectUrl, deleteProject } from './e2e-backend/deleteProject'
 export { getDeleteProviderUrl, deleteProvider } from './e2e-backend/deleteProvider'
 export { getDeleteServerByIdUrl, deleteServerById } from './e2e-backend/deleteServerById'
+export { getDeleteStackServiceVolumeUrl, deleteStackServiceVolume } from './e2e-backend/deleteStackServiceVolume'
 export { getGetDeploymentLogsUrl, getDeploymentLogs } from './e2e-backend/getDeploymentLogs'
 export { getGetDeploymentsForServerUrl, getDeploymentsForServer } from './e2e-backend/getDeploymentsForServer'
 export { getGetDeploymentsForStackUrl, getDeploymentsForStack } from './e2e-backend/getDeploymentsForStack'
@@ -257,6 +289,7 @@ export { getGetProvidersUrl, getProviders } from './e2e-backend/getProviders'
 export { getGetServerByIdUrl, getServerById } from './e2e-backend/getServerById'
 export { getGetServersUrl, getServers } from './e2e-backend/getServers'
 export { getGetStackDetailUrl, getStackDetail } from './e2e-backend/getStackDetail'
+export { getGetStackServiceVolumesUrl, getStackServiceVolumes } from './e2e-backend/getStackServiceVolumes'
 export { getGetUsersUrl, getUsers } from './e2e-backend/getUsers'
 export { getPostCreateDeploymentUrl, postCreateDeployment } from './e2e-backend/postCreateDeployment'
 export { getPostCreateEnvironmentVariableUrl, postCreateEnvironmentVariable } from './e2e-backend/postCreateEnvironmentVariable'
@@ -264,6 +297,7 @@ export { getPostCreateEnvironmentVariableGroupUrl, postCreateEnvironmentVariable
 export { getPostCreateGithubAppUrl, postCreateGithubApp } from './e2e-backend/postCreateGithubApp'
 export { getPostCreateStackUrl, postCreateStack } from './e2e-backend/postCreateStack'
 export { getPostCreateStackFromSourceProviderUrl, postCreateStackFromSourceProvider } from './e2e-backend/postCreateStackFromSourceProvider'
+export { getPostCreateStackServiceVolumeUrl, postCreateStackServiceVolume } from './e2e-backend/postCreateStackServiceVolume'
 export { getPostCreateUserUrl, postCreateUser } from './e2e-backend/postCreateUser'
 export { getPostDispatchStackDeploymentUrl, postDispatchStackDeployment } from './e2e-backend/postDispatchStackDeployment'
 export { getPostLoginUserUrl, postLoginUser } from './e2e-backend/postLoginUser'
@@ -273,6 +307,7 @@ export { getPostValidateGithubRepoUrl, postValidateGithubRepo } from './e2e-back
 export { getPutUpdateEnvironmentVariableUrl, putUpdateEnvironmentVariable } from './e2e-backend/putUpdateEnvironmentVariable'
 export { getPutUpdateEnvironmentVariableGroupUrl, putUpdateEnvironmentVariableGroup } from './e2e-backend/putUpdateEnvironmentVariableGroup'
 export { getPutUpdateGithubProviderUrl, putUpdateGithubProvider } from './e2e-backend/putUpdateGithubProvider'
+export { getPutUpdateStackServiceVolumeUrl, putUpdateStackServiceVolume } from './e2e-backend/putUpdateStackServiceVolume'
 export { getTestUrl, test } from './e2e-backend/test'
 export { getUpdateProjectUrl, updateProject } from './e2e-backend/updateProject'
 export { getUpdateServerUrl, updateServer } from './e2e-backend/updateServer'
@@ -284,6 +319,7 @@ export { entityHealthDtoValueEnum } from './types/EntityHealthDtoValue'
 export { filterOperatorOptionEnum } from './types/FilterOperatorOption'
 export { providerTypeEnum } from './types/ProviderType'
 export { serverStatusDtoValueEnum } from './types/ServerStatusDtoValue'
+export { stackServiceVolumeTypeDtoEnum } from './types/StackServiceVolumeTypeDto'
 export { stackSourceDtoTypeEnum } from './types/StackSourceDtoType'
 export { channelOutputLogLineLevelSchema } from './zod/channelOutputLogLineLevelSchema'
 export { checkValidGitRepoCommandSchema } from './zod/checkValidGitRepoCommandSchema'
@@ -297,6 +333,7 @@ export { createStackCommandSchema } from './zod/createStackCommandSchema'
 export { createStackEnvironmentVariableCommandSchema } from './zod/createStackEnvironmentVariableCommandSchema'
 export { createStackEnvironmentVariableGroupCommandSchema } from './zod/createStackEnvironmentVariableGroupCommandSchema'
 export { createStackFromSourceProviderCommandSchema } from './zod/createStackFromSourceProviderCommandSchema'
+export { createStackServiceVolumeCommandSchema } from './zod/createStackServiceVolumeCommandSchema'
 export { createUserCommandSchema } from './zod/createUserCommandSchema'
 export {
   deleteEnvironmentVariableGroupPathParamsSchema,
@@ -311,6 +348,11 @@ export {
 export { deleteProjectPathParamsSchema, deleteProject200Schema, deleteProjectMutationResponseSchema } from './zod/deleteProjectSchema'
 export { deleteProviderPathParamsSchema, deleteProvider200Schema, deleteProviderMutationResponseSchema } from './zod/deleteProviderSchema'
 export { deleteServerByIdPathParamsSchema, deleteServerById200Schema, deleteServerByIdMutationResponseSchema } from './zod/deleteServerByIdSchema'
+export {
+  deleteStackServiceVolumePathParamsSchema,
+  deleteStackServiceVolume200Schema,
+  deleteStackServiceVolumeMutationResponseSchema,
+} from './zod/deleteStackServiceVolumeSchema'
 export { deployedStackDtoSchema } from './zod/deployedStackDtoSchema'
 export { deploymentCreatedDetailsDtoSchema } from './zod/deploymentCreatedDetailsDtoSchema'
 export { deploymentLogDtoSchema } from './zod/deploymentLogDtoSchema'
@@ -359,6 +401,11 @@ export { getProvidersQueryParamsSchema, getProviders200Schema, getProvidersQuery
 export { getServerByIdPathParamsSchema, getServerById200Schema, getServerByIdQueryResponseSchema } from './zod/getServerByIdSchema'
 export { getServers200Schema, getServersQueryResponseSchema } from './zod/getServersSchema'
 export { getStackDetailPathParamsSchema, getStackDetail200Schema, getStackDetail404Schema, getStackDetailQueryResponseSchema } from './zod/getStackDetailSchema'
+export {
+  getStackServiceVolumesPathParamsSchema,
+  getStackServiceVolumes200Schema,
+  getStackServiceVolumesQueryResponseSchema,
+} from './zod/getStackServiceVolumesSchema'
 export { getUsers200Schema, getUsersMutationRequestSchema, getUsersMutationResponseSchema } from './zod/getUsersSchema'
 export { gitApplicationSourceDtoSchema } from './zod/gitApplicationSourceDtoSchema'
 export { githubApplicationSourceDtoSchema } from './zod/githubApplicationSourceDtoSchema'
@@ -398,6 +445,12 @@ export {
   postCreateStackFromSourceProviderMutationResponseSchema,
 } from './zod/postCreateStackFromSourceProviderSchema'
 export { postCreateStack200Schema, postCreateStackMutationRequestSchema, postCreateStackMutationResponseSchema } from './zod/postCreateStackSchema'
+export {
+  postCreateStackServiceVolumePathParamsSchema,
+  postCreateStackServiceVolume201Schema,
+  postCreateStackServiceVolumeMutationRequestSchema,
+  postCreateStackServiceVolumeMutationResponseSchema,
+} from './zod/postCreateStackServiceVolumeSchema'
 export { postCreateUser200Schema, postCreateUserMutationRequestSchema, postCreateUserMutationResponseSchema } from './zod/postCreateUserSchema'
 export {
   postDispatchStackDeploymentPathParamsSchema,
@@ -436,6 +489,13 @@ export {
   putUpdateGithubProviderMutationRequestSchema,
   putUpdateGithubProviderMutationResponseSchema,
 } from './zod/putUpdateGithubProviderSchema'
+export {
+  putUpdateStackServiceVolumePathParamsSchema,
+  putUpdateStackServiceVolume200Schema,
+  putUpdateStackServiceVolume400Schema,
+  putUpdateStackServiceVolumeMutationRequestSchema,
+  putUpdateStackServiceVolumeMutationResponseSchema,
+} from './zod/putUpdateStackServiceVolumeSchema'
 export { refreshUserTokenCommandSchema } from './zod/refreshUserTokenCommandSchema'
 export { serverDetailDtoSchema } from './zod/serverDetailDtoSchema'
 export { serverDtoSchema } from './zod/serverDtoSchema'
@@ -452,6 +512,8 @@ export { stackServerDtoSchema } from './zod/stackServerDtoSchema'
 export { stackServiceDtoSchema } from './zod/stackServiceDtoSchema'
 export { stackServiceHealthcheckConfigurationDtoSchema } from './zod/stackServiceHealthcheckConfigurationDtoSchema'
 export { stackServiceHttpConfigurationDtoSchema } from './zod/stackServiceHttpConfigurationDtoSchema'
+export { stackServiceVolumeDtoSchema } from './zod/stackServiceVolumeDtoSchema'
+export { stackServiceVolumeTypeDtoSchema } from './zod/stackServiceVolumeTypeDtoSchema'
 export { stackSourceDtoSchema } from './zod/stackSourceDtoSchema'
 export { stackSourceDtoTypeSchema } from './zod/stackSourceDtoTypeSchema'
 export { test200Schema, testQueryResponseSchema } from './zod/testSchema'
@@ -490,4 +552,5 @@ export {
   updateStackServiceMutationRequestSchema,
   updateStackServiceMutationResponseSchema,
 } from './zod/updateStackServiceSchema'
+export { updateStackServiceVolumeCommandSchema } from './zod/updateStackServiceVolumeCommandSchema'
 export { userDtoSchema } from './zod/userDtoSchema'

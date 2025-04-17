@@ -41,9 +41,11 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     public DbSet<BackgroundJob> Jobs => Set<BackgroundJob>();
     public DbSet<StackService> StackServices => Set<StackService>();
     public DbSet<StackServiceType> StackServiceTypes => Set<StackServiceType>();
+    public DbSet<StackServiceVolume> StackServiceVolumes => Set<StackServiceVolume>();
 
     public DbSet<SourceProvider> SourceProviders => Set<SourceProvider>();
     public DbSet<GithubProvider> GithubProviders => Set<GithubProvider>();
+
     public DbSet<StackEnvironmentVariable> StackEnvironmentVariables =>
         Set<StackEnvironmentVariable>();
 

@@ -10,12 +10,15 @@ public class ServerDetailDto
 
     public string? AgentKey { get; set; }
 
+    public required string DockerNetworkName { get; set; }
+
     private class Mapping : Profile
     {
         public Mapping()
         {
             CreateMap<Entities.Server, ServerDetailDto>()
-                .ForMember(x => x.AgentKey, opt => opt.MapFrom(src => src.AgentSecretKey));
+                .ForMember(x => x.AgentKey, opt => opt.MapFrom(src => src.AgentSecretKey))
+                .ForMember(x => x.DockerNetworkName, opt => opt.MapFrom(src => src.DockerNetwork));
         }
     }
 }

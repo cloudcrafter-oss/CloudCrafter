@@ -131,6 +131,46 @@ networks:
     }
 
     [Test]
+    public void ShouldNotBeAbleToAddDuplicateVolume()
+    {
+        _editor.AddVolume("my-data");
+
+        var ex = Assert.Throws<VolumeAlreadyExistsException>(() => _editor.AddVolume("my-data"));
+    }
+
+    [Test]
+    public void ShouldNotBeAbleToFetchNonExistingVolume()
+    {
+        Assert.Throws<InvalidVolumeException>(() => _editor.Volume("my-non-existing-volume"));
+    }
+
+    [Test]
+    public void ShouldBeAbleToFetchVolume()
+    {
+        var volume = _editor.Volume("db_data");
+        volume.Should().NotBeNull();
+        volume.VolumeName().Should().Be("db_data");
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToSetDriverOptsOnExistingVolume()
+    {
+        var volume = _editor.Volume("db_data");
+        volume
+            .SetDriver("local")
+            .SetExternal(false)
+            .SetDriverOpt("type", "nfs")
+            .SetDriverOpt("o", "addr=127.0.0.1")
+            .SetDriverOpt("device", ":/path/to/dir");
+
+        var yaml = _editor.GetYaml();
+        var isValid = await _editor.IsValid();
+
+        isValid.IsValid.Should().BeTrue();
+        await Verify(yaml);
+    }
+
+    [Test]
     public async Task ShouldBeAbleToAddService()
     {
         var service = _editor.AddService("newService");
@@ -172,6 +212,39 @@ networks:
     {
         var service = _editor.Service("web")!;
         service.SetImage("php", "8.0-apache");
+
+        var yaml = _editor.GetYaml();
+
+        var isValid = await _editor.IsValid();
+
+        isValid.IsValid.Should().BeTrue();
+
+        await Verify(yaml);
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToAddAVolumeButThisVolumeDoesNotExists()
+    {
+        var service = _editor.Service("web")!;
+        service.AddVolume("my-volume", "/var/www/html/cache");
+
+        var yaml = _editor.GetYaml();
+
+        var isValid = await _editor.IsValid();
+
+        isValid.IsValid.Should().BeFalse();
+
+        await Verify(yaml);
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToAddAVolume()
+    {
+        var service = _editor.Service("web")!;
+        service.AddVolume("my-volume", "/var/www/html/cache");
+
+        var volume = _editor.AddVolume("my-volume");
+        volume.SetDriver("local");
 
         var yaml = _editor.GetYaml();
 

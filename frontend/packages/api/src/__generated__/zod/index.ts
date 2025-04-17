@@ -10,6 +10,7 @@ export { createStackCommandSchema } from './createStackCommandSchema'
 export { createStackEnvironmentVariableCommandSchema } from './createStackEnvironmentVariableCommandSchema'
 export { createStackEnvironmentVariableGroupCommandSchema } from './createStackEnvironmentVariableGroupCommandSchema'
 export { createStackFromSourceProviderCommandSchema } from './createStackFromSourceProviderCommandSchema'
+export { createStackServiceVolumeCommandSchema } from './createStackServiceVolumeCommandSchema'
 export { createUserCommandSchema } from './createUserCommandSchema'
 export {
   deleteEnvironmentVariableGroupPathParamsSchema,
@@ -24,6 +25,11 @@ export {
 export { deleteProjectPathParamsSchema, deleteProject200Schema, deleteProjectMutationResponseSchema } from './deleteProjectSchema'
 export { deleteProviderPathParamsSchema, deleteProvider200Schema, deleteProviderMutationResponseSchema } from './deleteProviderSchema'
 export { deleteServerByIdPathParamsSchema, deleteServerById200Schema, deleteServerByIdMutationResponseSchema } from './deleteServerByIdSchema'
+export {
+  deleteStackServiceVolumePathParamsSchema,
+  deleteStackServiceVolume200Schema,
+  deleteStackServiceVolumeMutationResponseSchema,
+} from './deleteStackServiceVolumeSchema'
 export { deployedStackDtoSchema } from './deployedStackDtoSchema'
 export { deploymentCreatedDetailsDtoSchema } from './deploymentCreatedDetailsDtoSchema'
 export { deploymentLogDtoSchema } from './deploymentLogDtoSchema'
@@ -72,6 +78,11 @@ export { getProvidersQueryParamsSchema, getProviders200Schema, getProvidersQuery
 export { getServerByIdPathParamsSchema, getServerById200Schema, getServerByIdQueryResponseSchema } from './getServerByIdSchema'
 export { getServers200Schema, getServersQueryResponseSchema } from './getServersSchema'
 export { getStackDetailPathParamsSchema, getStackDetail200Schema, getStackDetail404Schema, getStackDetailQueryResponseSchema } from './getStackDetailSchema'
+export {
+  getStackServiceVolumesPathParamsSchema,
+  getStackServiceVolumes200Schema,
+  getStackServiceVolumesQueryResponseSchema,
+} from './getStackServiceVolumesSchema'
 export { getUsers200Schema, getUsersMutationRequestSchema, getUsersMutationResponseSchema } from './getUsersSchema'
 export { gitApplicationSourceDtoSchema } from './gitApplicationSourceDtoSchema'
 export { githubApplicationSourceDtoSchema } from './githubApplicationSourceDtoSchema'
@@ -107,6 +118,12 @@ export {
   postCreateStackFromSourceProviderMutationResponseSchema,
 } from './postCreateStackFromSourceProviderSchema'
 export { postCreateStack200Schema, postCreateStackMutationRequestSchema, postCreateStackMutationResponseSchema } from './postCreateStackSchema'
+export {
+  postCreateStackServiceVolumePathParamsSchema,
+  postCreateStackServiceVolume201Schema,
+  postCreateStackServiceVolumeMutationRequestSchema,
+  postCreateStackServiceVolumeMutationResponseSchema,
+} from './postCreateStackServiceVolumeSchema'
 export { postCreateUser200Schema, postCreateUserMutationRequestSchema, postCreateUserMutationResponseSchema } from './postCreateUserSchema'
 export {
   postDispatchStackDeploymentPathParamsSchema,
@@ -145,6 +162,13 @@ export {
   putUpdateGithubProviderMutationRequestSchema,
   putUpdateGithubProviderMutationResponseSchema,
 } from './putUpdateGithubProviderSchema'
+export {
+  putUpdateStackServiceVolumePathParamsSchema,
+  putUpdateStackServiceVolume200Schema,
+  putUpdateStackServiceVolume400Schema,
+  putUpdateStackServiceVolumeMutationRequestSchema,
+  putUpdateStackServiceVolumeMutationResponseSchema,
+} from './putUpdateStackServiceVolumeSchema'
 export { refreshUserTokenCommandSchema } from './refreshUserTokenCommandSchema'
 export { serverDetailDtoSchema } from './serverDetailDtoSchema'
 export { serverDtoSchema } from './serverDtoSchema'
@@ -161,6 +185,8 @@ export { stackServerDtoSchema } from './stackServerDtoSchema'
 export { stackServiceDtoSchema } from './stackServiceDtoSchema'
 export { stackServiceHealthcheckConfigurationDtoSchema } from './stackServiceHealthcheckConfigurationDtoSchema'
 export { stackServiceHttpConfigurationDtoSchema } from './stackServiceHttpConfigurationDtoSchema'
+export { stackServiceVolumeDtoSchema } from './stackServiceVolumeDtoSchema'
+export { stackServiceVolumeTypeDtoSchema } from './stackServiceVolumeTypeDtoSchema'
 export { stackSourceDtoSchema } from './stackSourceDtoSchema'
 export { stackSourceDtoTypeSchema } from './stackSourceDtoTypeSchema'
 export { test200Schema, testQueryResponseSchema } from './testSchema'
@@ -199,4 +225,5 @@ export {
   updateStackServiceMutationRequestSchema,
   updateStackServiceMutationResponseSchema,
 } from './updateStackServiceSchema'
+export { updateStackServiceVolumeCommandSchema } from './updateStackServiceVolumeCommandSchema'
 export { userDtoSchema } from './userDtoSchema'

@@ -34,6 +34,7 @@ public class SimpleAppDeploymentTest : BaseTestFixture
                 EnvironmentId = EnvironmentId,
                 StackId = StackId,
                 StackServiceId = StackServiceId,
+                DockerNetworkName = "cloudcrafter",
                 StackName = "My Custom Stack 123",
                 StackServiceName = "My Custom Service : 123",
                 SourceProvider = null,

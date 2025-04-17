@@ -53,7 +53,8 @@ public class SimpleAppRecipeGenerator(BaseRecipeGenerator.Args options)
 
     private async Task AddSteps(DockerComposeEditor dockerComposeEditor)
     {
-        AddNetworkExistsStep("cloudcrafter");
+        var network = Options.Stack.Server?.DockerNetwork;
+        AddNetworkExistsStep(network ?? "cloudcrafter");
 
         var isPublicApp = !string.IsNullOrWhiteSpace(Options.Stack.Source?.Git?.Repository);
         var isGithubApp = Options.Stack.Source?.GithubApp != null;

@@ -248,6 +248,43 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
         context.StackEnvironmentVariableGroups.Remove(group);
     }
 
+    public Task<StackServiceVolume?> GetServiceVolume(Guid stackId, Guid serviceId, Guid volumeId)
+    {
+        return context
+            .StackServiceVolumes.Where(v =>
+                v.StackServiceId == serviceId
+                && v.StackService.StackId == stackId
+                && v.Id == volumeId
+            )
+            .FirstOrDefaultAsync();
+    }
+
+    public void AddStackServiceVolume(StackServiceVolume volume)
+    {
+        context.StackServiceVolumes.Add(volume);
+    }
+
+    public Task<bool> StackServiceExists(Guid stackId, Guid stackServiceId)
+    {
+        return context
+            .StackServices.Where(x => x.Id == stackServiceId && x.StackId == stackId)
+            .AnyAsync();
+    }
+
+    public Task<List<StackServiceVolume>> GetServiceVolumes(Guid stackId, Guid stackServiceId)
+    {
+        return context
+            .StackServiceVolumes.Where(x =>
+                x.StackServiceId == stackServiceId && x.StackService.StackId == stackId
+            )
+            .ToListAsync();
+    }
+
+    public void DeleteStackServiceVolume(StackServiceVolume volume)
+    {
+        context.StackServiceVolumes.Remove(volume);
+    }
+
     public Task SaveChangesAsync()
     {
         return context.SaveChangesAsync();
