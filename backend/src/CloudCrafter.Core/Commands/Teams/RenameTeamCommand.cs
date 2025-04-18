@@ -1,11 +1,17 @@
-﻿using CloudCrafter.Core.Common.Security;
+﻿using System.Text.Json.Serialization;
+using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Teams;
 using MediatR;
 
 namespace CloudCrafter.Core.Commands.Teams;
 
 [Authorize]
-public record RenameTeamCommand(Guid Id, string Name) : IRequest;
+public record RenameTeamCommand : IRequest
+{
+    [JsonIgnore]
+    public Guid Id { get; init; }
+    public string Name { get; init; } = string.Empty;
+}
 
 internal class RenameTeamCommandHandler(ITeamsService service) : IRequestHandler<RenameTeamCommand>
 {

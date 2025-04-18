@@ -10,7 +10,11 @@ using static Testing;
 
 public class RenameTeamCommandTest : BaseTeamTest
 {
-    private readonly RenameTeamCommand Command = new(Guid.Empty, "new name");
+    private readonly RenameTeamCommand Command = new RenameTeamCommand()
+    {
+        Id = Guid.NewGuid(),
+        Name = "New name",
+    };
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()

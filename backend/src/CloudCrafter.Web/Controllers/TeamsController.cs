@@ -11,4 +11,14 @@ public class TeamsController : CloudCrafterController
     {
         return sender.Send(request);
     }
+
+    [HttpPut("{teamId:guid}")]
+    public Task RenameTeam(
+        [FromRoute] Guid teamId,
+        [FromBody] RenameTeamCommand request,
+        ISender sender
+    )
+    {
+        return sender.Send(request with { Id = teamId });
+    }
 }
