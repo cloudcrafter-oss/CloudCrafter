@@ -1,9 +1,11 @@
-﻿using CloudCrafter.Core.Interfaces.Domain.Teams;
+﻿using AutoMapper;
+using CloudCrafter.Core.Interfaces.Domain.Teams;
 using CloudCrafter.Core.Interfaces.Repositories;
+using CloudCrafter.Domain.Domain.Teams;
 
 namespace CloudCrafter.Core.Services.Domain.Teams;
 
-public class TeamsService(ITeamsRepository repository) : ITeamsService
+public class TeamsService(ITeamsRepository repository, IMapper mapper) : ITeamsService
 {
     public Task<Guid> CreateTeam(string name, Guid ownerId)
     {
@@ -18,5 +20,12 @@ public class TeamsService(ITeamsRepository repository) : ITeamsService
     public Task UpdateTeamName(Guid teamId, string name)
     {
         return repository.UpdateTeamName(teamId, name);
+    }
+
+    public async Task<List<SimpleTeamDto>> GetTeams(Guid userId)
+    {
+        var teams = await repository.GetTeamsForUser(userId);
+
+        return mapper.Map<List<SimpleTeamDto>>(teams);
     }
 }

@@ -32,6 +32,7 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     }
 
     public DbSet<Contributor> Contributors => Set<Contributor>();
+    public DbSet<TeamUser> TeamUsers => Set<TeamUser>();
     public DbSet<UserRefreshToken> UserRefreshTokens => Set<UserRefreshToken>();
     public DbSet<Server> Servers => Set<Server>();
     public DbSet<Project> Projects => Set<Project>();

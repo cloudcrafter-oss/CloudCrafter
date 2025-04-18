@@ -14,9 +14,6 @@ public class TeamConfiguration : IEntityTypeConfiguration<Team>
             .HasForeignKey(x => x.OwnerId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder
-            .HasMany(x => x.Users)
-            .WithMany(x => x.Teams)
-            .UsingEntity(j => j.ToTable("UserTeams"));
+        builder.HasMany(x => x.TeamUsers).WithOne(x => x.Team).OnDelete(DeleteBehavior.Cascade);
     }
 }

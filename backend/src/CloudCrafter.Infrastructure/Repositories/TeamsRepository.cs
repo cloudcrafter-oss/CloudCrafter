@@ -2,6 +2,7 @@
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.Infrastructure.Repositories;
 
@@ -45,5 +46,14 @@ public class TeamsRepository(IApplicationDbContext context) : ITeamsRepository
 
         team.Name = name;
         await context.SaveChangesAsync();
+    }
+
+    public Task<List<Team>> GetTeamsForUser(Guid userId)
+    {
+        var teams = context
+            .Teams.Where(x => x.TeamUsers.Any(y => y.UserId == userId) || x.OwnerId == userId)
+            .ToListAsync();
+
+        return teams;
     }
 }

@@ -15,9 +15,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder
-            .HasMany(x => x.Teams)
-            .WithMany(x => x.Users)
-            .UsingEntity(j => j.ToTable("UserTeams"));
+        builder.HasMany(x => x.TeamUsers).WithOne(x => x.User).OnDelete(DeleteBehavior.Cascade);
     }
 }

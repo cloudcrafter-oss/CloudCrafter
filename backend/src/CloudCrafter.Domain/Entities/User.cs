@@ -8,9 +8,9 @@ public class User : IdentityUser<Guid>, IAggregateRoot
     public bool IsActive { get; set; } = true;
 
     public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
-    public List<UserRefreshToken> RefreshTokens { get; set; } = new List<UserRefreshToken>();
+    public List<UserRefreshToken> RefreshTokens { get; set; } = new();
 
-    public List<Team> Teams { get; set; } = new List<Team>();
+    public List<TeamUser> TeamUsers { get; set; } = new();
 
     public string FullName { get; set; } = string.Empty;
 }

@@ -239,6 +239,7 @@ public static class FakerInstances
             .RuleFor(x => x.Owner, (User?)null)
             .RuleFor(x => x.OwnerId, f => Guid.Empty)
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.TeamUsers, f => new List<TeamUser>())
             .RuleFor(x => x.CreatedBy, f => null)
             .RuleFor(x => x.LastModifiedBy, f => null)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
