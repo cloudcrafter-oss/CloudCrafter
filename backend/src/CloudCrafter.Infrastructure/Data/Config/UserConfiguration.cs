@@ -14,5 +14,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey("UserId")
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasMany(x => x.Teams)
+            .WithMany(x => x.Users)
+            .UsingEntity(j => j.ToTable("UserTeams"));
     }
 }

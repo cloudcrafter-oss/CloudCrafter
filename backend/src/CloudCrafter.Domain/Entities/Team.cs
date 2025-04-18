@@ -9,4 +9,6 @@ public class Team : BaseAuditableEntity
     public required Guid OwnerId { get; set; }
 
     public virtual User Owner { get; set; } = null!;
+
+    public List<User> Users { get; set; } = new List<User>();
 }
