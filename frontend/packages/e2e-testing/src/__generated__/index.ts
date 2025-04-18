@@ -11,6 +11,8 @@ export type { CreateStackEnvironmentVariableCommand } from './types/CreateStackE
 export type { CreateStackEnvironmentVariableGroupCommand } from './types/CreateStackEnvironmentVariableGroupCommand'
 export type { CreateStackFromSourceProviderCommand } from './types/CreateStackFromSourceProviderCommand'
 export type { CreateStackServiceVolumeCommand } from './types/CreateStackServiceVolumeCommand'
+export type { CreateTeam200, CreateTeamMutationRequest, CreateTeamMutationResponse, CreateTeamMutation } from './types/CreateTeam'
+export type { CreateTeamCommand } from './types/CreateTeamCommand'
 export type { CreateUserCommand } from './types/CreateUserCommand'
 export type {
   DeleteEnvironmentVariablePathParams,
@@ -73,6 +75,7 @@ export type {
 export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilterableFieldsQuery } from './types/GetFilterableFields'
 export type { GetGitBranchesPathParams, GetGitBranches200, GetGitBranchesQueryResponse, GetGitBranchesQuery } from './types/GetGitBranches'
 export type { GetGitRepositoriesPathParams, GetGitRepositories200, GetGitRepositoriesQueryResponse, GetGitRepositoriesQuery } from './types/GetGitRepositories'
+export type { GetMyTeams200, GetMyTeamsQueryResponse, GetMyTeamsQuery } from './types/GetMyTeams'
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from './types/GetProject'
 export type {
   GetProjectEnvironmentEnhancedPathParams,
@@ -205,12 +208,15 @@ export type {
   PutUpdateStackServiceVolumeMutation,
 } from './types/PutUpdateStackServiceVolume'
 export type { RefreshUserTokenCommand } from './types/RefreshUserTokenCommand'
+export type { RenameTeamPathParams, RenameTeam200, RenameTeamMutationRequest, RenameTeamMutationResponse, RenameTeamMutation } from './types/RenameTeam'
+export type { RenameTeamCommand } from './types/RenameTeamCommand'
 export type { ServerDetailDto } from './types/ServerDetailDto'
 export type { ServerDto } from './types/ServerDto'
 export type { ServerPingDto } from './types/ServerPingDto'
 export type { ServerStatusDtoValueEnum, ServerStatusDtoValue } from './types/ServerStatusDtoValue'
 export type { SimpleDeploymentDto } from './types/SimpleDeploymentDto'
 export type { SimpleGithubProviderDto } from './types/SimpleGithubProviderDto'
+export type { SimpleTeamDto } from './types/SimpleTeamDto'
 export type { SourceProviderDto } from './types/SourceProviderDto'
 export type { StackCreatedDto } from './types/StackCreatedDto'
 export type { StackDetailDto } from './types/StackDetailDto'
@@ -268,6 +274,7 @@ export type { UpdateStackServiceVolumeCommand } from './types/UpdateStackService
 export type { UserDto } from './types/UserDto'
 export { getCreateProjectUrl, createProject } from './e2e-backend/createProject'
 export { getCreateServerUrl, createServer } from './e2e-backend/createServer'
+export { getCreateTeamUrl, createTeam } from './e2e-backend/createTeam'
 export { getDeleteEnvironmentVariableUrl, deleteEnvironmentVariable } from './e2e-backend/deleteEnvironmentVariable'
 export { getDeleteEnvironmentVariableGroupUrl, deleteEnvironmentVariableGroup } from './e2e-backend/deleteEnvironmentVariableGroup'
 export { getDeleteProjectUrl, deleteProject } from './e2e-backend/deleteProject'
@@ -282,6 +289,7 @@ export { getGetEnvironmentVariablesUrl, getEnvironmentVariables } from './e2e-ba
 export { getGetFilterableFieldsUrl, getFilterableFields } from './e2e-backend/getFilterableFields'
 export { getGetGitBranchesUrl, getGitBranches } from './e2e-backend/getGitBranches'
 export { getGetGitRepositoriesUrl, getGitRepositories } from './e2e-backend/getGitRepositories'
+export { getGetMyTeamsUrl, getMyTeams } from './e2e-backend/getMyTeams'
 export { getGetProjectUrl, getProject } from './e2e-backend/getProject'
 export { getGetProjectEnvironmentEnhancedUrl, getProjectEnvironmentEnhanced } from './e2e-backend/getProjectEnvironmentEnhanced'
 export { getGetProjectsUrl, getProjects } from './e2e-backend/getProjects'
@@ -308,6 +316,7 @@ export { getPutUpdateEnvironmentVariableUrl, putUpdateEnvironmentVariable } from
 export { getPutUpdateEnvironmentVariableGroupUrl, putUpdateEnvironmentVariableGroup } from './e2e-backend/putUpdateEnvironmentVariableGroup'
 export { getPutUpdateGithubProviderUrl, putUpdateGithubProvider } from './e2e-backend/putUpdateGithubProvider'
 export { getPutUpdateStackServiceVolumeUrl, putUpdateStackServiceVolume } from './e2e-backend/putUpdateStackServiceVolume'
+export { getRenameTeamUrl, renameTeam } from './e2e-backend/renameTeam'
 export { getTestUrl, test } from './e2e-backend/test'
 export { getUpdateProjectUrl, updateProject } from './e2e-backend/updateProject'
 export { getUpdateServerUrl, updateServer } from './e2e-backend/updateServer'
@@ -334,6 +343,8 @@ export { createStackEnvironmentVariableCommandSchema } from './zod/createStackEn
 export { createStackEnvironmentVariableGroupCommandSchema } from './zod/createStackEnvironmentVariableGroupCommandSchema'
 export { createStackFromSourceProviderCommandSchema } from './zod/createStackFromSourceProviderCommandSchema'
 export { createStackServiceVolumeCommandSchema } from './zod/createStackServiceVolumeCommandSchema'
+export { createTeamCommandSchema } from './zod/createTeamCommandSchema'
+export { createTeam200Schema, createTeamMutationRequestSchema, createTeamMutationResponseSchema } from './zod/createTeamSchema'
 export { createUserCommandSchema } from './zod/createUserCommandSchema'
 export {
   deleteEnvironmentVariableGroupPathParamsSchema,
@@ -389,6 +400,7 @@ export {
 export { getFilterableFields200Schema, getFilterableFieldsQueryResponseSchema } from './zod/getFilterableFieldsSchema'
 export { getGitBranchesPathParamsSchema, getGitBranches200Schema, getGitBranchesQueryResponseSchema } from './zod/getGitBranchesSchema'
 export { getGitRepositoriesPathParamsSchema, getGitRepositories200Schema, getGitRepositoriesQueryResponseSchema } from './zod/getGitRepositoriesSchema'
+export { getMyTeams200Schema, getMyTeamsQueryResponseSchema } from './zod/getMyTeamsSchema'
 export {
   getProjectEnvironmentEnhancedPathParamsSchema,
   getProjectEnvironmentEnhanced200Schema,
@@ -497,12 +509,15 @@ export {
   putUpdateStackServiceVolumeMutationResponseSchema,
 } from './zod/putUpdateStackServiceVolumeSchema'
 export { refreshUserTokenCommandSchema } from './zod/refreshUserTokenCommandSchema'
+export { renameTeamCommandSchema } from './zod/renameTeamCommandSchema'
+export { renameTeamPathParamsSchema, renameTeam200Schema, renameTeamMutationRequestSchema, renameTeamMutationResponseSchema } from './zod/renameTeamSchema'
 export { serverDetailDtoSchema } from './zod/serverDetailDtoSchema'
 export { serverDtoSchema } from './zod/serverDtoSchema'
 export { serverPingDtoSchema } from './zod/serverPingDtoSchema'
 export { serverStatusDtoValueSchema } from './zod/serverStatusDtoValueSchema'
 export { simpleDeploymentDtoSchema } from './zod/simpleDeploymentDtoSchema'
 export { simpleGithubProviderDtoSchema } from './zod/simpleGithubProviderDtoSchema'
+export { simpleTeamDtoSchema } from './zod/simpleTeamDtoSchema'
 export { sourceProviderDtoSchema } from './zod/sourceProviderDtoSchema'
 export { stackCreatedDtoSchema } from './zod/stackCreatedDtoSchema'
 export { stackDetailDtoSchema } from './zod/stackDetailDtoSchema'

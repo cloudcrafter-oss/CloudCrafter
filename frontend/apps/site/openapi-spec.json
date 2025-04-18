@@ -1946,6 +1946,134 @@
 					}
 				}
 			}
+		},
+		"/api/Teams": {
+			"get": {
+				"tags": ["Teams"],
+				"operationId": "GetMyTeams",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Teams"],
+				"operationId": "CreateTeam",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTeamCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTeamCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTeamCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "string",
+									"format": "uuid"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "string",
+									"format": "uuid"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "string",
+									"format": "uuid"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Teams/{teamId}": {
+			"put": {
+				"tags": ["Teams"],
+				"operationId": "RenameTeam",
+				"parameters": [
+					{
+						"name": "teamId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RenameTeamCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RenameTeamCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/RenameTeamCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
 		}
 	},
 	"components": {
@@ -2127,6 +2255,15 @@
 					},
 					"target": {
 						"minLength": 1,
+						"type": "string"
+					}
+				}
+			},
+			"CreateTeamCommand": {
+				"required": ["name"],
+				"type": "object",
+				"properties": {
+					"name": {
 						"type": "string"
 					}
 				}
@@ -2527,6 +2664,15 @@
 					}
 				}
 			},
+			"RenameTeamCommand": {
+				"required": ["name"],
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				}
+			},
 			"ServerDetailDto": {
 				"required": ["id", "name", "ipAddress", "dockerNetworkName"],
 				"type": "object",
@@ -2698,6 +2844,19 @@
 					}
 				},
 				"nullable": true
+			},
+			"SimpleTeamDto": {
+				"required": ["id", "name"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					}
+				}
 			},
 			"SourceProviderDto": {
 				"required": ["id", "name", "type"],
@@ -3248,6 +3407,9 @@
 		},
 		{
 			"name": "Stacks"
+		},
+		{
+			"name": "Teams"
 		}
 	]
 }

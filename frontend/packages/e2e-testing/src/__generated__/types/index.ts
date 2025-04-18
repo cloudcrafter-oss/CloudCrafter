@@ -11,6 +11,8 @@ export type { CreateStackEnvironmentVariableCommand } from './CreateStackEnviron
 export type { CreateStackEnvironmentVariableGroupCommand } from './CreateStackEnvironmentVariableGroupCommand'
 export type { CreateStackFromSourceProviderCommand } from './CreateStackFromSourceProviderCommand'
 export type { CreateStackServiceVolumeCommand } from './CreateStackServiceVolumeCommand'
+export type { CreateTeam200, CreateTeamMutationRequest, CreateTeamMutationResponse, CreateTeamMutation } from './CreateTeam'
+export type { CreateTeamCommand } from './CreateTeamCommand'
 export type { CreateUserCommand } from './CreateUserCommand'
 export type {
   DeleteEnvironmentVariablePathParams,
@@ -73,6 +75,7 @@ export type {
 export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilterableFieldsQuery } from './GetFilterableFields'
 export type { GetGitBranchesPathParams, GetGitBranches200, GetGitBranchesQueryResponse, GetGitBranchesQuery } from './GetGitBranches'
 export type { GetGitRepositoriesPathParams, GetGitRepositories200, GetGitRepositoriesQueryResponse, GetGitRepositoriesQuery } from './GetGitRepositories'
+export type { GetMyTeams200, GetMyTeamsQueryResponse, GetMyTeamsQuery } from './GetMyTeams'
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from './GetProject'
 export type {
   GetProjectEnvironmentEnhancedPathParams,
@@ -195,12 +198,15 @@ export type {
   PutUpdateStackServiceVolumeMutation,
 } from './PutUpdateStackServiceVolume'
 export type { RefreshUserTokenCommand } from './RefreshUserTokenCommand'
+export type { RenameTeamPathParams, RenameTeam200, RenameTeamMutationRequest, RenameTeamMutationResponse, RenameTeamMutation } from './RenameTeam'
+export type { RenameTeamCommand } from './RenameTeamCommand'
 export type { ServerDetailDto } from './ServerDetailDto'
 export type { ServerDto } from './ServerDto'
 export type { ServerPingDto } from './ServerPingDto'
 export type { ServerStatusDtoValueEnum, ServerStatusDtoValue } from './ServerStatusDtoValue'
 export type { SimpleDeploymentDto } from './SimpleDeploymentDto'
 export type { SimpleGithubProviderDto } from './SimpleGithubProviderDto'
+export type { SimpleTeamDto } from './SimpleTeamDto'
 export type { SourceProviderDto } from './SourceProviderDto'
 export type { StackCreatedDto } from './StackCreatedDto'
 export type { StackDetailDto } from './StackDetailDto'
