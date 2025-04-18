@@ -40,6 +40,7 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     public DbSet<Deployment> Deployments => Set<Deployment>();
     public DbSet<BackgroundJob> Jobs => Set<BackgroundJob>();
     public DbSet<StackService> StackServices => Set<StackService>();
+    public DbSet<Team> Teams => Set<Team>();
     public DbSet<StackServiceType> StackServiceTypes => Set<StackServiceType>();
     public DbSet<StackServiceVolume> StackServiceVolumes => Set<StackServiceVolume>();
 
