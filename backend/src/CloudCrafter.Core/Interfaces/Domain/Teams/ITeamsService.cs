@@ -2,7 +2,7 @@
 
 public interface ITeamsService
 {
-    Task<Guid> CreateTeam(string name);
+    Task<Guid> CreateTeam(string name, Guid ownerId);
     Task DeleteTeam(Guid teamId);
     Task UpdateTeamName(Guid teamId, string name);
 }

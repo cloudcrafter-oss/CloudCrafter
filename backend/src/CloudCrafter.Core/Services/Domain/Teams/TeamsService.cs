@@ -5,9 +5,9 @@ namespace CloudCrafter.Core.Services.Domain.Teams;
 
 public class TeamsService(ITeamsRepository repository) : ITeamsService
 {
-    public Task<Guid> CreateTeam(string name)
+    public Task<Guid> CreateTeam(string name, Guid ownerId)
     {
-        return repository.CreateTeam(name);
+        return repository.CreateTeam(name, ownerId);
     }
 
     public Task DeleteTeam(Guid teamId)

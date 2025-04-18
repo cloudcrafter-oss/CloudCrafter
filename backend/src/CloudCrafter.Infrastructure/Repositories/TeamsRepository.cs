@@ -6,7 +6,7 @@ namespace CloudCrafter.Infrastructure.Repositories;
 
 public class TeamsRepository(IApplicationDbContext context) : ITeamsRepository
 {
-    public async Task<Guid> CreateTeam(string name)
+    public async Task<Guid> CreateTeam(string name, Guid ownerId)
     {
         var team = new Team
         {
@@ -14,6 +14,7 @@ public class TeamsRepository(IApplicationDbContext context) : ITeamsRepository
             Name = name,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
+            OwnerId = ownerId,
         };
 
         context.Teams.Add(team);
