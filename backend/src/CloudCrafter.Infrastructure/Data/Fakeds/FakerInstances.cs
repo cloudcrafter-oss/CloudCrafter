@@ -229,4 +229,18 @@ public static class FakerInstances
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
     }
+
+    public static Faker<Team> TeamFaker()
+    {
+        return new Faker<Team>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, Guid.NewGuid)
+            .RuleFor(x => x.Name, f => f.Person.FullName)
+            .RuleFor(x => x.Owner, (User?)null)
+            .RuleFor(x => x.OwnerId, f => Guid.Empty)
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.CreatedBy, f => null)
+            .RuleFor(x => x.LastModifiedBy, f => null)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    }
 }

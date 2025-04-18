@@ -1,4 +1,5 @@
-﻿using CloudCrafter.Core.Common.Interfaces;
+﻿using Ardalis.GuardClauses;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Entities;
 
@@ -39,7 +40,7 @@ public class TeamsRepository(IApplicationDbContext context) : ITeamsRepository
         var team = await context.Teams.FindAsync(teamId);
         if (team == null)
         {
-            return;
+            throw new NotFoundException("Team", "Team not found");
         }
 
         team.Name = name;
