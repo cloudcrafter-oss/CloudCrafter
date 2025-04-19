@@ -39,6 +39,8 @@ public static class FakerInstances
             .RuleFor(x => x.Name, f => $"Project {f.Person.FirstName}")
             .RuleFor(x => x.Description, f => f.Lorem.Sentence())
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.TeamId, Guid.Empty)
+            .RuleFor(x => x.Team, (Team?)null)
             .RuleFor(x => x.Environments, new List<Environment>())
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
@@ -240,6 +242,7 @@ public static class FakerInstances
             .RuleFor(x => x.OwnerId, f => Guid.Empty)
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.TeamUsers, f => new List<TeamUser>())
+            .RuleFor(x => x.Projects, f => new List<Project>())
             .RuleFor(x => x.CreatedBy, f => null)
             .RuleFor(x => x.LastModifiedBy, f => null)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);

@@ -1,6 +1,11 @@
 'use client'
 
-import { createTeamCommandSchema, useCreateTeamHook } from '@cloudcrafter/api'
+import {
+	createTeamCommandSchema,
+	useCreateTeamHook,
+	useRenameTeamHook,
+} from '@cloudcrafter/api'
+import type { SimpleTeamDto } from '@cloudcrafter/api'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Form,
@@ -28,10 +33,18 @@ interface AddTeamSheetProps {
 	open: boolean
 	setOpen: (open: boolean) => void
 	onSuccess?: () => void
+	team?: SimpleTeamDto | null
 }
 
-export function AddTeamSheet({ open, setOpen, onSuccess }: AddTeamSheetProps) {
-	const mutation = useCreateTeamHook({
+export function AddTeamSheet({
+	open,
+	setOpen,
+	onSuccess,
+	team,
+}: AddTeamSheetProps) {
+	const isEditing = !!team
+
+	const createMutation = useCreateTeamHook({
 		mutation: {
 			onSuccess: () => {
 				toast.success('Team created successfully')
@@ -41,17 +54,35 @@ export function AddTeamSheet({ open, setOpen, onSuccess }: AddTeamSheetProps) {
 		},
 	})
 
+	const renameMutation = useRenameTeamHook({
+		mutation: {
+			onSuccess: () => {
+				toast.success('Team updated successfully')
+				setOpen(false)
+				onSuccess?.()
+			},
+		},
+	})
+
 	const onSubmit = async (values: z.infer<typeof createTeamCommandSchema>) => {
-		console.log(values)
-		mutation.mutate({
-			data: values,
-		})
+		if (isEditing) {
+			renameMutation.mutate({
+				teamId: team.id,
+				data: {
+					name: values.name,
+				},
+			})
+		} else {
+			createMutation.mutate({
+				data: values,
+			})
+		}
 	}
 
 	const form = useForm<z.infer<typeof createTeamCommandSchema>>({
 		resolver: zodResolver(createTeamCommandSchema),
 		defaultValues: {
-			name: '',
+			name: team?.name ?? '',
 		},
 	})
 
@@ -59,9 +90,11 @@ export function AddTeamSheet({ open, setOpen, onSuccess }: AddTeamSheetProps) {
 		<Sheet open={open} onOpenChange={setOpen}>
 			<SheetContent>
 				<SheetHeader>
-					<SheetTitle>Add New Team</SheetTitle>
+					<SheetTitle>{isEditing ? 'Edit Team' : 'Add New Team'}</SheetTitle>
 					<SheetDescription>
-						Create a new team by providing a name. Click save when you're done.
+						{isEditing
+							? "Update the team name. Click save when you're done."
+							: "Create a new team by providing a name. Click save when you're done."}
 					</SheetDescription>
 				</SheetHeader>
 				<Form {...form}>
@@ -74,12 +107,12 @@ export function AddTeamSheet({ open, setOpen, onSuccess }: AddTeamSheetProps) {
 							name='name'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Service Name</FormLabel>
+									<FormLabel>Team Name</FormLabel>
 									<FormControl>
 										<Input
 											{...field}
 											value={field.value ?? ''}
-											placeholder='Enter service name'
+											placeholder='Enter team name'
 										/>
 									</FormControl>
 									<FormMessage />
@@ -87,7 +120,9 @@ export function AddTeamSheet({ open, setOpen, onSuccess }: AddTeamSheetProps) {
 							)}
 						/>
 						<SheetFooter>
-							<Button type='submit'>Save Team</Button>
+							<Button type='submit'>
+								{isEditing ? 'Update Team' : 'Save Team'}
+							</Button>
 						</SheetFooter>
 					</form>
 				</Form>

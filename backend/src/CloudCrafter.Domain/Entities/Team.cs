@@ -11,4 +11,5 @@ public class Team : BaseAuditableEntity
     public virtual User Owner { get; set; } = null!;
 
     public List<TeamUser> TeamUsers { get; set; } = new();
+    public List<Project> Projects { get; set; } = new();
 }

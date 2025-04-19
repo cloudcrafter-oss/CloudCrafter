@@ -29,7 +29,7 @@ public class TeamsRepository(IApplicationDbContext context) : ITeamsRepository
         var team = await context.Teams.FindAsync(teamId);
         if (team == null)
         {
-            return;
+            throw new NotFoundException("Team", "Team not found");
         }
 
         context.Teams.Remove(team);

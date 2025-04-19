@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Core.Interfaces.Domain.Teams;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Teams;
+using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.Core.Services.Domain.Teams;
 
@@ -12,9 +14,16 @@ public class TeamsService(ITeamsRepository repository, IMapper mapper) : ITeamsS
         return repository.CreateTeam(name, ownerId);
     }
 
-    public Task DeleteTeam(Guid teamId)
+    public async Task DeleteTeam(Guid teamId)
     {
-        return repository.DeleteTeam(teamId);
+        try
+        {
+            await repository.DeleteTeam(teamId);
+        }
+        catch (DbUpdateException)
+        {
+            throw new ValidationException(ValidationExceptionHelper.TeamHasExistingResources());
+        }
     }
 
     public Task UpdateTeamName(Guid teamId, string name)

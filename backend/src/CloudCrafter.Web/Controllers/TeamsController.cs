@@ -34,4 +34,10 @@ public class TeamsController : CloudCrafterController
     {
         return sender.Send(request with { Id = teamId });
     }
+
+    [HttpDelete("{teamId:guid}")]
+    public Task DeleteTeam([FromRoute] Guid teamId, ISender sender)
+    {
+        return sender.Send(new DeleteTeamCommand(teamId));
+    }
 }
