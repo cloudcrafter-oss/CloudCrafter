@@ -1,5 +1,5 @@
 'use client'
-import { useProjects } from '@/src/hooks/useProjects'
+import { useTeams } from '@/src/hooks/useProjects'
 import { useSelectedProjectAndEnvironment } from '@/src/hooks/useSelectedProjectAndEnvironment'
 import {
 	DropdownMenu,
@@ -66,24 +66,9 @@ const ActiveProject = () => {
 export function CloudCrafterProjectSwitcher() {
 	const { isMobile } = useSidebar()
 	const router = useRouter()
-	const { projects } = useProjects()
+	const { teams } = useTeams()
 	const { selectedProjectId, selectedEnvironmentId } =
 		useSelectedProjectAndEnvironment()
-
-	// TODO: Replace with actual teams data from API
-	const teams: Team[] = [
-		{
-			id: '1',
-			name: 'Thijmen',
-			projects: projects.filter((p) => p.name.startsWith('Thijmen')),
-		},
-		{
-			id: '2',
-			name: 'Thijmen blog',
-			projects: projects.filter((p) => p.name.startsWith('Thijmen blog')),
-		},
-		// Add more teams as needed
-	]
 
 	return (
 		<SidebarMenu>
