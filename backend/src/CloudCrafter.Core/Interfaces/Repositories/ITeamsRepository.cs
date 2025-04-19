@@ -9,4 +9,5 @@ public interface ITeamsRepository
     Task UpdateTeamName(Guid teamId, string name);
     Task<List<Team>> GetTeamsForUser(Guid userId);
     Task<List<Team>> GetAllTeams();
+    Task<List<Team>> GetTeamsWithProjectsAndEnvironments(Guid userId);
 }

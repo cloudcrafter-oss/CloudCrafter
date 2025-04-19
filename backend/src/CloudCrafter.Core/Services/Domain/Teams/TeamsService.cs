@@ -44,4 +44,13 @@ public class TeamsService(ITeamsRepository repository, IMapper mapper) : ITeamsS
 
         return mapper.Map<List<SimpleTeamDto>>(teams);
     }
+
+    public async Task<
+        List<SimpleTeamWithProjectsAndEnvironmentsDto>
+    > GetTeamsWithProjectsAndEnvironments(Guid userId)
+    {
+        var teams = await repository.GetTeamsWithProjectsAndEnvironments(userId);
+
+        return mapper.Map<List<SimpleTeamWithProjectsAndEnvironmentsDto>>(teams);
+    }
 }

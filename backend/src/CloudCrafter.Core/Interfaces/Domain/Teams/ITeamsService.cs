@@ -9,4 +9,7 @@ public interface ITeamsService
     Task UpdateTeamName(Guid teamId, string name);
     Task<List<SimpleTeamDto>> GetTeams(Guid userId);
     Task<List<SimpleTeamDto>> GetAllTeams();
+    Task<List<SimpleTeamWithProjectsAndEnvironmentsDto>> GetTeamsWithProjectsAndEnvironments(
+        Guid userId
+    );
 }

@@ -50,9 +50,7 @@ public class TeamsRepository(IApplicationDbContext context) : ITeamsRepository
 
     public Task<List<Team>> GetTeamsForUser(Guid userId)
     {
-        var teams = context
-            .Teams.Where(x => x.TeamUsers.Any(y => y.UserId == userId) || x.OwnerId == userId)
-            .ToListAsync();
+        var teams = UserTeams(userId).ToListAsync();
 
         return teams;
     }
@@ -60,5 +58,21 @@ public class TeamsRepository(IApplicationDbContext context) : ITeamsRepository
     public Task<List<Team>> GetAllTeams()
     {
         return context.Teams.OrderBy(x => x.CreatedAt).ToListAsync();
+    }
+
+    public Task<List<Team>> GetTeamsWithProjectsAndEnvironments(Guid userId)
+    {
+        var teams = UserTeams(userId)
+            .Include(team => team.Projects)
+            .ThenInclude(project => project.Environments);
+
+        return teams.ToListAsync();
+    }
+
+    private IQueryable<Team> UserTeams(Guid userId)
+    {
+        return context.Teams.Where(x =>
+            x.TeamUsers.Any(y => y.UserId == userId) || x.OwnerId == userId
+        );
     }
 }

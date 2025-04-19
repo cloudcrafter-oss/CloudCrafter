@@ -13,6 +13,14 @@ public class TeamsController : CloudCrafterController
         return sender.Send(new GetMyTeamsCommand());
     }
 
+    [HttpGet("projects-and-environments")]
+    public async Task<
+        List<SimpleTeamWithProjectsAndEnvironmentsDto>
+    > GetMyTeamsWithProjectsAndEnvironments(ISender sender)
+    {
+        return await sender.Send(new GetMyTeamsWithProjectsAndEnvironmentsCommand());
+    }
+
     [HttpGet("all")]
     public Task<List<SimpleTeamDto>> GetAllTeams(ISender sender)
     {
