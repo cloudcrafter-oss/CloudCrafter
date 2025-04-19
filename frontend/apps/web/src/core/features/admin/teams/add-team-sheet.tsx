@@ -88,9 +88,11 @@ export function AddTeamSheet({
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
-			<SheetContent>
-				<SheetHeader>
-					<SheetTitle>{isEditing ? 'Edit Team' : 'Add New Team'}</SheetTitle>
+			<SheetContent className='w-[400px] sm:w-[540px]'>
+				<SheetHeader className='space-y-2'>
+					<SheetTitle className='text-xl'>
+						{isEditing ? 'Edit Team' : 'Add New Team'}
+					</SheetTitle>
 					<SheetDescription>
 						{isEditing
 							? "Update the team name. Click save when you're done."
@@ -99,20 +101,23 @@ export function AddTeamSheet({
 				</SheetHeader>
 				<Form {...form}>
 					<form
+						className='flex flex-col gap-4 p-4'
 						onSubmit={form.handleSubmit(onSubmit)}
-						className='space-y-4 py-4'
 					>
 						<FormField
 							control={form.control}
 							name='name'
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Team Name</FormLabel>
+									<FormLabel className='text-sm font-medium'>
+										Team Name
+									</FormLabel>
 									<FormControl>
 										<Input
 											{...field}
 											value={field.value ?? ''}
 											placeholder='Enter team name'
+											className='w-full'
 										/>
 									</FormControl>
 									<FormMessage />
@@ -120,7 +125,7 @@ export function AddTeamSheet({
 							)}
 						/>
 						<SheetFooter>
-							<Button type='submit'>
+							<Button type='submit' className='w-full sm:w-auto'>
 								{isEditing ? 'Update Team' : 'Save Team'}
 							</Button>
 						</SheetFooter>

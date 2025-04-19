@@ -176,3 +176,4 @@ export { updateProjectMutationKey, useUpdateProjectHook } from './useUpdateProje
 export { updateServerMutationKey, useUpdateServerHook } from './useUpdateServerHook'
 export { updateStackMutationKey, useUpdateStackHook } from './useUpdateStackHook'
 export { updateStackServiceMutationKey, useUpdateStackServiceHook } from './useUpdateStackServiceHook'
+export { deleteTeamMutationKey, useDeleteTeamHook } from './useDeleteTeamHook'
