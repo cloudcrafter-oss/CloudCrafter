@@ -3,11 +3,14 @@
 import { SourceSettings } from '@/src/components/stack-detail/source-settings'
 import { useStackHub } from '@/src/hooks/useStackHub'
 import type { StackDetailDto } from '@cloudcrafter/api'
+import { useGetDeploymentsForStackHook } from '@cloudcrafter/api'
+import { Card, CardContent } from '@cloudcrafter/ui/components/card'
 import { cn } from '@cloudcrafter/ui/lib/utils'
 import { ChevronDown, Menu, X } from 'lucide-react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { DummyInfoTab } from '../DummyInfoTab'
+import { DeploymentList } from '../deployments/deployment-list'
 import { DockerStorage } from '../docker-storage/DockerStorage'
 import { EnvironmentVariables } from '../environment-variables/EnvironmentVariables'
 import { VariableHistory } from '../environment-variables/VariableHistory'
@@ -41,6 +44,24 @@ const sections = [
 				id: 'advanced',
 				title: 'Advanced Settings',
 				component: DummyInfoTab as React.ComponentType<BaseComponentProps>,
+			},
+		],
+	},
+	{
+		id: 'deployments',
+		title: 'Deployments',
+		testId: 'subsection-deployments',
+		description: 'View and manage stack deployments',
+		subTabs: [
+			{
+				id: 'list',
+				title: 'Deployment List',
+				component: ({ stackDetails }: BaseComponentProps) => {
+					const { data: deployments = [] } = useGetDeploymentsForStackHook(
+						stackDetails.id,
+					)
+					return <DeploymentList deployments={deployments} />
+				},
 			},
 		],
 	},
@@ -230,9 +251,9 @@ const StackConfigPage: React.FC<{ stackDetails: StackDetailDto }> = ({
 				/>
 
 				{/* Sidebar Content */}
-				<div
+				<Card
 					className={cn(
-						'fixed right-0 h-full w-[min(320px,100vw-4rem)] bg-background border-l md:w-auto md:static md:border-l-0',
+						'fixed right-0 h-full w-[min(320px,100vw-4rem)] md:w-auto md:static',
 						'transition-transform duration-200 ease-in-out',
 						'flex flex-col md:h-full overflow-hidden',
 						isSidebarOpen
@@ -251,7 +272,7 @@ const StackConfigPage: React.FC<{ stackDetails: StackDetailDto }> = ({
 						</button>
 					</div>
 
-					<div className='flex-1 overflow-y-auto overflow-x-hidden p-2 md:p-4 space-y-1'>
+					<CardContent className='flex-1 overflow-y-auto overflow-x-hidden p-2 md:p-6 space-y-2'>
 						{sections.map((section) => (
 							<div key={section.id} className='w-full'>
 								<button
@@ -272,28 +293,28 @@ const StackConfigPage: React.FC<{ stackDetails: StackDetailDto }> = ({
 										}
 									}}
 									className={cn(
-										'w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors text-sm group',
-										'hover:bg-accent/50',
+										'w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 text-sm group',
+										'hover:bg-accent/50 hover:shadow-sm',
 										activeSection === section.id
-											? 'bg-accent/50 text-foreground font-medium'
+											? 'bg-gradient-to-r from-primary/10 to-accent/20 text-foreground font-medium shadow-sm'
 											: 'text-muted-foreground hover:text-foreground',
 									)}
 								>
-									<span className='truncate'>{section.title}</span>
+									<span className='truncate font-medium'>{section.title}</span>
 									<ChevronDown
 										className={cn(
-											'h-4 w-4 text-muted-foreground/50 transition-transform',
+											'h-4 w-4 text-muted-foreground/70 transition-transform duration-300',
 											expandedSections.includes(section.id) && 'rotate-180',
-											'group-hover:text-foreground/50',
+											'group-hover:text-foreground',
 										)}
 									/>
 								</button>
 								<div
 									className={cn(
-										'overflow-hidden transition-all duration-200 space-y-1 mt-1',
+										'overflow-hidden transition-all duration-300 space-y-0.5 pl-2',
 										expandedSections.includes(section.id)
-											? 'max-h-40'
-											: 'max-h-0',
+											? 'max-h-48 opacity-100 mt-1'
+											: 'max-h-0 opacity-0',
 									)}
 								>
 									{section.subTabs.map((subTab) => (
@@ -306,27 +327,31 @@ const StackConfigPage: React.FC<{ stackDetails: StackDetailDto }> = ({
 												setIsSidebarOpen(false)
 											}}
 											className={cn(
-												'w-full flex items-center px-6 py-1.5 rounded-lg transition-colors text-sm',
-												'hover:bg-accent/50',
+												'w-full flex items-center px-4 py-2 rounded-lg transition-all duration-200 text-sm',
+												'hover:bg-accent/40',
 												activeSection === section.id &&
 													activeSubTab === subTab.id
-													? 'bg-accent text-accent-foreground font-medium'
+													? 'bg-accent/30 text-foreground font-medium shadow-sm'
 													: 'text-muted-foreground hover:text-foreground',
+												'relative overflow-hidden',
+												activeSection === section.id &&
+													activeSubTab === subTab.id &&
+													'after:absolute after:left-0 after:top-1/2 after:-translate-y-1/2 after:w-1 after:h-6 after:bg-primary after:rounded-r-full',
 											)}
 										>
-											<span className='truncate'>{subTab.title}</span>
+											<span className='truncate ml-1'>{subTab.title}</span>
 										</button>
 									))}
 								</div>
 							</div>
 						))}
-					</div>
-				</div>
+					</CardContent>
+				</Card>
 			</div>
 
 			{/* Content Area */}
 			<div className='flex-1 min-w-0 overflow-y-auto overflow-x-hidden'>
-				<div className='w-full max-w-full p-4 md:p-6 md:border-l'>
+				<div className='w-full max-w-full pt-0 md:pt-0 p-4 md:p-6 md:border-l'>
 					{sections.map((section) =>
 						section.subTabs.map(
 							(subTab) =>
