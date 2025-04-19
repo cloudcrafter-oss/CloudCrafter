@@ -1,5 +1,5 @@
 'use client'
-import { fetchProjectsWithEnvironments } from '@/src/app/_actions/project'
+import { fetchTeamsWithProjectsAndEnvironments } from '@/src/app/_actions/project'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Command,
@@ -28,15 +28,17 @@ export const LayoutSidebarProjectSelector = () => {
 	const { 'project-uuid': projectUuid, 'environment-uuid': environmentUuid } =
 		params
 
-	const { data: projects, isLoading } = useSWR(
+	const { data: teams, isLoading } = useSWR(
 		'userProjects',
-		fetchProjectsWithEnvironments,
+		fetchTeamsWithProjectsAndEnvironments,
 	)
 
-	const selectedProject = projects?.find(
-		(project) => project.id === projectUuid,
-	)?.name
-	const selectedEnvironment = projects
+	const selectedProject = teams
+		?.flatMap((team) => team.projects)
+		.find((project) => project.id === projectUuid)?.name
+
+	const selectedEnvironment = teams
+		?.flatMap((team) => team.projects)
 		?.find((project) => project.id === projectUuid)
 		?.environments.find((env) => env.id === environmentUuid)?.name
 
