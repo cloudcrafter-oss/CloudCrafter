@@ -2305,6 +2305,7 @@
 				"type": "object",
 				"properties": {
 					"name": {
+						"minLength": 1,
 						"type": "string"
 					}
 				}

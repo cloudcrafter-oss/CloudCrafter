@@ -38,6 +38,10 @@ interface DataTableProps<TData> {
 	searchPlaceholder?: string
 	showColumnVisibility?: boolean
 	showRowSelection?: boolean
+	addButton?: {
+		label?: string
+		onClick: () => void
+	}
 }
 
 export function CloudCrafterTable<TData>({
@@ -47,6 +51,7 @@ export function CloudCrafterTable<TData>({
 	searchPlaceholder = 'Filter...',
 	showColumnVisibility = true,
 	showRowSelection = true,
+	addButton,
 }: DataTableProps<TData>) {
 	const [sorting, setSorting] = React.useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -90,34 +95,41 @@ export function CloudCrafterTable<TData>({
 						className='max-w-sm'
 					/>
 				)}
-				{showColumnVisibility && (
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant='outline' className='ml-auto'>
-								Columns <ChevronDown />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align='end'>
-							{table
-								.getAllColumns()
-								.filter((column) => column.getCanHide())
-								.map((column) => {
-									return (
-										<DropdownMenuCheckboxItem
-											key={column.id}
-											className='capitalize'
-											checked={column.getIsVisible()}
-											onCheckedChange={(value) =>
-												column.toggleVisibility(!!value)
-											}
-										>
-											{column.id}
-										</DropdownMenuCheckboxItem>
-									)
-								})}
-						</DropdownMenuContent>
-					</DropdownMenu>
-				)}
+				<div className='ml-auto flex items-center gap-2'>
+					{addButton && (
+						<Button onClick={addButton.onClick}>
+							{addButton.label ?? 'Add'}
+						</Button>
+					)}
+					{showColumnVisibility && (
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button variant='outline'>
+									Columns <ChevronDown />
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent align='end'>
+								{table
+									.getAllColumns()
+									.filter((column) => column.getCanHide())
+									.map((column) => {
+										return (
+											<DropdownMenuCheckboxItem
+												key={column.id}
+												className='capitalize'
+												checked={column.getIsVisible()}
+												onCheckedChange={(value) =>
+													column.toggleVisibility(!!value)
+												}
+											>
+												{column.id}
+											</DropdownMenuCheckboxItem>
+										)
+									})}
+							</DropdownMenuContent>
+						</DropdownMenu>
+					)}
+				</div>
 			</div>
 			<div className='rounded-md border'>
 				<Table>
