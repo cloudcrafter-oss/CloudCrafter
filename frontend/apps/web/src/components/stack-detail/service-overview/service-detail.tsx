@@ -13,7 +13,6 @@ import {
 	FormMessage,
 } from '@cloudcrafter/ui/components/form'
 import { Input } from '@cloudcrafter/ui/components/input'
-import { Label } from '@cloudcrafter/ui/components/label'
 import {
 	Tabs,
 	TabsContent,
@@ -26,7 +25,6 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
-import { Debug } from '../../debug/debug'
 import { VolumeList } from './volume-list'
 
 export const ServiceDetail = ({
@@ -292,19 +290,6 @@ export const ServiceDetail = ({
 							</TabsContent>
 						</div>
 					</Tabs>
-
-					<Debug>
-						<div className='px-3 sm:px-6 pb-3 sm:pb-6 space-y-2 border-t'>
-							<Label>Debug Information</Label>
-							<pre className='p-3 sm:p-4 bg-muted rounded-md overflow-auto text-xs'>
-								{JSON.stringify(
-									{ values: formValues, errors: formErrors },
-									null,
-									2,
-								)}
-							</pre>
-						</div>
-					</Debug>
 				</div>
 			)}
 		</div>
