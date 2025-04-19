@@ -7,6 +7,7 @@ export type { DeleteProjectMutationKey } from './hooks/useDeleteProjectHook'
 export type { DeleteProviderMutationKey } from './hooks/useDeleteProviderHook'
 export type { DeleteServerByIdMutationKey } from './hooks/useDeleteServerByIdHook'
 export type { DeleteStackServiceVolumeMutationKey } from './hooks/useDeleteStackServiceVolumeHook'
+export type { DeleteTeamMutationKey } from './hooks/useDeleteTeamHook'
 export type { GetAllTeamsQueryKey } from './hooks/useGetAllTeamsHook'
 export type { GetAllTeamsSuspenseQueryKey } from './hooks/useGetAllTeamsSuspenseHook'
 export type { GetDeploymentLogsQueryKey } from './hooks/useGetDeploymentLogsHook'
@@ -27,6 +28,8 @@ export type { GetGitRepositoriesQueryKey } from './hooks/useGetGitRepositoriesHo
 export type { GetGitRepositoriesSuspenseQueryKey } from './hooks/useGetGitRepositoriesSuspenseHook'
 export type { GetMyTeamsQueryKey } from './hooks/useGetMyTeamsHook'
 export type { GetMyTeamsSuspenseQueryKey } from './hooks/useGetMyTeamsSuspenseHook'
+export type { GetMyTeamsWithProjectsAndEnvironmentsQueryKey } from './hooks/useGetMyTeamsWithProjectsAndEnvironmentsHook'
+export type { GetMyTeamsWithProjectsAndEnvironmentsSuspenseQueryKey } from './hooks/useGetMyTeamsWithProjectsAndEnvironmentsSuspenseHook'
 export type { GetProjectEnvironmentEnhancedQueryKey } from './hooks/useGetProjectEnvironmentEnhancedHook'
 export type { GetProjectEnvironmentEnhancedSuspenseQueryKey } from './hooks/useGetProjectEnvironmentEnhancedSuspenseHook'
 export type { GetProjectQueryKey } from './hooks/useGetProjectHook'
@@ -102,6 +105,7 @@ export type {
   DeleteStackServiceVolumeMutationResponse,
   DeleteStackServiceVolumeMutation,
 } from './types/DeleteStackServiceVolume'
+export type { DeleteTeamPathParams, DeleteTeam200, DeleteTeamMutationResponse, DeleteTeamMutation } from './types/DeleteTeam'
 export type { DeployedStackDto } from './types/DeployedStackDto'
 export type { DeploymentCreatedDetailsDto } from './types/DeploymentCreatedDetailsDto'
 export type { DeploymentLogDto } from './types/DeploymentLogDto'
@@ -144,6 +148,11 @@ export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilte
 export type { GetGitBranchesPathParams, GetGitBranches200, GetGitBranchesQueryResponse, GetGitBranchesQuery } from './types/GetGitBranches'
 export type { GetGitRepositoriesPathParams, GetGitRepositories200, GetGitRepositoriesQueryResponse, GetGitRepositoriesQuery } from './types/GetGitRepositories'
 export type { GetMyTeams200, GetMyTeamsQueryResponse, GetMyTeamsQuery } from './types/GetMyTeams'
+export type {
+  GetMyTeamsWithProjectsAndEnvironments200,
+  GetMyTeamsWithProjectsAndEnvironmentsQueryResponse,
+  GetMyTeamsWithProjectsAndEnvironmentsQuery,
+} from './types/GetMyTeamsWithProjectsAndEnvironments'
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from './types/GetProject'
 export type {
   GetProjectEnvironmentEnhancedPathParams,
@@ -285,6 +294,7 @@ export type { ServerStatusDtoValueEnum, ServerStatusDtoValue } from './types/Ser
 export type { SimpleDeploymentDto } from './types/SimpleDeploymentDto'
 export type { SimpleGithubProviderDto } from './types/SimpleGithubProviderDto'
 export type { SimpleTeamDto } from './types/SimpleTeamDto'
+export type { SimpleTeamWithProjectsAndEnvironmentsDto } from './types/SimpleTeamWithProjectsAndEnvironmentsDto'
 export type { SourceProviderDto } from './types/SourceProviderDto'
 export type { StackCreatedDto } from './types/StackCreatedDto'
 export type { StackDetailDto } from './types/StackDetailDto'
@@ -349,6 +359,7 @@ export { getDeleteProjectUrl, deleteProject } from './axios-backend/deleteProjec
 export { getDeleteProviderUrl, deleteProvider } from './axios-backend/deleteProvider'
 export { getDeleteServerByIdUrl, deleteServerById } from './axios-backend/deleteServerById'
 export { getDeleteStackServiceVolumeUrl, deleteStackServiceVolume } from './axios-backend/deleteStackServiceVolume'
+export { getDeleteTeamUrl, deleteTeam } from './axios-backend/deleteTeam'
 export { getGetAllTeamsUrl, getAllTeams } from './axios-backend/getAllTeams'
 export { getGetDeploymentLogsUrl, getDeploymentLogs } from './axios-backend/getDeploymentLogs'
 export { getGetDeploymentsForServerUrl, getDeploymentsForServer } from './axios-backend/getDeploymentsForServer'
@@ -359,6 +370,7 @@ export { getGetFilterableFieldsUrl, getFilterableFields } from './axios-backend/
 export { getGetGitBranchesUrl, getGitBranches } from './axios-backend/getGitBranches'
 export { getGetGitRepositoriesUrl, getGitRepositories } from './axios-backend/getGitRepositories'
 export { getGetMyTeamsUrl, getMyTeams } from './axios-backend/getMyTeams'
+export { getGetMyTeamsWithProjectsAndEnvironmentsUrl, getMyTeamsWithProjectsAndEnvironments } from './axios-backend/getMyTeamsWithProjectsAndEnvironments'
 export { getGetProjectUrl, getProject } from './axios-backend/getProject'
 export { getGetProjectEnvironmentEnhancedUrl, getProjectEnvironmentEnhanced } from './axios-backend/getProjectEnvironmentEnhanced'
 export { getGetProjectsUrl, getProjects } from './axios-backend/getProjects'
@@ -397,6 +409,7 @@ export { deleteProjectMutationKey, useDeleteProjectHook } from './hooks/useDelet
 export { deleteProviderMutationKey, useDeleteProviderHook } from './hooks/useDeleteProviderHook'
 export { deleteServerByIdMutationKey, useDeleteServerByIdHook } from './hooks/useDeleteServerByIdHook'
 export { deleteStackServiceVolumeMutationKey, useDeleteStackServiceVolumeHook } from './hooks/useDeleteStackServiceVolumeHook'
+export { deleteTeamMutationKey, useDeleteTeamHook } from './hooks/useDeleteTeamHook'
 export { getAllTeamsQueryKey, getAllTeamsQueryOptionsHook, useGetAllTeamsHook } from './hooks/useGetAllTeamsHook'
 export { getAllTeamsSuspenseQueryKey, getAllTeamsSuspenseQueryOptionsHook, useGetAllTeamsSuspenseHook } from './hooks/useGetAllTeamsSuspenseHook'
 export { getDeploymentLogsQueryKey, getDeploymentLogsQueryOptionsHook, useGetDeploymentLogsHook } from './hooks/useGetDeploymentLogsHook'
@@ -457,6 +470,16 @@ export {
 } from './hooks/useGetGitRepositoriesSuspenseHook'
 export { getMyTeamsQueryKey, getMyTeamsQueryOptionsHook, useGetMyTeamsHook } from './hooks/useGetMyTeamsHook'
 export { getMyTeamsSuspenseQueryKey, getMyTeamsSuspenseQueryOptionsHook, useGetMyTeamsSuspenseHook } from './hooks/useGetMyTeamsSuspenseHook'
+export {
+  getMyTeamsWithProjectsAndEnvironmentsQueryKey,
+  getMyTeamsWithProjectsAndEnvironmentsQueryOptionsHook,
+  useGetMyTeamsWithProjectsAndEnvironmentsHook,
+} from './hooks/useGetMyTeamsWithProjectsAndEnvironmentsHook'
+export {
+  getMyTeamsWithProjectsAndEnvironmentsSuspenseQueryKey,
+  getMyTeamsWithProjectsAndEnvironmentsSuspenseQueryOptionsHook,
+  useGetMyTeamsWithProjectsAndEnvironmentsSuspenseHook,
+} from './hooks/useGetMyTeamsWithProjectsAndEnvironmentsSuspenseHook'
 export {
   getProjectEnvironmentEnhancedQueryKey,
   getProjectEnvironmentEnhancedQueryOptionsHook,
@@ -552,6 +575,7 @@ export {
   deleteStackServiceVolume200Schema,
   deleteStackServiceVolumeMutationResponseSchema,
 } from './zod/deleteStackServiceVolumeSchema'
+export { deleteTeamPathParamsSchema, deleteTeam200Schema, deleteTeamMutationResponseSchema } from './zod/deleteTeamSchema'
 export { deployedStackDtoSchema } from './zod/deployedStackDtoSchema'
 export { deploymentCreatedDetailsDtoSchema } from './zod/deploymentCreatedDetailsDtoSchema'
 export { deploymentLogDtoSchema } from './zod/deploymentLogDtoSchema'
@@ -590,6 +614,10 @@ export { getFilterableFields200Schema, getFilterableFieldsQueryResponseSchema } 
 export { getGitBranchesPathParamsSchema, getGitBranches200Schema, getGitBranchesQueryResponseSchema } from './zod/getGitBranchesSchema'
 export { getGitRepositoriesPathParamsSchema, getGitRepositories200Schema, getGitRepositoriesQueryResponseSchema } from './zod/getGitRepositoriesSchema'
 export { getMyTeams200Schema, getMyTeamsQueryResponseSchema } from './zod/getMyTeamsSchema'
+export {
+  getMyTeamsWithProjectsAndEnvironments200Schema,
+  getMyTeamsWithProjectsAndEnvironmentsQueryResponseSchema,
+} from './zod/getMyTeamsWithProjectsAndEnvironmentsSchema'
 export {
   getProjectEnvironmentEnhancedPathParamsSchema,
   getProjectEnvironmentEnhanced200Schema,
@@ -707,6 +735,7 @@ export { serverStatusDtoValueSchema } from './zod/serverStatusDtoValueSchema'
 export { simpleDeploymentDtoSchema } from './zod/simpleDeploymentDtoSchema'
 export { simpleGithubProviderDtoSchema } from './zod/simpleGithubProviderDtoSchema'
 export { simpleTeamDtoSchema } from './zod/simpleTeamDtoSchema'
+export { simpleTeamWithProjectsAndEnvironmentsDtoSchema } from './zod/simpleTeamWithProjectsAndEnvironmentsDtoSchema'
 export { sourceProviderDtoSchema } from './zod/sourceProviderDtoSchema'
 export { stackCreatedDtoSchema } from './zod/stackCreatedDtoSchema'
 export { stackDetailDtoSchema } from './zod/stackDetailDtoSchema'

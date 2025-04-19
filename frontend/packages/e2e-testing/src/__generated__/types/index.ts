@@ -35,6 +35,7 @@ export type {
   DeleteStackServiceVolumeMutationResponse,
   DeleteStackServiceVolumeMutation,
 } from './DeleteStackServiceVolume'
+export type { DeleteTeamPathParams, DeleteTeam200, DeleteTeamMutationResponse, DeleteTeamMutation } from './DeleteTeam'
 export type { DeployedStackDto } from './DeployedStackDto'
 export type { DeploymentCreatedDetailsDto } from './DeploymentCreatedDetailsDto'
 export type { DeploymentLogDto } from './DeploymentLogDto'
@@ -77,6 +78,11 @@ export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilte
 export type { GetGitBranchesPathParams, GetGitBranches200, GetGitBranchesQueryResponse, GetGitBranchesQuery } from './GetGitBranches'
 export type { GetGitRepositoriesPathParams, GetGitRepositories200, GetGitRepositoriesQueryResponse, GetGitRepositoriesQuery } from './GetGitRepositories'
 export type { GetMyTeams200, GetMyTeamsQueryResponse, GetMyTeamsQuery } from './GetMyTeams'
+export type {
+  GetMyTeamsWithProjectsAndEnvironments200,
+  GetMyTeamsWithProjectsAndEnvironmentsQueryResponse,
+  GetMyTeamsWithProjectsAndEnvironmentsQuery,
+} from './GetMyTeamsWithProjectsAndEnvironments'
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from './GetProject'
 export type {
   GetProjectEnvironmentEnhancedPathParams,
@@ -208,6 +214,7 @@ export type { ServerStatusDtoValueEnum, ServerStatusDtoValue } from './ServerSta
 export type { SimpleDeploymentDto } from './SimpleDeploymentDto'
 export type { SimpleGithubProviderDto } from './SimpleGithubProviderDto'
 export type { SimpleTeamDto } from './SimpleTeamDto'
+export type { SimpleTeamWithProjectsAndEnvironmentsDto } from './SimpleTeamWithProjectsAndEnvironmentsDto'
 export type { SourceProviderDto } from './SourceProviderDto'
 export type { StackCreatedDto } from './StackCreatedDto'
 export type { StackDetailDto } from './StackDetailDto'

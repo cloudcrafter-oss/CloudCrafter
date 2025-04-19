@@ -2033,6 +2033,43 @@
 				}
 			}
 		},
+		"/api/Teams/projects-and-environments": {
+			"get": {
+				"tags": ["Teams"],
+				"operationId": "GetMyTeamsWithProjectsAndEnvironments",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamWithProjectsAndEnvironmentsDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamWithProjectsAndEnvironmentsDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamWithProjectsAndEnvironmentsDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/Teams/all": {
 			"get": {
 				"tags": ["Teams"],
@@ -2105,6 +2142,26 @@
 					},
 					"required": true
 				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Teams"],
+				"operationId": "DeleteTeam",
+				"parameters": [
+					{
+						"name": "teamId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "OK"
@@ -2897,6 +2954,25 @@
 					},
 					"name": {
 						"type": "string"
+					}
+				}
+			},
+			"SimpleTeamWithProjectsAndEnvironmentsDto": {
+				"required": ["id", "name", "projects"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					},
+					"projects": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/ProjectDto"
+						}
 					}
 				}
 			},

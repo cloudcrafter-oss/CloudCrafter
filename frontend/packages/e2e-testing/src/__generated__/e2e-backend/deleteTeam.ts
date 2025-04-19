@@ -1,6 +1,6 @@
-import client from '@cloudcrafter/api/client'
+import client from '@kubb/plugin-client/clients/axios'
 import type { DeleteTeamMutationResponse, DeleteTeamPathParams } from '../types/DeleteTeam'
-import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
+import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
 
 export function getDeleteTeamUrl(teamId: DeleteTeamPathParams['teamId']) {
   return `/api/Teams/${teamId}` as const

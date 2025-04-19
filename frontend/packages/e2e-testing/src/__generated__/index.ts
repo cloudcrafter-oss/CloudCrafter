@@ -35,6 +35,7 @@ export type {
   DeleteStackServiceVolumeMutationResponse,
   DeleteStackServiceVolumeMutation,
 } from './types/DeleteStackServiceVolume'
+export type { DeleteTeamPathParams, DeleteTeam200, DeleteTeamMutationResponse, DeleteTeamMutation } from './types/DeleteTeam'
 export type { DeployedStackDto } from './types/DeployedStackDto'
 export type { DeploymentCreatedDetailsDto } from './types/DeploymentCreatedDetailsDto'
 export type { DeploymentLogDto } from './types/DeploymentLogDto'
@@ -77,6 +78,11 @@ export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilte
 export type { GetGitBranchesPathParams, GetGitBranches200, GetGitBranchesQueryResponse, GetGitBranchesQuery } from './types/GetGitBranches'
 export type { GetGitRepositoriesPathParams, GetGitRepositories200, GetGitRepositoriesQueryResponse, GetGitRepositoriesQuery } from './types/GetGitRepositories'
 export type { GetMyTeams200, GetMyTeamsQueryResponse, GetMyTeamsQuery } from './types/GetMyTeams'
+export type {
+  GetMyTeamsWithProjectsAndEnvironments200,
+  GetMyTeamsWithProjectsAndEnvironmentsQueryResponse,
+  GetMyTeamsWithProjectsAndEnvironmentsQuery,
+} from './types/GetMyTeamsWithProjectsAndEnvironments'
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from './types/GetProject'
 export type {
   GetProjectEnvironmentEnhancedPathParams,
@@ -218,6 +224,7 @@ export type { ServerStatusDtoValueEnum, ServerStatusDtoValue } from './types/Ser
 export type { SimpleDeploymentDto } from './types/SimpleDeploymentDto'
 export type { SimpleGithubProviderDto } from './types/SimpleGithubProviderDto'
 export type { SimpleTeamDto } from './types/SimpleTeamDto'
+export type { SimpleTeamWithProjectsAndEnvironmentsDto } from './types/SimpleTeamWithProjectsAndEnvironmentsDto'
 export type { SourceProviderDto } from './types/SourceProviderDto'
 export type { StackCreatedDto } from './types/StackCreatedDto'
 export type { StackDetailDto } from './types/StackDetailDto'
@@ -282,6 +289,7 @@ export { getDeleteProjectUrl, deleteProject } from './e2e-backend/deleteProject'
 export { getDeleteProviderUrl, deleteProvider } from './e2e-backend/deleteProvider'
 export { getDeleteServerByIdUrl, deleteServerById } from './e2e-backend/deleteServerById'
 export { getDeleteStackServiceVolumeUrl, deleteStackServiceVolume } from './e2e-backend/deleteStackServiceVolume'
+export { getDeleteTeamUrl, deleteTeam } from './e2e-backend/deleteTeam'
 export { getGetAllTeamsUrl, getAllTeams } from './e2e-backend/getAllTeams'
 export { getGetDeploymentLogsUrl, getDeploymentLogs } from './e2e-backend/getDeploymentLogs'
 export { getGetDeploymentsForServerUrl, getDeploymentsForServer } from './e2e-backend/getDeploymentsForServer'
@@ -292,6 +300,7 @@ export { getGetFilterableFieldsUrl, getFilterableFields } from './e2e-backend/ge
 export { getGetGitBranchesUrl, getGitBranches } from './e2e-backend/getGitBranches'
 export { getGetGitRepositoriesUrl, getGitRepositories } from './e2e-backend/getGitRepositories'
 export { getGetMyTeamsUrl, getMyTeams } from './e2e-backend/getMyTeams'
+export { getGetMyTeamsWithProjectsAndEnvironmentsUrl, getMyTeamsWithProjectsAndEnvironments } from './e2e-backend/getMyTeamsWithProjectsAndEnvironments'
 export { getGetProjectUrl, getProject } from './e2e-backend/getProject'
 export { getGetProjectEnvironmentEnhancedUrl, getProjectEnvironmentEnhanced } from './e2e-backend/getProjectEnvironmentEnhanced'
 export { getGetProjectsUrl, getProjects } from './e2e-backend/getProjects'
@@ -366,6 +375,7 @@ export {
   deleteStackServiceVolume200Schema,
   deleteStackServiceVolumeMutationResponseSchema,
 } from './zod/deleteStackServiceVolumeSchema'
+export { deleteTeamPathParamsSchema, deleteTeam200Schema, deleteTeamMutationResponseSchema } from './zod/deleteTeamSchema'
 export { deployedStackDtoSchema } from './zod/deployedStackDtoSchema'
 export { deploymentCreatedDetailsDtoSchema } from './zod/deploymentCreatedDetailsDtoSchema'
 export { deploymentLogDtoSchema } from './zod/deploymentLogDtoSchema'
@@ -404,6 +414,10 @@ export { getFilterableFields200Schema, getFilterableFieldsQueryResponseSchema } 
 export { getGitBranchesPathParamsSchema, getGitBranches200Schema, getGitBranchesQueryResponseSchema } from './zod/getGitBranchesSchema'
 export { getGitRepositoriesPathParamsSchema, getGitRepositories200Schema, getGitRepositoriesQueryResponseSchema } from './zod/getGitRepositoriesSchema'
 export { getMyTeams200Schema, getMyTeamsQueryResponseSchema } from './zod/getMyTeamsSchema'
+export {
+  getMyTeamsWithProjectsAndEnvironments200Schema,
+  getMyTeamsWithProjectsAndEnvironmentsQueryResponseSchema,
+} from './zod/getMyTeamsWithProjectsAndEnvironmentsSchema'
 export {
   getProjectEnvironmentEnhancedPathParamsSchema,
   getProjectEnvironmentEnhanced200Schema,
@@ -521,6 +535,7 @@ export { serverStatusDtoValueSchema } from './zod/serverStatusDtoValueSchema'
 export { simpleDeploymentDtoSchema } from './zod/simpleDeploymentDtoSchema'
 export { simpleGithubProviderDtoSchema } from './zod/simpleGithubProviderDtoSchema'
 export { simpleTeamDtoSchema } from './zod/simpleTeamDtoSchema'
+export { simpleTeamWithProjectsAndEnvironmentsDtoSchema } from './zod/simpleTeamWithProjectsAndEnvironmentsDtoSchema'
 export { sourceProviderDtoSchema } from './zod/sourceProviderDtoSchema'
 export { stackCreatedDtoSchema } from './zod/stackCreatedDtoSchema'
 export { stackDetailDtoSchema } from './zod/stackDetailDtoSchema'
