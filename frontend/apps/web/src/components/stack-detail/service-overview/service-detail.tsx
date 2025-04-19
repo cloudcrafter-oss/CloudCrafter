@@ -26,6 +26,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
+import { Debug } from '../../debug/debug'
 import { VolumeList } from './volume-list'
 
 export const ServiceDetail = ({
@@ -292,7 +293,7 @@ export const ServiceDetail = ({
 						</div>
 					</Tabs>
 
-					{process.env.NODE_ENV === 'development' && (
+					<Debug>
 						<div className='px-3 sm:px-6 pb-3 sm:pb-6 space-y-2 border-t'>
 							<Label>Debug Information</Label>
 							<pre className='p-3 sm:p-4 bg-muted rounded-md overflow-auto text-xs'>
@@ -303,7 +304,7 @@ export const ServiceDetail = ({
 								)}
 							</pre>
 						</div>
-					)}
+					</Debug>
 				</div>
 			)}
 		</div>
