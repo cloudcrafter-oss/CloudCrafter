@@ -81,8 +81,6 @@ public class DeployStackBackgroundJobTests : BaseTestFixture
     [Test]
     public async Task ShouldSendProperRecipeToAgent()
     {
-        // Arrange
-        await RunAsDefaultUserAsync();
         var deploymentId = Guid.Parse("fde85aa6-8dd6-48c9-8c4b-8172a2f15f28");
 
         var deploymentEntity = FakerInstances
