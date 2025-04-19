@@ -1,6 +1,9 @@
 'use client'
 import type { DeploymentStatusDto } from '@cloudcrafter/api'
 import type { SimpleDeploymentDto } from '@cloudcrafter/api'
+import { Card, CardContent } from '@cloudcrafter/ui/components/card'
+import { formatDistanceToNow } from 'date-fns'
+import { RocketIcon } from 'lucide-react'
 import { useState } from 'react'
 import { ChannelLogViewerEnhanced } from '../../logviewer/ChannelLogViewer'
 
@@ -18,34 +21,41 @@ export const DeploymentList = ({
 				show={showDeploymentLogsId != null}
 				onHide={() => setShowDeploymentLogsId(null)}
 			/>
-			{deployments.map((deployment) => (
-				<li key={deployment.id} className='py-4'>
-					<div className='flex items-center justify-between'>
-						<div>
-							<p
-								onClick={() => setShowDeploymentLogsId(deployment.id)}
-								className='text-lg text-blue-600 hover:underline font-semibold'
+			<Card className='overflow-hidden'>
+				<CardContent className='p-0'>
+					<div className='divide-y divide-border'>
+						{deployments.map((deployment) => (
+							<div
+								key={deployment.id}
+								className='flex items-center justify-between p-3 hover:bg-muted/50 transition-colors'
 							>
-								Manual Deployment
-							</p>
-							<p className='text-sm text-gray-500'>
-								{new Date(deployment.createdAt)
-									.toLocaleString('en-GB', {
-										day: 'numeric',
-										month: 'numeric',
-										year: 'numeric',
-										hour: '2-digit',
-										minute: '2-digit',
-										second: '2-digit',
-										hour12: false,
-									})
-									.replace(',', ' at')}
-							</p>
-						</div>
-						<DeploymentStatusBadge state={deployment.state} />
+								<div className='flex items-center gap-3 min-w-0'>
+									<div className='flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 dark:bg-primary/20'>
+										<RocketIcon className='h-4 w-4 text-primary' />
+									</div>
+									<div className='min-w-0'>
+										<p
+											onClick={() => setShowDeploymentLogsId(deployment.id)}
+											className='text-sm font-medium truncate text-blue-600 hover:underline cursor-pointer'
+										>
+											Manual Deployment
+										</p>
+										<p
+											className='text-xs text-muted-foreground truncate'
+											title={new Date(deployment.createdAt).toLocaleString()}
+										>
+											{formatDistanceToNow(new Date(deployment.createdAt), {
+												addSuffix: true,
+											})}
+										</p>
+									</div>
+								</div>
+								<DeploymentStatusBadge state={deployment.state} />
+							</div>
+						))}
 					</div>
-				</li>
-			))}
+				</CardContent>
+			</Card>
 		</>
 	)
 }
@@ -55,7 +65,7 @@ export const DeploymentStatusBadge = ({
 }: { state: DeploymentStatusDto }) => {
 	return (
 		<span
-			className={`px-2 py-1 rounded-full text-xs font-medium ${
+			className={`px-2 py-0.5 rounded-full text-xs font-medium shrink-0 ${
 				state === 'Succeeded'
 					? 'bg-green-100 text-green-800'
 					: state === 'Failed'
