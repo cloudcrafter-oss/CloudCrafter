@@ -8,7 +8,7 @@ import {
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-} from '@cloudcrafter/ui/components/ui/dialog'
+} from '@cloudcrafter/ui/components/dialog'
 import { cn } from '@cloudcrafter/ui/lib/utils'
 
 function Command({

@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import type * as React from 'react'
 import { DayPicker } from 'react-day-picker'
 
-import { buttonVariants } from '@cloudcrafter/ui/components/ui/button'
+import { buttonVariants } from '@cloudcrafter/ui/components/button'
 import { cn } from '@cloudcrafter/ui/lib/utils'
 
 function Calendar({

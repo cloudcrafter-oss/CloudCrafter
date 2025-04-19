@@ -5,23 +5,23 @@ import { type VariantProps, cva } from 'class-variance-authority'
 import { PanelLeftIcon } from 'lucide-react'
 import * as React from 'react'
 
-import { Button } from '@cloudcrafter/ui/components/ui/button'
-import { Input } from '@cloudcrafter/ui/components/ui/input'
-import { Separator } from '@cloudcrafter/ui/components/ui/separator'
+import { Button } from '@cloudcrafter/ui/components/button'
+import { Input } from '@cloudcrafter/ui/components/input'
+import { Separator } from '@cloudcrafter/ui/components/separator'
 import {
 	Sheet,
 	SheetContent,
 	SheetDescription,
 	SheetHeader,
 	SheetTitle,
-} from '@cloudcrafter/ui/components/ui/sheet'
-import { Skeleton } from '@cloudcrafter/ui/components/ui/skeleton'
+} from '@cloudcrafter/ui/components/sheet'
+import { Skeleton } from '@cloudcrafter/ui/components/skeleton'
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
-} from '@cloudcrafter/ui/components/ui/tooltip'
+} from '@cloudcrafter/ui/components/tooltip'
 import { useIsMobile } from '@cloudcrafter/ui/hooks/use-mobile'
 import { cn } from '@cloudcrafter/ui/lib/utils'
 

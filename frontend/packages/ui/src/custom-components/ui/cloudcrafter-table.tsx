@@ -1,13 +1,13 @@
 'use client'
 
-import { Button } from '@cloudcrafter/ui/components/ui/button'
+import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
 	DropdownMenuContent,
 	DropdownMenuTrigger,
-} from '@cloudcrafter/ui/components/ui/dropdown-menu'
-import { Input } from '@cloudcrafter/ui/components/ui/input'
+} from '@cloudcrafter/ui/components/dropdown-menu'
+import { Input } from '@cloudcrafter/ui/components/input'
 import {
 	Table,
 	TableBody,
@@ -15,7 +15,7 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from '@cloudcrafter/ui/components/ui/table'
+} from '@cloudcrafter/ui/components/table'
 import {
 	type ColumnDef,
 	type ColumnFiltersState,

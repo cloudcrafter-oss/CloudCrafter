@@ -3,7 +3,7 @@
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
 import type * as React from 'react'
 
-import { buttonVariants } from '@cloudcrafter/ui/components/ui/button'
+import { buttonVariants } from '@cloudcrafter/ui/components/button'
 import { cn } from '@cloudcrafter/ui/lib/utils'
 
 function AlertDialog({

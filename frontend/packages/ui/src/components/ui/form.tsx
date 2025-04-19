@@ -13,7 +13,7 @@ import {
 	useFormState,
 } from 'react-hook-form'
 
-import { Label } from '@cloudcrafter/ui/components/ui/label'
+import { Label } from '@cloudcrafter/ui/components/label'
 import { cn } from '@cloudcrafter/ui/lib/utils'
 
 const Form = FormProvider
