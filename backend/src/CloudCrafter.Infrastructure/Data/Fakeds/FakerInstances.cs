@@ -32,16 +32,6 @@ public static class FakerInstances
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
-    public static Faker<Project> ProjectFaker =>
-        new Faker<Project>()
-            .StrictMode(true)
-            .RuleFor(x => x.Id, Guid.NewGuid)
-            .RuleFor(x => x.Name, f => $"Project {f.Person.FirstName}")
-            .RuleFor(x => x.Description, f => f.Lorem.Sentence())
-            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
-            .RuleFor(x => x.Environments, new List<Environment>())
-            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
-
     public static Faker<GithubProvider> GithubProviderFaker
     {
         get
@@ -77,6 +67,20 @@ public static class FakerInstances
 
     public static StackServiceType StackServiceAppTypeType =>
         new() { Id = StackServiceTypeConstants.App, Type = nameof(StackServiceTypeConstants.App) };
+
+    public static Faker<Project> ProjectFaker(Guid teamId)
+    {
+        return new Faker<Project>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, Guid.NewGuid)
+            .RuleFor(x => x.Name, f => $"Project {f.Person.FirstName}")
+            .RuleFor(x => x.Description, f => f.Lorem.Sentence())
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.TeamId, teamId)
+            .RuleFor(x => x.Team, (Team?)null)
+            .RuleFor(x => x.Environments, new List<Environment>())
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    }
 
     public static Faker<StackEnvironmentVariable> StackEnvironmentVariableFaker(Stack stack)
     {
@@ -227,6 +231,22 @@ public static class FakerInstances
             .RuleFor(x => x.Name, f => $"Environment {f.Person.FirstName}")
             .RuleFor(x => x.Stacks, f => new List<Stack>())
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    }
+
+    public static Faker<Team> TeamFaker()
+    {
+        return new Faker<Team>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, Guid.NewGuid)
+            .RuleFor(x => x.Name, f => f.Person.FullName)
+            .RuleFor(x => x.Owner, (User?)null)
+            .RuleFor(x => x.OwnerId, f => Guid.Empty)
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.TeamUsers, f => new List<TeamUser>())
+            .RuleFor(x => x.Projects, f => new List<Project>())
+            .RuleFor(x => x.CreatedBy, f => null)
+            .RuleFor(x => x.LastModifiedBy, f => null)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
     }
 }

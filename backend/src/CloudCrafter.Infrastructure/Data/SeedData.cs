@@ -23,17 +23,23 @@ public static class SeedData
         var authService = serviceProvider.GetRequiredService<ICloudCrafterAuthService>();
 
         // ensure that E2E user exists
-        authService
+        var userId = authService
             .CreateUserWithPasswordAsync("demo@cloudcrafter.app", "Demo User", "P@ssw0rd!123")
             .ConfigureAwait(false)
             .GetAwaiter()
             .GetResult();
-
         var userCount = dbContext.Users.Count();
 
         if (userCount < 100)
         {
             PopulateUsers(dbContext, authService);
+        }
+
+        var teamCount = dbContext.Teams.Count();
+
+        if (teamCount < 10)
+        {
+            PopulateTeams(dbContext, authService);
         }
 
         var serverCount = dbContext.Servers.Count();
@@ -47,7 +53,7 @@ public static class SeedData
 
         if (projectCount == 0)
         {
-            PopulateProjects(dbContext);
+            PopulateProjects(dbContext, userId);
         }
 
         var applicationCount = dbContext.Stacks.Count();
@@ -87,9 +93,11 @@ public static class SeedData
         dbContext.SaveChanges();
     }
 
-    public static void PopulateProjects(AppDbContext dbContext)
+    public static void PopulateProjects(AppDbContext dbContext, Guid userId)
     {
-        var projects = FakerInstances.ProjectFaker.Generate(10);
+        var team = FakerInstances.TeamFaker().RuleFor(x => x.OwnerId, userId).Generate();
+        dbContext.Teams.Add(team);
+        var projects = FakerInstances.ProjectFaker(team.Id).Generate(10);
         foreach (var project in projects)
         {
             dbContext.Projects.Add(project);
@@ -127,6 +135,32 @@ public static class SeedData
         dbContext.Servers.Add(localTestServer);
 
         dbContext.SaveChanges();
+    }
+
+    public static void PopulateTeams(AppDbContext context, ICloudCrafterAuthService authService)
+    {
+        var user = FakerInstances.UserFaker.Generate();
+        try
+        {
+            var userId = authService
+                .CreateUserWithPasswordAsync(user.Email!, user.FullName!, "P@ssw0rd!123")
+                .ConfigureAwait(false)
+                .GetAwaiter()
+                .GetResult();
+
+            var teams = FakerInstances.TeamFaker().RuleFor(x => x.OwnerId, userId).Generate(10);
+
+            foreach (var team in teams)
+            {
+                context.Teams.Add(team);
+            }
+
+            context.SaveChanges();
+        }
+#pragma warning disable CS0168 // Variable is declared but never used
+        catch (Exception e)
+#pragma warning restore CS0168 // Variable is declared but never used
+        { }
     }
 
     public static void PopulateUsers(AppDbContext dbContext, ICloudCrafterAuthService service)

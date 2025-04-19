@@ -14,7 +14,7 @@ export const RepositorySourceSelector = ({
 	onContinue,
 }: RepositorySourceSelectorProps) => {
 	return (
-		<div className='space-y-6'>
+		<div className='space-y-6 px-6'>
 			<div className='flex flex-col gap-4'>
 				<Button
 					type='button'

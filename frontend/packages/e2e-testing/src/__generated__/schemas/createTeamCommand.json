@@ -1,0 +1,1 @@
+{"required":["name"],"type":"object","properties":{"name":{"minLength":1,"type":"string"}},"x-readme-ref-name":"CreateTeamCommand"}

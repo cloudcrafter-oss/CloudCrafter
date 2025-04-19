@@ -66,7 +66,8 @@ public class CreateStackCommandTest : BaseTestFixture
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
 
-        var project = FakerInstances.ProjectFaker.Generate();
+        var team = await CreateTeam();
+        var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 
         var environment = FakerInstances.EnvironmentFaker(project).Generate();

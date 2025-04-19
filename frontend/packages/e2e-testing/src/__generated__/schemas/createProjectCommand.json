@@ -1,1 +1,1 @@
-{"required":["name"],"type":"object","properties":{"name":{"type":"string"}},"x-readme-ref-name":"CreateProjectCommand"}
+{"required":["name","teamId"],"type":"object","properties":{"name":{"type":"string"},"teamId":{"type":"string","format":"uuid"}},"x-readme-ref-name":"CreateProjectCommand"}

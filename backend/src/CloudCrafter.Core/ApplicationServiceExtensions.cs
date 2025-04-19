@@ -11,6 +11,7 @@ using CloudCrafter.Core.Interfaces.Domain.Projects;
 using CloudCrafter.Core.Interfaces.Domain.Providers;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
+using CloudCrafter.Core.Interfaces.Domain.Teams;
 using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Domain.Utils;
 using CloudCrafter.Core.Jobs.Dispatcher;
@@ -30,6 +31,7 @@ using CloudCrafter.Core.Services.Domain.Providers.Github;
 using CloudCrafter.Core.Services.Domain.Providers.Proxy;
 using CloudCrafter.Core.Services.Domain.Servers;
 using CloudCrafter.Core.Services.Domain.Stacks;
+using CloudCrafter.Core.Services.Domain.Teams;
 using CloudCrafter.Core.Services.Domain.Users;
 using CloudCrafter.Core.Services.Domain.Utils;
 using CloudCrafter.Core.SignalR;
@@ -157,6 +159,7 @@ public static class ApplicationServiceExtensions
             .AddScoped<IServerConnectivityService, ServerConnectivityService>()
             .AddScoped<IProjectsService, ProjectsService>()
             .AddScoped<IProvidersService, ProvidersService>()
+            .AddScoped<ITeamsService, TeamsService>()
             .AddScoped<IProviderValidationService, ProviderValidationService>()
             .AddScoped<IStacksService, StacksService>()
             .AddScoped<IStackServicesService, StackServicesService>()

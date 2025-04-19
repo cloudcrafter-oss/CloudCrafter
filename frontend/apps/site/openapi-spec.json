@@ -1946,6 +1946,228 @@
 					}
 				}
 			}
+		},
+		"/api/Teams": {
+			"get": {
+				"tags": ["Teams"],
+				"operationId": "GetMyTeams",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Teams"],
+				"operationId": "CreateTeam",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTeamCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTeamCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTeamCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "string",
+									"format": "uuid"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "string",
+									"format": "uuid"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "string",
+									"format": "uuid"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Teams/projects-and-environments": {
+			"get": {
+				"tags": ["Teams"],
+				"operationId": "GetMyTeamsWithProjectsAndEnvironments",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamWithProjectsAndEnvironmentsDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamWithProjectsAndEnvironmentsDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamWithProjectsAndEnvironmentsDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Teams/all": {
+			"get": {
+				"tags": ["Teams"],
+				"operationId": "GetAllTeams",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Teams/{teamId}": {
+			"put": {
+				"tags": ["Teams"],
+				"operationId": "RenameTeam",
+				"parameters": [
+					{
+						"name": "teamId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RenameTeamCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RenameTeamCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/RenameTeamCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Teams"],
+				"operationId": "DeleteTeam",
+				"parameters": [
+					{
+						"name": "teamId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
 		}
 	},
 	"components": {
@@ -1972,11 +2194,15 @@
 				}
 			},
 			"CreateProjectCommand": {
-				"required": ["name"],
+				"required": ["name", "teamId"],
 				"type": "object",
 				"properties": {
 					"name": {
 						"type": "string"
+					},
+					"teamId": {
+						"type": "string",
+						"format": "uuid"
 					}
 				}
 			},
@@ -2126,6 +2352,16 @@
 						"nullable": true
 					},
 					"target": {
+						"minLength": 1,
+						"type": "string"
+					}
+				}
+			},
+			"CreateTeamCommand": {
+				"required": ["name"],
+				"type": "object",
+				"properties": {
+					"name": {
 						"minLength": 1,
 						"type": "string"
 					}
@@ -2527,6 +2763,15 @@
 					}
 				}
 			},
+			"RenameTeamCommand": {
+				"required": ["name"],
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				}
+			},
 			"ServerDetailDto": {
 				"required": ["id", "name", "ipAddress", "dockerNetworkName"],
 				"type": "object",
@@ -2698,6 +2943,38 @@
 					}
 				},
 				"nullable": true
+			},
+			"SimpleTeamDto": {
+				"required": ["id", "name"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					}
+				}
+			},
+			"SimpleTeamWithProjectsAndEnvironmentsDto": {
+				"required": ["id", "name", "projects"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					},
+					"projects": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/ProjectDto"
+						}
+					}
+				}
 			},
 			"SourceProviderDto": {
 				"required": ["id", "name", "type"],
@@ -3248,6 +3525,9 @@
 		},
 		{
 			"name": "Stacks"
+		},
+		{
+			"name": "Teams"
 		}
 	]
 }

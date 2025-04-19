@@ -68,6 +68,25 @@ public abstract class BaseReplaceTest
         );
     }
 
+    public async Task<Team> CreateTeam(Guid? ownerId = null)
+    {
+        var teamFaker = FakerInstances.TeamFaker();
+        if (ownerId == null)
+        {
+            var user = FakerInstances.UserFaker.Generate();
+            await AddAsync(user);
+            teamFaker = teamFaker.RuleFor(x => x.OwnerId, user.Id);
+        }
+        else
+        {
+            teamFaker = teamFaker.RuleFor(x => x.OwnerId, ownerId.Value);
+        }
+
+        var team = teamFaker.Generate();
+        await AddAsync(team);
+        return team;
+    }
+
     public async Task<Guid?> RunAsUserAsync(string userName, string password, string[] roles)
     {
         using var scope = _scopeFactory.CreateScope();
@@ -159,7 +178,8 @@ public abstract class BaseReplaceTest
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
 
-        var project = FakerInstances.ProjectFaker.Generate();
+        var team = await CreateTeam();
+        var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 
         var environment = FakerInstances.EnvironmentFaker(project).Generate();

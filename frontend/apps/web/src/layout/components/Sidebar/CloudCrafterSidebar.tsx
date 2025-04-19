@@ -85,6 +85,10 @@ const data = {
 			icon: FolderKey,
 			items: [
 				{
+					title: 'Teams',
+					url: '/admin/teams',
+				},
+				{
 					title: 'Overview',
 					url: '/admin/projects',
 				},

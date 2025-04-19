@@ -1,5 +1,5 @@
 'use client'
-import { useProjects } from '@/src/hooks/useProjects'
+import { useTeams } from '@/src/hooks/useProjects'
 import { useSelectedProjectAndEnvironment } from '@/src/hooks/useSelectedProjectAndEnvironment'
 import {
 	DropdownMenu,
@@ -26,8 +26,22 @@ import {
 	FolderIcon,
 	Plus,
 	ServerIcon,
+	Users,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+
+interface Team {
+	id: string
+	name: string
+	projects: {
+		id: string
+		name: string
+		environments: {
+			id: string
+			name: string
+		}[]
+	}[]
+}
 
 const ActiveProject = () => {
 	const { selectedProject, selectedEnvironment } =
@@ -51,11 +65,8 @@ const ActiveProject = () => {
 
 export function CloudCrafterProjectSwitcher() {
 	const { isMobile } = useSidebar()
-
 	const router = useRouter()
-
-	const { projects } = useProjects()
-
+	const { teams } = useTeams()
 	const { selectedProjectId, selectedEnvironmentId } =
 		useSelectedProjectAndEnvironment()
 
@@ -77,50 +88,57 @@ export function CloudCrafterProjectSwitcher() {
 						side={isMobile ? 'bottom' : 'right'}
 						sideOffset={4}
 					>
-						<DropdownMenuLabel className='text-xs text-muted-foreground'>
-							Projects
-						</DropdownMenuLabel>
-						{projects.map((project) => (
-							<DropdownMenuGroup key={project.id}>
-								<DropdownMenuSub>
-									<DropdownMenuSubTrigger className='gap-2 p-2'>
-										<FolderIcon className='size-4' />
-										{selectedProjectId === project.id ? (
-											<>
-												<span className='font-semibold'>
-													{project.name} ({project.environments.length})
-												</span>
-											</>
-										) : (
-											<>
-												<span>
-													{project.name} ({project.environments.length})
-												</span>
-											</>
-										)}
-									</DropdownMenuSubTrigger>
-									<DropdownMenuSubContent>
-										{project.environments.map((env) => (
-											<DropdownMenuItem
-												key={env.id}
-												className='gap-2 p-2'
-												onClick={() => {
-													router.push(`/admin/projects/${project.id}/${env.id}`)
-												}}
-											>
-												<ServerIcon className='size-4' />
-												{env.name}
-												{selectedProjectId === project.id &&
-													selectedEnvironmentId === env.id && (
-														<Check className='ml-auto size-4' />
-													)}
-											</DropdownMenuItem>
-										))}
-									</DropdownMenuSubContent>
-								</DropdownMenuSub>
-							</DropdownMenuGroup>
+						{teams.map((team) => (
+							<div key={team.id}>
+								<DropdownMenuLabel className='flex items-center gap-2 text-xs text-muted-foreground'>
+									<Users className='size-3' />
+									{team.name} ({team.projects.length})
+								</DropdownMenuLabel>
+								{team.projects.map((project) => (
+									<DropdownMenuGroup key={project.id}>
+										<DropdownMenuSub>
+											<DropdownMenuSubTrigger className='gap-2 p-2'>
+												<FolderIcon className='size-4' />
+												{selectedProjectId === project.id ? (
+													<>
+														<span className='font-semibold'>
+															{project.name} ({project.environments.length})
+														</span>
+													</>
+												) : (
+													<>
+														<span>
+															{project.name} ({project.environments.length})
+														</span>
+													</>
+												)}
+											</DropdownMenuSubTrigger>
+											<DropdownMenuSubContent>
+												{project.environments.map((env) => (
+													<DropdownMenuItem
+														key={env.id}
+														className='gap-2 p-2'
+														onClick={() => {
+															router.push(
+																`/admin/projects/${project.id}/${env.id}`,
+															)
+														}}
+													>
+														<ServerIcon className='size-4' />
+														{env.name}
+														{selectedProjectId === project.id &&
+															selectedEnvironmentId === env.id && (
+																<Check className='ml-auto size-4' />
+															)}
+													</DropdownMenuItem>
+												))}
+											</DropdownMenuSubContent>
+										</DropdownMenuSub>
+									</DropdownMenuGroup>
+								))}
+								<DropdownMenuSeparator />
+							</div>
 						))}
-						<DropdownMenuSeparator />
 						<DropdownMenuItem className='gap-2 p-2'>
 							<div className='flex size-6 items-center justify-center rounded-md border bg-background'>
 								<Plus className='size-4' />

@@ -13,7 +13,6 @@ import {
 	FormMessage,
 } from '@cloudcrafter/ui/components/form'
 import { Input } from '@cloudcrafter/ui/components/input'
-import { Label } from '@cloudcrafter/ui/components/label'
 import {
 	Tabs,
 	TabsContent,
@@ -291,19 +290,6 @@ export const ServiceDetail = ({
 							</TabsContent>
 						</div>
 					</Tabs>
-
-					{process.env.NODE_ENV === 'development' && (
-						<div className='px-3 sm:px-6 pb-3 sm:pb-6 space-y-2 border-t'>
-							<Label>Debug Information</Label>
-							<pre className='p-3 sm:p-4 bg-muted rounded-md overflow-auto text-xs'>
-								{JSON.stringify(
-									{ values: formValues, errors: formErrors },
-									null,
-									2,
-								)}
-							</pre>
-						</div>
-					)}
 				</div>
 			)}
 		</div>

@@ -52,7 +52,6 @@ export const SourceSettings = ({
 							isEditing={isEditing}
 						/>
 					)}
-					<pre>{JSON.stringify(stackDetails.source, null, 2)}</pre>
 				</CardContent>
 			</Card>
 		</div>

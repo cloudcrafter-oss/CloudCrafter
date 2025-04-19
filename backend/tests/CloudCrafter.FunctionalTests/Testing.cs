@@ -6,13 +6,10 @@ using CloudCrafter.FunctionalTests.TestModels;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using CloudCrafter.Infrastructure.Logging;
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Containers;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
 using Serilog;
 using Environment = System.Environment;
 
@@ -214,6 +211,20 @@ public class Testing
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
         context.Add(entity);
+
+        await context.SaveChangesAsync();
+    }
+
+    public static async Task AddAsyncList<TEntity>(List<TEntity> entities)
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        foreach (var entity in entities)
+        {
+            context.Add(entity);
+        }
 
         await context.SaveChangesAsync();
     }

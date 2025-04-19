@@ -3,6 +3,7 @@
 import {
 	type ServerDetailDto,
 	updateServerDtoSchema,
+	useDeleteServerByIdHook,
 	usePostRotateAgentKeyHook,
 	useUpdateServerHook,
 } from '@cloudcrafter/api'
@@ -38,7 +39,13 @@ import { Input } from '@cloudcrafter/ui/components/input'
 import { Label } from '@cloudcrafter/ui/components/label'
 import { AnimatedSaveButton } from '@cloudcrafter/ui/custom-components/animated-save-button'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CircleIcon, CopyIcon, RefreshCwIcon, ServerIcon } from 'lucide-react'
+import {
+	CircleIcon,
+	CopyIcon,
+	RefreshCwIcon,
+	ServerIcon,
+	Trash2Icon,
+} from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -76,8 +83,21 @@ export const GeneralSettingsCard = ({ server }: GeneralSettingsCardProps) => {
 		},
 	})
 
+	const deleteServer = useDeleteServerByIdHook({
+		mutation: {
+			onSuccess: () => {
+				toast.success('Server deleted successfully')
+				router.push('/admin/servers')
+			},
+		},
+	})
+
 	const handleRotateAgentKey = () => {
 		rotateAgentKey.mutate({ id: server.id })
+	}
+
+	const handleDeleteServer = () => {
+		deleteServer.mutate({ id: server.id })
 	}
 
 	const serverBasicForm = useForm<z.infer<typeof schema>>({
@@ -242,6 +262,43 @@ export const GeneralSettingsCard = ({ server }: GeneralSettingsCardProps) => {
 					</CardFooter>
 				</form>
 			</Form>
+
+			<div className='border-t border-border/50'>
+				<div className='p-6'>
+					<h3 className='text-lg font-semibold text-destructive'>
+						Danger Zone
+					</h3>
+					<p className='text-sm text-muted-foreground/80 mt-1 mb-4'>
+						Once you delete a server, there is no going back. Please be certain.
+					</p>
+					<AlertDialog>
+						<AlertDialogTrigger asChild>
+							<Button variant='destructive' className='gap-2'>
+								<Trash2Icon className='h-4 w-4' />
+								Delete Server
+							</Button>
+						</AlertDialogTrigger>
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+								<AlertDialogDescription>
+									This action cannot be undone. This will permanently delete the
+									server and all associated data.
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+							<AlertDialogFooter>
+								<AlertDialogCancel>Cancel</AlertDialogCancel>
+								<AlertDialogAction
+									onClick={handleDeleteServer}
+									className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
+								>
+									Delete Server
+								</AlertDialogAction>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
+				</div>
+			</div>
 		</Card>
 	)
 }

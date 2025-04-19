@@ -1,6 +1,6 @@
 import { cn } from '@cloudcrafter/ui/lib/utils'
 import { type VariantProps, cva } from 'class-variance-authority'
-import * as React from 'react'
+import type * as React from 'react'
 
 const kbdVariants = cva(
 	'select-none rounded border px-1.5 py-px font-mono text-[0.7rem] font-normal shadow-sm disabled:opacity-50',
@@ -29,25 +29,32 @@ export interface KbdProps
 	abbrTitle?: string
 }
 
-const Kbd = React.forwardRef<HTMLUnknownElement, KbdProps>(
-	({ abbrTitle, children, className, variant, ...props }, ref) => {
-		return (
-			<kbd
-				className={cn(kbdVariants({ variant, className }))}
-				ref={ref}
-				{...props}
-			>
-				{abbrTitle ? (
-					<abbr title={abbrTitle} className='no-underline'>
-						{children}
-					</abbr>
-				) : (
-					children
-				)}
-			</kbd>
-		)
-	},
-)
+const Kbd = ({
+	ref,
+	abbrTitle,
+	children,
+	className,
+	variant,
+	...props
+}: KbdProps & {
+	ref: React.RefObject<HTMLUnknownElement>
+}) => {
+	return (
+		<kbd
+			className={cn(kbdVariants({ variant, className }))}
+			ref={ref}
+			{...props}
+		>
+			{abbrTitle ? (
+				<abbr title={abbrTitle} className='no-underline'>
+					{children}
+				</abbr>
+			) : (
+				children
+			)}
+		</kbd>
+	)
+}
 Kbd.displayName = 'Kbd'
 
 export { Kbd }

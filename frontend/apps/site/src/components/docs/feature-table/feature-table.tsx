@@ -6,12 +6,24 @@ import React from 'react'
 type FeatureStatus = 'Supported' | 'In Development' | 'Planned'
 
 // Define the structure for a feature
+
+const categories = [
+	'Servers',
+	'Projects',
+	'Environments',
+	'Stacks',
+	'Services',
+	'Volumes',
+	'Environment Variables',
+	'Teams',
+] as const
+type Category = (typeof categories)[number]
 interface Feature {
 	name: string
 	status: FeatureStatus
 	description: string
 	release: string
-	category: string // Added category for potential filtering
+	category: Category
 	releaseInfo?: string // Added for tooltip content
 }
 
@@ -52,18 +64,6 @@ const Tooltip: React.FC<TooltipProps> = ({ content, isOpen, onClose }) => {
 		</>
 	)
 }
-
-// Define categories based on the image
-const categories = [
-	'All',
-	'Security',
-	'Data Management',
-	'Integration',
-	'Reporting',
-	'Productivity',
-	'Customization',
-	'AI & Machine Learning',
-]
 
 // Helper component for the status badge
 const StatusBadge: React.FC<{ status: FeatureStatus }> = ({ status }) => {
@@ -226,71 +226,20 @@ export const FeatureTable: React.FC = () => {
 // Sample data based on the image
 const features: Feature[] = [
 	{
-		name: 'User Authentication',
+		name: 'Adding Server',
 		status: 'Supported',
-		description:
-			'Secure login and registration with multi-factor authentication support.',
+		description: 'Adding a server to CloudCrafter.',
 		release: 'Available now',
-		category: 'Security',
+		category: 'Servers',
 	},
 	{
-		name: 'Role-based Access Control',
-		status: 'Supported',
-		description:
-			'Granular permission system for different user roles and teams.',
-		release: 'Available now',
-		category: 'Security',
-	},
-	{
-		name: 'Data Export',
-		status: 'Supported',
-		description: 'Export your data in CSV, JSON, or Excel formats.',
-		release: 'Available now',
-		category: 'Data Management',
-	},
-	{
-		name: 'API Integration',
-		status: 'Supported',
-		description: 'Connect with third-party services via our RESTful API.',
-		release: 'Available now',
-		category: 'Integration',
-	},
-	{
-		name: 'Advanced Analytics',
+		name: 'Teams',
 		status: 'In Development',
-		description:
-			'Detailed insights and visualization of your business metrics.',
-		release: 'Q3 2025',
-		category: 'Reporting',
+		description: 'Adding a team to CloudCrafter.',
+		release: 'unknown',
+		category: 'Teams',
 		releaseInfo:
-			'Our Advanced Analytics feature is currently in active development. Expected release in Q3 2025 with initial support for basic metrics visualization and custom dashboard creation.',
-	},
-	{
-		name: 'Workflow Automation',
-		status: 'In Development',
-		description: 'Create custom workflows to automate repetitive tasks.',
-		release: 'Q2 2025',
-		category: 'Productivity',
-		releaseInfo:
-			'Workflow Automation is being developed with a focus on no-code automation tools. Beta testing planned for Q1 2025 with full release in Q2 2025.',
-	},
-	{
-		name: 'Custom Branding',
-		status: 'Planned',
-		description: "White-label solution with your company's branding.",
-		release: 'Q4 2025',
-		category: 'Customization',
-		releaseInfo:
-			'Custom Branding feature is in our roadmap for Q4 2025. This will include full white-labeling capabilities, custom CSS injection, and theme management.',
-	},
-	{
-		name: 'AI-powered Recommendations',
-		status: 'Planned',
-		description: 'Smart suggestions based on user behavior and preferences.',
-		release: 'Q1 2026',
-		category: 'AI & Machine Learning',
-		releaseInfo:
-			'Our AI-powered Recommendations system is planned for Q1 2026. We are currently researching and designing the ML models that will power this feature.',
+			'This is not possible yet, and does not have a high priority at the moment.',
 	},
 ]
 

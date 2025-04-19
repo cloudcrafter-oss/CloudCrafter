@@ -15,6 +15,8 @@ public interface IApplicationDbContext
     DbSet<Stack> Stacks { get; }
     DbSet<Deployment> Deployments { get; }
     DbSet<BackgroundJob> Jobs { get; }
+    DbSet<Team> Teams { get; }
+    DbSet<TeamUser> TeamUsers { get; }
     DbSet<StackService> StackServices { get; }
     DbSet<StackServiceType> StackServiceTypes { get; }
     DbSet<StackServiceVolume> StackServiceVolumes { get; }

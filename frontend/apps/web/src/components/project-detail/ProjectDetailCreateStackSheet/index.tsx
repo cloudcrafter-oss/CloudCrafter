@@ -38,7 +38,7 @@ export const ProjectDetailCreateStackSheet = ({
 	const renderContent = () => {
 		if (createdStack) {
 			return (
-				<div className='space-y-4'>
+				<div className='flex flex-col gap-4'>
 					<div className='flex items-center space-x-2 text-green-600'>
 						<CheckCircle className='h-5 w-5' />
 						<h2 className='text-lg font-semibold'>

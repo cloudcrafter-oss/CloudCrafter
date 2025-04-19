@@ -2,7 +2,6 @@ using CloudCrafter.Core.Commands.Projects;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Projects;
 
@@ -34,7 +33,8 @@ public class GetProjectQueryTest : BaseTestFixture
     {
         await RunAsAdministratorAsync();
 
-        var project = FakerInstances.ProjectFaker.Generate();
+        var team = await CreateTeam();
+        var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 
         var result = await SendAsync(new GetProjectDetailQuery(project.Id));

@@ -108,10 +108,6 @@ export const PublicGitForm = ({
 					/>
 				))}
 
-				<pre className='p-4 bg-muted rounded-md overflow-auto'>
-					{JSON.stringify(formValues, null, 2)}
-				</pre>
-
 				{isEditing && (
 					<div className='flex justify-end space-x-2'>
 						<Button type='submit' disabled={updateDetailMutation.isPending}>

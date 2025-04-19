@@ -20,9 +20,9 @@ public class ProjectsService(
         return repository.GetProjects(options);
     }
 
-    public async Task<ProjectDto> CreateProject(string name)
+    public async Task<ProjectDto> CreateProject(string name, Guid teamId)
     {
-        var createdProject = await repository.CreateProject(name);
+        var createdProject = await repository.CreateProject(name, teamId);
 
         await eventStore.PublishAsync(new ProjectCreatedEvent(createdProject));
 
