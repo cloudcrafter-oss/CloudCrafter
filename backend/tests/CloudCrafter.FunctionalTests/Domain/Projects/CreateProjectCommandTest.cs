@@ -1,7 +1,6 @@
 using CloudCrafter.Core.Commands.Projects;
 using CloudCrafter.Domain.Entities;
 using FluentAssertions;
-using NUnit.Framework;
 using Environment = CloudCrafter.Domain.Entities.Environment;
 
 namespace CloudCrafter.FunctionalTests.Domain.Projects;
@@ -10,7 +9,7 @@ using static Testing;
 
 public class CreateProjectCommandTest : BaseTestFixture
 {
-    private CreateProjectCommand Command = new("Dummy", Guid.NewGuid());
+    private readonly CreateProjectCommand Command = new("Dummy", Guid.NewGuid());
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
@@ -25,7 +24,9 @@ public class CreateProjectCommandTest : BaseTestFixture
 
         await RunAsAdministratorAsync();
 
-        var result = await SendAsync(Command);
+        var team = await CreateTeam();
+
+        var result = await SendAsync(Command with { TeamId = team.Id });
         result.Name.Should().Be("Dummy");
         result.Id.Should().NotBeEmpty();
 
@@ -40,7 +41,8 @@ public class CreateProjectCommandTest : BaseTestFixture
 
         await RunAsAdministratorAsync();
 
-        var result = await SendAsync(Command);
+        var team = await CreateTeam();
+        var result = await SendAsync(Command with { TeamId = team.Id });
         result.Name.Should().Be("Dummy");
 
         (await CountAsync<Project>()).Should().Be(1);

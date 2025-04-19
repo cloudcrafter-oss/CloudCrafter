@@ -1,6 +1,5 @@
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests;
 
@@ -13,6 +12,25 @@ public abstract class BaseTestFixture
     public async Task TestSetUp()
     {
         await ResetState();
+    }
+
+    public async Task<Team> CreateTeam(Guid? ownerId = null)
+    {
+        var teamFaker = FakerInstances.TeamFaker();
+        if (ownerId == null)
+        {
+            var user = FakerInstances.UserFaker.Generate();
+            await AddAsync(user);
+            teamFaker = teamFaker.RuleFor(x => x.OwnerId, user.Id);
+        }
+        else
+        {
+            teamFaker = teamFaker.RuleFor(x => x.OwnerId, ownerId.Value);
+        }
+
+        var team = teamFaker.Generate();
+        await AddAsync(team);
+        return team;
     }
 
     public async Task<Stack> CreateSampleStack(Action<Stack>? customizeStack = null)
