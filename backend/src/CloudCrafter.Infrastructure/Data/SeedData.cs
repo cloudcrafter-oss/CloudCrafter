@@ -28,12 +28,18 @@ public static class SeedData
             .ConfigureAwait(false)
             .GetAwaiter()
             .GetResult();
-
         var userCount = dbContext.Users.Count();
 
         if (userCount < 100)
         {
             PopulateUsers(dbContext, authService);
+        }
+
+        var teamCount = dbContext.Teams.Count();
+
+        if (teamCount < 10)
+        {
+            PopulateTeams(dbContext, authService);
         }
 
         var serverCount = dbContext.Servers.Count();
@@ -127,6 +133,32 @@ public static class SeedData
         dbContext.Servers.Add(localTestServer);
 
         dbContext.SaveChanges();
+    }
+
+    public static void PopulateTeams(AppDbContext context, ICloudCrafterAuthService authService)
+    {
+        var user = FakerInstances.UserFaker.Generate();
+        try
+        {
+            var userId = authService
+                .CreateUserWithPasswordAsync(user.Email!, user.FullName!, "P@ssw0rd!123")
+                .ConfigureAwait(false)
+                .GetAwaiter()
+                .GetResult();
+
+            var teams = FakerInstances.TeamFaker().RuleFor(x => x.OwnerId, userId).Generate(10);
+
+            foreach (var team in teams)
+            {
+                context.Teams.Add(team);
+            }
+
+            context.SaveChanges();
+        }
+#pragma warning disable CS0168 // Variable is declared but never used
+        catch (Exception e)
+#pragma warning restore CS0168 // Variable is declared but never used
+        { }
     }
 
     public static void PopulateUsers(AppDbContext dbContext, ICloudCrafterAuthService service)

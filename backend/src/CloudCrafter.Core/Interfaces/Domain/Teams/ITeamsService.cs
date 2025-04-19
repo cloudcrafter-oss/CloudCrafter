@@ -8,4 +8,5 @@ public interface ITeamsService
     Task DeleteTeam(Guid teamId);
     Task UpdateTeamName(Guid teamId, string name);
     Task<List<SimpleTeamDto>> GetTeams(Guid userId);
+    Task<List<SimpleTeamDto>> GetAllTeams();
 }

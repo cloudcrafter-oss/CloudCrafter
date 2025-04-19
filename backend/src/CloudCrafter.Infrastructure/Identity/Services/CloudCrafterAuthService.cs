@@ -51,13 +51,13 @@ public class CloudCrafterAuthService(
         return await CreateTokenForUserAsync(userFromManager);
     }
 
-    public async Task CreateUserWithPasswordAsync(string email, string name, string password)
+    public async Task<Guid> CreateUserWithPasswordAsync(string email, string name, string password)
     {
         var user = await userManager.FindByEmailAsync(email);
 
         if (user != null)
         {
-            return;
+            return user.Id;
         }
 
         var result = await identityService.CreateUserAsync(email, password);
@@ -66,6 +66,8 @@ public class CloudCrafterAuthService(
         {
             throw new UnauthorizedAccessException();
         }
+
+        return result.UserId;
     }
 
     public async Task<TokenDto> FetchTokensForRefreshToken(string refreshToken)

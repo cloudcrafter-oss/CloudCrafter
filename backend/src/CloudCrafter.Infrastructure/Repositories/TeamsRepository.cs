@@ -56,4 +56,9 @@ public class TeamsRepository(IApplicationDbContext context) : ITeamsRepository
 
         return teams;
     }
+
+    public Task<List<Team>> GetAllTeams()
+    {
+        return context.Teams.OrderBy(x => x.CreatedAt).ToListAsync();
+    }
 }

@@ -13,6 +13,12 @@ public class TeamsController : CloudCrafterController
         return sender.Send(new GetMyTeamsCommand());
     }
 
+    [HttpGet("all")]
+    public Task<List<SimpleTeamDto>> GetAllTeams(ISender sender)
+    {
+        return sender.Send(new GetAllTeamsCommand());
+    }
+
     [HttpPost]
     public Task<Guid> CreateTeam(ISender sender, CreateTeamCommand request)
     {

@@ -8,4 +8,5 @@ public interface ITeamsRepository
     Task DeleteTeam(Guid teamId);
     Task UpdateTeamName(Guid teamId, string name);
     Task<List<Team>> GetTeamsForUser(Guid userId);
+    Task<List<Team>> GetAllTeams();
 }

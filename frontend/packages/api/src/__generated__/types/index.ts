@@ -45,6 +45,7 @@ export type { EnvironmentDto } from './EnvironmentDto'
 export type { EnvironmentVariableType } from './EnvironmentVariableType'
 export type { FilterCriterea } from './FilterCriterea'
 export type { FilterOperatorOptionEnum, FilterOperatorOption } from './FilterOperatorOption'
+export type { GetAllTeams200, GetAllTeamsQueryResponse, GetAllTeamsQuery } from './GetAllTeams'
 export type { GetDeploymentLogsPathParams, GetDeploymentLogs200, GetDeploymentLogsQueryResponse, GetDeploymentLogsQuery } from './GetDeploymentLogs'
 export type {
   GetDeploymentsForServerPathParams,

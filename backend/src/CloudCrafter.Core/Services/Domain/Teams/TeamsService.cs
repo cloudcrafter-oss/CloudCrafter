@@ -28,4 +28,11 @@ public class TeamsService(ITeamsRepository repository, IMapper mapper) : ITeamsS
 
         return mapper.Map<List<SimpleTeamDto>>(teams);
     }
+
+    public async Task<List<SimpleTeamDto>> GetAllTeams()
+    {
+        var teams = await repository.GetAllTeams();
+
+        return mapper.Map<List<SimpleTeamDto>>(teams);
+    }
 }

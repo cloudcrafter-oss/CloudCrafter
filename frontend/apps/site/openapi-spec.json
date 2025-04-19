@@ -2033,6 +2033,43 @@
 				}
 			}
 		},
+		"/api/Teams/all": {
+			"get": {
+				"tags": ["Teams"],
+				"operationId": "GetAllTeams",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/Teams/{teamId}": {
 			"put": {
 				"tags": ["Teams"],
@@ -2100,11 +2137,15 @@
 				}
 			},
 			"CreateProjectCommand": {
-				"required": ["name"],
+				"required": ["name", "teamId"],
 				"type": "object",
 				"properties": {
 					"name": {
 						"type": "string"
+					},
+					"teamId": {
+						"type": "string",
+						"format": "uuid"
 					}
 				}
 			},
