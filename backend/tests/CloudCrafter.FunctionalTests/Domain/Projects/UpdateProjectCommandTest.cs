@@ -1,7 +1,6 @@
 using CloudCrafter.Core.Commands.Projects;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Projects;
 
@@ -23,7 +22,8 @@ public class UpdateProjectCommandTest : BaseTestFixture
     {
         await RunAsAdministratorAsync();
 
-        var project = FakerInstances.ProjectFaker.Generate();
+        var team = await CreateTeam();
+        var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 
         var args = new UpdateProjectArgs { Name = "New Name" };
@@ -38,7 +38,8 @@ public class UpdateProjectCommandTest : BaseTestFixture
     {
         await RunAsAdministratorAsync();
 
-        var project = FakerInstances.ProjectFaker.Generate();
+        var team = await CreateTeam();
+        var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 
         var args = new UpdateProjectArgs { Description = "New Description" };

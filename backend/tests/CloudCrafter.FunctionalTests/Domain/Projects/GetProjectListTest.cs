@@ -25,7 +25,7 @@ public class GetProjectListTest : BaseTestFixture
         (await CountAsync<Project>()).Should().Be(0);
 
         var team = await CreateTeam();
-        var projects = FakerInstances.ProjectFaker.RuleFor(x => x.TeamId, team.Id).Generate(10);
+        var projects = FakerInstances.ProjectFaker(team.Id).Generate(10);
         foreach (var project in projects)
         {
             await AddAsync(project);
@@ -49,7 +49,7 @@ public class GetProjectListTest : BaseTestFixture
         (await CountAsync<Project>()).Should().Be(0);
 
         var team = await CreateTeam();
-        var projects = FakerInstances.ProjectFaker.RuleFor(x => x.TeamId, team.Id).Generate(10);
+        var projects = FakerInstances.ProjectFaker(team.Id).Generate(10);
         foreach (var project in projects)
         {
             await AddAsync(project);

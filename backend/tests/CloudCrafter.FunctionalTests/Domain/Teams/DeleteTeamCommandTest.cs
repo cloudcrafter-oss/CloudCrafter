@@ -54,7 +54,7 @@ public class DeleteTeamCommandTest : BaseTeamTest
 
         await AddAsync(team);
 
-        var project = FakerInstances.ProjectFaker.RuleFor(x => x.TeamId, team.Id).Generate();
+        var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 
         await AssertTeamCount(1);

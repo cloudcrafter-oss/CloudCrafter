@@ -54,7 +54,7 @@ public class GetMyTeamsWithProjectsAndEnvironmentsCommandTest : BaseTeamTest
         var userId = await RunAsAdministratorAsync();
         var emptyTeam = await CreateTeam(userId);
         var team = await CreateTeam(userId);
-        var projects = FakerInstances.ProjectFaker.RuleFor(x => x.TeamId, team.Id).Generate(10);
+        var projects = FakerInstances.ProjectFaker(team.Id).Generate(10);
         foreach (var project in projects)
         {
             await AddAsync(project);

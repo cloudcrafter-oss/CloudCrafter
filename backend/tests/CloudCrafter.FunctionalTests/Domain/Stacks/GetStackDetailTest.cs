@@ -36,7 +36,8 @@ public class GetStackDetailTest : BaseTestFixture
     {
         await RunAsAdministratorAsync();
 
-        var project = FakerInstances.ProjectFaker.Generate();
+        var team = await CreateTeam();
+        var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 
         var environment = FakerInstances.EnvironmentFaker(project).Generate();

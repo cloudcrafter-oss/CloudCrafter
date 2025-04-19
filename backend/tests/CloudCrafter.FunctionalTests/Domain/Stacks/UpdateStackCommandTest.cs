@@ -122,7 +122,8 @@ public class UpdateStackCommandTest : BaseTestFixture
         var stackId = Guid.Parse("35223e08-9c9f-4322-972e-51c610c202e3");
         var stackServiceId = Guid.Parse("b34a6560-701d-4f0e-b024-b4b7b2155bcf");
 
-        var project = FakerInstances.ProjectFaker.Generate();
+        var team = await CreateTeam();
+        var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 
         var environment = FakerInstances
@@ -158,7 +159,8 @@ public class UpdateStackCommandTest : BaseTestFixture
         var stackId = Guid.Parse("35223e08-9c9f-4322-972e-51c610c202e3");
         var stackServiceId = Guid.Parse("b34a6560-701d-4f0e-b024-b4b7b2155bcf");
 
-        var project = FakerInstances.ProjectFaker.Generate();
+        var team = await CreateTeam();
+        var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 
         var environment = FakerInstances
