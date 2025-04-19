@@ -213,7 +213,7 @@
         "recharts": "^2.15.3",
         "sonner": "^2.0.3",
         "tailwind-merge": "^3.2.0",
-        "tailwindcss-animate": "^1.0.7",
+        "tw-animate-css": "^1.2.4",
         "vaul": "^1.1.2",
         "zod": "^3.24.3",
       },
@@ -2330,6 +2330,8 @@
     "turbo-windows-64": ["turbo-windows-64@2.4.5-canary.6", "", { "os": "win32", "cpu": "x64" }, "sha512-sj/6ReDcCOsi5xt//Ga+ZC+skTMR6PoY9S85TuKvWcyWJAlNgjIsRXFnuLSZe6hWnWh2FtEapwvCp18cEzAayw=="],
 
     "turbo-windows-arm64": ["turbo-windows-arm64@2.4.5-canary.6", "", { "os": "win32", "cpu": "arm64" }, "sha512-D+zSLmrOw931ftJmouLCtmY8imxs28i/vFfXAAW+jfM1n6XV+z3xdR6gd2KxP4Vf17OYZSvIsiRStdBZvL9ZNg=="],
+
+    "tw-animate-css": ["tw-animate-css@1.2.5", "", {}, "sha512-ABzjfgVo+fDbhRREGL4KQZUqqdPgvc5zVrLyeW9/6mVqvaDepXc7EvedA+pYmMnIOsUAQMwcWzNvom26J2qYvQ=="],
 
     "type": ["type@2.7.3", "", {}, "sha512-8j+1QmAbPvLZow5Qpi6NCaN8FB60p/6x8/vfNqOk/hC+HuvFZhL4+WfekuhQLiqFZXOgQdrs3B+XxEmCc6b3FQ=="],
 
