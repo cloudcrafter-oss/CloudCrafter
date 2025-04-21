@@ -1,6 +1,12 @@
 'use client'
 
 import { type UserDto, useGetUsersHook } from '@cloudcrafter/api'
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from '@cloudcrafter/ui/components/card'
 import type { ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
 
@@ -38,22 +44,27 @@ export function UsersTable() {
 	]
 
 	return (
-		<div className='space-y-4'>
-			<SimpleTable<UserDto>
-				paginationOptions={{
-					onPaginationChange: (pagination) => {
-						tablePagination.setFilters(
-							typeof pagination === 'function'
-								? pagination(paginationState)
-								: pagination,
-						)
-					},
-					rowCount: data?.result.length ?? 0,
-				}}
-				pagination={paginationState}
-				data={data}
-				columns={columns}
-			/>
-		</div>
+		<Card>
+			<CardHeader>
+				<CardTitle>Users</CardTitle>
+			</CardHeader>
+			<CardContent>
+				<SimpleTable<UserDto>
+					paginationOptions={{
+						onPaginationChange: (pagination) => {
+							tablePagination.setFilters(
+								typeof pagination === 'function'
+									? pagination(paginationState)
+									: pagination,
+							)
+						},
+						rowCount: data?.result.length ?? 0,
+					}}
+					pagination={paginationState}
+					data={data}
+					columns={columns}
+				/>
+			</CardContent>
+		</Card>
 	)
 }

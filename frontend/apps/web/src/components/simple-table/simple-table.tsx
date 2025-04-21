@@ -2,6 +2,12 @@
 
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from '@cloudcrafter/ui/components/dropdown-menu'
+import {
 	Table,
 	TableBody,
 	TableCell,
@@ -13,12 +19,15 @@ import type {
 	ColumnDef,
 	PaginationOptions,
 	PaginationState,
+	VisibilityState,
 } from '@tanstack/react-table'
 import {
 	flexRender,
 	getCoreRowModel,
 	useReactTable,
 } from '@tanstack/react-table'
+import { ChevronDown } from 'lucide-react'
+import { useState } from 'react'
 
 interface PaginationData<TData> {
 	page: number
@@ -32,6 +41,7 @@ interface SimpleTableProps<TData> {
 	columns: ColumnDef<TData>[]
 	pagination: PaginationState
 	paginationOptions: Pick<PaginationOptions, 'onPaginationChange' | 'rowCount'>
+	showColumnVisibility?: boolean
 }
 
 export function SimpleTable<TData>({
@@ -39,7 +49,9 @@ export function SimpleTable<TData>({
 	columns,
 	pagination,
 	paginationOptions,
+	showColumnVisibility = true,
 }: SimpleTableProps<TData>) {
+	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 	const table = useReactTable({
 		data: data?.result ?? [],
 		columns,
@@ -47,8 +59,10 @@ export function SimpleTable<TData>({
 		manualPagination: true,
 		manualFiltering: true,
 		manualSorting: true,
+		onColumnVisibilityChange: setColumnVisibility,
 		state: {
 			pagination,
+			columnVisibility,
 		},
 		...paginationOptions,
 		getCoreRowModel: getCoreRowModel(),
@@ -56,6 +70,55 @@ export function SimpleTable<TData>({
 
 	return (
 		<div className='w-full'>
+			<div className='flex items-center py-4'>
+				{/* {searchColumn && (
+                    <Input
+                        placeholder={searchPlaceholder}
+                        value={
+                            (table.getColumn(searchColumn)?.getFilterValue() as string) ?? ''
+                        }
+                        onChange={(event) =>
+                            table.getColumn(searchColumn)?.setFilterValue(event.target.value)
+                        }
+                        className='max-w-sm'
+                    />
+                )} */}
+				<div className='ml-auto flex items-center gap-2'>
+					{/* {addButton && (
+                        <Button onClick={addButton.onClick}>
+                            {addButton.label ?? 'Add'}
+                        </Button>
+                    )} */}
+					{showColumnVisibility && (
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button variant='outline'>
+									Columns <ChevronDown />
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent align='end'>
+								{table
+									.getAllColumns()
+									.filter((column) => column.getCanHide())
+									.map((column) => {
+										return (
+											<DropdownMenuCheckboxItem
+												key={column.id}
+												className='capitalize'
+												checked={column.getIsVisible()}
+												onCheckedChange={(value) =>
+													column.toggleVisibility(!!value)
+												}
+											>
+												{column.id}
+											</DropdownMenuCheckboxItem>
+										)
+									})}
+							</DropdownMenuContent>
+						</DropdownMenu>
+					)}
+				</div>
+			</div>
 			<div className='rounded-md border'>
 				<Table>
 					<TableHeader>
