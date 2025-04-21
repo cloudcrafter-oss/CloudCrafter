@@ -19,7 +19,7 @@ public class UserRepository(AppDbContext context, IMapper mapper) : IUserReposit
         return context.Users.OrderBy(x => x.Email);
     }
 
-    public async Task<PaginatedList<UserDto>> GetUsers(PaginatedRequest<UserDto> filter)
+    public async Task<PaginatedList<UserDto>> GetUsers(PaginatedRequest filter)
     {
         var users = GetBaseQuery().AsQueryable();
 

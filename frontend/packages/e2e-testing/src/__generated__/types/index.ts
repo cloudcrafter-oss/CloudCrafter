@@ -44,8 +44,6 @@ export type { EntityHealthDto } from './EntityHealthDto'
 export type { EntityHealthDtoValueEnum, EntityHealthDtoValue } from './EntityHealthDtoValue'
 export type { EnvironmentDto } from './EnvironmentDto'
 export type { EnvironmentVariableType } from './EnvironmentVariableType'
-export type { FilterCriterea } from './FilterCriterea'
-export type { FilterOperatorOptionEnum, FilterOperatorOption } from './FilterOperatorOption'
 export type { GetAllTeams200, GetAllTeamsQueryResponse, GetAllTeamsQuery } from './GetAllTeams'
 export type { GetDeploymentLogsPathParams, GetDeploymentLogs200, GetDeploymentLogsQueryResponse, GetDeploymentLogsQuery } from './GetDeploymentLogs'
 export type {
@@ -102,7 +100,7 @@ export type {
   GetStackServiceVolumesQueryResponse,
   GetStackServiceVolumesQuery,
 } from './GetStackServiceVolumes'
-export type { GetUsers200, GetUsersMutationRequest, GetUsersMutationResponse, GetUsersMutation } from './GetUsers'
+export type { GetUsersQueryParams, GetUsers200, GetUsersQueryResponse, GetUsersQuery } from './GetUsers'
 export type { GitApplicationSourceDto } from './GitApplicationSourceDto'
 export type { GithubApplicationSourceDto } from './GithubApplicationSourceDto'
 export type { GitProviderBranchDto } from './GitProviderBranchDto'
@@ -111,7 +109,6 @@ export type { GitRepositoryCheckResultDto } from './GitRepositoryCheckResultDto'
 export type { LoginUserCommand } from './LoginUserCommand'
 export type { PaginatedListOfSimpleDeploymentDto } from './PaginatedListOfSimpleDeploymentDto'
 export type { PaginatedListOfUserDto } from './PaginatedListOfUserDto'
-export type { PaginatedRequestOfUserDto } from './PaginatedRequestOfUserDto'
 export type {
   PostCreateDeploymentPathParams,
   PostCreateDeployment200,
@@ -228,7 +225,6 @@ export type { StackServiceVolumeDto } from './StackServiceVolumeDto'
 export type { StackServiceVolumeTypeDtoEnum, StackServiceVolumeTypeDto } from './StackServiceVolumeTypeDto'
 export type { StackSourceDto } from './StackSourceDto'
 export type { StackSourceDtoTypeEnum, StackSourceDtoType } from './StackSourceDtoType'
-export type { Test200, TestQueryResponse, TestQuery } from './Test'
 export type { TokenDto } from './TokenDto'
 export type { UpdateGithubInstallationRequest } from './UpdateGithubInstallationRequest'
 export type {
@@ -267,7 +263,6 @@ export type { UserDto } from './UserDto'
 export { channelOutputLogLineLevelEnum } from './ChannelOutputLogLineLevel'
 export { deploymentStatusDtoEnum } from './DeploymentStatusDto'
 export { entityHealthDtoValueEnum } from './EntityHealthDtoValue'
-export { filterOperatorOptionEnum } from './FilterOperatorOption'
 export { providerTypeEnum } from './ProviderType'
 export { serverStatusDtoValueEnum } from './ServerStatusDtoValue'
 export { stackServiceVolumeTypeDtoEnum } from './StackServiceVolumeTypeDto'

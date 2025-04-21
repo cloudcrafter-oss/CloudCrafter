@@ -41,8 +41,6 @@ export { entityHealthDtoSchema } from './entityHealthDtoSchema'
 export { entityHealthDtoValueSchema } from './entityHealthDtoValueSchema'
 export { environmentDtoSchema } from './environmentDtoSchema'
 export { environmentVariableTypeSchema } from './environmentVariableTypeSchema'
-export { filterCritereaSchema } from './filterCritereaSchema'
-export { filterOperatorOptionSchema } from './filterOperatorOptionSchema'
 export { getAllTeams200Schema, getAllTeamsQueryResponseSchema } from './getAllTeamsSchema'
 export { getDeploymentLogsPathParamsSchema, getDeploymentLogs200Schema, getDeploymentLogsQueryResponseSchema } from './getDeploymentLogsSchema'
 export {
@@ -92,7 +90,7 @@ export {
   getStackServiceVolumes200Schema,
   getStackServiceVolumesQueryResponseSchema,
 } from './getStackServiceVolumesSchema'
-export { getUsers200Schema, getUsersMutationRequestSchema, getUsersMutationResponseSchema } from './getUsersSchema'
+export { getUsersQueryParamsSchema, getUsers200Schema, getUsersQueryResponseSchema } from './getUsersSchema'
 export { gitApplicationSourceDtoSchema } from './gitApplicationSourceDtoSchema'
 export { githubApplicationSourceDtoSchema } from './githubApplicationSourceDtoSchema'
 export { gitProviderBranchDtoSchema } from './gitProviderBranchDtoSchema'
@@ -101,7 +99,6 @@ export { gitRepositoryCheckResultDtoSchema } from './gitRepositoryCheckResultDto
 export { loginUserCommandSchema } from './loginUserCommandSchema'
 export { paginatedListOfSimpleDeploymentDtoSchema } from './paginatedListOfSimpleDeploymentDtoSchema'
 export { paginatedListOfUserDtoSchema } from './paginatedListOfUserDtoSchema'
-export { paginatedRequestOfUserDtoSchema } from './paginatedRequestOfUserDtoSchema'
 export { postCreateDeploymentPathParamsSchema, postCreateDeployment200Schema, postCreateDeploymentMutationResponseSchema } from './postCreateDeploymentSchema'
 export {
   postCreateEnvironmentVariableGroupPathParamsSchema,
@@ -202,7 +199,6 @@ export { stackServiceVolumeDtoSchema } from './stackServiceVolumeDtoSchema'
 export { stackServiceVolumeTypeDtoSchema } from './stackServiceVolumeTypeDtoSchema'
 export { stackSourceDtoSchema } from './stackSourceDtoSchema'
 export { stackSourceDtoTypeSchema } from './stackSourceDtoTypeSchema'
-export { test200Schema, testQueryResponseSchema } from './testSchema'
 export { tokenDtoSchema } from './tokenDtoSchema'
 export { updateGithubInstallationRequestSchema } from './updateGithubInstallationRequestSchema'
 export { updateProjectArgsSchema } from './updateProjectArgsSchema'

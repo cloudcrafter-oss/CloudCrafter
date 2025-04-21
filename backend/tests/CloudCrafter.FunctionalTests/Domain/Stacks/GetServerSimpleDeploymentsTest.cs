@@ -28,7 +28,10 @@ public class GetServerSimpleDeploymentsTest : BaseTestFixture
 
         var serverId = Guid.NewGuid();
         var ex = Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await SendAsync(new GetServerSimpleDeployments.Query(serverId, new PaginatedRequest<SimpleDeploymentDto>()))
+            async () =>
+                await SendAsync(
+                    new GetServerSimpleDeployments.Query(serverId, new PaginatedRequest())
+                )
         );
 
         ex.Message.Should().Be($"User does not have access to server {serverId}");
@@ -41,7 +44,9 @@ public class GetServerSimpleDeploymentsTest : BaseTestFixture
 
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
-        var result = await SendAsync(new GetServerSimpleDeployments.Query(server.Id, new PaginatedRequest<SimpleDeploymentDto>()));
+        var result = await SendAsync(
+            new GetServerSimpleDeployments.Query(server.Id, new PaginatedRequest())
+        );
 
         result.Result.Count.Should().Be(0);
     }

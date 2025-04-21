@@ -1,31 +1,45 @@
 import client from '@cloudcrafter/api/client'
-import type { GetUsersMutationRequest, GetUsersMutationResponse } from '../types/GetUsers'
+import type { GetUsersQueryResponse, GetUsersQueryParams } from '../types/GetUsers'
 import type { RequestConfig, ResponseErrorConfig } from '@cloudcrafter/api/client'
-import type { UseMutationOptions } from '@tanstack/react-query'
+import type { QueryKey, QueryObserverOptions, UseQueryResult } from '@tanstack/react-query'
 import { getUsers } from '../axios-backend/getUsers'
-import { useMutation } from '@tanstack/react-query'
+import { queryOptions, useQuery } from '@tanstack/react-query'
 
-export const getUsersMutationKey = () => [{ url: '/api/Users' }] as const
+export const getUsersQueryKey = (params?: GetUsersQueryParams) => [{ url: '/api/Users' }, ...(params ? [params] : [])] as const
 
-export type GetUsersMutationKey = ReturnType<typeof getUsersMutationKey>
+export type GetUsersQueryKey = ReturnType<typeof getUsersQueryKey>
+
+export function getUsersQueryOptionsHook(params?: GetUsersQueryParams, config: Partial<RequestConfig> & { client?: typeof client } = {}) {
+  const queryKey = getUsersQueryKey(params)
+  return queryOptions<GetUsersQueryResponse, ResponseErrorConfig<Error>, GetUsersQueryResponse, typeof queryKey>({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      config.signal = signal
+      return getUsers(params, config)
+    },
+  })
+}
 
 /**
  * {@link /api/Users}
  */
-export function useGetUsersHook<TContext>(
+export function useGetUsersHook<TData = GetUsersQueryResponse, TQueryData = GetUsersQueryResponse, TQueryKey extends QueryKey = GetUsersQueryKey>(
+  params?: GetUsersQueryParams,
   options: {
-    mutation?: UseMutationOptions<GetUsersMutationResponse, ResponseErrorConfig<Error>, { data: GetUsersMutationRequest }, TContext>
-    client?: Partial<RequestConfig<GetUsersMutationRequest>> & { client?: typeof client }
+    query?: Partial<QueryObserverOptions<GetUsersQueryResponse, ResponseErrorConfig<Error>, TData, TQueryData, TQueryKey>>
+    client?: Partial<RequestConfig> & { client?: typeof client }
   } = {},
 ) {
-  const { mutation: mutationOptions, client: config = {} } = options ?? {}
-  const mutationKey = mutationOptions?.mutationKey ?? getUsersMutationKey()
+  const { query: queryOptions, client: config = {} } = options ?? {}
+  const queryKey = queryOptions?.queryKey ?? getUsersQueryKey(params)
 
-  return useMutation<GetUsersMutationResponse, ResponseErrorConfig<Error>, { data: GetUsersMutationRequest }, TContext>({
-    mutationFn: async ({ data }) => {
-      return getUsers(data, config)
-    },
-    mutationKey,
-    ...mutationOptions,
-  })
+  const query = useQuery({
+    ...(getUsersQueryOptionsHook(params, config) as unknown as QueryObserverOptions),
+    queryKey,
+    ...(queryOptions as unknown as Omit<QueryObserverOptions, 'queryKey'>),
+  }) as UseQueryResult<TData, ResponseErrorConfig<Error>> & { queryKey: TQueryKey }
+
+  query.queryKey = queryKey as TQueryKey
+
+  return query
 }

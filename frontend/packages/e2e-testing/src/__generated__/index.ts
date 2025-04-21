@@ -44,8 +44,6 @@ export type { EntityHealthDto } from './types/EntityHealthDto'
 export type { EntityHealthDtoValueEnum, EntityHealthDtoValue } from './types/EntityHealthDtoValue'
 export type { EnvironmentDto } from './types/EnvironmentDto'
 export type { EnvironmentVariableType } from './types/EnvironmentVariableType'
-export type { FilterCriterea } from './types/FilterCriterea'
-export type { FilterOperatorOptionEnum, FilterOperatorOption } from './types/FilterOperatorOption'
 export type { GetAllTeams200, GetAllTeamsQueryResponse, GetAllTeamsQuery } from './types/GetAllTeams'
 export type { GetDeploymentLogsPathParams, GetDeploymentLogs200, GetDeploymentLogsQueryResponse, GetDeploymentLogsQuery } from './types/GetDeploymentLogs'
 export type {
@@ -102,7 +100,7 @@ export type {
   GetStackServiceVolumesQueryResponse,
   GetStackServiceVolumesQuery,
 } from './types/GetStackServiceVolumes'
-export type { GetUsers200, GetUsersMutationRequest, GetUsersMutationResponse, GetUsersMutation } from './types/GetUsers'
+export type { GetUsersQueryParams, GetUsers200, GetUsersQueryResponse, GetUsersQuery } from './types/GetUsers'
 export type { GitApplicationSourceDto } from './types/GitApplicationSourceDto'
 export type { GithubApplicationSourceDto } from './types/GithubApplicationSourceDto'
 export type { GitProviderBranchDto } from './types/GitProviderBranchDto'
@@ -111,7 +109,6 @@ export type { GitRepositoryCheckResultDto } from './types/GitRepositoryCheckResu
 export type { LoginUserCommand } from './types/LoginUserCommand'
 export type { PaginatedListOfSimpleDeploymentDto } from './types/PaginatedListOfSimpleDeploymentDto'
 export type { PaginatedListOfUserDto } from './types/PaginatedListOfUserDto'
-export type { PaginatedRequestOfUserDto } from './types/PaginatedRequestOfUserDto'
 export type {
   PostCreateDeploymentPathParams,
   PostCreateDeployment200,
@@ -238,7 +235,6 @@ export type { StackServiceVolumeDto } from './types/StackServiceVolumeDto'
 export type { StackServiceVolumeTypeDtoEnum, StackServiceVolumeTypeDto } from './types/StackServiceVolumeTypeDto'
 export type { StackSourceDto } from './types/StackSourceDto'
 export type { StackSourceDtoTypeEnum, StackSourceDtoType } from './types/StackSourceDtoType'
-export type { Test200, TestQueryResponse, TestQuery } from './types/Test'
 export type { TokenDto } from './types/TokenDto'
 export type { UpdateGithubInstallationRequest } from './types/UpdateGithubInstallationRequest'
 export type {
@@ -328,7 +324,6 @@ export { getPutUpdateEnvironmentVariableGroupUrl, putUpdateEnvironmentVariableGr
 export { getPutUpdateGithubProviderUrl, putUpdateGithubProvider } from './e2e-backend/putUpdateGithubProvider'
 export { getPutUpdateStackServiceVolumeUrl, putUpdateStackServiceVolume } from './e2e-backend/putUpdateStackServiceVolume'
 export { getRenameTeamUrl, renameTeam } from './e2e-backend/renameTeam'
-export { getTestUrl, test } from './e2e-backend/test'
 export { getUpdateProjectUrl, updateProject } from './e2e-backend/updateProject'
 export { getUpdateServerUrl, updateServer } from './e2e-backend/updateServer'
 export { getUpdateStackUrl, updateStack } from './e2e-backend/updateStack'
@@ -336,7 +331,6 @@ export { getUpdateStackServiceUrl, updateStackService } from './e2e-backend/upda
 export { channelOutputLogLineLevelEnum } from './types/ChannelOutputLogLineLevel'
 export { deploymentStatusDtoEnum } from './types/DeploymentStatusDto'
 export { entityHealthDtoValueEnum } from './types/EntityHealthDtoValue'
-export { filterOperatorOptionEnum } from './types/FilterOperatorOption'
 export { providerTypeEnum } from './types/ProviderType'
 export { serverStatusDtoValueEnum } from './types/ServerStatusDtoValue'
 export { stackServiceVolumeTypeDtoEnum } from './types/StackServiceVolumeTypeDto'
@@ -384,8 +378,6 @@ export { entityHealthDtoSchema } from './zod/entityHealthDtoSchema'
 export { entityHealthDtoValueSchema } from './zod/entityHealthDtoValueSchema'
 export { environmentDtoSchema } from './zod/environmentDtoSchema'
 export { environmentVariableTypeSchema } from './zod/environmentVariableTypeSchema'
-export { filterCritereaSchema } from './zod/filterCritereaSchema'
-export { filterOperatorOptionSchema } from './zod/filterOperatorOptionSchema'
 export { getAllTeams200Schema, getAllTeamsQueryResponseSchema } from './zod/getAllTeamsSchema'
 export { getDeploymentLogsPathParamsSchema, getDeploymentLogs200Schema, getDeploymentLogsQueryResponseSchema } from './zod/getDeploymentLogsSchema'
 export {
@@ -435,7 +427,7 @@ export {
   getStackServiceVolumes200Schema,
   getStackServiceVolumesQueryResponseSchema,
 } from './zod/getStackServiceVolumesSchema'
-export { getUsers200Schema, getUsersMutationRequestSchema, getUsersMutationResponseSchema } from './zod/getUsersSchema'
+export { getUsersQueryParamsSchema, getUsers200Schema, getUsersQueryResponseSchema } from './zod/getUsersSchema'
 export { gitApplicationSourceDtoSchema } from './zod/gitApplicationSourceDtoSchema'
 export { githubApplicationSourceDtoSchema } from './zod/githubApplicationSourceDtoSchema'
 export { gitProviderBranchDtoSchema } from './zod/gitProviderBranchDtoSchema'
@@ -444,7 +436,6 @@ export { gitRepositoryCheckResultDtoSchema } from './zod/gitRepositoryCheckResul
 export { loginUserCommandSchema } from './zod/loginUserCommandSchema'
 export { paginatedListOfSimpleDeploymentDtoSchema } from './zod/paginatedListOfSimpleDeploymentDtoSchema'
 export { paginatedListOfUserDtoSchema } from './zod/paginatedListOfUserDtoSchema'
-export { paginatedRequestOfUserDtoSchema } from './zod/paginatedRequestOfUserDtoSchema'
 export {
   postCreateDeploymentPathParamsSchema,
   postCreateDeployment200Schema,
@@ -549,7 +540,6 @@ export { stackServiceVolumeDtoSchema } from './zod/stackServiceVolumeDtoSchema'
 export { stackServiceVolumeTypeDtoSchema } from './zod/stackServiceVolumeTypeDtoSchema'
 export { stackSourceDtoSchema } from './zod/stackSourceDtoSchema'
 export { stackSourceDtoTypeSchema } from './zod/stackSourceDtoTypeSchema'
-export { test200Schema, testQueryResponseSchema } from './zod/testSchema'
 export { tokenDtoSchema } from './zod/tokenDtoSchema'
 export { updateGithubInstallationRequestSchema } from './zod/updateGithubInstallationRequestSchema'
 export { updateProjectArgsSchema } from './zod/updateProjectArgsSchema'

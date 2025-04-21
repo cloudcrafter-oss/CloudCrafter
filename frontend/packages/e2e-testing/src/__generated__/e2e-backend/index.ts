@@ -46,7 +46,6 @@ export { getPutUpdateEnvironmentVariableGroupUrl, putUpdateEnvironmentVariableGr
 export { getPutUpdateGithubProviderUrl, putUpdateGithubProvider } from './putUpdateGithubProvider'
 export { getPutUpdateStackServiceVolumeUrl, putUpdateStackServiceVolume } from './putUpdateStackServiceVolume'
 export { getRenameTeamUrl, renameTeam } from './renameTeam'
-export { getTestUrl, test } from './test'
 export { getUpdateProjectUrl, updateProject } from './updateProject'
 export { getUpdateServerUrl, updateServer } from './updateServer'
 export { getUpdateStackUrl, updateStack } from './updateStack'

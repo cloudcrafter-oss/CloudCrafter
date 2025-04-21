@@ -9,8 +9,7 @@ using MediatR;
 namespace CloudCrafter.Core.Commands.Users;
 
 [Authorize]
-public record GetUserListQuery(PaginatedRequest<UserDto> Pagination)
-    : IRequest<PaginatedList<UserDto>>;
+public record GetUserListQuery(PaginatedRequest Pagination) : IRequest<PaginatedList<UserDto>>;
 
 public class GetUserListQueryHandler(IUsersService service)
     : IRequestHandler<GetUserListQuery, PaginatedList<UserDto>>

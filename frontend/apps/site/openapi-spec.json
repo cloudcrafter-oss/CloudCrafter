@@ -322,55 +322,6 @@
 				}
 			}
 		},
-		"/api/Users": {
-			"post": {
-				"tags": ["Users"],
-				"operationId": "GetUsers",
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/PaginatedRequestOfUserDto"
-							}
-						}
-					},
-					"required": true
-				},
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/PaginatedListOfUserDto"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/api/Users/test": {
-			"get": {
-				"tags": ["Users"],
-				"operationId": "Test",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"type": "string"
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
 		"/api/Utils/validate-git-repository": {
 			"post": {
 				"tags": ["Utils"],
@@ -2168,6 +2119,52 @@
 					}
 				}
 			}
+		},
+		"/api/Users": {
+			"get": {
+				"tags": ["Users"],
+				"operationId": "GetUsers",
+				"parameters": [
+					{
+						"name": "Page",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					},
+					{
+						"name": "PageSize",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfUserDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfUserDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfUserDto"
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	},
 	"components": {
@@ -2474,33 +2471,6 @@
 			"EnvironmentVariableType": {
 				"type": "integer"
 			},
-			"FilterCriterea": {
-				"required": ["propertyName", "operator"],
-				"type": "object",
-				"properties": {
-					"propertyName": {
-						"type": "string"
-					},
-					"operator": {
-						"$ref": "#/components/schemas/FilterOperatorOption"
-					},
-					"value": {
-						"type": "string",
-						"nullable": true
-					}
-				}
-			},
-			"FilterOperatorOption": {
-				"enum": [
-					"Equal",
-					"NotEqual",
-					"GreaterThan",
-					"GreaterThanOrEqual",
-					"LessThan",
-					"LessThanOrEqual",
-					"Contains"
-				]
-			},
 			"GitApplicationSourceDto": {
 				"required": ["repository"],
 				"type": "object",
@@ -2626,26 +2596,6 @@
 						"items": {
 							"$ref": "#/components/schemas/UserDto"
 						}
-					}
-				}
-			},
-			"PaginatedRequestOfUserDto": {
-				"required": ["filters", "page", "pageSize"],
-				"type": "object",
-				"properties": {
-					"filters": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/FilterCriterea"
-						}
-					},
-					"page": {
-						"type": "integer",
-						"format": "int32"
-					},
-					"pageSize": {
-						"type": "integer",
-						"format": "int32"
 					}
 				}
 			},
@@ -3512,9 +3462,6 @@
 			"name": "System"
 		},
 		{
-			"name": "Users"
-		},
-		{
 			"name": "Utils"
 		},
 		{
@@ -3528,6 +3475,9 @@
 		},
 		{
 			"name": "Teams"
+		},
+		{
+			"name": "Users"
 		}
 	]
 }
