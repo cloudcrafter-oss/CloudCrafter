@@ -1,3 +1,4 @@
+'use client'
 import type { PaginationState } from '@tanstack/react-table'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useMemo } from 'react'
@@ -40,7 +41,7 @@ export function usePagination({
 		(newPage: number) => {
 			const params = new URLSearchParams(searchParams.toString())
 			params.set(pageParamName, Math.max(1, newPage).toString())
-			router.push(`?${params.toString()}`)
+			router.push(`?${params.toString()}`, { scroll: false })
 		},
 		[router, searchParams, pageParamName],
 	)
@@ -50,7 +51,7 @@ export function usePagination({
 			const params = new URLSearchParams(searchParams.toString())
 			params.set(pageSizeParamName, Math.max(1, newPageSize).toString())
 			params.set(pageParamName, '1') // Reset to first page when changing page size
-			router.push(`?${params.toString()}`)
+			router.push(`?${params.toString()}`, { scroll: false })
 		},
 		[router, searchParams, pageParamName, pageSizeParamName],
 	)
@@ -59,7 +60,7 @@ export function usePagination({
 		const params = new URLSearchParams(searchParams.toString())
 		params.set(pageParamName, (pagination.pageIndex + 1).toString())
 		params.set(pageSizeParamName, pagination.pageSize.toString())
-		router.push(`?${params.toString()}`)
+		router.push(`?${params.toString()}`, { scroll: false })
 	}
 
 	return {

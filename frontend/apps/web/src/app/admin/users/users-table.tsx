@@ -18,6 +18,13 @@ export function UsersTable() {
 	const { data } = useGetUsersHook({
 		Page: tablePagination.page,
 		PageSize: tablePagination.pageSize,
+		Filters: [
+			{
+				propertyName: 'email',
+				operator: 'Contains',
+				value: 'gmail.com',
+			},
+		],
 	})
 
 	const paginationState = {

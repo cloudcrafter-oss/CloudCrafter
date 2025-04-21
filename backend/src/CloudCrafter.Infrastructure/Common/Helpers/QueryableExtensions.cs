@@ -19,7 +19,7 @@ public static class QueryableExtensions
         where TDto : class
         where TEntity : class
     {
-        //  query = query.ApplyFiltering<TDto, TEntity>(request.Filters);
+        query = query.ApplyFiltering<TDto, TEntity>(request.Filters);
 
         var totalCount = await query.CountAsync();
 

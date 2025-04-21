@@ -41,6 +41,8 @@ export { entityHealthDtoSchema } from './entityHealthDtoSchema'
 export { entityHealthDtoValueSchema } from './entityHealthDtoValueSchema'
 export { environmentDtoSchema } from './environmentDtoSchema'
 export { environmentVariableTypeSchema } from './environmentVariableTypeSchema'
+export { filterCritereaSchema } from './filterCritereaSchema'
+export { filterOperatorOptionSchema } from './filterOperatorOptionSchema'
 export { getAllTeams200Schema, getAllTeamsQueryResponseSchema } from './getAllTeamsSchema'
 export { getDeploymentLogsPathParamsSchema, getDeploymentLogs200Schema, getDeploymentLogsQueryResponseSchema } from './getDeploymentLogsSchema'
 export {

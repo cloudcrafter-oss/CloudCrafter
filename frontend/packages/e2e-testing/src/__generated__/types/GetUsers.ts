@@ -1,6 +1,11 @@
+import type { FilterCriterea } from './FilterCriterea'
 import type { PaginatedListOfUserDto } from './PaginatedListOfUserDto'
 
 export type GetUsersQueryParams = {
+  /**
+   * @type array | undefined
+   */
+  Filters?: FilterCriterea[]
   /**
    * @type integer | undefined, int32
    */

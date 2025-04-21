@@ -52,15 +52,15 @@ public class GetUserListQueryTest : BaseTestFixture
         var query = new GetUserListQuery(
             new()
             {
-                // Filters = new List<FilterCriterea>()
-                // {
-                //     new FilterCriterea()
-                //     {
-                //         Operator = FilterOperatorOption.Contains,
-                //         PropertyName = "Email",
-                //         Value = randomUser.Email,
-                //     },
-                // },
+                Filters = new List<FilterCriterea>()
+                {
+                    new FilterCriterea()
+                    {
+                        Operator = FilterOperatorOption.Contains,
+                        PropertyName = "Email",
+                        Value = randomUser.Email,
+                    },
+                },
             }
         );
 
@@ -76,15 +76,15 @@ public class GetUserListQueryTest : BaseTestFixture
         query = new GetUserListQuery(
             new()
             {
-                // Filters = new List<FilterCriterea>()
-                // {
-                //     new FilterCriterea()
-                //     {
-                //         Operator = FilterOperatorOption.NotEqual,
-                //         PropertyName = "Email",
-                //         Value = randomUser.Email,
-                //     },
-                // },
+                Filters = new List<FilterCriterea>()
+                {
+                    new FilterCriterea()
+                    {
+                        Operator = FilterOperatorOption.NotEqual,
+                        PropertyName = "Email",
+                        Value = randomUser.Email,
+                    },
+                },
             }
         );
 

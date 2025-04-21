@@ -2126,6 +2126,16 @@
 				"operationId": "GetUsers",
 				"parameters": [
 					{
+						"name": "Filters",
+						"in": "query",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/components/schemas/FilterCriterea"
+							}
+						}
+					},
+					{
 						"name": "Page",
 						"in": "query",
 						"schema": {
@@ -2470,6 +2480,33 @@
 			},
 			"EnvironmentVariableType": {
 				"type": "integer"
+			},
+			"FilterCriterea": {
+				"required": ["propertyName", "operator"],
+				"type": "object",
+				"properties": {
+					"propertyName": {
+						"type": "string"
+					},
+					"operator": {
+						"$ref": "#/components/schemas/FilterOperatorOption"
+					},
+					"value": {
+						"type": "string",
+						"nullable": true
+					}
+				}
+			},
+			"FilterOperatorOption": {
+				"enum": [
+					"Equal",
+					"NotEqual",
+					"GreaterThan",
+					"GreaterThanOrEqual",
+					"LessThan",
+					"LessThanOrEqual",
+					"Contains"
+				]
 			},
 			"GitApplicationSourceDto": {
 				"required": ["repository"],
