@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Bogus;
+using CloudCrafter.Domain.Constants;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.FunctionalTests.Database;
 using CloudCrafter.FunctionalTests.TestModels;
@@ -141,7 +142,7 @@ public class Testing
 
     public static async Task<Guid?> RunAsDefaultUserAsync()
     {
-        return await RunAsUserAsync("test@local", "Testing1234!", Array.Empty<string>());
+        return await RunAsUserAsync("test@local", "Testing1234!", [Roles.User]);
     }
 
     public static async Task<Guid?> RunAsAdministratorAsync()
@@ -149,7 +150,7 @@ public class Testing
         return await RunAsUserAsync(
             "administrator@local",
             "Administrator1234!",
-            Array.Empty<string>()
+            [Roles.Administrator, Roles.User]
         );
     }
 
@@ -165,11 +166,11 @@ public class Testing
 
         if (roles.Any())
         {
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
 
             foreach (var role in roles)
             {
-                await roleManager.CreateAsync(new IdentityRole(role));
+                await roleManager.CreateAsync(new Role(role));
             }
 
             await userManager.AddToRolesAsync(user, roles);

@@ -2,6 +2,7 @@ using Ardalis.GuardClauses;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Auth;
 using CloudCrafter.Domain.Domain.Auth;
+using CloudCrafter.Domain.Domain.User;
 using CloudCrafter.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
@@ -87,6 +88,28 @@ public class CloudCrafterAuthService(
         }
 
         return await CreateTokenForUserAsync(user, refreshToken);
+    }
+
+    public async Task<List<RoleDto>> GetRoles(Guid userId)
+    {
+        var user = await userManager.FindByIdAsync(userId.ToString());
+
+        if (user == null)
+        {
+            throw new NotFoundException("User", "User not found");
+        }
+
+        var roles = await userManager.GetRolesAsync(user);
+
+        var roleDtoList = new List<RoleDto>();
+
+        foreach (var role in roles)
+        {
+            var roleDto = new RoleDto { Name = role };
+            roleDtoList.Add(roleDto);
+        }
+
+        return roleDtoList;
     }
 
     private async Task<TokenDto> CreateTokenForUserAsync(

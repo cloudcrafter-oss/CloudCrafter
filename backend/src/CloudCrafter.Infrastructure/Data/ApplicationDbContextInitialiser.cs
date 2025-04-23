@@ -1,5 +1,6 @@
 using CloudCrafter.Domain.Constants;
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,35 +24,24 @@ public static class InitialiserExtensions
     }
 }
 
-public class ApplicationDbContextInitialiser
+public class ApplicationDbContextInitialiser(
+    ILogger<ApplicationDbContextInitialiser> logger,
+    AppDbContext context,
+    AuthSeeder authSeeder,
+    UserManager<User> userManager
+)
 {
-    private readonly AppDbContext _context;
-    private readonly ILogger<ApplicationDbContextInitialiser> _logger;
-    private readonly RoleManager<Role> _roleManager;
-    private readonly UserManager<User> _userManager;
-
-    public ApplicationDbContextInitialiser(
-        ILogger<ApplicationDbContextInitialiser> logger,
-        AppDbContext context,
-        UserManager<User> userManager,
-        RoleManager<Role> roleManager
-    )
-    {
-        _logger = logger;
-        _context = context;
-        _userManager = userManager;
-        _roleManager = roleManager;
-    }
+    private readonly AuthSeeder _authSeeder = authSeeder;
 
     public async Task InitialiseAsync()
     {
         try
         {
-            await _context.Database.MigrateAsync();
+            await context.Database.MigrateAsync();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while initialising the database.");
+            logger.LogError(ex, "An error occurred while initialising the database.");
             throw;
         }
     }
@@ -60,11 +50,12 @@ public class ApplicationDbContextInitialiser
     {
         try
         {
+            await _authSeeder.SeedRolesAsync();
             await TrySeedAsync();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while seeding the database.");
+            logger.LogError(ex, "An error occurred while seeding the database.");
             throw;
         }
     }
@@ -74,20 +65,15 @@ public class ApplicationDbContextInitialiser
         // Default roles
         var administratorRole = new Role(Roles.Administrator);
 
-        if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
-        {
-            await _roleManager.CreateAsync(administratorRole);
-        }
-
         // Default users
         var administrator = new User { UserName = "admin@admin.com", Email = "admin@admin.com" };
 
-        if (_userManager.Users.All(u => u.UserName != administrator.UserName))
+        if (userManager.Users.All(u => u.UserName != administrator.UserName))
         {
-            await _userManager.CreateAsync(administrator, "P@ssw0rd!123");
+            await userManager.CreateAsync(administrator, "P@ssw0rd!123");
             if (!string.IsNullOrWhiteSpace(administratorRole.Name))
             {
-                await _userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
+                await userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
             }
         }
 

@@ -17,4 +17,10 @@ public class UsersController : CloudCrafterController
     {
         return await sender.Send(new GetUserListQuery(paginationRequest));
     }
+
+    [HttpGet]
+    public async Task<List<RoleDto>> GetUserRoles(ISender sender)
+    {
+        return await sender.Send(new GetCurrentUserRolesQuery());
+    }
 }
