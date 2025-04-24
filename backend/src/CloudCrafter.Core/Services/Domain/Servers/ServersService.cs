@@ -111,6 +111,8 @@ public class ServersService(
     {
         var server = await repository.GetServerEntityOrFail(id);
 
+        await accessService.EnsureCanMutateEntity(server, user.Id);
+
         if (updateDto.Name is not null)
         {
             server.Name = updateDto.Name;

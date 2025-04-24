@@ -1,10 +1,9 @@
 using CloudCrafter.Core.Commands.Servers;
+using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Domain.Server;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
-using Npgsql;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Servers;
 
@@ -33,6 +32,27 @@ public class UpdateServerCommandTest : BaseTestFixture
     }
 
     [Test]
+    public async Task ShouldNotBeAbleToUpdateServerBecauseUserIsNotAnAdministrator()
+    {
+        await RunAsDefaultUserAsync();
+
+        var server = FakerInstances.ServerFaker.Generate();
+        await AddAsync(server);
+
+        Assert.ThrowsAsync<ForbiddenAccessException>(
+            async () => await SendAsync(Command with { ServerId = server.Id })
+        );
+    }
+
+    private async Task VerifyUpdateName(Guid serverId, string newName)
+    {
+        var updatedServer = await FindAsync<Server>(serverId);
+
+        updatedServer.Should().NotBeNull();
+        updatedServer!.Name.Should().Be(newName);
+    }
+
+    [Test]
     public async Task ShouldBeAbleToPatchName()
     {
         await RunAsAdministratorAsync();
@@ -45,10 +65,42 @@ public class UpdateServerCommandTest : BaseTestFixture
 
         await SendAsync(command);
 
-        var updatedServer = await FindAsync<Server>(server.Id);
+        await VerifyUpdateName(server.Id, command.UpdateDetails.Name!);
+    }
 
-        updatedServer.Should().NotBeNull();
-        updatedServer!.Name.Should().Be(command.UpdateDetails.Name);
+    [Test]
+    public async Task ShouldBeAbleToPatchNameWhenTeamOwner()
+    {
+        var userId = await RunAsDefaultUserAsync();
+        var team = await CreateTeam(userId);
+
+        var server = FakerInstances.ServerFaker.RuleFor(x => x.TeamId, f => team.Id).Generate();
+        await AddAsync(server);
+
+        var command = new UpdateServerCommand(server.Id, new UpdateServerDto { Name = "New Name" });
+        server.Name.Should().NotBe(command.UpdateDetails.Name);
+
+        await SendAsync(command);
+
+        await VerifyUpdateName(server.Id, command.UpdateDetails.Name!);
+    }
+
+    [Test]
+    public async Task ShouldNotBeAbleToUpdateServerBecauseUserIsNotATeamOwner()
+    {
+        var userId = await RunAsDefaultUserAsync();
+        var team = await CreateTeam();
+        await AddToTeam(team, userId);
+
+        var server = FakerInstances.ServerFaker.RuleFor(x => x.TeamId, f => team.Id).Generate();
+        await AddAsync(server);
+
+        Assert.ThrowsAsync<ForbiddenAccessException>(
+            async () =>
+                await SendAsync(
+                    new UpdateServerCommand(server.Id, new UpdateServerDto { Name = "New Name" })
+                )
+        );
     }
 
     [Test]
