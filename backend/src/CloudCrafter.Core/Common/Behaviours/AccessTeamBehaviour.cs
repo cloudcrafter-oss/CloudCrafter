@@ -16,14 +16,14 @@ public class AccessTeamBehaviour<TRequest, TResponse>(IIdentityService identityS
         CancellationToken cancellationToken
     )
     {
-        if (user.Id == null)
-        {
-            throw new UnauthorizedAccessException();
-        }
-
         if (request is not IRequireTeamAccess teamAccessRequest)
         {
             return await next();
+        }
+
+        if (user.Id == null)
+        {
+            throw new UnauthorizedAccessException();
         }
 
         var teamId = teamAccessRequest.TeamId;
