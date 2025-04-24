@@ -97,6 +97,7 @@ public class ServersService(
     public async Task RotateServerKey(Guid id)
     {
         var server = await repository.GetServerEntityOrFail(id);
+        await accessService.EnsureCanMutateEntity(server, user.Id);
 
         server.UpdateServerAgentKey(StringUtils.GenerateSecret(64));
         server.AddDomainEvent(
