@@ -38,7 +38,7 @@ public class GetProvidersQueryTest : BaseTestFixture
 
         for (int i = 0; i < generate; i++)
         {
-            var createdProvider = FakerInstances.GithubProviderFaker.Generate();
+            var createdProvider = FakerInstances.GithubProviderFaker().Generate();
             await AddAsync(createdProvider);
         }
 
@@ -67,7 +67,8 @@ public class GetProvidersQueryTest : BaseTestFixture
             .Generate();
 
         var createdProvider = FakerInstances
-            .GithubProviderFaker.RuleFor(x => x.SourceProvider, f => provider)
+            .GithubProviderFaker()
+            .RuleFor(x => x.SourceProvider, f => provider)
             .RuleFor(x => x.SourceProviderId, f => provider.Id)
             .Generate();
 
@@ -93,7 +94,8 @@ public class GetProvidersQueryTest : BaseTestFixture
             .Generate();
 
         var createdProvider = FakerInstances
-            .GithubProviderFaker.RuleFor(x => x.SourceProvider, f => provider)
+            .GithubProviderFaker()
+            .RuleFor(x => x.SourceProvider, f => provider)
             .RuleFor(x => x.SourceProviderId, f => provider.Id)
             .Generate();
 

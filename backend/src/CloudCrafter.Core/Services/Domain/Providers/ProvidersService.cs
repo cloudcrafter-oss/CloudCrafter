@@ -4,10 +4,8 @@ using CloudCrafter.Core.Interfaces.Domain.Providers;
 using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Core.Services.Core.Providers;
-using CloudCrafter.Core.Services.Domain.Providers.Github;
 using CloudCrafter.Domain.Domain.Providers;
 using CloudCrafter.Domain.Domain.Providers.Filter;
-using CloudCrafter.Domain.Entities;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Services.Domain.Providers;
@@ -58,7 +56,7 @@ public class ProvidersService(
             internalFilter.UserId = user.Id;
         }
 
-        List<SourceProvider> providers = await repository.GetProviders(filter, internalFilter);
+        var providers = await repository.GetProviders(filter, internalFilter);
 
         return mapper.Map<List<SourceProviderDto>>(providers);
     }
@@ -94,6 +92,8 @@ public class ProvidersService(
     public async Task InstallGithubProvider(Guid providerId, long installationId)
     {
         var provider = await repository.GetSourceProvider(providerId);
+
+        await accessService.EnsureCanMutateEntity(provider, user.Id);
 
         if (provider.GithubProvider == null || provider.GithubProvider.InstallationId.HasValue)
         {

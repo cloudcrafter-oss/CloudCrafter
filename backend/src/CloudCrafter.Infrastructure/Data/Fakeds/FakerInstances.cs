@@ -34,32 +34,6 @@ public static class FakerInstances
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
 
-    public static Faker<GithubProvider> GithubProviderFaker
-    {
-        get
-        {
-            var githubProviderId = Guid.NewGuid();
-            var provider = SourceProviderFaker(githubProviderId).Generate();
-
-            return new Faker<GithubProvider>()
-                .StrictMode(true)
-                .RuleFor(x => x.Id, githubProviderId)
-                .RuleFor(x => x.AppName, f => f.Person.FullName)
-                .RuleFor(x => x.IsValid, f => null)
-                .RuleFor(x => x.AppId, f => f.Random.Long())
-                .RuleFor(x => x.AppClientId, f => f.Random.Guid().ToString())
-                .RuleFor(x => x.AppClientSecret, f => f.Random.Guid().ToString())
-                .RuleFor(x => x.AppWebhookSecret, f => f.Random.Guid().ToString())
-                .RuleFor(x => x.AppPrivateKey, f => f.Random.Guid().ToString())
-                .RuleFor(x => x.InstallationId, f => null)
-                .RuleFor(x => x.AppUrl, f => f.Internet.Url())
-                .RuleFor(x => x.SourceProvider, f => provider)
-                .RuleFor(x => x.SourceProviderId, f => provider.Id)
-                .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
-                .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
-        }
-    }
-
     public static Faker<EntityStackServiceHealthStatus> EntityHealthStatusFaker =>
         new Faker<EntityStackServiceHealthStatus>()
             .StrictMode(true)
@@ -69,6 +43,31 @@ public static class FakerInstances
 
     public static StackServiceType StackServiceAppTypeType =>
         new() { Id = StackServiceTypeConstants.App, Type = nameof(StackServiceTypeConstants.App) };
+
+    public static Faker<GithubProvider> GithubProviderFaker(Guid? teamId = null)
+    {
+        var githubProviderId = Guid.NewGuid();
+        var provider = SourceProviderFaker(githubProviderId)
+            .RuleFor(x => x.TeamId, f => teamId)
+            .Generate();
+
+        return new Faker<GithubProvider>()
+            .StrictMode(true)
+            .RuleFor(x => x.Id, githubProviderId)
+            .RuleFor(x => x.AppName, f => f.Person.FullName)
+            .RuleFor(x => x.IsValid, f => null)
+            .RuleFor(x => x.AppId, f => f.Random.Long())
+            .RuleFor(x => x.AppClientId, f => f.Random.Guid().ToString())
+            .RuleFor(x => x.AppClientSecret, f => f.Random.Guid().ToString())
+            .RuleFor(x => x.AppWebhookSecret, f => f.Random.Guid().ToString())
+            .RuleFor(x => x.AppPrivateKey, f => f.Random.Guid().ToString())
+            .RuleFor(x => x.InstallationId, f => null)
+            .RuleFor(x => x.AppUrl, f => f.Internet.Url())
+            .RuleFor(x => x.SourceProvider, f => provider)
+            .RuleFor(x => x.SourceProviderId, f => provider.Id)
+            .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);
+    }
 
     public static Faker<Project> ProjectFaker(Guid teamId)
     {
