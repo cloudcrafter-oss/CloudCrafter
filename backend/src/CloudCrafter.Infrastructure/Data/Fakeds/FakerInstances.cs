@@ -25,6 +25,8 @@ public static class FakerInstances
             .RuleFor(x => x.DockerDataDirectoryMount, "/data/random/dir")
             .RuleFor(x => x.Stacks, [])
             .RuleFor(x => x.DockerNetwork, f => f.Internet.DomainWord())
+            .RuleFor(x => x.TeamId, f => null)
+            .RuleFor(x => x.Team, f => null)
             .RuleFor(x => x.CreatedBy, f => null)
             .RuleFor(x => x.LastModifiedBy, f => null)
             .RuleFor(x => x.PingHealthData, new ServerPingData())
@@ -128,6 +130,8 @@ public static class FakerInstances
             .RuleFor(x => x.Id, f => Guid.NewGuid())
             .RuleFor(x => x.Name, f => f.Person.FirstName)
             .RuleFor(x => x.CreatedAt, DateTime.UtcNow)
+            .RuleFor(x => x.TeamId, f => null)
+            .RuleFor(x => x.Team, f => null)
             .RuleFor(x => x.GithubProvider, f => null)
             .RuleFor(x => x.GithubProviderId, f => githubProviderId)
             .RuleFor(x => x.UpdatedAt, DateTime.UtcNow);

@@ -155,7 +155,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ICommandExecutor, CommandExecutor>();
         services
             .AddScoped<IUsersService, UsersService>()
-            .AddScoped<IServersService, ServersService>()
+            .AddScoped<IServersService, ServersUserService>()
             .AddScoped<IUserAccessService, UserAccessService>()
             .AddScoped<IServerConnectivityService, ServerConnectivityService>()
             .AddScoped<IProjectsService, ProjectsService>()

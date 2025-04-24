@@ -1,6 +1,5 @@
 using AutoMapper;
 using CloudCrafter.Core.Commands.Servers;
-using CloudCrafter.Core.Events.DomainEvents;
 using CloudCrafter.Core.Events.DomainEvents.Server;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
@@ -56,7 +55,7 @@ public class ServersService(IServerRepository repository, IMapper mapper) : ISer
         await repository.SaveChangesAsync();
     }
 
-    public async Task DeleteServer(Guid id)
+    public virtual async Task DeleteServer(Guid id)
     {
         try
         {

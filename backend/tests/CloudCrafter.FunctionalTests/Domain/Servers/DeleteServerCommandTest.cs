@@ -20,6 +20,23 @@ public class DeleteServerCommandTest : BaseTestFixture
     }
 
     [Test]
+    public async Task ShouldNotBeAbleToDeleteServerWhichUserDoesNotHaveAccessTo()
+    {
+        await RunAsDefaultUserAsync();
+
+        var server = FakerInstances.ServerFaker.Generate();
+        await AddAsync(server);
+
+        (await CountAsync<Server>()).Should().Be(1);
+
+        Assert.ThrowsAsync<ForbiddenAccessException>(
+            async () => await SendAsync(new DeleteServerCommand(server.Id))
+        );
+
+        (await CountAsync<Server>()).Should().Be(1);
+    }
+
+    [Test]
     public async Task ShouldExecuteEvenIfServerDoesNotExists()
     {
         await RunAsAdministratorAsync();
