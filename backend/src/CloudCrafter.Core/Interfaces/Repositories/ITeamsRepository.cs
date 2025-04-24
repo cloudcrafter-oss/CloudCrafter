@@ -10,4 +10,5 @@ public interface ITeamsRepository
     Task<List<Team>> GetTeamsForUser(Guid userId);
     Task<List<Team>> GetAllTeams();
     Task<List<Team>> GetTeamsWithProjectsAndEnvironments(Guid userId);
+    Task<Team> GetTeam(Guid teamId);
 }

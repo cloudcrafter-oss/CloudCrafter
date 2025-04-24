@@ -69,6 +69,18 @@ public class TeamsRepository(IApplicationDbContext context) : ITeamsRepository
         return teams.ToListAsync();
     }
 
+    public async Task<Team> GetTeam(Guid teamId)
+    {
+        var team = await context.Teams.Where(x => x.Id == teamId).FirstOrDefaultAsync();
+
+        if (team == null)
+        {
+            throw new NotFoundException("Team", "Team not found");
+        }
+
+        return team;
+    }
+
     private IQueryable<Team> UserTeams(Guid userId)
     {
         return context.Teams.Where(x =>

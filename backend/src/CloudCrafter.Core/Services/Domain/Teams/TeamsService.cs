@@ -3,6 +3,7 @@ using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Core.Interfaces.Domain.Teams;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Teams;
+using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.Core.Services.Domain.Teams;
@@ -29,6 +30,11 @@ public class TeamsService(ITeamsRepository repository, IMapper mapper) : ITeamsS
     public Task UpdateTeamName(Guid teamId, string name)
     {
         return repository.UpdateTeamName(teamId, name);
+    }
+
+    public Task<Team> GetTeam(Guid teamId)
+    {
+        return repository.GetTeam(teamId);
     }
 
     public async Task<List<SimpleTeamDto>> GetTeams(Guid userId)
