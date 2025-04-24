@@ -7,8 +7,8 @@ public class Project : IHasTimestamps
     public required Guid Id { get; init; }
     public required string Name { get; set; }
     public required string? Description { get; set; }
-    public required Guid TeamId { get; init; }
-    public virtual Team Team { get; set; } = null!;
+    public required Guid TeamId { get; set; }
+    public Team Team { get; init; } = null!;
     public IList<Environment> Environments { get; set; } = new List<Environment>();
     public required DateTime CreatedAt { get; init; }
     public required DateTime UpdatedAt { get; set; }

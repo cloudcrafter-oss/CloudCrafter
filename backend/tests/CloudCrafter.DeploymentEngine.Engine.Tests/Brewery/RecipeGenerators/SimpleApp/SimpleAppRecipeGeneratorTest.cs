@@ -169,6 +169,7 @@ public class SimpleAppRecipeGeneratorTest
         var sourceProvider = new SourceProvider
         {
             Id = Guid.NewGuid(),
+            TeamId = null,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Name = "Github OSS Test",
@@ -188,6 +189,7 @@ public class SimpleAppRecipeGeneratorTest
                 SourceProvider = new SourceProvider
                 {
                     Id = Guid.NewGuid(),
+                    TeamId = null,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
                     Name = "Github OSS Test",

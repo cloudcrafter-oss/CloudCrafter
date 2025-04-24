@@ -103,6 +103,7 @@ public static class EntityFaker
         var sourceProvider = new SourceProvider
         {
             Id = Guid.NewGuid(),
+            TeamId = null,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Name = "Github OSS Test",
@@ -125,6 +126,7 @@ public static class EntityFaker
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
                     Name = "Github OSS Test",
+                    TeamId = null,
                     GithubProviderId = Guid.NewGuid(),
                     GithubProvider = new GithubProvider
                     {

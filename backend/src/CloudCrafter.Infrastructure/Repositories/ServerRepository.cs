@@ -85,6 +85,7 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
         {
             Id = Guid.NewGuid(),
             Name = requestName,
+            TeamId = null,
             AgentSecretKey = StringUtils.GenerateSecret(64),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
@@ -104,7 +105,7 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
 
     public async Task<List<Server>> FilterServers(ServerFilter filter)
     {
-        IQueryable<Server> servers = GetBaseQuery();
+        var servers = GetBaseQuery();
 
         if (filter.HealthCheckAgeOlderThan.HasValue)
         {

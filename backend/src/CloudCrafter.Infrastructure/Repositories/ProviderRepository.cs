@@ -16,6 +16,7 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
         var sourceProvider = new SourceProvider
         {
             Name = data.Name,
+            TeamId = null,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             GithubProviderId = providerId,
