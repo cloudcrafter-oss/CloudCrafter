@@ -33,6 +33,16 @@ public abstract class BaseTestFixture
         return team;
     }
 
+    public async Task AddToTeam(Team team, Guid? userId)
+    {
+        if (userId == null)
+        {
+            return;
+        }
+
+        await AddAsync(new TeamUser() { TeamId = team.Id, UserId = userId.Value });
+    }
+
     public async Task<Stack> CreateSampleStack(Action<Stack>? customizeStack = null)
     {
         var server = FakerInstances.ServerFaker.Generate();

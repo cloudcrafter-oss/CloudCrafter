@@ -14,13 +14,20 @@ namespace CloudCrafter.Infrastructure.Repositories;
 
 public class ServerRepository(IApplicationDbContext context, IMapper mapper) : IServerRepository
 {
-    public async Task<List<ServerDto>> GetServers()
+    public async Task<List<ServerDto>> GetServers(ServerFilter filter)
     {
-        var servers = GetBaseQuery().AsQueryable();
+        var servers = GetFilteredServers(filter);
 
         var result = await servers.ProjectTo<ServerDto>(mapper.ConfigurationProvider).ToListAsync();
 
         return result;
+    }
+
+    public async Task<List<Server>> FilterServers(ServerFilter filter)
+    {
+        var servers = GetFilteredServers(filter);
+
+        return await servers.ToListAsync();
     }
 
     public async Task<Server?> GetServer(Guid id)
@@ -98,24 +105,6 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
         return server;
     }
 
-    public async Task<List<Server>> FilterServers(ServerFilter filter)
-    {
-        var servers = GetBaseQuery();
-
-        if (filter.HealthCheckAgeOlderThan.HasValue)
-        {
-            servers =
-                from zz in servers
-                where
-                    !zz.PingHealthData.LastPingAt.HasValue
-                    || zz.PingHealthData.LastPingAt.Value
-                        < DateTime.UtcNow - filter.HealthCheckAgeOlderThan.Value
-                select zz;
-        }
-
-        return await servers.ToListAsync();
-    }
-
     public Task SaveChangesAsync()
     {
         return context.SaveChangesAsync();
@@ -133,6 +122,38 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
         context.Servers.Remove(server);
 
         await context.SaveChangesAsync();
+    }
+
+    private IQueryable<Server> GetFilteredServers(ServerFilter filter)
+    {
+        var servers = GetBaseQuery();
+
+        if (filter.HealthCheckAgeOlderThan.HasValue)
+        {
+            servers =
+                from zz in servers
+                where
+                    !zz.PingHealthData.LastPingAt.HasValue
+                    || zz.PingHealthData.LastPingAt.Value
+                        < DateTime.UtcNow - filter.HealthCheckAgeOlderThan.Value
+                select zz;
+        }
+
+        if (filter.UserId.HasValue)
+        {
+            servers =
+                from zz in servers
+                where
+                    zz.TeamId.HasValue
+                    && zz.Team != null
+                    && (
+                        zz.Team.OwnerId == filter.UserId.Value
+                        || zz.Team.TeamUsers.Any(x => x.UserId == filter.UserId.Value)
+                    )
+                select zz;
+        }
+
+        return servers;
     }
 
     private IQueryable<Server> GetBaseQuery()

@@ -1,7 +1,6 @@
 using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Servers;
 
@@ -9,7 +8,7 @@ using static Testing;
 
 public class GetServerListTest : BaseTestFixture
 {
-    private GetServerListQuery Query = new();
+    private readonly GetServerListQuery Query = new();
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
@@ -17,12 +16,24 @@ public class GetServerListTest : BaseTestFixture
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Query));
     }
 
-    [Test]
-    public async Task ShouldBeAbleToFetchServersWhenLoggedIn()
+    [TestCase(true, 5, 5)]
+    [TestCase(false, 5, 0)]
+    public async Task ShouldBeAbleToFetchServersWhenLoggedIn(
+        bool isAdmin,
+        int generate,
+        int expected
+    )
     {
-        await RunAsAdministratorAsync();
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            await RunAsDefaultUserAsync();
+        }
 
-        var servers = FakerInstances.ServerFaker.Generate(5);
+        var servers = FakerInstances.ServerFaker.Generate(generate);
         foreach (var server in servers)
         {
             await AddAsync(server);
@@ -30,6 +41,37 @@ public class GetServerListTest : BaseTestFixture
 
         var result = await SendAsync(Query);
 
-        result.Count.Should().Be(5);
+        result.Count.Should().Be(expected);
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToSeeOwnedTeamServer()
+    {
+        var userId = await RunAsDefaultUserAsync();
+
+        var team = await CreateTeam(userId);
+
+        var server = FakerInstances.ServerFaker.RuleFor(x => x.TeamId, team.Id).Generate();
+        await AddAsync(server);
+
+        var result = await SendAsync(Query);
+
+        result.Count.Should().Be(1);
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToAttachedTeamServer()
+    {
+        var userId = await RunAsDefaultUserAsync();
+
+        var team = await CreateTeam();
+        await AddToTeam(team, userId);
+
+        var server = FakerInstances.ServerFaker.RuleFor(x => x.TeamId, team.Id).Generate();
+
+        await AddAsync(server);
+
+        var result = await SendAsync(Query);
+        result.Count.Should().Be(1);
     }
 }

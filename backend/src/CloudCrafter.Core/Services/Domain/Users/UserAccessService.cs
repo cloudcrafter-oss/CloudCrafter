@@ -2,7 +2,6 @@
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Core.Interfaces.Domain.Environments;
 using CloudCrafter.Core.Interfaces.Domain.Projects;
-using CloudCrafter.Core.Interfaces.Domain.Servers;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Domain.Teams;
 using CloudCrafter.Core.Interfaces.Domain.Users;
@@ -90,6 +89,18 @@ public class UserAccessService(
         {
             throw new ForbiddenAccessException();
         }
+    }
+
+    public async Task<bool> IsAdministrator(Guid? userId)
+    {
+        if (userId == null)
+        {
+            return false;
+        }
+
+        var isAdmin = await identityService.IsInRoleAsync(userId.Value, Roles.Administrator);
+
+        return isAdmin;
     }
 
     private async Task<bool> UserCanMutate(Guid? teamId, Guid userId)

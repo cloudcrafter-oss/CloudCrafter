@@ -22,9 +22,18 @@ public class ServersService(
     IUser user
 ) : IServersService
 {
-    public Task<List<ServerDto>> GetServers()
+    public async Task<List<ServerDto>> GetServers()
     {
-        return repository.GetServers();
+        var isAdmin = await accessService.IsAdministrator(user.Id);
+
+        var filter = new ServerFilter();
+
+        if (!isAdmin)
+        {
+            filter.UserId = user.Id;
+        }
+
+        return await repository.GetServers(filter);
     }
 
     public async Task<ServerDetailDto?> GetServer(Guid id)

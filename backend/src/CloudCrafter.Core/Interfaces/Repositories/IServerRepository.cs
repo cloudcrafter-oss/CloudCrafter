@@ -7,7 +7,7 @@ namespace CloudCrafter.Core.Interfaces.Repositories;
 
 public interface IServerRepository
 {
-    Task<List<ServerDto>> GetServers();
+    Task<List<ServerDto>> GetServers(ServerFilter filter);
     Task<Server?> GetServer(Guid id);
     Task<Server> GetServerEntityOrFail(Guid serverId);
     Task<bool> HasAgent(Guid serverId, string serverKey);

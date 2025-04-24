@@ -12,4 +12,5 @@ public interface IUserAccessService
     public Task<bool> CanMutateEntity(IHaveATeam entity, Guid userId);
     public Task EnsureCanMutateEntity(IHaveATeam entity, Guid? userId);
     public Task EnsureCanMutateEntity(IMayHaveATeam entity, Guid? userId);
+    public Task<bool> IsAdministrator(Guid? userId);
 }
