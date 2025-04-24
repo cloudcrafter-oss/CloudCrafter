@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
 using NUnit.Framework;
 using Octokit;
+using Team = CloudCrafter.Domain.Entities.Team;
 using User = Octokit.User;
 
 namespace CloudCrafter.FunctionalTestWithMocks.Domain.Providers.Github;
@@ -51,9 +52,30 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
     }
 
     [Test]
-    public async Task ShouldBeAbleToCreateFromGitHub()
+    public async Task ShouldNotBeAbleToCreateProviderWithoutATeamAsARegularUser()
     {
-        await RunAsAdministratorAsync();
+        await RunAsDefaultUserAsync();
+
+        Assert.ThrowsAsync<CloudCrafter.Core.Exceptions.ForbiddenAccessException>(
+            async () => await SendAsync(new CreateGithubProviderCommand("dummy"))
+        );
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToCreateFromGitHub(bool isAdmin)
+    {
+        Team? team = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            var userId = await RunAsDefaultUserAsync();
+
+            team = await CreateTeam(userId!.Value);
+        }
 
         // Setup
         (await CountAsync<GithubProvider>())
@@ -89,7 +111,9 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         _mockProvider.Setup(x => x.GetClient()).Returns(_mockClient.Object);
 
         // Act
-        var result = await SendAsync(new CreateGithubProviderCommand("dummy"));
+        var result = await SendAsync(
+            new CreateGithubProviderCommand("dummy") { TeamId = team?.Id }
+        );
 
         // Assert
         result.Should().BeTrue();
@@ -110,6 +134,15 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
 
         provider!.GithubProvider.Should().NotBeNull();
         provider.GithubProviderId.Should().Be(firstItem!.Id);
+
+        if (isAdmin)
+        {
+            provider.TeamId.Should().BeNull();
+        }
+        else
+        {
+            provider.TeamId.Should().Be(team!.Id);
+        }
 
         firstItem.AppName.Should().Be(manifest.Name);
         firstItem.AppId.Should().Be(manifest.Id);

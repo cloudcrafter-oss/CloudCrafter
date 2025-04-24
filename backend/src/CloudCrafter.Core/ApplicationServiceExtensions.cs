@@ -146,6 +146,7 @@ public static class ApplicationServiceExtensions
                 typeof(IPipelineBehavior<,>),
                 typeof(ServerAccessAuthorizationBehavior<,>)
             );
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AccessTeamBehaviour<,>));
         });
 
         services.AddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>();

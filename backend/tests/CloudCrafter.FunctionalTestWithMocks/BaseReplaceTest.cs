@@ -1,5 +1,6 @@
 using System.Data.Common;
 using System.Linq.Expressions;
+using CloudCrafter.Domain.Constants;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.FunctionalTests.Database;
 using CloudCrafter.Infrastructure.Data;
@@ -64,8 +65,13 @@ public abstract class BaseReplaceTest
         return await RunAsUserAsync(
             "administrator@local",
             "Administrator1234!",
-            Array.Empty<string>()
+            [Roles.Administrator, Roles.User]
         );
+    }
+
+    public async Task<Guid?> RunAsDefaultUserAsync()
+    {
+        return await RunAsUserAsync("user@local", "Administrator1234!", [Roles.User]);
     }
 
     public async Task<Team> CreateTeam(Guid? ownerId = null)
@@ -99,11 +105,11 @@ public abstract class BaseReplaceTest
 
         if (roles.Any())
         {
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
 
             foreach (var role in roles)
             {
-                await roleManager.CreateAsync(new IdentityRole(role));
+                await roleManager.CreateAsync(new Role(role));
             }
 
             await userManager.AddToRolesAsync(user, roles);

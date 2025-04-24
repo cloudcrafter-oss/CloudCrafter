@@ -79,13 +79,13 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
         await context.SaveChangesAsync();
     }
 
-    public async Task<Server> CreateServer(string requestName)
+    public async Task<Server> CreateServer(string name, Guid? teamId)
     {
         var server = new Server
         {
             Id = Guid.NewGuid(),
-            Name = requestName,
-            TeamId = null,
+            Name = name,
+            TeamId = teamId,
             AgentSecretKey = StringUtils.GenerateSecret(64),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,

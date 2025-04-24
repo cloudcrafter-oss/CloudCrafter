@@ -10,13 +10,13 @@ namespace CloudCrafter.Infrastructure.Repositories;
 
 public class ProviderRepository(IApplicationDbContext context) : IProviderRepository
 {
-    public async Task<SourceProvider> CreateGithubProvider(GitHubAppFromManifest data)
+    public async Task<SourceProvider> CreateGithubProvider(GitHubAppFromManifest data, Guid? teamId)
     {
         var providerId = Guid.NewGuid();
         var sourceProvider = new SourceProvider
         {
             Name = data.Name,
-            TeamId = null,
+            TeamId = teamId,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             GithubProviderId = providerId,

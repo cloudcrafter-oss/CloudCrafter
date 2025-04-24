@@ -17,7 +17,7 @@ public class ProvidersService(
     IMapper mapper
 ) : IProvidersService
 {
-    public async Task<bool> CreateGithubProvider(string code)
+    public async Task<bool> CreateGithubProvider(string code, Guid? teamId)
     {
         try
         {
@@ -30,7 +30,7 @@ public class ProvidersService(
                 return false;
             }
 
-            var result = await repository.CreateGithubProvider(data);
+            var result = await repository.CreateGithubProvider(data, teamId);
 
             return true;
         }
