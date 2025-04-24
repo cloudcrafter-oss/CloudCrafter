@@ -1,8 +1,9 @@
 using CloudCrafter.Domain.Common;
+using CloudCrafter.Domain.Entities.Interfaces;
 
 namespace CloudCrafter.Domain.Entities;
 
-public class SourceProvider : BaseEntity
+public class SourceProvider : BaseEntity, IMayHaveATeam
 {
     public required string Name { get; set; }
     public required Guid? TeamId { get; set; }

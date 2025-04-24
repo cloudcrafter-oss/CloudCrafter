@@ -1,9 +1,10 @@
 ﻿using CloudCrafter.Domain.Common;
+using CloudCrafter.Domain.Entities.Interfaces;
 using EntityFrameworkCore.EncryptColumn.Attributes;
 
 namespace CloudCrafter.Domain.Entities;
 
-public class Server : BaseAuditableEntity
+public class Server : BaseAuditableEntity, IMayHaveATeam
 {
     public required string Name { get; set; }
     public required string IpAddress { get; set; }
