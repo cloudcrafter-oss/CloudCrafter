@@ -1,3 +1,4 @@
+using Ardalis.GuardClauses;
 using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
@@ -37,11 +38,13 @@ public class DeleteServerCommandTest : BaseTestFixture
     }
 
     [Test]
-    public async Task ShouldExecuteEvenIfServerDoesNotExists()
+    public async Task ShouldThrowExceptionWhenServerDoesNotExists()
     {
         await RunAsAdministratorAsync();
 
-        await SendAsync(new DeleteServerCommand(Guid.NewGuid()));
+        Assert.ThrowsAsync<NotFoundException>(
+            async () => await SendAsync(new DeleteServerCommand(Guid.NewGuid()))
+        );
 
         (await CountAsync<Server>()).Should().Be(0);
     }
