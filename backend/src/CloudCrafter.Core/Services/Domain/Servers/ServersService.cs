@@ -1,8 +1,10 @@
 using AutoMapper;
 using CloudCrafter.Core.Commands.Servers;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Events.DomainEvents.Server;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
+using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Core.Utils;
 using CloudCrafter.Domain.Common;
@@ -13,16 +15,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.Core.Services.Domain.Servers;
 
-public class ServersService(IServerRepository repository, IMapper mapper) : IServersService
+public class ServersService(
+    IServerRepository repository,
+    IMapper mapper,
+    IUserAccessService accessService,
+    IUser user
+) : IServersService
 {
     public Task<List<ServerDto>> GetServers()
     {
         return repository.GetServers();
     }
 
-    public Task<ServerDetailDto?> GetServer(Guid id)
+    public async Task<ServerDetailDto?> GetServer(Guid id)
     {
-        return repository.GetServer(id);
+        var server = await repository.GetServer(id);
+        if (server == null)
+        {
+            return null;
+        }
+
+        await accessService.EnsureCanMutateEntity(server, user.Id);
+
+        return mapper.Map<ServerDetailDto>(server);
     }
 
     public Task SaveChangesAsync()
@@ -55,8 +70,11 @@ public class ServersService(IServerRepository repository, IMapper mapper) : ISer
         await repository.SaveChangesAsync();
     }
 
-    public virtual async Task DeleteServer(Guid id)
+    public async Task DeleteServer(Guid id)
     {
+        var server = await repository.GetServerEntityOrFail(id);
+        await accessService.EnsureCanMutateEntity(server, user.Id);
+
         try
         {
             await repository.DeleteServer(id);

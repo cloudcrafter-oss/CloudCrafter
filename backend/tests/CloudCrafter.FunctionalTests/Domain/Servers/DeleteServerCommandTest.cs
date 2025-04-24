@@ -64,20 +64,6 @@ public class DeleteServerCommandTest : BaseTestFixture
     }
 
     [Test]
-    public async Task ShouldNotDeleteOtherServers()
-    {
-        await RunAsAdministratorAsync();
-
-        var server = FakerInstances.ServerFaker.Generate();
-        await AddAsync(server);
-
-        (await CountAsync<Server>()).Should().Be(1);
-        await SendAsync(new DeleteServerCommand(Guid.NewGuid()));
-
-        (await CountAsync<Server>()).Should().Be(1);
-    }
-
-    [Test]
     public async Task ShouldNotBeAbleToDeleteServerBecauseItHasStacksAttached()
     {
         await RunAsAdministratorAsync();

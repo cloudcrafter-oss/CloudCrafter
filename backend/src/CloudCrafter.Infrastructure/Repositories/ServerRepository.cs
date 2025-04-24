@@ -23,16 +23,11 @@ public class ServerRepository(IApplicationDbContext context, IMapper mapper) : I
         return result;
     }
 
-    public async Task<ServerDetailDto?> GetServer(Guid id)
+    public async Task<Server?> GetServer(Guid id)
     {
         var server = await GetBaseQuery().Where(x => x.Id == id).FirstOrDefaultAsync();
 
-        if (server == null)
-        {
-            return null;
-        }
-
-        return mapper.Map<ServerDetailDto>(server);
+        return server;
     }
 
     public async Task<Server> GetServerEntityOrFail(Guid serverId)
