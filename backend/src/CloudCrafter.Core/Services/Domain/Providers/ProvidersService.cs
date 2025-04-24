@@ -63,7 +63,9 @@ public class ProvidersService(
 
     public async Task<List<GitProviderRepositoryDto>> GetGitRepositories(Guid providerId)
     {
-        var provider = await repository.GetSourceProvider(providerId);
+        var filter = await GetInternalFilter();
+        var provider = await repository.GetSourceProvider(providerId, filter);
+
         try
         {
             return await providerProxy.GetRepositories(provider);
@@ -77,7 +79,8 @@ public class ProvidersService(
 
     public async Task<List<GitProviderBranchDto>> GetBranches(Guid providerId, string repositoryId)
     {
-        var provider = await repository.GetSourceProvider(providerId);
+        var filter = await GetInternalFilter();
+        var provider = await repository.GetSourceProvider(providerId, filter);
         try
         {
             return await providerProxy.GetBranches(provider, repositoryId);
@@ -91,7 +94,8 @@ public class ProvidersService(
 
     public async Task InstallGithubProvider(Guid providerId, long installationId)
     {
-        var provider = await repository.GetSourceProvider(providerId);
+        var filter = await GetInternalFilter();
+        var provider = await repository.GetSourceProvider(providerId, filter);
 
         await accessService.EnsureCanMutateEntity(provider, user.Id);
 
@@ -107,5 +111,19 @@ public class ProvidersService(
     public Task DeleteProvider(Guid providerId)
     {
         return repository.DeleteProvider(providerId);
+    }
+
+    private async Task<InternalProviderFilter> GetInternalFilter()
+    {
+        var isAdmin = await accessService.IsAdministrator(user.Id);
+
+        var internalFilter = new InternalProviderFilter();
+
+        if (!isAdmin)
+        {
+            internalFilter.UserId = user.Id;
+        }
+
+        return internalFilter;
     }
 }

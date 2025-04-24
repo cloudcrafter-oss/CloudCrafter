@@ -45,12 +45,16 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
         return sourceProvider;
     }
 
-    public async Task<SourceProvider> GetSourceProvider(Guid providerId)
+    public async Task<SourceProvider> GetSourceProvider(
+        Guid providerId,
+        InternalProviderFilter filter
+    )
     {
-        var provider = await context
-            .SourceProviders.Where(x => x.Id == providerId)
-            .Include(x => x.GithubProvider)
-            .FirstOrDefaultAsync();
+        filter.Id = providerId;
+
+        var providers = GetProvidersForQueries(new ProviderFilterRequest(), filter);
+
+        var provider = await providers.Include(x => x.GithubProvider).FirstOrDefaultAsync();
 
         if (provider == null)
         {
@@ -66,6 +70,27 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
     }
 
     public Task<List<SourceProvider>> GetProviders(
+        ProviderFilterRequest filter,
+        InternalProviderFilter internalProviderFilter
+    )
+    {
+        return GetProvidersForQueries(filter, internalProviderFilter).ToListAsync();
+    }
+
+    public async Task DeleteProvider(Guid providerId)
+    {
+        var provider = await context.SourceProviders.FirstOrDefaultAsync(x => x.Id == providerId);
+
+        if (provider == null)
+        {
+            throw new NotFoundException("provider", "Source provider not found");
+        }
+
+        context.SourceProviders.Remove(provider);
+        await context.SaveChangesAsync();
+    }
+
+    private IQueryable<SourceProvider> GetProvidersForQueries(
         ProviderFilterRequest filter,
         InternalProviderFilter internalProviderFilter
     )
@@ -93,20 +118,12 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
                 );
         }
 
-        return query.OrderBy(x => x.CreatedAt).ToListAsync();
-    }
-
-    public async Task DeleteProvider(Guid providerId)
-    {
-        var provider = await context.SourceProviders.FirstOrDefaultAsync(x => x.Id == providerId);
-
-        if (provider == null)
+        if (internalProviderFilter.Id.HasValue)
         {
-            throw new NotFoundException("provider", "Source provider not found");
+            query = query.Where(x => x.Id == internalProviderFilter.Id.Value);
         }
 
-        context.SourceProviders.Remove(provider);
-        await context.SaveChangesAsync();
+        return query.OrderBy(x => x.CreatedAt);
     }
 
     public Task<List<GithubProvider>> GetGithubProviders(ProviderFilterRequest filter)

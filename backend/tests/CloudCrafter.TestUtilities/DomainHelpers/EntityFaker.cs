@@ -169,6 +169,45 @@ public static class EntityFaker
         return stack;
     }
 
+    public static SourceProvider GenerateGithubSourceProvider()
+    {
+        var id = Guid.NewGuid();
+        var sourceProvider = new SourceProvider
+        {
+            Id = Guid.NewGuid(),
+            TeamId = null,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            Name = "Github OSS Test",
+            GithubProviderId = id,
+        };
+
+        var githubProvider = new GithubProvider
+        {
+            Id = id,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            InstallationId = 58413956,
+            AppName = "[CI TESTS] CloudCrafter-OSS",
+            AppId = long.Parse(
+                Environment.GetEnvironmentVariable("TESTS_GITHUB_APP_APP_ID") ?? "0"
+            ),
+            AppClientId = Environment.GetEnvironmentVariable("TESTS_GITHUB_APP_CLIENT_ID"),
+            AppClientSecret = Environment.GetEnvironmentVariable("TESTS_GITHUB_APP_CLIENT_SECRET"),
+            AppWebhookSecret = Environment.GetEnvironmentVariable(
+                "TESTS_GITHUB_APP_WEBHOOK_SECRET"
+            ),
+            AppUrl = Environment.GetEnvironmentVariable("TESTS_GITHUB_APP_URL"),
+            AppPrivateKey = Environment.GetEnvironmentVariable("TESTS_GITHUB_APP_PRIVATE_KEY"),
+            IsValid = true,
+            SourceProvider = sourceProvider,
+        };
+
+        sourceProvider.GithubProvider = githubProvider;
+
+        return sourceProvider;
+    }
+
     public class GenerateBasicAppArgs
     {
         public required Guid EnvironmentId { get; init; }
