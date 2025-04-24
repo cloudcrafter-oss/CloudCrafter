@@ -1,9 +1,12 @@
 using AutoMapper;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Providers;
+using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Core.Services.Core.Providers;
 using CloudCrafter.Core.Services.Domain.Providers.Github;
 using CloudCrafter.Domain.Domain.Providers;
+using CloudCrafter.Domain.Domain.Providers.Filter;
 using CloudCrafter.Domain.Entities;
 using Microsoft.Extensions.Logging;
 
@@ -14,7 +17,9 @@ public class ProvidersService(
     IGithubClientProvider clientProvider,
     IProviderRepository repository,
     ILogger<ProvidersService> logger,
-    IMapper mapper
+    IMapper mapper,
+    IUserAccessService accessService,
+    IUser user
 ) : IProvidersService
 {
     public async Task<bool> CreateGithubProvider(string code, Guid? teamId)
@@ -44,7 +49,16 @@ public class ProvidersService(
 
     public async Task<List<SourceProviderDto>> GetProviders(ProviderFilterRequest filter)
     {
-        List<SourceProvider> providers = await repository.GetProviders(filter);
+        var isAdmin = await accessService.IsAdministrator(user.Id);
+
+        var internalFilter = new InternalProviderFilter();
+
+        if (!isAdmin)
+        {
+            internalFilter.UserId = user.Id;
+        }
+
+        List<SourceProvider> providers = await repository.GetProviders(filter, internalFilter);
 
         return mapper.Map<List<SourceProviderDto>>(providers);
     }

@@ -1,6 +1,7 @@
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Providers;
+using CloudCrafter.Domain.Domain.Providers.Filter;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Octokit;
@@ -64,7 +65,10 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
         return context.SaveChangesAsync();
     }
 
-    public Task<List<SourceProvider>> GetProviders(ProviderFilterRequest filter)
+    public Task<List<SourceProvider>> GetProviders(
+        ProviderFilterRequest filter,
+        InternalProviderFilter internalProviderFilter
+    )
     {
         IQueryable<SourceProvider> query = context.SourceProviders.Include(x => x.GithubProvider);
 
@@ -76,6 +80,17 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
                 && x.GithubProvider.IsValid.HasValue
                 && x.GithubProvider.IsValid.Value == filter.IsActive.Value
             );
+        }
+
+        if (internalProviderFilter.UserId.HasValue)
+        {
+            query = query
+                .Where(x => x.TeamId.HasValue)
+                .Where(x => x.Team != null)
+                .Where(x =>
+                    x.Team!.OwnerId == internalProviderFilter.UserId.Value
+                    || x.Team.TeamUsers.Any(tu => tu.UserId == internalProviderFilter.UserId.Value)
+                );
         }
 
         return query.OrderBy(x => x.CreatedAt).ToListAsync();
