@@ -81,6 +81,7 @@ public class ProvidersService(
     {
         var filter = await GetInternalFilter();
         var provider = await repository.GetSourceProvider(providerId, filter);
+
         try
         {
             return await providerProxy.GetBranches(provider, repositoryId);
