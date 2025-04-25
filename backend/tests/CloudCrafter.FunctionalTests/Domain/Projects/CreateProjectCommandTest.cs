@@ -1,4 +1,5 @@
 using CloudCrafter.Core.Commands.Projects;
+using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using FluentAssertions;
 using Environment = CloudCrafter.Domain.Entities.Environment;
@@ -18,13 +19,43 @@ public class CreateProjectCommandTest : BaseTestFixture
     }
 
     [Test]
-    public async Task ShouldBeAbleToCreateProject()
+    public async Task ShouldNotBeAbleToCreateProjectWhenUserDoesNotHaveAccessToTeam()
+    {
+        await RunAsDefaultUserAsync();
+        var team = await CreateTeam();
+
+        Assert.ThrowsAsync<ForbiddenAccessException>(
+            async () => await SendAsync(Command with { TeamId = team.Id })
+        );
+    }
+
+    [TestCase(true, false)]
+    [TestCase(false, true)]
+    [TestCase(false, true)]
+    public async Task ShouldBeAbleToCreateProject(bool isAdmin, bool isTeamOwner)
     {
         (await CountAsync<Project>()).Should().Be(0);
 
-        await RunAsAdministratorAsync();
+        Team? team = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+            team = await CreateTeam();
+        }
+        else
+        {
+            var userId = await RunAsDefaultUserAsync();
 
-        var team = await CreateTeam();
+            if (isTeamOwner)
+            {
+                team = await CreateTeam(userId);
+            }
+            else
+            {
+                team = await CreateTeam();
+                await AddToTeam(team, userId);
+            }
+        }
 
         var result = await SendAsync(Command with { TeamId = team.Id });
         result.Name.Should().Be("Dummy");

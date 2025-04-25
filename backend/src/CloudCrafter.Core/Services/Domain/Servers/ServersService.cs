@@ -10,6 +10,7 @@ using CloudCrafter.Core.Utils;
 using CloudCrafter.Domain.Common;
 using CloudCrafter.Domain.Domain.Server;
 using CloudCrafter.Domain.Domain.Server.Filter;
+using CloudCrafter.Domain.Domain.User.ACL;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,7 +45,7 @@ public class ServersService(
             return null;
         }
 
-        await accessService.EnsureCanMutateEntity(server, user.Id);
+        await accessService.EnsureHasAccessToEntity(server, user.Id, AccessType.Read);
 
         return mapper.Map<ServerDetailDto>(server);
     }
@@ -82,7 +83,7 @@ public class ServersService(
     public async Task DeleteServer(Guid id)
     {
         var server = await repository.GetServerEntityOrFail(id);
-        await accessService.EnsureCanMutateEntity(server, user.Id);
+        await accessService.EnsureHasAccessToEntity(server, user.Id, AccessType.Write);
 
         try
         {
@@ -97,7 +98,7 @@ public class ServersService(
     public async Task RotateServerKey(Guid id)
     {
         var server = await repository.GetServerEntityOrFail(id);
-        await accessService.EnsureCanMutateEntity(server, user.Id);
+        await accessService.EnsureHasAccessToEntity(server, user.Id, AccessType.Write);
 
         server.UpdateServerAgentKey(StringUtils.GenerateSecret(64));
         server.AddDomainEvent(
@@ -111,7 +112,7 @@ public class ServersService(
     {
         var server = await repository.GetServerEntityOrFail(id);
 
-        await accessService.EnsureCanMutateEntity(server, user.Id);
+        await accessService.EnsureHasAccessToEntity(server, user.Id, AccessType.Write);
 
         if (updateDto.Name is not null)
         {

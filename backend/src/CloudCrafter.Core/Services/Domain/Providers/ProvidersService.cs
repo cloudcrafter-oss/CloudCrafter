@@ -6,6 +6,7 @@ using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Core.Services.Core.Providers;
 using CloudCrafter.Domain.Domain.Providers;
 using CloudCrafter.Domain.Domain.Providers.Filter;
+using CloudCrafter.Domain.Domain.User.ACL;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Services.Domain.Providers;
@@ -98,7 +99,7 @@ public class ProvidersService(
         var filter = await GetInternalFilter();
         var provider = await repository.GetSourceProvider(providerId, filter);
 
-        await accessService.EnsureCanMutateEntity(provider, user.Id);
+        await accessService.EnsureHasAccessToEntity(provider, user.Id, AccessType.Write);
 
         if (provider.GithubProvider == null || provider.GithubProvider.InstallationId.HasValue)
         {

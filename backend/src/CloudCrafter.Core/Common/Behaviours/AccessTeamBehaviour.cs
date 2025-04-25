@@ -3,6 +3,7 @@ using CloudCrafter.Core.Common.Interfaces.Access;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Domain.Constants;
+using CloudCrafter.Domain.Domain.User.ACL;
 using MediatR;
 
 namespace CloudCrafter.Core.Common.Behaviours;
@@ -45,7 +46,11 @@ public class AccessTeamBehaviour<TRequest, TResponse>(
             throw new ForbiddenAccessException();
         }
 
-        var canAccess = await userAccessService.HasAccessToTeam(user.Id.Value, teamId.Value);
+        var canAccess = await userAccessService.HasAccessToTeam(
+            user.Id.Value,
+            teamId.Value,
+            AccessType.Write
+        );
 
         if (!canAccess)
         {

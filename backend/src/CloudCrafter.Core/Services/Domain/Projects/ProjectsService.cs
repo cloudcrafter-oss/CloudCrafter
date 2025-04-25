@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using CloudCrafter.Core.Commands.Projects;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Events;
 using CloudCrafter.Core.Events.Projects;
 using CloudCrafter.Core.Interfaces.Domain.Projects;
+using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Project;
+using CloudCrafter.Domain.Domain.User.ACL;
 
 namespace CloudCrafter.Core.Services.Domain.Projects;
 
@@ -12,7 +15,9 @@ public class ProjectsService(
     IProjectRepository repository,
     IEnvironmentRepository environmentRepository,
     IMapper mapper,
-    IEventStore eventStore
+    IEventStore eventStore,
+    IUserAccessService userAccessService,
+    IUser user
 ) : IProjectsService
 {
     public Task<List<ProjectDto>> GetProjects(LoadProjectOptions options)
@@ -22,6 +27,7 @@ public class ProjectsService(
 
     public async Task<ProjectDto> CreateProject(string name, Guid teamId)
     {
+        await userAccessService.EnsureHasTeamAccess(user?.Id, teamId, AccessType.Write);
         var createdProject = await repository.CreateProject(name, teamId);
 
         await eventStore.PublishAsync(new ProjectCreatedEvent(createdProject));

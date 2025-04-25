@@ -1,12 +1,12 @@
 ﻿using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Core.Interfaces.Domain.Environments;
-using CloudCrafter.Core.Interfaces.Domain.Projects;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Domain.Teams;
 using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Constants;
+using CloudCrafter.Domain.Domain.User.ACL;
 using CloudCrafter.Domain.Entities.Interfaces;
 
 namespace CloudCrafter.Core.Services.Domain.Users;
@@ -14,7 +14,7 @@ namespace CloudCrafter.Core.Services.Domain.Users;
 public class UserAccessService(
     IServerRepository serverRepository,
     IEnvironmentService environmentService,
-    IProjectsService projectsService,
+    IProjectRepository projectRepository,
     IStacksService stacksService,
     IIdentityService identityService,
     ITeamsService teamsService
@@ -38,7 +38,7 @@ public class UserAccessService(
 
     public async Task<bool> CanAccessProject(Guid userId, Guid id)
     {
-        var project = await projectsService.GetProject(id);
+        var project = await projectRepository.GetProject(id);
 
         // TODO: ACL check
         return project != null;
@@ -51,51 +51,39 @@ public class UserAccessService(
         return stack != null;
     }
 
-    public Task<bool> CanMutateEntity(IMayHaveATeam entity, Guid userId)
+    public Task<bool> HasEntityPermissions(IMayHaveATeam entity, Guid userId, AccessType accessType)
     {
-        return UserCanMutate(entity.TeamId, userId);
+        return UserHasPermissionToTeam(entity.TeamId, userId, accessType);
     }
 
-    public Task<bool> CanMutateEntity(IHaveATeam entity, Guid userId)
+    public Task<bool> HasEntityPermissions(IHaveATeam entity, Guid userId, AccessType accessType)
     {
-        return UserCanMutate(entity.TeamId, userId);
+        return UserHasPermissionToTeam(entity.TeamId, userId, accessType);
     }
 
-    public async Task EnsureCanMutateEntity(IHaveATeam entity, Guid? userId)
+    public Task EnsureHasAccessToEntity(IHaveATeam entity, Guid? userId, AccessType accessType)
     {
-        if (userId == null)
-        {
-            throw new ForbiddenAccessException();
-        }
-
-        var canMutate = await CanMutateEntity(entity, userId.Value);
-
-        if (!canMutate)
-        {
-            throw new ForbiddenAccessException();
-        }
+        return EnsureTeamAccess(entity.TeamId, userId, accessType);
     }
 
-    public async Task EnsureCanMutateEntity(IMayHaveATeam entity, Guid? userId)
+    public Task EnsureHasAccessToEntity(IMayHaveATeam entity, Guid? userId, AccessType accessType)
     {
-        if (userId == null)
-        {
-            throw new ForbiddenAccessException();
-        }
-
-        var canMutate = await CanMutateEntity(entity, userId.Value);
-
-        if (!canMutate)
-        {
-            throw new ForbiddenAccessException();
-        }
+        return EnsureTeamAccess(entity.TeamId, userId, accessType);
     }
 
-    public async Task<bool> HasAccessToTeam(Guid userId, Guid teamId)
+    public Task EnsureHasTeamAccess(Guid? userId, Guid teamId, AccessType accessType)
     {
-        var team = await teamsService.GetTeam(teamId);
+        return EnsureTeamAccess(teamId, userId, accessType);
+    }
 
-        return team.OwnerId == userId || team.TeamUsers.Any(x => x.UserId == userId);
+    public Task<bool> HasAccessToTeam(Guid userId, Guid teamId, AccessType accessType)
+    {
+        return UserHasPermissionToTeam(teamId, userId, accessType);
+    }
+
+    public Task<bool> HasAccessToTeam(Guid? userId, Guid teamId, AccessType accessType)
+    {
+        return UserHasPermissionToTeam(teamId, userId, accessType);
     }
 
     public async Task<bool> IsAdministrator(Guid? userId)
@@ -110,35 +98,69 @@ public class UserAccessService(
         return isAdmin;
     }
 
-    private async Task<bool> UserCanMutate(Guid? teamId, Guid userId)
+    private async Task<bool> UserHasPermissionToTeam(
+        Guid? teamId,
+        Guid? userId,
+        AccessType accessType
+    )
     {
-        var isUser = await identityService.IsInRoleAsync(userId, Roles.User);
-
-        if (!isUser)
+        if (userId == null)
         {
-            // Non-users may never mutate!
             return false;
         }
 
-        var isAdmin = await identityService.IsInRoleAsync(userId, Roles.Administrator);
+        var isUser = await identityService.IsInRoleAsync(userId.Value, Roles.User);
+
+        if (!isUser)
+        {
+            return false;
+        }
+
+        var isAdmin = await identityService.IsInRoleAsync(userId.Value, Roles.Administrator);
 
         if (isAdmin)
         {
-            // Administrators can always do everything
             return true;
         }
 
         if (teamId == null)
         {
-            // If it is a global instance entity, it should always be an administrator.
-            // If it is not an administrator, we cannot mutate.
-            return isAdmin;
+            // Regular users cannot do this
+            return false;
         }
 
         var team = await teamsService.GetTeam(teamId.Value);
 
-        // At this point, the user is always a User role.
-        // The user may only mutate if the user is the owner of the Team.
-        return team.OwnerId == userId;
+        switch (accessType)
+        {
+            case AccessType.Write:
+                // only team owner can write
+                return team.OwnerId == userId;
+            case AccessType.Read:
+                // only team owner or team member can read
+                return team.OwnerId == userId || team.TeamUsers.Any(x => x.UserId == userId);
+        }
+
+        return false;
+    }
+
+    private async Task EnsureTeamAccess(Guid? teamId, Guid? userId, AccessType accessType)
+    {
+        if (userId == null)
+        {
+            throw new ForbiddenAccessException();
+        }
+
+        var hasAccess = await UserHasPermissionToTeam(teamId, userId, accessType);
+
+        if (!hasAccess)
+        {
+            if (accessType == AccessType.Write)
+            {
+                throw new NotEnoughPermissionInTeamException();
+            }
+
+            throw new CannotAccessTeamException();
+        }
     }
 }
