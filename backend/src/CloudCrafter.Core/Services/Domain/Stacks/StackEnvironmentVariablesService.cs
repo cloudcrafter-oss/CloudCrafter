@@ -289,6 +289,12 @@ public class StackEnvironmentVariablesService(
             throw new NotFoundException("Stack", "Stack not found");
         }
 
+        await accessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Write
+        );
+
         // Find the variable to update
         var variable = stack.EnvironmentVariables.FirstOrDefault(v => v.Id == id);
 

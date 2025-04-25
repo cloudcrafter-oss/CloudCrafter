@@ -1,5 +1,6 @@
 using Ardalis.GuardClauses;
 using CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
+using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using FluentAssertions;
 using NUnit.Framework;
@@ -55,14 +56,63 @@ public class DeleteStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
         await AssertEnvCount(0);
     }
 
-    [Test]
-    public async Task ShouldDeleteEnvironmentVariableSuccessfully()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToDeleteVariableBecauseUserIsNotOwnerOfTeam(bool addUserToTeam)
     {
-        await RunAsAdministratorAsync();
+        var userId = await RunAsDefaultUserAsync();
+
+        var stack = await CreateSampleStack();
+
+        if (addUserToTeam)
+        {
+            await AddToTeam(stack.Environment.Project.Team, userId);
+        }
+
+        // Create environment variable to delete
+        var envVar = new StackEnvironmentVariable
+        {
+            Id = Guid.NewGuid(),
+            StackId = stack.Id,
+            Key = "TEST_DELETE_VAR",
+            Value = "Value to delete",
+            IsSecret = false,
+            Type = EnvironmentVariableType.Both,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+        };
+
+        await AddAsync(envVar);
+        await AssertEnvCount(1);
+
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+            async () =>
+                await SendAsync(new DeleteStackEnvironmentVariableCommand(stack.Id, envVar.Id))
+        );
+    }
+
+    [TestCase(true, false)]
+    [TestCase(true, true)]
+    public async Task ShouldDeleteEnvironmentVariableSuccessfully(bool isAdmin, bool isTeamOwner)
+    {
         await AssertEnvCount(0);
 
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            var userId = await RunAsDefaultUserAsync();
+            if (isTeamOwner)
+            {
+                ownerId = userId;
+            }
+        }
+
         // Create stack
-        var stack = await CreateSampleStack();
+        var stack = await CreateSampleStack(null, ownerId);
 
         // Create environment variable to delete
         var envVar = new StackEnvironmentVariable
@@ -91,15 +141,30 @@ public class DeleteStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
         deletedVar.Should().BeNull();
     }
 
-    [Test]
-    public async Task ShouldDeleteEnvironmentVariableInAGroup()
+    [TestCase(true, false)]
+    [TestCase(false, true)]
+    public async Task ShouldDeleteEnvironmentVariableInAGroup(bool isAdmin, bool isTeamOwner)
     {
-        await RunAsAdministratorAsync();
         await AssertEnvCount(0);
         await AssertEnvGroupCount(0);
 
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            var userId = await RunAsDefaultUserAsync();
+
+            if (isTeamOwner)
+            {
+                ownerId = userId;
+            }
+        }
+
         // Create stack
-        var stack = await CreateSampleStack();
+        var stack = await CreateSampleStack(null, ownerId);
 
         // Create a group
         var group = new StackEnvironmentVariableGroup
