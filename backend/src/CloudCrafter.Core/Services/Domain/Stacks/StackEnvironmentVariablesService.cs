@@ -413,6 +413,19 @@ public class StackEnvironmentVariablesService(
 
     public async Task DeleteEnvironmentVariableGroup(Guid id, Guid stackId)
     {
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw new NotFoundException("Stack", "Stack not found");
+        }
+
+        await accessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Write
+        );
+
         // Get the group directly from repository
         var group = await repository.GetEnvironmentVariableGroup(stackId, id);
 

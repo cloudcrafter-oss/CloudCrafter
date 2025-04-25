@@ -1,8 +1,8 @@
 using Ardalis.GuardClauses;
 using CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
+using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Stacks.EnvironmentVariables;
 
@@ -53,14 +53,63 @@ public class DeleteStackEnvironmentVariableGroupCommandTest : BaseEnvironmentVar
         );
     }
 
-    [Test]
-    public async Task ShouldSuccessfullyDeleteGroup()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToDeleteStackIfNotTeamOwner(bool attachToTeam)
     {
-        await RunAsAdministratorAsync();
+        var userId = await RunAsDefaultUserAsync();
+
+        var stack = await CreateSampleStack();
+
+        if (attachToTeam)
+        {
+            await AddToTeam(stack.Environment.Project.Team, userId);
+        }
+
+        var group = new StackEnvironmentVariableGroup
+        {
+            Id = Guid.NewGuid(),
+            StackId = stack.Id,
+            Name = "Test Group",
+            Description = "A test group for deletion",
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+        };
+
+        await AddAsync(group);
+        await AssertEnvGroupCount(1);
+
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+            async () =>
+                await SendAsync(new DeleteStackEnvironmentVariableGroupCommand(stack.Id, group.Id))
+        );
+
+        await AssertEnvGroupCount(1);
+    }
+
+    [TestCase(true, false)]
+    [TestCase(false, true)]
+    public async Task ShouldSuccessfullyDeleteGroup(bool isAdmin, bool isTeamOwner)
+    {
         await AssertEnvGroupCount(0);
 
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            var userId = await RunAsDefaultUserAsync();
+
+            if (isTeamOwner)
+            {
+                ownerId = userId;
+            }
+        }
+
         // Create stack
-        var stack = await CreateSampleStack();
+        var stack = await CreateSampleStack(null, ownerId);
 
         // Create group
         var group = new StackEnvironmentVariableGroup
