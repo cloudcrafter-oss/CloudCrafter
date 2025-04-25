@@ -1,8 +1,11 @@
 using AutoMapper;
 using CloudCrafter.Core.Commands.Stacks;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
+using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Stacks;
+using CloudCrafter.Domain.Domain.User.ACL;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -14,7 +17,9 @@ namespace CloudCrafter.Core.Services.Domain.Stacks;
 public class StackEnvironmentVariablesService(
     IStackRepository repository,
     ILogger<StackEnvironmentVariablesService> logger,
-    IMapper mapper
+    IMapper mapper,
+    IUser user,
+    IUserAccessService accessService
 ) : IStackEnvironmentVariablesService
 {
     public async Task<List<StackEnvironmentVariableDto>> GetEnvironmentVariables(
@@ -162,6 +167,10 @@ public class StackEnvironmentVariablesService(
         {
             throw StackValidations.Create(StackValidations.StackNotFound);
         }
+
+        var project = stack.Environment.Project;
+
+        await accessService.EnsureHasAccessToEntity(project, user?.Id, AccessType.Write);
 
         if (groupId.HasValue)
         {

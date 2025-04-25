@@ -1,5 +1,8 @@
+using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
+using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.FunctionalTests;
 
@@ -69,6 +72,11 @@ public abstract class BaseTestFixture
 
         await AddAsync(stack);
 
-        return stack;
+        var stackRepo = GetService<IStackRepository>();
+
+        var stackFromRepo = await stackRepo.GetStack(stack.Id);
+
+        stackFromRepo.Should().NotBeNull();
+        return stackFromRepo!;
     }
 }

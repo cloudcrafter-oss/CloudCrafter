@@ -90,6 +90,26 @@ public class CreateStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
         await AssertEnvCount(0);
     }
 
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToCreateEnvironmentVariableBecauseUserDoesNotHavePermissionToTeam(
+        bool attachUserToTeam
+    )
+    {
+        var userId = await RunAsDefaultUserAsync();
+        var stack = await CreateSampleStack();
+
+        if (attachUserToTeam)
+        {
+            await AddToTeam(stack.Environment.Project.Team, userId);
+        }
+
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+            async () =>
+                await SendAsync(Command with { StackId = stack.Id, Key = "Test", Value = "Dummy" })
+        );
+    }
+
     [Test]
     public async Task ShouldBeAbleToCreateEnvironmentVariable()
     {
