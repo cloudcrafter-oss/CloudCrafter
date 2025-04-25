@@ -37,7 +37,7 @@ public class GetServerDetailQueryTest : BaseTestFixture
 
         await AddAsync(server);
 
-        Assert.ThrowsAsync<ForbiddenAccessException>(
+        Assert.ThrowsAsync<CannotAccessTeamException>(
             async () => await SendAsync(new GetServerDetailQuery(server.Id))
         );
     }

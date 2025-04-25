@@ -59,7 +59,7 @@ public class RotateServerKeyCommandTest : BaseTestFixture
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
 
-        Assert.ThrowsAsync<ForbiddenAccessException>(
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
             async () => await SendAsync(new RotateServerKeyCommand(server.Id))
         );
     }
@@ -88,7 +88,7 @@ public class RotateServerKeyCommandTest : BaseTestFixture
         var server = FakerInstances.ServerFaker.RuleFor(x => x.TeamId, team.Id).Generate();
 
         await AddAsync(server);
-        Assert.ThrowsAsync<ForbiddenAccessException>(
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
             async () => await SendAsync(new RotateServerKeyCommand(server.Id))
         );
     }

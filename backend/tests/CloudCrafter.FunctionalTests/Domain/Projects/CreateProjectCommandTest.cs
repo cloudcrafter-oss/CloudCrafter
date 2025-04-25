@@ -24,7 +24,7 @@ public class CreateProjectCommandTest : BaseTestFixture
         await RunAsDefaultUserAsync();
         var team = await CreateTeam();
 
-        Assert.ThrowsAsync<ForbiddenAccessException>(
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
             async () => await SendAsync(Command with { TeamId = team.Id })
         );
     }

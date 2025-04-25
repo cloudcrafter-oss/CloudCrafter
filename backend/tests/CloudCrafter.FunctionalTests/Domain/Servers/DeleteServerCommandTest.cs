@@ -30,7 +30,7 @@ public class DeleteServerCommandTest : BaseTestFixture
 
         (await CountAsync<Server>()).Should().Be(1);
 
-        Assert.ThrowsAsync<ForbiddenAccessException>(
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
             async () => await SendAsync(new DeleteServerCommand(server.Id))
         );
 
