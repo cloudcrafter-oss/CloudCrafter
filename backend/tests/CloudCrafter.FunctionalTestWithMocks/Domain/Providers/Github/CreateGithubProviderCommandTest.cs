@@ -76,7 +76,6 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
 
     [TestCase(true, false)]
     [TestCase(false, true)]
-    [TestCase(false, false)]
     public async Task ShouldBeAbleToCreateFromGitHub(bool isAdmin, bool teamOwner)
     {
         Team? team = null;

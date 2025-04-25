@@ -39,7 +39,7 @@ public class UpdateServerCommandTest : BaseTestFixture
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
 
-        Assert.ThrowsAsync<ForbiddenAccessException>(
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
             async () => await SendAsync(Command with { ServerId = server.Id })
         );
     }
@@ -95,7 +95,7 @@ public class UpdateServerCommandTest : BaseTestFixture
         var server = FakerInstances.ServerFaker.RuleFor(x => x.TeamId, f => team.Id).Generate();
         await AddAsync(server);
 
-        Assert.ThrowsAsync<ForbiddenAccessException>(
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
             async () =>
                 await SendAsync(
                     new UpdateServerCommand(server.Id, new UpdateServerDto { Name = "New Name" })
