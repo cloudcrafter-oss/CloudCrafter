@@ -91,6 +91,13 @@ public class UserAccessService(
         }
     }
 
+    public async Task<bool> HasAccessToTeam(Guid userId, Guid teamId)
+    {
+        var team = await teamsService.GetTeam(teamId);
+
+        return team.OwnerId == userId || team.TeamUsers.Any(x => x.UserId == userId);
+    }
+
     public async Task<bool> IsAdministrator(Guid? userId)
     {
         if (userId == null)

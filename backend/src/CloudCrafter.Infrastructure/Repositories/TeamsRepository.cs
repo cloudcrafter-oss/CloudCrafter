@@ -71,7 +71,10 @@ public class TeamsRepository(IApplicationDbContext context) : ITeamsRepository
 
     public async Task<Team> GetTeam(Guid teamId)
     {
-        var team = await context.Teams.Where(x => x.Id == teamId).FirstOrDefaultAsync();
+        var team = await context
+            .Teams.Include(x => x.TeamUsers)
+            .Where(x => x.Id == teamId)
+            .FirstOrDefaultAsync();
 
         if (team == null)
         {

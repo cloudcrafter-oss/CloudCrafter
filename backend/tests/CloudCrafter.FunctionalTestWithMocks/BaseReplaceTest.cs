@@ -74,6 +74,16 @@ public abstract class BaseReplaceTest
         return await RunAsUserAsync("user@local", "Administrator1234!", [Roles.User]);
     }
 
+    public async Task AddToTeam(Team team, Guid? userId)
+    {
+        if (userId == null)
+        {
+            return;
+        }
+
+        await AddAsync(new TeamUser() { TeamId = team.Id, UserId = userId.Value });
+    }
+
     public async Task<Team> CreateTeam(Guid? ownerId = null)
     {
         var teamFaker = FakerInstances.TeamFaker();

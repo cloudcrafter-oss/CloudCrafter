@@ -3,6 +3,7 @@ using CloudCrafter.Core.Commands.Providers.Github;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Services.Core.Providers;
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Infrastructure.Data.Migrations;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -61,9 +62,22 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         );
     }
 
-    [TestCase(true)]
-    [TestCase(false)]
-    public async Task ShouldBeAbleToCreateFromGitHub(bool isAdmin)
+    [Test]
+    public async Task ShouldNotBeAbleToCreateProviderForATeamUserDoesNotHaveAccessTo()
+    {
+        var team = await CreateTeam();
+        await RunAsDefaultUserAsync();
+
+        Assert.ThrowsAsync<CloudCrafter.Core.Exceptions.ForbiddenAccessException>(
+            async () =>
+                await SendAsync(new CreateGithubProviderCommand("dummy") { TeamId = team.Id })
+        );
+    }
+
+    [TestCase(true, false)]
+    [TestCase(false, true)]
+    [TestCase(false, false)]
+    public async Task ShouldBeAbleToCreateFromGitHub(bool isAdmin, bool teamOwner)
     {
         Team? team = null;
         if (isAdmin)
@@ -74,7 +88,15 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         {
             var userId = await RunAsDefaultUserAsync();
 
-            team = await CreateTeam(userId!.Value);
+            if (teamOwner)
+            {
+                team = await CreateTeam(userId!.Value);
+            }
+            else
+            {
+                team = await CreateTeam();
+                await AddToTeam(team, userId);
+            }
         }
 
         // Setup
