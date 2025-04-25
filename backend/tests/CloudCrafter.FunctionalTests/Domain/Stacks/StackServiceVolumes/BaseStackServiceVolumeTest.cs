@@ -2,6 +2,7 @@
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.FunctionalTests.Domain.Stacks.StackServiceVolumes;
 
@@ -12,6 +13,17 @@ public class BaseStackServiceVolumeTest : BaseTestFixture
     public async Task AssertVolumeCount(int count)
     {
         (await CountAsync<StackServiceVolume>()).Should().Be(count);
+    }
+
+    public Stack GetStack(Guid id)
+    {
+        var stackFromDb = FetchEntity<Stack>(
+            q => q.Id == id,
+            inc =>
+                inc.Include(x => x.Environment).ThenInclude(x => x.Project).ThenInclude(x => x.Team)
+        );
+
+        return stackFromDb!;
     }
 
     public async Task<StackService> GenerateStackService(Guid? teamOwnerId = null)

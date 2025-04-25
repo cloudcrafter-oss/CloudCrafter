@@ -153,15 +153,11 @@ public class CreateStackServiceVolumeCommandTest : BaseStackServiceVolumeTest
 
         var stackService = await GenerateStackService();
 
-        var stackFromDb = FetchEntity<Stack>(
-            q => q.Id == stackService.StackId,
-            inc =>
-                inc.Include(x => x.Environment).ThenInclude(x => x.Project).ThenInclude(x => x.Team)
-        );
+        var stackFromDb = GetStack(stackService.StackId);
 
         if (attachToTeam)
         {
-            await AddToTeam(stackFromDb!.Environment.Project.Team, userId);
+            await AddToTeam(stackFromDb.Environment.Project.Team, userId);
         }
 
         Command = Command with

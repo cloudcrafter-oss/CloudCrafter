@@ -118,11 +118,26 @@ public class StackServiceVolumesService(
         Guid stackServiceVolumeId
     )
     {
+        var notFoundException = new NotFoundException("StackService", "Stack service not found");
+
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw notFoundException;
+        }
+
+        await userAccessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Write
+        );
+
         var stackServiceExists = await repository.StackServiceExists(stackId, stackServiceId);
 
         if (!stackServiceExists)
         {
-            throw new NotFoundException("StackService", "Stack service not found");
+            throw notFoundException;
         }
 
         var volume = await repository.GetServiceVolume(
