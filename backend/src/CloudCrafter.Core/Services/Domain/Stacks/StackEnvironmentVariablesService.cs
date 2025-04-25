@@ -34,6 +34,12 @@ public class StackEnvironmentVariablesService(
             throw new NotFoundException("Stack", "Stack not found");
         }
 
+        await accessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Read
+        );
+
         var environmentVariables = await repository.GetEnvironmentVariables(stackId);
 
         return mapper.Map<List<StackEnvironmentVariableDto>>(
