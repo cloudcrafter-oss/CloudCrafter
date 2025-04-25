@@ -151,6 +151,12 @@ public class StackEnvironmentVariablesService(
             throw new NotFoundException("Stack", "Stack not found");
         }
 
+        await accessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Read
+        );
+
         // Get the variable groups for the stack
         var groups = await repository.GetEnvironmentVariableGroups(stackId);
 
