@@ -37,7 +37,7 @@ public class GetGitRepositoriesQueryTest : ProviderBaseTest
 
         var providerId = githubProvider.SourceProviderId;
 
-        Assert.ThrowsAsync<ForbiddenAccessException>(
+        Assert.ThrowsAsync<NotFoundException>(
             async () => await SendAsync(Query with { ProviderId = providerId })
         );
     }
