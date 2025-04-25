@@ -1,14 +1,21 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
+using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Stack;
+using CloudCrafter.Domain.Domain.User.ACL;
 using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.Core.Services.Domain.Stacks;
 
-public class StackServiceVolumesService(IStackRepository repository, IMapper mapper)
-    : IStackServiceVolumesService
+public class StackServiceVolumesService(
+    IStackRepository repository,
+    IMapper mapper,
+    IUserAccessService userAccessService,
+    IUser user
+) : IStackServiceVolumesService
 {
     public async Task<Guid> CreateOrUpdateStackServiceVolume(
         Guid stackId,
@@ -20,6 +27,19 @@ public class StackServiceVolumesService(IStackRepository repository, IMapper map
         string requestTarget
     )
     {
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw new NotFoundException("Stack", "Stack not found");
+        }
+
+        await userAccessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Write
+        );
+
         var stackServiceExists = await repository.StackServiceExists(stackId, stackServiceId);
 
         if (!stackServiceExists)

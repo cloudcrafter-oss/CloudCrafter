@@ -14,9 +14,9 @@ public class BaseStackServiceVolumeTest : BaseTestFixture
         (await CountAsync<StackServiceVolume>()).Should().Be(count);
     }
 
-    public async Task<StackService> GenerateStackService()
+    public async Task<StackService> GenerateStackService(Guid? teamOwnerId = null)
     {
-        var stack = await CreateSampleStack();
+        var stack = await CreateSampleStack(null, teamOwnerId);
 
         var stackService = FakerInstances
             .StackServiceFaker(stack)

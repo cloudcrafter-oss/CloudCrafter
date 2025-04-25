@@ -4,7 +4,7 @@ using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Entities;
 using FluentAssertions;
-using NUnit.Framework;
+using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.FunctionalTests.Domain.Stacks.StackServiceVolumes;
 
@@ -29,13 +29,23 @@ public class CreateStackServiceVolumeCommandTest : BaseStackServiceVolumeTest
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
     }
 
-    [Test]
-    public async Task ShouldNotBeAbleToCreateVolumeWithSourceWhenUsingDockerVolume()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToCreateVolumeWithSourceWhenUsingDockerVolume(bool isAdmin)
     {
         await AssertVolumeCount(0);
-        await RunAsAdministratorAsync();
 
-        var stackService = await GenerateStackService();
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            ownerId = await RunAsDefaultUserAsync();
+        }
+
+        var stackService = await GenerateStackService(ownerId);
 
         Command = Command with
         {
@@ -56,13 +66,22 @@ public class CreateStackServiceVolumeCommandTest : BaseStackServiceVolumeTest
         await AssertVolumeCount(0);
     }
 
-    [Test]
-    public async Task ShouldNotBeAbleToCreateVolumeOnNonExistingService()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToCreateVolumeOnNonExistingService(bool isAdmin)
     {
         await AssertVolumeCount(0);
-        await RunAsAdministratorAsync();
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            ownerId = await RunAsDefaultUserAsync();
+        }
 
-        var stackService = await GenerateStackService();
+        var stackService = await GenerateStackService(ownerId);
 
         Command = Command with
         {
@@ -81,13 +100,22 @@ public class CreateStackServiceVolumeCommandTest : BaseStackServiceVolumeTest
         await AssertVolumeCount(0);
     }
 
-    [Test]
-    public async Task ShouldBeAbleToCreateDockerVolume()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToCreateDockerVolume(bool isAdmin)
     {
         await AssertVolumeCount(0);
-        await RunAsAdministratorAsync();
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            ownerId = await RunAsDefaultUserAsync();
+        }
 
-        var stackService = await GenerateStackService();
+        var stackService = await GenerateStackService(ownerId);
 
         Command = Command with
         {
@@ -111,5 +139,42 @@ public class CreateStackServiceVolumeCommandTest : BaseStackServiceVolumeTest
         volume.StackServiceId.Should().Be(stackService.Id);
 
         await AssertVolumeCount(1);
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToCreateVolumeBecauseUserHasNotCorrectRoleInTeam(
+        bool attachToTeam
+    )
+    {
+        await AssertVolumeCount(0);
+
+        var userId = await RunAsDefaultUserAsync();
+
+        var stackService = await GenerateStackService();
+
+        var stackFromDb = FetchEntity<Stack>(
+            q => q.Id == stackService.StackId,
+            inc =>
+                inc.Include(x => x.Environment).ThenInclude(x => x.Project).ThenInclude(x => x.Team)
+        );
+
+        if (attachToTeam)
+        {
+            await AddToTeam(stackFromDb!.Environment.Project.Team, userId);
+        }
+
+        Command = Command with
+        {
+            StackId = stackService.StackId,
+            StackServiceId = stackService.Id,
+            Source = null,
+            Target = "/dummy",
+            Type = StackServiceVolumeTypeDto.DockerVolume,
+        };
+
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+            async () => await SendAsync(Command)
+        );
     }
 }
