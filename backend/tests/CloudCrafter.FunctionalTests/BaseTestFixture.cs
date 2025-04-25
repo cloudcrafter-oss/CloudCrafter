@@ -46,12 +46,15 @@ public abstract class BaseTestFixture
         await AddAsync(new TeamUser() { TeamId = team.Id, UserId = userId.Value });
     }
 
-    public async Task<Stack> CreateSampleStack(Action<Stack>? customizeStack = null)
+    public async Task<Stack> CreateSampleStack(
+        Action<Stack>? customizeStack = null,
+        Guid? teamOwnerId = null
+    )
     {
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
 
-        var team = await CreateTeam();
+        var team = await CreateTeam(teamOwnerId);
         var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 

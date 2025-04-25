@@ -3,7 +3,6 @@ using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Stacks.EnvironmentVariables;
 
@@ -110,13 +109,21 @@ public class CreateStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
         );
     }
 
-    [Test]
-    public async Task ShouldBeAbleToCreateEnvironmentVariable()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToCreateEnvironmentVariable(bool runAsAdministrator)
     {
-        await RunAsAdministratorAsync();
         await AssertEnvCount(0);
-
         var stack = await CreateSampleStack();
+        if (runAsAdministrator)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            var userId = await RunAsDefaultUserAsync();
+            await AddToTeam(stack.Environment.Project.Team, userId);
+        }
 
         var result = await SendAsync(
             Command with
