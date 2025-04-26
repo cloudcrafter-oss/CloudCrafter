@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core.Commands.Teams;
+using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
 
@@ -14,6 +15,14 @@ public class GetAllTeamsCommandTest : BaseTeamTest
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
+    }
+
+    [Test]
+    public async Task ShouldThrowExceptionWhenUserIsNotAnAdministrator()
+    {
+        await RunAsDefaultUserAsync();
+
+        Assert.ThrowsAsync<ForbiddenAccessException>(async () => await SendAsync(Command));
     }
 
     [Test]

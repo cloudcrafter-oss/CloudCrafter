@@ -1,11 +1,12 @@
 ﻿using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Teams;
+using CloudCrafter.Domain.Constants;
 using CloudCrafter.Domain.Domain.Teams;
 using MediatR;
 
 namespace CloudCrafter.Core.Commands.Teams;
 
-[Authorize]
+[Authorize(Roles = $"{Roles.Administrator}")]
 public class GetAllTeamsCommand : IRequest<List<SimpleTeamDto>> { }
 
 internal class GetAllTeamsCommandHandler(ITeamsService service)
