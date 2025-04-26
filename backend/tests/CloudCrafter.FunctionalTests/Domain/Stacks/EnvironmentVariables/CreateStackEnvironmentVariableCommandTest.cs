@@ -114,16 +114,17 @@ public class CreateStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
     public async Task ShouldBeAbleToCreateEnvironmentVariable(bool runAsAdministrator)
     {
         await AssertEnvCount(0);
-        var stack = await CreateSampleStack();
+        Guid? ownerId = null;
         if (runAsAdministrator)
         {
             await RunAsAdministratorAsync();
         }
         else
         {
-            var userId = await RunAsDefaultUserAsync();
-            await AddToTeam(stack.Environment.Project.Team, userId);
+            ownerId = await RunAsDefaultUserAsync();
         }
+
+        var stack = await CreateSampleStack(null, ownerId);
 
         var result = await SendAsync(
             Command with

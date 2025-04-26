@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using CloudCrafter.Core.Commands.Stacks.Volumes;
+using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Entities;
 using FluentAssertions;
@@ -12,7 +13,7 @@ using static Testing;
 
 public class GetStackServiceVolumesQueryTest : BaseStackServiceVolumeTest
 {
-    private GetStackServiceVolumesQuery Query { get; set; } = null!;
+    private readonly GetStackServiceVolumesQuery Query = new(Guid.NewGuid(), Guid.NewGuid());
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
@@ -20,10 +21,18 @@ public class GetStackServiceVolumesQueryTest : BaseStackServiceVolumeTest
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Query));
     }
 
-    [Test]
-    public async Task ShouldNotBeAbleToFetchVolumesForNonExistingService()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToFetchVolumesForNonExistingService(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            await RunAsDefaultUserAsync();
+        }
         await AssertVolumeCount(0);
 
         var exception = Assert.ThrowsAsync<NotFoundException>(async () => await SendAsync(Query));
@@ -35,10 +44,9 @@ public class GetStackServiceVolumesQueryTest : BaseStackServiceVolumeTest
     }
 
     [Test]
-    public async Task ShouldBeAbleToFetchVolumes()
+    public async Task ShouldNotBeAbleToFetchVolumesForStackServiceBecauseUserIsNotInTeam()
     {
-        await RunAsAdministratorAsync();
-        await AssertVolumeCount(0);
+        await RunAsDefaultUserAsync();
 
         var volume1 = await GenerateStackServiceVolume(StackServiceVolumeType.LocalMount);
         var volume2 = await GenerateStackServiceVolume(
@@ -48,14 +56,81 @@ public class GetStackServiceVolumesQueryTest : BaseStackServiceVolumeTest
 
         var fetchedVolume = FetchEntity<StackServiceVolume>(
             x => x.Id == volume1.Id,
-            inc => inc.Include(x => x.StackService)
+            inc =>
+                inc.Include(x => x.StackService)
+                    .ThenInclude(x => x.Stack)
+                    .ThenInclude(x => x!.Environment)
+                    .ThenInclude(x => x.Project)
+                    .ThenInclude(x => x.Team)
         );
 
-        Query = new GetStackServiceVolumesQuery(
-            fetchedVolume!.StackService.StackId,
-            fetchedVolume.StackServiceId
+        Assert.ThrowsAsync<CannotAccessTeamException>(
+            async () =>
+                await SendAsync(
+                    Query with
+                    {
+                        StackId = fetchedVolume!.StackService.StackId,
+                        StackServiceId = fetchedVolume.StackServiceId,
+                    }
+                )
         );
-        var result = await SendAsync(Query);
+    }
+
+    [TestCase(true, false)]
+    [TestCase(false, true)]
+    [TestCase(false, false)]
+    public async Task ShouldBeAbleToFetchVolumes(bool isAdmin, bool isTeamOwner)
+    {
+        Guid? teamOwner = null;
+        Guid? userId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            userId = await RunAsDefaultUserAsync();
+
+            if (isTeamOwner)
+            {
+                teamOwner = userId;
+            }
+        }
+
+        await AssertVolumeCount(0);
+
+        var volume1 = await GenerateStackServiceVolume(
+            StackServiceVolumeType.LocalMount,
+            null,
+            teamOwner
+        );
+        var volume2 = await GenerateStackServiceVolume(
+            StackServiceVolumeType.DockerVolume,
+            f => f.RuleFor(x => x.StackServiceId, volume1.StackServiceId)
+        );
+
+        var fetchedVolume = FetchEntity<StackServiceVolume>(
+            x => x.Id == volume1.Id,
+            inc =>
+                inc.Include(x => x.StackService)
+                    .ThenInclude(x => x.Stack)
+                    .ThenInclude(x => x!.Environment)
+                    .ThenInclude(x => x.Project)
+                    .ThenInclude(x => x.Team)
+        );
+
+        if (userId.HasValue)
+        {
+            await AddToTeam(fetchedVolume!.StackService.Stack!.Environment.Project.Team, userId);
+        }
+
+        var result = await SendAsync(
+            Query with
+            {
+                StackId = fetchedVolume!.StackService.StackId,
+                StackServiceId = fetchedVolume.StackServiceId,
+            }
+        );
 
         result.Should().HaveCount(2);
         ValidateVolumeDto(result.First(x => x.Id == volume1.Id), volume1);

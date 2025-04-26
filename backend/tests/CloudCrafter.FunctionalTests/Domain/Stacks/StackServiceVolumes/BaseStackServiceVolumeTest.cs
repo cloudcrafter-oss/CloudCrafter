@@ -42,10 +42,11 @@ public class BaseStackServiceVolumeTest : BaseTestFixture
 
     public async Task<StackServiceVolume> GenerateStackServiceVolume(
         StackServiceVolumeType type,
-        Action<Faker<StackServiceVolume>>? additionalRules = null
+        Action<Faker<StackServiceVolume>>? additionalRules = null,
+        Guid? teamOwnerId = null
     )
     {
-        var stack = await CreateSampleStack();
+        var stack = await CreateSampleStack(null, teamOwnerId);
 
         var stackService = FakerInstances
             .StackServiceFaker(stack)

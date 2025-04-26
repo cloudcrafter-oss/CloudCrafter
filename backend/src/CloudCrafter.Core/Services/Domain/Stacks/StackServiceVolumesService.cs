@@ -100,6 +100,19 @@ public class StackServiceVolumesService(
 
     public async Task<List<StackServiceVolumeDto>> GetVolumes(Guid stackId, Guid stackServiceId)
     {
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw new NotFoundException("Stack", "Stack not found");
+        }
+
+        await userAccessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Read
+        );
+
         var stackServiceExists = await repository.StackServiceExists(stackId, stackServiceId);
 
         if (!stackServiceExists)
