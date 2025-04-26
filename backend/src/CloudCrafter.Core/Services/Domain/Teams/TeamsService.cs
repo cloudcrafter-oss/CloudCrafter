@@ -37,9 +37,11 @@ public class TeamsService(
         }
     }
 
-    public Task UpdateTeamName(Guid teamId, string name)
+    public async Task UpdateTeamName(Guid teamId, string name)
     {
-        return repository.UpdateTeamName(teamId, name);
+        await userAccessService.EnsureHasTeamAccess(user?.Id, teamId, AccessType.Write);
+
+        await repository.UpdateTeamName(teamId, name);
     }
 
     public Task<Team> GetTeam(Guid teamId)

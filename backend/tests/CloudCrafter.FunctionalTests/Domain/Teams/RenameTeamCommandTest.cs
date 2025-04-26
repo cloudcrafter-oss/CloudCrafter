@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using CloudCrafter.Core.Commands.Teams;
+using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
@@ -22,20 +23,39 @@ public class RenameTeamCommandTest : BaseTeamTest
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
     }
 
-    [Test]
-    public async Task ShouldNotBeAbleToRenameNonExistingTeam()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToRenameNonExistingTeam(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        await RunAsUserRoleAsync(isAdmin);
         await AssertTeamCount(0);
         Assert.ThrowsAsync<NotFoundException>(async () => await SendAsync(Command));
 
         await AssertTeamCount(0);
     }
 
-    [Test]
-    public async Task ShouldBeAbleToRenameExistingTeam()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToRenameNonExistingTeamBecauseNotOwner(bool attachToTeam)
     {
-        var userId = await RunAsAdministratorAsync();
+        var userId = await RunAsDefaultUserAsync();
+
+        var team = await CreateTeam();
+        if (attachToTeam)
+        {
+            await AddToTeam(team, userId);
+        }
+
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+            async () => await SendAsync(Command with { Id = team.Id, Name = "Some name" })
+        );
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToRenameExistingTeamAsOwner(bool isAdmin)
+    {
+        var userId = await RunAsUserRoleAsync(isAdmin);
         await AssertTeamCount(0);
 
         var teamFaker = FakerInstances
