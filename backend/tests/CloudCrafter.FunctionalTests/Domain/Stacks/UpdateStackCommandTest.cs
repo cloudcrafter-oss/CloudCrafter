@@ -7,7 +7,6 @@ using CloudCrafter.Infrastructure.Data.Fakeds;
 using CloudCrafter.TestUtilities.DomainHelpers;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Stacks;
 
@@ -23,10 +22,11 @@ public class UpdateStackCommandTest : BaseTestFixture
         );
     }
 
-    [Test]
-    public async Task ShoulThrowErrorWhenNoAccessBecauseItDoesNotExists()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldThrowErrorWhenNoAccessBecauseItDoesNotExists(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        await RunAsUserRoleAsync(isAdmin);
 
         var stackId = Guid.NewGuid();
         var ex = Assert.ThrowsAsync<UnauthorizedAccessException>(
@@ -36,26 +36,32 @@ public class UpdateStackCommandTest : BaseTestFixture
         ex.Message.Should().Be($"User does not have access to stack {stackId}");
     }
 
-    [TestCase("Name", "New Test Name")]
-    [TestCase("Description", "New Test Description")]
-    [TestCase("PublicGitRepo", "https://github.com/cloudcrafter-oss/CloudCrafter")]
-    public async Task ShouldUpdateStackProperty(string propertyName, string newValue)
+    [TestCase("Name", "New Test Name", true)]
+    [TestCase("Description", "New Test Description", true)]
+    [TestCase("PublicGitRepo", "https://github.com/cloudcrafter-oss/CloudCrafter", true)]
+    [TestCase("Name", "New Test Name", false)]
+    [TestCase("Description", "New Test Description", false)]
+    [TestCase("PublicGitRepo", "https://github.com/cloudcrafter-oss/CloudCrafter", false)]
+    public async Task ShouldUpdateStackProperty(string propertyName, string newValue, bool isAdmin)
     {
-        await RunAsAdministratorAsync();
-        var stack = await CreateSampleStack(stack =>
-            stack.Source = new ApplicationSource
-            {
-                Git = new ApplicationSourceGit
+        var userId = await RunAsUserRoleAsync(isAdmin);
+
+        var stack = await CreateSampleStack(
+            stack =>
+                stack.Source = new ApplicationSource
                 {
-                    Repository = "",
-                    Branch = "",
-                    Path = "",
+                    Git = new ApplicationSourceGit
+                    {
+                        Repository = "",
+                        Branch = "",
+                        Path = "",
+                    },
+                    Type = ApplicationSourceType.Git,
                 },
-                Type = ApplicationSourceType.Git,
-            }
+            !isAdmin ? userId : null
         );
 
-        UpdateStackCommand command = propertyName switch
+        var command = propertyName switch
         {
             "Name" => new UpdateStackCommand(stack.Id, newValue),
             "Description" => new UpdateStackCommand(stack.Id, Description: newValue),
@@ -87,11 +93,12 @@ public class UpdateStackCommandTest : BaseTestFixture
         actualValue.Should().Be(newValue);
     }
 
-    [Test]
-    public async Task ShouldNotBeAbleToUpdatePublicGitRepoBecauseRepoIsInvalid()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToUpdatePublicGitRepoBecauseRepoIsInvalid(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
-        var stack = await CreateSampleStack();
+        var userId = await RunAsUserRoleAsync(isAdmin);
+        var stack = await CreateSampleStack(null, !isAdmin ? userId : null);
 
         var command = new UpdateStackCommand(
             stack.Id,
@@ -113,16 +120,18 @@ public class UpdateStackCommandTest : BaseTestFixture
         exception.Errors["GitRepository"][0].Should().Be("Invalid Git repository");
     }
 
-    [Test]
-    public async Task ShouldNotAbleToUpdateGithubAppBranchBecauseBranchDoesNotExists()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotAbleToUpdateGithubAppBranchBecauseBranchDoesNotExists(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        var userId = await RunAsUserRoleAsync(isAdmin);
+
         var environmentId = Guid.Parse("f41d5c09-2fa1-459a-ae09-9eda843135df");
         var deploymentId = Guid.Parse("fde85aa6-8dd6-48c9-8c4b-8172a2f15f28");
         var stackId = Guid.Parse("35223e08-9c9f-4322-972e-51c610c202e3");
         var stackServiceId = Guid.Parse("b34a6560-701d-4f0e-b024-b4b7b2155bcf");
 
-        var team = await CreateTeam();
+        var team = await CreateTeam(!isAdmin ? userId : null);
         var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 
@@ -150,16 +159,55 @@ public class UpdateStackCommandTest : BaseTestFixture
         exception.Errors["Branch"][0].Should().Be("Invalid branch");
     }
 
-    [Test]
-    public async Task ShouldBeAbleToUpdateGithubAppBranch()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToUpdateStackBecauseUserIsNotTeamOwner(bool attachToTeam)
     {
-        await RunAsAdministratorAsync();
+        var userId = await RunAsDefaultUserAsync();
+        var team = await CreateTeam();
+
+        var environmentId = Guid.Parse("f41d5c09-2fa1-459a-ae09-9eda843135df");
+        var stackId = Guid.Parse("35223e08-9c9f-4322-972e-51c610c202e3");
+        var stackServiceId = Guid.Parse("b34a6560-701d-4f0e-b024-b4b7b2155bcf");
+
+        if (attachToTeam)
+        {
+            await AddToTeam(team, userId);
+        }
+
+        var project = FakerInstances.ProjectFaker(team.Id).Generate();
+        await AddAsync(project);
+
+        var environment = FakerInstances
+            .EnvironmentFaker(project)
+            .RuleFor(x => x.Id, f => environmentId)
+            .Generate();
+        await AddAsync(environment);
+
+        var stack = EntityFaker.GenerateStackWithGithubApp(environmentId, stackId, stackServiceId);
+        await AddAsync(stack);
+
+        var command = new UpdateStackCommand(
+            stack.Id,
+            GithubSettings: new UpdateStackGithubSettings { Branch = "test-branch" }
+        );
+
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+            async () => await SendAsync(command)
+        );
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToUpdateGithubAppBranch(bool isAdmin)
+    {
+        var userId = await RunAsUserRoleAsync(isAdmin);
         var environmentId = Guid.Parse("f41d5c09-2fa1-459a-ae09-9eda843135df");
         var deploymentId = Guid.Parse("fde85aa6-8dd6-48c9-8c4b-8172a2f15f28");
         var stackId = Guid.Parse("35223e08-9c9f-4322-972e-51c610c202e3");
         var stackServiceId = Guid.Parse("b34a6560-701d-4f0e-b024-b4b7b2155bcf");
 
-        var team = await CreateTeam();
+        var team = await CreateTeam(!isAdmin ? userId : null);
         var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 

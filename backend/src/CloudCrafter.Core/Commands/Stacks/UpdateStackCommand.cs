@@ -42,6 +42,8 @@ internal class UpdateStackCommandHandler(IStacksService stackService, IGitServic
         CancellationToken cancellationToken
     )
     {
+        await stackService.EnsureStackWritePermissions(request.StackId);
+
         if (!string.IsNullOrEmpty(request.GitPublicSettings?.Repository))
         {
             var isValidGitRepo = await gitService.ValidateRepository(

@@ -1,10 +1,9 @@
-using System.Reflection.Metadata;
+using Ardalis.GuardClauses;
 using AutoMapper;
 using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Common.Responses;
-using CloudCrafter.Core.Events;
 using CloudCrafter.Core.Events.DomainEvents;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Domain.Stacks.Filters;
@@ -67,6 +66,22 @@ public class StacksService(
         );
 
         return mapper.Map<StackDetailDto>(stack);
+    }
+
+    public async Task EnsureStackWritePermissions(Guid stackId)
+    {
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw new NotFoundException("Stack", "Stack not found");
+        }
+
+        await userAccessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Write
+        );
     }
 
     public Task<Guid> CreateDeployment(Guid stackId)
