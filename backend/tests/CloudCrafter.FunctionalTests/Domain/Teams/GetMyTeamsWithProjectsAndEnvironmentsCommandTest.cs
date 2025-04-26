@@ -16,10 +16,11 @@ public class GetMyTeamsWithProjectsAndEnvironmentsCommandTest : BaseTeamTest
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
     }
 
-    [Test]
-    public async Task ShouldBeAbleToFetchNoTeamsWhenNonOwnedOrAssigned()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToFetchNoTeamsWhenNonOwnedOrAssigned(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        await RunAsUserRoleAsync(isAdmin);
         await AssertTeamCount(0);
 
         var result = await SendAsync(Command);
@@ -28,10 +29,11 @@ public class GetMyTeamsWithProjectsAndEnvironmentsCommandTest : BaseTeamTest
         result.Should().BeEmpty();
     }
 
-    [Test]
-    public async Task ShouldBeAbleToFetchTeamsWhenOwned()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToFetchTeamsWhenOwned(bool isAdmin)
     {
-        var userId = await RunAsAdministratorAsync();
+        var userId = await RunAsUserRoleAsync(isAdmin);
         await AssertTeamCount(0);
 
         var teamFaker = FakerInstances
@@ -48,10 +50,11 @@ public class GetMyTeamsWithProjectsAndEnvironmentsCommandTest : BaseTeamTest
         result[0].Projects.Should().BeEmpty();
     }
 
-    [Test]
-    public async Task ShouldBeAbleToFetchTeamsWithEnvironments()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToFetchTeamsWithEnvironments(bool isAdmin)
     {
-        var userId = await RunAsAdministratorAsync();
+        var userId = await RunAsUserRoleAsync(isAdmin);
         var emptyTeam = await CreateTeam(userId);
         var team = await CreateTeam(userId);
         var projects = FakerInstances.ProjectFaker(team.Id).Generate(10);
