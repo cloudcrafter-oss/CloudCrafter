@@ -7,6 +7,7 @@ using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Constants;
 using CloudCrafter.Domain.Domain.User.ACL;
+using CloudCrafter.Domain.Entities;
 using CloudCrafter.Domain.Entities.Interfaces;
 
 namespace CloudCrafter.Core.Services.Domain.Users;
@@ -17,7 +18,7 @@ public class UserAccessService(
     IProjectRepository projectRepository,
     IStackRepository stackRepository,
     IIdentityService identityService,
-    ITeamsService teamsService
+    ITeamsRepository teamsRepository
 ) : IUserAccessService
 {
     public async Task<bool> CanAccessServer(Guid userId, Guid id)
@@ -132,7 +133,7 @@ public class UserAccessService(
             return false;
         }
 
-        var team = await teamsService.GetTeam(teamId.Value);
+        var team = await teamsRepository.GetTeam(teamId.Value);
 
         switch (accessType)
         {

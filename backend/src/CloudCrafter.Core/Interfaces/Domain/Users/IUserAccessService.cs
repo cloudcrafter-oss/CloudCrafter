@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Domain.Domain.User.ACL;
+using CloudCrafter.Domain.Entities;
 using CloudCrafter.Domain.Entities.Interfaces;
 
 namespace CloudCrafter.Core.Interfaces.Domain.Users;

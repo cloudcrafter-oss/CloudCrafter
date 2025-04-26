@@ -20,20 +20,22 @@ public class DeleteTeamCommandTest : BaseTeamTest
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
     }
 
-    [Test]
-    public async Task ShouldNotBeAbleToDeleteANonExistingTeam()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToDeleteANonExistingTeam(bool isAdmin)
     {
         await AssertTeamCount(0);
-        await RunAsAdministratorAsync();
+        await RunAsUserRoleAsync(isAdmin);
 
         Assert.ThrowsAsync<NotFoundException>(async () => await SendAsync(Command));
     }
 
-    [Test]
-    public async Task ShouldBeAbleToDeleteATeam()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToDeleteATeam(bool isAdmin)
     {
         await AssertTeamCount(0);
-        var userId = await RunAsAdministratorAsync();
+        var userId = await RunAsUserRoleAsync(isAdmin);
 
         var team = FakerInstances.TeamFaker().RuleFor(x => x.OwnerId, userId!.Value).Generate();
 
@@ -45,10 +47,25 @@ public class DeleteTeamCommandTest : BaseTeamTest
     }
 
     [Test]
-    public async Task ShouldNotBeAbleToDeleteATeamThatHasAProject()
+    public async Task ShouldNotBeAbleToDeleteATeamOfWhichUserIsNotAnOwner()
+    {
+        var userId = await RunAsDefaultUserAsync();
+
+        var team = await CreateTeam();
+
+        await AssertTeamCount(1);
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+            async () => await SendAsync(Command with { TeamId = team.Id })
+        );
+        await AssertTeamCount(1);
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToDeleteATeamThatHasAProject(bool isAdmin)
     {
         await AssertTeamCount(0);
-        var userId = await RunAsAdministratorAsync();
+        var userId = await RunAsUserRoleAsync(isAdmin);
 
         var team = FakerInstances.TeamFaker().RuleFor(x => x.OwnerId, userId!.Value).Generate();
 

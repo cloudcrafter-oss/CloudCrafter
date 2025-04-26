@@ -1,4 +1,5 @@
 ﻿using CloudCrafter.Core.Commands.Teams;
+using CloudCrafter.Domain.Entities;
 using FluentAssertions;
 using static CloudCrafter.FunctionalTests.Testing;
 
@@ -14,13 +15,20 @@ public class CreateTeamCommandTest : BaseTeamTest
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
     }
 
-    [Test]
-    public async Task ShouldBeAbleToCreateATeam()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToCreateATeam(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        var userId = await RunAsUserRoleAsync(isAdmin);
         await AssertTeamCount(0);
         var teamId = await SendAsync(Command);
         teamId.Should().NotBeEmpty();
+
+        var team = FetchEntity<Team>(x => x.Id == teamId);
+
+        team.Should().NotBeNull();
+        team!.OwnerId.Should().Be(userId!.Value);
+
         await AssertTeamCount(1);
     }
 }
