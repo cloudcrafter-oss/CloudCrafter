@@ -39,7 +39,7 @@ public class UpdateServerCommandTest : BaseTestFixture
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
 
-        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+        Assert.ThrowsAsync<UnauthorizedAccessException>(
             async () => await SendAsync(Command with { ServerId = server.Id })
         );
     }
@@ -52,29 +52,15 @@ public class UpdateServerCommandTest : BaseTestFixture
         updatedServer!.Name.Should().Be(newName);
     }
 
-    [Test]
-    public async Task ShouldBeAbleToPatchName()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToPatchName(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        var userId = await RunAsUserRoleAsync(isAdmin);
 
-        var server = FakerInstances.ServerFaker.Generate();
-        await AddAsync(server);
-
-        var command = new UpdateServerCommand(server.Id, new UpdateServerDto { Name = "New Name" });
-        server.Name.Should().NotBe(command.UpdateDetails.Name);
-
-        await SendAsync(command);
-
-        await VerifyUpdateName(server.Id, command.UpdateDetails.Name!);
-    }
-
-    [Test]
-    public async Task ShouldBeAbleToPatchNameWhenTeamOwner()
-    {
-        var userId = await RunAsDefaultUserAsync();
         var team = await CreateTeam(userId);
 
-        var server = FakerInstances.ServerFaker.RuleFor(x => x.TeamId, f => team.Id).Generate();
+        var server = FakerInstances.ServerFaker.RuleFor(x => x.TeamId, team.Id).Generate();
         await AddAsync(server);
 
         var command = new UpdateServerCommand(server.Id, new UpdateServerDto { Name = "New Name" });

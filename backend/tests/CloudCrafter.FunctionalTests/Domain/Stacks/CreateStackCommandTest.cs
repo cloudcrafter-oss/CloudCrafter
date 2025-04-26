@@ -3,7 +3,6 @@ using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Stacks;
 
@@ -55,9 +54,11 @@ public class CreateStackCommandTest : BaseTestFixture
             async () => await SendAsync(Command)
         );
 
-        exception
-            .Message.Should()
-            .Be($"User does not have access to environment {Command.EnvironmentId}");
+        var message = isAdmin
+            ? $"User does not have access to environment {Command.EnvironmentId}"
+            : $"User does not have access to server {Command.ServerId}";
+
+        exception.Message.Should().Be(message);
         (await CountAsync<Stack>()).Should().Be(0);
     }
 
@@ -136,8 +137,15 @@ public class CreateStackCommandTest : BaseTestFixture
 
         (await CountAsync<StackEnvironmentVariableGroup>()).Should().Be(0);
 
-        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
-            async () => await SendAsync(Command)
-        );
+        if (!attachToTeam)
+        {
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
+        }
+        else
+        {
+            Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+                async () => await SendAsync(Command)
+            );
+        }
     }
 }
