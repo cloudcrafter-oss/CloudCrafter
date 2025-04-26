@@ -23,9 +23,12 @@ public class UserAccessService(
     public async Task<bool> CanAccessServer(Guid userId, Guid id)
     {
         var server = await serverRepository.GetServer(id);
+        if (server == null)
+        {
+            return false;
+        }
 
-        // TODO: ACL check
-        return server != null;
+        return await HasEntityPermissions(server, userId, AccessType.Read);
     }
 
     public async Task<bool> CanAccessEnvironment(Guid userId, Guid id)
