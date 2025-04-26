@@ -37,9 +37,7 @@ public class GetStackServiceVolumesQueryTest : BaseStackServiceVolumeTest
 
         var exception = Assert.ThrowsAsync<NotFoundException>(async () => await SendAsync(Query));
         exception.Should().NotBeNull();
-        exception
-            .Message.Should()
-            .Be("Queried object Stack service not found was not found, Key: StackService");
+        exception.Message.Should().Be("Queried object Stack not found was not found, Key: Stack");
         await AssertVolumeCount(0);
     }
 
