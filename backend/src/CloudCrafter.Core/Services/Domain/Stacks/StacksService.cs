@@ -60,6 +60,12 @@ public class StacksService(
             return null;
         }
 
+        await userAccessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Read
+        );
+
         return mapper.Map<StackDetailDto>(stack);
     }
 
