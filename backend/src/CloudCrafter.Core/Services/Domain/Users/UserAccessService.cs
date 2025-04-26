@@ -15,7 +15,7 @@ public class UserAccessService(
     IServerRepository serverRepository,
     IEnvironmentService environmentService,
     IProjectRepository projectRepository,
-    IStacksService stacksService,
+    IStackRepository stackRepository,
     IIdentityService identityService,
     ITeamsService teamsService
 ) : IUserAccessService
@@ -46,7 +46,7 @@ public class UserAccessService(
 
     public async Task<bool> CanAccessStack(Guid userId, Guid id)
     {
-        var stack = await stacksService.GetSimpleStackDetails(id);
+        var stack = await stackRepository.GetStack(id);
         // TODO: ACL check
         return stack != null;
     }

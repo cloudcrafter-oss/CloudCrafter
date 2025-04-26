@@ -2,25 +2,38 @@ using System.Reflection.Metadata;
 using AutoMapper;
 using CloudCrafter.Agent.SignalR.Models;
 using CloudCrafter.Core.Commands.Stacks;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Core.Events;
 using CloudCrafter.Core.Events.DomainEvents;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Domain.Stacks.Filters;
+using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Common;
 using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Domain.Stack.Filter;
+using CloudCrafter.Domain.Domain.User.ACL;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Domain.Requests.Filtering;
 
 namespace CloudCrafter.Core.Services.Domain.Stacks;
 
-public class StacksService(IStackRepository repository, IMapper mapper) : IStacksService
+public class StacksService(
+    IStackRepository repository,
+    IServerRepository serverRepository,
+    IMapper mapper,
+    IUserAccessService userAccessService,
+    IUser user
+) : IStacksService
 {
     public async Task<StackCreatedDto> CreateStack(CreateStackArgsDto args)
     {
+        var server = await serverRepository.GetServerEntityOrFail(args.ServerId);
+
+        await userAccessService.EnsureHasAccessToEntity(server, user?.Id, AccessType.Write);
+
         var createdStack = await repository.CreateStack(args);
 
         return new StackCreatedDto { Id = createdStack.Id };

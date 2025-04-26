@@ -154,6 +154,15 @@ public class Testing
         );
     }
 
+    public static async Task<Guid?> RunAsUserRoleAsync(bool isAdmin)
+    {
+        return await RunAsUserAsync(
+            isAdmin ? "administrator@local" : "test@local",
+            isAdmin ? "Administrator1234!" : "Testing1234!",
+            isAdmin ? [Roles.Administrator, Roles.User] : [Roles.User]
+        );
+    }
+
     public static async Task<Guid?> RunAsUserAsync(string userName, string password, string[] roles)
     {
         using var scope = _scopeFactory.CreateScope();
