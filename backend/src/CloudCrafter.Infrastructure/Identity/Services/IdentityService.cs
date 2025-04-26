@@ -1,5 +1,6 @@
 using Ardalis.Result;
 using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Domain.Constants;
 using CloudCrafter.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -44,6 +45,8 @@ public class IdentityService(
         };
 
         var result = await userManager.CreateAsync(user);
+
+        await userManager.AddToRoleAsync(user, Roles.User);
 
         return (result.ToApplicationResult(), user.Id);
     }
