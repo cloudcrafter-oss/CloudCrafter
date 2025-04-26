@@ -34,6 +34,13 @@ public class StackServiceVolumesService(
             throw new NotFoundException("Stack", "Stack not found");
         }
 
+        // Ensure the user has access to the stack
+        await userAccessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Write
+        );
+
         await userAccessService.EnsureHasAccessToEntity(
             stack.Environment.Project,
             user?.Id,
