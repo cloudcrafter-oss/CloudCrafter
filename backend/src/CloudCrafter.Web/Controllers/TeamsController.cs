@@ -1,4 +1,6 @@
 ﻿using CloudCrafter.Core.Commands.Teams;
+using CloudCrafter.Core.Common.Responses;
+using CloudCrafter.Domain.Common.Pagination;
 using CloudCrafter.Domain.Domain.Teams;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +13,28 @@ public class TeamsController : CloudCrafterController
     public Task<List<SimpleTeamDto>> GetMyTeams(ISender sender)
     {
         return sender.Send(new GetMyTeamsCommand());
+    }
+
+    [HttpGet("{teamId:guid}")]
+    public Task<PaginatedList<TeamMemberDto>> GetTeamMembers(
+        ISender sender,
+        Guid teamId,
+        [FromQuery] PaginatedRequest paginatedRequest
+    )
+    {
+        return sender.Send(new GetTeamUsersCommand(teamId, paginatedRequest));
+    }
+
+    [HttpPost("{teamId:guid}/invite")]
+    public async Task<IActionResult> InviteUserToTeam(
+        [FromRoute] Guid teamId,
+        [FromBody] string email,
+        ISender sender
+    )
+    {
+        await sender.Send(new InviteUserToTeamWriteCommand { Email = email, TeamId = teamId });
+
+        return Ok();
     }
 
     [HttpGet("projects-and-environments")]

@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using CloudCrafter.Core.Common.Interfaces.Access;
+using System.Text.Json.Serialization;
 using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Teams;
 using MediatR;
@@ -11,6 +11,8 @@ public record InviteUserToTeamWriteCommand : IRequest
 {
     [Required]
     public required string Email { get; init; }
+
+    [JsonIgnore]
     public required Guid TeamId { get; set; }
 }
 
