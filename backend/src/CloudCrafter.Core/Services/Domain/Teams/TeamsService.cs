@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Core.Interfaces.Domain.Teams;
 using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Repositories;
+using CloudCrafter.Domain.Common.Pagination;
 using CloudCrafter.Domain.Domain.Teams;
 using CloudCrafter.Domain.Domain.User.ACL;
 using CloudCrafter.Domain.Entities;
@@ -87,5 +89,17 @@ public class TeamsService(
         }
 
         await repository.AddUserToTeam(team, userFromEmail);
+    }
+
+    public async Task<PaginatedList<TeamMemberDto>> GetTeamMembers(
+        Guid teamId,
+        PaginatedRequest pagination
+    )
+    {
+        var team = await repository.GetTeam(teamId);
+
+        await userAccessService.EnsureHasTeamAccess(user.Id, teamId, AccessType.Read);
+
+        return await repository.GetTeamMembers(teamId, pagination);
     }
 }

@@ -1,4 +1,7 @@
-﻿using CloudCrafter.Domain.Entities;
+﻿using CloudCrafter.Core.Common.Responses;
+using CloudCrafter.Domain.Common.Pagination;
+using CloudCrafter.Domain.Domain.Teams;
+using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.Core.Interfaces.Repositories;
 
@@ -12,4 +15,5 @@ public interface ITeamsRepository
     Task<List<Team>> GetTeamsWithProjectsAndEnvironments(Guid userId);
     Task<Team> GetTeam(Guid teamId);
     Task AddUserToTeam(Team team, User user);
+    Task<PaginatedList<TeamMemberDto>> GetTeamMembers(Guid teamId, PaginatedRequest pagination);
 }

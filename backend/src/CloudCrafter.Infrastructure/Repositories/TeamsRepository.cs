@@ -1,12 +1,17 @@
 ﻿using Ardalis.GuardClauses;
+using AutoMapper;
 using CloudCrafter.Core.Common.Interfaces;
+using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Core.Interfaces.Repositories;
+using CloudCrafter.Domain.Common.Pagination;
+using CloudCrafter.Domain.Domain.Teams;
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Infrastructure.Common.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.Infrastructure.Repositories;
 
-public class TeamsRepository(IApplicationDbContext context) : ITeamsRepository
+public class TeamsRepository(IApplicationDbContext context, IMapper mapper) : ITeamsRepository
 {
     public async Task<Guid> CreateTeam(string name, Guid ownerId)
     {
@@ -89,6 +94,21 @@ public class TeamsRepository(IApplicationDbContext context) : ITeamsRepository
         context.TeamUsers.Add(new TeamUser() { TeamId = team.Id, UserId = user.Id });
 
         await context.SaveChangesAsync();
+    }
+
+    public async Task<PaginatedList<TeamMemberDto>> GetTeamMembers(
+        Guid teamId,
+        PaginatedRequest pagination
+    )
+    {
+        var users = context
+            .TeamUsers.Where(x => x.TeamId == teamId)
+            .Include(x => x.User)
+            .AsQueryable();
+
+        var result = await users.ToPaginatedListAsync<TeamUser, TeamMemberDto>(pagination, mapper);
+
+        return result;
     }
 
     private IQueryable<Team> UserTeams(Guid userId)

@@ -1,6 +1,7 @@
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
+using CloudCrafter.TestUtilities.DomainHelpers;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,6 +35,17 @@ public abstract class BaseTestFixture
         var team = teamFaker.Generate();
         await AddAsync(team);
         return team;
+    }
+
+    public async Task AddToTeam(Team team, int amountOfUser)
+    {
+        var users = FakerInstances.UserFaker.Generate(amountOfUser);
+
+        foreach (var user in users)
+        {
+            await AddAsync(user);
+            await AddAsync(new TeamUser() { TeamId = team.Id, UserId = user.Id });
+        }
     }
 
     public async Task AddToTeam(Team team, Guid? userId)
