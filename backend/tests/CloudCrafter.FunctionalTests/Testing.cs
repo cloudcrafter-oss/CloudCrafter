@@ -180,7 +180,12 @@ public class Testing
 
             foreach (var role in roles)
             {
-                await roleManager.CreateAsync(new Role(role));
+                var roleExists = await roleManager.RoleExistsAsync(role);
+
+                if (!roleExists)
+                {
+                    throw new Exception($"Role '{role}' does not exist.");
+                }
             }
 
             await userManager.AddToRolesAsync(user, roles);
