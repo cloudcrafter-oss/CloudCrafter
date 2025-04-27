@@ -6,6 +6,7 @@ using CloudCrafter.FunctionalTests.Database;
 using CloudCrafter.FunctionalTests.TestModels;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Data.Fakeds;
+using CloudCrafter.Infrastructure.Identity;
 using CloudCrafter.Infrastructure.Logging;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -201,6 +202,9 @@ public class Testing
     {
         await _database.ResetAsync();
         _userId = null;
+
+        var authSeeder = GetService<AuthSeeder>();
+        await authSeeder.SeedRolesAsync();
     }
 
     public static async Task<TEntity?> FindAsync<TEntity>(params object[] keyValues)
