@@ -8,4 +8,6 @@ namespace CloudCrafter.Core.Interfaces.Repositories;
 public interface IUserRepository
 {
     Task<PaginatedList<UserDto>> GetUsers(PaginatedRequest filter);
+
+    Task<User?> GetUserByEmail(string email);
 }

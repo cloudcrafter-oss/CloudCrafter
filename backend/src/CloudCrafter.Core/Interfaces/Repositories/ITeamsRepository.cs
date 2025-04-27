@@ -11,4 +11,5 @@ public interface ITeamsRepository
     Task<List<Team>> GetAllTeams();
     Task<List<Team>> GetTeamsWithProjectsAndEnvironments(Guid userId);
     Task<Team> GetTeam(Guid teamId);
+    Task AddUserToTeam(Team team, User user);
 }

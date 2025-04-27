@@ -84,6 +84,13 @@ public class TeamsRepository(IApplicationDbContext context) : ITeamsRepository
         return team;
     }
 
+    public async Task AddUserToTeam(Team team, User user)
+    {
+        context.TeamUsers.Add(new TeamUser() { TeamId = team.Id, UserId = user.Id });
+
+        await context.SaveChangesAsync();
+    }
+
     private IQueryable<Team> UserTeams(Guid userId)
     {
         return context.Teams.Where(x =>

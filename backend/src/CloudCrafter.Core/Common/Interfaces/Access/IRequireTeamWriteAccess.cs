@@ -1,6 +1,6 @@
 ﻿namespace CloudCrafter.Core.Common.Interfaces.Access;
 
-public interface IRequireTeamAccess
+public interface IRequireTeamWriteAccess
 {
     Guid? TeamId { get; set; }
 }

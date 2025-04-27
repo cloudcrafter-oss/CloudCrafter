@@ -21,7 +21,7 @@ public class AccessTeamBehaviour<TRequest, TResponse>(
         CancellationToken cancellationToken
     )
     {
-        if (request is not IRequireTeamAccess teamAccessRequest)
+        if (request is not IRequireTeamWriteAccess teamAccessRequest)
         {
             return await next();
         }

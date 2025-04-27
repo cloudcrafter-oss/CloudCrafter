@@ -7,7 +7,7 @@ using MediatR;
 namespace CloudCrafter.Core.Commands.Servers;
 
 [Authorize]
-public record CreateServerCommand(string Name) : IRequest<CreatedServerDto>, IRequireTeamAccess
+public record CreateServerCommand(string Name) : IRequest<CreatedServerDto>, IRequireTeamWriteAccess
 {
     public Guid? TeamId { get; set; }
 }

@@ -27,4 +27,9 @@ public class UserRepository(AppDbContext context, IMapper mapper) : IUserReposit
 
         return result;
     }
+
+    public Task<User?> GetUserByEmail(string email)
+    {
+        return GetBaseQuery().Where(x => x.Email == email).FirstOrDefaultAsync();
+    }
 }

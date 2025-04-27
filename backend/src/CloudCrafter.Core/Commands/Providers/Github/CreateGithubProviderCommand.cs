@@ -6,7 +6,7 @@ using MediatR;
 namespace CloudCrafter.Core.Commands.Providers.Github;
 
 [Authorize]
-public record CreateGithubProviderCommand(string Code) : IRequest<bool>, IRequireTeamAccess
+public record CreateGithubProviderCommand(string Code) : IRequest<bool>, IRequireTeamWriteAccess
 {
     public Guid? TeamId { get; set; }
 }

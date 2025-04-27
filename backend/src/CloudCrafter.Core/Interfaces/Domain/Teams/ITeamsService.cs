@@ -14,4 +14,6 @@ public interface ITeamsService
     Task<List<SimpleTeamWithProjectsAndEnvironmentsDto>> GetTeamsWithProjectsAndEnvironments(
         Guid userId
     );
+
+    Task InviteUser(Guid requestTeamId, string requestEmail);
 }

@@ -13,6 +13,7 @@ namespace CloudCrafter.Core.Services.Domain.Teams;
 
 public class TeamsService(
     ITeamsRepository repository,
+    IUserRepository userRepository,
     IMapper mapper,
     IUserAccessService userAccessService,
     IUser user
@@ -70,5 +71,21 @@ public class TeamsService(
         var teams = await repository.GetTeamsWithProjectsAndEnvironments(userId);
 
         return mapper.Map<List<SimpleTeamWithProjectsAndEnvironmentsDto>>(teams);
+    }
+
+    public async Task InviteUser(Guid teamId, string userEmail)
+    {
+        var team = await repository.GetTeam(teamId);
+
+        await userAccessService.EnsureHasTeamAccess(user?.Id, teamId, AccessType.Write);
+
+        var userFromEmail = await userRepository.GetUserByEmail(userEmail);
+
+        if (userFromEmail == null)
+        {
+            return;
+        }
+
+        await repository.AddUserToTeam(team, userFromEmail);
     }
 }
