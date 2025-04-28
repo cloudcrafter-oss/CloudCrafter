@@ -1,3 +1,4 @@
+using Ardalis.GuardClauses;
 using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
@@ -20,11 +21,30 @@ public class DeleteServerCommandTest : BaseTestFixture
     }
 
     [Test]
-    public async Task ShouldExecuteEvenIfServerDoesNotExists()
+    public async Task ShouldNotBeAbleToDeleteServerWhichUserDoesNotHaveAccessTo()
+    {
+        await RunAsDefaultUserAsync();
+
+        var server = FakerInstances.ServerFaker.Generate();
+        await AddAsync(server);
+
+        (await CountAsync<Server>()).Should().Be(1);
+
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+            async () => await SendAsync(new DeleteServerCommand(server.Id))
+        );
+
+        (await CountAsync<Server>()).Should().Be(1);
+    }
+
+    [Test]
+    public async Task ShouldThrowExceptionWhenServerDoesNotExists()
     {
         await RunAsAdministratorAsync();
 
-        await SendAsync(new DeleteServerCommand(Guid.NewGuid()));
+        Assert.ThrowsAsync<NotFoundException>(
+            async () => await SendAsync(new DeleteServerCommand(Guid.NewGuid()))
+        );
 
         (await CountAsync<Server>()).Should().Be(0);
     }
@@ -41,20 +61,6 @@ public class DeleteServerCommandTest : BaseTestFixture
         await SendAsync(new DeleteServerCommand(server.Id));
 
         (await CountAsync<Server>()).Should().Be(0);
-    }
-
-    [Test]
-    public async Task ShouldNotDeleteOtherServers()
-    {
-        await RunAsAdministratorAsync();
-
-        var server = FakerInstances.ServerFaker.Generate();
-        await AddAsync(server);
-
-        (await CountAsync<Server>()).Should().Be(1);
-        await SendAsync(new DeleteServerCommand(Guid.NewGuid()));
-
-        (await CountAsync<Server>()).Should().Be(1);
     }
 
     [Test]

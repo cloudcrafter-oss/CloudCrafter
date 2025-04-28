@@ -5,6 +5,7 @@ using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Entities;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Namotion.Reflection;
 using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Stacks.StackServiceVolumes;
@@ -30,12 +31,22 @@ public class UpdateStackServiceVolumeCommandTest : BaseStackServiceVolumeTest
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
     }
 
-    [Test]
-    public async Task ShouldNotBeAbleToUpdateNonExistingVolume()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToUpdateNonExistingVolume(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            ownerId = await RunAsDefaultUserAsync();
+        }
+
         await AssertVolumeCount(0);
-        var stackService = await GenerateStackService();
+        var stackService = await GenerateStackService(ownerId);
 
         Command = Command with
         {
@@ -55,12 +66,25 @@ public class UpdateStackServiceVolumeCommandTest : BaseStackServiceVolumeTest
         await AssertVolumeCount(0);
     }
 
-    [Test]
-    public async Task ShouldNotBeAbleToUpdateValueToDockerVolumeWithSource()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToUpdateValueToDockerVolumeWithSource(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            ownerId = await RunAsDefaultUserAsync();
+        }
 
-        var volume = await GenerateStackServiceVolume(StackServiceVolumeType.LocalMount);
+        var volume = await GenerateStackServiceVolume(
+            StackServiceVolumeType.LocalMount,
+            null,
+            ownerId
+        );
         volume.Type.Should().Be(StackServiceVolumeType.LocalMount);
         volume.SourcePath.Should().NotBeNullOrEmpty();
         await AssertVolumeCount(1);
@@ -101,17 +125,28 @@ public class UpdateStackServiceVolumeCommandTest : BaseStackServiceVolumeTest
             .BeEquivalentTo(fetchedVolume, x => x.Excluding(e => e.StackService));
     }
 
-    [Test]
-    public async Task ShouldBeAbleToUpdateLocalMountVolume()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToUpdateLocalMountVolume(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            ownerId = await RunAsDefaultUserAsync();
+        }
+
         await AssertVolumeCount(0);
         var volume = await GenerateStackServiceVolume(
             StackServiceVolumeType.LocalMount,
             faker =>
                 faker
                     .RuleFor(x => x.SourcePath, "/my/source")
-                    .RuleFor(x => x.DestinationPath, "/my/destination")
+                    .RuleFor(x => x.DestinationPath, "/my/destination"),
+            ownerId
         );
         await AssertVolumeCount(1);
 
@@ -148,5 +183,55 @@ public class UpdateStackServiceVolumeCommandTest : BaseStackServiceVolumeTest
         refetchedVolume.Type.Should().Be(StackServiceVolumeType.LocalMount);
 
         await AssertVolumeCount(1);
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToUpdateLocalMountVolumeBecauseUserIsNoTeamOwner(
+        bool attachUser
+    )
+    {
+        var userId = await RunAsDefaultUserAsync();
+
+        var volume = await GenerateStackServiceVolume(
+            StackServiceVolumeType.LocalMount,
+            faker =>
+                faker
+                    .RuleFor(x => x.SourcePath, "/my/source")
+                    .RuleFor(x => x.DestinationPath, "/my/destination")
+        );
+        await AssertVolumeCount(1);
+
+        // refetch with relations
+        var fetchedVolume = FetchEntity<StackServiceVolume>(
+            x => x.Id == volume.Id,
+            include =>
+                include
+                    .Include(x => x.StackService)
+                    .ThenInclude(x => x.Stack)
+                    .ThenInclude(x => x!.Environment)
+                    .ThenInclude(x => x!.Project)
+                    .ThenInclude(x => x!.Team)
+        );
+        fetchedVolume.Should().NotBeNull();
+
+        if (attachUser)
+        {
+            await AddToTeam(fetchedVolume!.StackService.Stack!.Environment.Project.Team, userId);
+        }
+
+        Command = Command with
+        {
+            StackId = fetchedVolume!.StackService.StackId,
+            StackServiceId = fetchedVolume.StackServiceId,
+            Id = fetchedVolume.Id,
+            Source = "dummy",
+            Target = "/dummy",
+            Type = StackServiceVolumeTypeDto.LocalMount,
+        };
+
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+            async () => await SendAsync(Command)
+        );
     }
 }

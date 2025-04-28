@@ -1,0 +1,1 @@
+{"required":["id","email","fullName"],"type":"object","properties":{"id":{"type":"string","format":"uuid"},"email":{"type":"string","nullable":true},"fullName":{"type":"string","nullable":true}},"x-readme-ref-name":"TeamMemberDto"}

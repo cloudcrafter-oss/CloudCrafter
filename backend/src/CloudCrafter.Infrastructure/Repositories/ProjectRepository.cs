@@ -31,13 +31,14 @@ public class ProjectRepository(IApplicationDbContext dbContext, IMapper mapper) 
         return result;
     }
 
-    public async Task<Project> CreateProject(string name)
+    public async Task<Project> CreateProject(string name, Guid teamId)
     {
         var project = new Project
         {
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Id = Guid.NewGuid(),
+            TeamId = teamId,
             Name = name,
             Description = null,
         };

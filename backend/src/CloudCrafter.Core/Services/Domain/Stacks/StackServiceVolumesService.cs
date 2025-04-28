@@ -1,14 +1,21 @@
 ﻿using Ardalis.GuardClauses;
 using AutoMapper;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
+using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Stack;
+using CloudCrafter.Domain.Domain.User.ACL;
 using CloudCrafter.Domain.Entities;
 
 namespace CloudCrafter.Core.Services.Domain.Stacks;
 
-public class StackServiceVolumesService(IStackRepository repository, IMapper mapper)
-    : IStackServiceVolumesService
+public class StackServiceVolumesService(
+    IStackRepository repository,
+    IMapper mapper,
+    IUserAccessService userAccessService,
+    IUser user
+) : IStackServiceVolumesService
 {
     public async Task<Guid> CreateOrUpdateStackServiceVolume(
         Guid stackId,
@@ -20,6 +27,26 @@ public class StackServiceVolumesService(IStackRepository repository, IMapper map
         string requestTarget
     )
     {
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw new NotFoundException("Stack", "Stack not found");
+        }
+
+        // Ensure the user has access to the stack
+        await userAccessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Write
+        );
+
+        await userAccessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Write
+        );
+
         var stackServiceExists = await repository.StackServiceExists(stackId, stackServiceId);
 
         if (!stackServiceExists)
@@ -80,6 +107,19 @@ public class StackServiceVolumesService(IStackRepository repository, IMapper map
 
     public async Task<List<StackServiceVolumeDto>> GetVolumes(Guid stackId, Guid stackServiceId)
     {
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw new NotFoundException("Stack", "Stack not found");
+        }
+
+        await userAccessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Read
+        );
+
         var stackServiceExists = await repository.StackServiceExists(stackId, stackServiceId);
 
         if (!stackServiceExists)
@@ -98,11 +138,26 @@ public class StackServiceVolumesService(IStackRepository repository, IMapper map
         Guid stackServiceVolumeId
     )
     {
+        var notFoundException = new NotFoundException("StackService", "Stack service not found");
+
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw notFoundException;
+        }
+
+        await userAccessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Write
+        );
+
         var stackServiceExists = await repository.StackServiceExists(stackId, stackServiceId);
 
         if (!stackServiceExists)
         {
-            throw new NotFoundException("StackService", "Stack service not found");
+            throw notFoundException;
         }
 
         var volume = await repository.GetServiceVolume(

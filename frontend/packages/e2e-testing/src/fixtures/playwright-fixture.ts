@@ -62,6 +62,7 @@ export const test = baseTest.extend<{}, { workerStorageState: string }>({
 			await page.context().storageState({ path: fileName })
 			await page.close()
 			await use(fileName)
+			await page.close()
 		},
 		{ scope: 'worker' },
 	],

@@ -14,6 +14,8 @@ public interface IStacksService
     Task<SimpleStackDetailsDto?> GetSimpleStackDetails(Guid id);
     Task<StackDetailDto?> GetStackDetail(Guid id);
 
+    Task EnsureStackWritePermissions(Guid stackId);
+
     Task<Guid> CreateDeployment(Guid stackId);
     Task<List<SimpleDeploymentDto>> GetDeployments(DeploymentsFilter filter);
 

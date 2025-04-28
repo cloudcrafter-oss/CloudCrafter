@@ -1,10 +1,10 @@
 using CloudCrafter.Core.Commands.Users;
+using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Common.Filtering;
+using CloudCrafter.Domain.Common.Pagination;
 using CloudCrafter.Domain.Entities;
-using CloudCrafter.Domain.Requests.Filtering;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Users;
 
@@ -12,12 +12,19 @@ using static Testing;
 
 public class GetUserListQueryTest : BaseTestFixture
 {
-    private GetUserListQuery _query = new GetUserListQuery(new());
+    private readonly GetUserListQuery Query = new(new PaginatedRequest());
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
-        Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(_query));
+        Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Query));
+    }
+
+    [Test]
+    public async Task ShouldThrowExceptionWhenUserIsNotAnAdministrator()
+    {
+        await RunAsDefaultUserAsync();
+        Assert.ThrowsAsync<ForbiddenAccessException>(async () => await SendAsync(Query));
     }
 
     [Test]
@@ -25,7 +32,7 @@ public class GetUserListQueryTest : BaseTestFixture
     {
         await RunAsAdministratorAsync();
 
-        var result = await SendAsync(_query);
+        var result = await SendAsync(Query);
 
         result.Should().NotBeNull();
         result.Result.Count.Should().Be(1);
@@ -50,11 +57,11 @@ public class GetUserListQueryTest : BaseTestFixture
         var randomUser = users[4];
 
         var query = new GetUserListQuery(
-            new()
+            new PaginatedRequest
             {
-                Filters = new List<FilterCriterea>()
+                Filters = new List<FilterCriterea>
                 {
-                    new FilterCriterea()
+                    new()
                     {
                         Operator = FilterOperatorOption.Contains,
                         PropertyName = "Email",
@@ -74,11 +81,11 @@ public class GetUserListQueryTest : BaseTestFixture
 
         // Now we should fetch for not equal
         query = new GetUserListQuery(
-            new()
+            new PaginatedRequest
             {
-                Filters = new List<FilterCriterea>()
+                Filters = new List<FilterCriterea>
                 {
-                    new FilterCriterea()
+                    new()
                     {
                         Operator = FilterOperatorOption.NotEqual,
                         PropertyName = "Email",

@@ -1,4 +1,5 @@
 using CloudCrafter.Core.Commands.Servers;
+using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
@@ -26,6 +27,19 @@ public class GetServerDetailQueryTest : BaseTestFixture
         var result = await SendAsync(new GetServerDetailQuery(Guid.NewGuid()));
 
         result.Should().BeNull();
+    }
+
+    [Test]
+    public async Task ShouldNotBeAbleToAccessServerForDefaultUser()
+    {
+        await RunAsDefaultUserAsync();
+        var server = FakerInstances.ServerFaker.Generate();
+
+        await AddAsync(server);
+
+        Assert.ThrowsAsync<CannotAccessTeamException>(
+            async () => await SendAsync(new GetServerDetailQuery(server.Id))
+        );
     }
 
     [Test]

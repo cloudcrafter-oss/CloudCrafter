@@ -149,6 +149,44 @@ public class CustomExceptionHandlerTest
     }
 
     [Test]
+    public async Task HandleNotEnoughTeamPermissions_SetsCorrectStatusCode()
+    {
+        // Arrange
+        var exception = new NotEnoughPermissionInTeamException();
+
+        // Act
+        await _handler.TryHandleAsync(_httpContext, exception, CancellationToken.None);
+
+        // Assert
+        _httpContext.Response.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+
+        // Reset the stream position to read the response
+        _responseBodyStream.Position = 0;
+        using var reader = new StreamReader(_responseBodyStream, Encoding.UTF8, leaveOpen: true);
+        var responseContent = await reader.ReadToEndAsync();
+        responseContent.Should().NotBeNullOrEmpty();
+    }
+
+    [Test]
+    public async Task HandleCannotAccessTeamException_SetsCorrectStatusCode()
+    {
+        // Arrange
+        var exception = new CannotAccessTeamException();
+
+        // Act
+        await _handler.TryHandleAsync(_httpContext, exception, CancellationToken.None);
+
+        // Assert
+        _httpContext.Response.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+
+        // Reset the stream position to read the response
+        _responseBodyStream.Position = 0;
+        using var reader = new StreamReader(_responseBodyStream, Encoding.UTF8, leaveOpen: true);
+        var responseContent = await reader.ReadToEndAsync();
+        responseContent.Should().NotBeNullOrEmpty();
+    }
+
+    [Test]
     public async Task HandleUnauthorizedAccessException_SetsCorrectStatusCode()
     {
         // Arrange

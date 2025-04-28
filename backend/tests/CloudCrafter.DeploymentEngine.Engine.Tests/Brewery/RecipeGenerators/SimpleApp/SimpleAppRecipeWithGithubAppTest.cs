@@ -28,6 +28,7 @@ public class SimpleAppRecipeWithGithubAppTest
         {
             Id = Guid.NewGuid(),
             CreatedAt = DateTime.UtcNow,
+            TeamId = null,
             UpdatedAt = DateTime.UtcNow,
             Name = "Github OSS Test",
             GithubProviderId = Guid.NewGuid(),
@@ -47,6 +48,7 @@ public class SimpleAppRecipeWithGithubAppTest
                 {
                     Id = Guid.NewGuid(),
                     CreatedAt = DateTime.UtcNow,
+                    TeamId = null,
                     UpdatedAt = DateTime.UtcNow,
                     Name = "Github OSS Test",
                     GithubProviderId = Guid.NewGuid(),

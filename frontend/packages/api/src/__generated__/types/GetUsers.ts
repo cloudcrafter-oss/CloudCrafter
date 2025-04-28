@@ -1,17 +1,30 @@
+import type { FilterCriterea } from './FilterCriterea'
 import type { PaginatedListOfUserDto } from './PaginatedListOfUserDto'
-import type { PaginatedRequestOfUserDto } from './PaginatedRequestOfUserDto'
+
+export type GetUsersQueryParams = {
+  /**
+   * @type array | undefined
+   */
+  Filters?: FilterCriterea[]
+  /**
+   * @type integer | undefined, int32
+   */
+  Page?: number
+  /**
+   * @type integer | undefined, int32
+   */
+  PageSize?: number
+}
 
 /**
  * @description OK
  */
 export type GetUsers200 = PaginatedListOfUserDto
 
-export type GetUsersMutationRequest = PaginatedRequestOfUserDto
+export type GetUsersQueryResponse = GetUsers200
 
-export type GetUsersMutationResponse = GetUsers200
-
-export type GetUsersMutation = {
+export type GetUsersQuery = {
   Response: GetUsers200
-  Request: GetUsersMutationRequest
+  QueryParams: GetUsersQueryParams
   Errors: any
 }

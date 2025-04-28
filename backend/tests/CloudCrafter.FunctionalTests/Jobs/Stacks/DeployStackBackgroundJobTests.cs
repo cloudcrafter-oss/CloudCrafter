@@ -28,7 +28,11 @@ public class DeployStackBackgroundJobTests : BaseTestFixture
         var stackId = Guid.Parse("35223e08-9c9f-4322-972e-51c610c202e3");
         var stackServiceId = Guid.Parse("b34a6560-701d-4f0e-b024-b4b7b2155bcf");
 
-        var project = FakerInstances.ProjectFaker.Generate();
+        var userId = await RunAsDefaultUserAsync();
+
+        var team = FakerInstances.TeamFaker().RuleFor(x => x.OwnerId, userId!.Value).Generate();
+        await AddAsync(team);
+        var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 
         var environment = FakerInstances
@@ -77,8 +81,6 @@ public class DeployStackBackgroundJobTests : BaseTestFixture
     [Test]
     public async Task ShouldSendProperRecipeToAgent()
     {
-        // Arrange
-        await RunAsDefaultUserAsync();
         var deploymentId = Guid.Parse("fde85aa6-8dd6-48c9-8c4b-8172a2f15f28");
 
         var deploymentEntity = FakerInstances

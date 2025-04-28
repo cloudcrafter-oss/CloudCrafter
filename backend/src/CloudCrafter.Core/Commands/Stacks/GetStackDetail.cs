@@ -7,7 +7,7 @@ using MediatR;
 namespace CloudCrafter.Core.Commands.Stacks;
 
 [Authorize]
-public class GetStackDetailQuery : IRequest<StackDetailDto?>, IRequireStackAccess
+public record GetStackDetailQuery : IRequest<StackDetailDto?>, IRequireStackAccess
 {
     public required Guid StackId { get; init; }
 }

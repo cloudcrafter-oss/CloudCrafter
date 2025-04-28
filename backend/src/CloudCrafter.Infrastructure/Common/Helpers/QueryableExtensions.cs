@@ -13,7 +13,7 @@ public static class QueryableExtensions
 {
     public static async Task<PaginatedList<TDto>> ToPaginatedListAsync<TEntity, TDto>(
         this IQueryable<TEntity> query,
-        PaginatedRequest<TDto> request,
+        PaginatedRequest request,
         IMapper mapper
     )
         where TDto : class
@@ -33,7 +33,7 @@ public static class QueryableExtensions
 
         return new PaginatedList<TDto>(items, totalCount, request.Page, request.PageSize);
     }
-    
+
     public static async Task<PaginatedList<TDto>> ToPaginatedListAsync<TEntity, TDto>(
         this IQueryable<TEntity> query,
         BasePaginationRequest request,

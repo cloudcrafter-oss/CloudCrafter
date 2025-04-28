@@ -16,6 +16,8 @@ public class CustomExceptionHandler : IExceptionHandler
             { typeof(ValidationException), HandleValidationException },
             { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
             { typeof(NotFoundException), HandleNotFoundException },
+            { typeof(NotEnoughPermissionInTeamException), HandleForbiddenException },
+            { typeof(CannotAccessTeamException), HandleForbiddenException },
         };
     }
 
@@ -75,6 +77,20 @@ public class CustomExceptionHandler : IExceptionHandler
             {
                 Status = StatusCodes.Status401Unauthorized,
                 Title = "Unauthorized",
+                Type = "https://tools.ietf.org/html/rfc7235#section-3.1",
+            }
+        );
+    }
+
+    private async Task HandleForbiddenException(HttpContext httpContext, Exception ex)
+    {
+        httpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+
+        await httpContext.Response.WriteAsJsonAsync(
+            new ProblemDetails
+            {
+                Status = StatusCodes.Status403Forbidden,
+                Title = "Forbidden",
                 Type = "https://tools.ietf.org/html/rfc7235#section-3.1",
             }
         );

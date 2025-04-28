@@ -1,10 +1,12 @@
 using AutoMapper;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Providers;
+using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Core.Services.Core.Providers;
-using CloudCrafter.Core.Services.Domain.Providers.Github;
 using CloudCrafter.Domain.Domain.Providers;
-using CloudCrafter.Domain.Entities;
+using CloudCrafter.Domain.Domain.Providers.Filter;
+using CloudCrafter.Domain.Domain.User.ACL;
 using Microsoft.Extensions.Logging;
 
 namespace CloudCrafter.Core.Services.Domain.Providers;
@@ -14,10 +16,12 @@ public class ProvidersService(
     IGithubClientProvider clientProvider,
     IProviderRepository repository,
     ILogger<ProvidersService> logger,
-    IMapper mapper
+    IMapper mapper,
+    IUserAccessService accessService,
+    IUser user
 ) : IProvidersService
 {
-    public async Task<bool> CreateGithubProvider(string code)
+    public async Task<bool> CreateGithubProvider(string code, Guid? teamId)
     {
         try
         {
@@ -30,7 +34,7 @@ public class ProvidersService(
                 return false;
             }
 
-            var result = await repository.CreateGithubProvider(data);
+            var result = await repository.CreateGithubProvider(data, teamId);
 
             return true;
         }
@@ -44,14 +48,25 @@ public class ProvidersService(
 
     public async Task<List<SourceProviderDto>> GetProviders(ProviderFilterRequest filter)
     {
-        List<SourceProvider> providers = await repository.GetProviders(filter);
+        var isAdmin = await accessService.IsAdministrator(user.Id);
+
+        var internalFilter = new InternalProviderFilter();
+
+        if (!isAdmin)
+        {
+            internalFilter.UserId = user.Id;
+        }
+
+        var providers = await repository.GetProviders(filter, internalFilter);
 
         return mapper.Map<List<SourceProviderDto>>(providers);
     }
 
     public async Task<List<GitProviderRepositoryDto>> GetGitRepositories(Guid providerId)
     {
-        var provider = await repository.GetSourceProvider(providerId);
+        var filter = await GetInternalFilter();
+        var provider = await repository.GetSourceProvider(providerId, filter);
+
         try
         {
             return await providerProxy.GetRepositories(provider);
@@ -65,7 +80,9 @@ public class ProvidersService(
 
     public async Task<List<GitProviderBranchDto>> GetBranches(Guid providerId, string repositoryId)
     {
-        var provider = await repository.GetSourceProvider(providerId);
+        var filter = await GetInternalFilter();
+        var provider = await repository.GetSourceProvider(providerId, filter);
+
         try
         {
             return await providerProxy.GetBranches(provider, repositoryId);
@@ -79,7 +96,10 @@ public class ProvidersService(
 
     public async Task InstallGithubProvider(Guid providerId, long installationId)
     {
-        var provider = await repository.GetSourceProvider(providerId);
+        var filter = await GetInternalFilter();
+        var provider = await repository.GetSourceProvider(providerId, filter);
+
+        await accessService.EnsureHasAccessToEntity(provider, user.Id, AccessType.Write);
 
         if (provider.GithubProvider == null || provider.GithubProvider.InstallationId.HasValue)
         {
@@ -93,5 +113,19 @@ public class ProvidersService(
     public Task DeleteProvider(Guid providerId)
     {
         return repository.DeleteProvider(providerId);
+    }
+
+    private async Task<InternalProviderFilter> GetInternalFilter()
+    {
+        var isAdmin = await accessService.IsAdministrator(user.Id);
+
+        var internalFilter = new InternalProviderFilter();
+
+        if (!isAdmin)
+        {
+            internalFilter.UserId = user.Id;
+        }
+
+        return internalFilter;
     }
 }

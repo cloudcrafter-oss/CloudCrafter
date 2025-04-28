@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using CloudCrafter.Core.Commands.Stacks.Volumes;
+using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,42 @@ public class DeleteStackServiceVolumeCommandTest : BaseStackServiceVolumeTest
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToDeleteBecauseUserHasNotTeamRights(bool attachToTeam)
+    {
+        var userId = await RunAsDefaultUserAsync();
+        var volume1 = await GenerateStackServiceVolume(StackServiceVolumeType.LocalMount);
+
+        var fetchedVolume = FetchEntity<StackServiceVolume>(
+            x => x.Id == volume1.Id,
+            inc =>
+                inc.Include(x => x.StackService)
+                    .ThenInclude(x => x.Stack)
+                    .ThenInclude(x => x!.Environment)
+                    .ThenInclude(x => x.Project)
+                    .ThenInclude(x => x.Team)
+        );
+
+        await AssertVolumeCount(1);
+
+        if (attachToTeam)
+        {
+            await AddToTeam(fetchedVolume!.StackService.Stack!.Environment.Project.Team, userId);
+        }
+
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+            async () =>
+                await SendAsync(
+                    new DeleteStackServiceVolumeCommand(
+                        StackId: fetchedVolume!.StackService.StackId,
+                        StackServiceId: fetchedVolume.StackServiceId,
+                        StackServiceVolumeId: fetchedVolume.Id
+                    )
+                )
+        );
     }
 
     [Test]

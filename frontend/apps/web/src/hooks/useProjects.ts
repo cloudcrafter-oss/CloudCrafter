@@ -1,13 +1,13 @@
 import useSWR from 'swr'
-import { fetchProjectsWithEnvironments } from '../app/_actions/project'
+import { fetchTeamsWithProjectsAndEnvironments } from '../app/_actions/project'
 
-export const useProjects = () => {
-	const { data: projects } = useSWR(
-		'userProjects',
-		fetchProjectsWithEnvironments,
+export const useTeams = () => {
+	const { data: teams } = useSWR(
+		'userTeams',
+		fetchTeamsWithProjectsAndEnvironments,
 	)
 
 	return {
-		projects: projects || [],
+		teams: teams || [],
 	}
 }

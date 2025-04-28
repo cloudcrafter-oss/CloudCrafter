@@ -1,5 +1,10 @@
 import { createProjectAction } from '@/src/app/_actions'
-import { createProjectCommandSchema } from '@cloudcrafter/api'
+import { CloudcrafterSelect } from '@/src/components/form/select/cloudcrafter-select'
+import {
+	type SimpleTeamDto,
+	createProjectCommandSchema,
+	useGetMyTeamsHook,
+} from '@cloudcrafter/api'
 import { Button } from '@cloudcrafter/ui/components/button'
 import {
 	Form,
@@ -26,8 +31,11 @@ export const CreateProjectSheet = ({ onClose }: { onClose: () => void }) => {
 		resolver: zodResolver(createProjectCommandSchema),
 		defaultValues: {
 			name: '',
+			teamId: '',
 		},
 	})
+
+	const { data: teams } = useGetMyTeamsHook()
 
 	const onSubmit = async (data: FormValues) => {
 		await createProjectAction(data)
@@ -35,6 +43,8 @@ export const CreateProjectSheet = ({ onClose }: { onClose: () => void }) => {
 		toast.success('Project created successfully')
 		onClose()
 	}
+
+	const formErrors = form.formState.errors
 
 	return (
 		<>
@@ -45,7 +55,10 @@ export const CreateProjectSheet = ({ onClose }: { onClose: () => void }) => {
 				</SheetDescription>
 			</SheetHeader>
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+				<form
+					onSubmit={form.handleSubmit(onSubmit)}
+					className='flex flex-col gap-4 p-4'
+				>
 					<FormField
 						control={form.control}
 						name='name'
@@ -59,7 +72,34 @@ export const CreateProjectSheet = ({ onClose }: { onClose: () => void }) => {
 							</FormItem>
 						)}
 					/>
-					{/* Add more FormField components for other fields in your schema */}
+					<FormField
+						control={form.control}
+						name='teamId'
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Team</FormLabel>
+								<CloudcrafterSelect<SimpleTeamDto>
+									selectValue='Select a team'
+									testPrefix='select-team'
+									onValueChange={field.onChange}
+									getOptionKey={(team) => team.id}
+									getOptionValue={(team) => team.id}
+									getOptionLabel={(team) => team.name}
+									options={teams}
+								/>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					{Object.keys(formErrors).length > 0 && (
+						<div className='mt-2 space-y-1'>
+							{Object.entries(formErrors).map(([key, error]) => (
+								<p key={key} className='text-sm text-destructive'>
+									{key}: {error.message}
+								</p>
+							))}
+						</div>
+					)}
 					<Button data-testid='btn-save-project' type='submit'>
 						Save changes
 					</Button>

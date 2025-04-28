@@ -247,10 +247,15 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
 
                     b.ToTable("Projects");
                 });
@@ -319,10 +324,15 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Property<int>("SshPort")
                         .HasColumnType("integer");
 
+                    b.Property<Guid?>("TeamId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
 
                     b.ToTable("Servers");
                 });
@@ -343,10 +353,15 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("TeamId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
 
                     b.ToTable("SourceProviders");
                 });
@@ -588,6 +603,53 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.HasIndex("StackServiceId");
 
                     b.ToTable("StackServiceVolumes");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.Team", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Teams");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.TeamUser", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TeamId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("UserId", "TeamId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("TeamUsers");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.User", b =>
@@ -945,8 +1007,23 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Navigation("Server");
                 });
 
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.Project", b =>
+                {
+                    b.HasOne("CloudCrafter.Domain.Entities.Team", "Team")
+                        .WithMany("Projects")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Team");
+                });
+
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Server", b =>
                 {
+                    b.HasOne("CloudCrafter.Domain.Entities.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId");
+
                     b.OwnsOne("CloudCrafter.Domain.Entities.ServerPingData", "PingHealthData", b1 =>
                         {
                             b1.Property<Guid>("ServerId")
@@ -986,6 +1063,17 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
 
                     b.Navigation("PingHealthData")
                         .IsRequired();
+
+                    b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.SourceProvider", b =>
+                {
+                    b.HasOne("CloudCrafter.Domain.Entities.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId");
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("CloudCrafter.Domain.Entities.Stack", b =>
@@ -1261,6 +1349,36 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Navigation("StackService");
                 });
 
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.Team", b =>
+                {
+                    b.HasOne("CloudCrafter.Domain.Entities.User", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.TeamUser", b =>
+                {
+                    b.HasOne("CloudCrafter.Domain.Entities.Team", "Team")
+                        .WithMany("TeamUsers")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CloudCrafter.Domain.Entities.User", "User")
+                        .WithMany("TeamUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Team");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("CloudCrafter.Domain.Entities.UserRefreshToken", b =>
                 {
                     b.HasOne("CloudCrafter.Domain.Entities.User", null)
@@ -1362,9 +1480,18 @@ namespace CloudCrafter.Infrastructure.Data.Migrations
                     b.Navigation("Volumes");
                 });
 
+            modelBuilder.Entity("CloudCrafter.Domain.Entities.Team", b =>
+                {
+                    b.Navigation("Projects");
+
+                    b.Navigation("TeamUsers");
+                });
+
             modelBuilder.Entity("CloudCrafter.Domain.Entities.User", b =>
                 {
                     b.Navigation("RefreshTokens");
+
+                    b.Navigation("TeamUsers");
                 });
 #pragma warning restore 612, 618
         }

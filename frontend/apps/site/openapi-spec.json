@@ -322,55 +322,6 @@
 				}
 			}
 		},
-		"/api/Users": {
-			"post": {
-				"tags": ["Users"],
-				"operationId": "GetUsers",
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/PaginatedRequestOfUserDto"
-							}
-						}
-					},
-					"required": true
-				},
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/PaginatedListOfUserDto"
-								}
-							}
-						}
-					}
-				}
-			}
-		},
-		"/api/Users/test": {
-			"get": {
-				"tags": ["Users"],
-				"operationId": "Test",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"type": "array",
-									"items": {
-										"type": "string"
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		},
 		"/api/Utils/validate-git-repository": {
 			"post": {
 				"tags": ["Utils"],
@@ -1946,6 +1897,468 @@
 					}
 				}
 			}
+		},
+		"/api/Teams": {
+			"get": {
+				"tags": ["Teams"],
+				"operationId": "GetMyTeams",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Teams"],
+				"operationId": "CreateTeam",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTeamCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTeamCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTeamCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "string",
+									"format": "uuid"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "string",
+									"format": "uuid"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "string",
+									"format": "uuid"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Teams/{teamId}": {
+			"get": {
+				"tags": ["Teams"],
+				"operationId": "GetTeamMembers",
+				"parameters": [
+					{
+						"name": "teamId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "Filters",
+						"in": "query",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/components/schemas/FilterCriterea"
+							}
+						}
+					},
+					{
+						"name": "Page",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					},
+					{
+						"name": "PageSize",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfTeamMemberDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfTeamMemberDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfTeamMemberDto"
+								}
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["Teams"],
+				"operationId": "RenameTeam",
+				"parameters": [
+					{
+						"name": "teamId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RenameTeamCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RenameTeamCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/RenameTeamCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Teams"],
+				"operationId": "DeleteTeam",
+				"parameters": [
+					{
+						"name": "teamId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/Teams/{teamId}/invite": {
+			"post": {
+				"tags": ["Teams"],
+				"operationId": "InviteUserToTeam",
+				"parameters": [
+					{
+						"name": "teamId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/InviteUserBody"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/InviteUserBody"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/InviteUserBody"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/Teams/{teamId}/remove": {
+			"delete": {
+				"tags": ["Teams"],
+				"operationId": "RemoveUserFromTeam",
+				"parameters": [
+					{
+						"name": "teamId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RemoveMemberBody"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RemoveMemberBody"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/RemoveMemberBody"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/Teams/projects-and-environments": {
+			"get": {
+				"tags": ["Teams"],
+				"operationId": "GetMyTeamsWithProjectsAndEnvironments",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamWithProjectsAndEnvironmentsDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamWithProjectsAndEnvironmentsDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamWithProjectsAndEnvironmentsDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Teams/all": {
+			"get": {
+				"tags": ["Teams"],
+				"operationId": "GetAllTeams",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/SimpleTeamDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Users": {
+			"get": {
+				"tags": ["Users"],
+				"operationId": "GetUsers",
+				"parameters": [
+					{
+						"name": "Filters",
+						"in": "query",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/components/schemas/FilterCriterea"
+							}
+						}
+					},
+					{
+						"name": "Page",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					},
+					{
+						"name": "PageSize",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfUserDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfUserDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfUserDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/Users/current-user/roles": {
+			"get": {
+				"tags": ["Users"],
+				"operationId": "GetUserRoles",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/RoleDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/RoleDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/RoleDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	},
 	"components": {
@@ -1968,15 +2381,24 @@
 				"properties": {
 					"code": {
 						"type": "string"
+					},
+					"teamId": {
+						"type": "string",
+						"format": "uuid",
+						"nullable": true
 					}
 				}
 			},
 			"CreateProjectCommand": {
-				"required": ["name"],
+				"required": ["name", "teamId"],
 				"type": "object",
 				"properties": {
 					"name": {
 						"type": "string"
+					},
+					"teamId": {
+						"type": "string",
+						"format": "uuid"
 					}
 				}
 			},
@@ -1986,6 +2408,11 @@
 				"properties": {
 					"name": {
 						"type": "string"
+					},
+					"teamId": {
+						"type": "string",
+						"format": "uuid",
+						"nullable": true
 					}
 				}
 			},
@@ -2126,6 +2553,16 @@
 						"nullable": true
 					},
 					"target": {
+						"minLength": 1,
+						"type": "string"
+					}
+				}
+			},
+			"CreateTeamCommand": {
+				"required": ["name"],
+				"type": "object",
+				"properties": {
+					"name": {
 						"minLength": 1,
 						"type": "string"
 					}
@@ -2333,6 +2770,15 @@
 				},
 				"nullable": true
 			},
+			"InviteUserBody": {
+				"required": ["email"],
+				"type": "object",
+				"properties": {
+					"email": {
+						"type": "string"
+					}
+				}
+			},
 			"LoginUserCommand": {
 				"required": ["email", "password"],
 				"type": "object",
@@ -2369,6 +2815,30 @@
 					}
 				}
 			},
+			"PaginatedListOfTeamMemberDto": {
+				"required": ["page", "totalPages", "totalItems", "result"],
+				"type": "object",
+				"properties": {
+					"page": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"totalPages": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"totalItems": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"result": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/TeamMemberDto"
+						}
+					}
+				}
+			},
 			"PaginatedListOfUserDto": {
 				"required": ["page", "totalPages", "totalItems", "result"],
 				"type": "object",
@@ -2390,26 +2860,6 @@
 						"items": {
 							"$ref": "#/components/schemas/UserDto"
 						}
-					}
-				}
-			},
-			"PaginatedRequestOfUserDto": {
-				"required": ["filters", "page", "pageSize"],
-				"type": "object",
-				"properties": {
-					"filters": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/FilterCriterea"
-						}
-					},
-					"page": {
-						"type": "integer",
-						"format": "int32"
-					},
-					"pageSize": {
-						"type": "integer",
-						"format": "int32"
 					}
 				}
 			},
@@ -2523,6 +2973,33 @@
 				"type": "object",
 				"properties": {
 					"refreshToken": {
+						"type": "string"
+					}
+				}
+			},
+			"RemoveMemberBody": {
+				"required": ["email"],
+				"type": "object",
+				"properties": {
+					"email": {
+						"type": "string"
+					}
+				}
+			},
+			"RenameTeamCommand": {
+				"required": ["name"],
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				}
+			},
+			"RoleDto": {
+				"required": ["name"],
+				"type": "object",
+				"properties": {
+					"name": {
 						"type": "string"
 					}
 				}
@@ -2698,6 +3175,38 @@
 					}
 				},
 				"nullable": true
+			},
+			"SimpleTeamDto": {
+				"required": ["id", "name"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					}
+				}
+			},
+			"SimpleTeamWithProjectsAndEnvironmentsDto": {
+				"required": ["id", "name", "projects"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"name": {
+						"type": "string"
+					},
+					"projects": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/ProjectDto"
+						}
+					}
+				}
 			},
 			"SourceProviderDto": {
 				"required": ["id", "name", "type"],
@@ -2961,6 +3470,24 @@
 			},
 			"StackSourceDtoType": {
 				"enum": ["Git", "GithubApp"]
+			},
+			"TeamMemberDto": {
+				"required": ["id", "email", "fullName"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"email": {
+						"type": "string",
+						"nullable": true
+					},
+					"fullName": {
+						"type": "string",
+						"nullable": true
+					}
+				}
 			},
 			"TokenDto": {
 				"required": [
@@ -3235,9 +3762,6 @@
 			"name": "System"
 		},
 		{
-			"name": "Users"
-		},
-		{
 			"name": "Utils"
 		},
 		{
@@ -3248,6 +3772,12 @@
 		},
 		{
 			"name": "Stacks"
+		},
+		{
+			"name": "Teams"
+		},
+		{
+			"name": "Users"
 		}
 	]
 }

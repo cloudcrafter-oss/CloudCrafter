@@ -11,6 +11,8 @@ export type { CreateStackEnvironmentVariableCommand } from './CreateStackEnviron
 export type { CreateStackEnvironmentVariableGroupCommand } from './CreateStackEnvironmentVariableGroupCommand'
 export type { CreateStackFromSourceProviderCommand } from './CreateStackFromSourceProviderCommand'
 export type { CreateStackServiceVolumeCommand } from './CreateStackServiceVolumeCommand'
+export type { CreateTeam200, CreateTeamMutationRequest, CreateTeamMutationResponse, CreateTeamMutation } from './CreateTeam'
+export type { CreateTeamCommand } from './CreateTeamCommand'
 export type { CreateUserCommand } from './CreateUserCommand'
 export type {
   DeleteEnvironmentVariablePathParams,
@@ -33,6 +35,7 @@ export type {
   DeleteStackServiceVolumeMutationResponse,
   DeleteStackServiceVolumeMutation,
 } from './DeleteStackServiceVolume'
+export type { DeleteTeamPathParams, DeleteTeam200, DeleteTeamMutationResponse, DeleteTeamMutation } from './DeleteTeam'
 export type { DeployedStackDto } from './DeployedStackDto'
 export type { DeploymentCreatedDetailsDto } from './DeploymentCreatedDetailsDto'
 export type { DeploymentLogDto } from './DeploymentLogDto'
@@ -43,6 +46,7 @@ export type { EnvironmentDto } from './EnvironmentDto'
 export type { EnvironmentVariableType } from './EnvironmentVariableType'
 export type { FilterCriterea } from './FilterCriterea'
 export type { FilterOperatorOptionEnum, FilterOperatorOption } from './FilterOperatorOption'
+export type { GetAllTeams200, GetAllTeamsQueryResponse, GetAllTeamsQuery } from './GetAllTeams'
 export type { GetDeploymentLogsPathParams, GetDeploymentLogs200, GetDeploymentLogsQueryResponse, GetDeploymentLogsQuery } from './GetDeploymentLogs'
 export type {
   GetDeploymentsForServerPathParams,
@@ -73,6 +77,12 @@ export type {
 export type { GetFilterableFields200, GetFilterableFieldsQueryResponse, GetFilterableFieldsQuery } from './GetFilterableFields'
 export type { GetGitBranchesPathParams, GetGitBranches200, GetGitBranchesQueryResponse, GetGitBranchesQuery } from './GetGitBranches'
 export type { GetGitRepositoriesPathParams, GetGitRepositories200, GetGitRepositoriesQueryResponse, GetGitRepositoriesQuery } from './GetGitRepositories'
+export type { GetMyTeams200, GetMyTeamsQueryResponse, GetMyTeamsQuery } from './GetMyTeams'
+export type {
+  GetMyTeamsWithProjectsAndEnvironments200,
+  GetMyTeamsWithProjectsAndEnvironmentsQueryResponse,
+  GetMyTeamsWithProjectsAndEnvironmentsQuery,
+} from './GetMyTeamsWithProjectsAndEnvironments'
 export type { GetProjectPathParams, GetProject200, GetProject404, GetProjectQueryResponse, GetProjectQuery } from './GetProject'
 export type {
   GetProjectEnvironmentEnhancedPathParams,
@@ -92,16 +102,26 @@ export type {
   GetStackServiceVolumesQueryResponse,
   GetStackServiceVolumesQuery,
 } from './GetStackServiceVolumes'
-export type { GetUsers200, GetUsersMutationRequest, GetUsersMutationResponse, GetUsersMutation } from './GetUsers'
+export type { GetTeamMembersPathParams, GetTeamMembersQueryParams, GetTeamMembers200, GetTeamMembersQueryResponse, GetTeamMembersQuery } from './GetTeamMembers'
+export type { GetUserRoles200, GetUserRolesQueryResponse, GetUserRolesQuery } from './GetUserRoles'
+export type { GetUsersQueryParams, GetUsers200, GetUsersQueryResponse, GetUsersQuery } from './GetUsers'
 export type { GitApplicationSourceDto } from './GitApplicationSourceDto'
 export type { GithubApplicationSourceDto } from './GithubApplicationSourceDto'
 export type { GitProviderBranchDto } from './GitProviderBranchDto'
 export type { GitProviderRepositoryDto } from './GitProviderRepositoryDto'
 export type { GitRepositoryCheckResultDto } from './GitRepositoryCheckResultDto'
+export type { InviteUserBody } from './InviteUserBody'
+export type {
+  InviteUserToTeamPathParams,
+  InviteUserToTeam200,
+  InviteUserToTeamMutationRequest,
+  InviteUserToTeamMutationResponse,
+  InviteUserToTeamMutation,
+} from './InviteUserToTeam'
 export type { LoginUserCommand } from './LoginUserCommand'
 export type { PaginatedListOfSimpleDeploymentDto } from './PaginatedListOfSimpleDeploymentDto'
+export type { PaginatedListOfTeamMemberDto } from './PaginatedListOfTeamMemberDto'
 export type { PaginatedListOfUserDto } from './PaginatedListOfUserDto'
-export type { PaginatedRequestOfUserDto } from './PaginatedRequestOfUserDto'
 export type {
   PostCreateDeploymentPathParams,
   PostCreateDeployment200,
@@ -195,12 +215,25 @@ export type {
   PutUpdateStackServiceVolumeMutation,
 } from './PutUpdateStackServiceVolume'
 export type { RefreshUserTokenCommand } from './RefreshUserTokenCommand'
+export type { RemoveMemberBody } from './RemoveMemberBody'
+export type {
+  RemoveUserFromTeamPathParams,
+  RemoveUserFromTeam200,
+  RemoveUserFromTeamMutationRequest,
+  RemoveUserFromTeamMutationResponse,
+  RemoveUserFromTeamMutation,
+} from './RemoveUserFromTeam'
+export type { RenameTeamPathParams, RenameTeam200, RenameTeamMutationRequest, RenameTeamMutationResponse, RenameTeamMutation } from './RenameTeam'
+export type { RenameTeamCommand } from './RenameTeamCommand'
+export type { RoleDto } from './RoleDto'
 export type { ServerDetailDto } from './ServerDetailDto'
 export type { ServerDto } from './ServerDto'
 export type { ServerPingDto } from './ServerPingDto'
 export type { ServerStatusDtoValueEnum, ServerStatusDtoValue } from './ServerStatusDtoValue'
 export type { SimpleDeploymentDto } from './SimpleDeploymentDto'
 export type { SimpleGithubProviderDto } from './SimpleGithubProviderDto'
+export type { SimpleTeamDto } from './SimpleTeamDto'
+export type { SimpleTeamWithProjectsAndEnvironmentsDto } from './SimpleTeamWithProjectsAndEnvironmentsDto'
 export type { SourceProviderDto } from './SourceProviderDto'
 export type { StackCreatedDto } from './StackCreatedDto'
 export type { StackDetailDto } from './StackDetailDto'
@@ -214,7 +247,7 @@ export type { StackServiceVolumeDto } from './StackServiceVolumeDto'
 export type { StackServiceVolumeTypeDtoEnum, StackServiceVolumeTypeDto } from './StackServiceVolumeTypeDto'
 export type { StackSourceDto } from './StackSourceDto'
 export type { StackSourceDtoTypeEnum, StackSourceDtoType } from './StackSourceDtoType'
-export type { Test200, TestQueryResponse, TestQuery } from './Test'
+export type { TeamMemberDto } from './TeamMemberDto'
 export type { TokenDto } from './TokenDto'
 export type { UpdateGithubInstallationRequest } from './UpdateGithubInstallationRequest'
 export type {

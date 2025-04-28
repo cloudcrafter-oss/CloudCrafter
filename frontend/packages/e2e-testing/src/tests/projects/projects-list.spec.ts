@@ -1,6 +1,6 @@
 import { expect, test } from '../../fixtures/project-fixture'
 import { ProjectListPage } from '../../pages/projects/projects.index'
-import { generateProjectName } from '../../utils/fake-data'
+import { generateProjectName, generateTeamName } from '../../utils/fake-data'
 
 test('should navigate to a pre-created project', async ({ page, project }) => {
 	// Navigate to the projects page
@@ -38,8 +38,11 @@ test('should be able to delete project', async ({ page, project }) => {
 	await expect(page.getByText('Project deleted successfully')).toBeVisible()
 })
 
-test('should create a new project', async ({ page }) => {
+test('should create a new project', async ({ page, projectFixture }) => {
 	await page.goto('/admin/projects')
+
+	const team = await projectFixture.fixtureCreateTeam(generateTeamName())
+	expect(team).not.toBeUndefined()
 
 	const projectListPage = ProjectListPage(page)
 
@@ -57,6 +60,13 @@ test('should create a new project', async ({ page }) => {
 	const newProjectName = generateProjectName()
 	// fill in project name
 	await projectListPage.form.name.fill(newProjectName)
+
+	// open the team selector
+	await projectListPage.form.teamSelector.openSelector()
+
+	await projectListPage.form.teamSelector.selectOption(team)
+
+	// select the team
 
 	// click on "Save changes"
 	await projectListPage.form.submitButton.click()

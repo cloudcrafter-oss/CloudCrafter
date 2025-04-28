@@ -12,36 +12,56 @@ using static Testing;
 
 public class GetServerSimpleDeploymentsTest : BaseTestFixture
 {
+    private readonly GetServerSimpleDeployments.Query Query = new(Guid.NewGuid(), new());
+
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
-        Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await SendAsync(new GetServerSimpleDeployments.Query(Guid.NewGuid(), new()))
-        );
+        Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Query));
     }
 
-    [Test]
-    [Ignore("TODO: ACL check not yet implemented")]
-    public async Task ShoulThrowErrorWhenNoAccessBecauseItDoesNotExists()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldThrowErrorWhenNoAccessBecauseItDoesNotExists(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        await RunAsUserRoleAsync(isAdmin);
 
         var serverId = Guid.NewGuid();
         var ex = Assert.ThrowsAsync<UnauthorizedAccessException>(
-            async () => await SendAsync(new GetServerSimpleDeployments.Query(serverId, new PaginatedRequest<SimpleDeploymentDto>()))
+            async () => await SendAsync(Query with { ServerId = serverId })
         );
 
         ex.Message.Should().Be($"User does not have access to server {serverId}");
     }
 
     [Test]
-    public async Task ShouldBeAbleToFetchDeployments()
+    public async Task ShouldNotBeAbleToFetchDeploymentsBecauseUserIsNotPartOfTeam()
     {
-        await RunAsAdministratorAsync();
+        await RunAsDefaultUserAsync();
 
-        var server = FakerInstances.ServerFaker.Generate();
+        var team = await CreateTeam();
+        var server = FakerInstances.ServerFaker.RuleFor(x => x.TeamId, team.Id).Generate();
         await AddAsync(server);
-        var result = await SendAsync(new GetServerSimpleDeployments.Query(server.Id, new PaginatedRequest<SimpleDeploymentDto>()));
+        var ex = Assert.ThrowsAsync<UnauthorizedAccessException>(
+            async () => await SendAsync(Query with { ServerId = server.Id })
+        );
+
+        ex.Message.Should().Be($"User does not have access to server {server.Id}");
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToFetchDeployments(bool isAdmin)
+    {
+        var userId = await RunAsUserRoleAsync(isAdmin);
+
+        var team = await CreateTeam(!isAdmin ? userId : null);
+
+        var server = FakerInstances.ServerFaker.RuleFor(x => x.TeamId, team.Id).Generate();
+        await AddAsync(server);
+        var result = await SendAsync(
+            new GetServerSimpleDeployments.Query(server.Id, new PaginatedRequest())
+        );
 
         result.Result.Count.Should().Be(0);
     }

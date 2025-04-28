@@ -1,8 +1,8 @@
 ﻿using CloudCrafter.Core.Commands.Servers;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Servers;
 
@@ -10,12 +10,22 @@ using static Testing;
 
 public class CreateServerCommandTest : BaseTestFixture
 {
-    private CreateServerCommand Command = new("");
+    private readonly CreateServerCommand Command = new("");
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
+    }
+
+    [Test]
+    public async Task ShouldNotBeAbleToCreateAServerAsDefaultUserWithoutATeam()
+    {
+        await RunAsDefaultUserAsync();
+
+        Assert.ThrowsAsync<ForbiddenAccessException>(
+            async () => await SendAsync(Command with { Name = "Dummy", TeamId = null })
+        );
     }
 
     [Test]
@@ -38,14 +48,27 @@ public class CreateServerCommandTest : BaseTestFixture
             );
     }
 
-    [Test]
-    public async Task ShouldBeAbleToCreateServer()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToCreateServer(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        Team? team = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            var userId = await RunAsDefaultUserAsync();
+
+            team = await CreateTeam(userId!.Value);
+        }
 
         (await CountAsync<Server>()).Should().Be(0);
 
-        var result = await SendAsync(new CreateServerCommand("My new server"));
+        var result = await SendAsync(
+            new CreateServerCommand("My new server") { TeamId = team?.Id }
+        );
 
         result.Should().NotBeNull();
 
@@ -57,5 +80,14 @@ public class CreateServerCommandTest : BaseTestFixture
 
         server.Should().NotBeNull();
         server!.Name.Should().Be("My new server");
+
+        if (isAdmin)
+        {
+            server.TeamId.Should().BeNull();
+        }
+        else
+        {
+            server.TeamId.Should().Be(team!.Id);
+        }
     }
 }

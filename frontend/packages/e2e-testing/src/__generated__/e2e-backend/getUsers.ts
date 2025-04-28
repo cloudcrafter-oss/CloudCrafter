@@ -1,5 +1,5 @@
 import client from '@kubb/plugin-client/clients/axios'
-import type { GetUsersMutationRequest, GetUsersMutationResponse } from '../types/GetUsers'
+import type { GetUsersQueryResponse, GetUsersQueryParams } from '../types/GetUsers'
 import type { RequestConfig, ResponseErrorConfig } from '@kubb/plugin-client/clients/axios'
 
 export function getGetUsersUrl() {
@@ -9,13 +9,13 @@ export function getGetUsersUrl() {
 /**
  * {@link /api/Users}
  */
-export async function getUsers(data: GetUsersMutationRequest, config: Partial<RequestConfig<GetUsersMutationRequest>> & { client?: typeof client } = {}) {
+export async function getUsers(params?: GetUsersQueryParams, config: Partial<RequestConfig> & { client?: typeof client } = {}) {
   const { client: request = client, ...requestConfig } = config
 
-  const res = await request<GetUsersMutationResponse, ResponseErrorConfig<Error>, GetUsersMutationRequest>({
-    method: 'POST',
+  const res = await request<GetUsersQueryResponse, ResponseErrorConfig<Error>, unknown>({
+    method: 'GET',
     url: getGetUsersUrl().toString(),
-    data,
+    params,
     ...requestConfig,
   })
   return res.data
