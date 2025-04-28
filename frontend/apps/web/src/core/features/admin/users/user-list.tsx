@@ -15,9 +15,9 @@ export const UsersList = async ({ searchParams }: UserListProps) => {
 	const search = searchParamsSchema.parse(searchParams)
 
 	const users = getUsers({
-		page: search.page,
-		pageSize: search.per_page,
-		filters: [],
+		Page: search.page,
+		PageSize: search.per_page,
+		Filters: [],
 	})
 
 	return (
