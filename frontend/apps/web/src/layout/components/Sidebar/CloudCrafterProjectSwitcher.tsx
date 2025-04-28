@@ -29,6 +29,8 @@ import {
 	Users,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { CreateTeamDialog } from './CreateTeamDialog'
 
 interface Team {
 	id: string
@@ -69,85 +71,98 @@ export function CloudCrafterProjectSwitcher() {
 	const { teams } = useTeams()
 	const { selectedProjectId, selectedEnvironmentId } =
 		useSelectedProjectAndEnvironment()
+	const [isCreateTeamDialogOpen, setIsCreateTeamDialogOpen] = useState(false)
 
 	return (
-		<SidebarMenu>
-			<SidebarMenuItem>
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<SidebarMenuButton
-							size='lg'
-							className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+		<>
+			<SidebarMenu>
+				<SidebarMenuItem>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<SidebarMenuButton
+								size='lg'
+								className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+							>
+								<ActiveProject />
+							</SidebarMenuButton>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent
+							className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg'
+							align='start'
+							side={isMobile ? 'bottom' : 'right'}
+							sideOffset={4}
 						>
-							<ActiveProject />
-						</SidebarMenuButton>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent
-						className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg'
-						align='start'
-						side={isMobile ? 'bottom' : 'right'}
-						sideOffset={4}
-					>
-						{teams.map((team) => (
-							<div key={team.id}>
-								<DropdownMenuLabel className='flex items-center gap-2 text-xs text-muted-foreground'>
-									<Users className='size-3' />
-									{team.name} ({team.projects.length})
-								</DropdownMenuLabel>
-								{team.projects.map((project) => (
-									<DropdownMenuGroup key={project.id}>
-										<DropdownMenuSub>
-											<DropdownMenuSubTrigger className='gap-2 p-2'>
-												<FolderIcon className='size-4' />
-												{selectedProjectId === project.id ? (
-													<>
-														<span className='font-semibold'>
-															{project.name} ({project.environments.length})
-														</span>
-													</>
-												) : (
-													<>
-														<span>
-															{project.name} ({project.environments.length})
-														</span>
-													</>
-												)}
-											</DropdownMenuSubTrigger>
-											<DropdownMenuSubContent>
-												{project.environments.map((env) => (
-													<DropdownMenuItem
-														key={env.id}
-														className='gap-2 p-2'
-														onClick={() => {
-															router.push(
-																`/admin/projects/${project.id}/${env.id}`,
-															)
-														}}
-													>
-														<ServerIcon className='size-4' />
-														{env.name}
-														{selectedProjectId === project.id &&
-															selectedEnvironmentId === env.id && (
-																<Check className='ml-auto size-4' />
-															)}
-													</DropdownMenuItem>
-												))}
-											</DropdownMenuSubContent>
-										</DropdownMenuSub>
-									</DropdownMenuGroup>
-								))}
-								<DropdownMenuSeparator />
-							</div>
-						))}
-						<DropdownMenuItem className='gap-2 p-2'>
-							<div className='flex size-6 items-center justify-center rounded-md border bg-background'>
-								<Plus className='size-4' />
-							</div>
-							<div className='font-medium text-muted-foreground'>Add team</div>
-						</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
-			</SidebarMenuItem>
-		</SidebarMenu>
+							{teams.map((team) => (
+								<div key={team.id}>
+									<DropdownMenuLabel className='flex items-center gap-2 text-xs text-muted-foreground'>
+										<Users className='size-3' />
+										{team.name} ({team.projects.length})
+									</DropdownMenuLabel>
+									{team.projects.map((project) => (
+										<DropdownMenuGroup key={project.id}>
+											<DropdownMenuSub>
+												<DropdownMenuSubTrigger className='gap-2 p-2'>
+													<FolderIcon className='size-4' />
+													{selectedProjectId === project.id ? (
+														<>
+															<span className='font-semibold'>
+																{project.name} ({project.environments.length})
+															</span>
+														</>
+													) : (
+														<>
+															<span>
+																{project.name} ({project.environments.length})
+															</span>
+														</>
+													)}
+												</DropdownMenuSubTrigger>
+												<DropdownMenuSubContent>
+													{project.environments.map((env) => (
+														<DropdownMenuItem
+															key={env.id}
+															className='gap-2 p-2'
+															onClick={() => {
+																router.push(
+																	`/admin/projects/${project.id}/${env.id}`,
+																)
+															}}
+														>
+															<ServerIcon className='size-4' />
+															{env.name}
+															{selectedProjectId === project.id &&
+																selectedEnvironmentId === env.id && (
+																	<Check className='ml-auto size-4' />
+																)}
+														</DropdownMenuItem>
+													))}
+												</DropdownMenuSubContent>
+											</DropdownMenuSub>
+										</DropdownMenuGroup>
+									))}
+									<DropdownMenuSeparator />
+								</div>
+							))}
+							<DropdownMenuItem
+								className='gap-2 p-2'
+								onClick={() => setIsCreateTeamDialogOpen(true)}
+							>
+								<div className='flex size-6 items-center justify-center rounded-md border bg-background'>
+									<Plus className='size-4' />
+								</div>
+								<div className='font-medium text-muted-foreground'>
+									Add team
+								</div>
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</SidebarMenuItem>
+			</SidebarMenu>
+
+			<CreateTeamDialog
+				open={isCreateTeamDialogOpen}
+				onOpenChange={setIsCreateTeamDialogOpen}
+			/>
+		</>
 	)
 }
