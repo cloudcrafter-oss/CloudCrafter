@@ -116,6 +116,7 @@ export type { GithubApplicationSourceDto } from './types/GithubApplicationSource
 export type { GitProviderBranchDto } from './types/GitProviderBranchDto'
 export type { GitProviderRepositoryDto } from './types/GitProviderRepositoryDto'
 export type { GitRepositoryCheckResultDto } from './types/GitRepositoryCheckResultDto'
+export type { InviteUserBody } from './types/InviteUserBody'
 export type {
   InviteUserToTeamPathParams,
   InviteUserToTeam200,
@@ -466,6 +467,7 @@ export { githubApplicationSourceDtoSchema } from './zod/githubApplicationSourceD
 export { gitProviderBranchDtoSchema } from './zod/gitProviderBranchDtoSchema'
 export { gitProviderRepositoryDtoSchema } from './zod/gitProviderRepositoryDtoSchema'
 export { gitRepositoryCheckResultDtoSchema } from './zod/gitRepositoryCheckResultDtoSchema'
+export { inviteUserBodySchema } from './zod/inviteUserBodySchema'
 export {
   inviteUserToTeamPathParamsSchema,
   inviteUserToTeam200Schema,

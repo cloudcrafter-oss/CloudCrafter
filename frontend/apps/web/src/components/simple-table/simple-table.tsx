@@ -42,6 +42,10 @@ interface SimpleTableProps<TData> {
 	pagination: PaginationState
 	paginationOptions: Pick<PaginationOptions, 'onPaginationChange' | 'rowCount'>
 	showColumnVisibility?: boolean
+	addButton?: {
+		label: string
+		onClick: () => void
+	}
 }
 
 export function SimpleTable<TData>({
@@ -50,6 +54,7 @@ export function SimpleTable<TData>({
 	pagination,
 	paginationOptions,
 	showColumnVisibility = true,
+	addButton,
 }: SimpleTableProps<TData>) {
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 	const table = useReactTable({
@@ -84,11 +89,11 @@ export function SimpleTable<TData>({
                     />
                 )} */}
 				<div className='ml-auto flex items-center gap-2'>
-					{/* {addButton && (
-                        <Button onClick={addButton.onClick}>
-                            {addButton.label ?? 'Add'}
-                        </Button>
-                    )} */}
+					{addButton && (
+						<Button onClick={addButton.onClick}>
+							{addButton.label ?? 'Add'}
+						</Button>
+					)}
 					{showColumnVisibility && (
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>

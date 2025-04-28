@@ -110,6 +110,7 @@ export type { GithubApplicationSourceDto } from './GithubApplicationSourceDto'
 export type { GitProviderBranchDto } from './GitProviderBranchDto'
 export type { GitProviderRepositoryDto } from './GitProviderRepositoryDto'
 export type { GitRepositoryCheckResultDto } from './GitRepositoryCheckResultDto'
+export type { InviteUserBody } from './InviteUserBody'
 export type {
   InviteUserToTeamPathParams,
   InviteUserToTeam200,

@@ -11,7 +11,7 @@ export function getInviteUserToTeamUrl(teamId: InviteUserToTeamPathParams['teamI
  */
 export async function inviteUserToTeam(
   teamId: InviteUserToTeamPathParams['teamId'],
-  data?: InviteUserToTeamMutationRequest,
+  data: InviteUserToTeamMutationRequest,
   config: Partial<RequestConfig<InviteUserToTeamMutationRequest>> & { client?: typeof client } = {},
 ) {
   const { client: request = client, ...requestConfig } = config

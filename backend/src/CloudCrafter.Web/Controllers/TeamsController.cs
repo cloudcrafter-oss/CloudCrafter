@@ -28,11 +28,11 @@ public class TeamsController : CloudCrafterController
     [HttpPost("{teamId:guid}/invite")]
     public async Task<IActionResult> InviteUserToTeam(
         [FromRoute] Guid teamId,
-        [FromBody] string email,
+        [FromBody] InviteUserBody body,
         ISender sender
     )
     {
-        await sender.Send(new InviteUserToTeamWriteCommand { Email = email, TeamId = teamId });
+        await sender.Send(new InviteUserToTeamWriteCommand { Email = body.Email, TeamId = teamId });
 
         return Ok();
     }

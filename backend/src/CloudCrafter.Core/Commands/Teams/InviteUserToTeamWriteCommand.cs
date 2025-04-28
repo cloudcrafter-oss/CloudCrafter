@@ -16,6 +16,12 @@ public record InviteUserToTeamWriteCommand : IRequest
     public required Guid TeamId { get; set; }
 }
 
+public record InviteUserBody
+{
+    [Required]
+    public required string Email { get; init; }
+}
+
 internal class InviteUserToTeamWriteCommandHandler(ITeamsService teamsService)
     : IRequestHandler<InviteUserToTeamWriteCommand>
 {

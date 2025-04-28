@@ -105,6 +105,7 @@ export { githubApplicationSourceDtoSchema } from './githubApplicationSourceDtoSc
 export { gitProviderBranchDtoSchema } from './gitProviderBranchDtoSchema'
 export { gitProviderRepositoryDtoSchema } from './gitProviderRepositoryDtoSchema'
 export { gitRepositoryCheckResultDtoSchema } from './gitRepositoryCheckResultDtoSchema'
+export { inviteUserBodySchema } from './inviteUserBodySchema'
 export {
   inviteUserToTeamPathParamsSchema,
   inviteUserToTeam200Schema,

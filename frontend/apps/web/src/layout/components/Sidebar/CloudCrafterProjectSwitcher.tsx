@@ -26,6 +26,7 @@ import {
 	FolderIcon,
 	Plus,
 	ServerIcon,
+	Settings,
 	Users,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
@@ -105,9 +106,20 @@ export function CloudCrafterProjectSwitcher() {
 						>
 							{teams.map((team) => (
 								<div key={team.id}>
-									<DropdownMenuLabel className='flex items-center gap-2 text-xs text-muted-foreground'>
-										<Users className='size-3' />
-										{team.name} ({team.projects.length})
+									<DropdownMenuLabel className='flex items-center justify-between text-xs text-muted-foreground'>
+										<div className='flex items-center gap-2'>
+											<Users className='size-3' />
+											{team.name} ({team.projects.length})
+										</div>
+										<DropdownMenuItem
+											className='gap-2 p-2 text-xs'
+											onClick={() => {
+												router.push(`/admin/teams/${team.id}`)
+											}}
+										>
+											<Settings className='size-3' />
+											Manage
+										</DropdownMenuItem>
 									</DropdownMenuLabel>
 									<DropdownMenuGroup>
 										{team.projects.map((project) => (

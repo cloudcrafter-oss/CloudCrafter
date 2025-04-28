@@ -1,3 +1,5 @@
+import type { InviteUserBody } from './InviteUserBody'
+
 export type InviteUserToTeamPathParams = {
   /**
    * @type string, uuid
@@ -10,7 +12,7 @@ export type InviteUserToTeamPathParams = {
  */
 export type InviteUserToTeam200 = any
 
-export type InviteUserToTeamMutationRequest = string
+export type InviteUserToTeamMutationRequest = InviteUserBody
 
 export type InviteUserToTeamMutationResponse = InviteUserToTeam200
 

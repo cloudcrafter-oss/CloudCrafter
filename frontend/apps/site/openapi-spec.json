@@ -2128,17 +2128,17 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"type": "string"
+								"$ref": "#/components/schemas/InviteUserBody"
 							}
 						},
 						"text/json": {
 							"schema": {
-								"type": "string"
+								"$ref": "#/components/schemas/InviteUserBody"
 							}
 						},
 						"application/*+json": {
 							"schema": {
-								"type": "string"
+								"$ref": "#/components/schemas/InviteUserBody"
 							}
 						}
 					},
@@ -2727,6 +2727,15 @@
 					}
 				},
 				"nullable": true
+			},
+			"InviteUserBody": {
+				"required": ["email"],
+				"type": "object",
+				"properties": {
+					"email": {
+						"type": "string"
+					}
+				}
 			},
 			"LoginUserCommand": {
 				"required": ["email", "password"],

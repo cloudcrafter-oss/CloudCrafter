@@ -17,7 +17,7 @@ export function useInviteUserToTeamHook<TContext>(
     mutation?: UseMutationOptions<
       InviteUserToTeamMutationResponse,
       ResponseErrorConfig<Error>,
-      { teamId: InviteUserToTeamPathParams['teamId']; data?: InviteUserToTeamMutationRequest },
+      { teamId: InviteUserToTeamPathParams['teamId']; data: InviteUserToTeamMutationRequest },
       TContext
     >
     client?: Partial<RequestConfig<InviteUserToTeamMutationRequest>> & { client?: typeof client }
@@ -29,7 +29,7 @@ export function useInviteUserToTeamHook<TContext>(
   return useMutation<
     InviteUserToTeamMutationResponse,
     ResponseErrorConfig<Error>,
-    { teamId: InviteUserToTeamPathParams['teamId']; data?: InviteUserToTeamMutationRequest },
+    { teamId: InviteUserToTeamPathParams['teamId']; data: InviteUserToTeamMutationRequest },
     TContext
   >({
     mutationFn: async ({ teamId, data }) => {
