@@ -1,6 +1,7 @@
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Providers;
+using CloudCrafter.Domain.Domain.Providers.Filter;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Octokit;
@@ -10,12 +11,13 @@ namespace CloudCrafter.Infrastructure.Repositories;
 
 public class ProviderRepository(IApplicationDbContext context) : IProviderRepository
 {
-    public async Task<SourceProvider> CreateGithubProvider(GitHubAppFromManifest data)
+    public async Task<SourceProvider> CreateGithubProvider(GitHubAppFromManifest data, Guid? teamId)
     {
         var providerId = Guid.NewGuid();
         var sourceProvider = new SourceProvider
         {
             Name = data.Name,
+            TeamId = teamId,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             GithubProviderId = providerId,
@@ -43,12 +45,16 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
         return sourceProvider;
     }
 
-    public async Task<SourceProvider> GetSourceProvider(Guid providerId)
+    public async Task<SourceProvider> GetSourceProvider(
+        Guid providerId,
+        InternalProviderFilter filter
+    )
     {
-        var provider = await context
-            .SourceProviders.Where(x => x.Id == providerId)
-            .Include(x => x.GithubProvider)
-            .FirstOrDefaultAsync();
+        filter.Id = providerId;
+
+        var providers = GetProvidersForQueries(new ProviderFilterRequest(), filter);
+
+        var provider = await providers.Include(x => x.GithubProvider).FirstOrDefaultAsync();
 
         if (provider == null)
         {
@@ -63,21 +69,12 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
         return context.SaveChangesAsync();
     }
 
-    public Task<List<SourceProvider>> GetProviders(ProviderFilterRequest filter)
+    public Task<List<SourceProvider>> GetProviders(
+        ProviderFilterRequest filter,
+        InternalProviderFilter internalProviderFilter
+    )
     {
-        IQueryable<SourceProvider> query = context.SourceProviders.Include(x => x.GithubProvider);
-
-        if (filter.IsActive.HasValue)
-        {
-            query = query.Where(x =>
-                x.GithubProviderId.HasValue
-                && x.GithubProvider != null
-                && x.GithubProvider.IsValid.HasValue
-                && x.GithubProvider.IsValid.Value == filter.IsActive.Value
-            );
-        }
-
-        return query.OrderBy(x => x.CreatedAt).ToListAsync();
+        return GetProvidersForQueries(filter, internalProviderFilter).ToListAsync();
     }
 
     public async Task DeleteProvider(Guid providerId)
@@ -91,6 +88,42 @@ public class ProviderRepository(IApplicationDbContext context) : IProviderReposi
 
         context.SourceProviders.Remove(provider);
         await context.SaveChangesAsync();
+    }
+
+    private IQueryable<SourceProvider> GetProvidersForQueries(
+        ProviderFilterRequest filter,
+        InternalProviderFilter internalProviderFilter
+    )
+    {
+        IQueryable<SourceProvider> query = context.SourceProviders.Include(x => x.GithubProvider);
+
+        if (filter.IsActive.HasValue)
+        {
+            query = query.Where(x =>
+                x.GithubProviderId.HasValue
+                && x.GithubProvider != null
+                && x.GithubProvider.IsValid.HasValue
+                && x.GithubProvider.IsValid.Value == filter.IsActive.Value
+            );
+        }
+
+        if (internalProviderFilter.UserId.HasValue)
+        {
+            query = query
+                .Where(x => x.TeamId.HasValue)
+                .Where(x => x.Team != null)
+                .Where(x =>
+                    x.Team!.OwnerId == internalProviderFilter.UserId.Value
+                    || x.Team.TeamUsers.Any(tu => tu.UserId == internalProviderFilter.UserId.Value)
+                );
+        }
+
+        if (internalProviderFilter.Id.HasValue)
+        {
+            query = query.Where(x => x.Id == internalProviderFilter.Id.Value);
+        }
+
+        return query.OrderBy(x => x.CreatedAt);
     }
 
     public Task<List<GithubProvider>> GetGithubProviders(ProviderFilterRequest filter)

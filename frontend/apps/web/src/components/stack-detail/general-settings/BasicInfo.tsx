@@ -29,8 +29,6 @@ import {
 	FormMessage,
 } from '@cloudcrafter/ui/components/form'
 import { Input } from '@cloudcrafter/ui/components/input'
-import { Label } from '@cloudcrafter/ui/components/label'
-import { Switch } from '@cloudcrafter/ui/components/switch'
 import { Textarea } from '@cloudcrafter/ui/components/textarea'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -191,10 +189,6 @@ export const BasicInfo = ({
 								)}
 							/>
 
-							<pre className='p-4 bg-muted rounded-md overflow-auto'>
-								{JSON.stringify(formValues, null, 2)}
-							</pre>
-
 							{isEditing && (
 								<div className='flex justify-end space-x-2'>
 									<Button type='submit'>Save Changes</Button>
@@ -202,72 +196,6 @@ export const BasicInfo = ({
 							)}
 						</form>
 					</Form>
-				</CardContent>
-			</Card>
-
-			<Card>
-				<CardHeader>
-					<CardTitle>Environment Variables</CardTitle>
-					<CardDescription>
-						Configure environment variables for your stack
-					</CardDescription>
-				</CardHeader>
-				<CardContent className='space-y-4'>
-					{/* Add a component for managing env variables */}
-					<Button>Add Environment Variable</Button>
-				</CardContent>
-			</Card>
-
-			<Card>
-				<CardHeader>
-					<CardTitle>Network Configuration</CardTitle>
-					<CardDescription>
-						Set up networking for your Docker stack
-					</CardDescription>
-				</CardHeader>
-				<CardContent className='space-y-4'>
-					<div className='flex items-center space-x-2'>
-						<Switch id='use-custom-network' />
-						<Label htmlFor='use-custom-network'>Use Custom Network</Label>
-					</div>
-					<div className='space-y-2'>
-						<Label htmlFor='network-name'>Network Name</Label>
-						<Input id='network-name' placeholder='my-custom-network' />
-					</div>
-				</CardContent>
-			</Card>
-
-			<Card>
-				<CardHeader>
-					<CardTitle>Volume Configuration</CardTitle>
-					<CardDescription>
-						Manage persistent storage for your stack
-					</CardDescription>
-				</CardHeader>
-				<CardContent className='space-y-4'>
-					{/* Add a component for managing volumes */}
-					<Button>Add Volume</Button>
-				</CardContent>
-			</Card>
-
-			<Card>
-				<CardHeader>
-					<CardTitle>Deployment Settings</CardTitle>
-					<CardDescription>
-						Configure deployment options for your stack
-					</CardDescription>
-				</CardHeader>
-				<CardContent className='space-y-4'>
-					<div className='flex items-center space-x-2'>
-						<Switch id='enable-rolling-updates' />
-						<Label htmlFor='enable-rolling-updates'>
-							Enable Rolling Updates
-						</Label>
-					</div>
-					<div className='space-y-2'>
-						<Label htmlFor='replicas'>Number of Replicas</Label>
-						<Input id='replicas' type='number' min='1' defaultValue='1' />
-					</div>
 				</CardContent>
 			</Card>
 		</div>

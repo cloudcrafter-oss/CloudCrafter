@@ -2,5 +2,14 @@
 	"title": "Application",
 	"description": "The docs for CloudCrafter",
 	"icon": "Building2",
-	"root": true
+	"root": true,
+	"pages": [
+		"---Introduction---",
+		"index",
+		"contributing",
+		"---Terminology---",
+		"concepts",
+		"---Features---",
+		"features"
+	]
 }

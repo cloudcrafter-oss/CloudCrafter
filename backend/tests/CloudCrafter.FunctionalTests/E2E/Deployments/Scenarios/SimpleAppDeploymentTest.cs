@@ -34,6 +34,7 @@ public class SimpleAppDeploymentTest : BaseTestFixture
                 EnvironmentId = EnvironmentId,
                 StackId = StackId,
                 StackServiceId = StackServiceId,
+                DockerNetworkName = "cloudcrafter",
                 StackName = "My Custom Stack 123",
                 StackServiceName = "My Custom Service : 123",
                 SourceProvider = null,
@@ -44,7 +45,8 @@ public class SimpleAppDeploymentTest : BaseTestFixture
     private async Task<TestConfig> EnsureConfigCreated()
     {
         (await CountAsync<Stack>()).Should().Be(0);
-        var project = FakerInstances.ProjectFaker.Generate();
+        var team = await CreateTeam();
+        var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 
         var environment = FakerInstances

@@ -1,11 +1,8 @@
 using Ardalis.GuardClauses;
 using CloudCrafter.Core.Commands.Providers.Github;
-using CloudCrafter.Core.Commands.Stacks;
-using CloudCrafter.Domain.Domain.Providers;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Providers.Github;
 
@@ -43,12 +40,22 @@ public class UpdateGithubInstallationCommandTest : BaseTestFixture
         );
     }
 
-    [Test]
-    public async Task ShouldBeAbleToSetInstallationId()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToSetInstallationId(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        Team? team = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            var userId = await RunAsDefaultUserAsync();
+            team = await CreateTeam(userId);
+        }
 
-        var githubProvider = FakerInstances.GithubProviderFaker.Generate();
+        var githubProvider = FakerInstances.GithubProviderFaker(team?.Id).Generate();
 
         await AddAsync(githubProvider);
 
@@ -68,12 +75,46 @@ public class UpdateGithubInstallationCommandTest : BaseTestFixture
     }
 
     [Test]
-    public async Task ShouldNotBeAbleToSetInstallationIdAgain()
+    public async Task ShouldBeNotAbleToSetInstallationIdBecauseUserIsNotATeamOwner()
     {
-        await RunAsAdministratorAsync();
+        await RunAsDefaultUserAsync();
+
+        var githubProvider = FakerInstances.GithubProviderFaker().Generate();
+
+        await AddAsync(githubProvider);
+
+        githubProvider.InstallationId.Should().BeNull();
+        (await CountAsync<GithubProvider>()).Should().Be(1);
+
+        Assert.ThrowsAsync<NotFoundException>(
+            async () =>
+                await SendAsync(
+                    new UpdateGithubInstallationCommand(
+                        new UpdateGithubInstallationRequest(123),
+                        githubProvider.SourceProvider.Id
+                    )
+                )
+        );
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToSetInstallationIdAgain(bool isAdmin)
+    {
+        Team? team = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            var userId = await RunAsDefaultUserAsync();
+            team = await CreateTeam(userId);
+        }
 
         var githubProvider = FakerInstances
-            .GithubProviderFaker.RuleFor(x => x.InstallationId, f => f.Random.Long())
+            .GithubProviderFaker(team?.Id)
+            .RuleFor(x => x.InstallationId, f => f.Random.Long())
             .Generate();
 
         await AddAsync(githubProvider);

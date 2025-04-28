@@ -1,7 +1,8 @@
 'use client'
-import { Toaster } from '@cloudcrafter/ui/components/sonner'
+import { Toaster as SonnerToaster } from '@cloudcrafter/ui/components/sonner'
 import type React from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
+import { Toaster } from 'sonner'
 
 type Theme = 'dark' | 'light' | 'system'
 
@@ -65,7 +66,8 @@ export function ThemeProvider({
 	return (
 		<ThemeProviderContext.Provider {...props} value={value}>
 			{children}
-			<Toaster richColors />
+			<SonnerToaster />
+			<Toaster />
 		</ThemeProviderContext.Provider>
 	)
 }

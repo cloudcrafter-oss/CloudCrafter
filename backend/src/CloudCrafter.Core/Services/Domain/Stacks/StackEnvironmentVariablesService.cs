@@ -1,8 +1,11 @@
 using AutoMapper;
 using CloudCrafter.Core.Commands.Stacks;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Stacks;
+using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Domain.Domain.Stacks;
+using CloudCrafter.Domain.Domain.User.ACL;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -14,7 +17,9 @@ namespace CloudCrafter.Core.Services.Domain.Stacks;
 public class StackEnvironmentVariablesService(
     IStackRepository repository,
     ILogger<StackEnvironmentVariablesService> logger,
-    IMapper mapper
+    IMapper mapper,
+    IUser user,
+    IUserAccessService accessService
 ) : IStackEnvironmentVariablesService
 {
     public async Task<List<StackEnvironmentVariableDto>> GetEnvironmentVariables(
@@ -28,6 +33,12 @@ public class StackEnvironmentVariablesService(
         {
             throw new NotFoundException("Stack", "Stack not found");
         }
+
+        await accessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Read
+        );
 
         var environmentVariables = await repository.GetEnvironmentVariables(stackId);
 
@@ -107,6 +118,19 @@ public class StackEnvironmentVariablesService(
         string? description
     )
     {
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw new NotFoundException("Stack", "Stack not found");
+        }
+
+        await accessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Write
+        );
+
         // Create a new environment variable group entity
         var group = new StackEnvironmentVariableGroup
         {
@@ -132,6 +156,12 @@ public class StackEnvironmentVariablesService(
         {
             throw new NotFoundException("Stack", "Stack not found");
         }
+
+        await accessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Read
+        );
 
         // Get the variable groups for the stack
         var groups = await repository.GetEnvironmentVariableGroups(stackId);
@@ -162,6 +192,10 @@ public class StackEnvironmentVariablesService(
         {
             throw StackValidations.Create(StackValidations.StackNotFound);
         }
+
+        var project = stack.Environment.Project;
+
+        await accessService.EnsureHasAccessToEntity(project, user?.Id, AccessType.Write);
 
         if (groupId.HasValue)
         {
@@ -221,6 +255,12 @@ public class StackEnvironmentVariablesService(
             throw StackValidations.Create(StackValidations.StackNotFound);
         }
 
+        await accessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Write
+        );
+
         // Find the variable to update
         var variable = stack.EnvironmentVariables.FirstOrDefault(v => v.Id == id);
 
@@ -266,6 +306,12 @@ public class StackEnvironmentVariablesService(
         {
             throw new NotFoundException("Stack", "Stack not found");
         }
+
+        await accessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Write
+        );
 
         // Find the variable to update
         var variable = stack.EnvironmentVariables.FirstOrDefault(v => v.Id == id);
@@ -355,6 +401,19 @@ public class StackEnvironmentVariablesService(
         string? description
     )
     {
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw new NotFoundException("Stack", "Stack not found");
+        }
+
+        await accessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Write
+        );
+
         // Get the environment variable group directly from repository
         var existingGroup = await repository.GetEnvironmentVariableGroup(stackId, id);
 
@@ -385,6 +444,19 @@ public class StackEnvironmentVariablesService(
 
     public async Task DeleteEnvironmentVariableGroup(Guid id, Guid stackId)
     {
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw new NotFoundException("Stack", "Stack not found");
+        }
+
+        await accessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Write
+        );
+
         // Get the group directly from repository
         var group = await repository.GetEnvironmentVariableGroup(stackId, id);
 

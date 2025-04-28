@@ -1,18 +1,17 @@
 using System.Linq.Expressions;
 using Bogus;
+using CloudCrafter.Domain.Constants;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.FunctionalTests.Database;
 using CloudCrafter.FunctionalTests.TestModels;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Data.Fakeds;
+using CloudCrafter.Infrastructure.Identity;
 using CloudCrafter.Infrastructure.Logging;
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Containers;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using NUnit.Framework;
 using Serilog;
 using Environment = System.Environment;
 
@@ -144,7 +143,7 @@ public class Testing
 
     public static async Task<Guid?> RunAsDefaultUserAsync()
     {
-        return await RunAsUserAsync("test@local", "Testing1234!", Array.Empty<string>());
+        return await RunAsUserAsync("test@local", "Testing1234!", [Roles.User]);
     }
 
     public static async Task<Guid?> RunAsAdministratorAsync()
@@ -152,7 +151,16 @@ public class Testing
         return await RunAsUserAsync(
             "administrator@local",
             "Administrator1234!",
-            Array.Empty<string>()
+            [Roles.Administrator, Roles.User]
+        );
+    }
+
+    public static async Task<Guid?> RunAsUserRoleAsync(bool isAdmin)
+    {
+        return await RunAsUserAsync(
+            isAdmin ? "administrator@local" : "test@local",
+            isAdmin ? "Administrator1234!" : "Testing1234!",
+            isAdmin ? [Roles.Administrator, Roles.User] : [Roles.User]
         );
     }
 
@@ -168,11 +176,16 @@ public class Testing
 
         if (roles.Any())
         {
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
 
             foreach (var role in roles)
             {
-                await roleManager.CreateAsync(new IdentityRole(role));
+                var roleExists = await roleManager.RoleExistsAsync(role);
+
+                if (!roleExists)
+                {
+                    throw new Exception($"Role '{role}' does not exist.");
+                }
             }
 
             await userManager.AddToRolesAsync(user, roles);
@@ -194,6 +207,9 @@ public class Testing
     {
         await _database.ResetAsync();
         _userId = null;
+
+        var authSeeder = GetService<AuthSeeder>();
+        await authSeeder.SeedRolesAsync();
     }
 
     public static async Task<TEntity?> FindAsync<TEntity>(params object[] keyValues)
@@ -214,6 +230,20 @@ public class Testing
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
         context.Add(entity);
+
+        await context.SaveChangesAsync();
+    }
+
+    public static async Task AddAsyncList<TEntity>(List<TEntity> entities)
+        where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        foreach (var entity in entities)
+        {
+            context.Add(entity);
+        }
 
         await context.SaveChangesAsync();
     }

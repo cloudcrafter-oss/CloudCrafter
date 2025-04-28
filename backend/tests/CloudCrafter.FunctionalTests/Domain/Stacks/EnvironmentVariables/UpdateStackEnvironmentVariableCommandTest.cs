@@ -3,7 +3,6 @@ using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Stacks.EnvironmentVariables;
 
@@ -27,10 +26,19 @@ public class UpdateStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
     }
 
-    [Test]
-    public async Task ShouldHaveBasicValidation()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldHaveBasicValidation(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            await RunAsDefaultUserAsync();
+        }
+
         await AssertEnvCount(0);
         var exception = Assert.ThrowsAsync<ValidationException>(
             async () => await SendAsync(Command)
@@ -43,10 +51,19 @@ public class UpdateStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
         await AssertEnvCount(0);
     }
 
-    [Test]
-    public async Task ShouldGetErrorWhenUpdatingEnvVarWhenStackDoesNotExists()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldGetErrorWhenUpdatingEnvVarWhenStackDoesNotExists(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            await RunAsDefaultUserAsync();
+        }
+
         await AssertEnvCount(0);
         var exception = Assert.ThrowsAsync<ValidationException>(
             async () =>
@@ -94,12 +111,45 @@ public class UpdateStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
     }
 
     [Test]
-    public async Task ShouldGetErrorWhenUpdatingEnvVarWhenEnvVarKeyAlreadyExists()
+    public async Task ShouldNotHavePermissionForStackToUpdateTheEnvVariable()
     {
-        await RunAsAdministratorAsync();
+        await RunAsDefaultUserAsync();
         await AssertEnvCount(0);
 
         var stack = await CreateSampleStack();
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+            async () =>
+                await SendAsync(
+                    Command with
+                    {
+                        Key = "DUMMY",
+                        Value = "My_Value",
+                        Id = Guid.NewGuid(),
+                        StackId = stack.Id,
+                    }
+                )
+        );
+
+        await AssertEnvCount(0);
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldGetErrorWhenUpdatingEnvVarWhenEnvVarKeyAlreadyExists(bool isAdmin)
+    {
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            ownerId = await RunAsDefaultUserAsync();
+        }
+
+        await AssertEnvCount(0);
+
+        var stack = await CreateSampleStack(null, ownerId);
 
         var envVar = FakerInstances
             .StackEnvironmentVariableFaker(stack)
@@ -155,14 +205,24 @@ public class UpdateStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
         await AssertEnvCount(2);
     }
 
-    [Test]
-    public async Task ShouldSuccessfullyUpdateEnvironmentVariable()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldSuccessfullyUpdateEnvironmentVariable(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            ownerId = await RunAsDefaultUserAsync();
+        }
+
         await AssertEnvCount(0);
 
         // Create stack
-        var stack = await CreateSampleStack();
+        var stack = await CreateSampleStack(null, ownerId);
 
         // Create environment variable to update
         var envVar = new StackEnvironmentVariable
@@ -205,15 +265,25 @@ public class UpdateStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
         await AssertEnvCount(1);
     }
 
-    [Test]
-    public async Task ShouldSuccessfullyUpdateEnvironmentVariableToAGroup()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldSuccessfullyUpdateEnvironmentVariableToAGroup(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            ownerId = await RunAsDefaultUserAsync();
+        }
+
         await AssertEnvCount(0);
         await AssertEnvGroupCount(0);
 
         // Create stack
-        var stack = await CreateSampleStack();
+        var stack = await CreateSampleStack(null, ownerId);
 
         var group = FakerInstances.StackEnvironmentVariableGroupFaker(stack).Generate();
         await AddAsync(group);
@@ -251,14 +321,24 @@ public class UpdateStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
         await AssertEnvCount(1);
     }
 
-    [Test]
-    public async Task ShouldSuccessfullyUpdateEnvironmentVariableGroup()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldSuccessfullyUpdateEnvironmentVariableGroup(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            ownerId = await RunAsDefaultUserAsync();
+        }
+
         await AssertEnvGroupCount(0);
 
         // Create stack
-        var stack = await CreateSampleStack();
+        var stack = await CreateSampleStack(null, ownerId);
 
         // Create environment variable group
         var group = new StackEnvironmentVariableGroup

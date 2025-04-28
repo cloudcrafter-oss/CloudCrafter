@@ -7,6 +7,9 @@ import type { ProjectDto, StackCreatedDto } from '../__generated__'
 import {
 	deleteProject as apiDeleteProject,
 	createProject,
+	createServer,
+	createTeam,
+	deleteTeam,
 	getProjects,
 	getServers,
 	postCreateStack,
@@ -18,6 +21,7 @@ import { generateProjectName, generateStackName } from '../utils/fake-data'
  */
 export class ProjectFixture extends UserFixture {
 	projects: ProjectDto[] = []
+	teams: string[] = []
 
 	/**
 	 * Clean up all created projects
@@ -39,12 +43,36 @@ export class ProjectFixture extends UserFixture {
 			}
 		}
 
+		for (const team of this.teams) {
+			try {
+				await deleteTeam(team, this.getApiClientConfig())
+			} catch (error) {
+				console.error(`Failed to clean up team ${team}:`, error)
+			}
+		}
+
+		this.teams = []
 		this.projects = []
 	}
 
+	async fixtureCreateTeam(teamName: string): Promise<string> {
+		const team = await createTeam({ name: teamName }, this.getApiClientConfig())
+		this.teams.push(team)
+		return team
+	}
+
 	async fixtureCreateProject(projectName: string): Promise<ProjectDto> {
+		const team = await createTeam(
+			{
+				name: `Team ${projectName}`,
+			},
+			this.getApiClientConfig(),
+		)
+
+		this.teams.push(team)
+
 		const result = await createProject(
-			{ name: projectName },
+			{ name: projectName, teamId: team },
 			this.getApiClientConfig(),
 		)
 
@@ -66,6 +94,23 @@ export class ProjectFixture extends UserFixture {
 	async fixtureCreateStack(project: ProjectDto): Promise<StackCreatedDto> {
 		expect(project.environments.length).toBeGreaterThan(0)
 		expect(project.environments[0].id).toBeDefined()
+
+		const team = await createTeam(
+			{
+				name: `Team ${project.name}`,
+			},
+			this.getApiClientConfig(),
+		)
+
+		this.teams.push(team)
+
+		const server = await createServer(
+			{
+				name: `Server ${project.name}`,
+				teamId: team,
+			},
+			this.getApiClientConfig(),
+		)
 
 		const client = this.getApiClientConfig()
 

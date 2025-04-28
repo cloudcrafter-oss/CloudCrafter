@@ -1,10 +1,10 @@
 ﻿using CloudCrafter.Domain.Common;
-using CloudCrafter.Domain.Interfaces;
+using CloudCrafter.Domain.Entities.Interfaces;
 using EntityFrameworkCore.EncryptColumn.Attributes;
 
 namespace CloudCrafter.Domain.Entities;
 
-public class Server : BaseAuditableEntity
+public class Server : BaseAuditableEntity, IMayHaveATeam
 {
     public required string Name { get; set; }
     public required string IpAddress { get; set; }
@@ -22,6 +22,8 @@ public class Server : BaseAuditableEntity
     /// </summary>
     public string DockerDataDirectoryMount { get; set; } = string.Empty;
 
+    public required string DockerNetwork { get; set; } = "cloudcrafter";
+
     // TODO: Remove this property
     public required int SshPort { get; set; } = 22;
 
@@ -29,8 +31,11 @@ public class Server : BaseAuditableEntity
 
     public ICollection<Stack> Stacks { get; set; } = [];
 
+    public required Guid? TeamId { get; set; }
+    public Team? Team { get; set; }
+
     public void UpdateServerAgentKey(string key)
     {
-        this.AgentSecretKey = key;
+        AgentSecretKey = key;
     }
 }

@@ -1,5 +1,6 @@
 using System.Data.Common;
 using System.Linq.Expressions;
+using CloudCrafter.Domain.Constants;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.FunctionalTests.Database;
 using CloudCrafter.Infrastructure.Data;
@@ -64,8 +65,42 @@ public abstract class BaseReplaceTest
         return await RunAsUserAsync(
             "administrator@local",
             "Administrator1234!",
-            Array.Empty<string>()
+            [Roles.Administrator, Roles.User]
         );
+    }
+
+    public async Task<Guid?> RunAsDefaultUserAsync()
+    {
+        return await RunAsUserAsync("user@local", "Administrator1234!", [Roles.User]);
+    }
+
+    public async Task AddToTeam(Team team, Guid? userId)
+    {
+        if (userId == null)
+        {
+            return;
+        }
+
+        await AddAsync(new TeamUser() { TeamId = team.Id, UserId = userId.Value });
+    }
+
+    public async Task<Team> CreateTeam(Guid? ownerId = null)
+    {
+        var teamFaker = FakerInstances.TeamFaker();
+        if (ownerId == null)
+        {
+            var user = FakerInstances.UserFaker.Generate();
+            await AddAsync(user);
+            teamFaker = teamFaker.RuleFor(x => x.OwnerId, user.Id);
+        }
+        else
+        {
+            teamFaker = teamFaker.RuleFor(x => x.OwnerId, ownerId.Value);
+        }
+
+        var team = teamFaker.Generate();
+        await AddAsync(team);
+        return team;
     }
 
     public async Task<Guid?> RunAsUserAsync(string userName, string password, string[] roles)
@@ -80,11 +115,11 @@ public abstract class BaseReplaceTest
 
         if (roles.Any())
         {
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
 
             foreach (var role in roles)
             {
-                await roleManager.CreateAsync(new IdentityRole(role));
+                await roleManager.CreateAsync(new Role(role));
             }
 
             await userManager.AddToRolesAsync(user, roles);
@@ -159,7 +194,8 @@ public abstract class BaseReplaceTest
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
 
-        var project = FakerInstances.ProjectFaker.Generate();
+        var team = await CreateTeam();
+        var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 
         var environment = FakerInstances.EnvironmentFaker(project).Generate();

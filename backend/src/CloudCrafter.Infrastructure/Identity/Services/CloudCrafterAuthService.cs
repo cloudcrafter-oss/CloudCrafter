@@ -2,6 +2,7 @@ using Ardalis.GuardClauses;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Interfaces.Domain.Auth;
 using CloudCrafter.Domain.Domain.Auth;
+using CloudCrafter.Domain.Domain.User;
 using CloudCrafter.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
@@ -51,13 +52,13 @@ public class CloudCrafterAuthService(
         return await CreateTokenForUserAsync(userFromManager);
     }
 
-    public async Task CreateUserWithPasswordAsync(string email, string name, string password)
+    public async Task<Guid> CreateUserWithPasswordAsync(string email, string name, string password)
     {
         var user = await userManager.FindByEmailAsync(email);
 
         if (user != null)
         {
-            return;
+            return user.Id;
         }
 
         var result = await identityService.CreateUserAsync(email, password);
@@ -66,6 +67,8 @@ public class CloudCrafterAuthService(
         {
             throw new UnauthorizedAccessException();
         }
+
+        return result.UserId;
     }
 
     public async Task<TokenDto> FetchTokensForRefreshToken(string refreshToken)
@@ -85,6 +88,28 @@ public class CloudCrafterAuthService(
         }
 
         return await CreateTokenForUserAsync(user, refreshToken);
+    }
+
+    public async Task<List<RoleDto>> GetRoles(Guid userId)
+    {
+        var user = await userManager.FindByIdAsync(userId.ToString());
+
+        if (user == null)
+        {
+            throw new NotFoundException("User", "User not found");
+        }
+
+        var roles = await userManager.GetRolesAsync(user);
+
+        var roleDtoList = new List<RoleDto>();
+
+        foreach (var role in roles)
+        {
+            var roleDto = new RoleDto { Name = role };
+            roleDtoList.Add(roleDto);
+        }
+
+        return roleDtoList;
     }
 
     private async Task<TokenDto> CreateTokenForUserAsync(

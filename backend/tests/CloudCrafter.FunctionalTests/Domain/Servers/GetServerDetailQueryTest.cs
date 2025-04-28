@@ -1,4 +1,5 @@
 using CloudCrafter.Core.Commands.Servers;
+using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
@@ -29,12 +30,27 @@ public class GetServerDetailQueryTest : BaseTestFixture
     }
 
     [Test]
+    public async Task ShouldNotBeAbleToAccessServerForDefaultUser()
+    {
+        await RunAsDefaultUserAsync();
+        var server = FakerInstances.ServerFaker.Generate();
+
+        await AddAsync(server);
+
+        Assert.ThrowsAsync<CannotAccessTeamException>(
+            async () => await SendAsync(new GetServerDetailQuery(server.Id))
+        );
+    }
+
+    [Test]
     public async Task ShouldBeAbleToFetchServerDetails()
     {
         await RunAsAdministratorAsync();
 
         (await CountAsync<Server>()).Should().Be(0);
-        var server = FakerInstances.ServerFaker.Generate();
+        var server = FakerInstances
+            .ServerFaker.RuleFor(x => x.DockerNetwork, "my-custom-network")
+            .Generate();
 
         await AddAsync(server);
 
@@ -43,5 +59,6 @@ public class GetServerDetailQueryTest : BaseTestFixture
         result.Should().NotBeNull();
         result!.Id.Should().NotBe(Guid.Empty);
         result.AgentKey.Should().NotBeEmpty();
+        result.DockerNetworkName.Should().Be("my-custom-network");
     }
 }

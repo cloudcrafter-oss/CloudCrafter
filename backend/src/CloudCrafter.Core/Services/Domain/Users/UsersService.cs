@@ -9,7 +9,7 @@ namespace CloudCrafter.Core.Services.Domain.Users;
 
 public class UsersService(IUserRepository userRepository) : IUsersService
 {
-    public Task<PaginatedList<UserDto>> GetUsers(PaginatedRequest<UserDto> filter)
+    public Task<PaginatedList<UserDto>> GetUsers(PaginatedRequest filter)
     {
         return userRepository.GetUsers(filter);
     }

@@ -12,6 +12,7 @@ using CloudCrafter.Infrastructure.Core.Configuration;
 using CloudCrafter.Infrastructure.Data;
 using CloudCrafter.Infrastructure.Data.Interceptors;
 using CloudCrafter.Infrastructure.Email;
+using CloudCrafter.Infrastructure.Identity;
 using CloudCrafter.Infrastructure.Identity.Services;
 using CloudCrafter.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -92,6 +93,7 @@ public static class InfrastructureServiceExtensions
             .AddApiEndpoints();
 
         services.AddSingleton(TimeProvider.System);
+        services.AddScoped<AuthSeeder>();
         services.AddTransient<IIdentityService, IdentityService>();
 
         services.AddAuthorization(options =>
@@ -105,13 +107,15 @@ public static class InfrastructureServiceExtensions
             .AddScoped<IServerRepository, ServerRepository>()
             .AddScoped<IEnvironmentRepository, EnvironmentRepository>()
             .AddScoped<IProviderRepository, ProviderRepository>()
+            .AddScoped<ITeamsRepository, TeamsRepository>()
             .AddScoped<IProjectRepository, ProjectRepository>()
             .AddScoped<IDeploymentRepository, DeploymentRepository>()
             .AddScoped<IStackRepository, StackRepository>()
             .AddScoped<IUserRefreshTokenRepository, UserRefreshTokenRepository>()
             .AddScoped<IJwtService, JwtService>()
             .AddScoped<IEmailSender, FakeEmailSender>()
-            .AddScoped<IStackEnvironmentVariablesService, StackEnvironmentVariablesService>();
+            .AddScoped<IStackEnvironmentVariablesService, StackEnvironmentVariablesService>()
+            .AddScoped<IStackServiceVolumesService, StackServiceVolumesService>();
 
         return services;
     }

@@ -13,12 +13,19 @@ import {
 	FormMessage,
 } from '@cloudcrafter/ui/components/form'
 import { Input } from '@cloudcrafter/ui/components/input'
-import { Label } from '@cloudcrafter/ui/components/label'
+import {
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from '@cloudcrafter/ui/components/tabs'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, Globe, HardDrive, Network } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
+import { VolumeList } from './volume-list'
 
 export const ServiceDetail = ({
 	stackId,
@@ -31,6 +38,8 @@ export const ServiceDetail = ({
 	toggleService: (serviceName: string) => void
 	expandedService: string | null
 }) => {
+	const [activeTab, setActiveTab] = useState('general')
+
 	const form = useForm<z.infer<typeof updateStackServiceCommandSchema>>({
 		resolver: zodResolver(updateStackServiceCommandSchema),
 		defaultValues: {
@@ -71,127 +80,216 @@ export const ServiceDetail = ({
 	}
 
 	return (
-		<div key={service.id} className='border rounded-lg overflow-hidden'>
-			<Button
-				variant='ghost'
-				className='w-full justify-between p-4 text-left hover:bg-secondary'
-				onClick={() => toggleService(service.name)}
-			>
-				<span className='text-lg font-semibold'>{service.name}</span>
-				{expandedService === service.name ? (
-					<ChevronUp className='h-5 w-5' />
-				) : (
-					<ChevronDown className='h-5 w-5' />
-				)}
-			</Button>
+		<div
+			key={service.id}
+			data-testid={`container-service-${service.id}`}
+			className='bg-card rounded-lg border'
+		>
+			<div className='p-3 sm:p-4'>
+				<Button
+					variant='ghost'
+					className='w-full flex items-center justify-between hover:bg-accent/50'
+					onClick={() => toggleService(service.name)}
+				>
+					<div className='flex items-center gap-2 sm:gap-3'>
+						<div className='flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg border bg-background'>
+							<HardDrive className='h-4 w-4 sm:h-5 sm:w-5' />
+						</div>
+						<div className='text-left'>
+							<h3 className='font-medium text-sm sm:text-base'>
+								{service.name}
+							</h3>
+							<p className='text-xs sm:text-sm text-muted-foreground truncate max-w-[180px] sm:max-w-none'>
+								{service.httpConfiguration?.domainName ||
+									'No domain configured'}
+							</p>
+						</div>
+					</div>
+					<ChevronDown
+						className={`h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground transition-transform ${
+							expandedService === service.name ? 'rotate-180' : ''
+						}`}
+					/>
+				</Button>
+			</div>
+
 			{expandedService === service.name && (
-				<div className='p-4 bg-secondary/50'>
-					<Form {...form}>
-						<form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-							<FormField
-								control={form.control}
-								name='name'
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Service name</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												value={field.value ?? ''}
-												placeholder='Enter service name'
+				<div>
+					<Tabs
+						value={activeTab}
+						onValueChange={setActiveTab}
+						className='w-full'
+					>
+						<div className='border-t border-b bg-accent/50 overflow-x-auto'>
+							<TabsList className='h-12 w-full justify-start p-0 bg-transparent gap-2 sm:gap-6 px-3 sm:px-0'>
+								<TabsTrigger
+									value='general'
+									data-testid='tab-general'
+									className='flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-3 text-xs sm:text-sm font-medium relative text-muted-foreground hover:text-foreground data-[state=active]:text-foreground data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:right-0 data-[state=active]:after:h-0.5 data-[state=active]:after:bg-foreground'
+								>
+									<Globe className='h-3.5 w-3.5 sm:h-4 sm:w-4' />
+									General
+								</TabsTrigger>
+								<TabsTrigger
+									value='network'
+									data-testid='tab-network'
+									className='flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-3 text-xs sm:text-sm font-medium relative text-muted-foreground hover:text-foreground data-[state=active]:text-foreground data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:right-0 data-[state=active]:after:h-0.5 data-[state=active]:after:bg-foreground'
+								>
+									<Network className='h-3.5 w-3.5 sm:h-4 sm:w-4' />
+									Network
+								</TabsTrigger>
+								<TabsTrigger
+									value='storage'
+									data-testid='tab-storage'
+									className='flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-3 text-xs sm:text-sm font-medium relative text-muted-foreground hover:text-foreground data-[state=active]:text-foreground data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:right-0 data-[state=active]:after:h-0.5 data-[state=active]:after:bg-foreground'
+								>
+									<HardDrive className='h-3.5 w-3.5 sm:h-4 sm:w-4' />
+									Storage
+								</TabsTrigger>
+							</TabsList>
+						</div>
+
+						<div className='p-3 sm:p-6'>
+							<TabsContent
+								value='general'
+								className='mt-0 space-y-4 sm:space-y-6'
+							>
+								<div>
+									<h3 className='text-lg sm:text-xl font-semibold mb-4 sm:mb-6'>
+										General Settings
+									</h3>
+									<Form {...form}>
+										<form
+											onSubmit={form.handleSubmit(onSubmit)}
+											className='space-y-4'
+										>
+											<FormField
+												control={form.control}
+												name='name'
+												render={({ field }) => (
+													<FormItem>
+														<FormLabel>Service Name</FormLabel>
+														<FormControl>
+															<Input
+																{...field}
+																value={field.value ?? ''}
+																placeholder='Enter service name'
+															/>
+														</FormControl>
+														<FormMessage />
+													</FormItem>
+												)}
 											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+											<div className='flex justify-end'>
+												<Button type='submit'>Save Changes</Button>
+											</div>
+										</form>
+									</Form>
+								</div>
+							</TabsContent>
 
-							<FormField
-								control={form.control}
-								name='domainName'
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Domain Name</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												value={field.value ?? ''}
-												placeholder='Enter domain name'
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+							<TabsContent
+								value='network'
+								className='mt-0 space-y-4 sm:space-y-6'
+							>
+								<div>
+									<h3 className='text-lg sm:text-xl font-semibold mb-4 sm:mb-6'>
+										Network Configuration
+									</h3>
+									<Form {...form}>
+										<form
+											onSubmit={form.handleSubmit(onSubmit)}
+											className='space-y-4 sm:space-y-6'
+										>
+											<div className='grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6'>
+												<FormField
+													control={form.control}
+													name='domainName'
+													render={({ field }) => (
+														<FormItem>
+															<FormLabel>Domain Name</FormLabel>
+															<FormControl>
+																<Input
+																	{...field}
+																	value={field.value ?? ''}
+																	placeholder='Enter domain name'
+																/>
+															</FormControl>
+															<FormMessage />
+														</FormItem>
+													)}
+												/>
 
-							<FormField
-								control={form.control}
-								name='containerPortExposes'
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Container Port Exposes</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												value={field.value ?? ''}
-												type='number'
-												onChange={(e) =>
-													field.onChange(
-														e.target.value === ''
-															? undefined
-															: Number(e.target.value),
-													)
-												}
-												placeholder='Enter container port (e.g. 3000)'
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+												<FormField
+													control={form.control}
+													name='containerPortExposes'
+													render={({ field }) => (
+														<FormItem>
+															<FormLabel>Container Port</FormLabel>
+															<FormControl>
+																<Input
+																	{...field}
+																	value={field.value ?? ''}
+																	type='number'
+																	onChange={(e) =>
+																		field.onChange(
+																			e.target.value === ''
+																				? undefined
+																				: Number(e.target.value),
+																		)
+																	}
+																	placeholder='Enter container port (e.g. 3000)'
+																/>
+															</FormControl>
+															<FormMessage />
+														</FormItem>
+													)}
+												/>
 
-							<FormField
-								control={form.control}
-								name='containerHealthCheckPort'
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Container Health Check Port</FormLabel>
-										<FormControl>
-											<Input
-												{...field}
-												value={field.value ?? ''}
-												type='number'
-												onChange={(e) =>
-													field.onChange(
-														e.target.value === ''
-															? undefined
-															: Number(e.target.value),
-													)
-												}
-												placeholder='Enter container health check port (e.g. 3000)'
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
+												<FormField
+													control={form.control}
+													name='containerHealthCheckPort'
+													render={({ field }) => (
+														<FormItem className='sm:col-span-2'>
+															<FormLabel>Health Check Port</FormLabel>
+															<FormControl>
+																<Input
+																	{...field}
+																	value={field.value ?? ''}
+																	type='number'
+																	onChange={(e) =>
+																		field.onChange(
+																			e.target.value === ''
+																				? undefined
+																				: Number(e.target.value),
+																		)
+																	}
+																	placeholder='Enter health check port (e.g. 3000)'
+																/>
+															</FormControl>
+															<FormMessage />
+														</FormItem>
+													)}
+												/>
+											</div>
 
-							<div className='flex justify-end'>
-								<Button type='submit'>Save Changes</Button>
-							</div>
+											<div className='flex justify-end'>
+												<Button type='submit'>Save Changes</Button>
+											</div>
+										</form>
+									</Form>
+								</div>
+							</TabsContent>
 
-							<div className='space-y-2'>
-								<Label>Debug Information</Label>
-								<pre className='p-4 bg-muted rounded-md overflow-auto text-xs'>
-									{JSON.stringify(
-										{ values: formValues, errors: formErrors },
-										null,
-										2,
-									)}
-								</pre>
-							</div>
-						</form>
-					</Form>
+							<TabsContent
+								value='storage'
+								data-testid='content-storage'
+								className='mt-0 space-y-4 sm:space-y-6'
+							>
+								<VolumeList stackId={stackId} stackServiceId={service.id} />
+							</TabsContent>
+						</div>
+					</Tabs>
 				</div>
 			)}
 		</div>

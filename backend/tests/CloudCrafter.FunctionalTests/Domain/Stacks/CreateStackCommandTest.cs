@@ -1,8 +1,8 @@
 ﻿using CloudCrafter.Core.Commands.Stacks;
+using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Stacks;
 
@@ -25,10 +25,11 @@ public class CreateStackCommandTest : BaseTestFixture
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
     }
 
-    [Test]
-    public async Task ShouldThrowExceptionWhenServerIdIsNotFound()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldThrowExceptionWhenServerIdIsNotFound(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        await RunAsUserRoleAsync(isAdmin);
         var exception = Assert.ThrowsAsync<UnauthorizedAccessException>(
             async () => await SendAsync(Command)
         );
@@ -38,10 +39,11 @@ public class CreateStackCommandTest : BaseTestFixture
         (await CountAsync<Stack>()).Should().Be(0);
     }
 
-    [Test]
-    public async Task ShouldThrowExceptionWhenEnvironmentIsNotFound()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldThrowExceptionWhenEnvironmentIsNotFound(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        await RunAsUserRoleAsync(isAdmin);
 
         var server = FakerInstances.ServerFaker.Generate();
         await AddAsync(server);
@@ -52,21 +54,26 @@ public class CreateStackCommandTest : BaseTestFixture
             async () => await SendAsync(Command)
         );
 
-        exception
-            .Message.Should()
-            .Be($"User does not have access to environment {Command.EnvironmentId}");
+        var message = isAdmin
+            ? $"User does not have access to environment {Command.EnvironmentId}"
+            : $"User does not have access to server {Command.ServerId}";
+
+        exception.Message.Should().Be(message);
         (await CountAsync<Stack>()).Should().Be(0);
     }
 
-    [Test]
-    public async Task ShouldBeAbleToCreateStack()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToCreateStack(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        var userId = await RunAsUserRoleAsync(isAdmin);
 
-        var server = FakerInstances.ServerFaker.Generate();
+        var team = await CreateTeam(!isAdmin ? userId : null);
+
+        var server = FakerInstances.ServerFaker.RuleFor(x => x.TeamId, team.Id).Generate();
         await AddAsync(server);
 
-        var project = FakerInstances.ProjectFaker.Generate();
+        var project = FakerInstances.ProjectFaker(team.Id).Generate();
         await AddAsync(project);
 
         var environment = FakerInstances.EnvironmentFaker(project).Generate();
@@ -99,5 +106,46 @@ public class CreateStackCommandTest : BaseTestFixture
         connectionStrings.Should().NotBeNull();
         connectionStrings!.StackId.Should().Be(result.Id);
         connectionStrings.Description.Should().Be("Database connection environment variables");
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToCreateStackBecauseUserIsNotCorrectTeamMember(
+        bool attachToTeam
+    )
+    {
+        var userId = await RunAsDefaultUserAsync();
+
+        var team = await CreateTeam();
+
+        if (attachToTeam)
+        {
+            await AddToTeam(team, userId);
+        }
+
+        var server = FakerInstances.ServerFaker.RuleFor(x => x.TeamId, team.Id).Generate();
+        await AddAsync(server);
+
+        var project = FakerInstances.ProjectFaker(team.Id).Generate();
+        await AddAsync(project);
+
+        var environment = FakerInstances.EnvironmentFaker(project).Generate();
+        await AddAsync(environment);
+
+        Command.EnvironmentId = environment.Id;
+        Command.ServerId = server.Id;
+
+        (await CountAsync<StackEnvironmentVariableGroup>()).Should().Be(0);
+
+        if (!attachToTeam)
+        {
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
+        }
+        else
+        {
+            Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+                async () => await SendAsync(Command)
+            );
+        }
     }
 }

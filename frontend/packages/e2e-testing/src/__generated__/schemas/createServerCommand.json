@@ -1,1 +1,1 @@
-{"required":["name"],"type":"object","properties":{"name":{"type":"string"}},"x-readme-ref-name":"CreateServerCommand"}
+{"required":["name"],"type":"object","properties":{"name":{"type":"string"},"teamId":{"type":"string","format":"uuid","nullable":true}},"x-readme-ref-name":"CreateServerCommand"}

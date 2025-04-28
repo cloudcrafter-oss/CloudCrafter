@@ -6,7 +6,7 @@ import type {
 	AxiosRequestConfig,
 	AxiosResponse,
 } from 'axios'
-import { getSession } from 'next-auth/react'
+import { getSession, signOut } from 'next-auth/react'
 import { auth } from '../authjs/auth'
 import { clientsEnvironment } from './uniform-environment'
 
@@ -82,6 +82,20 @@ axiosInstance.interceptors.request.use(async (request) => {
 
 	return request
 })
+
+// Add response interceptor to handle 401 errors
+axiosInstance.interceptors.response.use(
+	(response) => response,
+	async (error: AxiosError) => {
+		if (error.response?.status === 401 && typeof window !== 'undefined') {
+			// Only handle 401s on client side
+			await signOut({ redirect: true, callbackUrl: '/admin' })
+			return
+		}
+		throw error
+	},
+)
+
 export const client = async <TData, TError = unknown, TVariables = unknown>(
 	config: RequestConfig<TVariables>,
 ): Promise<ResponseConfig<TData>> => {

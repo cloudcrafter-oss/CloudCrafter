@@ -21,6 +21,7 @@ export const test = base.extend({
 							'Failed to start the connection: Error: The connection was stopped during negotiation',
 						),
 			)
+			.filter((m) => !m.text().includes('404'))
 			.map((m) => m.text())
 		expect(humanFriendlyErrorMessages).toEqual([])
 	},

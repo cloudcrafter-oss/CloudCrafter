@@ -2,9 +2,7 @@ using Ardalis.GuardClauses;
 using CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
-using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Stacks.EnvironmentVariables;
 
@@ -24,6 +22,33 @@ public class CreateStackEnvironmentVariableGroupCommandTest : BaseEnvironmentVar
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
     {
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToCreateEnvironmentVariableGroupBecauseUserHasNoPermissionToStack(
+        bool addUserToTeam
+    )
+    {
+        var userId = await RunAsDefaultUserAsync();
+        var stack = await CreateSampleStack();
+
+        if (addUserToTeam)
+        {
+            await AddToTeam(stack.Environment.Project.Team, userId);
+        }
+
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+            async () =>
+                await SendAsync(
+                    Command with
+                    {
+                        StackId = stack.Id,
+                        Name = "Test Group",
+                        Description = "A test group for environment variables",
+                    }
+                )
+        );
     }
 
     [Test]
@@ -55,13 +80,24 @@ public class CreateStackEnvironmentVariableGroupCommandTest : BaseEnvironmentVar
         await AssertEnvGroupCount(0);
     }
 
-    [Test]
-    public async Task ShouldBeAbleToCreateEnvironmentVariableGroup()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToCreateEnvironmentVariableGroup(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
         await AssertEnvGroupCount(0);
 
-        var stack = await CreateSampleStack();
+        Guid? userId = null;
+
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            userId = await RunAsDefaultUserAsync();
+        }
+
+        var stack = await CreateSampleStack(null, userId);
 
         var result = await SendAsync(
             Command with

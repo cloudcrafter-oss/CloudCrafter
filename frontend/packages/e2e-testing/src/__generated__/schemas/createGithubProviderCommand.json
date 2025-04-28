@@ -1,1 +1,1 @@
-{"required":["code"],"type":"object","properties":{"code":{"type":"string"}},"x-readme-ref-name":"CreateGithubProviderCommand"}
+{"required":["code"],"type":"object","properties":{"code":{"type":"string"},"teamId":{"type":"string","format":"uuid","nullable":true}},"x-readme-ref-name":"CreateGithubProviderCommand"}

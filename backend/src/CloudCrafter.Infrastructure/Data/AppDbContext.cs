@@ -32,6 +32,7 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     }
 
     public DbSet<Contributor> Contributors => Set<Contributor>();
+    public DbSet<TeamUser> TeamUsers => Set<TeamUser>();
     public DbSet<UserRefreshToken> UserRefreshTokens => Set<UserRefreshToken>();
     public DbSet<Server> Servers => Set<Server>();
     public DbSet<Project> Projects => Set<Project>();
@@ -40,10 +41,13 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IApplicationDbC
     public DbSet<Deployment> Deployments => Set<Deployment>();
     public DbSet<BackgroundJob> Jobs => Set<BackgroundJob>();
     public DbSet<StackService> StackServices => Set<StackService>();
+    public DbSet<Team> Teams => Set<Team>();
     public DbSet<StackServiceType> StackServiceTypes => Set<StackServiceType>();
+    public DbSet<StackServiceVolume> StackServiceVolumes => Set<StackServiceVolume>();
 
     public DbSet<SourceProvider> SourceProviders => Set<SourceProvider>();
     public DbSet<GithubProvider> GithubProviders => Set<GithubProvider>();
+
     public DbSet<StackEnvironmentVariable> StackEnvironmentVariables =>
         Set<StackEnvironmentVariable>();
 

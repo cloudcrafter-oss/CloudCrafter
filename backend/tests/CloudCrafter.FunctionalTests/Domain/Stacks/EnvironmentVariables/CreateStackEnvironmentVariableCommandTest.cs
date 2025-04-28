@@ -3,7 +3,6 @@ using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Stacks.EnvironmentVariables;
 
@@ -90,13 +89,42 @@ public class CreateStackEnvironmentVariableCommandTest : BaseEnvironmentVariable
         await AssertEnvCount(0);
     }
 
-    [Test]
-    public async Task ShouldBeAbleToCreateEnvironmentVariable()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToCreateEnvironmentVariableBecauseUserDoesNotHavePermissionToTeam(
+        bool attachUserToTeam
+    )
     {
-        await RunAsAdministratorAsync();
-        await AssertEnvCount(0);
-
+        var userId = await RunAsDefaultUserAsync();
         var stack = await CreateSampleStack();
+
+        if (attachUserToTeam)
+        {
+            await AddToTeam(stack.Environment.Project.Team, userId);
+        }
+
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+            async () =>
+                await SendAsync(Command with { StackId = stack.Id, Key = "Test", Value = "Dummy" })
+        );
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldBeAbleToCreateEnvironmentVariable(bool runAsAdministrator)
+    {
+        await AssertEnvCount(0);
+        Guid? ownerId = null;
+        if (runAsAdministrator)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            ownerId = await RunAsDefaultUserAsync();
+        }
+
+        var stack = await CreateSampleStack(null, ownerId);
 
         var result = await SendAsync(
             Command with

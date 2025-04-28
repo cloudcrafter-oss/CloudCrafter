@@ -1,7 +1,7 @@
 using CloudCrafter.Core.Commands.Projects;
+using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using FluentAssertions;
-using NUnit.Framework;
 using Environment = CloudCrafter.Domain.Entities.Environment;
 
 namespace CloudCrafter.FunctionalTests.Domain.Projects;
@@ -10,7 +10,7 @@ using static Testing;
 
 public class CreateProjectCommandTest : BaseTestFixture
 {
-    private CreateProjectCommand Command = new("Dummy");
+    private readonly CreateProjectCommand Command = new("Dummy", Guid.NewGuid());
 
     [Test]
     public void ShouldThrowExceptionWhenUserIsNotLoggedIn()
@@ -19,13 +19,45 @@ public class CreateProjectCommandTest : BaseTestFixture
     }
 
     [Test]
-    public async Task ShouldBeAbleToCreateProject()
+    public async Task ShouldNotBeAbleToCreateProjectWhenUserDoesNotHaveAccessToTeam()
+    {
+        await RunAsDefaultUserAsync();
+        var team = await CreateTeam();
+
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+            async () => await SendAsync(Command with { TeamId = team.Id })
+        );
+    }
+
+    [TestCase(true, false)]
+    [TestCase(false, true)]
+    [TestCase(false, true)]
+    public async Task ShouldBeAbleToCreateProject(bool isAdmin, bool isTeamOwner)
     {
         (await CountAsync<Project>()).Should().Be(0);
 
-        await RunAsAdministratorAsync();
+        Team? team = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+            team = await CreateTeam();
+        }
+        else
+        {
+            var userId = await RunAsDefaultUserAsync();
 
-        var result = await SendAsync(Command);
+            if (isTeamOwner)
+            {
+                team = await CreateTeam(userId);
+            }
+            else
+            {
+                team = await CreateTeam();
+                await AddToTeam(team, userId);
+            }
+        }
+
+        var result = await SendAsync(Command with { TeamId = team.Id });
         result.Name.Should().Be("Dummy");
         result.Id.Should().NotBeEmpty();
 
@@ -40,7 +72,8 @@ public class CreateProjectCommandTest : BaseTestFixture
 
         await RunAsAdministratorAsync();
 
-        var result = await SendAsync(Command);
+        var team = await CreateTeam();
+        var result = await SendAsync(Command with { TeamId = team.Id });
         result.Name.Should().Be("Dummy");
 
         (await CountAsync<Project>()).Should().Be(1);

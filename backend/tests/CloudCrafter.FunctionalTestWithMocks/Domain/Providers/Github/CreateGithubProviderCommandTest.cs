@@ -3,6 +3,7 @@ using CloudCrafter.Core.Commands.Providers.Github;
 using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Services.Core.Providers;
 using CloudCrafter.Domain.Entities;
+using CloudCrafter.Infrastructure.Data.Migrations;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
 using NUnit.Framework;
 using Octokit;
+using Team = CloudCrafter.Domain.Entities.Team;
 using User = Octokit.User;
 
 namespace CloudCrafter.FunctionalTestWithMocks.Domain.Providers.Github;
@@ -51,9 +53,50 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
     }
 
     [Test]
-    public async Task ShouldBeAbleToCreateFromGitHub()
+    public async Task ShouldNotBeAbleToCreateProviderWithoutATeamAsARegularUser()
     {
-        await RunAsAdministratorAsync();
+        await RunAsDefaultUserAsync();
+
+        Assert.ThrowsAsync<CloudCrafter.Core.Exceptions.ForbiddenAccessException>(
+            async () => await SendAsync(new CreateGithubProviderCommand("dummy"))
+        );
+    }
+
+    [Test]
+    public async Task ShouldNotBeAbleToCreateProviderForATeamUserDoesNotHaveAccessTo()
+    {
+        var team = await CreateTeam();
+        await RunAsDefaultUserAsync();
+
+        Assert.ThrowsAsync<CloudCrafter.Core.Exceptions.ForbiddenAccessException>(
+            async () =>
+                await SendAsync(new CreateGithubProviderCommand("dummy") { TeamId = team.Id })
+        );
+    }
+
+    [TestCase(true, false)]
+    [TestCase(false, true)]
+    public async Task ShouldBeAbleToCreateFromGitHub(bool isAdmin, bool teamOwner)
+    {
+        Team? team = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            var userId = await RunAsDefaultUserAsync();
+
+            if (teamOwner)
+            {
+                team = await CreateTeam(userId!.Value);
+            }
+            else
+            {
+                team = await CreateTeam();
+                await AddToTeam(team, userId);
+            }
+        }
 
         // Setup
         (await CountAsync<GithubProvider>())
@@ -89,7 +132,9 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
         _mockProvider.Setup(x => x.GetClient()).Returns(_mockClient.Object);
 
         // Act
-        var result = await SendAsync(new CreateGithubProviderCommand("dummy"));
+        var result = await SendAsync(
+            new CreateGithubProviderCommand("dummy") { TeamId = team?.Id }
+        );
 
         // Assert
         result.Should().BeTrue();
@@ -110,6 +155,15 @@ public class CreateGithubProviderCommandTest : BaseReplaceTest
 
         provider!.GithubProvider.Should().NotBeNull();
         provider.GithubProviderId.Should().Be(firstItem!.Id);
+
+        if (isAdmin)
+        {
+            provider.TeamId.Should().BeNull();
+        }
+        else
+        {
+            provider.TeamId.Should().Be(team!.Id);
+        }
 
         firstItem.AppName.Should().Be(manifest.Name);
         firstItem.AppId.Should().Be(manifest.Id);

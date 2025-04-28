@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test'
 import type { ProjectDto } from '../../__generated__'
+import { SelectHelper } from '../../utils/helpers/select-helper'
 
 export const ProjectListPage = (page: Page) => {
 	return {
@@ -7,6 +8,7 @@ export const ProjectListPage = (page: Page) => {
 
 		form: {
 			name: page.getByTestId('input-project-name'),
+			teamSelector: SelectHelper(page, 'select-team'),
 			submitButton: page.getByTestId('btn-save-project'),
 		},
 

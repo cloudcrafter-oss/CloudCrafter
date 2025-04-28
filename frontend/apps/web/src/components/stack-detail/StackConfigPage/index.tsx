@@ -3,10 +3,13 @@
 import { SourceSettings } from '@/src/components/stack-detail/source-settings'
 import { useStackHub } from '@/src/hooks/useStackHub'
 import type { StackDetailDto } from '@cloudcrafter/api'
-import { cn } from '@cloudcrafter/ui/lib/utils'
+import { useGetDeploymentsForStackHook } from '@cloudcrafter/api'
+import { Key, List, type LucideIcon, Server, Settings } from 'lucide-react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { DummyInfoTab } from '../DummyInfoTab'
+import { DeploymentList } from '../deployments/deployment-list'
+import { DockerStorage } from '../docker-storage/DockerStorage'
 import { EnvironmentVariables } from '../environment-variables/EnvironmentVariables'
 import { VariableHistory } from '../environment-variables/VariableHistory'
 import { VariableTemplates } from '../environment-variables/VariableTemplates'
@@ -18,12 +21,24 @@ interface BaseComponentProps {
 	stackDetails: StackDetailDto
 }
 
+interface NavItem {
+	id: string
+	title: string
+	testId?: string
+	icon: LucideIcon
+	children: {
+		id: string
+		title: string
+		testId?: string
+	}[]
+}
+
 // Update the sections structure
 const sections = [
 	{
 		id: 'general',
 		title: 'General Settings',
-		description: 'Manage your general project settings',
+		icon: Settings,
 		subTabs: [
 			{
 				id: 'basic',
@@ -43,10 +58,28 @@ const sections = [
 		],
 	},
 	{
+		id: 'deployments',
+		title: 'Deployments',
+		testId: 'subsection-deployments',
+		icon: List,
+		subTabs: [
+			{
+				id: 'list',
+				title: 'Deployment List',
+				component: ({ stackDetails }: BaseComponentProps) => {
+					const { data: deployments = [] } = useGetDeploymentsForStackHook(
+						stackDetails.id,
+					)
+					return <DeploymentList deployments={deployments} />
+				},
+			},
+		],
+	},
+	{
 		id: 'environment',
 		title: 'Environment Variables',
 		testId: 'subsection-environment-variables',
-		description: 'Manage environment variables for your stack',
+		icon: Key,
 		subTabs: [
 			{
 				id: 'variables',
@@ -69,47 +102,34 @@ const sections = [
 	{
 		id: 'services',
 		title: 'Services',
-		description: 'Manage your services',
+		testId: 'subsection-services',
+		icon: Server,
 		subTabs: [
 			{
 				id: 'overview',
 				title: 'Overview',
 				component: ServiceOverview as React.ComponentType<BaseComponentProps>,
 			},
-		],
-	},
-	{
-		id: 'security',
-		title: 'Security',
-		description: 'Configure security options for your project',
-		subTabs: [
-			{ id: 'access', title: 'Access Control', component: DummyInfoTab },
-			{ id: 'encryption', title: 'Encryption', component: DummyInfoTab },
-		],
-	},
-	{
-		id: 'integrations',
-		title: 'Integrations',
-		description: 'Manage third-party integrations',
-		subTabs: [
-			{ id: 'api', title: 'API Integrations', component: DummyInfoTab },
 			{
-				id: 'social',
-				title: 'Social Media Integrations',
-				component: DummyInfoTab,
+				id: 'storage',
+				title: 'Docker Storage',
+				component: DockerStorage as React.ComponentType<BaseComponentProps>,
 			},
 		],
 	},
-	{
-		id: 'notifications',
-		title: 'Notifications',
-		description: 'Set up your notification preferences',
-		subTabs: [
-			{ id: 'email', title: 'Email Notifications', component: DummyInfoTab },
-			{ id: 'sms', title: 'SMS Notifications', component: DummyInfoTab },
-		],
-	},
 ]
+
+export const navItems: NavItem[] = sections.map((section) => ({
+	id: section.id,
+	title: section.title,
+	icon: section.icon,
+	testId: section.testId,
+	children: section.subTabs.map((subTab) => ({
+		id: subTab.id,
+		title: subTab.title,
+		testId: `subtab-${subTab.id}`,
+	})),
+}))
 
 const StackConfigPage: React.FC<{ stackDetails: StackDetailDto }> = ({
 	stackDetails,
@@ -143,76 +163,28 @@ const StackConfigPage: React.FC<{ stackDetails: StackDetailDto }> = ({
 		return () => window.removeEventListener('hashchange', handleHashChange)
 	}, [])
 
-	const updateHash = (sectionId: string, subTabId: string) => {
-		window.location.hash = `${sectionId}/${subTabId}`
-	}
-
 	return (
-		<div className='flex h-screen'>
-			{/* Sidebar */}
-			<div className='w-64 h-full bg-slate-100 dark:bg-slate-800 flex flex-col items-start justify-start p-6 space-y-4 border-r'>
-				{sections.map((section) => (
-					<div key={section.id} className='w-full'>
-						<button
-							type='button'
-							data-testid={section.testId}
-							onClick={() => {
-								const newSubTabId = section.subTabs[0].id
-								setActiveSection(section.id)
-								setActiveSubTab(newSubTabId)
-								updateHash(section.id, newSubTabId)
-							}}
-							className={cn(
-								'w-full justify-start text-left px-4 py-2 rounded-md transition-colors',
-								'hover:bg-slate-200 dark:hover:bg-slate-700',
-								activeSection === section.id
-									? 'bg-primary text-primary-foreground font-semibold'
-									: 'text-slate-700 dark:text-slate-300',
-							)}
-						>
-							{section.title}
-						</button>
-						<div className='ml-4 mt-2 space-y-2'>
-							{section.subTabs.map((subTab) => (
-								<button
-									type='button'
-									key={subTab.id}
-									onClick={() => {
-										setActiveSubTab(subTab.id)
-										updateHash(section.id, subTab.id)
-									}}
-									className={cn(
-										'w-full justify-start text-left px-4 py-1 rounded-md transition-colors text-sm',
-										'hover:bg-slate-200 dark:hover:bg-slate-700',
-										activeSection === section.id && activeSubTab === subTab.id
-											? 'bg-secondary text-secondary-foreground font-medium'
-											: 'text-slate-600 dark:text-slate-400',
-										activeSection !== section.id && 'hidden',
-									)}
-								>
-									{subTab.title}
-								</button>
-							))}
-						</div>
-					</div>
-				))}
-			</div>
-
+		<div className='flex flex-col md:flex-row min-h-0 max-w-[100vw]'>
 			{/* Content Area */}
-			<div className='flex-1 p-8 overflow-auto'>
-				{sections.map((section) =>
-					section.subTabs.map(
-						(subTab) =>
-							activeSection === section.id &&
-							activeSubTab === subTab.id && (
-								<div key={`${section.id}-${subTab.id}`}>
-									{subTab.component && (
-										<subTab.component stackDetails={stack} />
-									)}
-								</div>
-							),
-					),
-				)}
+			<div className='flex-1 min-w-0 overflow-y-auto overflow-x-hidden'>
+				<div className='w-full max-w-full pt-0 md:pt-0 p-4 md:p-6'>
+					{sections.map((section) =>
+						section.subTabs.map(
+							(subTab) =>
+								activeSection === section.id &&
+								activeSubTab === subTab.id && (
+									<div
+										key={`${section.id}-${subTab.id}`}
+										className='min-w-0 max-w-full'
+									>
+										{subTab.component && (
+											<subTab.component stackDetails={stack} />
+										)}
+									</div>
+								),
+						),
+					)}
+				</div>
 			</div>
 		</div>
 	)

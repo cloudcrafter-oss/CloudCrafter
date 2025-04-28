@@ -28,6 +28,7 @@ public class SimpleAppRecipeWithGithubAppTest
         {
             Id = Guid.NewGuid(),
             CreatedAt = DateTime.UtcNow,
+            TeamId = null,
             UpdatedAt = DateTime.UtcNow,
             Name = "Github OSS Test",
             GithubProviderId = Guid.NewGuid(),
@@ -40,12 +41,14 @@ public class SimpleAppRecipeWithGithubAppTest
                 EnvironmentId = environmentId,
                 StackId = stackId,
                 StackServiceId = stackServiceId,
+                DockerNetworkName = "cloudcrafter",
                 StackName = "My Custom Stack 123",
                 StackServiceName = "My Custom Service : 123",
                 SourceProvider = new SourceProvider
                 {
                     Id = Guid.NewGuid(),
                     CreatedAt = DateTime.UtcNow,
+                    TeamId = null,
                     UpdatedAt = DateTime.UtcNow,
                     Name = "Github OSS Test",
                     GithubProviderId = Guid.NewGuid(),

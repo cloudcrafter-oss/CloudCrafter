@@ -1,0 +1,1 @@
+{"required":["email"],"type":"object","properties":{"email":{"type":"string"}},"x-readme-ref-name":"InviteUserBody"}

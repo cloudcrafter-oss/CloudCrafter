@@ -14,5 +14,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey("UserId")
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(x => x.TeamUsers).WithOne(x => x.User).OnDelete(DeleteBehavior.Cascade);
     }
 }

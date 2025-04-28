@@ -1,8 +1,8 @@
 ﻿using Ardalis.GuardClauses;
 using CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
+using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Stacks.EnvironmentVariables;
 
@@ -18,10 +18,18 @@ public class GetStackEnvironmentVariablesQueryTest : BaseEnvironmentVariablesTes
         );
     }
 
-    [Test]
-    public async Task ShouldThrowExceptionWhenStackIdDoesNotExists()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldThrowExceptionWhenStackIdDoesNotExists(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            await RunAsDefaultUserAsync();
+        }
 
         Assert.ThrowsAsync<NotFoundException>(
             async () => await SendAsync(new GetStackEnvironmentVariablesQuery(Guid.NewGuid()))
@@ -29,13 +37,49 @@ public class GetStackEnvironmentVariablesQueryTest : BaseEnvironmentVariablesTes
     }
 
     [Test]
-    public async Task ShouldGetEmptyListWhenNoEnvironmentVariablesExists()
+    public async Task ShouldNotBeAbleToGetVariablesBecauseUserNotPartOfTeam()
     {
-        await RunAsAdministratorAsync();
-
-        await AssertEnvCount(0);
-
+        await RunAsDefaultUserAsync();
         var stack = await CreateSampleStack();
+
+        Assert.ThrowsAsync<CannotAccessTeamException>(
+            async () => await SendAsync(new GetStackEnvironmentVariablesQuery(stack.Id))
+        );
+    }
+
+    [TestCase(true, false, false)]
+    [TestCase(false, true, true)]
+    [TestCase(false, false, true)]
+    [TestCase(false, true, false)]
+    public async Task ShouldGetEmptyListWhenNoEnvironmentVariablesExists(
+        bool isAdmin,
+        bool isMember,
+        bool isTeamOwner
+    )
+    {
+        await AssertEnvCount(0);
+        Guid? ownerId = null;
+        Guid? userId = null;
+
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            userId = await RunAsDefaultUserAsync();
+            if (isTeamOwner)
+            {
+                ownerId = userId;
+            }
+        }
+
+        var stack = await CreateSampleStack(null, ownerId);
+
+        if (isMember)
+        {
+            await AddToTeam(stack.Environment.Project.Team, userId);
+        }
 
         var result = await SendAsync(new GetStackEnvironmentVariablesQuery(stack.Id));
 
@@ -43,15 +87,40 @@ public class GetStackEnvironmentVariablesQueryTest : BaseEnvironmentVariablesTes
         await AssertEnvCount(0);
     }
 
-    [Test]
-    public async Task ShouldGetGroupedAndNonGroupedEnvironmentVariables()
+    [TestCase(true, false, false)]
+    [TestCase(false, true, true)]
+    [TestCase(false, false, true)]
+    [TestCase(false, true, false)]
+    public async Task ShouldGetGroupedAndNonGroupedEnvironmentVariables(
+        bool isAdmin,
+        bool isMember,
+        bool isTeamOwner
+    )
     {
-        await RunAsAdministratorAsync();
-
         await AssertEnvCount(0);
         await AssertEnvGroupCount(0);
+        Guid? ownerId = null;
+        Guid? userId = null;
 
-        var stack = await CreateSampleStack();
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            userId = await RunAsDefaultUserAsync();
+            if (isTeamOwner)
+            {
+                ownerId = userId;
+            }
+        }
+
+        var stack = await CreateSampleStack(null, ownerId);
+
+        if (isMember)
+        {
+            await AddToTeam(stack.Environment.Project.Team, userId);
+        }
 
         var group = FakerInstances.StackEnvironmentVariableGroupFaker(stack).Generate();
         await AddAsync(group);

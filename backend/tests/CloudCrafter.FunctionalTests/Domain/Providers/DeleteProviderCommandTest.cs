@@ -34,7 +34,7 @@ public class DeleteProviderCommandTest : BaseTestFixture
     {
         await RunAsAdministratorAsync();
 
-        var githubProvider = FakerInstances.GithubProviderFaker.Generate();
+        var githubProvider = FakerInstances.GithubProviderFaker().Generate();
         await AddAsync(githubProvider);
 
         (await CountAsync<GithubProvider>()).Should().Be(1);

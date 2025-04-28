@@ -1,29 +1,53 @@
 using AutoMapper;
 using CloudCrafter.Core.Commands.Servers;
-using CloudCrafter.Core.Events.DomainEvents;
+using CloudCrafter.Core.Common.Interfaces;
 using CloudCrafter.Core.Events.DomainEvents.Server;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Core.Interfaces.Domain.Servers;
+using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Core.Interfaces.Repositories;
 using CloudCrafter.Core.Utils;
 using CloudCrafter.Domain.Common;
 using CloudCrafter.Domain.Domain.Server;
 using CloudCrafter.Domain.Domain.Server.Filter;
+using CloudCrafter.Domain.Domain.User.ACL;
 using CloudCrafter.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CloudCrafter.Core.Services.Domain.Servers;
 
-public class ServersService(IServerRepository repository, IMapper mapper) : IServersService
+public class ServersService(
+    IServerRepository repository,
+    IMapper mapper,
+    IUserAccessService accessService,
+    IUser user
+) : IServersService
 {
-    public Task<List<ServerDto>> GetServers()
+    public async Task<List<ServerDto>> GetServers()
     {
-        return repository.GetServers();
+        var isAdmin = await accessService.IsAdministrator(user.Id);
+
+        var filter = new ServerFilter();
+
+        if (!isAdmin)
+        {
+            filter.UserId = user.Id;
+        }
+
+        return await repository.GetServers(filter);
     }
 
-    public Task<ServerDetailDto?> GetServer(Guid id)
+    public async Task<ServerDetailDto?> GetServer(Guid id)
     {
-        return repository.GetServer(id);
+        var server = await repository.GetServer(id);
+        if (server == null)
+        {
+            return null;
+        }
+
+        await accessService.EnsureHasAccessToEntity(server, user.Id, AccessType.Read);
+
+        return mapper.Map<ServerDetailDto>(server);
     }
 
     public Task SaveChangesAsync()
@@ -38,7 +62,7 @@ public class ServersService(IServerRepository repository, IMapper mapper) : ISer
 
     public async Task<CreatedServerDto> CreateServer(CreateServerCommand request)
     {
-        var server = await repository.CreateServer(request.Name);
+        var server = await repository.CreateServer(request.Name, request.TeamId);
         return mapper.Map<CreatedServerDto>(server);
     }
 
@@ -58,6 +82,9 @@ public class ServersService(IServerRepository repository, IMapper mapper) : ISer
 
     public async Task DeleteServer(Guid id)
     {
+        var server = await repository.GetServerEntityOrFail(id);
+        await accessService.EnsureHasAccessToEntity(server, user.Id, AccessType.Write);
+
         try
         {
             await repository.DeleteServer(id);
@@ -71,6 +98,7 @@ public class ServersService(IServerRepository repository, IMapper mapper) : ISer
     public async Task RotateServerKey(Guid id)
     {
         var server = await repository.GetServerEntityOrFail(id);
+        await accessService.EnsureHasAccessToEntity(server, user.Id, AccessType.Write);
 
         server.UpdateServerAgentKey(StringUtils.GenerateSecret(64));
         server.AddDomainEvent(
@@ -84,9 +112,16 @@ public class ServersService(IServerRepository repository, IMapper mapper) : ISer
     {
         var server = await repository.GetServerEntityOrFail(id);
 
+        await accessService.EnsureHasAccessToEntity(server, user.Id, AccessType.Write);
+
         if (updateDto.Name is not null)
         {
             server.Name = updateDto.Name;
+        }
+
+        if (updateDto.DockerNetwork is not null)
+        {
+            server.DockerNetwork = updateDto.DockerNetwork;
         }
 
         await repository.SaveChangesAsync();

@@ -3,7 +3,6 @@ using CloudCrafter.Core.Commands.Stacks.EnvironmentVariables;
 using CloudCrafter.Core.Exceptions;
 using CloudCrafter.Domain.Entities;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Stacks.EnvironmentVariables;
 
@@ -26,10 +25,19 @@ public class UpdateStackEnvironmentVariableGroupCommandTest : BaseEnvironmentVar
         Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await SendAsync(Command));
     }
 
-    [Test]
-    public async Task ShouldThrowExceptionWhenStackDoesNotExist()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldThrowExceptionWhenStackDoesNotExist(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            await RunAsDefaultUserAsync();
+        }
+
         await AssertEnvGroupCount(0);
 
         Assert.ThrowsAsync<NotFoundException>(
@@ -62,14 +70,50 @@ public class UpdateStackEnvironmentVariableGroupCommandTest : BaseEnvironmentVar
         );
     }
 
-    [Test]
-    public async Task ShouldSuccessfullyUpdateEnvironmentVariableGroup()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToUpdateIfUserDoesNotHaveOwnerPermission(bool attachToTeam)
     {
-        await RunAsAdministratorAsync();
+        var userId = await RunAsDefaultUserAsync();
+
+        var stack = await CreateSampleStack();
+
+        if (attachToTeam)
+        {
+            await AddToTeam(stack.Environment.Project.Team, userId);
+        }
+
+        Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
+            async () =>
+                await SendAsync(
+                    Command with
+                    {
+                        Id = Guid.NewGuid(),
+                        StackId = stack.Id,
+                        Name = "Updated Group",
+                    }
+                )
+        );
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldSuccessfullyUpdateEnvironmentVariableGroup(bool isAdmin)
+    {
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            ownerId = await RunAsDefaultUserAsync();
+        }
+
         await AssertEnvGroupCount(0);
 
         // Create stack
-        var stack = await CreateSampleStack();
+        var stack = await CreateSampleStack(null, ownerId);
 
         // Create group
         var group = new StackEnvironmentVariableGroup
@@ -104,14 +148,24 @@ public class UpdateStackEnvironmentVariableGroupCommandTest : BaseEnvironmentVar
         updatedGroup.UpdatedAt.Should().BeAfter(group.UpdatedAt);
     }
 
-    [Test]
-    public async Task ShouldNotUpdateWhenNameConflictsWithAnotherGroup()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotUpdateWhenNameConflictsWithAnotherGroup(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            ownerId = await RunAsDefaultUserAsync();
+        }
+
         await AssertEnvGroupCount(0);
 
         // Create stack
-        var stack = await CreateSampleStack();
+        var stack = await CreateSampleStack(null, ownerId);
 
         // Create first group
         var group1 = new StackEnvironmentVariableGroup
@@ -166,14 +220,24 @@ public class UpdateStackEnvironmentVariableGroupCommandTest : BaseEnvironmentVar
         notUpdatedGroup!.Name.Should().Be("Group Two");
     }
 
-    [Test]
-    public async Task ShouldAllowUpdatingWithoutChangingName()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldAllowUpdatingWithoutChangingName(bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        Guid? ownerId = null;
+        if (isAdmin)
+        {
+            await RunAsAdministratorAsync();
+        }
+        else
+        {
+            ownerId = await RunAsDefaultUserAsync();
+        }
+
         await AssertEnvGroupCount(0);
 
         // Create stack
-        var stack = await CreateSampleStack();
+        var stack = await CreateSampleStack(null, ownerId);
 
         // Create group
         var group = new StackEnvironmentVariableGroup

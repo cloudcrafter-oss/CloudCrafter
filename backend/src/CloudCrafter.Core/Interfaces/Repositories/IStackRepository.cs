@@ -47,4 +47,23 @@ public interface IStackRepository
     /// </summary>
     /// <param name="group">The environment variable group to remove</param>
     void RemoveEnvironmentVariableGroup(StackEnvironmentVariableGroup group);
+
+    /// <summary>
+    ///     Gets a service volume directly from the database
+    /// </summary>
+    /// <param name="stackId">ID of the stack</param>
+    /// <param name="serviceId">ID of the service</param>
+    /// <param name="volumeId">ID of the volume</param>
+    /// <returns>The service volume, or null if not found</returns>
+    Task<StackServiceVolume?> GetServiceVolume(Guid stackId, Guid serviceId, Guid volumeId);
+
+    /// <summary>
+    ///     Adds a new service volume to the database
+    /// </summary>
+    /// <param name="volume">The volume to add</param>
+    void AddStackServiceVolume(StackServiceVolume volume);
+
+    Task<bool> StackServiceExists(Guid stackId, Guid stackServiceId);
+    Task<List<StackServiceVolume>> GetServiceVolumes(Guid stackId, Guid stackServiceId);
+    void DeleteStackServiceVolume(StackServiceVolume volume);
 }

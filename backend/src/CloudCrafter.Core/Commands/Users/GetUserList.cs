@@ -2,15 +2,14 @@ using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Core.Common.Security;
 using CloudCrafter.Core.Interfaces.Domain.Users;
 using CloudCrafter.Domain.Common.Pagination;
+using CloudCrafter.Domain.Constants;
 using CloudCrafter.Domain.Domain.User;
-using CloudCrafter.Domain.Requests.Filtering;
 using MediatR;
 
 namespace CloudCrafter.Core.Commands.Users;
 
-[Authorize]
-public record GetUserListQuery(PaginatedRequest<UserDto> Pagination)
-    : IRequest<PaginatedList<UserDto>>;
+[Authorize(Roles = $"{Roles.Administrator}")]
+public record GetUserListQuery(PaginatedRequest Pagination) : IRequest<PaginatedList<UserDto>>;
 
 public class GetUserListQueryHandler(IUsersService service)
     : IRequestHandler<GetUserListQuery, PaginatedList<UserDto>>

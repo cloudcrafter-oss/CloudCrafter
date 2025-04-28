@@ -20,6 +20,7 @@ public class SimpleAppDockerComposeGeneratorTest
             new EntityFaker.GenerateBasicAppArgs
             {
                 DomainName = "my-custom-domain.com",
+                DockerNetworkName = "cloudcrafter",
                 EnvironmentId = environmentId,
                 StackId = stackId,
                 StackServiceId = stackServiceId,
@@ -41,5 +42,64 @@ public class SimpleAppDockerComposeGeneratorTest
 
         // Assert
         await Verify(composeContent);
+    }
+
+    [Test]
+    public async Task ShouldCreateDockerComposeEditorWithVolumes()
+    {
+        // Arrange
+        var environmentId = Guid.Parse("f41d5c09-2fa1-459a-ae09-9eda843135df");
+        var deploymentId = Guid.Parse("fde85aa6-8dd6-48c9-8c4b-8172a2f15f28");
+        var stackId = Guid.Parse("35223e08-9c9f-4322-972e-51c610c202e3");
+        var stackServiceId = Guid.Parse("b34a6560-701d-4f0e-b024-b4b7b2155bcf");
+
+        var stack = EntityFaker.GenerateBasicAppStack(
+            new EntityFaker.GenerateBasicAppArgs
+            {
+                DomainName = "my-custom-domain.com",
+                DockerNetworkName = "cloudcrafter",
+                EnvironmentId = environmentId,
+                StackId = stackId,
+                StackServiceId = stackServiceId,
+                StackName = "My Custom Stack 123",
+                StackServiceName = "My Custom Service : 123",
+                ContainerHttpPort = 3000,
+                SourceProvider = null,
+                Volumes =
+                [
+                    new EntityFaker.BasicAppVolume
+                    {
+                        Id = environmentId,
+                        Name = "My Docker Volume",
+                        IsDockerVolume = true,
+                        Target = "/var/lib/mysql",
+                        Source = null,
+                    },
+                    new EntityFaker.BasicAppVolume
+                    {
+                        Id = stackId,
+                        Name = "My Local Volume",
+                        IsDockerVolume = false,
+                        Target = "/var/lib/mysql",
+                        Source = "/data/var/lib/mysql",
+                    },
+                ],
+            }
+        );
+        var generator = new SimpleAppDockerComposeGenerator(
+            new BaseDockerComposeGenerator.Args { Stack = stack, DeploymentId = deploymentId }
+        );
+
+        // Act
+        var editor = generator.Generate();
+        editor.Should().NotBeNull();
+
+        var composeContent = editor.GetYaml();
+
+        // Assert
+        await Verify(composeContent);
+
+        var isValid = await editor.IsValid();
+        isValid.IsValid.Should().BeTrue();
     }
 }

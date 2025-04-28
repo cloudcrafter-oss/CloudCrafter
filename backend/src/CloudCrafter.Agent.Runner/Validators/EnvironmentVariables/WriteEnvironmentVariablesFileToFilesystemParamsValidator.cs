@@ -9,6 +9,5 @@ public class WriteEnvironmentVariablesFileToFilesystemParamsValidator
     public WriteEnvironmentVariablesFileToFilesystemParamsValidator()
     {
         RuleFor(x => x.FileName).NotEmpty().WithMessage("FileName cannot be empty.");
-        RuleFor(x => x.FileContents).NotEmpty().WithMessage("FileContents cannot be empty.");
     }
 }

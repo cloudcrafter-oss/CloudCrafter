@@ -1,6 +1,5 @@
 ﻿using CloudCrafter.Core.Commands.Utils;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CloudCrafter.FunctionalTests.Domain.Utils;
 
@@ -8,11 +7,13 @@ using static Testing;
 
 public class CheckValidGitRepoCommandTest : BaseTestFixture
 {
-    [TestCase("https://github.com/cloudcrafter-oss/CloudCrafter")]
-    [TestCase("https://gitlab.com/gitlab-org/gitlab")]
-    public async Task ShouldBeAValidGitRepo(string repo)
+    [TestCase("https://github.com/cloudcrafter-oss/CloudCrafter", true)]
+    [TestCase("https://gitlab.com/gitlab-org/gitlab", true)]
+    [TestCase("https://github.com/cloudcrafter-oss/CloudCrafter", false)]
+    [TestCase("https://gitlab.com/gitlab-org/gitlab", false)]
+    public async Task ShouldBeAValidGitRepo(string repo, bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        await RunAsUserRoleAsync(isAdmin);
         var command = new CheckValidGitRepoCommand(repo);
 
         var result = await SendAsync(command);
@@ -21,11 +22,13 @@ public class CheckValidGitRepoCommandTest : BaseTestFixture
         result.IsValid.Should().BeTrue();
     }
 
-    [TestCase("https://github.com/cloudcrafter-oss/CloudCrafter-not-existing")]
-    [TestCase("https://www.google.nl")]
-    public async Task ShouldBeInvalidGitRepo(string repo)
+    [TestCase("https://github.com/cloudcrafter-oss/CloudCrafter-not-existing", true)]
+    [TestCase("https://www.google.nl", true)]
+    [TestCase("https://github.com/cloudcrafter-oss/CloudCrafter-not-existing", false)]
+    [TestCase("https://www.google.nl", false)]
+    public async Task ShouldBeInvalidGitRepo(string repo, bool isAdmin)
     {
-        await RunAsAdministratorAsync();
+        await RunAsUserRoleAsync(isAdmin);
         var command = new CheckValidGitRepoCommand(repo);
 
         var result = await SendAsync(command);

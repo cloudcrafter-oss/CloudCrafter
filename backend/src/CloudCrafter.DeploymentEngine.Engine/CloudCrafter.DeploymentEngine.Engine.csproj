@@ -1,4 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Slugify.Core"/>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CloudCrafter.Agent.Models\CloudCrafter.Agent.Models.csproj"/>
     <ProjectReference Include="..\CloudCrafter.Domain\CloudCrafter.Domain.csproj"/>

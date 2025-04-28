@@ -3,8 +3,8 @@
 import { actionClient } from '@/src/utils/actions/safe-action'
 import {
 	deleteProject,
+	getMyTeamsWithProjectsAndEnvironments,
 	getProject,
-	getProjects,
 	updateProject,
 } from '@cloudcrafter/api'
 import {
@@ -40,8 +40,6 @@ export const deleteProjectAction = actionClient
 		return await deleteProject(id)
 	})
 
-export const fetchProjectsWithEnvironments = async () => {
-	return await getProjects({
-		includeEnvironments: true,
-	})
+export const fetchTeamsWithProjectsAndEnvironments = async () => {
+	return await getMyTeamsWithProjectsAndEnvironments()
 }

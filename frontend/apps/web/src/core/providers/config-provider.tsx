@@ -9,6 +9,8 @@ interface ConfigProviderProps {
 export const ConfigProvider = ({ children }: ConfigProviderProps) => {
 	const [isLoading, setIsLoading] = useState(true)
 
+	const [isError, setIsError] = useState(false)
+
 	useEffect(() => {
 		fetch('/api/config')
 			.then((response) => response.json())
@@ -20,10 +22,18 @@ export const ConfigProvider = ({ children }: ConfigProviderProps) => {
 			})
 			.catch((error) => {
 				console.error('Failed to fetch config:', error)
-				setIsLoading(false)
+
+				setIsError(true)
 			})
 	}, [])
 
+	if (isError) {
+		return (
+			<div className='flex items-center justify-center w-full h-full min-h-[50vh]'>
+				<p>Failed to fetch config</p>
+			</div>
+		)
+	}
 	if (isLoading) {
 		return (
 			<div className='flex items-center justify-center w-full h-full min-h-[50vh]'>

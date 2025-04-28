@@ -25,6 +25,53 @@ public class SimpleAppRecipeGeneratorTest
             {
                 DomainName = "my-custom-domain.com",
                 EnvironmentId = environmentId,
+                DockerNetworkName = "cloudcrafter",
+                StackId = stackId,
+                StackServiceId = stackServiceId,
+                StackName = "My Custom Stack 123",
+                StackServiceName = "My Custom Service : 123",
+                SourceProvider = null,
+            }
+        );
+
+        var generator = new SimpleAppRecipeGenerator(
+            new BaseRecipeGenerator.Args
+            {
+                Stack = stack,
+                DeploymentId = deploymentId,
+                ProviderHelperProvider = new DummyHelperProvider(),
+            }
+        );
+
+        // Act
+        var result = await generator.Generate();
+
+        var writer = new YamlRecipeWriter(result.Recipe);
+        var recipe = writer.WriteString();
+
+        // Assert
+        await Verify(new { Recipe = recipe, DockerCompose = result.DockerComposeYaml });
+
+        var reader = new YamlRecipeReader();
+        var recipeFromReader = reader.FromString(recipe);
+        recipeFromReader.Should().NotBeNull();
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToGenerateRecipeForSimpleAppWithCustomServerNetworkName()
+    {
+        // Arrange
+        var environmentId = Guid.Parse("f41d5c09-2fa1-459a-ae09-9eda843135df");
+        var deploymentId = Guid.Parse("fde85aa6-8dd6-48c9-8c4b-8172a2f15f28");
+        var stackId = Guid.Parse("35223e08-9c9f-4322-972e-51c610c202e3");
+        var stackServiceId = Guid.Parse("b34a6560-701d-4f0e-b024-b4b7b2155bcf");
+
+        var stack = EntityFaker.GenerateBasicAppStack(
+            new EntityFaker.GenerateBasicAppArgs
+            {
+                DomainName = "my-custom-domain.com",
+                EnvironmentId = environmentId,
+                DockerNetworkName = "my-custom-network",
                 StackId = stackId,
                 StackServiceId = stackServiceId,
                 StackName = "My Custom Stack 123",
@@ -72,6 +119,7 @@ public class SimpleAppRecipeGeneratorTest
                 EnvironmentId = environmentId,
                 StackId = stackId,
                 StackServiceId = stackServiceId,
+                DockerNetworkName = "cloudcrafter",
                 StackName = "My Custom Stack 123",
                 StackServiceName = "My Custom Service : 123",
                 SourceProvider = null,
@@ -121,6 +169,7 @@ public class SimpleAppRecipeGeneratorTest
         var sourceProvider = new SourceProvider
         {
             Id = Guid.NewGuid(),
+            TeamId = null,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Name = "Github OSS Test",
@@ -134,11 +183,13 @@ public class SimpleAppRecipeGeneratorTest
                 EnvironmentId = environmentId,
                 StackId = stackId,
                 StackServiceId = stackServiceId,
+                DockerNetworkName = "cloudcrafter",
                 StackName = "My Custom Stack 123",
                 StackServiceName = "My Custom Service : 123",
                 SourceProvider = new SourceProvider
                 {
                     Id = Guid.NewGuid(),
+                    TeamId = null,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
                     Name = "Github OSS Test",
@@ -210,6 +261,7 @@ public class SimpleAppRecipeGeneratorTest
             {
                 DomainName = "my-custom-domain.com",
                 EnvironmentId = environmentId,
+                DockerNetworkName = "cloudcrafter",
                 StackId = stackId,
                 StackServiceId = stackServiceId,
                 StackName = "My Custom Stack 123",
