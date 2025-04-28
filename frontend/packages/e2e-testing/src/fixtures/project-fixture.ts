@@ -9,6 +9,7 @@ import {
 	createProject,
 	createServer,
 	createTeam,
+	deleteTeam,
 	getProjects,
 	getServers,
 	postCreateStack,
@@ -20,6 +21,7 @@ import { generateProjectName, generateStackName } from '../utils/fake-data'
  */
 export class ProjectFixture extends UserFixture {
 	projects: ProjectDto[] = []
+	teams: string[] = []
 
 	/**
 	 * Clean up all created projects
@@ -41,6 +43,15 @@ export class ProjectFixture extends UserFixture {
 			}
 		}
 
+		for (const team of this.teams) {
+			try {
+				await deleteTeam(team, this.getApiClientConfig())
+			} catch (error) {
+				console.error(`Failed to clean up team ${team}:`, error)
+			}
+		}
+
+		this.teams = []
 		this.projects = []
 	}
 
@@ -51,6 +62,9 @@ export class ProjectFixture extends UserFixture {
 			},
 			this.getApiClientConfig(),
 		)
+
+		this.teams.push(team)
+
 		const result = await createProject(
 			{ name: projectName, teamId: team },
 			this.getApiClientConfig(),
@@ -81,6 +95,8 @@ export class ProjectFixture extends UserFixture {
 			},
 			this.getApiClientConfig(),
 		)
+
+		this.teams.push(team)
 
 		const server = await createServer(
 			{
