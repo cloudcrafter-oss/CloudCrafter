@@ -40,7 +40,7 @@ function StackConfigNav() {
 						className='group/collapsible'
 					>
 						<SidebarMenuItem>
-							<CollapsibleTrigger asChild>
+							<CollapsibleTrigger data-testid={section.testId} asChild>
 								<SidebarMenuButton tooltip={section.title}>
 									{section.icon && <section.icon />}
 									<span>{section.title}</span>
@@ -51,7 +51,7 @@ function StackConfigNav() {
 								<SidebarMenuSub>
 									{section.children.map((subTab) => (
 										<SidebarMenuSubItem key={subTab.id}>
-											<SidebarMenuSubButton asChild>
+											<SidebarMenuSubButton data-testid={subTab.testId} asChild>
 												<Link
 													href={`/stack-config#${section.id}/${subTab.id}`}
 													onClick={(e) => {

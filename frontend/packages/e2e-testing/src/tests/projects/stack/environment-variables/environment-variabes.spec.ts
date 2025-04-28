@@ -20,8 +20,7 @@ test('should be able to create environment variable', async ({
 
 	await page.goto(stackPage.url(stack))
 
-	await expect(stackPage.environments.button).toBeVisible()
-	await stackPage.environments.button.click()
+	await stackPage.goToEnvironmentVariables()
 
 	await stackPage.environments.screen.addVariableButton.click()
 

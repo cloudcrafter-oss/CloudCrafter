@@ -24,10 +24,12 @@ interface BaseComponentProps {
 interface NavItem {
 	id: string
 	title: string
+	testId?: string
 	icon: LucideIcon
 	children: {
 		id: string
 		title: string
+		testId?: string
 	}[]
 }
 
@@ -121,9 +123,11 @@ export const navItems: NavItem[] = sections.map((section) => ({
 	id: section.id,
 	title: section.title,
 	icon: section.icon,
+	testId: section.testId,
 	children: section.subTabs.map((subTab) => ({
 		id: subTab.id,
 		title: subTab.title,
+		testId: `subtab-${subTab.id}`,
 	})),
 }))
 

@@ -7,6 +7,7 @@ import type { ProjectDto, StackCreatedDto } from '../__generated__'
 import {
 	deleteProject as apiDeleteProject,
 	createProject,
+	createServer,
 	createTeam,
 	getProjects,
 	getServers,
@@ -73,6 +74,21 @@ export class ProjectFixture extends UserFixture {
 	async fixtureCreateStack(project: ProjectDto): Promise<StackCreatedDto> {
 		expect(project.environments.length).toBeGreaterThan(0)
 		expect(project.environments[0].id).toBeDefined()
+
+		const team = await createTeam(
+			{
+				name: `Team ${project.name}`,
+			},
+			this.getApiClientConfig(),
+		)
+
+		const server = await createServer(
+			{
+				name: `Server ${project.name}`,
+				teamId: team,
+			},
+			this.getApiClientConfig(),
+		)
 
 		const client = this.getApiClientConfig()
 
