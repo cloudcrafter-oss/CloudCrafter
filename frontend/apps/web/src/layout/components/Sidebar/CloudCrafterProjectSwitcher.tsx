@@ -30,6 +30,7 @@ import {
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { CreateProjectDialog } from './CreateProjectDialog'
 import { CreateTeamDialog } from './CreateTeamDialog'
 
 interface Team {
@@ -72,6 +73,16 @@ export function CloudCrafterProjectSwitcher() {
 	const { selectedProjectId, selectedEnvironmentId } =
 		useSelectedProjectAndEnvironment()
 	const [isCreateTeamDialogOpen, setIsCreateTeamDialogOpen] = useState(false)
+	const [isCreateProjectDialogOpen, setIsCreateProjectDialogOpen] =
+		useState(false)
+	const [selectedTeamId, setSelectedTeamId] = useState<string>('')
+	const [selectedTeamName, setSelectedTeamName] = useState<string>('')
+
+	const handleCreateProjectClick = (teamId: string, teamName: string) => {
+		setSelectedTeamId(teamId)
+		setSelectedTeamName(teamName)
+		setIsCreateProjectDialogOpen(true)
+	}
 
 	return (
 		<>
@@ -98,9 +109,9 @@ export function CloudCrafterProjectSwitcher() {
 										<Users className='size-3' />
 										{team.name} ({team.projects.length})
 									</DropdownMenuLabel>
-									{team.projects.map((project) => (
-										<DropdownMenuGroup key={project.id}>
-											<DropdownMenuSub>
+									<DropdownMenuGroup>
+										{team.projects.map((project) => (
+											<DropdownMenuSub key={project.id}>
 												<DropdownMenuSubTrigger className='gap-2 p-2'>
 													<FolderIcon className='size-4' />
 													{selectedProjectId === project.id ? (
@@ -138,8 +149,21 @@ export function CloudCrafterProjectSwitcher() {
 													))}
 												</DropdownMenuSubContent>
 											</DropdownMenuSub>
-										</DropdownMenuGroup>
-									))}
+										))}
+										<DropdownMenuItem
+											className='gap-2 p-2'
+											onClick={() =>
+												handleCreateProjectClick(team.id, team.name)
+											}
+										>
+											<div className='flex size-6 items-center justify-center rounded-md border bg-background'>
+												<Plus className='size-4' />
+											</div>
+											<div className='font-medium text-muted-foreground'>
+												Create Project
+											</div>
+										</DropdownMenuItem>
+									</DropdownMenuGroup>
 									<DropdownMenuSeparator />
 								</div>
 							))}
@@ -162,6 +186,13 @@ export function CloudCrafterProjectSwitcher() {
 			<CreateTeamDialog
 				open={isCreateTeamDialogOpen}
 				onOpenChange={setIsCreateTeamDialogOpen}
+			/>
+
+			<CreateProjectDialog
+				open={isCreateProjectDialogOpen}
+				onOpenChange={setIsCreateProjectDialogOpen}
+				teamId={selectedTeamId}
+				teamName={selectedTeamName}
 			/>
 		</>
 	)
