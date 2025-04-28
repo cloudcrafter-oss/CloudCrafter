@@ -215,6 +215,14 @@ export type {
   PutUpdateStackServiceVolumeMutation,
 } from './PutUpdateStackServiceVolume'
 export type { RefreshUserTokenCommand } from './RefreshUserTokenCommand'
+export type { RemoveMemberBody } from './RemoveMemberBody'
+export type {
+  RemoveUserFromTeamPathParams,
+  RemoveUserFromTeam200,
+  RemoveUserFromTeamMutationRequest,
+  RemoveUserFromTeamMutationResponse,
+  RemoveUserFromTeamMutation,
+} from './RemoveUserFromTeam'
 export type { RenameTeamPathParams, RenameTeam200, RenameTeamMutationRequest, RenameTeamMutationResponse, RenameTeamMutation } from './RenameTeam'
 export type { RenameTeamCommand } from './RenameTeamCommand'
 export type { RoleDto } from './RoleDto'

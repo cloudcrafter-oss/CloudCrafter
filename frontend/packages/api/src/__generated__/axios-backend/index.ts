@@ -45,6 +45,7 @@ export { getPutUpdateEnvironmentVariableUrl, putUpdateEnvironmentVariable } from
 export { getPutUpdateEnvironmentVariableGroupUrl, putUpdateEnvironmentVariableGroup } from './putUpdateEnvironmentVariableGroup'
 export { getPutUpdateGithubProviderUrl, putUpdateGithubProvider } from './putUpdateGithubProvider'
 export { getPutUpdateStackServiceVolumeUrl, putUpdateStackServiceVolume } from './putUpdateStackServiceVolume'
+export { getRemoveUserFromTeamUrl, removeUserFromTeam } from './removeUserFromTeam'
 export { getRenameTeamUrl, renameTeam } from './renameTeam'
 export { getUpdateProjectUrl, updateProject } from './updateProject'
 export { getUpdateServerUrl, updateServer } from './updateServer'

@@ -2151,6 +2151,48 @@
 				}
 			}
 		},
+		"/api/Teams/{teamId}/remove": {
+			"delete": {
+				"tags": ["Teams"],
+				"operationId": "RemoveUserFromTeam",
+				"parameters": [
+					{
+						"name": "teamId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RemoveMemberBody"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RemoveMemberBody"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/RemoveMemberBody"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
 		"/api/Teams/projects-and-environments": {
 			"get": {
 				"tags": ["Teams"],
@@ -2931,6 +2973,15 @@
 				"type": "object",
 				"properties": {
 					"refreshToken": {
+						"type": "string"
+					}
+				}
+			},
+			"RemoveMemberBody": {
+				"required": ["email"],
+				"type": "object",
+				"properties": {
+					"email": {
 						"type": "string"
 					}
 				}

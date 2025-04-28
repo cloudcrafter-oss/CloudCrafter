@@ -231,6 +231,14 @@ export type {
   PutUpdateStackServiceVolumeMutation,
 } from './types/PutUpdateStackServiceVolume'
 export type { RefreshUserTokenCommand } from './types/RefreshUserTokenCommand'
+export type { RemoveMemberBody } from './types/RemoveMemberBody'
+export type {
+  RemoveUserFromTeamPathParams,
+  RemoveUserFromTeam200,
+  RemoveUserFromTeamMutationRequest,
+  RemoveUserFromTeamMutationResponse,
+  RemoveUserFromTeamMutation,
+} from './types/RemoveUserFromTeam'
 export type { RenameTeamPathParams, RenameTeam200, RenameTeamMutationRequest, RenameTeamMutationResponse, RenameTeamMutation } from './types/RenameTeam'
 export type { RenameTeamCommand } from './types/RenameTeamCommand'
 export type { RoleDto } from './types/RoleDto'
@@ -347,6 +355,7 @@ export { getPutUpdateEnvironmentVariableUrl, putUpdateEnvironmentVariable } from
 export { getPutUpdateEnvironmentVariableGroupUrl, putUpdateEnvironmentVariableGroup } from './e2e-backend/putUpdateEnvironmentVariableGroup'
 export { getPutUpdateGithubProviderUrl, putUpdateGithubProvider } from './e2e-backend/putUpdateGithubProvider'
 export { getPutUpdateStackServiceVolumeUrl, putUpdateStackServiceVolume } from './e2e-backend/putUpdateStackServiceVolume'
+export { getRemoveUserFromTeamUrl, removeUserFromTeam } from './e2e-backend/removeUserFromTeam'
 export { getRenameTeamUrl, renameTeam } from './e2e-backend/renameTeam'
 export { getUpdateProjectUrl, updateProject } from './e2e-backend/updateProject'
 export { getUpdateServerUrl, updateServer } from './e2e-backend/updateServer'
@@ -559,6 +568,13 @@ export {
   putUpdateStackServiceVolumeMutationResponseSchema,
 } from './zod/putUpdateStackServiceVolumeSchema'
 export { refreshUserTokenCommandSchema } from './zod/refreshUserTokenCommandSchema'
+export { removeMemberBodySchema } from './zod/removeMemberBodySchema'
+export {
+  removeUserFromTeamPathParamsSchema,
+  removeUserFromTeam200Schema,
+  removeUserFromTeamMutationRequestSchema,
+  removeUserFromTeamMutationResponseSchema,
+} from './zod/removeUserFromTeamSchema'
 export { renameTeamCommandSchema } from './zod/renameTeamCommandSchema'
 export { renameTeamPathParamsSchema, renameTeam200Schema, renameTeamMutationRequestSchema, renameTeamMutationResponseSchema } from './zod/renameTeamSchema'
 export { roleDtoSchema } from './zod/roleDtoSchema'

@@ -67,6 +67,7 @@ export type { PutUpdateEnvironmentVariableGroupMutationKey } from './hooks/usePu
 export type { PutUpdateEnvironmentVariableMutationKey } from './hooks/usePutUpdateEnvironmentVariableHook'
 export type { PutUpdateGithubProviderMutationKey } from './hooks/usePutUpdateGithubProviderHook'
 export type { PutUpdateStackServiceVolumeMutationKey } from './hooks/usePutUpdateStackServiceVolumeHook'
+export type { RemoveUserFromTeamMutationKey } from './hooks/useRemoveUserFromTeamHook'
 export type { RenameTeamMutationKey } from './hooks/useRenameTeamHook'
 export type { UpdateProjectMutationKey } from './hooks/useUpdateProjectHook'
 export type { UpdateServerMutationKey } from './hooks/useUpdateServerHook'
@@ -305,6 +306,14 @@ export type {
   PutUpdateStackServiceVolumeMutation,
 } from './types/PutUpdateStackServiceVolume'
 export type { RefreshUserTokenCommand } from './types/RefreshUserTokenCommand'
+export type { RemoveMemberBody } from './types/RemoveMemberBody'
+export type {
+  RemoveUserFromTeamPathParams,
+  RemoveUserFromTeam200,
+  RemoveUserFromTeamMutationRequest,
+  RemoveUserFromTeamMutationResponse,
+  RemoveUserFromTeamMutation,
+} from './types/RemoveUserFromTeam'
 export type { RenameTeamPathParams, RenameTeam200, RenameTeamMutationRequest, RenameTeamMutationResponse, RenameTeamMutation } from './types/RenameTeam'
 export type { RenameTeamCommand } from './types/RenameTeamCommand'
 export type { RoleDto } from './types/RoleDto'
@@ -418,6 +427,7 @@ export { getPutUpdateEnvironmentVariableUrl, putUpdateEnvironmentVariable } from
 export { getPutUpdateEnvironmentVariableGroupUrl, putUpdateEnvironmentVariableGroup } from './axios-backend/putUpdateEnvironmentVariableGroup'
 export { getPutUpdateGithubProviderUrl, putUpdateGithubProvider } from './axios-backend/putUpdateGithubProvider'
 export { getPutUpdateStackServiceVolumeUrl, putUpdateStackServiceVolume } from './axios-backend/putUpdateStackServiceVolume'
+export { getRemoveUserFromTeamUrl, removeUserFromTeam } from './axios-backend/removeUserFromTeam'
 export { getRenameTeamUrl, renameTeam } from './axios-backend/renameTeam'
 export { getUpdateProjectUrl, updateProject } from './axios-backend/updateProject'
 export { getUpdateServerUrl, updateServer } from './axios-backend/updateServer'
@@ -552,6 +562,7 @@ export { putUpdateEnvironmentVariableGroupMutationKey, usePutUpdateEnvironmentVa
 export { putUpdateEnvironmentVariableMutationKey, usePutUpdateEnvironmentVariableHook } from './hooks/usePutUpdateEnvironmentVariableHook'
 export { putUpdateGithubProviderMutationKey, usePutUpdateGithubProviderHook } from './hooks/usePutUpdateGithubProviderHook'
 export { putUpdateStackServiceVolumeMutationKey, usePutUpdateStackServiceVolumeHook } from './hooks/usePutUpdateStackServiceVolumeHook'
+export { removeUserFromTeamMutationKey, useRemoveUserFromTeamHook } from './hooks/useRemoveUserFromTeamHook'
 export { renameTeamMutationKey, useRenameTeamHook } from './hooks/useRenameTeamHook'
 export { updateProjectMutationKey, useUpdateProjectHook } from './hooks/useUpdateProjectHook'
 export { updateServerMutationKey, useUpdateServerHook } from './hooks/useUpdateServerHook'
@@ -767,6 +778,13 @@ export {
   putUpdateStackServiceVolumeMutationResponseSchema,
 } from './zod/putUpdateStackServiceVolumeSchema'
 export { refreshUserTokenCommandSchema } from './zod/refreshUserTokenCommandSchema'
+export { removeMemberBodySchema } from './zod/removeMemberBodySchema'
+export {
+  removeUserFromTeamPathParamsSchema,
+  removeUserFromTeam200Schema,
+  removeUserFromTeamMutationRequestSchema,
+  removeUserFromTeamMutationResponseSchema,
+} from './zod/removeUserFromTeamSchema'
 export { renameTeamCommandSchema } from './zod/renameTeamCommandSchema'
 export { renameTeamPathParamsSchema, renameTeam200Schema, renameTeamMutationRequestSchema, renameTeamMutationResponseSchema } from './zod/renameTeamSchema'
 export { roleDtoSchema } from './zod/roleDtoSchema'
