@@ -15,5 +15,6 @@ public interface ITeamsRepository
     Task<List<Team>> GetTeamsWithProjectsAndEnvironments(Guid userId);
     Task<Team> GetTeam(Guid teamId);
     Task AddUserToTeam(Team team, User user);
+    Task RemoveUserFromTeam(Team team, User user);
     Task<PaginatedList<TeamMemberDto>> GetTeamMembers(Guid teamId, PaginatedRequest pagination);
 }

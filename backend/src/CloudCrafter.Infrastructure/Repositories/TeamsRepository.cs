@@ -96,6 +96,21 @@ public class TeamsRepository(IApplicationDbContext context, IMapper mapper) : IT
         await context.SaveChangesAsync();
     }
 
+    public async Task RemoveUserFromTeam(Team team, User user)
+    {
+        var userTeam = await context
+            .TeamUsers.Where(x => x.UserId == user.Id && x.TeamId == team.Id)
+            .FirstOrDefaultAsync();
+
+        if (userTeam == null)
+        {
+            return;
+        }
+
+        context.TeamUsers.Remove(userTeam);
+        await context.SaveChangesAsync();
+    }
+
     public async Task<PaginatedList<TeamMemberDto>> GetTeamMembers(
         Guid teamId,
         PaginatedRequest pagination

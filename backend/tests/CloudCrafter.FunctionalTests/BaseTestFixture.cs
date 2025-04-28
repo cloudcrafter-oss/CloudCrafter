@@ -48,6 +48,15 @@ public abstract class BaseTestFixture
         }
     }
 
+    public async Task<User> AddToTeam(Team team)
+    {
+        var user = FakerInstances.UserFaker.Generate();
+        await AddAsync(user);
+        await AddAsync(new TeamUser() { TeamId = team.Id, UserId = user.Id });
+
+        return user;
+    }
+
     public async Task AddToTeam(Team team, Guid? userId)
     {
         if (userId == null)

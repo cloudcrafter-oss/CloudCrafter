@@ -19,4 +19,5 @@ public interface ITeamsService
 
     Task InviteUser(Guid requestTeamId, string requestEmail);
     Task<PaginatedList<TeamMemberDto>> GetTeamMembers(Guid teamId, PaginatedRequest pagination);
+    Task RemoveUserFromTeam(Guid teamId, string email);
 }

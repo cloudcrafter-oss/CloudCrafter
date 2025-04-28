@@ -91,6 +91,21 @@ public class TeamsService(
         await repository.AddUserToTeam(team, userFromEmail);
     }
 
+    public async Task RemoveUserFromTeam(Guid teamId, string email)
+    {
+        var team = await repository.GetTeam(teamId);
+        await userAccessService.EnsureHasTeamAccess(user?.Id, teamId, AccessType.Write);
+
+        var userFromEmail = await userRepository.GetUserByEmail(email);
+
+        if (userFromEmail == null)
+        {
+            return;
+        }
+
+        await repository.RemoveUserFromTeam(team, userFromEmail);
+    }
+
     public async Task<PaginatedList<TeamMemberDto>> GetTeamMembers(
         Guid teamId,
         PaginatedRequest pagination

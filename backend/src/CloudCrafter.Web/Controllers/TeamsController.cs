@@ -37,6 +37,20 @@ public class TeamsController : CloudCrafterController
         return Ok();
     }
 
+    [HttpDelete("{teamId:guid}/remove")]
+    public async Task<IActionResult> RemoveUserFromTeam(
+        [FromRoute] Guid teamId,
+        [FromBody] RemoveMemberBody body,
+        ISender sender
+    )
+    {
+        await sender.Send(
+            new RemoveMemberFromTeamCommand() { TeamId = teamId, Email = body.Email }
+        );
+
+        return Ok();
+    }
+
     [HttpGet("projects-and-environments")]
     public async Task<
         List<SimpleTeamWithProjectsAndEnvironmentsDto>
