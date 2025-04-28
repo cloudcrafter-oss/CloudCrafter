@@ -38,8 +38,10 @@ test('should be able to delete project', async ({ page, project }) => {
 	await expect(page.getByText('Project deleted successfully')).toBeVisible()
 })
 
-test('should create a new project', async ({ page }) => {
+test('should create a new project', async ({ page, projectFixture }) => {
 	await page.goto('/admin/projects')
+
+	const team = projectFixture.teams[0]
 
 	const projectListPage = ProjectListPage(page)
 

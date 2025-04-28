@@ -84,17 +84,25 @@ export const CreateProjectSheet = ({ onClose }: { onClose: () => void }) => {
 							<FormItem>
 								<FormLabel>Team</FormLabel>
 								<Select
+									data-testid='select-team'
 									onValueChange={field.onChange}
 									defaultValue={field.value}
 								>
 									<FormControl>
 										<SelectTrigger className='w-full'>
-											<SelectValue placeholder='Select a team' />
+											<SelectValue
+												data-testid='default-value'
+												placeholder='Select a team'
+											/>
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
 										{teams?.map((team) => (
-											<SelectItem key={team.id} value={team.id}>
+											<SelectItem
+												key={team.id}
+												value={team.id}
+												data-testid={`select-item-${team.id}`}
+											>
 												{team.name}
 											</SelectItem>
 										))}
