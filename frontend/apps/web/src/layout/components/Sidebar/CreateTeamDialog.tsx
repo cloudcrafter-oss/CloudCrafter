@@ -20,6 +20,7 @@ import { Input } from '@cloudcrafter/ui/components/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { mutate } from 'swr'
 import type { z } from 'zod'
 
 type FormData = z.infer<typeof createTeamCommandSchema>
@@ -38,6 +39,7 @@ export function CreateTeamDialog({
 			onSuccess: () => {
 				onOpenChange(false)
 				toast.success('Team created successfully')
+				mutate('userTeams')
 			},
 		},
 	})
@@ -83,7 +85,9 @@ export function CreateTeamDialog({
 							>
 								Cancel
 							</Button>
-							<Button type='submit'>Create Team</Button>
+							<Button type='submit' disabled={mutation.isPending}>
+								{mutation.isPending ? 'Creating...' : 'Create Team'}
+							</Button>
 						</div>
 					</form>
 				</Form>
