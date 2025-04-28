@@ -29,6 +29,8 @@ public class IdentityService(
 
         var result = await userManager.CreateAsync(user, password);
 
+        await userManager.AddToRoleAsync(user, Roles.User);
+
         return (result.ToApplicationResult(), user.Id);
     }
 
