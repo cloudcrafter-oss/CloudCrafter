@@ -55,6 +55,12 @@ export class ProjectFixture extends UserFixture {
 		this.projects = []
 	}
 
+	async fixtureCreateTeam(teamName: string): Promise<string> {
+		const team = await createTeam({ name: teamName }, this.getApiClientConfig())
+		this.teams.push(team)
+		return team
+	}
+
 	async fixtureCreateProject(projectName: string): Promise<ProjectDto> {
 		const team = await createTeam(
 			{

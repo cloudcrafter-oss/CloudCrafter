@@ -1,5 +1,7 @@
 import { createProjectAction } from '@/src/app/_actions'
+import { CloudcrafterSelect } from '@/src/components/form/select/cloudcrafter-select'
 import {
+	type SimpleTeamDto,
 	createProjectCommandSchema,
 	useGetMyTeamsHook,
 } from '@cloudcrafter/api'
@@ -13,13 +15,6 @@ import {
 	FormMessage,
 } from '@cloudcrafter/ui/components/form'
 import { Input } from '@cloudcrafter/ui/components/input'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@cloudcrafter/ui/components/select'
 import {
 	SheetDescription,
 	SheetHeader,
@@ -83,31 +78,15 @@ export const CreateProjectSheet = ({ onClose }: { onClose: () => void }) => {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Team</FormLabel>
-								<Select
-									data-testid='select-team'
+								<CloudcrafterSelect<SimpleTeamDto>
+									selectValue='Select a team'
+									testPrefix='select-team'
 									onValueChange={field.onChange}
-									defaultValue={field.value}
-								>
-									<FormControl>
-										<SelectTrigger className='w-full'>
-											<SelectValue
-												data-testid='default-value'
-												placeholder='Select a team'
-											/>
-										</SelectTrigger>
-									</FormControl>
-									<SelectContent>
-										{teams?.map((team) => (
-											<SelectItem
-												key={team.id}
-												value={team.id}
-												data-testid={`select-item-${team.id}`}
-											>
-												{team.name}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
+									getOptionKey={(team) => team.id}
+									getOptionValue={(team) => team.id}
+									getOptionLabel={(team) => team.name}
+									options={teams}
+								/>
 								<FormMessage />
 							</FormItem>
 						)}
