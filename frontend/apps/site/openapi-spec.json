@@ -1984,6 +1984,173 @@
 				}
 			}
 		},
+		"/api/Teams/{teamId}": {
+			"get": {
+				"tags": ["Teams"],
+				"operationId": "GetTeamMembers",
+				"parameters": [
+					{
+						"name": "teamId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					},
+					{
+						"name": "Filters",
+						"in": "query",
+						"schema": {
+							"type": "array",
+							"items": {
+								"$ref": "#/components/schemas/FilterCriterea"
+							}
+						}
+					},
+					{
+						"name": "Page",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					},
+					{
+						"name": "PageSize",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfTeamMemberDto"
+								}
+							},
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfTeamMemberDto"
+								}
+							},
+							"text/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PaginatedListOfTeamMemberDto"
+								}
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["Teams"],
+				"operationId": "RenameTeam",
+				"parameters": [
+					{
+						"name": "teamId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RenameTeamCommand"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RenameTeamCommand"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"$ref": "#/components/schemas/RenameTeamCommand"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Teams"],
+				"operationId": "DeleteTeam",
+				"parameters": [
+					{
+						"name": "teamId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
+		"/api/Teams/{teamId}/invite": {
+			"post": {
+				"tags": ["Teams"],
+				"operationId": "InviteUserToTeam",
+				"parameters": [
+					{
+						"name": "teamId",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"format": "uuid"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "string"
+							}
+						},
+						"text/json": {
+							"schema": {
+								"type": "string"
+							}
+						},
+						"application/*+json": {
+							"schema": {
+								"type": "string"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					}
+				}
+			}
+		},
 		"/api/Teams/projects-and-environments": {
 			"get": {
 				"tags": ["Teams"],
@@ -2058,68 +2225,6 @@
 				}
 			}
 		},
-		"/api/Teams/{teamId}": {
-			"put": {
-				"tags": ["Teams"],
-				"operationId": "RenameTeam",
-				"parameters": [
-					{
-						"name": "teamId",
-						"in": "path",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"format": "uuid"
-						}
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/RenameTeamCommand"
-							}
-						},
-						"text/json": {
-							"schema": {
-								"$ref": "#/components/schemas/RenameTeamCommand"
-							}
-						},
-						"application/*+json": {
-							"schema": {
-								"$ref": "#/components/schemas/RenameTeamCommand"
-							}
-						}
-					},
-					"required": true
-				},
-				"responses": {
-					"200": {
-						"description": "OK"
-					}
-				}
-			},
-			"delete": {
-				"tags": ["Teams"],
-				"operationId": "DeleteTeam",
-				"parameters": [
-					{
-						"name": "teamId",
-						"in": "path",
-						"required": true,
-						"schema": {
-							"type": "string",
-							"format": "uuid"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "OK"
-					}
-				}
-			}
-		},
 		"/api/Users": {
 			"get": {
 				"tags": ["Users"],
@@ -2175,6 +2280,43 @@
 					}
 				}
 			}
+		},
+		"/api/Users/current-user/roles": {
+			"get": {
+				"tags": ["Users"],
+				"operationId": "GetUserRoles",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/RoleDto"
+									}
+								}
+							},
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/RoleDto"
+									}
+								}
+							},
+							"text/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/RoleDto"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	},
 	"components": {
@@ -2197,6 +2339,11 @@
 				"properties": {
 					"code": {
 						"type": "string"
+					},
+					"teamId": {
+						"type": "string",
+						"format": "uuid",
+						"nullable": true
 					}
 				}
 			},
@@ -2219,6 +2366,11 @@
 				"properties": {
 					"name": {
 						"type": "string"
+					},
+					"teamId": {
+						"type": "string",
+						"format": "uuid",
+						"nullable": true
 					}
 				}
 			},
@@ -2612,6 +2764,30 @@
 					}
 				}
 			},
+			"PaginatedListOfTeamMemberDto": {
+				"required": ["page", "totalPages", "totalItems", "result"],
+				"type": "object",
+				"properties": {
+					"page": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"totalPages": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"totalItems": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"result": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/TeamMemberDto"
+						}
+					}
+				}
+			},
 			"PaginatedListOfUserDto": {
 				"required": ["page", "totalPages", "totalItems", "result"],
 				"type": "object",
@@ -2751,6 +2927,15 @@
 				}
 			},
 			"RenameTeamCommand": {
+				"required": ["name"],
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				}
+			},
+			"RoleDto": {
 				"required": ["name"],
 				"type": "object",
 				"properties": {
@@ -3225,6 +3410,24 @@
 			},
 			"StackSourceDtoType": {
 				"enum": ["Git", "GithubApp"]
+			},
+			"TeamMemberDto": {
+				"required": ["id", "email", "fullName"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"format": "uuid"
+					},
+					"email": {
+						"type": "string",
+						"nullable": true
+					},
+					"fullName": {
+						"type": "string",
+						"nullable": true
+					}
+				}
 			},
 			"TokenDto": {
 				"required": [

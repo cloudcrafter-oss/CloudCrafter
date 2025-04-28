@@ -46,8 +46,13 @@ export type { GetStackDetailQueryKey } from './hooks/useGetStackDetailHook'
 export type { GetStackDetailSuspenseQueryKey } from './hooks/useGetStackDetailSuspenseHook'
 export type { GetStackServiceVolumesQueryKey } from './hooks/useGetStackServiceVolumesHook'
 export type { GetStackServiceVolumesSuspenseQueryKey } from './hooks/useGetStackServiceVolumesSuspenseHook'
+export type { GetTeamMembersQueryKey } from './hooks/useGetTeamMembersHook'
+export type { GetTeamMembersSuspenseQueryKey } from './hooks/useGetTeamMembersSuspenseHook'
+export type { GetUserRolesQueryKey } from './hooks/useGetUserRolesHook'
+export type { GetUserRolesSuspenseQueryKey } from './hooks/useGetUserRolesSuspenseHook'
 export type { GetUsersQueryKey } from './hooks/useGetUsersHook'
 export type { GetUsersSuspenseQueryKey } from './hooks/useGetUsersSuspenseHook'
+export type { InviteUserToTeamMutationKey } from './hooks/useInviteUserToTeamHook'
 export type { PostCreateDeploymentMutationKey } from './hooks/usePostCreateDeploymentHook'
 export type { PostCreateEnvironmentVariableGroupMutationKey } from './hooks/usePostCreateEnvironmentVariableGroupHook'
 export type { PostCreateEnvironmentVariableMutationKey } from './hooks/usePostCreateEnvironmentVariableHook'
@@ -171,14 +176,30 @@ export type {
   GetStackServiceVolumesQueryResponse,
   GetStackServiceVolumesQuery,
 } from './types/GetStackServiceVolumes'
+export type {
+  GetTeamMembersPathParams,
+  GetTeamMembersQueryParams,
+  GetTeamMembers200,
+  GetTeamMembersQueryResponse,
+  GetTeamMembersQuery,
+} from './types/GetTeamMembers'
+export type { GetUserRoles200, GetUserRolesQueryResponse, GetUserRolesQuery } from './types/GetUserRoles'
 export type { GetUsersQueryParams, GetUsers200, GetUsersQueryResponse, GetUsersQuery } from './types/GetUsers'
 export type { GitApplicationSourceDto } from './types/GitApplicationSourceDto'
 export type { GithubApplicationSourceDto } from './types/GithubApplicationSourceDto'
 export type { GitProviderBranchDto } from './types/GitProviderBranchDto'
 export type { GitProviderRepositoryDto } from './types/GitProviderRepositoryDto'
 export type { GitRepositoryCheckResultDto } from './types/GitRepositoryCheckResultDto'
+export type {
+  InviteUserToTeamPathParams,
+  InviteUserToTeam200,
+  InviteUserToTeamMutationRequest,
+  InviteUserToTeamMutationResponse,
+  InviteUserToTeamMutation,
+} from './types/InviteUserToTeam'
 export type { LoginUserCommand } from './types/LoginUserCommand'
 export type { PaginatedListOfSimpleDeploymentDto } from './types/PaginatedListOfSimpleDeploymentDto'
+export type { PaginatedListOfTeamMemberDto } from './types/PaginatedListOfTeamMemberDto'
 export type { PaginatedListOfUserDto } from './types/PaginatedListOfUserDto'
 export type {
   PostCreateDeploymentPathParams,
@@ -285,6 +306,7 @@ export type {
 export type { RefreshUserTokenCommand } from './types/RefreshUserTokenCommand'
 export type { RenameTeamPathParams, RenameTeam200, RenameTeamMutationRequest, RenameTeamMutationResponse, RenameTeamMutation } from './types/RenameTeam'
 export type { RenameTeamCommand } from './types/RenameTeamCommand'
+export type { RoleDto } from './types/RoleDto'
 export type { ServerDetailDto } from './types/ServerDetailDto'
 export type { ServerDto } from './types/ServerDto'
 export type { ServerPingDto } from './types/ServerPingDto'
@@ -306,6 +328,7 @@ export type { StackServiceVolumeDto } from './types/StackServiceVolumeDto'
 export type { StackServiceVolumeTypeDtoEnum, StackServiceVolumeTypeDto } from './types/StackServiceVolumeTypeDto'
 export type { StackSourceDto } from './types/StackSourceDto'
 export type { StackSourceDtoTypeEnum, StackSourceDtoType } from './types/StackSourceDtoType'
+export type { TeamMemberDto } from './types/TeamMemberDto'
 export type { TokenDto } from './types/TokenDto'
 export type { UpdateGithubInstallationRequest } from './types/UpdateGithubInstallationRequest'
 export type {
@@ -376,7 +399,10 @@ export { getGetServerByIdUrl, getServerById } from './axios-backend/getServerByI
 export { getGetServersUrl, getServers } from './axios-backend/getServers'
 export { getGetStackDetailUrl, getStackDetail } from './axios-backend/getStackDetail'
 export { getGetStackServiceVolumesUrl, getStackServiceVolumes } from './axios-backend/getStackServiceVolumes'
+export { getGetTeamMembersUrl, getTeamMembers } from './axios-backend/getTeamMembers'
+export { getGetUserRolesUrl, getUserRoles } from './axios-backend/getUserRoles'
 export { getGetUsersUrl, getUsers } from './axios-backend/getUsers'
+export { getInviteUserToTeamUrl, inviteUserToTeam } from './axios-backend/inviteUserToTeam'
 export { getPostCreateDeploymentUrl, postCreateDeployment } from './axios-backend/postCreateDeployment'
 export { getPostCreateEnvironmentVariableUrl, postCreateEnvironmentVariable } from './axios-backend/postCreateEnvironmentVariable'
 export { getPostCreateEnvironmentVariableGroupUrl, postCreateEnvironmentVariableGroup } from './axios-backend/postCreateEnvironmentVariableGroup'
@@ -504,8 +530,13 @@ export {
   getStackServiceVolumesSuspenseQueryOptionsHook,
   useGetStackServiceVolumesSuspenseHook,
 } from './hooks/useGetStackServiceVolumesSuspenseHook'
+export { getTeamMembersQueryKey, getTeamMembersQueryOptionsHook, useGetTeamMembersHook } from './hooks/useGetTeamMembersHook'
+export { getTeamMembersSuspenseQueryKey, getTeamMembersSuspenseQueryOptionsHook, useGetTeamMembersSuspenseHook } from './hooks/useGetTeamMembersSuspenseHook'
+export { getUserRolesQueryKey, getUserRolesQueryOptionsHook, useGetUserRolesHook } from './hooks/useGetUserRolesHook'
+export { getUserRolesSuspenseQueryKey, getUserRolesSuspenseQueryOptionsHook, useGetUserRolesSuspenseHook } from './hooks/useGetUserRolesSuspenseHook'
 export { getUsersQueryKey, getUsersQueryOptionsHook, useGetUsersHook } from './hooks/useGetUsersHook'
 export { getUsersSuspenseQueryKey, getUsersSuspenseQueryOptionsHook, useGetUsersSuspenseHook } from './hooks/useGetUsersSuspenseHook'
+export { inviteUserToTeamMutationKey, useInviteUserToTeamHook } from './hooks/useInviteUserToTeamHook'
 export { postCreateDeploymentMutationKey, usePostCreateDeploymentHook } from './hooks/usePostCreateDeploymentHook'
 export { postCreateEnvironmentVariableGroupMutationKey, usePostCreateEnvironmentVariableGroupHook } from './hooks/usePostCreateEnvironmentVariableGroupHook'
 export { postCreateEnvironmentVariableMutationKey, usePostCreateEnvironmentVariableHook } from './hooks/usePostCreateEnvironmentVariableHook'
@@ -630,14 +661,28 @@ export {
   getStackServiceVolumes200Schema,
   getStackServiceVolumesQueryResponseSchema,
 } from './zod/getStackServiceVolumesSchema'
+export {
+  getTeamMembersPathParamsSchema,
+  getTeamMembersQueryParamsSchema,
+  getTeamMembers200Schema,
+  getTeamMembersQueryResponseSchema,
+} from './zod/getTeamMembersSchema'
+export { getUserRoles200Schema, getUserRolesQueryResponseSchema } from './zod/getUserRolesSchema'
 export { getUsersQueryParamsSchema, getUsers200Schema, getUsersQueryResponseSchema } from './zod/getUsersSchema'
 export { gitApplicationSourceDtoSchema } from './zod/gitApplicationSourceDtoSchema'
 export { githubApplicationSourceDtoSchema } from './zod/githubApplicationSourceDtoSchema'
 export { gitProviderBranchDtoSchema } from './zod/gitProviderBranchDtoSchema'
 export { gitProviderRepositoryDtoSchema } from './zod/gitProviderRepositoryDtoSchema'
 export { gitRepositoryCheckResultDtoSchema } from './zod/gitRepositoryCheckResultDtoSchema'
+export {
+  inviteUserToTeamPathParamsSchema,
+  inviteUserToTeam200Schema,
+  inviteUserToTeamMutationRequestSchema,
+  inviteUserToTeamMutationResponseSchema,
+} from './zod/inviteUserToTeamSchema'
 export { loginUserCommandSchema } from './zod/loginUserCommandSchema'
 export { paginatedListOfSimpleDeploymentDtoSchema } from './zod/paginatedListOfSimpleDeploymentDtoSchema'
+export { paginatedListOfTeamMemberDtoSchema } from './zod/paginatedListOfTeamMemberDtoSchema'
 export { paginatedListOfUserDtoSchema } from './zod/paginatedListOfUserDtoSchema'
 export {
   postCreateDeploymentPathParamsSchema,
@@ -722,6 +767,7 @@ export {
 export { refreshUserTokenCommandSchema } from './zod/refreshUserTokenCommandSchema'
 export { renameTeamCommandSchema } from './zod/renameTeamCommandSchema'
 export { renameTeamPathParamsSchema, renameTeam200Schema, renameTeamMutationRequestSchema, renameTeamMutationResponseSchema } from './zod/renameTeamSchema'
+export { roleDtoSchema } from './zod/roleDtoSchema'
 export { serverDetailDtoSchema } from './zod/serverDetailDtoSchema'
 export { serverDtoSchema } from './zod/serverDtoSchema'
 export { serverPingDtoSchema } from './zod/serverPingDtoSchema'
@@ -743,6 +789,7 @@ export { stackServiceVolumeDtoSchema } from './zod/stackServiceVolumeDtoSchema'
 export { stackServiceVolumeTypeDtoSchema } from './zod/stackServiceVolumeTypeDtoSchema'
 export { stackSourceDtoSchema } from './zod/stackSourceDtoSchema'
 export { stackSourceDtoTypeSchema } from './zod/stackSourceDtoTypeSchema'
+export { teamMemberDtoSchema } from './zod/teamMemberDtoSchema'
 export { tokenDtoSchema } from './zod/tokenDtoSchema'
 export { updateGithubInstallationRequestSchema } from './zod/updateGithubInstallationRequestSchema'
 export { updateProjectArgsSchema } from './zod/updateProjectArgsSchema'

@@ -102,14 +102,24 @@ export type {
   GetStackServiceVolumesQueryResponse,
   GetStackServiceVolumesQuery,
 } from './GetStackServiceVolumes'
+export type { GetTeamMembersPathParams, GetTeamMembersQueryParams, GetTeamMembers200, GetTeamMembersQueryResponse, GetTeamMembersQuery } from './GetTeamMembers'
+export type { GetUserRoles200, GetUserRolesQueryResponse, GetUserRolesQuery } from './GetUserRoles'
 export type { GetUsersQueryParams, GetUsers200, GetUsersQueryResponse, GetUsersQuery } from './GetUsers'
 export type { GitApplicationSourceDto } from './GitApplicationSourceDto'
 export type { GithubApplicationSourceDto } from './GithubApplicationSourceDto'
 export type { GitProviderBranchDto } from './GitProviderBranchDto'
 export type { GitProviderRepositoryDto } from './GitProviderRepositoryDto'
 export type { GitRepositoryCheckResultDto } from './GitRepositoryCheckResultDto'
+export type {
+  InviteUserToTeamPathParams,
+  InviteUserToTeam200,
+  InviteUserToTeamMutationRequest,
+  InviteUserToTeamMutationResponse,
+  InviteUserToTeamMutation,
+} from './InviteUserToTeam'
 export type { LoginUserCommand } from './LoginUserCommand'
 export type { PaginatedListOfSimpleDeploymentDto } from './PaginatedListOfSimpleDeploymentDto'
+export type { PaginatedListOfTeamMemberDto } from './PaginatedListOfTeamMemberDto'
 export type { PaginatedListOfUserDto } from './PaginatedListOfUserDto'
 export type {
   PostCreateDeploymentPathParams,
@@ -206,6 +216,7 @@ export type {
 export type { RefreshUserTokenCommand } from './RefreshUserTokenCommand'
 export type { RenameTeamPathParams, RenameTeam200, RenameTeamMutationRequest, RenameTeamMutationResponse, RenameTeamMutation } from './RenameTeam'
 export type { RenameTeamCommand } from './RenameTeamCommand'
+export type { RoleDto } from './RoleDto'
 export type { ServerDetailDto } from './ServerDetailDto'
 export type { ServerDto } from './ServerDto'
 export type { ServerPingDto } from './ServerPingDto'
@@ -227,6 +238,7 @@ export type { StackServiceVolumeDto } from './StackServiceVolumeDto'
 export type { StackServiceVolumeTypeDtoEnum, StackServiceVolumeTypeDto } from './StackServiceVolumeTypeDto'
 export type { StackSourceDto } from './StackSourceDto'
 export type { StackSourceDtoTypeEnum, StackSourceDtoType } from './StackSourceDtoType'
+export type { TeamMemberDto } from './TeamMemberDto'
 export type { TokenDto } from './TokenDto'
 export type { UpdateGithubInstallationRequest } from './UpdateGithubInstallationRequest'
 export type {
