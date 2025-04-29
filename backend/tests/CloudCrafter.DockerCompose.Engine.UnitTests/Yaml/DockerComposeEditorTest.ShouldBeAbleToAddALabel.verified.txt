@@ -7,8 +7,9 @@ services:
     volumes:
     - ./php-app:/var/www/html
     labels:
-    - "my.example.label=example"
-    - treafik.enable=true
+      my.example.label: "example"
+      some.value: "true"
+      treafik.enable: "true"
     networks:
     - lampnet
   db:

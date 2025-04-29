@@ -34,14 +34,27 @@ public class DockerComposeEditor
         }
 
         rootNode = (YamlMappingNode)yaml.Documents[0].RootNode;
-        servicesNode = (YamlMappingNode)rootNode["services"];
 
-        if (rootNode.Children.ContainsKey("networks"))
+        // Ensure services node exists
+        if (!rootNode.Children.ContainsKey(new YamlScalarNode("services")))
+        {
+            // Or handle the case where 'services' might be missing, e.g., throw exception or create it
+            servicesNode = new YamlMappingNode();
+            rootNode.Add("services", servicesNode);
+        }
+        else
+        {
+            servicesNode = (YamlMappingNode)rootNode["services"];
+            // Normalize labels for all existing services upon loading
+            NormalizeLabelsForAllServices();
+        }
+
+        if (rootNode.Children.ContainsKey(new YamlScalarNode("networks")))
         {
             networksNode = (YamlMappingNode)rootNode["networks"];
         }
 
-        if (rootNode.Children.ContainsKey("volumes"))
+        if (rootNode.Children.ContainsKey(new YamlScalarNode("volumes")))
         {
             volumesNode = (YamlMappingNode)rootNode["volumes"];
         }
@@ -190,13 +203,6 @@ public class DockerComposeEditor
 
         using (var writer = new StringWriter())
         {
-            var serializer = new YamlDotNet.Serialization.SerializerBuilder()
-                .WithQuotingNecessaryStrings()
-                .WithDefaultScalarStyle(ScalarStyle.Plain)
-                .Build();
-
-            var test = serializer.Serialize(yaml);
-
             yaml.Save(writer, false);
             var yamlString = writer.ToString();
 
@@ -329,30 +335,71 @@ public class DockerComposeEditor
         public ServiceEditor AddLabel(string key, string value)
         {
             var serviceNode = editor.GetServiceNode(serviceName);
+            YamlMappingNode labelsMappingNode;
+
             if (!serviceNode!.Children.ContainsKey("labels"))
             {
-                serviceNode.Add("labels", new YamlSequenceNode());
+                // If 'labels' doesn't exist, create a new mapping node
+                labelsMappingNode = new YamlMappingNode();
+                serviceNode.Add("labels", labelsMappingNode);
             }
-
-            var labelsNode = serviceNode["labels"];
-
-            // If it's a mapping, convert it to sequence
-            if (labelsNode is YamlMappingNode mappingNode)
+            else
             {
-                var newSequenceNode = new YamlSequenceNode();
-                foreach (var child in mappingNode.Children)
+                var labelsNode = serviceNode["labels"];
+
+                // If it's a sequence, convert it to a mapping
+                if (labelsNode is YamlSequenceNode sequenceNode)
                 {
-                    newSequenceNode.Add(new YamlScalarNode($"{child.Key}={child.Value}"));
+                    labelsMappingNode = new YamlMappingNode();
+                    foreach (var item in sequenceNode)
+                    {
+                        if (item is YamlScalarNode scalarItem)
+                        {
+                            var label = scalarItem.Value;
+                            var parts = label?.Split('=', 2);
+                            if (parts?.Length == 2)
+                            {
+                                // Add existing items from sequence to the new map, ensuring quotes
+                                labelsMappingNode.Add(
+                                    new YamlScalarNode(parts[0]),
+                                    new YamlScalarNode(parts[1])
+                                    {
+                                        Style = ScalarStyle.DoubleQuoted,
+                                    }
+                                );
+                            }
+                            else if (!string.IsNullOrEmpty(label))
+                            {
+                                // Handle cases like just "label" without a value if needed, maybe add as key with empty string?
+                                // For now, just adding with empty value and quotes. Adjust if needed.
+                                labelsMappingNode.Add(
+                                    new YamlScalarNode(label),
+                                    new YamlScalarNode("") { Style = ScalarStyle.DoubleQuoted }
+                                );
+                            }
+                        }
+                    }
+                    // Replace the sequence node with the new mapping node
+                    serviceNode.Children[new YamlScalarNode("labels")] = labelsMappingNode;
                 }
-                serviceNode.Children[new YamlScalarNode("labels")] = newSequenceNode;
-                labelsNode = newSequenceNode;
+                // If it's already a mapping, just use it
+                else if (labelsNode is YamlMappingNode mappingNode)
+                {
+                    labelsMappingNode = mappingNode;
+                }
+                // If it's something unexpected, create a new mapping node (overwriting)
+                else
+                {
+                    labelsMappingNode = new YamlMappingNode();
+                    serviceNode.Children[new YamlScalarNode("labels")] = labelsMappingNode;
+                }
             }
 
-            // Add the new label in sequence format
-            if (labelsNode is YamlSequenceNode sequenceNode)
-            {
-                sequenceNode.Add(new YamlScalarNode($"{key}={value}"));
-            }
+            // Add the new label to the mapping node, ensuring the value is double-quoted
+            labelsMappingNode.Add(
+                new YamlScalarNode(key), // Key usually doesn't need quotes unless it has special chars
+                new YamlScalarNode(value) { Style = ScalarStyle.DoubleQuoted } // Force double quotes for value
+            );
 
             return this;
         }
@@ -592,5 +639,80 @@ public class DockerComposeEditor
             volumeNode.Add("name", name);
             return this;
         }
+    }
+
+    private void NormalizeLabelsForAllServices()
+    {
+        foreach (var serviceEntry in servicesNode.Children)
+        {
+            if (serviceEntry.Value is YamlMappingNode serviceNode)
+            {
+                NormalizeLabelsForService(serviceNode);
+            }
+        }
+    }
+
+    private void NormalizeLabelsForService(YamlMappingNode serviceNode)
+    {
+        var labelsKey = new YamlScalarNode("labels");
+        if (!serviceNode.Children.ContainsKey(labelsKey))
+        {
+            return; // No labels to normalize
+        }
+
+        var labelsNode = serviceNode.Children[labelsKey];
+        var newLabelsMappingNode = new YamlMappingNode();
+
+        // Case 1: Labels are a sequence (e.g., - "key=value")
+        if (labelsNode is YamlSequenceNode sequenceNode)
+        {
+            foreach (var item in sequenceNode)
+            {
+                if (item is YamlScalarNode scalarItem && scalarItem.Value != null)
+                {
+                    var parts = scalarItem.Value.Split('=', 2);
+                    if (parts.Length == 2)
+                    {
+                        newLabelsMappingNode.Add(
+                            new YamlScalarNode(parts[0]),
+                            new YamlScalarNode(parts[1]) { Style = ScalarStyle.DoubleQuoted }
+                        );
+                    }
+                    else if (parts.Length == 1 && !string.IsNullOrEmpty(parts[0]))
+                    {
+                        // Handle label with no value, add as key: ""
+                        newLabelsMappingNode.Add(
+                            new YamlScalarNode(parts[0]),
+                            new YamlScalarNode("") { Style = ScalarStyle.DoubleQuoted }
+                        );
+                    }
+                }
+            }
+            // Replace sequence with the new mapping
+            serviceNode.Children[labelsKey] = newLabelsMappingNode;
+        }
+        // Case 2: Labels are already a mapping
+        else if (labelsNode is YamlMappingNode mappingNode)
+        {
+            foreach (var entry in mappingNode.Children)
+            {
+                if (entry.Key is YamlScalarNode keyNode && entry.Value is YamlScalarNode valueNode)
+                {
+                    // Ensure existing values have double quotes
+                    newLabelsMappingNode.Add(
+                        keyNode, // Keep original key node
+                        new YamlScalarNode(valueNode.Value ?? "")
+                        {
+                            Style = ScalarStyle.DoubleQuoted,
+                        } // Ensure value is quoted
+                    );
+                }
+                // Potentially handle non-scalar keys/values if necessary, though unlikely for labels
+            }
+            // Replace original mapping with the new one (ensuring quoted values)
+            serviceNode.Children[labelsKey] = newLabelsMappingNode;
+        }
+        // Else: Unexpected format, maybe log a warning or ignore.
+        // Currently, it will leave the labels node as is if it's not sequence or mapping.
     }
 }
