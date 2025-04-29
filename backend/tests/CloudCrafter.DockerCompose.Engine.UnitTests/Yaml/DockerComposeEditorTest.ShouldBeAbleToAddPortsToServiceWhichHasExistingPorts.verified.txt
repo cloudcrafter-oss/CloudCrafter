@@ -7,6 +7,8 @@ services:
     - 443:443
     volumes:
     - ./php-app:/var/www/html
+    labels:
+    - "my.example.label=example"
     networks:
     - lampnet
   db:

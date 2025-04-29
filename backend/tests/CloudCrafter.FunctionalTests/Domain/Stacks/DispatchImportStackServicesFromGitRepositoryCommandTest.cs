@@ -62,7 +62,7 @@ public class DispatchImportStackServicesFromGitRepositoryCommandTest : BaseStack
 
         var stackFromDb = FetchEntity<Stack>(
             s => s.Id == stack.Id,
-            inc => inc.Include(s => s.DockerComposeData)
+            inc => inc.Include(s => s.DockerComposeData).Include(s => s.Services)
         );
 
         stackFromDb.Should().NotBeNull();

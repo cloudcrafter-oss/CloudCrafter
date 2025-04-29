@@ -15,6 +15,15 @@ public class StackService : BaseAuditableEntity
 
     public required string Name { get; set; }
     public required string? Description { get; init; }
+    public StackServiceDockerComposeData DockerComposeData { get; set; } = new();
 
     public required EntityStackServiceHealthStatus HealthStatus { get; init; }
+}
+
+public class StackServiceDockerComposeData
+{
+    /// <summary>
+    ///     Used to identify services in docker-compose files, to re-use the StackService
+    /// </summary>
+    public string? ServiceName { get; set; }
 }

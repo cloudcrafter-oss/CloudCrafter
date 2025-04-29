@@ -1,5 +1,6 @@
 using CloudCrafter.Core.Common.Responses;
 using CloudCrafter.Core.Interfaces.Domain.Stacks.Filters;
+using CloudCrafter.Domain.Domain.Application.Services;
 using CloudCrafter.Domain.Domain.Deployment;
 using CloudCrafter.Domain.Domain.Stack;
 using CloudCrafter.Domain.Domain.Stack.Filter;
@@ -12,7 +13,12 @@ public interface IStackRepository
 {
     Task<Stack> CreateStack(CreateStackArgsDto args);
     Task<Stack?> GetStack(Guid id);
-    Task AddAppServiceToStack(Guid stackId, string name);
+    Task<StackService> AddServiceToStack(
+        Guid stackId,
+        string name,
+        StackServiceTypes type,
+        bool shouldPersist
+    );
 
     Task<Guid> CreateDeployment(Guid stackId);
     Task<StackService?> GetService(Guid stackServiceId);
@@ -66,4 +72,5 @@ public interface IStackRepository
     Task<bool> StackServiceExists(Guid stackId, Guid stackServiceId);
     Task<List<StackServiceVolume>> GetServiceVolumes(Guid stackId, Guid stackServiceId);
     void DeleteStackServiceVolume(StackServiceVolume volume);
+    void AddService(StackService service);
 }

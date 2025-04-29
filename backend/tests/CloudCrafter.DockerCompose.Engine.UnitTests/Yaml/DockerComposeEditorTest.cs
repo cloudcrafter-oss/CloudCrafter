@@ -30,6 +30,9 @@ services:
       - ""80:80""
     volumes:
       - ./php-app:/var/www/html
+    labels:
+      - ""my.example.label=example""
+      - some.value=true
     networks:
       - lampnet
   db:
@@ -91,7 +94,11 @@ networks:
     [Test]
     public async Task ShouldBeAbleToAddALabel()
     {
-        var service = _editor.Service("web")!.AddLabel("treafik.enable", "true");
+        var service = _editor.Service("web");
+
+        service.GetLabelValue("my.example.label").Should().Be("example");
+
+        service.AddLabel("treafik.enable", "true");
 
         var yaml = _editor.GetYaml();
 

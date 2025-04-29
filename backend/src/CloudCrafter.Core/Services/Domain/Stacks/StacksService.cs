@@ -26,7 +26,8 @@ public class StacksService(
     IMapper mapper,
     IUserAccessService userAccessService,
     IUser user,
-    IGitService gitService
+    IGitService gitService,
+    IStackServiceProvisioner stackServiceProvisioner
 ) : IStacksService
 {
     public async Task<StackCreatedDto> CreateStack(CreateStackArgsDto args)
@@ -277,8 +278,6 @@ public class StacksService(
             throw new InvalidOperationException("No docker-compose content found");
         }
 
-        // Update the stack with the docker-compose content
-        stack.DockerComposeData.DockerComposeFile = dockerComposeContent;
-        await repository.SaveChangesAsync();
+        await stackServiceProvisioner.ProvisionStackFromYaml(stack.Id, dockerComposeContent);
     }
 }

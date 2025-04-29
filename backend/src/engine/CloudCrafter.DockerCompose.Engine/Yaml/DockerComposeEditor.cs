@@ -4,6 +4,7 @@ using CloudCrafter.DockerCompose.Engine.Exceptions;
 using CloudCrafter.DockerCompose.Engine.Models;
 using CloudCrafter.DockerCompose.Engine.Validator;
 using Slugify;
+using YamlDotNet.Core;
 using YamlDotNet.RepresentationModel;
 
 namespace CloudCrafter.DockerCompose.Engine.Yaml;
@@ -189,6 +190,13 @@ public class DockerComposeEditor
 
         using (var writer = new StringWriter())
         {
+            var serializer = new YamlDotNet.Serialization.SerializerBuilder()
+                .WithQuotingNecessaryStrings()
+                .WithDefaultScalarStyle(ScalarStyle.Plain)
+                .Build();
+
+            var test = serializer.Serialize(yaml);
+
             yaml.Save(writer, false);
             var yamlString = writer.ToString();
 
@@ -323,12 +331,69 @@ public class DockerComposeEditor
             var serviceNode = editor.GetServiceNode(serviceName);
             if (!serviceNode!.Children.ContainsKey("labels"))
             {
-                serviceNode.Add("labels", new YamlMappingNode());
+                serviceNode.Add("labels", new YamlSequenceNode());
             }
 
-            var labelsNode = (YamlMappingNode)serviceNode["labels"];
-            labelsNode.Add(key, new YamlScalarNode(value));
+            var labelsNode = serviceNode["labels"];
+
+            // If it's a mapping, convert it to sequence
+            if (labelsNode is YamlMappingNode mappingNode)
+            {
+                var newSequenceNode = new YamlSequenceNode();
+                foreach (var child in mappingNode.Children)
+                {
+                    newSequenceNode.Add(new YamlScalarNode($"{child.Key}={child.Value}"));
+                }
+                serviceNode.Children[new YamlScalarNode("labels")] = newSequenceNode;
+                labelsNode = newSequenceNode;
+            }
+
+            // Add the new label in sequence format
+            if (labelsNode is YamlSequenceNode sequenceNode)
+            {
+                sequenceNode.Add(new YamlScalarNode($"{key}={value}"));
+            }
+
             return this;
+        }
+
+        public string? GetLabelValue(string key)
+        {
+            var serviceNode = editor.GetServiceNode(serviceName);
+
+            if (!serviceNode.Children.ContainsKey("labels"))
+            {
+                return null;
+            }
+
+            var labelsNode = serviceNode["labels"];
+
+            // Handle mapping format (key: value)
+            if (labelsNode is YamlMappingNode mappingNode)
+            {
+                if (!mappingNode.Children.ContainsKey(key))
+                {
+                    return null;
+                }
+
+                return ((YamlScalarNode)mappingNode[key]).Value;
+            }
+
+            // Handle sequence format (array of "key=value")
+            if (labelsNode is YamlSequenceNode sequenceNode)
+            {
+                foreach (var item in sequenceNode)
+                {
+                    var label = ((YamlScalarNode)item).Value;
+                    var parts = label?.Split('=', 2);
+                    if (parts?.Length == 2 && parts[0] == key)
+                    {
+                        return parts[1];
+                    }
+                }
+            }
+
+            return null;
         }
 
         public ServiceEditor AddLabels(DockerComposeLabelService labelService)
