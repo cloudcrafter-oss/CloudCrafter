@@ -15,6 +15,8 @@ public class CreateStackCommandTest : BaseTestFixture
         {
             Name = "Dummy Stack",
             GitRepository = "https://github.com/cloudcrafter-oss/demo-examples",
+            GitBranch = "main",
+            PathInGitRepository = "",
             ServerId = Guid.NewGuid(),
             EnvironmentId = Guid.NewGuid(),
         };

@@ -19,6 +19,11 @@ public class CreateStackCommand
     [MinLength(1)]
     public required string GitRepository { get; init; }
 
+    [MinLength(1)]
+    public required string GitBranch { get; init; }
+
+    public required string PathInGitRepository { get; init; }
+
     public required Guid EnvironmentId { get; set; }
 
     public required Guid ServerId { get; set; }
