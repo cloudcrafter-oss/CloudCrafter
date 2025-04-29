@@ -248,4 +248,9 @@ public class StacksService(
 
         await repository.SaveChangesAsync();
     }
+
+    public Task FetchAndLoadServices(Guid stackId)
+    {
+        throw new NotImplementedException();
+    }
 }
