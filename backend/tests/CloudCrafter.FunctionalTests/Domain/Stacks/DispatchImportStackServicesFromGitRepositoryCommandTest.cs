@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Core.Exceptions;
+using CloudCrafter.Domain.Domain.Application.Services;
 using CloudCrafter.Domain.Entities;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -41,11 +42,28 @@ public class DispatchImportStackServicesFromGitRepositoryCommandTest : BaseStack
             await AddToTeam(team, userId);
         }
 
-        var stack = await CreateStack(team.Id, DemoPostgresPath, DemoBranch, DemoPostgresPath);
+        var stack = await CreateStack(team.Id, DemoRepo, DemoBranch, DemoPostgresPath);
 
         Assert.ThrowsAsync<NotEnoughPermissionInTeamException>(
             async () => await SendAsync(Command with { StackId = stack.Id })
         );
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task ShouldNotBeAbleToDispatchBecauseStackIsNotDockerComposeStack(bool isAdmin)
+    {
+        var userId = await RunAsUserRoleAsync(isAdmin);
+
+        var team = await CreateTeam(!isAdmin ? userId : null);
+
+        var stack = await CreateStack(team.Id, DemoRepo, DemoBranch, DemoPostgresPath);
+        (await CountAsync<StackService>()).Should().Be(0);
+        Assert.ThrowsAsync<InvalidOperationException>(
+            async () => await SendAsync(Command with { StackId = stack.Id })
+        );
+
+        (await CountAsync<StackService>()).Should().Be(0);
     }
 
     [TestCase(true)]
@@ -56,20 +74,37 @@ public class DispatchImportStackServicesFromGitRepositoryCommandTest : BaseStack
 
         var team = await CreateTeam(!isAdmin ? userId : null);
 
-        var stack = await CreateStack(team.Id, DemoRepo, DemoBranch, DemoPostgresPath);
+        var stack = await CreateStack(
+            team.Id,
+            DemoRepo,
+            DemoBranch,
+            DemoPostgresPath,
+            StackBuildPack.DockerCompose
+        );
 
+        (await CountAsync<StackService>()).Should().Be(0);
         await SendAsync(Command with { StackId = stack.Id });
+        (await CountAsync<StackService>()).Should().Be(1);
 
         var stackFromDb = FetchEntity<Stack>(
             s => s.Id == stack.Id,
-            inc => inc.Include(s => s.DockerComposeData).Include(s => s.Services)
+            inc =>
+                inc.Include(s => s.DockerComposeData)
+                    .Include(s => s.Services)
+                    .ThenInclude(x => x.Volumes)
         );
 
         stackFromDb.Should().NotBeNull();
         stackFromDb!.DockerComposeData.Should().NotBeNull();
+        stackFromDb.BuildPack.Should().Be(StackBuildPack.DockerCompose);
         stackFromDb.DockerComposeData.DockerComposeFile.Should().NotBeNull();
         stackFromDb
             .DockerComposeData.DockerComposeFile.Should()
             .ContainAll("image: postgres:16-alpine", "cloudcrafter.service.type=database");
+
+        stackFromDb.Services.Should().HaveCount(1);
+
+        var service = stackFromDb.Services[0];
+        service.StackServiceTypeId.Should().Be(StackServiceTypeConstants.DatabasePostgres);
     }
 }

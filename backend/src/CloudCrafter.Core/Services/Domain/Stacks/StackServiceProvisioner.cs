@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.Core.Interfaces.Domain.Stacks;
 using CloudCrafter.Core.Interfaces.Repositories;
+using CloudCrafter.Core.Utils;
 using CloudCrafter.DockerCompose.Engine.Yaml;
 using CloudCrafter.Domain.Domain.Application.Services;
 using CloudCrafter.Domain.Entities;
@@ -54,6 +55,13 @@ public class StackServiceProvisioner(IStackRepository stackRepository) : IStackS
                 false
             );
             stackRepository.AddService(service);
+        }
+
+        var labelIdentifier = new LabelIdentifier(serviceEditor);
+
+        if (labelIdentifier.IsDatabase() && labelIdentifier.IsDatabasePostgres())
+        {
+            service.StackServiceTypeId = StackServiceTypeConstants.DatabasePostgres;
         }
 
         service.DockerComposeData.ServiceName = name;

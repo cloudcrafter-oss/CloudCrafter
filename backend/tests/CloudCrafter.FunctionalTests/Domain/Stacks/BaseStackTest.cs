@@ -11,7 +11,13 @@ public abstract class BaseStackTest : BaseTestFixture
     public const string DemoBranch = "main";
     public const string DemoPostgresPath = "docker-compose-examples/postgresql-server";
 
-    public async Task<Stack> CreateStack(Guid teamId, string repository, string branch, string path)
+    public async Task<Stack> CreateStack(
+        Guid teamId,
+        string repository,
+        string branch,
+        string path,
+        StackBuildPack pack = StackBuildPack.Nixpacks
+    )
     {
         var project = FakerInstances.ProjectFaker(teamId).Generate();
         await AddAsync(project);
@@ -24,6 +30,7 @@ public abstract class BaseStackTest : BaseTestFixture
                 environment.Id,
                 new FakerInstances.PublicGitSettings(repository, branch, path)
             )
+            .RuleFor(x => x.BuildPack, pack)
             .Generate();
         await AddAsync(stack);
 

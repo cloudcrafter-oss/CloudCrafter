@@ -1,5 +1,6 @@
 ﻿using CloudCrafter.Core.Commands.Stacks;
 using CloudCrafter.Core.Exceptions;
+using CloudCrafter.Domain.Domain.Application.Services;
 using CloudCrafter.Domain.Entities;
 using CloudCrafter.Infrastructure.Data.Fakeds;
 using FluentAssertions;
@@ -92,6 +93,10 @@ public class CreateStackCommandTest : BaseTestFixture
         result.Id.Should().NotBe(Guid.Empty);
 
         (await CountAsync<StackService>()).Should().Be(1);
+
+        var stack = FetchEntity<StackService>(x => x.StackId == result.Id);
+        stack.Should().NotBeNull();
+        stack!.StackServiceTypeId.Should().Be(StackServiceTypeConstants.App);
         (await CountAsync<StackEnvironmentVariableGroup>()).Should().Be(2);
 
         // Check if the environment variable groups are created

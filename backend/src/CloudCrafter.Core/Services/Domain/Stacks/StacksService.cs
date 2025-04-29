@@ -266,6 +266,11 @@ public class StacksService(
             AccessType.Write
         );
 
+        if (stack.BuildPack != StackBuildPack.DockerCompose)
+        {
+            throw new InvalidOperationException("Stack is not a Docker Compose stack");
+        }
+
         var (dockerComposeContent, error) = await gitService.FetchDockerComposeContent(stack);
 
         if (error != null)
