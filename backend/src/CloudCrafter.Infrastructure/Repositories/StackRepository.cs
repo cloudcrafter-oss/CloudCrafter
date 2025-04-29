@@ -217,10 +217,13 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
         return await stacks.ToListAsync();
     }
 
-    public async Task AddEnvironmentVariable(StackEnvironmentVariable variable)
+    public async Task AddEnvironmentVariable(StackEnvironmentVariable variable, bool persist = true)
     {
         context.StackEnvironmentVariables.Add(variable);
-        await context.SaveChangesAsync();
+        if (persist)
+        {
+            await context.SaveChangesAsync();
+        }
     }
 
     public async Task<List<StackEnvironmentVariable>> GetEnvironmentVariables(Guid stackId)

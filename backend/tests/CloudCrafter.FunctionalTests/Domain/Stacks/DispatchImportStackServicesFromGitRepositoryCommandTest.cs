@@ -110,6 +110,22 @@ public class DispatchImportStackServicesFromGitRepositoryCommandTest : BaseStack
 
         // Validate env vars
         // See https://github.com/cloudcrafter-oss/demo-examples/edit/main/docker-compose-examples/postgresql-server/docker-compose.yml
-        stackFromDb.EnvironmentVariables.Should().HaveCount(3);
+        var envVars = stackFromDb.EnvironmentVariables;
+        envVars.Should().HaveCount(3);
+
+        var userEnvVar = envVars.FirstOrDefault(x => x.Key == "POSTGRES_USER");
+        userEnvVar.Should().NotBeNull();
+        userEnvVar!.Value.Should().Be("cloudcrafter");
+        userEnvVar.IsSecret.Should().BeFalse();
+
+        var passwordEnvVar = envVars.FirstOrDefault(x => x.Key == "POSTGRES_PASSWORD");
+        passwordEnvVar.Should().NotBeNull();
+        passwordEnvVar!.Value.Should().Be("password");
+        passwordEnvVar.IsSecret.Should().BeFalse();
+
+        var dbNameEnvVar = envVars.FirstOrDefault(x => x.Key == "POSTGRES_DB");
+        dbNameEnvVar.Should().NotBeNull();
+        dbNameEnvVar!.Value.Should().Be("demo");
+        dbNameEnvVar.IsSecret.Should().BeFalse();
     }
 }

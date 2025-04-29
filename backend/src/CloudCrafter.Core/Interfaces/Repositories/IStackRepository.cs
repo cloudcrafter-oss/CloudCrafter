@@ -13,6 +13,7 @@ public interface IStackRepository
 {
     Task<Stack> CreateStack(CreateStackArgsDto args);
     Task<Stack?> GetStack(Guid id);
+
     Task<StackService> AddServiceToStack(
         Guid stackId,
         string name,
@@ -33,7 +34,7 @@ public interface IStackRepository
         BasePaginationRequest paginatedRequest
     );
 
-    Task AddEnvironmentVariable(StackEnvironmentVariable variable);
+    Task AddEnvironmentVariable(StackEnvironmentVariable variable, bool persist = true);
     Task<List<StackEnvironmentVariable>> GetEnvironmentVariables(Guid stackId);
 
     Task AddEnvironmentVariableGroups(IList<StackEnvironmentVariableGroup> groups);

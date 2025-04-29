@@ -66,14 +66,37 @@ public class StackServiceProvisioner(IStackRepository stackRepository) : IStackS
 
         service.DockerComposeData.ServiceName = name;
 
-        ConfigureEnvironmentVariables(stack, serviceEditor);
+        await ConfigureEnvironmentVariables(stack, serviceEditor);
     }
 
-    private void ConfigureEnvironmentVariables(
+    private async Task ConfigureEnvironmentVariables(
         Stack stack,
         DockerComposeEditor.ServiceEditor serviceEditor
     )
     {
         var envVars = serviceEditor.GetEnvironmentVariables();
+
+        foreach (var envVar in envVars)
+        {
+            var envVarInStack = stack.EnvironmentVariables.FirstOrDefault(x => x.Key == envVar.Key);
+
+            if (envVarInStack != null)
+            {
+                continue;
+            }
+
+            await stackRepository.AddEnvironmentVariable(
+                new StackEnvironmentVariable
+                {
+                    Id = Guid.NewGuid(),
+                    StackId = stack.Id,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    Key = envVar.Key,
+                    Value = envVar.Value,
+                },
+                false
+            );
+        }
     }
 }
