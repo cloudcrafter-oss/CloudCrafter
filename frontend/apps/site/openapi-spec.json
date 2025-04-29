@@ -2422,12 +2422,16 @@
 					}
 				}
 			},
+			"CreateStackBuildOption": {
+				"enum": ["Nixpacks", "DockerCompose"]
+			},
 			"CreateStackCommand": {
 				"required": [
 					"name",
 					"gitRepository",
 					"gitBranch",
 					"pathInGitRepository",
+					"buildOption",
 					"environmentId",
 					"serverId"
 				],
@@ -2447,6 +2451,9 @@
 					},
 					"pathInGitRepository": {
 						"type": "string"
+					},
+					"buildOption": {
+						"$ref": "#/components/schemas/CreateStackBuildOption"
 					},
 					"environmentId": {
 						"type": "string",
@@ -2505,6 +2512,7 @@
 					"branch",
 					"path",
 					"repository",
+					"buildOption",
 					"environmentId",
 					"serverId"
 				],
@@ -2531,6 +2539,9 @@
 					},
 					"repository": {
 						"type": "string"
+					},
+					"buildOption": {
+						"$ref": "#/components/schemas/CreateStackBuildOption"
 					},
 					"environmentId": {
 						"type": "string",
