@@ -29,6 +29,8 @@ interface PublicRepositoryFormProps {
 	onStackCreated: (stack: StackCreatedDto) => void
 }
 
+type CreateStackCommand = keyof z.infer<typeof createStackCommandSchema>
+
 export const PublicRepositoryForm = ({
 	environmentId,
 	onBack,
@@ -60,17 +62,36 @@ export const PublicRepositoryForm = ({
 					path: values.pathInGitRepository,
 				},
 			})
+
+			setGitErrors(!isValid)
 			if (!isValid) {
-				form.setError('gitRepository', {
-					type: 'manual',
-					message: 'The provided Git repository is not valid',
-				})
 				return
 			}
 			const createdStackFromApi = await createStack({ data: values })
 			onStackCreated(createdStackFromApi)
 		} finally {
 			setFormIsSubmitting(false)
+		}
+	}
+
+	const setGitErrors = (isError: boolean) => {
+		const keys: CreateStackCommand[] = [
+			'gitRepository',
+			'gitBranch',
+			'pathInGitRepository',
+		]
+
+		if (isError) {
+			keys.forEach((key) => {
+				form.setError(key, {
+					type: 'manual',
+					message: 'The provided Git repository is not valid',
+				})
+			})
+		} else {
+			keys.forEach((key) => {
+				form.clearErrors(key)
+			})
 		}
 	}
 
@@ -83,14 +104,8 @@ export const PublicRepositoryForm = ({
 			const result = await validateRepo({
 				data: { repository: url, branch, path },
 			})
-			if (!result.isValid) {
-				form.setError('gitRepository', {
-					type: 'manual',
-					message: 'The provided Git repository is not valid',
-				})
-			} else {
-				form.clearErrors('gitRepository')
-			}
+
+			setGitErrors(!result.isValid)
 		} catch (error) {
 			form.setError('gitRepository', {
 				type: 'manual',
@@ -193,6 +208,14 @@ export const PublicRepositoryForm = ({
 									disabled={formIsSubmitting}
 									{...field}
 									autoComplete='off'
+									onBlur={(e) => {
+										field.onBlur()
+										handleValidateRepo(
+											form.getValues('gitRepository'),
+											e.target.value,
+											form.getValues('pathInGitRepository'),
+										)
+									}}
 								/>
 							</FormControl>
 							<FormMessage />
@@ -211,6 +234,14 @@ export const PublicRepositoryForm = ({
 									disabled={formIsSubmitting}
 									{...field}
 									autoComplete='off'
+									onBlur={(e) => {
+										field.onBlur()
+										handleValidateRepo(
+											form.getValues('gitRepository'),
+											form.getValues('gitBranch'),
+											e.target.value,
+										)
+									}}
 								/>
 							</FormControl>
 							<FormMessage />
