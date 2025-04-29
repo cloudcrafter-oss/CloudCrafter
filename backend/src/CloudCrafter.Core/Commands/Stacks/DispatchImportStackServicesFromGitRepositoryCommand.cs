@@ -6,7 +6,7 @@ using MediatR;
 namespace CloudCrafter.Core.Commands.Stacks;
 
 [Authorize]
-public class DispatchImportStackServicesFromGitRepositoryCommand : IRequest, IRequireStackAccess
+public record DispatchImportStackServicesFromGitRepositoryCommand : IRequest, IRequireStackAccess
 {
     public Guid StackId { get; init; }
 }
