@@ -67,6 +67,15 @@ public class StackServiceProvisioner(IStackRepository stackRepository) : IStackS
         service.DockerComposeData.ServiceName = name;
 
         await ConfigureEnvironmentVariables(stack, serviceEditor);
+        await ConfigureVolumes(service, serviceEditor);
+    }
+
+    private Task ConfigureVolumes(
+        StackService service,
+        DockerComposeEditor.ServiceEditor serviceEditor
+    )
+    {
+        return Task.CompletedTask;
     }
 
     private async Task ConfigureEnvironmentVariables(

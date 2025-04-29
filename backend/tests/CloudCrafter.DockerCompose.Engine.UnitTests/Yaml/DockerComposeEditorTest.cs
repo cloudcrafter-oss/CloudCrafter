@@ -309,6 +309,22 @@ networks:
     }
 
     [Test]
+    public void ShouldBeAbleToGetVolumes()
+    {
+        var webService = _editor.Service("web");
+        var dbService = _editor.Service("db");
+
+        var webVolumes = webService.GetVolumes();
+        var dbVolumes = dbService.GetVolumes();
+
+        webVolumes.Should().HaveCount(1);
+        webVolumes.Should().Contain(("./php-app", "/var/www/html", false));
+
+        dbVolumes.Should().HaveCount(1);
+        dbVolumes.Should().Contain(("db_data", "/var/lib/mysql", true));
+    }
+
+    [Test]
     public async Task ShouldBeAbleToAddNetwork()
     {
         var network = _editor.AddNetwork("mynetwork");

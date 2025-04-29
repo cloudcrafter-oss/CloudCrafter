@@ -614,6 +614,44 @@ public class DockerComposeEditor
 
             return environmentVariables;
         }
+
+        public List<(string HostPath, string ContainerPath, bool IsDockerVolume)> GetVolumes()
+        {
+            var serviceNode = editor.GetServiceNode(serviceName);
+            var volumes = new List<(string HostPath, string ContainerPath, bool IsDockerVolume)>();
+
+            if (serviceNode!.Children.ContainsKey("volumes"))
+            {
+                var volumesNode = serviceNode["volumes"];
+                if (volumesNode is YamlSequenceNode sequenceNode)
+                {
+                    foreach (var item in sequenceNode)
+                    {
+                        if (item is YamlScalarNode scalarItem)
+                        {
+                            var volume = scalarItem.Value;
+                            if (!string.IsNullOrEmpty(volume))
+                            {
+                                var parts = volume.Split(':', 2);
+                                if (parts.Length == 2)
+                                {
+                                    // Check if the host path is a Docker volume by looking at the root node's volumes
+                                    var isDockerVolume =
+                                        editor.rootNode.Children.ContainsKey("volumes")
+                                        && (
+                                            (YamlMappingNode)editor.rootNode["volumes"]
+                                        ).Children.ContainsKey(parts[0]);
+
+                                    volumes.Add((parts[0], parts[1], isDockerVolume));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return volumes;
+        }
     }
 
     public class VolumeEditor

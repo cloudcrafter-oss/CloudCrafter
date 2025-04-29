@@ -136,6 +136,10 @@ public class EmptyDockerComposeEditorTest
             .Contain(x => x.Key == "DEV" && x.Value == "1")
             .And.Contain(x => x.Key == "DB_NAME" && x.Value == "example");
 
+        var volumes = serviceEditor.GetVolumes();
+        volumes.Should().HaveCount(1);
+        volumes.Should().Contain(("/dev-path", "/dev-path", false));
+
         serviceEditor.AddExposedPort(80, 80);
         serviceEditor.AddExposedPort(443, 443);
 
