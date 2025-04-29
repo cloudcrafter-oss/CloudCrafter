@@ -10,6 +10,15 @@ export type CreateStackCommand = {
    */
   gitRepository: string
   /**
+   * @minLength 1
+   * @type string
+   */
+  gitBranch: string
+  /**
+   * @type string
+   */
+  pathInGitRepository: string
+  /**
    * @type string, uuid
    */
   environmentId: string

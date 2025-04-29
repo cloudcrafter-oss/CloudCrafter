@@ -2367,10 +2367,16 @@
 				"enum": ["Verbose", "Debug", "Information", "Warning", "Error", "Fatal"]
 			},
 			"CheckValidGitRepoCommand": {
-				"required": ["repository"],
+				"required": ["repository", "branch", "path"],
 				"type": "object",
 				"properties": {
 					"repository": {
+						"type": "string"
+					},
+					"branch": {
+						"type": "string"
+					},
+					"path": {
 						"type": "string"
 					}
 				}
@@ -2417,7 +2423,14 @@
 				}
 			},
 			"CreateStackCommand": {
-				"required": ["name", "gitRepository", "environmentId", "serverId"],
+				"required": [
+					"name",
+					"gitRepository",
+					"gitBranch",
+					"pathInGitRepository",
+					"environmentId",
+					"serverId"
+				],
 				"type": "object",
 				"properties": {
 					"name": {
@@ -2426,6 +2439,13 @@
 					},
 					"gitRepository": {
 						"minLength": 1,
+						"type": "string"
+					},
+					"gitBranch": {
+						"minLength": 1,
+						"type": "string"
+					},
+					"pathInGitRepository": {
 						"type": "string"
 					},
 					"environmentId": {
