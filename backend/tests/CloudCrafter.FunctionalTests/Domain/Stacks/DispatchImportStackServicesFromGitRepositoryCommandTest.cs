@@ -90,6 +90,7 @@ public class DispatchImportStackServicesFromGitRepositoryCommandTest : BaseStack
             s => s.Id == stack.Id,
             inc =>
                 inc.Include(s => s.DockerComposeData)
+                    .Include(x => x.EnvironmentVariables)
                     .Include(s => s.Services)
                     .ThenInclude(x => x.Volumes)
         );
@@ -106,5 +107,9 @@ public class DispatchImportStackServicesFromGitRepositoryCommandTest : BaseStack
 
         var service = stackFromDb.Services[0];
         service.StackServiceTypeId.Should().Be(StackServiceTypeConstants.DatabasePostgres);
+
+        // Validate env vars
+        // See https://github.com/cloudcrafter-oss/demo-examples/edit/main/docker-compose-examples/postgresql-server/docker-compose.yml
+        stackFromDb.EnvironmentVariables.Should().HaveCount(3);
     }
 }

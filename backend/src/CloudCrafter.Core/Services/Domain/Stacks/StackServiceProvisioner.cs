@@ -65,5 +65,15 @@ public class StackServiceProvisioner(IStackRepository stackRepository) : IStackS
         }
 
         service.DockerComposeData.ServiceName = name;
+
+        ConfigureEnvironmentVariables(stack, serviceEditor);
+    }
+
+    private void ConfigureEnvironmentVariables(
+        Stack stack,
+        DockerComposeEditor.ServiceEditor serviceEditor
+    )
+    {
+        var envVars = serviceEditor.GetEnvironmentVariables();
     }
 }

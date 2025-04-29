@@ -128,6 +128,14 @@ public class EmptyDockerComposeEditorTest
         serviceEditor.AddEnvironmentVariable("DEV", "1");
         serviceEditor.AddEnvironmentVariable("DB_NAME", "example");
 
+        var environmentVariables = serviceEditor.GetEnvironmentVariables();
+        environmentVariables.Should().HaveCount(2);
+
+        environmentVariables
+            .Should()
+            .Contain(x => x.Key == "DEV" && x.Value == "1")
+            .And.Contain(x => x.Key == "DB_NAME" && x.Value == "example");
+
         serviceEditor.AddExposedPort(80, 80);
         serviceEditor.AddExposedPort(443, 443);
 

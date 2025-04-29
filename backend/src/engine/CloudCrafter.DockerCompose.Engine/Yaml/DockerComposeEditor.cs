@@ -587,6 +587,33 @@ public class DockerComposeEditor
             serviceNode.Add("healthcheck", healthcheckNode);
             return this;
         }
+
+        public Dictionary<string, string> GetEnvironmentVariables()
+        {
+            var serviceNode = editor.GetServiceNode(serviceName);
+            var environmentVariables = new Dictionary<string, string>();
+
+            if (serviceNode!.Children.ContainsKey("environment"))
+            {
+                var envNode = serviceNode["environment"];
+                if (envNode is YamlMappingNode mappingNode)
+                {
+                    foreach (var entry in mappingNode.Children)
+                    {
+                        if (
+                            entry.Key is YamlScalarNode keyNode
+                            && entry.Value is YamlScalarNode valueNode
+                        )
+                        {
+                            environmentVariables.Add(keyNode.Value!, valueNode.Value ?? "");
+                        }
+                    }
+                }
+                // Optionally handle sequence format if needed, though mapping is more common
+            }
+
+            return environmentVariables;
+        }
     }
 
     public class VolumeEditor

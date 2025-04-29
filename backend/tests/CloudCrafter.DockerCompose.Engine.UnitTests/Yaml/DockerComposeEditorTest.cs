@@ -110,9 +110,45 @@ networks:
     }
 
     [Test]
+    public async Task ShouldBeAbleToAddEnvironmentVariableToExistingService()
+    {
+        var service = _editor.Service("db");
+
+        service.AddEnvironmentVariable("MYSQL_DATABASE", "example_db");
+        service
+            .GetEnvironmentVariables()
+            .Should()
+            .HaveCount(2)
+            .And.Contain(x => x.Key == "MYSQL_ROOT_PASSWORD" && x.Value == "example")
+            .And.Contain(x => x.Key == "MYSQL_DATABASE" && x.Value == "example_db");
+
+        var yaml = _editor.GetYaml();
+
+        var isValid = await _editor.IsValid();
+
+        isValid.IsValid.Should().BeTrue();
+
+        await Verify(yaml);
+    }
+
+    [Test]
     public async Task ShouldBeAbleToAddEnvironmentVariable()
     {
-        var service = _editor.Service("web")!.AddEnvironmentVariable("APP_ENV", "dev");
+        var service = _editor.Service("web");
+
+        service.AddEnvironmentVariable("APP_ENV", "dev");
+
+        service
+            .GetEnvironmentVariables()
+            .Should()
+            .HaveCount(1)
+            .And.Contain(x => x.Key == "APP_ENV" && x.Value == "dev");
+
+        var db = _editor.Service("db");
+        db.GetEnvironmentVariables()
+            .Should()
+            .HaveCount(1)
+            .And.Contain(x => x.Key == "MYSQL_ROOT_PASSWORD" && x.Value == "example");
 
         var yaml = _editor.GetYaml();
 
