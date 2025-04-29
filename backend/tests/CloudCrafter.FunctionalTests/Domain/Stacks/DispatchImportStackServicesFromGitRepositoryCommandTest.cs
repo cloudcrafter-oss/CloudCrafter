@@ -127,5 +127,17 @@ public class DispatchImportStackServicesFromGitRepositoryCommandTest : BaseStack
         dbNameEnvVar.Should().NotBeNull();
         dbNameEnvVar!.Value.Should().Be("demo");
         dbNameEnvVar.IsSecret.Should().BeFalse();
+
+        // Validate volumes
+        var volumes = stackFromDb.Services[0].Volumes;
+        volumes.Should().HaveCount(1);
+
+        var volume = volumes.FirstOrDefault(x => x.SourcePath == "pgdata");
+        volume.Should().NotBeNull();
+
+        volume!.Name.Should().Be("/var/lib/postgresql/data");
+        volume.SourcePath.Should().Be("pgdata");
+        volume.DestinationPath.Should().Be("/var/lib/postgresql/data");
+        volume.Type.Should().Be(StackServiceVolumeType.DockerVolume);
     }
 }

@@ -75,6 +75,36 @@ public class StackServiceProvisioner(IStackRepository stackRepository) : IStackS
         DockerComposeEditor.ServiceEditor serviceEditor
     )
     {
+        var volumes = serviceEditor.GetVolumes();
+
+        foreach (var volume in volumes)
+        {
+            var volumeInInService = service.Volumes.FirstOrDefault(x =>
+                x.SourcePath == volume.HostPath
+            );
+
+            if (volumeInInService != null)
+            {
+                continue;
+            }
+
+            stackRepository.AddStackServiceVolume(
+                new StackServiceVolume()
+                {
+                    Id = Guid.NewGuid(),
+                    StackServiceId = service.Id,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    SourcePath = volume.HostPath,
+                    Name = volume.ContainerPath,
+                    DestinationPath = volume.ContainerPath,
+                    Type = volume.IsDockerVolume
+                        ? StackServiceVolumeType.DockerVolume
+                        : StackServiceVolumeType.LocalMount,
+                }
+            );
+        }
+
         return Task.CompletedTask;
     }
 

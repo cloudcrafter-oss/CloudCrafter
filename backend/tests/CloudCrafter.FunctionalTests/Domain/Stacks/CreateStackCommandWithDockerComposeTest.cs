@@ -101,6 +101,7 @@ public class CreateStackCommandWithDockerComposeTest : BaseTestFixture
         stack!.StackServiceTypeId.Should().Be(StackServiceTypeConstants.DatabasePostgres);
         (await CountAsync<StackEnvironmentVariableGroup>()).Should().Be(2);
         (await CountAsync<StackEnvironmentVariable>()).Should().Be(3);
+        (await CountAsync<StackServiceVolume>()).Should().Be(1);
 
         // Check if the environment variable groups are created
         var groups = FetchEntityList<StackEnvironmentVariableGroup>(x => x.StackId == result.Id);
