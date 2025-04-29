@@ -20,6 +20,7 @@ import { CheckCircle, Loader2, XCircle } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import type * as z from 'zod'
+import { FormErrors } from '../../form/errors/form-errors'
 import { ServerSelect } from './ServerSelect'
 
 interface PublicRepositoryFormProps {
@@ -39,6 +40,8 @@ export const PublicRepositoryForm = ({
 		defaultValues: {
 			gitRepository: 'https://github.com/cloudcrafter-oss/demo-examples',
 			name: '',
+			gitBranch: 'main',
+			pathInGitRepository: '',
 			environmentId,
 		},
 	})
@@ -51,7 +54,11 @@ export const PublicRepositoryForm = ({
 		setFormIsSubmitting(true)
 		try {
 			const isValid = await validateRepo({
-				data: { repository: values.gitRepository },
+				data: {
+					repository: values.gitRepository,
+					branch: values.gitBranch,
+					path: values.pathInGitRepository,
+				},
 			})
 			if (!isValid) {
 				form.setError('gitRepository', {
@@ -67,10 +74,14 @@ export const PublicRepositoryForm = ({
 		}
 	}
 
-	const handleValidateRepo = async (url: string) => {
+	const handleValidateRepo = async (
+		url: string,
+		branch: string,
+		path: string,
+	) => {
 		try {
 			const result = await validateRepo({
-				data: { repository: url },
+				data: { repository: url, branch, path },
 			})
 			if (!result.isValid) {
 				form.setError('gitRepository', {
@@ -87,6 +98,8 @@ export const PublicRepositoryForm = ({
 			})
 		}
 	}
+
+	const formErrors = form.formState.errors
 
 	return (
 		<Form {...form}>
@@ -127,7 +140,11 @@ export const PublicRepositoryForm = ({
 										data-testid='input-git-repository'
 										onBlur={(e) => {
 											field.onBlur()
-											handleValidateRepo(e.target.value)
+											handleValidateRepo(
+												e.target.value,
+												form.getValues('gitBranch'),
+												form.getValues('pathInGitRepository'),
+											)
 										}}
 									/>
 								</FormControl>
@@ -139,7 +156,13 @@ export const PublicRepositoryForm = ({
 											? 'destructive'
 											: 'outline'
 									}
-									onClick={() => handleValidateRepo(field.value)}
+									onClick={() =>
+										handleValidateRepo(
+											field.value,
+											form.getValues('gitBranch'),
+											form.getValues('pathInGitRepository'),
+										)
+									}
 									disabled={formIsSubmitting || isPending}
 								>
 									{isPending ? (
@@ -158,9 +181,44 @@ export const PublicRepositoryForm = ({
 						</FormItem>
 					)}
 				/>
-
+				<FormField
+					control={form.control}
+					name='gitBranch'
+					render={({ field }) => (
+						<FormItem className='space-y-2'>
+							<FormLabel>Git Branch</FormLabel>
+							<FormControl>
+								<Input
+									data-testid='input-git-branch'
+									disabled={formIsSubmitting}
+									{...field}
+									autoComplete='off'
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name='pathInGitRepository'
+					render={({ field }) => (
+						<FormItem className='space-y-2'>
+							<FormLabel>Path in Git Repository</FormLabel>
+							<FormControl>
+								<Input
+									data-testid='input-path-in-git-repository'
+									disabled={formIsSubmitting}
+									{...field}
+									autoComplete='off'
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
 				<ServerSelect form={form} inputDisabled={formIsSubmitting} />
-
+				<FormErrors errors={formErrors} />
 				<div className='flex justify-between'>
 					<Button type='button' variant='outline' onClick={onBack}>
 						Back
