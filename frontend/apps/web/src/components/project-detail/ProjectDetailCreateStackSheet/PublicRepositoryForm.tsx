@@ -1,5 +1,7 @@
 import {
+	type CreateStackBuildOption,
 	type StackCreatedDto,
+	createStackBuildOptionSchema,
 	createStackCommandSchema,
 	usePostCreateStackHook,
 	usePostValidateGithubRepoHook,
@@ -21,6 +23,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import type * as z from 'zod'
 import { FormErrors } from '../../form/errors/form-errors'
+import { CloudcrafterSelect } from '../../form/select/cloudcrafter-select'
 import { ServerSelect } from './ServerSelect'
 
 interface PublicRepositoryFormProps {
@@ -30,6 +33,21 @@ interface PublicRepositoryFormProps {
 }
 
 type CreateStackCommand = keyof z.infer<typeof createStackCommandSchema>
+
+// fetch createStackBuildOptionSchema and select all types to an array
+const createStackBuildOptionSchemaOptions = createStackBuildOptionSchema.options
+
+const getBuildOptionLabel = (buildOption: CreateStackBuildOption): string => {
+	switch (buildOption) {
+		case 'DockerCompose':
+			return 'Docker Compose'
+		case 'Nixpacks':
+			return 'Nixpacks'
+		// Add other cases as needed
+		default:
+			return buildOption
+	}
+}
 
 export const PublicRepositoryForm = ({
 	environmentId,
@@ -136,6 +154,25 @@ export const PublicRepositoryForm = ({
 									autoComplete='off'
 								/>
 							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name='buildOption'
+					render={({ field }) => (
+						<FormItem className='space-y-2'>
+							<FormLabel>Build Option</FormLabel>
+							<CloudcrafterSelect<CreateStackBuildOption>
+								selectValue='Select a build option'
+								testPrefix='select-build-option'
+								onValueChange={field.onChange}
+								getOptionKey={(buildOption) => buildOption}
+								getOptionValue={(buildOption) => buildOption}
+								getOptionLabel={getBuildOptionLabel}
+								options={createStackBuildOptionSchemaOptions}
+							/>
 							<FormMessage />
 						</FormItem>
 					)}
