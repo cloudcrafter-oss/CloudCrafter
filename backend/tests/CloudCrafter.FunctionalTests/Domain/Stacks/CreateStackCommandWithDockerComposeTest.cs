@@ -10,7 +10,7 @@ namespace CloudCrafter.FunctionalTests.Domain.Stacks;
 
 using static Testing;
 
-public class CreateStackCommandTest : BaseTestFixture
+public class CreateStackCommandWithDockerComposeTest : BaseTestFixture
 {
     private readonly CreateStackCommand _command =
         new()
@@ -18,10 +18,10 @@ public class CreateStackCommandTest : BaseTestFixture
             Name = "Dummy Stack",
             GitRepository = "https://github.com/cloudcrafter-oss/demo-examples",
             GitBranch = "main",
-            PathInGitRepository = "",
+            PathInGitRepository = "docker-compose-examples/postgresql-server",
             ServerId = Guid.NewGuid(),
             EnvironmentId = Guid.NewGuid(),
-            BuildOption = CreateStackBuildOption.Nixpacks,
+            BuildOption = CreateStackBuildOption.DockerCompose,
         };
 
     [Test]
@@ -98,8 +98,9 @@ public class CreateStackCommandTest : BaseTestFixture
 
         var stack = FetchEntity<StackService>(x => x.StackId == result.Id);
         stack.Should().NotBeNull();
-        stack!.StackServiceTypeId.Should().Be(StackServiceTypeConstants.App);
+        stack!.StackServiceTypeId.Should().Be(StackServiceTypeConstants.DatabasePostgres);
         (await CountAsync<StackEnvironmentVariableGroup>()).Should().Be(2);
+        (await CountAsync<StackEnvironmentVariable>()).Should().Be(3);
 
         // Check if the environment variable groups are created
         var groups = FetchEntityList<StackEnvironmentVariableGroup>(x => x.StackId == result.Id);

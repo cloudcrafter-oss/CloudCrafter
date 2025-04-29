@@ -33,7 +33,12 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
             source = new ApplicationSource
             {
                 Type = ApplicationSourceType.Git,
-                Git = new ApplicationSourceGit { Repository = args.PublicGit!.GitRepository },
+                Git = new ApplicationSourceGit
+                {
+                    Repository = args.PublicGit!.GitRepository,
+                    Branch = args.PublicGit.Branch,
+                    Path = args.PublicGit.Path,
+                },
             };
         }
 
@@ -58,6 +63,13 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
             throw new ArgumentOutOfRangeException("Provided configuration not supported");
         }
 
+        var buildPack = args.BuildOption switch
+        {
+            CreateStackBuildOption.Nixpacks => StackBuildPack.Nixpacks,
+            CreateStackBuildOption.DockerCompose => StackBuildPack.DockerCompose,
+            _ => throw new ArgumentOutOfRangeException("Provided configuration not supported"),
+        };
+
         var stack = new Stack
         {
             Id = Guid.NewGuid(),
@@ -66,8 +78,7 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
             ServerId = args.ServerId,
             Description = null,
             Source = source,
-            // TODO: Allow multiple options
-            BuildPack = StackBuildPack.Nixpacks,
+            BuildPack = buildPack,
             HealthStatus = new StackHealthEntity
             {
                 StatusAt = null,
