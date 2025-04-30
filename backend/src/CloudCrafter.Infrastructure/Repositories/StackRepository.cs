@@ -321,6 +321,11 @@ public class StackRepository(IApplicationDbContext context, IMapper mapper) : IS
         context.StackServices.Add(service);
     }
 
+    public void DeleteStack(Stack stack)
+    {
+        context.Stacks.Remove(stack);
+    }
+
     public Task SaveChangesAsync()
     {
         return context.SaveChangesAsync();

@@ -6,6 +6,7 @@ export type { DeleteEnvironmentVariableMutationKey } from './hooks/useDeleteEnvi
 export type { DeleteProjectMutationKey } from './hooks/useDeleteProjectHook'
 export type { DeleteProviderMutationKey } from './hooks/useDeleteProviderHook'
 export type { DeleteServerByIdMutationKey } from './hooks/useDeleteServerByIdHook'
+export type { DeleteStackMutationKey } from './hooks/useDeleteStackHook'
 export type { DeleteStackServiceVolumeMutationKey } from './hooks/useDeleteStackServiceVolumeHook'
 export type { DeleteTeamMutationKey } from './hooks/useDeleteTeamHook'
 export type { GetAllTeamsQueryKey } from './hooks/useGetAllTeamsHook'
@@ -105,6 +106,7 @@ export type {
 export type { DeleteProjectPathParams, DeleteProject200, DeleteProjectMutationResponse, DeleteProjectMutation } from './types/DeleteProject'
 export type { DeleteProviderPathParams, DeleteProvider200, DeleteProviderMutationResponse, DeleteProviderMutation } from './types/DeleteProvider'
 export type { DeleteServerByIdPathParams, DeleteServerById200, DeleteServerByIdMutationResponse, DeleteServerByIdMutation } from './types/DeleteServerById'
+export type { DeleteStackPathParams, DeleteStack200, DeleteStackMutationResponse, DeleteStackMutation } from './types/DeleteStack'
 export type {
   DeleteStackServiceVolumePathParams,
   DeleteStackServiceVolume200,
@@ -389,6 +391,7 @@ export { getDeleteEnvironmentVariableGroupUrl, deleteEnvironmentVariableGroup } 
 export { getDeleteProjectUrl, deleteProject } from './axios-backend/deleteProject'
 export { getDeleteProviderUrl, deleteProvider } from './axios-backend/deleteProvider'
 export { getDeleteServerByIdUrl, deleteServerById } from './axios-backend/deleteServerById'
+export { getDeleteStackUrl, deleteStack } from './axios-backend/deleteStack'
 export { getDeleteStackServiceVolumeUrl, deleteStackServiceVolume } from './axios-backend/deleteStackServiceVolume'
 export { getDeleteTeamUrl, deleteTeam } from './axios-backend/deleteTeam'
 export { getGetAllTeamsUrl, getAllTeams } from './axios-backend/getAllTeams'
@@ -442,6 +445,7 @@ export { deleteEnvironmentVariableMutationKey, useDeleteEnvironmentVariableHook 
 export { deleteProjectMutationKey, useDeleteProjectHook } from './hooks/useDeleteProjectHook'
 export { deleteProviderMutationKey, useDeleteProviderHook } from './hooks/useDeleteProviderHook'
 export { deleteServerByIdMutationKey, useDeleteServerByIdHook } from './hooks/useDeleteServerByIdHook'
+export { deleteStackMutationKey, useDeleteStackHook } from './hooks/useDeleteStackHook'
 export { deleteStackServiceVolumeMutationKey, useDeleteStackServiceVolumeHook } from './hooks/useDeleteStackServiceVolumeHook'
 export { deleteTeamMutationKey, useDeleteTeamHook } from './hooks/useDeleteTeamHook'
 export { getAllTeamsQueryKey, getAllTeamsQueryOptionsHook, useGetAllTeamsHook } from './hooks/useGetAllTeamsHook'
@@ -611,6 +615,7 @@ export {
 export { deleteProjectPathParamsSchema, deleteProject200Schema, deleteProjectMutationResponseSchema } from './zod/deleteProjectSchema'
 export { deleteProviderPathParamsSchema, deleteProvider200Schema, deleteProviderMutationResponseSchema } from './zod/deleteProviderSchema'
 export { deleteServerByIdPathParamsSchema, deleteServerById200Schema, deleteServerByIdMutationResponseSchema } from './zod/deleteServerByIdSchema'
+export { deleteStackPathParamsSchema, deleteStack200Schema, deleteStackMutationResponseSchema } from './zod/deleteStackSchema'
 export {
   deleteStackServiceVolumePathParamsSchema,
   deleteStackServiceVolume200Schema,

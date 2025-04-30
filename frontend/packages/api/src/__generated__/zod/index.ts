@@ -28,6 +28,7 @@ export {
 export { deleteProjectPathParamsSchema, deleteProject200Schema, deleteProjectMutationResponseSchema } from './deleteProjectSchema'
 export { deleteProviderPathParamsSchema, deleteProvider200Schema, deleteProviderMutationResponseSchema } from './deleteProviderSchema'
 export { deleteServerByIdPathParamsSchema, deleteServerById200Schema, deleteServerByIdMutationResponseSchema } from './deleteServerByIdSchema'
+export { deleteStackPathParamsSchema, deleteStack200Schema, deleteStackMutationResponseSchema } from './deleteStackSchema'
 export {
   deleteStackServiceVolumePathParamsSchema,
   deleteStackServiceVolume200Schema,

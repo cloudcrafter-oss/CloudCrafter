@@ -30,6 +30,7 @@ export type {
 export type { DeleteProjectPathParams, DeleteProject200, DeleteProjectMutationResponse, DeleteProjectMutation } from './types/DeleteProject'
 export type { DeleteProviderPathParams, DeleteProvider200, DeleteProviderMutationResponse, DeleteProviderMutation } from './types/DeleteProvider'
 export type { DeleteServerByIdPathParams, DeleteServerById200, DeleteServerByIdMutationResponse, DeleteServerByIdMutation } from './types/DeleteServerById'
+export type { DeleteStackPathParams, DeleteStack200, DeleteStackMutationResponse, DeleteStackMutation } from './types/DeleteStack'
 export type {
   DeleteStackServiceVolumePathParams,
   DeleteStackServiceVolume200,
@@ -314,6 +315,7 @@ export { getDeleteEnvironmentVariableGroupUrl, deleteEnvironmentVariableGroup } 
 export { getDeleteProjectUrl, deleteProject } from './e2e-backend/deleteProject'
 export { getDeleteProviderUrl, deleteProvider } from './e2e-backend/deleteProvider'
 export { getDeleteServerByIdUrl, deleteServerById } from './e2e-backend/deleteServerById'
+export { getDeleteStackUrl, deleteStack } from './e2e-backend/deleteStack'
 export { getDeleteStackServiceVolumeUrl, deleteStackServiceVolume } from './e2e-backend/deleteStackServiceVolume'
 export { getDeleteTeamUrl, deleteTeam } from './e2e-backend/deleteTeam'
 export { getGetAllTeamsUrl, getAllTeams } from './e2e-backend/getAllTeams'
@@ -401,6 +403,7 @@ export {
 export { deleteProjectPathParamsSchema, deleteProject200Schema, deleteProjectMutationResponseSchema } from './zod/deleteProjectSchema'
 export { deleteProviderPathParamsSchema, deleteProvider200Schema, deleteProviderMutationResponseSchema } from './zod/deleteProviderSchema'
 export { deleteServerByIdPathParamsSchema, deleteServerById200Schema, deleteServerByIdMutationResponseSchema } from './zod/deleteServerByIdSchema'
+export { deleteStackPathParamsSchema, deleteStack200Schema, deleteStackMutationResponseSchema } from './zod/deleteStackSchema'
 export {
   deleteStackServiceVolumePathParamsSchema,
   deleteStackServiceVolume200Schema,

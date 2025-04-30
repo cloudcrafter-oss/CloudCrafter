@@ -285,4 +285,24 @@ public class StacksService(
 
         await stackServiceProvisioner.ProvisionStackFromYaml(stack.Id, dockerComposeContent);
     }
+
+    public async Task DeleteStack(Guid stackId)
+    {
+        var stack = await repository.GetStack(stackId);
+
+        if (stack == null)
+        {
+            throw new NotFoundException("Stack", "Stack not found");
+        }
+
+        await userAccessService.EnsureHasAccessToEntity(
+            stack.Environment.Project,
+            user?.Id,
+            AccessType.Write
+        );
+
+        repository.DeleteStack(stack);
+
+        await repository.SaveChangesAsync();
+    }
 }

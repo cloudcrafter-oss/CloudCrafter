@@ -29,4 +29,5 @@ public interface IStacksService
 
     Task MarkStacksUnknownAfterTimespan(TimeSpan maxHealthCheckAge);
     Task FetchAndLoadServices(Guid stackId);
+    Task DeleteStack(Guid stackId);
 }

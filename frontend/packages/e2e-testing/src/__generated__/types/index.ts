@@ -30,6 +30,7 @@ export type {
 export type { DeleteProjectPathParams, DeleteProject200, DeleteProjectMutationResponse, DeleteProjectMutation } from './DeleteProject'
 export type { DeleteProviderPathParams, DeleteProvider200, DeleteProviderMutationResponse, DeleteProviderMutation } from './DeleteProvider'
 export type { DeleteServerByIdPathParams, DeleteServerById200, DeleteServerByIdMutationResponse, DeleteServerByIdMutation } from './DeleteServerById'
+export type { DeleteStackPathParams, DeleteStack200, DeleteStackMutationResponse, DeleteStackMutation } from './DeleteStack'
 export type {
   DeleteStackServiceVolumePathParams,
   DeleteStackServiceVolume200,
