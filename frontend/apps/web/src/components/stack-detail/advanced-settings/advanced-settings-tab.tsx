@@ -42,6 +42,7 @@ export const AdvancedSettingsTab = ({
 							will be permanently deleted.
 						</p>
 						<Button
+							data-testid='button-delete-stack'
 							variant='destructive'
 							onClick={() => setIsDeleteDialogOpen(true)}
 						>

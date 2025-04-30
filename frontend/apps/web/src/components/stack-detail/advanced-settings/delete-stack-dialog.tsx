@@ -61,6 +61,7 @@ export const DeleteStackDialog = ({
 					<Button
 						disabled={mutation.isPending}
 						variant='destructive'
+						data-testid='button-stack-delete-confirm'
 						onClick={handleDeleteStack}
 					>
 						{mutation.isPending ? 'Deleting...' : 'Delete Stack'}

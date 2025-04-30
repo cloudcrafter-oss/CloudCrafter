@@ -38,6 +38,7 @@ const sections = [
 	{
 		id: 'general',
 		title: 'General Settings',
+		testId: 'general-settings',
 		icon: Settings,
 		subTabs: [
 			{
